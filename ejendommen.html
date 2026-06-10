@@ -1,0 +1,1168 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ejendommen — Castillo del Alma</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@300;400;500&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Manrope:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --cream:      #faf6ee;
+  --beige:      #f0e8d5;
+  --sand:       #e0d0b0;
+  --stone:      #c8b898;
+  --charcoal:   #2c2318;
+  --text:       #2c2318;
+  --text-mid:   #5c4e3a;
+  --text-light: #9a8c7a;
+  --wine:       #7a1f35;
+  --wine-light: #a03048;
+  --terracotta: #c05c30;
+  --olive:      #6a7240;
+  --gold:       #b88a1e;
+  --gold-light: #d4a830;
+  --teal:       #3a6e6a;
+  --section-alt:#ede4d0;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{font-family:'Manrope',sans-serif;background:var(--cream);color:var(--text);overflow-x:hidden;}
+
+/* ── NAV ── */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:200;
+  padding:1.4rem 4rem;
+  display:flex;justify-content:space-between;align-items:center;
+  background:rgba(250,246,238,.96);
+  backdrop-filter:blur(16px);
+  border-bottom:1px solid rgba(184,138,30,.15);
+  box-shadow:0 2px 28px rgba(44,35,24,.06);
+}
+.nav-logo img{height:42px;width:auto;}
+.nav-links{display:flex;gap:2rem;list-style:none;align-items:center;}
+.nav-links a{font-size:.68rem;font-weight:400;letter-spacing:.14em;text-transform:uppercase;color:var(--text-mid);text-decoration:none;transition:color .3s;}
+.nav-links a:hover{color:var(--wine);}
+.nav-back{
+  font-size:.68rem;font-weight:500;letter-spacing:.15em;text-transform:uppercase;
+  color:var(--wine);text-decoration:none;display:flex;align-items:center;gap:.5rem;
+  transition:gap .3s;
+}
+.nav-back:hover{gap:.8rem;}
+
+/* ── HERO ── */
+.page-hero{
+  height:70vh;min-height:500px;
+  position:relative;overflow:hidden;
+  display:flex;align-items:flex-end;
+  margin-top:0;
+}
+.page-hero-img{
+  position:absolute;inset:0;
+  background-image:url('estate-aerial.jpg');
+  background-size:cover;background-position:center 30%;
+  transform:scale(1.03);
+  transition:transform 8s ease;
+}
+.page-hero-img.loaded{transform:scale(1);}
+.page-hero-overlay{
+  position:absolute;inset:0;
+  background:linear-gradient(to bottom,rgba(44,35,24,.2) 0%,rgba(44,35,24,.15) 40%,rgba(44,35,24,.75) 100%);
+}
+.page-hero-content{
+  position:relative;z-index:2;
+  padding:0 4rem 4rem;
+  max-width:1320px;margin:0 auto;width:100%;
+}
+.page-hero-eyebrow{
+  font-size:.62rem;letter-spacing:.4em;text-transform:uppercase;
+  color:rgba(238,222,160,.8);margin-bottom:1rem;display:block;
+}
+.page-hero h1{
+  font-family:'Cinzel',serif;font-weight:300;
+  font-size:clamp(2.5rem,6vw,5rem);
+  letter-spacing:.1em;color:#fff;line-height:1;
+  text-shadow:0 2px 32px rgba(0,0,0,.4);
+}
+.page-hero h1 em{color:transparent;-webkit-text-stroke:1px rgba(255,255,255,.7);font-style:normal;}
+
+/* ── LAYOUT ── */
+.section-inner{max-width:1320px;margin:0 auto;padding:0 4rem;}
+.section-label{
+  font-size:.6rem;letter-spacing:.4em;text-transform:uppercase;
+  color:var(--gold);margin-bottom:1.4rem;
+  display:flex;align-items:center;gap:1rem;
+}
+.section-label::before{content:'';width:28px;height:1px;background:var(--gold);flex-shrink:0;}
+.divider{height:1px;background:linear-gradient(to right,transparent,rgba(184,138,30,.22),transparent);max-width:1320px;margin:0 auto;}
+
+/* ── INTRO ── */
+.estate-intro{background:var(--cream);padding:8rem 0 7rem;}
+.intro-two-col{display:grid;grid-template-columns:1fr 1fr;gap:7rem;align-items:start;}
+.intro-two-col h2{
+  font-family:'Cinzel',serif;font-weight:300;
+  font-size:clamp(2rem,3.5vw,3rem);letter-spacing:.08em;
+  color:var(--charcoal);margin-bottom:2rem;line-height:1.2;
+}
+.intro-two-col h2 em{color:var(--terracotta);font-style:normal;}
+.intro-two-col p{
+  font-family:'Cormorant Garamond',serif;font-size:1.1rem;
+  font-weight:300;line-height:1.95;color:var(--text-mid);margin-bottom:1.4rem;
+}
+.estate-facts{
+  display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;
+  margin-top:3rem;padding-top:2.5rem;
+  border-top:1px solid rgba(184,138,30,.2);
+}
+.estate-fact h4{
+  font-family:'Cinzel',serif;font-weight:300;font-size:1.6rem;
+  color:var(--gold);letter-spacing:.05em;margin-bottom:.2rem;
+}
+.estate-fact p{font-size:.65rem;letter-spacing:.15em;text-transform:uppercase;color:var(--text-light);}
+.intro-img-stack{position:relative;}
+.intro-main-img{
+  width:100%;aspect-ratio:4/5;overflow:hidden;
+  box-shadow:8px 8px 0 var(--sand),9px 9px 0 var(--stone);
+}
+.intro-main-img img{width:100%;height:100%;object-fit:cover;object-position:center;display:block;}
+.intro-small-img{
+  position:absolute;bottom:-2rem;left:-2.5rem;
+  width:55%;aspect-ratio:4/3;overflow:hidden;
+  border:4px solid var(--cream);
+  box-shadow:0 8px 32px rgba(44,35,24,.15);
+}
+.intro-small-img img{width:100%;height:100%;object-fit:cover;display:block;}
+
+/* ── PHOTO STRIP ── */
+.photo-strip{background:var(--section-alt);padding:0;}
+.photo-strip-grid{
+  display:grid;grid-template-columns:repeat(5,1fr);
+  height:320px;
+}
+.strip-item{overflow:hidden;cursor:pointer;position:relative;}
+.strip-item img{
+  width:100%;height:100%;object-fit:cover;
+  transition:transform .8s cubic-bezier(.23,1,.32,1);
+}
+.strip-item:hover img{transform:scale(1.07);}
+.strip-item-overlay{
+  position:absolute;inset:0;
+  background:rgba(44,35,24,0);
+  transition:background .4s;
+}
+.strip-item:hover .strip-item-overlay{background:rgba(44,35,24,.15);}
+
+/* ── TOWERS ── */
+.towers{background:var(--cream);padding:8rem 0;}
+.towers-grid{display:grid;grid-template-columns:1fr 1fr;gap:7rem;align-items:center;}
+.towers h2{
+  font-family:'Cinzel',serif;font-weight:300;
+  font-size:clamp(2rem,3.5vw,3rem);letter-spacing:.08em;
+  color:var(--charcoal);margin-bottom:2rem;line-height:1.2;
+}
+.towers h2 em{color:var(--wine);font-style:normal;}
+.towers p{font-family:'Cormorant Garamond',serif;font-size:1.08rem;font-weight:300;line-height:1.95;color:var(--text-mid);margin-bottom:1.4rem;}
+.tower-img{
+  width:100%;aspect-ratio:3/4;overflow:hidden;
+  position:relative;
+}
+.tower-img img{width:100%;height:100%;object-fit:cover;display:block;}
+.tower-img-caption{
+  position:absolute;bottom:0;left:0;right:0;
+  padding:1.5rem 2rem;
+  background:linear-gradient(to top,rgba(44,35,24,.85),transparent);
+  font-family:'Cormorant Garamond',serif;font-style:italic;
+  font-size:.9rem;color:rgba(255,255,255,.8);
+}
+
+/* ── ROOMS ── */
+.rooms{background:var(--section-alt);padding:8rem 0;}
+.rooms-header{text-align:center;margin-bottom:5rem;}
+.rooms-header h2{
+  font-family:'Cinzel',serif;font-weight:300;
+  font-size:clamp(2rem,4vw,3.2rem);letter-spacing:.1em;
+  color:var(--charcoal);margin-bottom:.8rem;
+}
+.rooms-header p{
+  font-family:'Cormorant Garamond',serif;font-style:italic;
+  font-size:1.2rem;font-weight:300;color:var(--text-light);
+}
+.rooms-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;}
+.room-card{
+  background:var(--cream);
+  position:relative;overflow:hidden;
+}
+.room-card-img{
+  width:100%;aspect-ratio:4/3;overflow:hidden;
+}
+.room-card-img img{
+  width:100%;height:100%;object-fit:cover;
+  transition:transform .8s cubic-bezier(.23,1,.32,1);
+  display:block;
+}
+.room-card:hover .room-card-img img{transform:scale(1.05);}
+
+/* Hover image swap */
+.room-hover-img { position:relative; }
+.room-hover-img .room-img-default,
+.room-hover-img .room-img-hover {
+  position:absolute; inset:0;
+  width:100%; height:100%;
+  object-fit:cover; display:block;
+  transition:opacity .6s ease, transform .8s cubic-bezier(.23,1,.32,1);
+}
+.room-hover-img .room-img-default { opacity:1; z-index:1; }
+.room-hover-img .room-img-hover  { opacity:0; z-index:2; }
+.room-card:hover .room-hover-img .room-img-default { opacity:0; }
+.room-card:hover .room-hover-img .room-img-hover  { opacity:1; }
+.room-card:hover .room-hover-img img { transform:scale(1.04); }
+.room-card-img-ph{
+  width:100%;height:100%;
+  display:flex;align-items:center;justify-content:center;
+}
+.room-card-body{padding:2rem 2rem 2.5rem;}
+.room-card-num{
+  font-size:.58rem;letter-spacing:.3em;text-transform:uppercase;
+  color:var(--gold);display:block;margin-bottom:.5rem;
+}
+.room-card h3{
+  font-family:'Cinzel',serif;font-weight:300;
+  font-size:1.1rem;letter-spacing:.06em;
+  color:var(--charcoal);margin-bottom:.8rem;
+}
+.room-card p{
+  font-family:'Cormorant Garamond',serif;font-size:1rem;
+  font-weight:300;line-height:1.85;color:var(--text-mid);
+  margin-bottom:1.2rem;
+}
+.room-amenities{display:flex;flex-wrap:wrap;gap:.4rem;}
+.room-amenity{
+  font-size:.58rem;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--text-light);border:1px solid var(--sand);
+  padding:.25rem .7rem;
+}
+.room-card-accent{height:2px;background:var(--gold);}
+.room-card:nth-child(2) .room-card-accent{background:var(--wine);}
+.room-card:nth-child(3) .room-card-accent{background:var(--teal);}
+.room-card:nth-child(4) .room-card-accent{background:var(--terracotta);}
+.room-card:nth-child(5) .room-card-accent{background:var(--olive);}
+.room-card:nth-child(6) .room-card-accent{background:linear-gradient(90deg,var(--gold),var(--wine));}
+
+/* ── FACILITIES ── */
+.facilities{background:var(--cream);padding:8rem 0;}
+.facilities-grid{
+  display:grid;grid-template-columns:1fr 1.2fr;
+  gap:7rem;align-items:start;
+}
+.facilities h2{
+  font-family:'Cinzel',serif;font-weight:300;
+  font-size:clamp(2rem,3.5vw,3rem);letter-spacing:.08em;
+  color:var(--charcoal);margin-bottom:2.5rem;
+}
+.facilities h2 em{color:var(--olive);font-style:normal;}
+.facility-list{display:grid;grid-template-columns:1fr 1fr;gap:0;}
+.facility-item{
+  padding:1.5rem 1rem;
+  border-bottom:1px solid rgba(184,138,30,.12);
+  display:flex;align-items:flex-start;gap:1rem;
+  transition:background .3s;
+}
+.facility-item:hover{background:var(--beige);}
+.facility-icon{
+  width:28px;height:28px;flex-shrink:0;
+  color:var(--gold);margin-top:.1rem;
+}
+.facility-icon svg{width:100%;height:100%;}
+.facility-text h4{
+  font-family:'Cormorant Garamond',serif;font-weight:400;
+  font-size:1rem;color:var(--charcoal);margin-bottom:.2rem;
+}
+.facility-text p{font-size:.75rem;color:var(--text-light);line-height:1.5;}
+
+.facilities-visual{
+  display:grid;grid-template-columns:1fr 1fr;
+  grid-template-rows:auto auto;gap:2px;
+}
+.fac-img{overflow:hidden;}
+.fac-img:first-child{grid-column:1/-1;aspect-ratio:16/8;}
+.fac-img:not(:first-child){aspect-ratio:1;}
+.fac-img img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .8s ease;}
+.fac-img:hover img{transform:scale(1.04);}
+.fac-img-ph{
+  width:100%;height:100%;
+  display:flex;align-items:center;justify-content:center;
+}
+
+/* ── VINEYARD DETAIL ── */
+.vineyard-detail{
+  background:var(--section-alt);
+  padding:8rem 0;position:relative;overflow:hidden;
+}
+.vineyard-detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:7rem;align-items:center;}
+.vineyard-detail h2{
+  font-family:'Cinzel',serif;font-weight:300;
+  font-size:clamp(1.8rem,3vw,2.6rem);letter-spacing:.08em;
+  color:var(--charcoal);margin-bottom:2rem;
+}
+.vineyard-detail h2 em{color:var(--olive);font-style:normal;}
+.vineyard-detail p{
+  font-family:'Cormorant Garamond',serif;font-size:1.08rem;
+  font-weight:300;line-height:1.95;color:var(--text-mid);margin-bottom:1.4rem;
+}
+.vineyard-img{
+  width:100%;aspect-ratio:4/3;overflow:hidden;
+  box-shadow:8px 8px 0 var(--sand),9px 9px 0 var(--stone);
+}
+.vineyard-img img{width:100%;height:100%;object-fit:cover;display:block;}
+
+/* ── LOCATION ── */
+.location{background:var(--cream);padding:8rem 0;}
+.location-grid{display:grid;grid-template-columns:1fr 1fr;gap:7rem;align-items:start;}
+.location h2{
+  font-family:'Cinzel',serif;font-weight:300;
+  font-size:clamp(2rem,3.5vw,3rem);letter-spacing:.08em;
+  color:var(--charcoal);margin-bottom:2rem;
+}
+.location h2 em{color:var(--teal);font-style:normal;}
+.location h2 .phonetic {
+  font-family:'Cormorant Garamond',serif;
+  font-size:.5em; font-weight:300; font-style:italic;
+  color:var(--text-light); letter-spacing:.04em;
+  vertical-align:middle; margin:0 .2em;
+}
+.location-phonetic{
+  font-family:'Cormorant Garamond',serif;
+  font-size:.95rem;font-weight:300;font-style:italic;
+  color:var(--text-light);letter-spacing:.05em;
+  margin-bottom:1.8rem;margin-top:-.6rem;
+}
+.location p{font-family:'Cormorant Garamond',serif;font-size:1.08rem;font-weight:300;line-height:1.95;color:var(--text-mid);margin-bottom:1.4rem;}
+.location-distances{
+  margin-top:2.5rem;
+  border-top:1px solid rgba(184,138,30,.2);
+  padding-top:2rem;
+}
+.location-distance{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:.9rem 0;
+  border-bottom:1px solid rgba(184,138,30,.1);
+}
+.location-distance span:first-child{
+  font-family:'Cormorant Garamond',serif;font-size:1.05rem;
+  font-weight:300;color:var(--text-mid);
+}
+.location-distance span:last-child{
+  font-family:'Cinzel',serif;font-size:.8rem;
+  letter-spacing:.1em;color:var(--gold);font-weight:300;
+}
+.location-map{
+  background:var(--section-alt);
+  border:1px solid var(--sand);
+  aspect-ratio:4/3;
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Cormorant Garamond',serif;font-style:italic;
+  color:var(--text-light);font-size:1rem;
+  overflow:hidden;position:relative;
+}
+.location-map iframe{
+  width:100%;height:100%;border:none;
+}
+
+/* ── CTA ── */
+.estate-cta{
+  background:var(--charcoal);
+  padding:8rem 0;text-align:center;
+}
+.estate-cta h2{
+  font-family:'Cinzel',serif;font-weight:300;
+  font-size:clamp(2rem,4vw,3rem);letter-spacing:.1em;
+  color:#fff;margin-bottom:1.2rem;
+}
+.estate-cta p{
+  font-family:'Cormorant Garamond',serif;font-style:italic;
+  font-size:1.2rem;font-weight:300;
+  color:rgba(255,255,255,.65);margin-bottom:3rem;
+  max-width:540px;margin-left:auto;margin-right:auto;
+}
+.cta-btns{display:flex;gap:1.2rem;justify-content:center;flex-wrap:wrap;}
+.btn-wine{
+  font-size:.7rem;font-weight:500;letter-spacing:.2em;text-transform:uppercase;
+  color:#fff;background:var(--wine);padding:1rem 2.5rem;
+  text-decoration:none;transition:background .3s;
+}
+.btn-wine:hover{background:var(--wine-light);}
+.btn-outline-light{
+  font-size:.7rem;font-weight:500;letter-spacing:.2em;text-transform:uppercase;
+  color:#fff;border:1px solid rgba(255,255,255,.4);padding:1rem 2.5rem;
+  text-decoration:none;transition:all .4s;
+}
+.btn-outline-light:hover{border-color:var(--gold);color:var(--gold);}
+
+/* ── FOOTER ── */
+footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:3rem 4rem;}
+.footer-bottom{max-width:1320px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;}
+.footer-bottom p{font-size:.68rem;color:rgba(255,255,255,.48);letter-spacing:.04em;}
+.footer-bottom a{font-size:.68rem;color:rgba(255,255,255,.62);text-decoration:none;transition:color .3s;}
+.footer-bottom a:hover{color:var(--gold);}
+
+/* ── REVEAL ── */
+.reveal{opacity:0;transform:translateY(28px);transition:opacity .9s ease,transform .9s ease;}
+.reveal.visible{opacity:1;transform:translateY(0);}
+.reveal-left{opacity:0;transform:translateX(-28px);transition:opacity .9s ease,transform .9s ease;}
+.reveal-left.visible{opacity:1;transform:translateX(0);}
+.reveal-right{opacity:0;transform:translateX(28px);transition:opacity .9s ease,transform .9s ease;}
+.reveal-right.visible{opacity:1;transform:translateX(0);}
+.d1{transition-delay:.1s;}.d2{transition-delay:.2s;}.d3{transition-delay:.3s;}
+
+/* ── SPLIT HEADING ── */
+.split-h .split-word{display:inline-block;overflow:hidden;}
+.split-h .split-word span{display:inline-block;opacity:0;transform:translateY(105%);}
+.split-h .split-word.visible span{animation:wordReveal .75s ease forwards;}
+@keyframes wordReveal{to{opacity:1;transform:translateY(0);}}
+
+/* ── SUSTAINABILITY ── */
+.sustainability { background:var(--cream); padding:8rem 0; }
+
+.sustain-heading {
+  margin-bottom:3rem;
+}
+.sustain-heading h2 {
+  font-family:'Cinzel',serif; font-weight:300;
+  font-size:clamp(2rem,3.5vw,3rem); letter-spacing:.08em;
+  color:var(--charcoal); margin-bottom:0; line-height:1.2;
+}
+.sustain-heading h2 em { color:var(--olive); font-style:normal; }
+.sustain-top {
+  display:grid; grid-template-columns:1fr 1.5fr;
+  gap:5rem; align-items:start; margin-bottom:3rem;
+}
+.sustain-top-text h2,
+.sustain-top h2 {
+  font-family:'Cinzel',serif; font-weight:300;
+  font-size:clamp(2rem,3.5vw,3rem); letter-spacing:.08em;
+  color:var(--charcoal); margin-bottom:1.8rem; line-height:1.2;
+}
+.sustain-top-text h2 em { color:var(--olive); font-style:normal; }
+.sustain-lead {
+  font-family:'Cormorant Garamond',serif; font-size:1.12rem;
+  font-weight:300; line-height:1.95; color:var(--text-mid);
+  margin-bottom:1.4rem;
+  font-style:italic;
+}
+.sustain-body {
+  font-family:'Cormorant Garamond',serif; font-size:1.05rem;
+  font-weight:300; line-height:1.7; color:var(--text-mid);
+  margin-bottom:.5rem;
+}
+.sustain-full {
+  margin-bottom:3rem;
+  columns:1;
+}
+.sustain-full .sustain-body { margin-bottom:.5rem; }
+
+.sustain-imgtext {
+  display:grid; grid-template-columns:1fr 1.5fr;
+  gap:5rem; align-items:center; margin-bottom:4rem;
+}
+.sustain-imgtext-img {
+  overflow:hidden;
+  box-shadow:8px 8px 0 var(--sand), 9px 9px 0 var(--stone);
+}
+.sustain-imgtext-img img {
+  width:100%; aspect-ratio:16/9;
+  object-fit:cover; object-position:center;
+  display:block;
+  transition:transform .9s cubic-bezier(.23,1,.32,1);
+}
+.sustain-imgtext:hover .sustain-imgtext-img img { transform:scale(1.03); }
+.sustain-top-img {
+  position:relative; overflow:hidden;
+  box-shadow:8px 8px 0 var(--sand), 9px 9px 0 var(--stone);
+  margin-top:3rem;
+}
+.sustain-top-img img {
+  width:100%; aspect-ratio:16/9;
+  object-fit:cover; object-position:center 40%; display:block;
+}
+.sustain-image-caption {
+  position:absolute; bottom:0; left:0; right:0;
+  padding:.9rem 1.2rem;
+  background:linear-gradient(to top,rgba(44,35,24,.65),transparent);
+  font-family:'Cormorant Garamond',serif; font-style:italic;
+  font-size:.82rem; color:rgba(255,255,255,.8);
+}
+.sustain-five {
+  display:grid; grid-template-columns:repeat(5,1fr);
+  gap:1px; background:rgba(106,114,64,.12);
+}
+.sustain-eco-item,
+.sustain-pillar {
+  background:var(--cream); padding:2.2rem 1.8rem; transition:background .3s;
+}
+.sustain-eco-item:hover, .sustain-pillar:hover { background:var(--beige); }
+.sustain-eco-icon, .sustain-icon {
+  width:30px; height:30px; color:var(--olive);
+  margin-bottom:1.1rem; transition:transform .4s;
+}
+.sustain-eco-item:hover .sustain-eco-icon,
+.sustain-pillar:hover .sustain-icon { transform:scale(1.1); }
+.sustain-eco-icon svg, .sustain-icon svg { width:100%; height:100%; }
+.sustain-eco-item h4, .sustain-pillar h4 {
+  font-family:'Cormorant Garamond',serif; font-weight:500;
+  font-size:1rem; color:var(--charcoal); margin-bottom:.5rem;
+}
+.sustain-eco-item p, .sustain-pillar p {
+  font-family:'Cormorant Garamond',serif; font-size:.92rem;
+  font-weight:300; line-height:1.75; color:var(--text-mid);
+}
+
+.has-canvas{position:relative;overflow:hidden;}
+.section-canvas{position:absolute;inset:0;pointer-events:none;z-index:0;opacity:1;}
+.has-canvas > *:not(.section-canvas){position:relative;z-index:1;}
+
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="index.html" class="nav-logo">
+    <img src="logo-castillo-hvid_transperant.png" alt="Castillo del Alma" style="filter:brightness(0);">
+  </a>
+  <ul class="nav-links">
+    <li><a href="#intro">Ejendommen</a></li>
+    <li><a href="#towers">Tårnene</a></li>
+    <li><a href="#rooms">Indkvartering</a></li>
+    <li><a href="#facilities">Faciliteter</a></li>
+    <li><a href="#sustainability">Bæredygtighed</a></li>
+    <li><a href="#vineyard">Vingården</a></li>
+    <li><a href="#location">Beliggenhed</a></li>
+  </ul>
+  <a href="index.html" class="nav-back">← Tilbage til forsiden</a>
+</nav>
+
+<!-- HERO -->
+<section class="page-hero">
+  <div class="page-hero-img" id="heroImg"></div>
+  <div class="page-hero-overlay"></div>
+  <div class="page-hero-content">
+    <span class="page-hero-eyebrow">Mollina · Antequera · Málaga</span>
+    <h1>Castillo<br><em>del Alma</em></h1>
+  </div>
+</section>
+
+<!-- INTRO -->
+<section class="estate-intro" id="intro">
+  <div class="section-inner">
+    <div class="intro-two-col">
+      <div class="reveal-left">
+        <span class="section-label">Ejendommen</span>
+        <h2 class="split-h">En <em>borglignende</em><br>oase i Andalucía</h2>
+        <p>Castillo del Alma ligger smukt og fredfyldt omgivet af bølgende vinmarker og sølvgrønne olivenplantager i den lille andalusiske by Mollina, tæt ved historiske Antequera i Málaga-provinsen.</p>
+        <p>Huset er opført for blot 13 år siden, men bygget med stor respekt for den klassiske andalusiske byggestil — med varme naturmaterialer, smukke linjer og karakterfuld arkitektur. Kalkstens-overflader, håndlavede fliser, røde teglsten og hvide mure skaber en æstetik der er både elegant og autentisk.</p>
+        <p>I hjertet af ejendommen finder man palmer, blomstrende buske og den smukke runde saltvandspool — alt omgivet af velholdte grønne arealer og naturens stilhed.</p>
+        <div class="estate-facts">
+          <div class="estate-fact"><h4>40.000 m²</h4><p>Samlet ejendom</p></div>
+          <div class="estate-fact"><h4>4+ ha</h4><p>Egne vinmarker</p></div>
+          <div class="estate-fact"><h4>2 Tårne</h4><p>360° panoramaudsigt</p></div>
+          <div class="estate-fact"><h4>7</h4><p>Eksklusive værelser</p></div>
+          <div class="estate-fact"><h4>2011</h4><p>Opført</p></div>
+          <div class="estate-fact"><h4>D.O.</h4><p>Málaga Denominación</p></div>
+        </div>
+      </div>
+      <div class="reveal-right d2">
+        <div class="intro-img-stack">
+          <div class="intro-main-img">
+            <img src="estate-aerial.jpg" alt="Castillo del Alma — luftfoto">
+          </div>
+          <div class="intro-small-img">
+            <img src="IMG_0603.JPG" alt="Castillo del Alma — pool">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PHOTO STRIP -->
+<div class="photo-strip">
+  <div class="photo-strip-grid">
+    <div class="strip-item">
+      <img src="estate-pool.jpg" alt="Pool">
+      <div class="strip-item-overlay"></div>
+    </div>
+    <div class="strip-item">
+      <img src="IMG_0603.JPG" alt="Have">
+      <div class="strip-item-overlay"></div>
+    </div>
+    <div class="strip-item">
+      <img src="estate-dining.jpg" alt="Spisestue">
+      <div class="strip-item-overlay"></div>
+    </div>
+    <div class="strip-item">
+      <img src="vinmark1.jpg" alt="Vingård">
+      <div class="strip-item-overlay"></div>
+    </div>
+    <div class="strip-item">
+      <img src="wellness-yoga-castillo.png" alt="Yoga">
+      <div class="strip-item-overlay"></div>
+    </div>
+  </div>
+</div>
+
+<!-- TOWERS -->
+<section class="towers" id="towers">
+  <div class="section-inner">
+    <div class="towers-grid">
+      <div class="tower-img reveal-left">
+        <img src="estate-aerial.jpg" alt="Tårnet på Castillo del Alma">
+        <div class="tower-img-caption">Det karakteristiske tårn set fra luften</div>
+      </div>
+      <div class="reveal-right d2">
+        <span class="section-label">Tårnene</span>
+        <h2 class="split-h">To tårne —<br>ét <em>udsyn</em></h2>
+        <p>Enhver borg har sit tårn — og Castillo del Alma har hele to. Tårnene er ejendommens mest karakteristiske arkitektoniske element og giver bygningen dens unikke og majestætiske silhuet.</p>
+        <p>Fra tårnenes øverste etage åbner sig et betagende 360 graders panorama over de omgivende vinmarker, sølvgrønne olivenlunde og de dramatiske bjerge, der danner rammen om det andalusiske landskab.</p>
+        <p>Specielt ved solopgang og solnedgang er tårnene et magisk sted — lyset forandrer landskabet fra minut til minut, og stilheden er komplet. Mange gæster beskriver disse øjeblikke som nogle af de mest mindeværdige fra opholdet.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="section-inner"><div class="divider"></div></div>
+
+<!-- ROOMS -->
+<section class="rooms has-canvas" id="rooms">
+  <canvas class="section-canvas" data-palette="warm"></canvas>
+  <div class="section-inner">
+    <div class="rooms-header reveal">
+      <span class="section-label">Indkvartering</span>
+      <h2>Værelserne</h2>
+      <p>Syv dobbelte eksklusive værelser, alle med ensuite badeværelse — designet til komfort, ro og nærvær</p>
+    </div>
+    <div class="rooms-grid reveal d1">
+
+      <div class="room-card">
+        <div class="room-card-accent"></div>
+        <div class="room-card-img room-hover-img">
+          <img class="room-img-default" src="vaerelse-1-1.jpg" alt="Suite del Alma — soveværelse">
+          <img class="room-img-hover" src="vaerelse-1-2.jpg" alt="Suite del Alma — badeværelse">
+        </div>
+        <div class="room-card-body">
+          <span class="room-card-num">01</span>
+          <h3>Suite del Alma</h3>
+          <p>Ejendommens største og smukkeste suite med panoramaudsigt fra tårnet. Privat terrasse, king-size seng og luksuriøst badeværelse med fritstående badekar.</p>
+          <div class="room-amenities">
+            <span class="room-amenity">King-size</span>
+            <span class="room-amenity">Privat terrasse</span>
+            <span class="room-amenity">Badekar</span>
+            <span class="room-amenity">Tårnudsigt</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="room-card">
+        <div class="room-card-accent"></div>
+        <div class="room-card-img">
+          <div class="room-card-img-ph" style="background:linear-gradient(145deg,#d4c0b0,#b8a090);"></div>
+        </div>
+        <div class="room-card-body">
+          <span class="room-card-num">02</span>
+          <h3>Habitación de la Viña</h3>
+          <p>Rummelig dobbeltstue med direkte udsigt over de grønne vinmarker. Andalusiske fliser, hvide mure og naturlige materialer skaber en varm og rolig atmosfære.</p>
+          <div class="room-amenities">
+            <span class="room-amenity">Queen-size</span>
+            <span class="room-amenity">Vingårds­udsigt</span>
+            <span class="room-amenity">Brusebad</span>
+            <span class="room-amenity">AC</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="room-card">
+        <div class="room-card-accent"></div>
+        <div class="room-card-img">
+          <div class="room-card-img-ph" style="background:linear-gradient(145deg,#c0d0b8,#a0b898);"></div>
+        </div>
+        <div class="room-card-body">
+          <span class="room-card-num">03</span>
+          <h3>Habitación del Jardín</h3>
+          <p>Lys og frisk dobbeltstue med direkte adgang til haven og poolområdet. Perfekt til gæster der ønsker nærhed til naturen og det andalusiske friluftsliv.</p>
+          <div class="room-amenities">
+            <span class="room-amenity">Queen-size</span>
+            <span class="room-amenity">Haveadgang</span>
+            <span class="room-amenity">Brusebad</span>
+            <span class="room-amenity">AC</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="room-card">
+        <div class="room-card-accent"></div>
+        <div class="room-card-img">
+          <div class="room-card-img-ph" style="background:linear-gradient(145deg,#d0b8b0,#b89898);"></div>
+        </div>
+        <div class="room-card-body">
+          <span class="room-card-num">04</span>
+          <h3>Habitación del Sol</h3>
+          <p>Sydvendt værelse der modtager dagens lys fra morgen til aften. Varme terracottafarver og andalusisk dekor skaber en intim og solrig stemning.</p>
+          <div class="room-amenities">
+            <span class="room-amenity">Double</span>
+            <span class="room-amenity">Sydvendt</span>
+            <span class="room-amenity">Brusebad</span>
+            <span class="room-amenity">AC</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="room-card">
+        <div class="room-card-accent"></div>
+        <div class="room-card-img">
+          <div class="room-card-img-ph" style="background:linear-gradient(145deg,#b8c8d0,#98a8b8);"></div>
+        </div>
+        <div class="room-card-body">
+          <span class="room-card-num">05</span>
+          <h3>Habitación de la Sierra</h3>
+          <p>Værelse med udsigt mod de dramatiske bjerge i horisonten. En rolig og kontemplativ atmosfære der indbyder til fordybelse og eftertanke.</p>
+          <div class="room-amenities">
+            <span class="room-amenity">Double</span>
+            <span class="room-amenity">Bjerg­udsigt</span>
+            <span class="room-amenity">Brusebad</span>
+            <span class="room-amenity">AC</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="room-card">
+        <div class="room-card-accent"></div>
+        <div class="room-card-img">
+          <div class="room-card-img-ph" style="background:linear-gradient(145deg,#d8c0a8,#c0a888);"></div>
+        </div>
+        <div class="room-card-body">
+          <span class="room-card-num">06</span>
+          <h3>Habitación del Olivo</h3>
+          <p>Charmerende enkeltværelse omgivet af oliventræernes dæmpede farver. Ideelt til solo-retreatgæster eller som supplement til en privat booking.</p>
+          <div class="room-amenities">
+            <span class="room-amenity">Single/Twin</span>
+            <span class="room-amenity">Olivenudsigt</span>
+            <span class="room-amenity">Brusebad</span>
+            <span class="room-amenity">AC</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="room-card">
+        <div class="room-card-accent"></div>
+        <div class="room-card-img">
+          <div class="room-card-img-ph" style="background:linear-gradient(145deg,#c8b8d0,#a898b8);"></div>
+        </div>
+        <div class="room-card-body">
+          <span class="room-card-num">07</span>
+          <h3>Habitación de la Torre</h3>
+          <p>Eksklusivt tårnværelse med adgang til udsigtsplatformen. Et unikt og mindeværdigt ophold med panoramaudsigt over vinmarker, olivenlunde og bjerge.</p>
+          <div class="room-amenities">
+            <span class="room-amenity">Double</span>
+            <span class="room-amenity">Tårnadgang</span>
+            <span class="room-amenity">Panoramaudsigt</span>
+            <span class="room-amenity">AC</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- FACILITIES -->
+<section class="facilities" id="facilities">
+  <div class="section-inner">
+    <div class="facilities-grid">
+      <div class="reveal-left">
+        <span class="section-label">Faciliteter</span>
+        <h2 class="split-h">Alt hvad du<br>behøver til <em>ro</em></h2>
+
+        <div class="facility-list">
+          <div class="facility-item">
+            <div class="facility-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><ellipse cx="12" cy="16" rx="9" ry="4"/><path d="M3 16v-4c0-2.2 4-4 9-4s9 1.8 9 4v4"/></svg>
+            </div>
+            <div class="facility-text"><h4>Saltvandspool</h4><p>Rund pool med saltvandsrensning og solterrasse</p></div>
+          </div>
+          <div class="facility-item">
+            <div class="facility-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-4 0v2"/><line x1="12" y1="12" x2="12" y2="16"/></svg>
+            </div>
+            <div class="facility-text"><h4>Finsk Sauna</h4><p>Traditionel finsk sauna til afspænding og restitution</p></div>
+          </div>
+          <div class="facility-item">
+            <div class="facility-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M12 2L8 8H4l3 6-2 7 7-3 7 3-2-7 3-6h-4z"/></svg>
+            </div>
+            <div class="facility-text"><h4>Infrarød Sauna</h4><p>Infrarød sauna for dyb varmebehandling</p></div>
+          </div>
+          <div class="facility-item">
+            <div class="facility-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+            </div>
+            <div class="facility-text"><h4>Stort fællesrum</h4><p>Romslig stue med andalusisk interiør og lounge</p></div>
+          </div>
+          <div class="facility-item">
+            <div class="facility-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M17 8h2a2 2 0 0 1 2 2v6a2 2 0 0 1-2 2h-2v4l-4-4H9a2 2 0 0 1-2-2v-1"/><path d="M5 7H3a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2v4l4-4h4a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2H5V5a2 2 0 0 1 2-2h8"/></svg>
+            </div>
+            <div class="facility-text"><h4>Retreat-rum</h4><p>Dedikeret rum til yoga, meditation og workshops</p></div>
+          </div>
+          <div class="facility-item">
+            <div class="facility-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M3 11l19-9-9 19-2-8-8-2z"/></svg>
+            </div>
+            <div class="facility-text"><h4>Udendørs terasser</h4><p>Flere private og fælles terasser med udsigt</p></div>
+          </div>
+          <div class="facility-item">
+            <div class="facility-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M6 3v6a3 3 0 0 0 6 0V3"/><line x1="9" y1="9" x2="9" y2="21"/><line x1="5" y1="21" x2="13" y2="21"/><path d="M18 3c0 0 2 1.5 2 4s-2 4-2 4v10"/></svg>
+            </div>
+            <div class="facility-text"><h4>Professionelt køkken</h4><p>Fuldt udstyret køkken til fælles madlavning</p></div>
+          </div>
+          <div class="facility-item">
+            <div class="facility-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+            </div>
+            <div class="facility-text"><h4>Stort spisebord</h4><p>Bord til 14 gæster — til fælles måltider og events</p></div>
+          </div>
+          <div class="facility-item">
+            <div class="facility-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="12" cy="12" r="2"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M16.9 16.9l2.1 2.1M4.9 19.1l2.1-2.1M16.9 7.1l2.1-2.1"/></svg>
+            </div>
+            <div class="facility-text"><h4>WiFi overalt</h4><p>Hurtig fiber-internetforbindelse i hele ejendommen</p></div>
+          </div>
+          <div class="facility-item">
+            <div class="facility-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12" y2="18" stroke-width="2"/></svg>
+            </div>
+            <div class="facility-text"><h4>Parkering</h4><p>Gratis parkering på ejendommen for alle gæster</p></div>
+          </div>
+          <div class="facility-item">
+            <div class="facility-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            </div>
+            <div class="facility-text"><h4>Fuldt aflåst</h4><p>Sikker og privat ejendom med adgangskontrol</p></div>
+          </div>
+          <div class="facility-item">
+            <div class="facility-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3M3 16v3a2 2 0 0 0 2 2h3m8 0h3a2 2 0 0 0 2-2v-3"/></svg>
+            </div>
+            <div class="facility-text"><h4>Vindyrkning</h4><p>Egne vinmarker — vin fra husets egen produktion</p></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="facilities-visual reveal-right d2">
+        <div class="fac-img">
+          <img src="IMG_0603.JPG" alt="Pool og have">
+        </div>
+        <div class="fac-img">
+          <img src="estate-pool.jpg" alt="Pool">
+        </div>
+        <div class="fac-img">
+          <img src="estate-dining.jpg" alt="Spisning">
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- SUSTAINABILITY -->
+<section class="sustainability" id="sustainability">
+  <div class="section-inner">
+
+    <!-- Full width heading -->
+    <div class="sustain-heading reveal">
+      <span class="section-label">Bæredygtighed</span>
+      <h2 class="split-h">Ansvar for <em>naturen</em> omkring os</h2>
+    </div>
+
+    <!-- Text left, image right -->
+    <div class="sustain-top reveal d1">
+      <div class="sustain-top-text">
+        <p class="sustain-lead">På Castillo del Alma tror vi på, at et ægte retreatsted ikke bare er skabt til menneskelig restitution — men også bærer et ansvar for den natur og de omgivelser, det er en del af.</p>
+        <p class="sustain-body">Castillo del Alma ligger midt i et landskab, hvor natur, vinmarker, stilhed og åbne vidder er en del af stedets sjæl. Derfor ønsker vi at passe på det, vi er blevet en del af. Vi arbejder med respekt for jorden, årstiderne og de ressourcer, der omgiver os. Det handler om at drive stedet med omtanke — ikke kun for dem, der besøger os i dag, men også for dem, der skal kunne opleve stedet i fremtiden.</p>
+        <p class="sustain-body">Vores vinmarker er en vigtig del af denne tilgang. De er ikke blot en smuk ramme omkring ejendommen, men et levende landskab, vi har ansvar for at forvalte nænsomt. Derfor sprøjtes vores vinmarker ikke. Vi ønsker at lade jorden, planterne og det omkringliggende dyreliv indgå i en mere naturlig balance, hvor biodiversitet og respekt for naturens egne processer får plads.</p>
+      </div>
+      <div class="sustain-top-img reveal-right d2">
+        <img src="close-up-farmer-working.jpg" alt="Bæredygtighed · Castillo del Alma">
+        <div class="sustain-image-caption">Vingården · Mollina · Andalucía</div>
+      </div>
+    </div>
+
+
+    <!-- Image left, text right -->
+    <div class="sustain-imgtext reveal">
+      <div class="sustain-imgtext-img">
+        <img src="old-hand-water-pump-well-garden-watering-saving-water-rural-environnement.jpg" alt="Bæredygtighed · Castillo del Alma">
+      </div>
+      <div class="sustain-imgtext-text">
+        <p class="sustain-body">Bæredygtighed handler for os om balance. Balancen mellem komfort og ansvar. Mellem gæstfrihed og ressourcebevidsthed. Mellem at skabe smukke rammer for fordybelse og samtidig minimere vores aftryk på omgivelserne.</p>
+        <p class="sustain-body">Det betyder, at vi løbende arbejder med at træffe bedre valg i hverdagen — om energi, vandforbrug, lokale råvarer, ansvarlig drift, hensyn til biodiversitet og en nænsom brug af de bygninger, marker og landskaber, vi har fået lov at forvalte.</p>
+        <p class="sustain-body">Vores ambition er ikke at være perfekte. Vores ambition er at være bevidste, ærlige og i konstant bevægelse mod en mere ansvarlig måde at drive et retreatsted på.</p>
+      </div>
+    </div>
+
+    <!-- 5 icon cards -->
+    <div class="sustain-five reveal d2">
+
+      <div class="sustain-eco-item">
+        <div class="sustain-eco-icon">
+          <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="16" cy="10" r="5"/>
+            <path d="M16 5 Q20 9 20 14"/><path d="M16 5 Q12 9 12 14"/>
+            <path d="M8 18 Q8 26 16 28 Q24 26 24 18"/>
+            <line x1="16" y1="15" x2="16" y2="28"/>
+          </svg>
+        </div>
+        <h4>Varmt vand fra solenergi</h4>
+        <p>Solvarmesystem dækker ejendommens samlede varmtvandsforbrug hele året rundt.</p>
+      </div>
+
+      <div class="sustain-eco-item">
+        <div class="sustain-eco-icon">
+          <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4 20 Q16 16 28 20"/>
+            <path d="M4 25 Q16 21 28 25"/>
+            <path d="M16 4 L19 11 L27 12 L21 18 L23 26 L16 22 L9 26 L11 18 L5 12 L13 11 Z" stroke-width="1.3"/>
+          </svg>
+        </div>
+        <h4>Gulvvarme fra solenergi</h4>
+        <p>Gulvvarme i hele huset opvarmes udelukkende af ejendommens eget solvarmeanlæg.</p>
+      </div>
+
+      <div class="sustain-eco-item">
+        <div class="sustain-eco-icon">
+          <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="4" y="12" width="24" height="14" rx="1"/>
+            <path d="M10 12 V9 Q16 5 22 9 V12"/>
+            <line x1="4" y1="19" x2="28" y2="19"/>
+            <line x1="13" y1="19" x2="13" y2="26"/>
+            <line x1="19" y1="19" x2="19" y2="26"/>
+          </svg>
+        </div>
+        <h4>Top isoleret bygning</h4>
+        <p>Ejendommen er bygget med høj isoleringsstandard — minimalt energiforbrug året rundt.</p>
+      </div>
+
+      <div class="sustain-eco-item">
+        <div class="sustain-eco-icon">
+          <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <ellipse cx="16" cy="24" rx="10" ry="4"/>
+            <path d="M6 24 V18 Q6 10 16 10 Q26 10 26 18 V24"/>
+            <path d="M11 16 Q13 20 16 18 Q19 16 21 20"/>
+          </svg>
+        </div>
+        <h4>Biologisk ECO-kloaksystem</h4>
+        <p>Spildevand renses naturligt via mikroorganismer uden brug af kemikalier — skånsomt for naturen.</p>
+      </div>
+
+      <div class="sustain-eco-item">
+        <div class="sustain-eco-icon">
+          <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="10" y1="2" x2="22" y2="2"/>
+            <line x1="16" y1="2" x2="16" y2="6"/>
+            <ellipse cx="16" cy="9" rx="8" ry="3"/>
+            <line x1="8" y1="9" x2="8" y2="24"/>
+            <line x1="24" y1="9" x2="24" y2="24"/>
+            <ellipse cx="16" cy="24" rx="8" ry="3"/>
+            <path d="M11 17 Q13.5 15 16 17 Q18.5 19 21 17"/>
+            <path d="M11 20 Q13.5 18 16 20 Q18.5 22 21 20"/>
+          </svg>
+        </div>
+        <h4>Egen brønd — 105 m dyb</h4>
+        <p>Castillo del Alma har sin egen 105 meter dybe artesiske brønd. Vandet bruges til vanding af vinplanterne og i huset — renset og godkendt som drikkevand. Rent naturligt grundvand, direkte fra kilden.</p>
+      </div>
+
+    </div><!-- end sustain-five -->
+
+  </div>
+</section>
+
+<!-- VINEYARD DETAIL -->
+<section class="vineyard-detail has-canvas" id="vineyard">
+  <canvas class="section-canvas" data-palette="green"></canvas>
+  <div class="section-inner">
+    <div class="vineyard-detail-grid">
+      <div class="reveal-left">
+        <span class="section-label">Vingården</span>
+        <h2 class="split-h">Husets egne<br>vine — Málaga <em>D.O.</em></h2>
+        <p>Castillo del Alma råder over mere end 4 hektar jord med egne vinmarker smukt beliggende i det solrige landskab omkring Mollina. Jordbunden er rig på kalk og mineraler — som giver vinene karakter, dybde og en flot balance.</p>
+        <p>Vingården dyrkes med 65% Cabernet Sauvignon og 35% Merlot under Málaga Denominación de Origen — en af Andalusiens stolteste vinregioner.</p>
+        <p>Området omkring Mollina er særligt kendt for sine mange solskinstimer, varme dage og køligere nætter, som skaber optimale betingelser for dyrkning af kvalitetsdruer. Kombinationen af klimaet, højden og den andalusiske jord giver druerne mulighed for at modne langsomt og udvikle en intens og kompleks smag.</p>
+        <p>Husets vin serveres ved retreats og private events — og kan købes med hjem som et smukt minde om opholdet.</p>
+      </div>
+      <div class="vineyard-img reveal-right d2">
+        <img src="vinmark1.jpg" alt="Vingård ved Castillo del Alma">
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- LOCATION -->
+<section class="location" id="location">
+  <div class="section-inner">
+    <div class="location-grid">
+      <div class="reveal-left">
+        <span class="section-label">Beliggenhed</span>
+        <h2 class="split-h">Mollina <span class="phonetic">/moˈʎina/</span><br>hjertet af <em>Andalucía</em></h2>
+        <p>Castillo del Alma ligger i Mollina, en lille andalusisk by i Málaga-provinsen. Omgivet af vinmarker, olivenlunde og et imponerende bjerglandskab er stedet perfekt til at koble fra og finde ro.</p>
+        <p>Placeringen er ideel — central nok til at udforske Andalusiens kulturelle skatte, men tilpas afsides til at give den stilhed og fred som et retreat kræver.</p>
+        <div class="location-distances">
+          <div class="location-distance"><span>Antequera</span><span>15 min</span></div>
+          <div class="location-distance"><span>Málaga ciudad</span><span>55 min</span></div>
+          <div class="location-distance"><span>Caminito del Rey</span><span>40 min</span></div>
+          <div class="location-distance"><span>Ronda</span><span>75 min</span></div>
+          <div class="location-distance"><span>Córdoba</span><span>90 min</span></div>
+          <div class="location-distance"><span>Granada</span><span>90 min</span></div>
+          <div class="location-distance"><span>Sevilla</span><span>2,5 timer</span></div>
+          <div class="location-distance"><span>Málaga Lufthavn</span><span>60 min</span></div>
+        </div>
+      </div>
+      <div class="location-map reveal-right d2">
+        <iframe
+          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d12562.8!2d-4.6506!3d37.1534!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd72b1d3ef80d34d%3A0x0!2sMollina%2C+M%C3%A1laga!5e0!3m2!1sda!2sdk!4v1"
+          allowfullscreen loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade">
+        </iframe>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="estate-cta">
+  <div class="section-inner">
+    <div class="reveal">
+      <h2>Klar til at opleve Castillo del Alma?</h2>
+      <p>Book dit retreat, lej ejendommen privat eller kontakt os for en personlig dialog om dine ønsker.</p>
+      <div class="cta-btns">
+        <a href="index.html#retreats" class="btn-wine">Se Retreats</a>
+        <a href="index.html#contact" class="btn-outline-light">Kontakt os</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-bottom">
+    <p>© 2026 Castillo del Alma · Mollina, Málaga · All rights reserved</p>
+    <a href="index.html">← Tilbage til forsiden</a>
+  </div>
+</footer>
+
+<script>
+// Reveal on scroll
+const revObs = new IntersectionObserver(entries=>{
+  entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');revObs.unobserve(e.target);}});
+},{threshold:.1});
+document.querySelectorAll('.reveal,.reveal-left,.reveal-right').forEach(el=>revObs.observe(el));
+
+// Split headings
+document.querySelectorAll('.split-h').forEach(h=>{
+  const nodes = [];
+  h.childNodes.forEach(node=>{
+    if(node.nodeType===3){
+      node.textContent.split(/(\s+)/).forEach(tok=>{
+        if(tok.trim()){const sw=document.createElement('span');sw.className='split-word';sw.innerHTML=`<span>${tok}</span>`;nodes.push(sw);nodes.push(document.createTextNode(' '));}
+        else if(tok==='\n'){nodes.push(document.createElement('br'));}
+      });
+    } else if(node.nodeType===1){
+      const sw=document.createElement('span');sw.className='split-word';sw.innerHTML=`<span>${node.outerHTML}</span>`;nodes.push(sw);nodes.push(document.createTextNode(' '));
+    }
+  });
+  h.innerHTML='';
+  nodes.forEach(n=>h.appendChild(n));
+  const obs=new IntersectionObserver(entries=>{
+    entries.forEach(e=>{if(e.isIntersecting){let i=0;e.target.querySelectorAll('.split-word').forEach(w=>{w.classList.add('visible');w.querySelector('span').style.animationDelay=(i*.08)+'s';i++;});obs.unobserve(e.target);}});
+  },{threshold:.25});
+  obs.observe(h);
+});
+
+// Hero parallax
+document.getElementById('heroImg').classList.add('loaded');
+</script>
+
+<script>
+const PALETTES = {
+  warm: [[184,138,30],[192,92,48],[122,31,53],[212,168,48]],
+  green:[[106,114,64],[138,148,88],[184,138,30],[58,110,50]],
+  teal: [[58,110,106],[90,140,136],[106,114,64],[184,138,30]],
+};
+class SectionRings {
+  constructor(canvas, palette){
+    this.c=canvas; this.ctx=canvas.getContext('2d');
+    this.pal=palette; this.rings=[]; this.running=false;
+    this.resize(); this.init();
+  }
+  resize(){
+    this.W=this.c.width=this.c.parentElement.offsetWidth;
+    this.H=this.c.height=this.c.parentElement.offsetHeight;
+  }
+  newRing(init=false){
+    const r={
+      cx:Math.random()*this.W, cy:Math.random()*this.H,
+      rx:Math.random()*260+80, ry:0,
+      rot:Math.random()*Math.PI*2, rotV:(Math.random()-.5)*.0022,
+      vx:(Math.random()-.5)*.18, vy:(Math.random()-.5)*.18,
+      wob:Array.from({length:5},()=>({a:Math.random()*Math.PI*2,s:(Math.random()-.5)*.006,m:Math.random()*16+4})),
+      col:this.pal[Math.floor(Math.random()*this.pal.length)],
+      lw:Math.random()*.55+.25, life:0, maxL:Math.random()*800+500,
+    };
+    r.ry=r.rx*(.65+Math.random()*.25);
+    if(init) r.life=Math.floor(Math.random()*r.maxL);
+    return r;
+  }
+  init(){ this.rings=Array.from({length:16},()=>this.newRing(true)); }
+  update(){ this.rings.forEach(r=>{ r.cx+=r.vx; r.cy+=r.vy; r.rot+=r.rotV; r.wob.forEach(w=>w.a+=w.s); r.life++; if(r.life>r.maxL) Object.assign(r,this.newRing()); }); }
+  draw(){
+    const ctx=this.ctx;
+    ctx.clearRect(0,0,this.W,this.H);
+    this.rings.forEach(r=>{
+      const t=r.life/r.maxL, fade=Math.sin(t*Math.PI)*.28;
+      const wx=r.wob[0].m*Math.sin(r.wob[0].a), wy=r.wob[1].m*Math.sin(r.wob[1].a);
+      const rxi=r.rx+r.wob[2].m*Math.sin(r.wob[2].a), ryi=r.ry+r.wob[3].m*Math.sin(r.wob[3].a);
+      ctx.save(); ctx.translate(r.cx+wx,r.cy+wy); ctx.rotate(r.rot);
+      const pts=72; ctx.beginPath();
+      for(let i=0;i<=pts;i++){
+        const a=(i/pts)*Math.PI*2;
+        const noise=1+.035*Math.sin(a*3+r.wob[0].a)+.025*Math.cos(a*7+r.wob[4].a);
+        const x=Math.cos(a)*rxi*noise, y=Math.sin(a)*ryi*noise;
+        i===0?ctx.moveTo(x,y):ctx.lineTo(x,y);
+      }
+      ctx.closePath();
+      const [rv,gv,bv]=r.col;
+      ctx.strokeStyle=`rgba(${rv},${gv},${bv},${fade})`; ctx.lineWidth=r.lw; ctx.stroke(); ctx.restore();
+    });
+  }
+  start(){ if(this.running) return; this.running=true; const loop=()=>{ if(!this.running) return; this.update(); this.draw(); requestAnimationFrame(loop); }; requestAnimationFrame(loop); }
+  stop(){ this.running=false; }
+}
+
+const sectionAnimators=[];
+document.querySelectorAll('.section-canvas').forEach(canvas=>{
+  const key=canvas.dataset.palette||'warm';
+  const anim=new SectionRings(canvas,PALETTES[key]);
+  sectionAnimators.push({canvas,anim,started:false});
+});
+window.addEventListener('resize',()=>{ sectionAnimators.forEach(({anim})=>{ anim.resize(); anim.rings=[]; anim.init(); }); });
+const canvasObs=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    const entry=sectionAnimators.find(x=>x.canvas===e.target);
+    if(!entry) return;
+    if(e.isIntersecting){ entry.anim.start(); entry.started=true; } else if(entry.started){ entry.anim.stop(); }
+  });
+},{threshold:.01});
+sectionAnimators.forEach(({canvas})=>canvasObs.observe(canvas));
+</script>
+
+</body>
+</html>

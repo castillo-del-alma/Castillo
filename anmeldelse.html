@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Del din oplevelse — Castillo del Alma</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@300;400&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Manrope:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --cream:#faf6ee; --beige:#f0e8d5; --sand:#e0d0b0; --stone:#c8b898;
+  --charcoal:#2c2318; --text:#2c2318; --text-mid:#5c4e3a; --text-light:#9a8c7a;
+  --wine:#7a1f35; --wine-light:#a03048; --gold:#b88a1e; --gold-light:#d4a830;
+  --teal:#3a6e6a; --olive:#6a7240; --terracotta:#c05c30;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{font-family:'Manrope',sans-serif;background:var(--cream);color:var(--text);min-height:100vh;}
+
+/* ── HEADER ── */
+.page-header{
+  text-align:center;padding:5rem 2rem 4rem;
+  background:linear-gradient(to bottom, var(--section-alt,#ede4d0), var(--cream));
+  border-bottom:1px solid rgba(184,138,30,.15);
+}
+.page-header img{height:48px;filter:brightness(0);margin-bottom:2rem;display:block;margin-left:auto;margin-right:auto;}
+.page-header h1{
+  font-family:'Cinzel',serif;font-weight:300;
+  font-size:clamp(1.8rem,4vw,3rem);letter-spacing:.1em;
+  color:var(--charcoal);margin-bottom:.6rem;
+}
+.page-header h1 em{color:var(--wine);font-style:normal;}
+.page-header p{
+  font-family:'Cormorant Garamond',serif;font-style:italic;
+  font-size:1.1rem;font-weight:300;color:var(--text-light);
+  max-width:500px;margin:0 auto;line-height:1.7;
+}
+
+/* ── FORM WRAPPER ── */
+.form-wrap{max-width:720px;margin:0 auto;padding:4rem 2rem 6rem;}
+
+/* ── STEP INDICATOR ── */
+.steps{
+  display:flex;justify-content:center;gap:0;
+  margin-bottom:3.5rem;
+  border:1px solid var(--sand);
+  overflow:hidden;
+}
+.step{
+  flex:1;text-align:center;
+  padding:.65rem .5rem;
+  font-size:.58rem;letter-spacing:.15em;text-transform:uppercase;
+  color:var(--text-light);background:var(--cream);
+  border-right:1px solid var(--sand);
+  transition:all .3s;cursor:default;
+}
+.step:last-child{border-right:none;}
+.step.active{background:var(--wine);color:#fff;border-color:var(--wine);}
+.step.done{background:var(--beige);color:var(--olive);}
+
+/* ── PAGES ── */
+.form-page{display:none;}
+.form-page.active{display:block;}
+
+/* ── SECTION TITLE ── */
+.section-title{
+  font-family:'Cinzel',serif;font-weight:300;
+  font-size:1.2rem;letter-spacing:.08em;color:var(--charcoal);
+  margin-bottom:.4rem;
+}
+.section-sub{
+  font-family:'Cormorant Garamond',serif;font-style:italic;
+  font-size:1rem;color:var(--text-light);margin-bottom:2.5rem;
+}
+
+/* ── RATING QUESTION ── */
+.rating-question{
+  margin-bottom:2.5rem;
+  padding:1.8rem 1.8rem 1.5rem;
+  background:#fff;border:1px solid var(--sand);
+  transition:border-color .3s;
+}
+.rating-question:hover{border-color:rgba(184,138,30,.35);}
+.rq-label{
+  font-family:'Cormorant Garamond',serif;font-weight:400;
+  font-size:1.05rem;color:var(--charcoal);
+  margin-bottom:1rem;display:block;
+}
+.rq-label strong{display:block;font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:.3rem;font-weight:400;}
+
+/* ── STAR RATING ── */
+.stars{display:flex;gap:.3rem;align-items:center;}
+.stars input{display:none;}
+.stars label{
+  font-size:1.8rem;color:var(--sand);
+  cursor:pointer;
+  transition:color .15s,transform .15s;
+  line-height:1;
+  user-select:none;
+}
+.stars label:hover,.stars label:hover ~ label{color:var(--gold);}
+.stars input:checked ~ label{color:var(--gold);}
+/* Reverse trick for CSS-only stars */
+.stars{flex-direction:row-reverse;justify-content:flex-end;}
+.stars label:hover,.stars label:hover ~ label{color:var(--gold-light);}
+.stars input:checked ~ label{color:var(--gold);}
+.stars:has(input:checked) label{color:var(--sand);}
+.stars input:checked ~ label{color:var(--gold);}
+.star-hint{
+  font-size:.62rem;letter-spacing:.1em;color:var(--text-light);
+  margin-left:.5rem;font-style:italic;
+}
+
+/* ── TEXT AREAS ── */
+.text-question{margin-bottom:2.5rem;}
+.text-question label{
+  display:block;font-family:'Cormorant Garamond',serif;font-weight:400;
+  font-size:1.05rem;color:var(--charcoal);margin-bottom:.8rem;
+}
+.text-question label strong{display:block;font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;color:var(--teal);margin-bottom:.3rem;font-weight:400;}
+.text-question textarea{
+  width:100%;padding:1rem 1.2rem;
+  font-family:'Cormorant Garamond',serif;font-size:1rem;
+  font-weight:300;color:var(--text);
+  background:#fff;border:1px solid var(--sand);
+  outline:none;resize:none;height:110px;
+  transition:border-color .3s;line-height:1.7;
+}
+.text-question textarea:focus{border-color:rgba(184,138,30,.5);}
+.text-question textarea::placeholder{color:var(--text-light);font-style:italic;}
+
+/* ── RADIO OPTIONS ── */
+.radio-options{display:flex;gap:.8rem;flex-wrap:wrap;margin-top:.8rem;}
+.radio-opt{
+  display:flex;align-items:center;gap:.5rem;cursor:pointer;
+  font-family:'Manrope',sans-serif;font-size:.78rem;
+  color:var(--text-mid);
+}
+.radio-opt input{display:none;}
+.radio-box{
+  width:18px;height:18px;border:1px solid var(--stone);
+  border-radius:50%;position:relative;transition:border-color .3s;
+  flex-shrink:0;
+}
+.radio-opt input:checked + .radio-box{border-color:var(--wine);}
+.radio-opt input:checked + .radio-box::after{
+  content:'';position:absolute;width:8px;height:8px;
+  background:var(--wine);border-radius:50%;
+  top:50%;left:50%;transform:translate(-50%,-50%);
+}
+
+/* ── NAME FIELDS ── */
+.input-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1.5rem;}
+.input-field{display:flex;flex-direction:column;gap:.35rem;}
+.input-field label{font-size:.58rem;letter-spacing:.2em;text-transform:uppercase;color:var(--text-light);}
+.input-field input,.input-field select{
+  padding:.8rem 1rem;
+  font-family:'Manrope',sans-serif;font-size:.83rem;
+  background:#fff;border:1px solid var(--sand);
+  color:var(--text);outline:none;
+  transition:border-color .3s;-webkit-appearance:none;
+}
+.input-field input:focus,.input-field select:focus{border-color:rgba(184,138,30,.5);}
+
+/* ── CONSENT ── */
+.consent-box{
+  background:var(--beige);border:1px solid var(--sand);
+  padding:1.5rem;margin-bottom:2.5rem;
+}
+.consent-box p{
+  font-family:'Cormorant Garamond',serif;font-size:.95rem;
+  font-weight:300;color:var(--text-mid);margin-bottom:1rem;
+  line-height:1.7;
+}
+
+/* ── NAVIGATION BUTTONS ── */
+.form-nav{
+  display:flex;justify-content:space-between;
+  align-items:center;margin-top:2.5rem;
+  padding-top:2rem;border-top:1px solid var(--sand);
+}
+.btn-prev{
+  font-size:.68rem;font-weight:500;letter-spacing:.15em;text-transform:uppercase;
+  color:var(--text-light);background:none;border:1px solid var(--sand);
+  padding:.7rem 1.5rem;cursor:pointer;transition:all .3s;
+}
+.btn-prev:hover{border-color:var(--text-mid);color:var(--text-mid);}
+.btn-next{
+  font-size:.68rem;font-weight:500;letter-spacing:.18em;text-transform:uppercase;
+  color:#fff;background:var(--wine);border:none;
+  padding:.8rem 2.2rem;cursor:pointer;transition:background .3s;
+}
+.btn-next:hover{background:var(--wine-light);}
+.btn-next:disabled{background:var(--stone);cursor:not-allowed;}
+
+/* ── PROGRESS ── */
+.progress-bar{
+  height:2px;background:var(--sand);margin-bottom:2.5rem;overflow:hidden;
+}
+.progress-fill{
+  height:100%;background:linear-gradient(90deg,var(--wine),var(--gold));
+  transition:width .5s cubic-bezier(.23,1,.32,1);
+}
+
+/* ── THANK YOU ── */
+.thankyou{
+  text-align:center;padding:5rem 2rem;display:none;
+}
+.thankyou.active{display:block;}
+.thankyou-icon{font-size:3rem;margin-bottom:1.5rem;}
+.thankyou h2{
+  font-family:'Cinzel',serif;font-weight:300;
+  font-size:clamp(1.6rem,3vw,2.4rem);letter-spacing:.1em;
+  color:var(--charcoal);margin-bottom:1rem;
+}
+.thankyou h2 em{color:var(--wine);font-style:normal;}
+.thankyou p{
+  font-family:'Cormorant Garamond',serif;font-style:italic;
+  font-size:1.15rem;color:var(--text-mid);
+  max-width:480px;margin:0 auto 2rem;line-height:1.8;
+}
+.thankyou a{
+  font-size:.68rem;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--wine);text-decoration:none;
+  border-bottom:1px solid rgba(122,31,53,.3);
+  padding-bottom:.1rem;transition:border-color .3s;
+}
+.thankyou a:hover{border-color:var(--wine);}
+
+/* ── FOOTER ── */
+.page-footer{
+  text-align:center;padding:2rem;
+  border-top:1px solid var(--sand);
+  font-size:.65rem;letter-spacing:.1em;color:var(--text-light);
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="page-header">
+  <img src="logo-castillo-hvid_transperant.png" alt="Castillo del Alma">
+  <h1>Del din <em>oplevelse</em></h1>
+  <p>Tak fordi du besøgte os. Din feedback er uvurderlig og hjælper os med at skabe endnu bedre retreats fremover.</p>
+</div>
+
+<!-- FORM -->
+<div class="form-wrap">
+
+  <!-- Steps -->
+  <div class="steps" id="stepsBar">
+    <div class="step active" data-step="1">Oplevelsen</div>
+    <div class="step" data-step="2">Personlig</div>
+    <div class="step" data-step="3">Anbefaling</div>
+    <div class="step" data-step="4">Om dig</div>
+  </div>
+
+  <!-- Progress -->
+  <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:25%"></div></div>
+
+  <!-- PAGE 1: Ratings 1-9 -->
+  <div class="form-page active" id="page1">
+    <p class="section-title">Din samlede oplevelse</p>
+    <p class="section-sub">Bedøm de forskellige aspekter af dit ophold på Castillo del Alma</p>
+
+    <div class="rating-question">
+      <span class="rq-label"><strong>1 · Modtagelse & tryghed</strong>Hvor tilfreds var du med modtagelsen og den tryghed, du oplevede under opholdet?</span>
+      <div class="stars" id="stars1">
+        <input type="radio" name="r1" id="r1_5" value="5"><label for="r1_5" title="Fremragende">★</label>
+        <input type="radio" name="r1" id="r1_4" value="4"><label for="r1_4" title="Meget godt">★</label>
+        <input type="radio" name="r1" id="r1_3" value="3"><label for="r1_3" title="Godt">★</label>
+        <input type="radio" name="r1" id="r1_2" value="2"><label for="r1_2" title="Kan forbedres">★</label>
+        <input type="radio" name="r1" id="r1_1" value="1"><label for="r1_1" title="Skuffende">★</label>
+      </div>
+    </div>
+
+    <div class="rating-question">
+      <span class="rq-label"><strong>2 · Værelset</strong>Hvordan vurderer du kvaliteten af dit værelse og faciliteterne?</span>
+      <div class="stars">
+        <input type="radio" name="r2" id="r2_5" value="5"><label for="r2_5">★</label>
+        <input type="radio" name="r2" id="r2_4" value="4"><label for="r2_4">★</label>
+        <input type="radio" name="r2" id="r2_3" value="3"><label for="r2_3">★</label>
+        <input type="radio" name="r2" id="r2_2" value="2"><label for="r2_2">★</label>
+        <input type="radio" name="r2" id="r2_1" value="1"><label for="r2_1">★</label>
+      </div>
+    </div>
+
+    <div class="rating-question">
+      <span class="rq-label"><strong>3 · Maden</strong>Hvor tilfreds var du med madens kvalitet og variation?</span>
+      <div class="stars">
+        <input type="radio" name="r3" id="r3_5" value="5"><label for="r3_5">★</label>
+        <input type="radio" name="r3" id="r3_4" value="4"><label for="r3_4">★</label>
+        <input type="radio" name="r3" id="r3_3" value="3"><label for="r3_3">★</label>
+        <input type="radio" name="r3" id="r3_2" value="2"><label for="r3_2">★</label>
+        <input type="radio" name="r3" id="r3_1" value="1"><label for="r3_1">★</label>
+      </div>
+    </div>
+
+    <div class="rating-question">
+      <span class="rq-label"><strong>4 · Omgivelserne</strong>Hvordan vurderer du de fysiske rammer og omgivelserne på retreatet?</span>
+      <div class="stars">
+        <input type="radio" name="r4" id="r4_5" value="5"><label for="r4_5">★</label>
+        <input type="radio" name="r4" id="r4_4" value="4"><label for="r4_4">★</label>
+        <input type="radio" name="r4" id="r4_3" value="3"><label for="r4_3">★</label>
+        <input type="radio" name="r4" id="r4_2" value="2"><label for="r4_2">★</label>
+        <input type="radio" name="r4" id="r4_1" value="1"><label for="r4_1">★</label>
+      </div>
+    </div>
+
+    <div class="rating-question">
+      <span class="rq-label"><strong>5 · Programmet</strong>Hvor tilfreds var du med aktiviteterne og indholdet af programmet?</span>
+      <div class="stars">
+        <input type="radio" name="r5" id="r5_5" value="5"><label for="r5_5">★</label>
+        <input type="radio" name="r5" id="r5_4" value="4"><label for="r5_4">★</label>
+        <input type="radio" name="r5" id="r5_3" value="3"><label for="r5_3">★</label>
+        <input type="radio" name="r5" id="r5_2" value="2"><label for="r5_2">★</label>
+        <input type="radio" name="r5" id="r5_1" value="1"><label for="r5_1">★</label>
+      </div>
+    </div>
+
+    <div class="rating-question">
+      <span class="rq-label"><strong>6 · Terapeuter & værter</strong>Hvordan vurderer du støtten, nærværet og kompetencerne hos terapeuter og værter?</span>
+      <div class="stars">
+        <input type="radio" name="r6" id="r6_5" value="5"><label for="r6_5">★</label>
+        <input type="radio" name="r6" id="r6_4" value="4"><label for="r6_4">★</label>
+        <input type="radio" name="r6" id="r6_3" value="3"><label for="r6_3">★</label>
+        <input type="radio" name="r6" id="r6_2" value="2"><label for="r6_2">★</label>
+        <input type="radio" name="r6" id="r6_1" value="1"><label for="r6_1">★</label>
+      </div>
+    </div>
+
+    <div class="rating-question">
+      <span class="rq-label"><strong>7 · Fællesskabet</strong>Hvor tilfreds var du med fællesskabet og samværet med de øvrige deltagere?</span>
+      <div class="stars">
+        <input type="radio" name="r7" id="r7_5" value="5"><label for="r7_5">★</label>
+        <input type="radio" name="r7" id="r7_4" value="4"><label for="r7_4">★</label>
+        <input type="radio" name="r7" id="r7_3" value="3"><label for="r7_3">★</label>
+        <input type="radio" name="r7" id="r7_2" value="2"><label for="r7_2">★</label>
+        <input type="radio" name="r7" id="r7_1" value="1"><label for="r7_1">★</label>
+      </div>
+    </div>
+
+    <div class="form-nav">
+      <span></span>
+      <button class="btn-next" onclick="goTo(2)">Næste →</button>
+    </div>
+  </div>
+
+  <!-- PAGE 2: Personal ratings + free text -->
+  <div class="form-page" id="page2">
+    <p class="section-title">Personlig udvikling & ro</p>
+    <p class="section-sub">De vigtigste målinger for os — og for dig</p>
+
+    <div class="rating-question">
+      <span class="rq-label"><strong>8 · Personlig udvikling</strong>I hvilken grad oplevede du, at opholdet hjalp dig personligt?</span>
+      <div class="stars">
+        <input type="radio" name="r8" id="r8_5" value="5"><label for="r8_5">★</label>
+        <input type="radio" name="r8" id="r8_4" value="4"><label for="r8_4">★</label>
+        <input type="radio" name="r8" id="r8_3" value="3"><label for="r8_3">★</label>
+        <input type="radio" name="r8" id="r8_2" value="2"><label for="r8_2">★</label>
+        <input type="radio" name="r8" id="r8_1" value="1"><label for="r8_1">★</label>
+      </div>
+    </div>
+
+    <div class="rating-question">
+      <span class="rq-label"><strong>9 · Ro & restitution</strong>Hvor godt lykkedes det retreatet at skabe ro, nærvær og mulighed for restitution?</span>
+      <div class="stars">
+        <input type="radio" name="r9" id="r9_5" value="5"><label for="r9_5">★</label>
+        <input type="radio" name="r9" id="r9_4" value="4"><label for="r9_4">★</label>
+        <input type="radio" name="r9" id="r9_3" value="3"><label for="r9_3">★</label>
+        <input type="radio" name="r9" id="r9_2" value="2"><label for="r9_2">★</label>
+        <input type="radio" name="r9" id="r9_1" value="1"><label for="r9_1">★</label>
+      </div>
+    </div>
+
+    <div class="rating-question">
+      <span class="rq-label"><strong>10 · Samlet oplevelse</strong>Hvor tilfreds er du samlet set med dit ophold?</span>
+      <div class="stars">
+        <input type="radio" name="r10" id="r10_5" value="5"><label for="r10_5">★</label>
+        <input type="radio" name="r10" id="r10_4" value="4"><label for="r10_4">★</label>
+        <input type="radio" name="r10" id="r10_3" value="3"><label for="r10_3">★</label>
+        <input type="radio" name="r10" id="r10_2" value="2"><label for="r10_2">★</label>
+        <input type="radio" name="r10" id="r10_1" value="1"><label for="r10_1">★</label>
+      </div>
+    </div>
+
+    <div class="text-question">
+      <label><strong>Hvad var det bedste ved dit ophold?</strong>Beskriv hvad der betød mest for dig</label>
+      <textarea id="best" placeholder="Del det øjeblik, den oplevelse eller den følelse der har sat sig mest..."></textarea>
+    </div>
+
+    <div class="text-question">
+      <label><strong>Hvilken forandring har opholdet skabt for dig?</strong>Hvad har du taget med dig hjem?</label>
+      <textarea id="change" placeholder="Beskriv hvad der har ændret sig — i kroppen, tankerne eller hverdagen..."></textarea>
+    </div>
+
+    <div class="form-nav">
+      <button class="btn-prev" onclick="goTo(1)">← Tilbage</button>
+      <button class="btn-next" onclick="goTo(3)">Næste →</button>
+    </div>
+  </div>
+
+  <!-- PAGE 3: Recommendation + consent -->
+  <div class="form-page" id="page3">
+    <p class="section-title">Vil du anbefale os?</p>
+    <p class="section-sub">Den vigtigste måling af alt</p>
+
+    <div class="rating-question">
+      <span class="rq-label"><strong>Vil du anbefale Castillo del Alma til andre?</strong>Hvor sandsynligt er det at du vil anbefale os til venner, familie eller kolleger?</span>
+      <div class="stars">
+        <input type="radio" name="r11" id="r11_5" value="5"><label for="r11_5">★</label>
+        <input type="radio" name="r11" id="r11_4" value="4"><label for="r11_4">★</label>
+        <input type="radio" name="r11" id="r11_3" value="3"><label for="r11_3">★</label>
+        <input type="radio" name="r11" id="r11_2" value="2"><label for="r11_2">★</label>
+        <input type="radio" name="r11" id="r11_1" value="1"><label for="r11_1">★</label>
+      </div>
+    </div>
+
+    <div class="consent-box">
+      <p>Må vi bruge din udtalelse og din bedømmelse på vores hjemmeside og sociale medier? Vi viser aldrig dit fulde navn uden tilladelse.</p>
+      <div class="radio-options">
+        <label class="radio-opt">
+          <input type="radio" name="consent" value="ja">
+          <span class="radio-box"></span>
+          Ja, I må bruge min anmeldelse
+        </label>
+        <label class="radio-opt">
+          <input type="radio" name="consent" value="anonymt">
+          <span class="radio-box"></span>
+          Ja, men kun anonymt
+        </label>
+        <label class="radio-opt">
+          <input type="radio" name="consent" value="nej">
+          <span class="radio-box"></span>
+          Nej tak
+        </label>
+      </div>
+    </div>
+
+    <div class="text-question">
+      <label><strong>Er der noget vi kan gøre bedre?</strong>Konstruktiv feedback er guld — vi læser alt</label>
+      <textarea id="improve" placeholder="Del dine tanker om hvad vi kan forbedre..."></textarea>
+    </div>
+
+    <div class="form-nav">
+      <button class="btn-prev" onclick="goTo(2)">← Tilbage</button>
+      <button class="btn-next" onclick="goTo(4)">Næste →</button>
+    </div>
+  </div>
+
+  <!-- PAGE 4: About you -->
+  <div class="form-page" id="page4">
+    <p class="section-title">Lidt om dig</p>
+    <p class="section-sub">Valgfrit — men hjælper os med at forstå vores gæster bedre</p>
+
+    <div class="input-row">
+      <div class="input-field"><label>Fornavn</label><input type="text" id="fname" placeholder="Dit fornavn"></div>
+      <div class="input-field"><label>Efternavn (valgfrit)</label><input type="text" id="lname" placeholder="Vises kun ved samtykke"></div>
+    </div>
+    <div class="input-row">
+      <div class="input-field">
+        <label>Hvilket retreat deltog du i?</label>
+        <select id="retreatName">
+          <option value="">Vælg retreat</option>
+          <option>Kunsten at sænke tempoet</option>
+          <option>Kultur & Udflugter</option>
+          <option>Rejsen til dit indre</option>
+          <option>Gay Retreat & Fællesskab</option>
+          <option>Run your own retreat</option>
+          <option>Business Retreat</option>
+          <option>Private Events</option>
+          <option>Location Scout</option>
+          <option>Privat ophold</option>
+        </select>
+      </div>
+      <div class="input-field">
+        <label>Hvornår var du her?</label>
+        <input type="month" id="visitDate">
+      </div>
+    </div>
+    <div class="input-row">
+      <div class="input-field">
+        <label>Land</label>
+        <select id="country">
+          <option value="">Vælg land</option>
+          <option>Danmark</option>
+          <option>Sverige</option>
+          <option>Norge</option>
+          <option>Finland</option>
+          <option>Tyskland</option>
+          <option>Holland</option>
+          <option>UK</option>
+          <option>Spanien</option>
+          <option>Andet</option>
+        </select>
+      </div>
+      <div class="input-field">
+        <label>Kom du alene eller med andre?</label>
+        <select id="group">
+          <option value="">Vælg</option>
+          <option>Alene</option>
+          <option>Med partner</option>
+          <option>Med venner</option>
+          <option>Med kolleger</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="form-nav">
+      <button class="btn-prev" onclick="goTo(3)">← Tilbage</button>
+      <button class="btn-next" onclick="submitReview()">Send anmeldelse ✓</button>
+    </div>
+  </div>
+
+  <!-- THANK YOU -->
+  <div class="thankyou" id="thankyou">
+    <div class="thankyou-icon">🌿</div>
+    <h2>Tusind tak for din <em>feedback</em></h2>
+    <p>Din anmeldelse er modtaget og betyder meget for os. Vi læser hver eneste tilbagemelding med stor opmærksomhed og ægte taknemmelighed.</p>
+    <p style="margin-top:1rem;">Vi ses forhåbentlig igen på Castillo del Alma — snart.</p>
+    <br>
+    <a href="index.html">← Gå til hjemmesiden</a>
+  </div>
+
+</div><!-- end form-wrap -->
+
+<div class="page-footer">
+  © 2026 Castillo del Alma · Mollina, Málaga · Andalusia
+</div>
+
+<script>
+let currentPage = 1;
+const totalPages = 4;
+
+function goTo(page) {
+  // Hide current
+  document.getElementById('page' + currentPage).classList.remove('active');
+  // Show new
+  currentPage = page;
+  document.getElementById('page' + currentPage).classList.add('active');
+  // Update steps
+  document.querySelectorAll('.step').forEach(s => {
+    const n = parseInt(s.dataset.step);
+    s.classList.remove('active','done');
+    if (n === currentPage) s.classList.add('active');
+    else if (n < currentPage) s.classList.add('done');
+  });
+  // Update progress
+  document.getElementById('progressFill').style.width = (currentPage / totalPages * 100) + '%';
+  // Scroll to top of form
+  window.scrollTo({top: document.querySelector('.form-wrap').offsetTop - 20, behavior:'smooth'});
+}
+
+function getStarValue(name) {
+  const checked = document.querySelector('input[name="' + name + '"]:checked');
+  return checked ? parseInt(checked.value) : 0;
+}
+
+async function submitReview() {
+  const btn = document.querySelector('#page4 .btn-next');
+  btn.disabled = true;
+  btn.textContent = 'Sender...';
+
+  const stars = n => getStarValue('r' + n);
+  const starLabel = n => '★'.repeat(stars(n)) + '☆'.repeat(5 - stars(n));
+
+  const fname   = document.getElementById('fname').value || 'Anonym';
+  const lname   = document.getElementById('lname').value || '';
+  const retreat = document.getElementById('retreatName').value || '—';
+  const country = document.getElementById('country').value || '—';
+  const group   = document.getElementById('group').value || '—';
+  const visit   = document.getElementById('visitDate').value || '—';
+  const best    = document.getElementById('best').value || '—';
+  const change  = document.getElementById('change').value || '—';
+  const improve = document.getElementById('improve').value || '—';
+  const consent = document.querySelector('input[name="consent"]:checked')?.value || 'nej';
+  const dato    = new Date().toLocaleDateString('da-DK', {day:'numeric', month:'long', year:'numeric'});
+
+  const body = `
+NY ANMELDELSE — Castillo del Alma
+Indsendt: ${dato}
+
+GÆST: ${fname} ${lname}
+Retreat: ${retreat}
+Besøgt: ${visit}
+Land: ${country}  |  Gruppe: ${group}
+Samtykke: ${consent}
+
+─── BEDØMMELSER ──────────────────
+1. Modtagelse & tryghed   ${starLabel(1)}  (${stars(1)}/5)
+2. Værelset               ${starLabel(2)}  (${stars(2)}/5)
+3. Maden                  ${starLabel(3)}  (${stars(3)}/5)
+4. Omgivelserne           ${starLabel(4)}  (${stars(4)}/5)
+5. Programmet             ${starLabel(5)}  (${stars(5)}/5)
+6. Terapeuter & værter    ${starLabel(6)}  (${stars(6)}/5)
+7. Fællesskabet           ${starLabel(7)}  (${stars(7)}/5)
+8. Personlig udvikling    ${starLabel(8)}  (${stars(8)}/5)
+9. Ro & restitution       ${starLabel(9)}  (${stars(9)}/5)
+10. Samlet oplevelse      ${starLabel(10)} (${stars(10)}/5)
+11. Anbefaling            ${starLabel(11)} (${stars(11)}/5)
+
+─── FRITEKST ─────────────────────
+Det bedste ved opholdet:
+${best}
+
+Forandring skabt af opholdet:
+${change}
+
+Forbedringsforslag:
+${improve}
+`.trim();
+
+  // Send via Formspree
+  try {
+    const res = await fetch('https://formspree.io/f/xykawbvk', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      body: JSON.stringify({
+        _replyto: 'erik@rybtke.dk',
+        _subject: `⭐ Ny anmeldelse — ${fname} ${lname} (${retreat})`,
+        message: body,
+        navn: `${fname} ${lname}`,
+        retreat, land: country, besøgt: visit,
+        samlet: stars(10) + '/5',
+        anbefaling: stars(11) + '/5',
+        samtykke: consent,
+        bedste: best,
+        forandring: change,
+      })
+    });
+
+    if (res.ok) {
+      showThankyou();
+    } else {
+      // Fallback — mailto
+      sendMailto(body, fname, lname, retreat);
+    }
+  } catch(e) {
+    sendMailto(body, fname, lname, retreat);
+  }
+}
+
+function sendMailto(body, fname, lname, retreat) {
+  const subject = encodeURIComponent(`⭐ Ny anmeldelse — ${fname} ${lname} (${retreat})`);
+  const bodyEnc = encodeURIComponent(body);
+  window.location.href = `mailto:erik@rybtke.dk?subject=${subject}&body=${bodyEnc}`;
+  showThankyou();
+}
+
+function showThankyou() {
+  document.querySelector('.form-wrap').querySelectorAll('.form-page, .steps, .progress-bar').forEach(el => el.style.display = 'none');
+  document.getElementById('thankyou').classList.add('active');
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+</script>
+</body>
+</html>

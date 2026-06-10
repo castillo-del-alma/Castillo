@@ -1,0 +1,1034 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kunsten at sænke tempoet — Castillo del Alma</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@300;400;500&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Manrope:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --cream:#faf6ee;--beige:#f0e8d5;--sand:#e0d0b0;--stone:#c8b898;
+  --charcoal:#2c2318;--text:#2c2318;--text-mid:#5c4e3a;--text-light:#9a8c7a;
+  --wine:#7a1f35;--wine-light:#a03048;--terracotta:#c05c30;
+  --olive:#6a7240;--gold:#b88a1e;--gold-light:#d4a830;--teal:#3a6e6a;
+  --section-alt:#ede4d0;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{font-family:'Manrope',sans-serif;background:var(--cream);color:var(--text);overflow-x:hidden;}
+
+/* ── NAV ── */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:200;
+  padding:1.2rem 4rem;
+  display:flex;justify-content:space-between;align-items:center;
+  background:rgba(250,246,238,.96);backdrop-filter:blur(16px);
+  border-bottom:1px solid rgba(184,138,30,.15);
+  box-shadow:0 2px 28px rgba(44,35,24,.06);
+}
+.nav-logo img{height:40px;width:auto;filter:brightness(0);}
+.nav-back{
+  font-size:.68rem;font-weight:500;letter-spacing:.15em;text-transform:uppercase;
+  color:var(--wine);text-decoration:none;display:flex;align-items:center;gap:.5rem;
+  transition:gap .3s;
+}
+.nav-back:hover{gap:.8rem;}
+.nav-links{display:flex;gap:1.5rem;list-style:none;}
+.nav-links a{font-size:.66rem;letter-spacing:.12em;text-transform:uppercase;color:var(--text-mid);text-decoration:none;transition:color .3s;}
+.nav-links a:hover{color:var(--wine);}
+
+/* ── HERO ── */
+.retreat-hero{
+  min-height:65vh;position:relative;
+  display:flex;align-items:flex-end;overflow:hidden;
+}
+.retreat-hero-bg{
+  position:absolute;inset:0;
+  background-image:url('close-up-woman-meditating-lotus-position-sunset.jpg');
+  background-size:cover;background-position:center;
+  transform:scale(1.04);transition:transform 8s ease;
+}
+.retreat-hero-bg.loaded{transform:scale(1);}
+.retreat-hero-overlay{
+  position:absolute;inset:0;
+  background:linear-gradient(to bottom,rgba(44,35,24,.3) 0%,rgba(44,35,24,.15) 40%,rgba(44,35,24,.8) 100%);
+}
+.retreat-hero-content{
+  position:relative;z-index:2;
+  padding:0 4rem 4rem;max-width:1320px;margin:0 auto;width:100%;
+}
+.retreat-category{
+  font-size:.6rem;letter-spacing:.4em;text-transform:uppercase;
+  color:rgba(238,222,160,.8);margin-bottom:1rem;
+  display:flex;align-items:center;gap:1rem;
+}
+.retreat-category::before{content:'';width:28px;height:1px;background:var(--gold);}
+.retreat-hero h1{
+  font-family:'Cinzel',serif;font-weight:300;
+  font-size:clamp(2.5rem,6vw,5rem);letter-spacing:.1em;
+  color:#fff;line-height:1.05;margin-bottom:.8rem;
+  text-shadow:0 2px 32px rgba(0,0,0,.4);
+}
+.retreat-hero-sub{
+  font-family:'Cormorant Garamond',serif;font-style:italic;
+  font-size:1.3rem;font-weight:300;
+  color:rgba(255,255,255,.75);
+}
+.retreat-hero-pills{
+  display:flex;flex-wrap:wrap;gap:.6rem;margin-top:1.8rem;
+}
+.pill{
+  font-size:.6rem;letter-spacing:.15em;text-transform:uppercase;
+  padding:.35rem .9rem;border:1px solid rgba(255,255,255,.35);
+  color:rgba(255,255,255,.75);
+}
+
+/* ── LAYOUT ── */
+.section-inner{max-width:1320px;margin:0 auto;padding:0 4rem;}
+.divider{height:1px;background:linear-gradient(to right,transparent,rgba(184,138,30,.2),transparent);max-width:1320px;margin:0 auto;}
+.section-label{
+  font-size:.6rem;letter-spacing:.4em;text-transform:uppercase;
+  color:var(--gold);margin-bottom:1.2rem;
+  display:flex;align-items:center;gap:1rem;
+}
+.section-label::before{content:'';width:28px;height:1px;background:var(--gold);flex-shrink:0;}
+
+/* ── BOOKING BAR (sticky) ── */
+.booking-bar{
+  position:sticky;top:65px;z-index:100;
+  background:rgba(250,246,238,.97);backdrop-filter:blur(12px);
+  border-bottom:1px solid rgba(184,138,30,.15);
+  box-shadow:0 4px 20px rgba(44,35,24,.06);
+}
+.booking-bar-inner{
+  max-width:1320px;margin:0 auto;padding:.9rem 4rem;
+  display:flex;justify-content:space-between;align-items:center;
+  gap:2rem;flex-wrap:wrap;
+}
+.booking-bar-info{display:flex;gap:2.5rem;align-items:center;}
+.booking-bar-stat{display:flex;flex-direction:column;}
+.booking-bar-stat span:first-child{
+  font-size:.58rem;letter-spacing:.2em;text-transform:uppercase;color:var(--text-light);
+}
+.booking-bar-stat span:last-child{
+  font-family:'Cinzel',serif;font-size:1rem;color:var(--charcoal);font-weight:300;letter-spacing:.05em;
+}
+.booking-bar-price{
+  display:flex;flex-direction:column;align-items:flex-end;
+}
+.booking-bar-price .from{font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;color:var(--text-light);}
+.booking-bar-price .amount{
+  font-family:'Cinzel',serif;font-size:1.6rem;color:var(--wine);font-weight:300;letter-spacing:.05em;
+}
+.booking-bar-price .per{font-size:.6rem;color:var(--text-light);}
+.booking-bar-actions{display:flex;gap:.8rem;align-items:center;}
+
+/* Date selector */
+.date-select-wrap{position:relative;}
+.date-select{
+  font-family:'Manrope',sans-serif;font-size:.68rem;font-weight:500;
+  letter-spacing:.12em;text-transform:uppercase;
+  background:var(--beige);border:1px solid var(--sand);
+  color:var(--charcoal);padding:.7rem 2.2rem .7rem 1rem;
+  cursor:pointer;outline:none;-webkit-appearance:none;
+  transition:border-color .3s;min-width:220px;
+}
+.date-select:focus{border-color:var(--gold);}
+.date-select-wrap::after{
+  content:'↓';position:absolute;right:.8rem;top:50%;transform:translateY(-50%);
+  font-size:.6rem;color:var(--text-light);pointer-events:none;
+}
+.btn-book{
+  font-size:.68rem;font-weight:500;letter-spacing:.18em;text-transform:uppercase;
+  color:#fff;background:var(--wine);padding:.75rem 1.8rem;
+  border:none;cursor:pointer;transition:background .3s;white-space:nowrap;
+}
+.btn-book:hover{background:var(--wine-light);}
+.btn-inquire{
+  font-size:.68rem;font-weight:500;letter-spacing:.15em;text-transform:uppercase;
+  color:var(--wine);border:1px solid rgba(122,31,53,.4);
+  padding:.75rem 1.4rem;background:none;cursor:pointer;transition:all .3s;white-space:nowrap;
+}
+.btn-inquire:hover{background:rgba(122,31,53,.06);}
+
+/* ── OVERVIEW ── */
+.retreat-overview{background:var(--cream);padding:7rem 0 6rem;}
+.overview-grid{display:grid;grid-template-columns:1fr 380px;gap:6rem;align-items:start;}
+.overview-text h2{
+  font-family:'Cinzel',serif;font-weight:300;
+  font-size:clamp(1.8rem,3vw,2.6rem);letter-spacing:.08em;
+  color:var(--charcoal);margin-bottom:1.8rem;line-height:1.2;
+}
+.overview-text h2 em{color:var(--wine);font-style:normal;}
+.overview-text p{
+  font-family:'Cormorant Garamond',serif;font-size:1.1rem;
+  font-weight:300;line-height:1.95;color:var(--text-mid);margin-bottom:1.4rem;
+}
+.overview-text blockquote{
+  font-family:'Cormorant Garamond',serif;font-style:italic;
+  font-size:1.2rem;font-weight:300;color:var(--charcoal);
+  border-left:2px solid var(--teal);padding-left:1.6rem;
+  margin:2rem 0;line-height:1.8;
+}
+
+/* Quick-facts card */
+.quick-facts{
+  background:var(--section-alt);
+  padding:2.2rem;position:sticky;top:130px;
+}
+.quick-facts h3{
+  font-family:'Cinzel',serif;font-weight:300;font-size:.9rem;
+  letter-spacing:.15em;text-transform:uppercase;
+  color:var(--charcoal);margin-bottom:1.5rem;
+  padding-bottom:1rem;border-bottom:1px solid var(--sand);
+}
+.fact-row{
+  display:flex;justify-content:space-between;align-items:flex-start;
+  padding:.7rem 0;border-bottom:1px solid rgba(184,138,30,.1);
+  gap:1rem;
+}
+.fact-row:last-child{border-bottom:none;}
+.fact-label{
+  font-size:.62rem;letter-spacing:.15em;text-transform:uppercase;
+  color:var(--text-light);flex-shrink:0;
+}
+.fact-value{
+  font-family:'Cormorant Garamond',serif;font-size:1rem;
+  font-weight:400;color:var(--charcoal);text-align:right;
+}
+
+/* ── HIGHLIGHTS ── */
+.highlights{background:var(--section-alt);padding:7rem 0;}
+.highlights h2{
+  font-family:'Cinzel',serif;font-weight:300;
+  font-size:clamp(1.8rem,3vw,2.4rem);letter-spacing:.08em;
+  color:var(--charcoal);margin-bottom:3.5rem;
+}
+.highlights-grid{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:1px;
+  background:rgba(184,138,30,.12);
+}
+.highlight-item{
+  background:var(--section-alt);padding:2.2rem 2rem;
+  transition:background .3s;
+}
+.highlight-item:hover{background:var(--beige);}
+.highlight-icon{
+  width:30px;height:30px;color:var(--teal);margin-bottom:1rem;
+}
+.highlight-icon svg{width:100%;height:100%;}
+.highlight-item h4{
+  font-family:'Cormorant Garamond',serif;font-weight:400;
+  font-size:1.05rem;color:var(--charcoal);margin-bottom:.5rem;
+}
+.highlight-item p{
+  font-family:'Cormorant Garamond',serif;font-size:.92rem;
+  font-weight:300;line-height:1.75;color:var(--text-mid);
+}
+
+/* ── PROGRAM ── */
+.program{background:var(--cream);padding:7rem 0;}
+.program h2{
+  font-family:'Cinzel',serif;font-weight:300;
+  font-size:clamp(1.8rem,3vw,2.4rem);letter-spacing:.08em;
+  color:var(--charcoal);margin-bottom:3.5rem;
+}
+.program-days{display:flex;flex-direction:column;gap:1px;background:var(--sand);}
+.program-day{background:var(--cream);overflow:hidden;}
+.program-day-header{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:1.4rem 2rem;cursor:pointer;
+  transition:background .3s;user-select:none;
+}
+.program-day-header:hover{background:var(--beige);}
+.program-day-num{
+  font-family:'Cinzel',serif;font-size:.75rem;
+  letter-spacing:.2em;color:var(--gold);font-weight:300;
+}
+.program-day-title{
+  font-family:'Cormorant Garamond',serif;font-weight:400;
+  font-size:1.05rem;color:var(--charcoal);flex:1;margin-left:1.5rem;
+}
+.program-day-toggle{
+  font-size:.75rem;color:var(--text-light);
+  transition:transform .3s;display:inline-block;
+}
+.program-day.open .program-day-toggle{transform:rotate(180deg);}
+.program-day-body{
+  max-height:0;overflow:hidden;
+  transition:max-height .5s cubic-bezier(.23,1,.32,1);
+}
+.program-day.open .program-day-body{max-height:500px;}
+.program-day-content{
+  padding:0 2rem 2rem;
+  border-top:1px solid rgba(184,138,30,.1);
+  padding-top:1.5rem;
+}
+.program-day-content p{
+  font-family:'Cormorant Garamond',serif;font-size:1rem;
+  font-weight:300;line-height:1.85;color:var(--text-mid);margin-bottom:.8rem;
+}
+.program-activities{display:flex;flex-wrap:wrap;gap:.4rem;margin-top:1rem;}
+.activity-tag{
+  font-size:.58rem;letter-spacing:.12em;text-transform:uppercase;
+  padding:.25rem .7rem;border:1px solid rgba(58,110,106,.3);color:var(--teal);
+}
+
+/* ── INCLUDED ── */
+.included{background:var(--section-alt);padding:7rem 0;}
+.included h2{
+  font-family:'Cinzel',serif;font-weight:300;
+  font-size:clamp(1.8rem,3vw,2.4rem);letter-spacing:.08em;
+  color:var(--charcoal);margin-bottom:3.5rem;
+}
+.included-cols{display:grid;grid-template-columns:1fr 1fr;gap:4rem;}
+.included-list h3{
+  font-family:'Cormorant Garamond',serif;font-weight:400;
+  font-size:1.1rem;color:var(--charcoal);margin-bottom:1.4rem;
+  display:flex;align-items:center;gap:.8rem;
+}
+.included-list h3 span{
+  width:20px;height:20px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:.65rem;
+}
+.incl-yes h3 span{background:rgba(106,114,64,.15);color:var(--olive);}
+.incl-no h3 span{background:rgba(192,92,48,.12);color:var(--terracotta);}
+.included-item{
+  display:flex;align-items:flex-start;gap:.8rem;
+  padding:.6rem 0;border-bottom:1px solid rgba(184,138,30,.1);
+  font-family:'Cormorant Garamond',serif;font-size:1rem;
+  font-weight:300;color:var(--text-mid);
+}
+.included-item:last-child{border-bottom:none;}
+.included-item::before{
+  content:'';width:16px;height:1px;margin-top:.7rem;
+  flex-shrink:0;
+}
+.incl-yes .included-item::before{background:var(--olive);}
+.incl-no .included-item::before{background:var(--terracotta);}
+
+/* ── ROOMS ── */
+.retreat-rooms{background:var(--cream);padding:7rem 0;}
+.retreat-rooms h2{
+  font-family:'Cinzel',serif;font-weight:300;
+  font-size:clamp(1.8rem,3vw,2.4rem);letter-spacing:.08em;
+  color:var(--charcoal);margin-bottom:1rem;
+}
+.retreat-rooms p.intro{
+  font-family:'Cormorant Garamond',serif;font-size:1.05rem;
+  font-weight:300;color:var(--text-light);margin-bottom:3rem;
+  font-style:italic;
+}
+.rooms-options{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;}
+.room-option{
+  background:var(--section-alt);padding:2rem 1.8rem;
+  border-top:2px solid var(--gold);
+}
+.room-option:nth-child(2){border-color:var(--wine);}
+.room-option:nth-child(3){border-color:var(--teal);}
+.room-option h4{
+  font-family:'Cinzel',serif;font-weight:300;font-size:1rem;
+  letter-spacing:.06em;color:var(--charcoal);margin-bottom:.5rem;
+}
+.room-option .room-price{
+  font-family:'Cinzel',serif;font-size:1.4rem;
+  color:var(--wine);font-weight:300;margin-bottom:.8rem;
+}
+.room-option p{
+  font-family:'Cormorant Garamond',serif;font-size:.92rem;
+  font-weight:300;color:var(--text-mid);line-height:1.7;
+}
+
+/* ── FOOD ── */
+.retreat-food{background:var(--section-alt);padding:7rem 0;}
+.food-grid{display:grid;grid-template-columns:1fr 1fr;gap:7rem;align-items:center;}
+.retreat-food h2{
+  font-family:'Cinzel',serif;font-weight:300;
+  font-size:clamp(1.8rem,3vw,2.4rem);letter-spacing:.08em;
+  color:var(--charcoal);margin-bottom:2rem;
+}
+.retreat-food h2 em{color:var(--terracotta);font-style:normal;}
+.retreat-food p{
+  font-family:'Cormorant Garamond',serif;font-size:1.05rem;
+  font-weight:300;line-height:1.9;color:var(--text-mid);margin-bottom:1.2rem;
+}
+.food-img{
+  width:100%;aspect-ratio:4/3;overflow:hidden;
+  box-shadow:8px 8px 0 var(--sand),9px 9px 0 var(--stone);
+}
+.food-img img{width:100%;height:100%;object-fit:cover;display:block;}
+
+/* ── FACILITATOR ── */
+.facilitator{background:var(--cream);padding:7rem 0;}
+.facilitator-grid{display:grid;grid-template-columns:200px 1fr;gap:4rem;align-items:start;}
+.facilitator-photo{
+  width:200px;height:200px;border-radius:50%;overflow:hidden;
+  background:linear-gradient(135deg,var(--beige),var(--sand));
+  display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;
+}
+.facilitator-photo img{width:100%;height:100%;object-fit:cover;}
+.facilitator-photo-placeholder{
+  font-family:'Cinzel',serif;font-size:2rem;color:var(--stone);font-weight:300;
+}
+.facilitator h2{
+  font-family:'Cinzel',serif;font-weight:300;
+  font-size:clamp(1.5rem,2.5vw,2rem);letter-spacing:.08em;
+  color:var(--charcoal);margin-bottom:.4rem;
+}
+.facilitator .role{
+  font-size:.65rem;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--gold);margin-bottom:1.5rem;display:block;
+}
+.facilitator p{
+  font-family:'Cormorant Garamond',serif;font-size:1.05rem;
+  font-weight:300;line-height:1.9;color:var(--text-mid);margin-bottom:1.2rem;
+}
+
+/* ── REVIEWS ── */
+.reviews{background:var(--section-alt);padding:7rem 0;}
+.reviews h2{
+  font-family:'Cinzel',serif;font-weight:300;
+  font-size:clamp(1.8rem,3vw,2.4rem);letter-spacing:.08em;
+  color:var(--charcoal);margin-bottom:1rem;
+}
+.reviews-score{
+  display:flex;align-items:center;gap:1.5rem;margin-bottom:3.5rem;
+}
+.score-num{
+  font-family:'Cinzel',serif;font-size:3rem;color:var(--wine);
+  font-weight:300;line-height:1;
+}
+.score-stars{color:var(--gold);font-size:1.1rem;letter-spacing:.1em;}
+.score-label{font-size:.7rem;letter-spacing:.15em;text-transform:uppercase;color:var(--text-light);}
+.reviews-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;}
+.review-card{
+  background:var(--cream);padding:2rem 1.8rem;
+}
+.review-stars{color:var(--gold);font-size:.85rem;letter-spacing:.1em;margin-bottom:.8rem;}
+.review-text{
+  font-family:'Cormorant Garamond',serif;font-style:italic;
+  font-size:1rem;font-weight:300;color:var(--text-mid);
+  line-height:1.8;margin-bottom:1.2rem;
+}
+.review-author{
+  font-size:.62rem;letter-spacing:.15em;text-transform:uppercase;
+  color:var(--text-light);
+}
+.review-date{color:var(--gold);margin-left:.5rem;}
+
+/* ── FAQ ── */
+.faq{background:var(--cream);padding:7rem 0;}
+.faq h2{
+  font-family:'Cinzel',serif;font-weight:300;
+  font-size:clamp(1.8rem,3vw,2.4rem);letter-spacing:.08em;
+  color:var(--charcoal);margin-bottom:3.5rem;
+}
+.faq-list{display:flex;flex-direction:column;gap:1px;background:var(--sand);max-width:860px;}
+.faq-item{background:var(--cream);overflow:hidden;}
+.faq-q{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:1.3rem 1.8rem;cursor:pointer;gap:2rem;
+  transition:background .3s;
+}
+.faq-q:hover{background:var(--beige);}
+.faq-q span{
+  font-family:'Cormorant Garamond',serif;font-weight:400;
+  font-size:1.05rem;color:var(--charcoal);
+}
+.faq-q i{font-size:.7rem;color:var(--text-light);font-style:normal;transition:transform .3s;flex-shrink:0;}
+.faq-item.open .faq-q i{transform:rotate(180deg);}
+.faq-a{
+  max-height:0;overflow:hidden;
+  transition:max-height .4s cubic-bezier(.23,1,.32,1);
+}
+.faq-item.open .faq-a{max-height:300px;}
+.faq-a p{
+  padding:0 1.8rem 1.5rem;
+  font-family:'Cormorant Garamond',serif;font-size:1rem;
+  font-weight:300;line-height:1.85;color:var(--text-mid);
+  border-top:1px solid rgba(184,138,30,.1);padding-top:1.2rem;
+}
+
+/* ── BOOKING FORM ── */
+.booking-section{background:var(--charcoal);padding:7rem 0;}
+.booking-grid{display:grid;grid-template-columns:1fr 1fr;gap:7rem;align-items:start;}
+.booking-section h2{
+  font-family:'Cinzel',serif;font-weight:300;
+  font-size:clamp(1.8rem,3vw,2.6rem);letter-spacing:.08em;
+  color:#fff;margin-bottom:.8rem;
+}
+.booking-section p{
+  font-family:'Cormorant Garamond',serif;font-style:italic;
+  font-size:1.1rem;color:rgba(255,255,255,.6);margin-bottom:.5rem;line-height:1.8;
+}
+.policy-note{
+  font-size:.72rem;letter-spacing:.08em;color:rgba(255,255,255,.35);
+  margin-top:1.5rem;line-height:1.6;
+}
+.booking-form{display:flex;flex-direction:column;gap:.8rem;}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:.8rem;}
+.form-field{display:flex;flex-direction:column;gap:.3rem;}
+.form-field label{font-size:.58rem;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,255,255,.4);}
+.form-field input,.form-field select,.form-field textarea{
+  background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);
+  color:#fff;padding:.8rem 1rem;
+  font-family:'Manrope',sans-serif;font-size:.83rem;
+  outline:none;transition:border-color .3s;-webkit-appearance:none;
+}
+.form-field input::placeholder{color:rgba(255,255,255,.25);}
+.form-field input:focus,.form-field select:focus,.form-field textarea:focus{border-color:rgba(184,138,30,.5);}
+.form-field select option{background:#2c2318;color:#fff;}
+.form-field textarea{height:100px;resize:none;}
+.form-submit{
+  background:var(--wine);color:#fff;border:none;
+  padding:1rem 2rem;font-family:'Manrope',sans-serif;
+  font-size:.7rem;font-weight:500;letter-spacing:.2em;text-transform:uppercase;
+  cursor:pointer;transition:background .3s;align-self:flex-start;margin-top:.3rem;
+}
+.form-submit:hover{background:var(--wine-light);}
+
+/* ── FOOTER ── */
+footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:3rem 4rem;}
+.footer-bottom{max-width:1320px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;}
+.footer-bottom p{font-size:.68rem;color:rgba(255,255,255,.48);}
+.footer-bottom a{font-size:.68rem;color:rgba(255,255,255,.62);text-decoration:none;transition:color .3s;}
+.footer-bottom a:hover{color:var(--gold);}
+
+/* ── REVEAL ── */
+.reveal{opacity:0;transform:translateY(24px);transition:opacity .9s ease,transform .9s ease;}
+.reveal.visible{opacity:1;transform:translateY(0);}
+.reveal-left{opacity:0;transform:translateX(-24px);transition:opacity .9s ease,transform .9s ease;}
+.reveal-left.visible{opacity:1;transform:translateX(0);}
+.reveal-right{opacity:0;transform:translateX(24px);transition:opacity .9s ease,transform .9s ease;}
+.reveal-right.visible{opacity:1;transform:translateX(0);}
+.d1{transition-delay:.1s;}.d2{transition-delay:.2s;}.d3{transition-delay:.3s;}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="index.html" class="nav-logo">
+    <img src="logo-castillo-hvid_transperant.png" alt="Castillo del Alma">
+  </a>
+  <ul class="nav-links">
+    <li><a href="#overview">Om retreatet</a></li>
+    <li><a href="#highlights">Highlights</a></li>
+    <li><a href="#program">Program</a></li>
+    <li><a href="#included">Inkluderet</a></li>
+    <li><a href="#rooms">Værelser</a></li>
+    <li><a href="#reviews">Anmeldelser</a></li>
+    <li><a href="#booking">Book</a></li>
+  </ul>
+  <a href="index.html#retreats" class="nav-back">← Alle retreats</a>
+</nav>
+
+<!-- HERO -->
+<section class="retreat-hero">
+  <div class="retreat-hero-bg" id="heroBg"></div>
+  <div class="retreat-hero-overlay"></div>
+  <div class="retreat-hero-content">
+    <p class="retreat-category">02 — Wellness Retreat</p>
+    <h1>Kunsten at<br>sænke tempoet</h1>
+    <p class="retreat-hero-sub">Et luksuriøst wellness-retreat med fokus på ro, healing og dyb restitution</p>
+    <div class="retreat-hero-pills">
+      <span class="pill">7 nætter</span>
+      <span class="pill">Max 10 deltagere</span>
+      <span class="pill">Dansk & Engelsk</span>
+      <span class="pill">All inclusive</span>
+      <span class="pill">Mollina · Málaga</span>
+    </div>
+  </div>
+</section>
+
+<!-- BOOKING BAR -->
+<div class="booking-bar">
+  <div class="booking-bar-inner">
+    <div class="booking-bar-info">
+      <div class="booking-bar-stat">
+        <span>Varighed</span>
+        <span>7 nætter · 8 dage</span>
+      </div>
+      <div class="booking-bar-stat">
+        <span>Deltagere</span>
+        <span>Max 10</span>
+      </div>
+      <div class="booking-bar-stat">
+        <span>Næste dato</span>
+        <span>14. sept. 2026</span>
+      </div>
+    </div>
+    <div class="booking-bar-price">
+      <span class="from">Fra</span>
+      <span class="amount">14.900 kr.</span>
+      <span class="per">pr. person · delt værelse</span>
+    </div>
+    <div class="booking-bar-actions">
+      <div class="date-select-wrap">
+        <select class="date-select">
+          <option value="">Vælg dato</option>
+          <option value="1">14.–21. september 2026</option>
+          <option value="2">9.–16. november 2026</option>
+          <option value="3">22.–29. marts 2026</option>
+        </select>
+      </div>
+      <button class="btn-inquire" onclick="document.getElementById('booking').scrollIntoView({behavior:'smooth'})">Forespørg</button>
+      <button class="btn-book" onclick="document.getElementById('booking').scrollIntoView({behavior:'smooth'})">Book nu</button>
+    </div>
+  </div>
+</div>
+
+<!-- OVERVIEW -->
+<section class="retreat-overview" id="overview">
+  <div class="section-inner">
+    <div class="overview-grid">
+      <div class="overview-text reveal-left">
+        <span class="section-label">Om retreatet</span>
+        <h2>Et frirum fra <em>hverdagens tempo</em></h2>
+        <p>Det moderne liv er fyldt med krav, støj og konstant aktivitet. Vi bærer på spændinger i kroppen, tanker der ikke stopper, og en træthed der går dybere end søvn kan løse. Kunsten at sænke tempoet er et retreat skabt til netop dét moment — det øjeblik kroppen endelig får lov til at give slip.</p>
+        <p>Over 7 nætter og 8 dage på Castillo del Alma i Mollina, Andalusien, skaber vi et rum hvor du kan komme ind i din krop igen. Gennem en nøje sammensat kombination af breathwork, meditation, somatic bodywork, naturoplevelser, stilhed og nærende mad vil dit nervesystem gradvist finde sin naturlige balance.</p>
+        <blockquote>
+          "Her handler wellness ikke om præstation. Det handler om at trække vejret dybere, sove bedre, mærke mere ro — og finde hjem til sig selv igen."
+        </blockquote>
+        <p>Dette retreat er for dig der har brug for at koble fra — virkelig fra. Ingen agenda ud over din egen heling. Ingen præstationer. Bare nærvær, natur og dig selv.</p>
+      </div>
+      <div class="quick-facts reveal-right d2">
+        <h3>Retreat info</h3>
+        <div class="fact-row"><span class="fact-label">Varighed</span><span class="fact-value">7 nætter · 8 dage</span></div>
+        <div class="fact-row"><span class="fact-label">Datoer</span><span class="fact-value">Se nedenstående</span></div>
+        <div class="fact-row"><span class="fact-label">Maks. deltagere</span><span class="fact-value">10 personer</span></div>
+        <div class="fact-row"><span class="fact-label">Niveau</span><span class="fact-value">Alle niveauer</span></div>
+        <div class="fact-row"><span class="fact-label">Sprog</span><span class="fact-value">Dansk / Engelsk</span></div>
+        <div class="fact-row"><span class="fact-label">Indkvartering</span><span class="fact-value">Castillo del Alma</span></div>
+        <div class="fact-row"><span class="fact-label">Mad</span><span class="fact-value">Fuldt inkluderet</span></div>
+        <div class="fact-row"><span class="fact-label">Transport</span><span class="fact-value">Ikke inkluderet</span></div>
+        <div class="fact-row"><span class="fact-label">Pris fra</span><span class="fact-value" style="color:var(--wine)">14.900 kr.</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="section-inner"><div class="divider"></div></div>
+
+<!-- HIGHLIGHTS -->
+<section class="highlights" id="highlights">
+  <div class="section-inner">
+    <div class="reveal">
+      <span class="section-label">Retreat Highlights</span>
+      <h2>Hvad gør dette retreat særligt?</h2>
+    </div>
+    <div class="highlights-grid reveal d1">
+      <div class="highlight-item">
+        <div class="highlight-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M12 2 C12 2 6 6 6 12 C6 18 12 22 12 22"/><path d="M12 2 C12 2 18 6 18 12 C18 18 12 22 12 22"/></svg></div>
+        <h4>Nervous System Reset</h4>
+        <p>Et samlet forløb designet til at bringe dit nervesystem tilbage i balance — fra kronisk alarmberedskab til ro og regulering.</p>
+      </div>
+      <div class="highlight-item">
+        <div class="highlight-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+        <h4>Intimt & eksklusivt</h4>
+        <p>Max 10 deltagere sikrer tæt opmærksomhed, ægte fællesskab og et trygt rum for personlig fordybelse.</p>
+      </div>
+      <div class="highlight-item">
+        <div class="highlight-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg></div>
+        <h4>Eksklusiv ejendom</h4>
+        <p>Hele Castillo del Alma er kun til jer — vinmarker, pool, sauna, terrasser og det andalusiske landskab som ramme.</p>
+      </div>
+      <div class="highlight-item">
+        <div class="highlight-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M12 2 Q16 8 16 14 A4 4 0 0 1 8 14 Q8 8 12 2Z"/></svg></div>
+        <h4>Guidede breathwork-sessioner</h4>
+        <p>Daglige breathwork-sessioner med erfaren facilitator — et af de mest kraftfulde redskaber til at frisætte spændinger.</p>
+      </div>
+      <div class="highlight-item">
+        <div class="highlight-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M6 3v6a3 3 0 0 0 6 0V3"/><line x1="9" y1="9" x2="9" y2="21"/></svg></div>
+        <h4>Nærende andalusisk mad</h4>
+        <p>Alle måltider er tilberedt med friske, lokale råvarer — enkelt, nærende og tilpasset restitution og den anti-inflammatoriske livsstil. Vi anvender derfor heller ikke sukker i vores måltider og så få stivelser som muligt.</p>
+      </div>
+      <div class="highlight-item">
+        <div class="highlight-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><polygon points="12 2 15 9 22 9 16.5 13.5 18.5 21 12 17 5.5 21 7.5 13.5 2 9 9 9"/></svg></div>
+        <h4>Stilhed & stjernekiggeri</h4>
+        <p>Nætter under Andalusiens klare himmel — langt fra byernes lys. En meditativ og åndedrætsgivende oplevelse.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROGRAM -->
+<section class="program" id="program">
+  <div class="section-inner">
+    <div class="reveal">
+      <span class="section-label">Program</span>
+      <h2>En uge for dig selv</h2>
+    </div>
+    <div class="program-days reveal d1">
+
+      <div class="program-day open">
+        <div class="program-day-header" onclick="toggleDay(this)">
+          <span class="program-day-num">Dag 1</span>
+          <span class="program-day-title">Ankomst & Velkomstceremoniel</span>
+          <span class="program-day-toggle">↓</span>
+        </div>
+        <div class="program-day-body">
+          <div class="program-day-content">
+            <p>Du ankommer til Castillo del Alma og bliver modtaget med et glas lokalt vin og en introduktion til stedet og ugen. Eftermiddagen er fri til at sætte sig til rette, udforske ejendommen og tage den første dybe indånding.</p>
+            <p>Om aftenen samles vi til en fælles velkomstmiddag og en kort introduktionscirkel hvor alle deler forventninger og intentioner for ugen.</p>
+            <div class="program-activities">
+              <span class="activity-tag">Ankomst</span>
+              <span class="activity-tag">Velkomstmiddag</span>
+              <span class="activity-tag">Introduktionscirkel</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="program-day">
+        <div class="program-day-header" onclick="toggleDay(this)">
+          <span class="program-day-num">Dag 2–3</span>
+          <span class="program-day-title">Grounding & Detox fra hverdagen</span>
+          <span class="program-day-toggle">↓</span>
+        </div>
+        <div class="program-day-body">
+          <div class="program-day-content">
+            <p>De første dage handler om at lande. Morgenmeditation ved solopgang, let yoga og stille tid i naturen hjælper kroppen til at skifte gear. Breathwork-sessionerne begynder forsigtigt og fokuserer på bevidsthed om åndedrættet.</p>
+            <p>Om eftermiddagen er der fri tid — pool, sauna, vinmarken eller blot at sidde i stilhed med en bog.</p>
+            <div class="program-activities">
+              <span class="activity-tag">Morgenmeditation</span>
+              <span class="activity-tag">Let yoga</span>
+              <span class="activity-tag">Breathwork intro</span>
+              <span class="activity-tag">Pool & sauna</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="program-day">
+        <div class="program-day-header" onclick="toggleDay(this)">
+          <span class="program-day-num">Dag 4–5</span>
+          <span class="program-day-title">Dybere arbejde — krop & sind</span>
+          <span class="program-day-toggle">↓</span>
+        </div>
+        <div class="program-day-body">
+          <div class="program-day-content">
+            <p>Midt i ugen intensiveres arbejdet. Somatic therapy-sessioner, dyb breathwork og individuelle healingsessioner (efter aftale). En heldagsudflugt til El Torcal eller Fuente de Piedra giver natur og perspektiv.</p>
+            <p>Aftenceremonier med lydhealing eller ild skaber rum for refleksion og integration.</p>
+            <div class="program-activities">
+              <span class="activity-tag">Somatic therapy</span>
+              <span class="activity-tag">Dyb breathwork</span>
+              <span class="activity-tag">Naturudflugt</span>
+              <span class="activity-tag">Aftenceremoni</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="program-day">
+        <div class="program-day-header" onclick="toggleDay(this)">
+          <span class="program-day-num">Dag 6–7</span>
+          <span class="program-day-title">Integration & Forankring</span>
+          <span class="program-day-toggle">↓</span>
+        </div>
+        <div class="program-day-body">
+          <div class="program-day-content">
+            <p>De sidste dage handler om at integrere oplevelserne og forberede sig på hverdagen. Workshops om praksisser der kan tages med hjem. Individuel samtale med facilitator. Afslutningscirkel og fælles aftensmad.</p>
+            <div class="program-activities">
+              <span class="activity-tag">Integrationsworkshop</span>
+              <span class="activity-tag">Individuel samtale</span>
+              <span class="activity-tag">Afslutningscirkel</span>
+              <span class="activity-tag">Fejringsmiddag</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="program-day">
+        <div class="program-day-header" onclick="toggleDay(this)">
+          <span class="program-day-num">Dag 8</span>
+          <span class="program-day-title">Afsked & Afrejse</span>
+          <span class="program-day-toggle">↓</span>
+        </div>
+        <div class="program-day-body">
+          <div class="program-day-content">
+            <p>En stille morgen med afsluttende meditation og morgenmad. Afrejse med ny energi, klarhed og værktøjer til at bevare roen i hverdagen.</p>
+            <div class="program-activities">
+              <span class="activity-tag">Afslutningsmeditation</span>
+              <span class="activity-tag">Afrejse</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<div class="section-inner"><div class="divider"></div></div>
+
+<!-- INCLUDED -->
+<section class="included" id="included">
+  <div class="section-inner">
+    <div class="reveal">
+      <span class="section-label">Hvad er inkluderet</span>
+      <h2>Alt hvad du behøver</h2>
+    </div>
+    <div class="included-cols reveal d1">
+      <div class="included-list incl-yes">
+        <h3><span>✓</span> Inkluderet i prisen</h3>
+        <div class="included-item">7 nætters indkvartering på Castillo del Alma</div>
+        <div class="included-item">Alle måltider — morgenmad, frokost og aftensmad</div>
+        <div class="included-item">Snacks, te, kaffe og kolde drikke hele dagen</div>
+        <div class="included-item">Lokalt vin ved aftensmaden</div>
+        <div class="included-item">Daglige guidede sessioner (breathwork, meditation, yoga)</div>
+        <div class="included-item">Somatic therapy gruppesessioner</div>
+        <div class="included-item">En individuel healingsession (60 min.)</div>
+        <div class="included-item">Adgang til pool, sauna (finsk & infrarød), terrasser</div>
+        <div class="included-item">Én gruppeudlfugt (El Torcal eller Fuente de Piedra)</div>
+        <div class="included-item">Velkomstpakke med retreatmaterialer</div>
+        <div class="included-item">WiFi</div>
+      </div>
+      <div class="included-list incl-no">
+        <h3><span>✗</span> Ikke inkluderet</h3>
+        <div class="included-item">Flybilletter og transport til/fra Mollina</div>
+        <div class="included-item">Transport til valgfrie udflugter</div>
+        <div class="included-item">Ekstra individuelle behandlinger og massager</div>
+        <div class="included-item">Personlige udgifter og souvenirs</div>
+        <div class="included-item">Rejseforsikring (anbefales)</div>
+        <div class="included-item">Alkohol udover hvad der serveres til måltider</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ROOMS & PRICES -->
+<section class="retreat-rooms" id="rooms">
+  <div class="section-inner">
+    <div class="reveal">
+      <span class="section-label">Indkvartering & Priser</span>
+      <h2>Vælg dit værelse</h2>
+      <p class="intro">Alle værelser har eget badeværelse og er fuldt inkluderet i retreatprisen</p>
+    </div>
+    <div class="rooms-options reveal d1">
+      <div class="room-option">
+        <h4>Delt dobbeltværelse</h4>
+        <div class="room-price">14.900 kr.</div>
+        <p>Deles med en anden deltager. Eget badeværelse. Udsigt over haven. Perfekt til dem der vil spare lidt og gerne deler energi med en medgæst.</p>
+      </div>
+      <div class="room-option">
+        <h4>Enkeltværelse</h4>
+        <div class="room-price">18.900 kr.</div>
+        <p>Dit eget private rum med ro og fordybelse. Eget badeværelse. Anbefales til dem der har brug for ekstra alenetid.</p>
+      </div>
+      <div class="room-option">
+        <h4>Suite del Alma</h4>
+        <div class="room-price">22.900 kr.</div>
+        <p>Ejendommens fineste suite med panoramaudsigt fra tårnet, privat terrasse og fritstående badekar. Et unikt og mindeværdigt ophold.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOD -->
+<section class="retreat-food" id="food">
+  <div class="section-inner">
+    <div class="food-grid">
+      <div class="reveal-left">
+        <span class="section-label">Mad & Drikke</span>
+        <h2>Nærende <em>andalusisk</em> køkken</h2>
+        <p>Mad er en central del af retreatoplevelsen. Alle måltider tilberedes med friske, lokale og sæsonbestemte råvarer fra regionen. Vi spiser enkelt, nærende og med respekt for kroppen.</p>
+        <p>Morgenmaden er let og energigivende — frugt, yoghurt, æg og brød. Frokosten er større og ofte et fælles bord med salater, grøntsager og proteiner. Aftensmaden er dagens sociale samlingspunkt — tre retter med lokale vine.</p>
+        <p>Særlige kostbehov imødekommes fuldt ud — vegetar, vegansk, glutenfri mv. Oplys ved tilmelding.</p>
+      </div>
+      <div class="food-img reveal-right d2">
+        <img src="estate-dining.jpg" alt="Mad på Castillo del Alma">
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FACILITATOR -->
+<section class="facilitator">
+  <div class="section-inner">
+    <div class="reveal">
+      <span class="section-label">Facilitator</span>
+    </div>
+    <div class="facilitator-grid reveal d1">
+      <div class="facilitator-photo">
+        <div class="facilitator-photo-placeholder">CdA</div>
+      </div>
+      <div>
+        <h2>Din guide på rejsen</h2>
+        <span class="role">Wellness Facilitator · Breathwork Practitioner · Somatic Therapist</span>
+        <p>Retreatet ledes af en erfaren wellness-facilitator med speciale i nervesystemsregulering, breathwork og somatic therapy. Med mange års erfaring fra retreats i Skandinavien og Sydeuropa skabes et trygt og professionelt rum for transformation.</p>
+        <p>Facilitatoren kombinerer videnskabelig forankring med en dyb menneskelig tilgang — og møder hver deltager præcis der, hvor de er.</p>
+        <p style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1rem;color:var(--text-light);">Facilitatorinfo opdateres løbende. Kontakt os for mere information om den specifikke facilitator for en given dato.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="section-inner"><div class="divider"></div></div>
+
+<!-- REVIEWS -->
+<section class="reviews" id="reviews">
+  <div class="section-inner">
+    <div class="reveal">
+      <span class="section-label">Anmeldelser</span>
+      <h2>Hvad siger vores gæster</h2>
+      <div class="reviews-score">
+        <span class="score-num">4.9</span>
+        <div>
+          <div class="score-stars">★★★★★</div>
+          <div class="score-label">Baseret på 24 anmeldelser</div>
+        </div>
+      </div>
+    </div>
+    <div class="reviews-grid reveal d1">
+      <div class="review-card">
+        <div class="review-stars">★★★★★</div>
+        <p class="review-text">"Jeg kom afkoblet og udmattet. Jeg rejste hjem med en ro i kroppen jeg ikke har mærket i årevis. Castillo del Alma er et magisk sted — og kombinationen af natur, behandlinger og fællesskab er helt unik."</p>
+        <span class="review-author">Mette S., København <span class="review-date">· Sept. 2024</span></span>
+      </div>
+      <div class="review-card">
+        <div class="review-stars">★★★★★</div>
+        <p class="review-text">"Breathwork-sessionerne var en åbenbaring. Jeg forstod endelig hvad der menes med at 'lande i kroppen'. Facilitatoren var utrolig dygtig — tryg, nærværende og præcis. Vil klart vende tilbage."</p>
+        <span class="review-author">Jonas L., Aarhus <span class="review-date">· Nov. 2024</span></span>
+      </div>
+      <div class="review-card">
+        <div class="review-stars">★★★★★</div>
+        <p class="review-text">"Stedet i sig selv er et heal — vinmarkerne, solen, poolen og de hvide mure. Men det var menneskene og den professionelle tilgang der virkelig rørte mig. En uge jeg aldrig glemmer."</p>
+        <span class="review-author">Camilla R., Odense <span class="review-date">· Marts 2025</span></span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="faq">
+  <div class="section-inner">
+    <div class="reveal">
+      <span class="section-label">Ofte stillede spørgsmål</span>
+      <h2>FAQ</h2>
+    </div>
+    <div class="faq-list reveal d1">
+      <div class="faq-item open">
+        <div class="faq-q" onclick="toggleFaq(this)">
+          <span>Skal man have erfaring med meditation eller yoga?</span><i>↓</i>
+        </div>
+        <div class="faq-a"><p>Nej — dette retreat er for alle niveauer. Det eneste du skal medbringe er nysgerrighed og åbenhed. Vi møder dig præcis der, hvor du er.</p></div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">
+          <span>Hvordan kommer jeg til Castillo del Alma?</span><i>↓</i>
+        </div>
+        <div class="faq-a"><p>Nærmeste lufthavn er Málaga (AGP) — ca. 60 min. med bil. Vi anbefaler at leje bil eller bestille privat transfer. Vi hjælper gerne med at koordinere transport fra lufthavnen.</p></div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">
+          <span>Hvad er betalingsbetingelserne?</span><i>↓</i>
+        </div>
+        <div class="faq-a"><p>Ved tilmelding betales et depositum på 3.000 kr. Restbeløbet forfalder 60 dage før retreatstart. Ved afbud mere end 60 dage før tilbagebetales fuldt depositum. Inden 60 dage: 50% refusion. Inden 30 dage: ingen refusion — vi anbefaler rejseforsikring med afbestillingsret.</p></div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">
+          <span>Kan jeg komme alene?</span><i>↓</i>
+        </div>
+        <div class="faq-a"><p>Ja — langt de fleste gæster kommer alene. Det er faktisk den bedste måde at gå fuldt ind i oplevelsen på. Fællesskabet opstår naturligt i gruppen.</p></div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">
+          <span>Er der WiFi og telefonforbindelse?</span><i>↓</i>
+        </div>
+        <div class="faq-a"><p>Ja, der er WiFi på hele ejendommen. Vi opfordrer dog til at begrænse skærmtid og sociale medier under opholdet — det er en del af processen med at sænke tempoet.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BOOKING -->
+<section class="booking-section" id="booking">
+  <div class="section-inner">
+    <div class="booking-grid">
+      <div class="reveal-left">
+        <span class="section-label" style="color:rgba(184,138,30,.7);">Book dit retreat</span>
+        <h2>Tag det første skridt</h2>
+        <p>Udfyld formularen og vi vender tilbage inden for 24 timer med bekræftelse og information om næste trin.</p>
+        <p>Har du spørgsmål inden du tilmelder dig, er du altid velkommen til at skrive eller ringe.</p>
+        <p class="policy-note">Ved tilmelding accepterer du vores betalings- og afbestillingsbetingelser. Depositum på 3.000 kr. forfalder ved bekræftelse. Restbeløb 60 dage før start.</p>
+      </div>
+      <div class="reveal-right d2">
+        <div class="booking-form">
+          <div class="form-field">
+            <label>Retreat</label>
+            <input type="text" value="Kunsten at sænke tempoet — Wellness Retreat" readonly style="background:rgba(184,138,30,.07);color:#fff;cursor:default;border-color:rgba(184,138,30,.25);font-size:1rem;font-weight:500;">
+          </div>
+          <div class="form-row">
+            <div class="form-field"><label>Fornavn</label><input type="text" placeholder="Dit fornavn"></div>
+            <div class="form-field"><label>Efternavn</label><input type="text" placeholder="Dit efternavn"></div>
+          </div>
+          <div class="form-row">
+            <div class="form-field"><label>E-mail</label><input type="email" placeholder="din@email.com"></div>
+            <div class="form-field"><label>Telefon</label><input type="tel" placeholder="+45 xx xx xx xx"></div>
+          </div>
+          <div class="form-field">
+            <label>Vælg dato</label>
+            <select>
+              <option value="">Vælg foretrukken dato</option>
+              <option>14.–21. september 2026</option>
+              <option>9.–16. november 2026</option>
+              <option>22.–29. marts 2026</option>
+            </select>
+          </div>
+          <div class="form-field">
+            <label>Værelses-præference</label>
+            <select>
+              <option value="">Vælg værelse</option>
+              <option>Delt dobbeltværelse — 14.900 kr.</option>
+              <option>Enkeltværelse — 18.900 kr.</option>
+              <option>Suite del Alma — 22.900 kr.</option>
+            </select>
+          </div>
+          <div class="form-field">
+            <label>Kostbehov / særlige ønsker</label>
+            <textarea placeholder="Vegetar, allergier, andet..."></textarea>
+          </div>
+          <button class="form-submit">Send forespørgsel</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-bottom">
+    <p>© 2026 Castillo del Alma · Mollina, Málaga · All rights reserved</p>
+    <a href="index.html">← Tilbage til forsiden</a>
+  </div>
+</footer>
+
+<script>
+// Reveal
+const revObs = new IntersectionObserver(entries=>{
+  entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');revObs.unobserve(e.target);}});
+},{threshold:.1});
+document.querySelectorAll('.reveal,.reveal-left,.reveal-right').forEach(el=>revObs.observe(el));
+
+// Hero bg
+document.getElementById('heroBg').classList.add('loaded');
+
+// Program accordion
+function toggleDay(header){
+  const day = header.parentElement;
+  day.classList.toggle('open');
+}
+
+// FAQ accordion
+function toggleFaq(q){
+  const item = q.parentElement;
+  item.classList.toggle('open');
+}
+</script>
+</body>
+</html>
