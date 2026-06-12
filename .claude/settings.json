@@ -1,0 +1,16 @@
+{
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write|NotebookEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "cd \"/Users/tillykke.nu/Library/CloudStorage/OneDrive-Personligt/! Dokumenter/CASTILLO DEL ALMA/castillo-del-alma\" && git add -A && git commit -m \"Auto-save\" 2>/dev/null; git push 2>/dev/null || true",
+            "statusMessage": "Gemmer til GitHub..."
+          }
+        ]
+      }
+    ]
+  }
+}
