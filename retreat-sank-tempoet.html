@@ -987,6 +987,11 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:3rem
             <div class="form-field"><label>E-mail</label><input type="email" placeholder="din@email.com"></div>
             <div class="form-field"><label>Telefon</label><input type="tel" placeholder="+45 xx xx xx xx"></div>
           </div>
+          <div id="extra-guests"></div>
+          <button type="button" class="add-guest-btn" onclick="addGuest()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            Tilføj gæst
+          </button>
           <div class="form-field">
             <label>Vælg dato</label>
             <select>
@@ -1009,11 +1014,6 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:3rem
             <label>Kostbehov / særlige ønsker</label>
             <textarea placeholder="Vegetar, allergier, andet..."></textarea>
           </div>
-          <div id="extra-guests"></div>
-          <button type="button" class="add-guest-btn" onclick="addGuest()">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-            Tilføj gæst
-          </button>
           <button class="form-submit">Send forespørgsel</button>
         </div>
       </div>
@@ -1066,9 +1066,10 @@ function addGuest() {
       <button type="button" class="remove-guest" onclick="removeGuest(${guestCount})">✕ Fjern</button>
     </div>
     <div class="form-row">
-      <div class="form-field"><label>Navn</label><input type="text" placeholder="Gæstens navn"></div>
-      <div class="form-field"><label>E-mail</label><input type="email" placeholder="gaest@email.com"></div>
-    </div>`;
+      <div class="form-field"><label>Fornavn</label><input type="text" placeholder="Fornavn"></div>
+      <div class="form-field"><label>Efternavn</label><input type="text" placeholder="Efternavn"></div>
+    </div>
+    <div class="form-field"><label>E-mail</label><input type="email" placeholder="gaest@email.com"></div>`;
   container.appendChild(row);
 }
 function removeGuest(id) {
