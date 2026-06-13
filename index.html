@@ -2075,5 +2075,20 @@ wOverlay.addEventListener('click', closeWModal);
 document.addEventListener('keydown', e => { if (e.key === 'Escape') closeWModal(); });
 </script>
 
+<script>
+(function () {
+  const heroVideo = document.querySelector('.hero-video-wrap video');
+  if (!heroVideo) return;
+  // Seeking to a tiny offset forces the browser to decode and paint the first frame
+  heroVideo.addEventListener('loadedmetadata', function () {
+    this.currentTime = 1e-9;
+  });
+  // Ensure playback starts as soon as enough data is available
+  heroVideo.addEventListener('canplay', function () {
+    this.play().catch(function () {});
+  });
+})();
+</script>
+
 </body>
 </html>
