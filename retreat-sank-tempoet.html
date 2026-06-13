@@ -522,6 +522,16 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:3rem
 .remove-guest{background:none;border:none;color:rgba(255,255,255,.3);cursor:pointer;
   font-size:.75rem;padding:.1rem .3rem;transition:color .2s;}
 .remove-guest:hover{color:var(--wine-light);}
+.form-addons-label{font-size:.58rem;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,255,255,.4);margin-bottom:.5rem;display:block;}
+.form-addons{display:flex;flex-direction:column;gap:.5rem;}
+.addon-item{display:flex;align-items:center;gap:.75rem;cursor:pointer;padding:.55rem .7rem;border:1px solid rgba(255,255,255,.08);transition:border-color .2s,background .2s;}
+.addon-item:hover{border-color:rgba(184,138,30,.3);background:rgba(184,138,30,.05);}
+.addon-item input[type="checkbox"]{display:none;}
+.addon-box{width:16px;height:16px;flex-shrink:0;border:1px solid rgba(255,255,255,.25);position:relative;transition:border-color .2s,background .2s;}
+.addon-item input:checked ~ .addon-box{background:var(--wine);border-color:var(--wine);}
+.addon-item input:checked ~ .addon-box::after{content:'';position:absolute;top:2px;left:5px;width:4px;height:8px;border:2px solid #fff;border-top:none;border-left:none;transform:rotate(45deg);}
+.addon-text{flex:1;font-size:.78rem;color:rgba(255,255,255,.7);}
+.addon-price{font-size:.7rem;color:rgba(184,138,30,.8);letter-spacing:.06em;}
 </style>
 </head>
 <body>
@@ -1008,6 +1018,29 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:3rem
               <option id="opt-delt">Delt dobbeltværelse — 14.900 kr.</option>
               <option>Forespørg på enkeltværelse</option>
             </select>
+          </div>
+          <div class="form-field">
+            <span class="form-addons-label">Tilvalg</span>
+            <div class="form-addons">
+              <label class="addon-item">
+                <input type="checkbox">
+                <span class="addon-box"></span>
+                <span class="addon-text">Ekstra nat inden retreat</span>
+                <span class="addon-price">€60</span>
+              </label>
+              <label class="addon-item">
+                <input type="checkbox">
+                <span class="addon-box"></span>
+                <span class="addon-text">Ekstra nat efter retreat</span>
+                <span class="addon-price">€60</span>
+              </label>
+              <label class="addon-item">
+                <input type="checkbox">
+                <span class="addon-box"></span>
+                <span class="addon-text">Kropsmassage 60 min.</span>
+                <span class="addon-price">€50</span>
+              </label>
+            </div>
           </div>
           <div class="form-field">
             <label>Kostbehov / særlige ønsker</label>
