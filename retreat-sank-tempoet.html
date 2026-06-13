@@ -506,6 +506,22 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:3rem
 .reveal-right{opacity:0;transform:translateX(24px);transition:opacity .9s ease,transform .9s ease;}
 .reveal-right.visible{opacity:1;transform:translateX(0);}
 .d1{transition-delay:.1s;}.d2{transition-delay:.2s;}.d3{transition-delay:.3s;}
+.add-guest-btn{
+  display:flex;align-items:center;gap:.5rem;
+  background:transparent;border:1px solid rgba(184,138,30,.35);
+  color:rgba(184,138,30,.85);
+  font-family:'Manrope',sans-serif;font-size:.65rem;font-weight:500;letter-spacing:.18em;text-transform:uppercase;
+  padding:.7rem 1.2rem;cursor:pointer;transition:all .25s;width:100%;justify-content:center;
+}
+.add-guest-btn:hover{background:rgba(184,138,30,.1);border-color:rgba(184,138,30,.6);}
+.add-guest-btn svg{width:13px;height:13px;flex-shrink:0;}
+.guest-row{display:flex;flex-direction:column;gap:.8rem;position:relative;
+  border-left:2px solid rgba(184,138,30,.25);padding-left:.9rem;margin-top:.2rem;}
+.guest-row-header{display:flex;align-items:center;justify-content:space-between;
+  font-size:.58rem;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,255,255,.35);}
+.remove-guest{background:none;border:none;color:rgba(255,255,255,.3);cursor:pointer;
+  font-size:.75rem;padding:.1rem .3rem;transition:color .2s;}
+.remove-guest:hover{color:var(--wine-light);}
 </style>
 </head>
 <body>
@@ -993,6 +1009,11 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:3rem
             <label>Kostbehov / særlige ønsker</label>
             <textarea placeholder="Vegetar, allergier, andet..."></textarea>
           </div>
+          <div id="extra-guests"></div>
+          <button type="button" class="add-guest-btn" onclick="addGuest()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            Tilføj gæst
+          </button>
           <button class="form-submit">Send forespørgsel</button>
         </div>
       </div>
@@ -1028,6 +1049,31 @@ function toggleDay(header){
 function toggleFaq(q){
   const item = q.parentElement;
   item.classList.toggle('open');
+}
+</script>
+
+<script>
+let guestCount = 0;
+function addGuest() {
+  guestCount++;
+  const container = document.getElementById('extra-guests');
+  const row = document.createElement('div');
+  row.className = 'guest-row';
+  row.id = 'guest-' + guestCount;
+  row.innerHTML = `
+    <div class="guest-row-header">
+      <span>Gæst ${guestCount}</span>
+      <button type="button" class="remove-guest" onclick="removeGuest(${guestCount})">✕ Fjern</button>
+    </div>
+    <div class="form-row">
+      <div class="form-field"><label>Navn</label><input type="text" placeholder="Gæstens navn"></div>
+      <div class="form-field"><label>E-mail</label><input type="email" placeholder="gaest@email.com"></div>
+    </div>`;
+  container.appendChild(row);
+}
+function removeGuest(id) {
+  const row = document.getElementById('guest-' + id);
+  if (row) row.remove();
 }
 </script>
 </body>
