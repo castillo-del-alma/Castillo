@@ -490,6 +490,11 @@ nav{
   cursor:pointer;transition:background .3s;align-self:flex-start;margin-top:.3rem;
 }
 .form-submit:hover{background:var(--wine-light);}
+.form-submit:disabled{opacity:.6;cursor:default;}
+.form-btns{display:grid;grid-template-columns:1fr 1fr;gap:.7rem;}
+.form-submit-secondary{background:transparent;border:1px solid rgba(255,255,255,.2);color:rgba(255,255,255,.7);}
+.form-submit-secondary:hover{background:rgba(255,255,255,.07);border-color:rgba(255,255,255,.35);}
+@media(max-width:600px){.form-btns{grid-template-columns:1fr;}}
 
 /* ── FOOTER ── */
 footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:3rem 4rem;}
@@ -981,7 +986,7 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:3rem
         <h2>Tag det første skridt</h2>
         <p>Udfyld formularen og vi vender tilbage inden for 24 timer med bekræftelse og information om næste trin.</p>
         <p>Har du spørgsmål inden du tilmelder dig, er du altid velkommen til at skrive eller ringe.</p>
-        <p class="policy-note">Ved tilmelding accepterer du vores betalings- og afbestillingsbetingelser. Depositum på 3.000 kr. forfalder ved bekræftelse. Restbeløb 60 dage før start.</p>
+        <p class="policy-note">Ved tilmelding accepterer du vores betalings- og afbestillingsbetingelser. Depositum på 30% forfalder ved tilmelding og reserverer din plads. Restbeløbet forfalder 8 dage før retreatstart.</p>
       </div>
       <div class="reveal-right d2">
         <div class="booking-form">
@@ -990,11 +995,11 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:3rem
             <input type="text" value="Kunsten at sænke tempoet — Wellness Retreat" readonly style="background:rgba(184,138,30,.07);color:#fff;cursor:default;border-color:rgba(184,138,30,.25);font-size:1rem;font-weight:500;">
           </div>
           <div class="form-row">
-            <div class="form-field"><label>Fornavn</label><input type="text" placeholder="Dit fornavn"></div>
-            <div class="form-field"><label>Efternavn</label><input type="text" placeholder="Dit efternavn"></div>
+            <div class="form-field"><label>Fornavn</label><input id="f-fornavn" type="text" placeholder="Dit fornavn"></div>
+            <div class="form-field"><label>Efternavn</label><input id="f-efternavn" type="text" placeholder="Dit efternavn"></div>
           </div>
           <div class="form-row">
-            <div class="form-field"><label>E-mail</label><input type="email" placeholder="din@email.com"></div>
+            <div class="form-field"><label>E-mail</label><input id="f-email" type="email" placeholder="din@email.com"></div>
             <div class="form-field"><label>Telefon</label><input type="tel" placeholder="+45 xx xx xx xx"></div>
           </div>
           <div id="extra-guests"></div>
@@ -1046,7 +1051,11 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:3rem
             <label>Særlige ønsker</label>
             <textarea placeholder="Skriv dine særlige ønsker eller behov"></textarea>
           </div>
-          <button class="form-submit">Send forespørgsel</button>
+          <div id="form-error" style="display:none;font-size:.78rem;color:#c05c30;margin-top:.2rem;"></div>
+          <div class="form-btns">
+            <button type="button" class="form-submit form-submit-secondary" onclick="sendForespørgsel()">Send forespørgsel</button>
+            <button type="button" class="form-submit" id="btn-depositum" onclick="betalDepositum()">Betal depositum · 4.470 kr.</button>
+          </div>
         </div>
       </div>
     </div>
@@ -1085,6 +1094,62 @@ function toggleFaq(q){
 </script>
 
 <script>
+const RETREAT_PRICE = 14900;
+const DEPOSIT_PCT   = 0.30;
+const DEPOSIT_DKK   = Math.round(RETREAT_PRICE * DEPOSIT_PCT);
+
+function getFormData() {
+  const fornavn   = document.getElementById('f-fornavn').value.trim();
+  const efternavn = document.getElementById('f-efternavn').value.trim();
+  const email     = document.getElementById('f-email').value.trim();
+  return { fornavn, efternavn, email, name: `${fornavn} ${efternavn}`.trim() };
+}
+
+function showFormError(msg) {
+  const el = document.getElementById('form-error');
+  el.textContent = msg;
+  el.style.display = msg ? 'block' : 'none';
+}
+
+function sendForespørgsel() {
+  const { fornavn, email } = getFormData();
+  if (!fornavn || !email) { showFormError('Udfyld mindst fornavn og e-mail.'); return; }
+  showFormError('');
+  // Placeholder — tilslut til din e-mail/backend når klar
+  alert('Forespørgsel registreret. Vi vender tilbage inden for 24 timer.');
+}
+
+async function betalDepositum() {
+  const { name, fornavn, email } = getFormData();
+  if (!fornavn || !email) { showFormError('Udfyld mindst fornavn og e-mail.'); return; }
+  showFormError('');
+
+  const btn = document.getElementById('btn-depositum');
+  btn.disabled = true;
+  btn.innerHTML = '<span style="display:inline-block;width:12px;height:12px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .6s linear infinite;vertical-align:middle;margin-right:.4rem;"></span>Opretter link…';
+
+  try {
+    const res = await fetch('/.netlify/functions/create-payment-link', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        name,
+        email,
+        amount: DEPOSIT_DKK,
+        currency: 'DKK',
+        description: `Depositum (30%) — Kunsten at sænke tempoet · Castillo del Alma`,
+      }),
+    });
+    const data = await res.json();
+    if (!res.ok || data.error) throw new Error(data.error || 'Ukendt fejl');
+    window.location.href = data.url;
+  } catch (err) {
+    showFormError('Fejl ved oprettelse af betaling: ' + err.message);
+    btn.disabled = false;
+    btn.textContent = 'Betal depositum · 4.470 kr.';
+  }
+}
+
 let guestCount = 0;
 
 function updateRoomLabel() {
