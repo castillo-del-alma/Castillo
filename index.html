@@ -320,9 +320,10 @@ section{position:relative;z-index:1;}
 .om-os-text::after{
   content:'';
   position:absolute;
-  bottom:-3rem;right:-1rem;
-  width:55%;height:85%;
-  background:url('img/logo-tower.jpg') center bottom/contain no-repeat;
+  top:50%;left:50%;
+  transform:translate(-50%,-50%);
+  width:85%;height:100%;
+  background:url('img/logo-tower.png') center center/contain no-repeat;
   opacity:.3;
   pointer-events:none;
   z-index:0;
