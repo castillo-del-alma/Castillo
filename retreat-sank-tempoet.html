@@ -1003,9 +1003,9 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:3rem
           </div>
           <div class="form-field">
             <label>Værelses-præference</label>
-            <select>
+            <select id="room-select">
               <option value="">Vælg værelse</option>
-              <option>Delt dobbeltværelse — 14.900 kr.</option>
+              <option id="opt-delt">Delt dobbeltværelse — 14.900 kr.</option>
               <option>Forespørg på enkeltværelse</option>
             </select>
           </div>
@@ -1053,6 +1053,16 @@ function toggleFaq(q){
 
 <script>
 let guestCount = 0;
+
+function updateRoomLabel() {
+  const opt = document.getElementById('opt-delt');
+  if (!opt) return;
+  const hasGuests = document.querySelectorAll('.guest-row').length > 0;
+  opt.textContent = hasGuests
+    ? 'Dobbeltværelse — 14.900 kr.'
+    : 'Delt dobbeltværelse — 14.900 kr.';
+}
+
 function addGuest() {
   guestCount++;
   const container = document.getElementById('extra-guests');
@@ -1070,10 +1080,13 @@ function addGuest() {
     </div>
     <div class="form-field"><label>E-mail</label><input type="email" placeholder="gaest@email.com"></div>`;
   container.appendChild(row);
+  updateRoomLabel();
 }
+
 function removeGuest(id) {
   const row = document.getElementById('guest-' + id);
   if (row) row.remove();
+  updateRoomLabel();
 }
 </script>
 </body>
