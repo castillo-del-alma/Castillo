@@ -291,6 +291,37 @@ section{position:relative;z-index:1;}
 .tag-gold:hover{background:rgba(184,138,30,.07);}
 
 /* ══════════════════════════════
+   OM OS
+══════════════════════════════ */
+.om-os{background:var(--section-alt);padding:10rem 0 9rem;}
+.om-os-grid{display:grid;grid-template-columns:1fr 1fr;gap:7rem;align-items:center;}
+.om-os-img-wrap{position:relative;padding-bottom:1.8rem;padding-right:1.8rem;}
+.om-os-img{position:relative;overflow:hidden;border-radius:2px;aspect-ratio:3/4;}
+.om-os-img img{width:100%;height:100%;object-fit:cover;display:block;transition:transform 1.2s ease;}
+.om-os-img:hover img{transform:scale(1.03);}
+.om-os-img-label{
+  position:absolute;bottom:0;right:0;
+  background:var(--wine);color:#fff;
+  font-family:'Manrope',sans-serif;font-size:.6rem;font-weight:500;
+  letter-spacing:.22em;text-transform:uppercase;padding:.65rem 1.1rem;
+}
+.om-os h2{margin-bottom:1.6rem;}
+.om-os h2 em{color:var(--wine);font-style:normal;}
+.om-os p{
+  font-family:'Cormorant Garamond',serif;font-size:1.08rem;font-weight:300;
+  line-height:1.95;color:var(--text-mid);margin-bottom:1.4rem;
+}
+.om-os-signature{
+  margin-top:2.2rem;
+  font-family:'Cormorant Garamond',serif;font-style:italic;
+  font-size:1.12rem;color:var(--text-mid);
+}
+@media(max-width:900px){
+  .om-os-grid{grid-template-columns:1fr;gap:3.5rem;}
+  .om-os-img{aspect-ratio:4/3;}
+}
+
+/* ══════════════════════════════
    RETREATS — has circles bg
 ══════════════════════════════ */
 .retreats{background:var(--section-alt);padding:9rem 0;}
@@ -1047,6 +1078,7 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:5rem
     <li><a href="#vineyard">Vingården</a></li>
     <li><a href="#experiences">Oplevelser</a></li>
     <li><a href="#gallery">Galleri</a></li><li><a href="#wellness">Wellness</a></li>
+    <li><a href="#om-os">Om os</a></li>
     <li><a href="#retreats" class="nav-book">Book Retreat</a></li>
   </ul>
 </nav>
@@ -1543,6 +1575,33 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:5rem
 
   </div>
 </section>
+
+<!-- ══════ OM OS ══════ -->
+<section class="om-os" id="om-os">
+  <div class="section-inner">
+    <div class="om-os-grid">
+      <div class="reveal">
+        <span class="section-label">Om os</span>
+        <h2 class="split-h">Michael<br>& <em>Erik</em></h2>
+        <p>Vi er et par der har været sammen siden 1988, og som igennem hele vores fælles liv har delt én overbevisning: man skal kun bruge tiden på det, der giver mening og glæde — og som man kan leve af.</p>
+        <p>Bag os har vi 30 år i TV- og videoproduktionsbranchen, en restaurant, et bed &amp; breakfast og en lang række andre projekter. Vores drivkraft har aldrig været ambition for sin egen skyld, men lysten til at skabe noget autentisk — med os selv som aktive deltagere i det vi laver.</p>
+        <p>Efter tre års søgen i Andalusien fandt vi det. Castillo del Alma er ikke bare et hus — det er præcis det vi havde drømt om. Et sted vi selv vil bo, og som vi med stolthed kan åbne for gæster.</p>
+        <p>Vores drøm er at skabe et sted, hvor folk kan trække vejret. Langt fra støj og travlhed — hvor gode oplevelser, stilhed og menneskelig varme er det eneste, der tæller.</p>
+        <div class="om-os-signature">— Michael &amp; Erik</div>
+      </div>
+      <div class="reveal-right d2">
+        <div class="om-os-img-wrap">
+          <div class="om-os-img">
+            <img src="img/erik-michael-castillo-del-alma.webp" alt="Michael og Erik — ejere af Castillo del Alma">
+          </div>
+          <div class="om-os-img-label">Michael &amp; Erik · Ejere</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="section-inner"><div class="divider"></div></div>
 
 <!-- ══════ TESTIMONIAL ══════ -->
 <section class="testimonial">
