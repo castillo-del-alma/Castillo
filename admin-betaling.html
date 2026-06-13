@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Betaling — Castillo del Alma Admin</title>
+<link rel="icon" type="image/png" href="img/logo-tower.png">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500&family=Manrope:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --cream: #faf6ee;
+  --beige: #f0e8d5;
+  --charcoal: #2c2318;
+  --text: #2c2318;
+  --text-mid: #5c4e3a;
+  --text-light: #9a8c7a;
+  --wine: #7a1f35;
+  --wine-light: #a03048;
+  --gold: #b88a1e;
+  --sand: #e0d0b0;
+  --olive: #6a7240;
+  --ok: #2d6a4f;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Manrope',sans-serif;background:var(--beige);color:var(--text);min-height:100vh;padding:3rem 1.5rem;}
+.page{max-width:720px;margin:0 auto;}
+header{display:flex;align-items:center;gap:1rem;margin-bottom:3rem;padding-bottom:1.5rem;border-bottom:1px solid rgba(184,138,30,.2);}
+header img{height:38px;opacity:.85;}
+header h1{font-family:'Cinzel',serif;font-size:1rem;font-weight:400;letter-spacing:.2em;text-transform:uppercase;color:var(--text-mid);}
+.card{background:#fff;border:1px solid rgba(184,138,30,.15);padding:2rem;margin-bottom:1.5rem;}
+.card-title{font-size:.62rem;letter-spacing:.25em;text-transform:uppercase;color:var(--gold);margin-bottom:1.4rem;display:flex;align-items:center;gap:.6rem;}
+.card-title::before{content:'';width:22px;height:1px;background:var(--gold);}
+.field{display:flex;flex-direction:column;gap:.35rem;margin-bottom:1rem;}
+.field label{font-size:.58rem;letter-spacing:.2em;text-transform:uppercase;color:var(--text-light);}
+.field input{border:1px solid rgba(184,138,30,.25);background:var(--cream);padding:.7rem .9rem;font-family:'Manrope',sans-serif;font-size:.9rem;color:var(--text);transition:border-color .2s;}
+.field input:focus{outline:none;border-color:rgba(184,138,30,.55);}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:1rem;}
+.payment-rows{display:flex;flex-direction:column;gap:1rem;}
+.payment-row{border:1px solid rgba(184,138,30,.15);padding:1.2rem;background:var(--cream);}
+.payment-row-label{font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;color:var(--text-mid);margin-bottom:.8rem;font-weight:500;}
+.payment-row-inputs{display:grid;grid-template-columns:1fr 90px auto;gap:.7rem;align-items:end;}
+.payment-row-inputs input{border:1px solid rgba(184,138,30,.25);background:#fff;padding:.65rem .8rem;font-family:'Manrope',sans-serif;font-size:1rem;color:var(--text);width:100%;}
+.payment-row-inputs input:focus{outline:none;border-color:rgba(184,138,30,.55);}
+.payment-row-inputs select{border:1px solid rgba(184,138,30,.25);background:#fff;padding:.65rem .6rem;font-family:'Manrope',sans-serif;font-size:.82rem;color:var(--text);cursor:pointer;appearance:none;text-align:center;}
+.payment-row-inputs select:focus{outline:none;}
+.btn-gen{background:var(--wine);color:#fff;border:none;padding:.68rem 1.2rem;font-family:'Manrope',sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.18em;text-transform:uppercase;cursor:pointer;white-space:nowrap;transition:background .2s;}
+.btn-gen:hover{background:var(--wine-light);}
+.btn-gen:disabled{background:var(--text-light);cursor:default;}
+.link-result{margin-top:.8rem;display:none;}
+.link-box{display:flex;gap:.5rem;align-items:center;padding:.7rem .9rem;background:#fff;border:1px solid rgba(106,114,64,.3);}
+.link-box a{font-size:.78rem;color:var(--olive);word-break:break-all;flex:1;text-decoration:none;}
+.link-box a:hover{text-decoration:underline;}
+.btn-copy{background:none;border:1px solid rgba(106,114,64,.4);padding:.4rem .7rem;font-size:.58rem;letter-spacing:.15em;text-transform:uppercase;color:var(--olive);cursor:pointer;white-space:nowrap;transition:all .2s;flex-shrink:0;}
+.btn-copy:hover{background:rgba(106,114,64,.08);}
+.btn-copy.copied{color:var(--ok);border-color:var(--ok);}
+.error-msg{margin-top:.7rem;font-size:.78rem;color:var(--wine);display:none;}
+.spinner{display:inline-block;width:12px;height:12px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .6s linear infinite;vertical-align:middle;margin-right:.4rem;}
+@keyframes spin{to{transform:rotate(360deg);}}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <header>
+    <img src="img/logo-tower.png" alt="">
+    <h1>Betalingsadmin · Castillo del Alma</h1>
+  </header>
+
+  <!-- Deltager -->
+  <div class="card">
+    <div class="card-title">Deltager</div>
+    <div class="row">
+      <div class="field">
+        <label>Fulde navn</label>
+        <input type="text" id="navn" placeholder="Fornavn Efternavn" oninput="clearLinks()">
+      </div>
+      <div class="field">
+        <label>E-mail</label>
+        <input type="email" id="email" placeholder="deltager@email.com" oninput="clearLinks()">
+      </div>
+    </div>
+  </div>
+
+  <!-- Betalinger -->
+  <div class="card">
+    <div class="card-title">Betalingslinks</div>
+    <div class="payment-rows">
+
+      <div class="payment-row" id="row-depositum">
+        <div class="payment-row-label">Depositum</div>
+        <div class="payment-row-inputs">
+          <input type="number" id="amt-depositum" placeholder="Beløb" min="1" step="any">
+          <select id="cur-depositum">
+            <option value="DKK">DKK</option>
+            <option value="EUR">EUR</option>
+          </select>
+          <button class="btn-gen" onclick="genLink('depositum')">Opret link</button>
+        </div>
+        <div class="link-result" id="link-depositum"></div>
+        <div class="error-msg" id="err-depositum"></div>
+      </div>
+
+      <div class="payment-row" id="row-restbelob">
+        <div class="payment-row-label">Restbeløb</div>
+        <div class="payment-row-inputs">
+          <input type="number" id="amt-restbelob" placeholder="Beløb" min="1" step="any">
+          <select id="cur-restbelob">
+            <option value="DKK">DKK</option>
+            <option value="EUR">EUR</option>
+          </select>
+          <button class="btn-gen" onclick="genLink('restbelob')">Opret link</button>
+        </div>
+        <div class="link-result" id="link-restbelob"></div>
+        <div class="error-msg" id="err-restbelob"></div>
+      </div>
+
+      <div class="payment-row" id="row-helebelob">
+        <div class="payment-row-label">Hele beløbet</div>
+        <div class="payment-row-inputs">
+          <input type="number" id="amt-helebelob" placeholder="Beløb" min="1" step="any">
+          <select id="cur-helebelob">
+            <option value="DKK">DKK</option>
+            <option value="EUR">EUR</option>
+          </select>
+          <button class="btn-gen" onclick="genLink('helebelob')">Opret link</button>
+        </div>
+        <div class="link-result" id="link-helebelob"></div>
+        <div class="error-msg" id="err-helebelob"></div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+<script>
+const labels = {
+  depositum: 'Depositum',
+  restbelob: 'Restbeløb',
+  helebelob: 'Hele beløbet',
+};
+
+function clearLinks() {
+  ['depositum', 'restbelob', 'helebelob'].forEach(type => {
+    document.getElementById('link-' + type).style.display = 'none';
+    document.getElementById('err-' + type).style.display = 'none';
+  });
+}
+
+async function genLink(type) {
+  const navn  = document.getElementById('navn').value.trim();
+  const email = document.getElementById('email').value.trim();
+  const amount = document.getElementById('amt-' + type).value.trim();
+  const currency = document.getElementById('cur-' + type).value;
+  const errEl  = document.getElementById('err-' + type);
+  const linkEl = document.getElementById('link-' + type);
+  const btn    = document.querySelector(`#row-${type} .btn-gen`);
+
+  errEl.style.display = 'none';
+  linkEl.style.display = 'none';
+
+  if (!navn || !email || !amount) {
+    errEl.textContent = 'Udfyld navn, e-mail og beløb.';
+    errEl.style.display = 'block';
+    return;
+  }
+
+  const description = `${labels[type]} — Castillo del Alma (${navn})`;
+
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner"></span>Opretter…';
+
+  try {
+    const res = await fetch('/.netlify/functions/create-payment-link', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name: navn, email, amount, currency, description }),
+    });
+    const data = await res.json();
+
+    if (!res.ok || data.error) {
+      throw new Error(data.error || 'Ukendt fejl');
+    }
+
+    linkEl.innerHTML = `
+      <div class="link-box">
+        <a href="${data.url}" target="_blank">${data.url}</a>
+        <button class="btn-copy" onclick="copyLink(this, '${data.url}')">Kopiér</button>
+      </div>`;
+    linkEl.style.display = 'block';
+  } catch (err) {
+    errEl.textContent = 'Fejl: ' + err.message;
+    errEl.style.display = 'block';
+  } finally {
+    btn.disabled = false;
+    btn.textContent = 'Opret link';
+  }
+}
+
+function copyLink(btn, url) {
+  navigator.clipboard.writeText(url).then(() => {
+    btn.textContent = 'Kopieret ✓';
+    btn.classList.add('copied');
+    setTimeout(() => {
+      btn.textContent = 'Kopiér';
+      btn.classList.remove('copied');
+    }, 2500);
+  });
+}
+</script>
+</body>
+</html>
