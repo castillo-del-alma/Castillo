@@ -316,6 +316,18 @@ section{position:relative;z-index:1;}
   font-family:'Cormorant Garamond',serif;font-style:italic;
   font-size:1.12rem;color:var(--text-mid);
 }
+.om-os-text{position:relative;}
+.om-os-text::after{
+  content:'';
+  position:absolute;
+  bottom:-3rem;right:-1rem;
+  width:55%;height:85%;
+  background:url('img/logo-tower.jpg') center bottom/contain no-repeat;
+  opacity:.3;
+  pointer-events:none;
+  z-index:0;
+}
+.om-os-text>*{position:relative;z-index:1;}
 @media(max-width:900px){
   .om-os-grid{grid-template-columns:1fr;gap:3.5rem;}
   .om-os-img{aspect-ratio:4/3;}
@@ -1580,7 +1592,7 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:5rem
 <section class="om-os" id="om-os">
   <div class="section-inner">
     <div class="om-os-grid">
-      <div class="reveal">
+      <div class="reveal om-os-text">
         <span class="section-label">Om os</span>
         <h2 class="split-h">Michael<br>& <em>Erik</em></h2>
         <p>Vi er et par der har været sammen siden 1988, og som igennem hele vores fælles liv har delt én overbevisning: man skal kun bruge tiden på det, der giver mening og glæde — og som man kan leve af.</p>
