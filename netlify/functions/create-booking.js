@@ -23,19 +23,33 @@ exports.handler = async (event) => {
       'Prefer': 'return=representation'
     };
 
-    // Opret kunde
-    const kundeRes = await fetch(`${SUPABASE_URL}/rest/v1/customers`, {
-      method: 'POST',
-      headers: { ...headers, 'Prefer': 'resolution=merge-duplicates,return=representation' },
-      body: JSON.stringify({
-        full_name: `${fornavn} ${efternavn}`.trim(),
-        email: email,
-        phone: telefon || null,
-      })
+    // Tjek om kunde eksisterer
+    const checkRes = await fetch(`${SUPABASE_URL}/rest/v1/customers?email=eq.${encodeURIComponent(email)}&select=id,full_name,email`, {
+      headers: {
+        'apikey': SUPABASE_KEY,
+        'Authorization': `Bearer ${SUPABASE_KEY}`
+      }
     });
-    const kundeData = await kundeRes.json();
-    const kunde = Array.isArray(kundeData) ? kundeData[0] : kundeData;
-    if (!kunde || !kunde.id) throw new Error('Kunde oprettelse fejlede');
+    const existing = await checkRes.json();
+
+    let kunde;
+    if (existing && existing.length > 0) {
+      kunde = existing[0];
+    } else {
+      const kundeRes = await fetch(`${SUPABASE_URL}/rest/v1/customers`, {
+        method: 'POST',
+        headers,
+        body: JSON.stringify({
+          full_name: `${fornavn} ${efternavn}`.trim(),
+          email: email,
+          phone: telefon || null,
+        })
+      });
+      const kundeData = await kundeRes.json();
+      kunde = Array.isArray(kundeData) ? kundeData[0] : kundeData;
+    }
+
+    if (!kunde || !kunde.id) throw new Error('Kunde kunne ikke oprettes: ' + JSON.stringify(kunde));
 
     // Opret booking
     const bookingRes = await fetch(`${SUPABASE_URL}/rest/v1/bookings`, {
@@ -54,7 +68,7 @@ exports.handler = async (event) => {
     });
     const bookingData = await bookingRes.json();
     const booking = Array.isArray(bookingData) ? bookingData[0] : bookingData;
-    if (!booking || !booking.id) throw new Error('Booking oprettelse fejlede');
+    if (!booking || !booking.id) throw new Error('Booking fejlede: ' + JSON.stringify(booking));
 
     // Opret betaling
     await fetch(`${SUPABASE_URL}/rest/v1/payments`, {
