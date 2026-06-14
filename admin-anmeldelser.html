@@ -611,6 +611,7 @@ function renderKunder() {
         <button class="kunde-btn kunde-btn-view" onclick="visDetalje('${k.id}')">Se detaljer</button>
         <button class="kunde-btn kunde-btn-charge" onclick="openForbrug('${booking.id}','${k.full_name}')">+ Forbrug</button>
         ${skylder > 0 ? `<button class="kunde-btn kunde-btn-pay" onclick="registrerBetaling('${booking.id}',${skylder})">Registrér betaling</button>` : ''}
+        <button class="kunde-btn" style="background:rgba(192,92,48,.1);color:rgba(192,92,48,.7);border:1px solid rgba(192,92,48,.2);" onclick="sletKunde('${k.id}','${k.full_name}')">Slet</button>
       </div>
     </div>`;
   }).join('');
@@ -624,6 +625,7 @@ function renderKundeCardIngen(k) {
     <div style="font-size:.72rem;color:rgba(232,220,200,.3);padding:.5rem 0;">Ingen booking endnu</div>
     <div class="kunde-actions">
       <button class="kunde-btn kunde-btn-view" onclick="visDetalje('${k.id}')">Se detaljer</button>
+      <button class="kunde-btn" style="background:rgba(192,92,48,.1);color:rgba(192,92,48,.7);border:1px solid rgba(192,92,48,.2);" onclick="sletKunde('${k.id}','${k.full_name}')">Slet</button>
     </div>
   </div>`;
 }
@@ -810,6 +812,20 @@ async function visDetalje(kundeId) {
 
   document.getElementById('detaljeSections').innerHTML = html;
   document.getElementById('modalDetalje').classList.add('open');
+}
+
+// ── SLET KUNDE ──
+async function sletKunde(kundeId, navn) {
+  if (!confirm(`Er du sikker på at du vil slette ${navn}?\nAlle bookinger og betalinger slettes også.`)) return;
+  
+  try {
+    const { error } = await sb.from('customers').delete().eq('id', kundeId);
+    if (error) throw error;
+    showToast(`${navn} slettet`);
+    await loadKunder();
+  } catch(e) {
+    showToast('Fejl: ' + e.message, true);
+  }
 }
 
 // ── MODAL HELPERS ──
