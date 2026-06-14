@@ -1,4 +1,3 @@
-const { createClient } = require('@supabase/supabase-js');
 const { Resend } = require('resend');
 
 exports.handler = async (event) => {
@@ -6,57 +5,70 @@ exports.handler = async (event) => {
     return { statusCode: 405, body: 'Method Not Allowed' };
   }
 
-  const supabase = createClient(
-    process.env.SUPABASE_URL,
-    process.env.SUPABASE_ANON_KEY
-  );
-
+  const SUPABASE_URL = process.env.SUPABASE_URL;
+  const SUPABASE_KEY = process.env.SUPABASE_ANON_KEY;
   const resend = new Resend(process.env.RESEND_API_KEY);
 
   try {
-    const { fornavn, efternavn, email, telefon, retreat, ankomst, afrejse, gaester, noter } = JSON.parse(event.body);
+    const { fornavn, efternavn, email, telefon, gaester } = JSON.parse(event.body);
 
     if (!fornavn || !email) {
       return { statusCode: 400, body: JSON.stringify({ error: 'Fornavn og email er påkrævet' }) };
     }
 
-    const { data: kunde, error: kErr } = await supabase
-      .from('customers')
-      .upsert({ 
+    const headers = {
+      'Content-Type': 'application/json',
+      'apikey': SUPABASE_KEY,
+      'Authorization': `Bearer ${SUPABASE_KEY}`,
+      'Prefer': 'return=representation'
+    };
+
+    // Opret kunde
+    const kundeRes = await fetch(`${SUPABASE_URL}/rest/v1/customers`, {
+      method: 'POST',
+      headers: { ...headers, 'Prefer': 'resolution=merge-duplicates,return=representation' },
+      body: JSON.stringify({
         full_name: `${fornavn} ${efternavn}`.trim(),
         email: email,
         phone: telefon || null,
-      }, { onConflict: 'email' })
-      .select()
-      .single();
+      })
+    });
+    const kundeData = await kundeRes.json();
+    const kunde = Array.isArray(kundeData) ? kundeData[0] : kundeData;
+    if (!kunde || !kunde.id) throw new Error('Kunde oprettelse fejlede');
 
-    if (kErr) throw kErr;
-
-    const { data: booking, error: bErr } = await supabase
-      .from('bookings')
-      .insert({
+    // Opret booking
+    const bookingRes = await fetch(`${SUPABASE_URL}/rest/v1/bookings`, {
+      method: 'POST',
+      headers,
+      body: JSON.stringify({
         customer_id: kunde.id,
-        retreat_name: retreat || 'Kunsten at sænke tempoet — Wellness Retreat',
-        arrival_date: ankomst || '2026-09-14',
-        departure_date: afrejse || '2026-09-21',
+        retreat_name: 'Kunsten at sænke tempoet — Wellness Retreat',
+        arrival_date: '2026-09-14',
+        departure_date: '2026-09-21',
         guests: gaester || 1,
         total_price: 14900,
         deposit_amount: 4470,
-        status: 'forespørgsel',
-        notes: noter || null
+        status: 'forespørgsel'
       })
-      .select()
-      .single();
+    });
+    const bookingData = await bookingRes.json();
+    const booking = Array.isArray(bookingData) ? bookingData[0] : bookingData;
+    if (!booking || !booking.id) throw new Error('Booking oprettelse fejlede');
 
-    if (bErr) throw bErr;
-
-    await supabase.from('payments').insert({
-      booking_id: booking.id,
-      amount: 4470,
-      type: 'deposit',
-      status: 'pending'
+    // Opret betaling
+    await fetch(`${SUPABASE_URL}/rest/v1/payments`, {
+      method: 'POST',
+      headers,
+      body: JSON.stringify({
+        booking_id: booking.id,
+        amount: 4470,
+        type: 'deposit',
+        status: 'pending'
+      })
     });
 
+    // Send email
     await resend.emails.send({
       from: 'Castillo del Alma <hello@booking.lacasadelalma.es>',
       to: email,
@@ -69,7 +81,7 @@ exports.handler = async (event) => {
     return {
       statusCode: 200,
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ success: true, kunde_id: kunde.id, booking_id: booking.id })
+      body: JSON.stringify({ success: true })
     };
 
   } catch (e) {
@@ -79,4 +91,3 @@ exports.handler = async (event) => {
     };
   }
 };
-<!-- hello sender -->
