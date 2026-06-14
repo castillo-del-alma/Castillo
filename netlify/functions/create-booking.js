@@ -1,4 +1,5 @@
 const { createClient } = require('@supabase/supabase-js');
+const { Resend } = require('resend');
 
 exports.handler = async (event) => {
   if (event.httpMethod !== 'POST') {
