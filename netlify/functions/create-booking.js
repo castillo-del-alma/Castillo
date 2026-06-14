@@ -58,7 +58,7 @@ exports.handler = async (event) => {
     });
 
     await resend.emails.send({
-      from: 'Castillo del Alma <hej@lacasadelalma.es>',
+      from: 'Castillo del Alma <hello@booking.lacasadelalma.es>',
       to: email,
       subject: 'Vi har modtaget din forespørgsel — Castillo del Alma',
       html: `<p>Kære ${fornavn},</p>
