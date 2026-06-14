@@ -97,6 +97,27 @@ exports.handler = async (event) => {
     const emailData = await emailRes.json();
     console.log('Email result:', JSON.stringify(emailData));
 
+    // Send admin notifikation
+    await fetch('https://api.resend.com/emails', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${RESEND_KEY}`
+      },
+      body: JSON.stringify({
+        from: 'Castillo del Alma <hello@booking.lacasadelalma.es>',
+        to: 'booking@lacasadelalma.es',
+        subject: 'Ny forespørgsel: ' + fornavn + ' ' + efternavn,
+        html: `<h2>Ny forespørgsel modtaget</h2>
+               <p><strong>Navn:</strong> ${fornavn} ${efternavn}</p>
+               <p><strong>Email:</strong> ${email}</p>
+               <p><strong>Telefon:</strong> ${telefon || '—'}</p>
+               <p><strong>Retreat:</strong> Kunsten at sænke tempoet</p>
+               <p><strong>Ankomst:</strong> 14. september 2026</p>
+               <p><strong>Afrejse:</strong> 21. september 2026</p>`
+      })
+    });
+
     return {
       statusCode: 200,
       headers: { 'Content-Type': 'application/json' },
