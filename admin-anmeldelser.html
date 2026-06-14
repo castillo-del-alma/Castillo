@@ -201,12 +201,12 @@ body{font-family:'Manrope',sans-serif;background:#1e1810;color:#e8dcc8;min-heigh
 
   <!-- FANER -->
   <div class="tabs">
-    <button class="tab-btn active" onclick="switchTab('anmeldelser',this)">Anmeldelser</button>
-    <button class="tab-btn" onclick="switchTab('kunder',this)">Kunder & Bookinger</button>
+    <button class="tab-btn" onclick="switchTab('anmeldelser',this)">Anmeldelser</button>
+    <button class="tab-btn active" onclick="switchTab('kunder',this)">Kunder & Bookinger</button>
   </div>
 
   <!-- FANE: ANMELDELSER -->
-  <div class="tab-content active" id="tab-anmeldelser">
+  <div class="tab-content" id="tab-anmeldelser">
     <div class="stats-bar" id="statsBar">
       <div class="stat"><span class="stat-num" id="statTotal">—</span><span class="stat-label">Anmeldelser</span></div>
       <div class="stat"><span class="stat-num" id="statAvg">—</span><span class="stat-label">Gns. samlet</span></div>
@@ -228,7 +228,7 @@ body{font-family:'Manrope',sans-serif;background:#1e1810;color:#e8dcc8;min-heigh
   </div>
 
   <!-- FANE: KUNDER -->
-  <div class="tab-content" id="tab-kunder">
+  <div class="tab-content active" id="tab-kunder">
     <div class="stats-bar">
       <div class="stat"><span class="stat-num" id="statKunder">—</span><span class="stat-label">Kunder</span></div>
       <div class="stat"><span class="stat-num" id="statBookinger">—</span><span class="stat-label">Bookinger</span></div>
