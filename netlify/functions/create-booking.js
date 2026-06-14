@@ -57,6 +57,23 @@ exports.handler = async (event) => {
       status: 'pending'
     });
 
+    // Send bekræftelsesmail
+    try {
+      await fetch(`${process.env.URL}/.netlify/functions/send-confirmation`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          navn: kunde.full_name,
+          email: kunde.email,
+          retreat: booking.retreat_name,
+          ankomst: '14. september 2026',
+          afrejse: '21. september 2026'
+        })
+      });
+    } catch(mailErr) {
+      console.log('Email fejl:', mailErr.message);
+    }
+
     return {
       statusCode: 200,
       headers: { 'Content-Type': 'application/json' },
