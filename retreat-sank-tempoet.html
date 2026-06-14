@@ -995,12 +995,12 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:3rem
             <input type="text" value="Kunsten at sænke tempoet — Wellness Retreat" readonly style="background:rgba(184,138,30,.07);color:#fff;cursor:default;border-color:rgba(184,138,30,.25);font-size:1rem;font-weight:500;">
           </div>
           <div class="form-row">
-            <div class="form-field"><label>Fornavn</label><input id="f-fornavn" type="text" placeholder="Dit fornavn"></div>
-            <div class="form-field"><label>Efternavn</label><input id="f-efternavn" type="text" placeholder="Dit efternavn"></div>
+            <div class="form-field"><label>Fornavn *</label><input id="f-fornavn" type="text" placeholder="Dit fornavn" required></div>
+            <div class="form-field"><label>Efternavn *</label><input id="f-efternavn" type="text" placeholder="Dit efternavn" required></div>
           </div>
           <div class="form-row">
-            <div class="form-field"><label>E-mail</label><input id="f-email" type="email" placeholder="din@email.com"></div>
-            <div class="form-field"><label>Telefon</label><input type="tel" placeholder="+45 xx xx xx xx"></div>
+            <div class="form-field"><label>E-mail *</label><input id="f-email" type="email" placeholder="din@email.com" required></div>
+            <div class="form-field"><label>Telefon *</label><input id="f-telefon" type="tel" placeholder="+45 xx xx xx xx" required></div>
           </div>
           <div id="extra-guests"></div>
           <button type="button" class="add-guest-btn" onclick="addGuest()">
@@ -1124,7 +1124,12 @@ async function sendForespørgsel() {
     const res = await fetch('/.netlify/functions/create-booking', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ fornavn, efternavn, email, gaester: 1 })
+      body: JSON.stringify({ 
+        fornavn, efternavn, email, gaester: 1,
+        telefon: document.getElementById('f-telefon') ? document.getElementById('f-telefon').value : '',
+        ankomst: '2026-09-14', 
+        afrejse: '2026-09-21' 
+      })
     });
     const data = await res.json();
     if (!res.ok) throw new Error(data.error || 'Ukendt fejl');

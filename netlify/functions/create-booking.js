@@ -36,8 +36,8 @@ exports.handler = async (event) => {
       .insert({
         customer_id: kunde.id,
         retreat_name: retreat || 'Kunsten at sænke tempoet — Wellness Retreat',
-        arrival_date: ankomst || null,
-        departure_date: afrejse || null,
+        arrival_date: ankomst || '2026-09-14',
+        departure_date: afrejse || '2026-09-21',
         guests: gaester || 1,
         total_price: 14900,
         deposit_amount: 4470,
