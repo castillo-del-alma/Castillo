@@ -11,6 +11,8 @@ exports.handler = async (event) => {
     process.env.SUPABASE_ANON_KEY
   );
 
+  const resend = new Resend(process.env.RESEND_API_KEY);
+
   try {
     const { fornavn, efternavn, email, telefon, retreat, ankomst, afrejse, gaester, noter } = JSON.parse(event.body);
 
@@ -18,7 +20,6 @@ exports.handler = async (event) => {
       return { statusCode: 400, body: JSON.stringify({ error: 'Fornavn og email er påkrævet' }) };
     }
 
-    // Opret kunde
     const { data: kunde, error: kErr } = await supabase
       .from('customers')
       .upsert({ 
@@ -31,7 +32,6 @@ exports.handler = async (event) => {
 
     if (kErr) throw kErr;
 
-    // Opret booking med status "forespørgsel"
     const { data: booking, error: bErr } = await supabase
       .from('bookings')
       .insert({
@@ -50,7 +50,6 @@ exports.handler = async (event) => {
 
     if (bErr) throw bErr;
 
-    // Opret depositum betaling (afventer)
     await supabase.from('payments').insert({
       booking_id: booking.id,
       amount: 4470,
@@ -58,31 +57,19 @@ exports.handler = async (event) => {
       status: 'pending'
     });
 
-    // Send bekræftelsesmail
-    try {
-      await fetch(`${process.env.URL}/.netlify/functions/send-confirmation`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          navn: kunde.full_name,
-          email: kunde.email,
-          retreat: booking.retreat_name,
-          ankomst: '14. september 2026',
-          afrejse: '21. september 2026'
-        })
-      });
-    } catch(mailErr) {
-      console.log('Email fejl:', mailErr.message);
-    }
+    await resend.emails.send({
+      from: 'Castillo del Alma <hej@lacasadelalma.es>',
+      to: email,
+      subject: 'Vi har modtaget din forespørgsel — Castillo del Alma',
+      html: `<p>Kære ${fornavn},</p>
+             <p>Vi har modtaget din forespørgsel til <strong>Kunsten at sænke tempoet — Wellness Retreat</strong> og vender tilbage inden for 24 timer.</p>
+             <p>Med venlig hilsen,<br>Castillo del Alma</p>`
+    });
 
     return {
       statusCode: 200,
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ 
-        success: true, 
-        kunde_id: kunde.id,
-        booking_id: booking.id
-      })
+      body: JSON.stringify({ success: true, kunde_id: kunde.id, booking_id: booking.id })
     };
 
   } catch (e) {
