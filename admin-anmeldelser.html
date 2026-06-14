@@ -512,15 +512,7 @@ function showFull(id) {
 // ── KUNDER ──
 async function loadKunder() {
   if (!sb) {
-    // Hent anon key via Netlify function
-    try {
-      const res = await fetch('/.netlify/functions/get-config');
-      const cfg = await res.json();
-      initSupabase(cfg.anonKey);
-    } catch(e) {
-      document.getElementById('kunderGrid').innerHTML = '<div class="empty-state"><p>Kunne ikke forbinde til database.</p></div>';
-      return;
-    }
+    initSupabase(SUPABASE_ANON_KEY);
   }
 
   try {
