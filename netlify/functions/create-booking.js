@@ -1,5 +1,3 @@
-const { Resend } = require('resend');
-
 exports.handler = async (event) => {
   if (event.httpMethod !== 'POST') {
     return { statusCode: 405, body: 'Method Not Allowed' };
@@ -7,7 +5,7 @@ exports.handler = async (event) => {
 
   const SUPABASE_URL = process.env.SUPABASE_URL;
   const SUPABASE_KEY = process.env.SUPABASE_ANON_KEY;
-  const resend = new Resend(process.env.RESEND_API_KEY);
+  const RESEND_KEY = process.env.RESEND_API_KEY;
 
   try {
     const { fornavn, efternavn, email, telefon, gaester } = JSON.parse(event.body);
@@ -25,10 +23,7 @@ exports.handler = async (event) => {
 
     // Tjek om kunde eksisterer
     const checkRes = await fetch(`${SUPABASE_URL}/rest/v1/customers?email=eq.${encodeURIComponent(email)}&select=id,full_name,email`, {
-      headers: {
-        'apikey': SUPABASE_KEY,
-        'Authorization': `Bearer ${SUPABASE_KEY}`
-      }
+      headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
     });
     const existing = await checkRes.json();
 
@@ -49,7 +44,7 @@ exports.handler = async (event) => {
       kunde = Array.isArray(kundeData) ? kundeData[0] : kundeData;
     }
 
-    if (!kunde || !kunde.id) throw new Error('Kunde kunne ikke oprettes: ' + JSON.stringify(kunde));
+    if (!kunde || !kunde.id) throw new Error('Kunde kunne ikke oprettes');
 
     // Opret booking
     const bookingRes = await fetch(`${SUPABASE_URL}/rest/v1/bookings`, {
@@ -68,7 +63,7 @@ exports.handler = async (event) => {
     });
     const bookingData = await bookingRes.json();
     const booking = Array.isArray(bookingData) ? bookingData[0] : bookingData;
-    if (!booking || !booking.id) throw new Error('Booking fejlede: ' + JSON.stringify(booking));
+    if (!booking || !booking.id) throw new Error('Booking fejlede');
 
     // Opret betaling
     await fetch(`${SUPABASE_URL}/rest/v1/payments`, {
@@ -82,23 +77,34 @@ exports.handler = async (event) => {
       })
     });
 
-    // Send email
-    await resend.emails.send({
-      from: 'Castillo del Alma <hello@booking.lacasadelalma.es>',
-      to: email,
-      subject: 'Vi har modtaget din forespørgsel — Castillo del Alma',
-      html: `<p>Kære ${fornavn},</p>
-             <p>Vi har modtaget din forespørgsel til <strong>Kunsten at sænke tempoet — Wellness Retreat</strong> og vender tilbage inden for 24 timer.</p>
-             <p>Med venlig hilsen,<br>Castillo del Alma</p>`
+    // Send email via Resend API direkte
+    const emailRes = await fetch('https://api.resend.com/emails', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${RESEND_KEY}`
+      },
+      body: JSON.stringify({
+        from: 'Castillo del Alma <hello@booking.lacasadelalma.es>',
+        to: email,
+        subject: 'Vi har modtaget din forespørgsel — Castillo del Alma',
+        html: `<p>Kære ${fornavn},</p>
+               <p>Vi har modtaget din forespørgsel til <strong>Kunsten at sænke tempoet — Wellness Retreat</strong> og vender tilbage inden for 24 timer.</p>
+               <p>Med venlig hilsen,<br>Castillo del Alma</p>`
+      })
     });
+
+    const emailData = await emailRes.json();
+    console.log('Email result:', JSON.stringify(emailData));
 
     return {
       statusCode: 200,
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ success: true })
+      body: JSON.stringify({ success: true, email: emailData })
     };
 
   } catch (e) {
+    console.log('Error:', e.message);
     return {
       statusCode: 500,
       body: JSON.stringify({ error: e.message })
