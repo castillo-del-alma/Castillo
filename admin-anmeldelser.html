@@ -579,6 +579,7 @@ function renderKunder() {
         <div>
           <div class="kunde-navn">${k.full_name}</div>
           <div class="kunde-email">${k.email}</div>
+          <div class="kunde-email" style="margin-top:.3rem;font-size:.6rem;opacity:.5;">Oprettet ${fmt(k.created_at)}</div>
         </div>
         <span class="kunde-status status-${status}">${statusLabel}</span>
       </div>
