@@ -1111,12 +1111,33 @@ function showFormError(msg) {
   el.style.display = msg ? 'block' : 'none';
 }
 
-function sendForespørgsel() {
-  const { fornavn, email } = getFormData();
+async function sendForespørgsel() {
+  const { fornavn, efternavn, email } = getFormData();
   if (!fornavn || !email) { showFormError('Udfyld mindst fornavn og e-mail.'); return; }
   showFormError('');
-  // Placeholder — tilslut til din e-mail/backend når klar
-  alert('Forespørgsel registreret. Vi vender tilbage inden for 24 timer.');
+
+  const btn = document.querySelector('.form-submit-secondary');
+  btn.disabled = true;
+  btn.textContent = 'Sender…';
+
+  try {
+    const res = await fetch('/.netlify/functions/create-booking', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ fornavn, efternavn, email, gaester: 1 })
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || 'Ukendt fejl');
+
+    btn.textContent = '✓ Forespørgsel sendt';
+    btn.style.background = 'rgba(106,114,64,.3)';
+    document.getElementById('form-error').style.color = '#a0c880';
+    showFormError('Tak ' + fornavn + '! Vi vender tilbage inden for 24 timer.');
+  } catch(e) {
+    btn.disabled = false;
+    btn.textContent = 'Send forespørgsel';
+    showFormError('Noget gik galt: ' + e.message);
+  }
 }
 
 async function betalDepositum() {
