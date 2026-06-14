@@ -373,20 +373,29 @@ let aktivBookingId = null;
 function doLogin() {
   const pw = document.getElementById('pwInput').value;
   if (pw === PASS) {
-    document.getElementById('loginScreen').style.display = 'none';
-    document.getElementById('dashboard').style.display = 'block';
-    loadReviews();
-    loadKunder();
+    localStorage.setItem('cda_admin_auth', '1');
+    showDashboard();
   } else {
     document.getElementById('loginError').style.display = 'block';
     document.getElementById('pwInput').value = '';
   }
 }
 function doLogout() {
+  localStorage.removeItem('cda_admin_auth');
   document.getElementById('loginScreen').style.display = 'flex';
   document.getElementById('dashboard').style.display = 'none';
   document.getElementById('pwInput').value = '';
 }
+function showDashboard() {
+  document.getElementById('loginScreen').style.display = 'none';
+  document.getElementById('dashboard').style.display = 'block';
+  loadReviews();
+  loadKunder();
+}
+// Auto-login hvis tidligere logget ind
+document.addEventListener('DOMContentLoaded', () => {
+  if (localStorage.getItem('cda_admin_auth') === '1') { showDashboard(); }
+});
 
 // ── FANER ──
 function switchTab(tab, btn) {
