@@ -144,6 +144,17 @@ exports.handler = async (event) => {
     console.log('Email result:', JSON.stringify(emailData));
 
     // Send admin notifikation
+    const { vaerelse, addon_foer, addon_efter, addon_massage, kommentar, ekstra_gaester } = JSON.parse(event.body);
+    const addons = [
+      addon_foer ? 'Ekstra overnatning før retreat (€60)' : null,
+      addon_efter ? 'Ekstra overnatning efter retreat (€60)' : null,
+      addon_massage ? 'Kropsmassage 60 min. (€50)' : null
+    ].filter(Boolean);
+
+    const ekstraGaesterHtml = ekstra_gaester && ekstra_gaester.length > 0
+      ? ekstra_gaester.map(g => `<p style="margin:4px 0;">👤 ${g.navn} — ${g.email}</p>`).join('')
+      : '<p style="margin:4px 0;color:#999;">Ingen ekstra gæster</p>';
+
     await fetch('https://api.resend.com/emails', {
       method: 'POST',
       headers: {
@@ -153,14 +164,23 @@ exports.handler = async (event) => {
       body: JSON.stringify({
         from: 'Castillo del Alma <hello@booking.lacasadelalma.es>',
         to: 'booking@lacasadelalma.es',
-        subject: 'Ny forespørgsel: ' + fornavn + ' ' + efternavn,
-        html: `<h2>Ny forespørgsel modtaget</h2>
+        subject: 'Ny reservation: ' + fornavn + ' ' + efternavn,
+        html: `<h2 style="color:#b88a1e;">Ny reservation modtaget</h2>
+               <h3>Gæst</h3>
                <p><strong>Navn:</strong> ${fornavn} ${efternavn}</p>
                <p><strong>Email:</strong> ${email}</p>
                <p><strong>Telefon:</strong> ${telefon || '—'}</p>
+               <h3>Booking</h3>
                <p><strong>Retreat:</strong> Kunsten at sænke tempoet</p>
                <p><strong>Ankomst:</strong> 14. september 2026</p>
-               <p><strong>Afrejse:</strong> 21. september 2026</p>`
+               <p><strong>Afrejse:</strong> 21. september 2026</p>
+               <p><strong>Værelse:</strong> ${vaerelse || '—'}</p>
+               <h3>Tilvalg</h3>
+               <p>${addons.length > 0 ? addons.join('<br>') : 'Ingen tilvalg'}</p>
+               <h3>Ekstra gæster</h3>
+               ${ekstraGaesterHtml}
+               <h3>Særlige ønsker</h3>
+               <p>${kommentar || '—'}</p>`
       })
     });
 

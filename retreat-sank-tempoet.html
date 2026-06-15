@@ -1028,19 +1028,19 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:3rem
             <span class="form-addons-label">Tilvalg</span>
             <div class="form-addons">
               <label class="addon-item">
-                <input type="checkbox">
+                <input type="checkbox" id="addon-foer">
                 <span class="addon-box"></span>
                 <span class="addon-text">Ekstra overnatning før retreat, om muligt</span>
                 <span class="addon-price">€60</span>
               </label>
               <label class="addon-item">
-                <input type="checkbox">
+                <input type="checkbox" id="addon-efter">
                 <span class="addon-box"></span>
                 <span class="addon-text">Ekstra overnatning efter retreat, om muligt</span>
                 <span class="addon-price">€60</span>
               </label>
               <label class="addon-item">
-                <input type="checkbox">
+                <input type="checkbox" id="addon-massage">
                 <span class="addon-box"></span>
                 <span class="addon-text">Kropsmassage 60 min.</span>
                 <span class="addon-price">€50</span>
@@ -1049,7 +1049,7 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:3rem
           </div>
           <div class="form-field">
             <label>Særlige ønsker</label>
-            <textarea placeholder="Skriv dine særlige ønsker eller behov"></textarea>
+            <textarea id="f-kommentar" placeholder="Skriv dine særlige ønsker eller behov"></textarea>
           </div>
           <div id="form-error" style="display:none;font-size:.78rem;color:#c05c30;margin-top:.2rem;"></div>
           <div class="form-btns">
@@ -1128,7 +1128,16 @@ async function sendForespørgsel() {
         fornavn, efternavn, email, gaester: 1,
         telefon: document.getElementById('f-telefon') ? document.getElementById('f-telefon').value : '',
         ankomst: '2026-09-14', 
-        afrejse: '2026-09-21' 
+        afrejse: '2026-09-21',
+        vaerelse: document.getElementById('room-select') ? document.getElementById('room-select').value : '',
+        addon_foer: document.getElementById('addon-foer') ? document.getElementById('addon-foer').checked : false,
+        addon_efter: document.getElementById('addon-efter') ? document.getElementById('addon-efter').checked : false,
+        addon_massage: document.getElementById('addon-massage') ? document.getElementById('addon-massage').checked : false,
+        kommentar: document.getElementById('f-kommentar') ? document.getElementById('f-kommentar').value : '',
+        ekstra_gaester: Array.from(document.querySelectorAll('.guest-row')).map(row => ({
+          navn: row.querySelector('input[placeholder="Fornavn"]') ? row.querySelector('input[placeholder="Fornavn"]').value + ' ' + row.querySelector('input[placeholder="Efternavn"]').value : '',
+          email: row.querySelector('input[type="email"]') ? row.querySelector('input[type="email"]').value : ''
+        })).filter(g => g.navn.trim())
       })
     });
     const data = await res.json();
