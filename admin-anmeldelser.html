@@ -371,7 +371,7 @@ body{font-family:'Manrope',sans-serif;background:#1e1810;color:#e8dcc8;min-heigh
         </div>
         <div class="form-group full">
           <label>Beløb modtaget (€) *</label>
-          <input type="number" id="reg_beloeb" placeholder="0">
+          <input type="text" inputmode="numeric" id="reg_beloeb" placeholder="0" style="text-align:right;-moz-appearance:textfield;" oninput="this.value=this.value.replace(/[^0-9.]/g,'')">
         </div>
         <div class="form-group full">
           <label>Note (valgfri)</label>
