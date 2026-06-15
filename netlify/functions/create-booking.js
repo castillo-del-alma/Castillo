@@ -8,7 +8,7 @@ exports.handler = async (event) => {
   const RESEND_KEY = process.env.RESEND_API_KEY;
 
   try {
-    const { fornavn, efternavn, email, telefon, gaester } = JSON.parse(event.body);
+    const { fornavn, efternavn, email, telefon, gaester, vaerelse, addon_foer, addon_efter, addon_massage, kommentar, ekstra_gaester } = JSON.parse(event.body);
 
     if (!fornavn || !email) {
       return { statusCode: 400, body: JSON.stringify({ error: 'Fornavn og email er påkrævet' }) };
@@ -144,7 +144,6 @@ exports.handler = async (event) => {
     console.log('Email result:', JSON.stringify(emailData));
 
     // Send admin notifikation
-    const { vaerelse, addon_foer, addon_efter, addon_massage, kommentar, ekstra_gaester } = JSON.parse(event.body);
     const addons = [
       addon_foer ? 'Ekstra overnatning før retreat (€60)' : null,
       addon_efter ? 'Ekstra overnatning efter retreat (€60)' : null,
