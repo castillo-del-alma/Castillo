@@ -611,6 +611,8 @@ function renderKunder() {
         <button class="kunde-btn kunde-btn-view" onclick="visDetalje('${k.id}')">Se detaljer</button>
         <button class="kunde-btn kunde-btn-charge" onclick="openForbrug('${booking.id}','${k.full_name}')">+ Forbrug</button>
         ${skylder > 0 ? `<button class="kunde-btn kunde-btn-pay" onclick="registrerBetaling('${booking.id}',${skylder})">Registrér betaling</button>` : ''}
+        ${booking.status === 'forespørgsel' ? `<button class="kunde-btn" style="background:rgba(184,138,30,.15);color:var(--gold);border:1px solid rgba(184,138,30,.3);" onclick="aktiverFrist('${booking.id}','${k.email}','${k.full_name}')">Aktivér 48-timers frist</button>` : ''}
+        ${booking.deadline ? `<div style="font-size:.58rem;color:rgba(232,220,200,.4);margin-top:.3rem;">Frist: \${new Date('${booking.deadline}').toLocaleString('da-DK')}</div>` : ''}
         <button class="kunde-btn" style="background:rgba(192,92,48,.1);color:rgba(192,92,48,.7);border:1px solid rgba(192,92,48,.2);" onclick="sletKunde('${k.id}','${k.full_name}')">Slet</button>
       </div>
     </div>`;
@@ -812,6 +814,35 @@ async function visDetalje(kundeId) {
 
   document.getElementById('detaljeSections').innerHTML = html;
   document.getElementById('modalDetalje').classList.add('open');
+}
+
+// ── AKTIVÉR 48-TIMERS FRIST ──
+async function aktiverFrist(bookingId, email, navn) {
+  if (!confirm(`Aktivér 48-timers betalingsfrist for ${navn}?\nDe modtager en email med betalingslink.`)) return;
+
+  const deadline = new Date(Date.now() + 48 * 60 * 60 * 1000).toISOString();
+
+  try {
+    // Opdater booking med deadline og status
+    const { error } = await sb.from('bookings')
+      .update({ deadline: deadline, status: 'afventer_betaling' })
+      .eq('id', bookingId);
+    if (error) throw error;
+
+    // Send email til gæsten via Netlify Function
+    const res = await fetch('/.netlify/functions/send-payment-request', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ bookingId, email, navn, deadline })
+    });
+
+    if (!res.ok) throw new Error('Email fejlede');
+
+    showToast(`48-timers frist aktiveret for ${navn} ✓`);
+    await loadKunder();
+  } catch(e) {
+    showToast('Fejl: ' + e.message, true);
+  }
 }
 
 // ── SLET KUNDE ──
