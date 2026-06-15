@@ -78,6 +78,7 @@ exports.handler = async (event) => {
     });
 
     // Send email via Resend API direkte
+    console.log('Sender email til:', email);
     const emailRes = await fetch('https://api.resend.com/emails', {
       method: 'POST',
       headers: {
