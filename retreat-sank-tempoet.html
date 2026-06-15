@@ -1020,7 +1020,7 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:3rem
             <label>Værelses-præference</label>
             <select id="room-select">
               <option value="">Vælg værelse</option>
-              <option id="opt-delt">Delt dobbeltværelse — 14.900 kr.</option>
+              <option id="opt-delt">Delt dobbeltværelse</option>
               <option>Forespørg på enkeltværelse</option>
             </select>
           </div>
@@ -1192,8 +1192,8 @@ function updateRoomLabel() {
   if (!opt) return;
   const hasGuests = document.querySelectorAll('.guest-row').length > 0;
   opt.textContent = hasGuests
-    ? 'Dobbeltværelse — 14.900 kr.'
-    : 'Delt dobbeltværelse — 14.900 kr.';
+    ? 'Dobbeltværelse'
+    : 'Delt dobbeltværelse';
 }
 
 function addGuest() {
@@ -1224,3 +1224,4 @@ function removeGuest(id) {
 </script>
 </body>
 </html>
+<!-- v2 -->
