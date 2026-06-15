@@ -346,6 +346,45 @@ body{font-family:'Manrope',sans-serif;background:#1e1810;color:#e8dcc8;min-heigh
   </div>
 </div>
 
+<!-- MODAL: REGISTRÉR BETALING -->
+<div class="modal-overlay" id="modalRegistrerBetaling">
+  <div class="modal" style="max-width:440px;">
+    <button class="modal-close" onclick="closeModal('modalRegistrerBetaling')">✕</button>
+    <h3>Registrér betaling</h3>
+    <div class="modal-sub" id="regBetalingKunde">—</div>
+    <div class="detalje-sections" style="margin-top:1.5rem;">
+      <div class="detalje-section">
+        <div class="detalje-row">
+          <span class="detalje-key">Udestående</span>
+          <span class="detalje-val" id="regBetalingSkylder" style="color:var(--gold);">—</span>
+        </div>
+      </div>
+      <div class="form-grid" style="margin-top:1rem;">
+        <div class="form-group full">
+          <label>Betalingstype</label>
+          <select id="reg_type">
+            <option value="deposit">Depositum</option>
+            <option value="partial">Delvis betaling</option>
+            <option value="final">Fuld slutbetaling</option>
+          </select>
+        </div>
+        <div class="form-group full">
+          <label>Beløb modtaget (€) *</label>
+          <input type="number" id="reg_beloeb" placeholder="0">
+        </div>
+        <div class="form-group full">
+          <label>Note (valgfri)</label>
+          <input type="text" id="reg_note" placeholder="Fx. bankoverførsel, kontant...">
+        </div>
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-secondary" onclick="closeModal('modalRegistrerBetaling')">Annuller</button>
+      <button class="btn-primary" onclick="gemRegistrerBetaling()">Registrér</button>
+    </div>
+  </div>
+</div>
+
 <!-- MODAL: BEKRÆFTELSE -->
 <div class="modal-overlay" id="modalBekraeft">
   <div class="modal" style="max-width:420px;text-align:center;">
@@ -734,22 +773,40 @@ async function gemForbrug() {
 }
 
 // ── REGISTRÉR BETALING ──
-async function registrerBetaling(bookingId, skylder) {
-  await visBekraeft(
-    'Registrér betaling',
-    `Udestående beløb: <strong>€${Math.round(skylder)}</strong><br><br>Registrér fuld betaling modtaget?`
-  );
-  const beloeb = skylder;
+let aktivBetalingBookingId = null;
+
+function registrerBetaling(bookingId, skylder) {
+  aktivBetalingBookingId = bookingId;
+  document.getElementById('regBetalingSkylder').textContent = '€' + Math.round(skylder);
+  document.getElementById('reg_beloeb').value = Math.round(skylder);
+  document.getElementById('reg_type').value = 'final';
+  document.getElementById('reg_note').value = '';
+  
+  // Find kundenavn
+  const kunde = allKunder.find(k => (k.bookings||[]).some(b => b.id === bookingId));
+  document.getElementById('regBetalingKunde').textContent = kunde ? kunde.full_name : '—';
+  
+  document.getElementById('modalRegistrerBetaling').classList.add('open');
+}
+
+async function gemRegistrerBetaling() {
+  const beloeb = parseFloat(document.getElementById('reg_beloeb').value);
+  const type = document.getElementById('reg_type').value;
+  const note = document.getElementById('reg_note').value;
+  
+  if (!beloeb || isNaN(beloeb)) { showToast('Indtast et beløb', true); return; }
 
   try {
     const { error } = await sb.from('payments').insert({
-      booking_id: bookingId,
-      amount: parseFloat(beloeb),
-      type: 'final',
+      booking_id: aktivBetalingBookingId,
+      amount: beloeb,
+      type: type,
       status: 'paid',
-      paid_at: new Date().toISOString()
+      paid_at: new Date().toISOString(),
+      notes: note || null
     });
     if (error) throw error;
+    closeModal('modalRegistrerBetaling');
     showToast(`€${beloeb} registreret ✓`);
     await loadKunder();
   } catch(e) {
