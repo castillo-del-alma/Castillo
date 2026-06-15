@@ -87,10 +87,56 @@ exports.handler = async (event) => {
       body: JSON.stringify({
         from: 'Castillo del Alma <hello@booking.lacasadelalma.es>',
         to: email,
-        subject: 'Vi har modtaget din forespørgsel — Castillo del Alma',
-        html: `<p>Kære ${fornavn},</p>
-               <p>Vi har modtaget din forespørgsel til <strong>Kunsten at sænke tempoet — Wellness Retreat</strong> og vender tilbage inden for 24 timer.</p>
-               <p>Med venlig hilsen,<br>Castillo del Alma</p>`
+        subject: 'Vi har modtaget din reservation — Castillo del Alma',
+        html: `<!DOCTYPE html><html lang="da"><head><meta charset="UTF-8"></head>
+<body style="margin:0;padding:0;background:#1a1208;font-family:Georgia,serif;">
+<table width="100%" cellpadding="0" cellspacing="0" style="background:#1a1208;padding:48px 0;">
+  <tr><td align="center">
+    <table width="600" cellpadding="0" cellspacing="0" style="background:#1e1510;border:1px solid rgba(184,138,30,.2);">
+      <tr><td style="background:linear-gradient(90deg,#7a1f35,#b88a1e,#7a1f35);height:2px;"></td></tr>
+      <tr><td style="padding:48px 56px 40px;text-align:center;border-bottom:1px solid rgba(184,138,30,.12);">
+        <p style="margin:0 0 16px;font-size:10px;letter-spacing:.4em;text-transform:uppercase;color:rgba(184,138,30,.6);">CASTILLO DEL ALMA</p>
+        <h1 style="margin:0 0 8px;font-size:28px;font-weight:normal;color:#e8dcc8;letter-spacing:.08em;">Tak for din reservation</h1>
+        <p style="margin:0;font-size:13px;color:rgba(232,220,200,.35);letter-spacing:.15em;text-transform:uppercase;">MOLLINA · MÁLAGA · SPANIEN</p>
+      </td></tr>
+      <tr><td style="padding:44px 56px;">
+        <p style="margin:0 0 24px;font-size:16px;line-height:1.9;color:rgba(232,220,200,.8);">Kære <em>${fornavn}</em>,</p>
+        <p style="margin:0 0 24px;font-size:15px;line-height:1.9;color:rgba(232,220,200,.65);">Vi har modtaget din reservation og er glade for at byde dig velkommen til Castillo del Alma. Vi vender tilbage inden for 24 timer for at bekræfte din plads.</p>
+        <table width="100%" cellpadding="0" cellspacing="0" style="background:rgba(184,138,30,.05);border:1px solid rgba(184,138,30,.18);margin:32px 0;">
+          <tr><td style="padding:28px 32px;">
+            <p style="margin:0 0 20px;font-size:9px;letter-spacing:.35em;text-transform:uppercase;color:rgba(184,138,30,.6);">DIN RESERVATION</p>
+            <table width="100%" cellpadding="0" cellspacing="0">
+              <tr>
+                <td style="padding:10px 0;border-bottom:1px solid rgba(255,255,255,.05);"><span style="font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:rgba(232,220,200,.3);">Retreat</span></td>
+                <td style="padding:10px 0;border-bottom:1px solid rgba(255,255,255,.05);text-align:right;"><span style="font-size:13px;color:#e8dcc8;">Kunsten at sænke tempoet</span></td>
+              </tr>
+              <tr>
+                <td style="padding:10px 0;border-bottom:1px solid rgba(255,255,255,.05);"><span style="font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:rgba(232,220,200,.3);">Ankomst</span></td>
+                <td style="padding:10px 0;border-bottom:1px solid rgba(255,255,255,.05);text-align:right;"><span style="font-size:13px;color:#e8dcc8;">14. september 2026</span></td>
+              </tr>
+              <tr>
+                <td style="padding:10px 0;border-bottom:1px solid rgba(255,255,255,.05);"><span style="font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:rgba(232,220,200,.3);">Afrejse</span></td>
+                <td style="padding:10px 0;border-bottom:1px solid rgba(255,255,255,.05);text-align:right;"><span style="font-size:13px;color:#e8dcc8;">21. september 2026</span></td>
+              </tr>
+              <tr>
+                <td style="padding:10px 0;"><span style="font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:rgba(232,220,200,.3);">Depositum</span></td>
+                <td style="padding:10px 0;text-align:right;"><span style="font-size:13px;color:#b88a1e;">€4.470</span></td>
+              </tr>
+            </table>
+          </td></tr>
+        </table>
+        <p style="margin:0 0 24px;font-size:15px;line-height:1.9;color:rgba(232,220,200,.65);">Når vi har bekræftet din plads, modtager du en email med mulighed for at betale depositum og dermed sikre din reservation endeligt.</p>
+        <p style="margin:0;font-size:15px;line-height:1.9;color:rgba(232,220,200,.5);font-style:italic;">Med venlig hilsen,<br><span style="color:#e8dcc8;">Castillo del Alma</span></p>
+      </td></tr>
+      <tr><td style="padding:0 56px;"><div style="border-top:1px solid rgba(184,138,30,.1);"></div></td></tr>
+      <tr><td style="padding:28px 56px;text-align:center;">
+        <p style="margin:0;font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:rgba(232,220,200,.2);">CASTILLO DEL ALMA · MOLLINA · MÁLAGA · SPANIEN</p>
+      </td></tr>
+      <tr><td style="background:linear-gradient(90deg,#7a1f35,#b88a1e,#7a1f35);height:1px;"></td></tr>
+    </table>
+  </td></tr>
+</table>
+</body></html>`
       })
     });
 
