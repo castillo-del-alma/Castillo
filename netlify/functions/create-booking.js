@@ -119,6 +119,22 @@ exports.handler = async (event) => {
                 <td style="padding:10px 0;border-bottom:1px solid rgba(255,255,255,.05);text-align:right;"><span style="font-size:13px;color:#e8dcc8;">21. september 2026</span></td>
               </tr>
               <tr>
+                <td style="padding:10px 0;border-bottom:1px solid rgba(255,255,255,.05);"><span style="font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:rgba(232,220,200,.3);">Værelse</span></td>
+                <td style="padding:10px 0;border-bottom:1px solid rgba(255,255,255,.05);text-align:right;"><span style="font-size:13px;color:#e8dcc8;">${vaerelse || '—'}</span></td>
+              </tr>
+              ${addon_foer || addon_efter || addon_massage ? `<tr>
+                <td style="padding:10px 0;border-bottom:1px solid rgba(255,255,255,.05);"><span style="font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:rgba(232,220,200,.3);">Tilvalg</span></td>
+                <td style="padding:10px 0;border-bottom:1px solid rgba(255,255,255,.05);text-align:right;"><span style="font-size:13px;color:#e8dcc8;">${[addon_foer?'Ekstra overnatning før':'',addon_efter?'Ekstra overnatning efter':'',addon_massage?'Kropsmassage 60 min.':''].filter(Boolean).join(', ')}</span></td>
+              </tr>` : ''}
+              ${ekstra_gaester && ekstra_gaester.length > 0 ? `<tr>
+                <td style="padding:10px 0;border-bottom:1px solid rgba(255,255,255,.05);"><span style="font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:rgba(232,220,200,.3);">Ekstra gæster</span></td>
+                <td style="padding:10px 0;border-bottom:1px solid rgba(255,255,255,.05);text-align:right;"><span style="font-size:13px;color:#e8dcc8;">${ekstra_gaester.map(g=>g.navn).join(', ')}</span></td>
+              </tr>` : ''}
+              ${kommentar ? `<tr>
+                <td style="padding:10px 0;border-bottom:1px solid rgba(255,255,255,.05);"><span style="font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:rgba(232,220,200,.3);">Særlige ønsker</span></td>
+                <td style="padding:10px 0;border-bottom:1px solid rgba(255,255,255,.05);text-align:right;"><span style="font-size:13px;color:#e8dcc8;">${kommentar}</span></td>
+              </tr>` : ''}
+              <tr>
                 <td style="padding:10px 0;"><span style="font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:rgba(232,220,200,.3);">Depositum</span></td>
                 <td style="padding:10px 0;text-align:right;"><span style="font-size:13px;color:#b88a1e;">€4.470</span></td>
               </tr>
