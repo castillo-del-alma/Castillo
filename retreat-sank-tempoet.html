@@ -1053,8 +1053,8 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:3rem
           </div>
           <div id="form-error" style="display:none;font-size:.78rem;color:#c05c30;margin-top:.2rem;"></div>
           <div class="form-btns">
-            <button type="button" class="form-submit form-submit-secondary" onclick="sendForespørgsel()">Send forespørgsel</button>
-            <button type="button" class="form-submit" id="btn-depositum" onclick="betalDepositum()">Betal depositum · 4.470 kr.</button>
+            <button type="button" class="form-submit form-submit-secondary" onclick="sendForespørgsel()">Reserver din plads</button>
+            <button type="button" class="form-submit" id="btn-depositum" onclick="betalDepositum()">Book nu og betal depositum · 4.470 kr.</button>
           </div>
         </div>
       </div>
@@ -1134,13 +1134,13 @@ async function sendForespørgsel() {
     const data = await res.json();
     if (!res.ok) throw new Error(data.error || 'Ukendt fejl');
 
-    btn.textContent = '✓ Forespørgsel sendt';
+    btn.textContent = '✓ Reservation sendt';
     btn.style.background = 'rgba(106,114,64,.3)';
     document.getElementById('form-error').style.color = '#a0c880';
     showFormError('Tak ' + fornavn + '! Vi vender tilbage inden for 24 timer.');
   } catch(e) {
     btn.disabled = false;
-    btn.textContent = 'Send forespørgsel';
+    btn.textContent = 'Reserver din plads';
     showFormError('Noget gik galt: ' + e.message);
   }
 }
@@ -1172,7 +1172,7 @@ async function betalDepositum() {
   } catch (err) {
     showFormError('Fejl ved oprettelse af betaling: ' + err.message);
     btn.disabled = false;
-    btn.textContent = 'Betal depositum · 4.470 kr.';
+    btn.textContent = 'Book nu og betal depositum · 4.470 kr.';
   }
 }
 
