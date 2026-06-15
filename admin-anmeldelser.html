@@ -346,6 +346,18 @@ body{font-family:'Manrope',sans-serif;background:#1e1810;color:#e8dcc8;min-heigh
   </div>
 </div>
 
+<!-- MODAL: BEKRÆFTELSE -->
+<div class="modal-overlay" id="modalBekraeft">
+  <div class="modal" style="max-width:420px;text-align:center;">
+    <h3 id="bekraeftTitel">Bekræft handling</h3>
+    <div class="modal-sub" id="bekraeftTekst">—</div>
+    <div class="modal-actions" style="justify-content:center;margin-top:2rem;">
+      <button class="btn-secondary" onclick="closeModal('modalBekraeft')">Annuller</button>
+      <button class="btn-primary" id="bekraeftOK">Bekræft</button>
+    </div>
+  </div>
+</div>
+
 <div class="toast" id="toast"></div>
 
 <script>
@@ -816,9 +828,28 @@ async function visDetalje(kundeId) {
   document.getElementById('modalDetalje').classList.add('open');
 }
 
+// ── BEKRÆFTELSESDIALOG ──
+function visBekraeft(titel, tekst) {
+  return new Promise((resolve) => {
+    document.getElementById('bekraeftTitel').textContent = titel;
+    document.getElementById('bekraeftTekst').innerHTML = tekst;
+    document.getElementById('modalBekraeft').classList.add('open');
+    const btn = document.getElementById('bekraeftOK');
+    const handler = () => {
+      closeModal('modalBekraeft');
+      btn.removeEventListener('click', handler);
+      resolve(true);
+    };
+    btn.addEventListener('click', handler);
+  });
+}
+
 // ── AKTIVÉR 48-TIMERS FRIST ──
 async function aktiverFrist(bookingId, email, navn) {
-  if (!confirm(`Aktivér 48-timers betalingsfrist for ${navn}?\nDe modtager en email med betalingslink.`)) return;
+  await visBekraeft(
+    'Aktivér 48-timers frist',
+    `Aktivér betalingsfrist for <strong>${navn}</strong>?<br><br>De modtager straks en email med betalingslink.`
+  );
 
   const deadline = new Date(Date.now() + 48 * 60 * 60 * 1000).toISOString();
 
@@ -847,7 +878,10 @@ async function aktiverFrist(bookingId, email, navn) {
 
 // ── SLET KUNDE ──
 async function sletKunde(kundeId, navn) {
-  if (!confirm(`Er du sikker på at du vil slette ${navn}?\nAlle bookinger og betalinger slettes også.`)) return;
+  await visBekraeft(
+    'Slet kunde',
+    `Er du sikker på at du vil slette <strong>${navn}</strong>?<br><br>Alle bookinger og betalinger slettes også.`
+  );
   
   try {
     const { error } = await sb.from('customers').delete().eq('id', kundeId);
