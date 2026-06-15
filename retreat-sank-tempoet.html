@@ -454,35 +454,37 @@ nav{
 }
 
 /* ── BOOKING FORM ── */
-.booking-section{background:var(--charcoal);padding:7rem 0;}
+.booking-section{background:#f0ead8;padding:7rem 0;}
 .booking-grid{display:grid;grid-template-columns:1fr 1fr;gap:7rem;align-items:start;}
 .booking-section h2{
   font-family:'Cinzel',serif;font-weight:300;
   font-size:clamp(1.8rem,3vw,2.6rem);letter-spacing:.08em;
-  color:#fff;margin-bottom:.8rem;
+  color:#2c2318;margin-bottom:.8rem;
 }
 .booking-section p{
   font-family:'Cormorant Garamond',serif;font-style:italic;
-  font-size:1.1rem;color:rgba(255,255,255,.6);margin-bottom:.5rem;line-height:1.8;
+  font-size:1.1rem;color:#5c4e3a;margin-bottom:.5rem;line-height:1.8;
 }
 .policy-note{
-  font-size:.72rem;letter-spacing:.08em;color:rgba(255,255,255,.35);
+  font-size:.72rem;letter-spacing:.08em;color:#9a8c7a;
   margin-top:1.5rem;line-height:1.6;
 }
 .booking-form{display:flex;flex-direction:column;gap:.8rem;}
 .form-row{display:grid;grid-template-columns:1fr 1fr;gap:.8rem;}
 .form-field{display:flex;flex-direction:column;gap:.3rem;}
-.form-field label{font-size:.58rem;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,255,255,.4);}
+.form-field label{font-size:.58rem;letter-spacing:.2em;text-transform:uppercase;color:#9a8c7a;}
 .form-field input,.form-field select,.form-field textarea{
-  background:#e8c87a;border:1px solid #c8a84a;
-  color:#3a2800;padding:.8rem 1rem;
-  font-family:'Manrope',sans-serif;font-size:.83rem;
+  background:#fff;border:1px solid #d4c4a0;
+  color:#5c4e3a;padding:.8rem 1rem;
+  font-family:'Manrope',sans-serif;font-size:.68rem;font-weight:300;
+  letter-spacing:.08em;text-transform:uppercase;
   outline:none;transition:border-color .3s;-webkit-appearance:none;
 }
-.form-field input::placeholder{color:#8a6820;opacity:.8;}
-.form-field input:focus,.form-field select:focus,.form-field textarea:focus{border-color:#9a7010;}
-.form-field select option{background:#faf6ee;color:#3a2800;}
-.form-field textarea{height:100px;resize:none;}
+.form-field input::placeholder{color:#b8a880;font-size:.68rem;letter-spacing:.08em;text-transform:uppercase;}
+.form-field input:focus,.form-field select:focus,.form-field textarea:focus{border-color:#b88a1e;}
+.form-field select option{background:#fff;color:#5c4e3a;}
+.form-field textarea{height:100px;resize:none;text-transform:none;}
+.form-field textarea::placeholder{text-transform:none;}
 .form-submit{
   background:var(--wine);color:#fff;border:none;
   padding:1rem 2rem;font-family:'Manrope',sans-serif;
@@ -492,8 +494,8 @@ nav{
 .form-submit:hover{background:var(--wine-light);}
 .form-submit:disabled{opacity:.6;cursor:default;}
 .form-btns{display:grid;grid-template-columns:1fr 1fr;gap:.7rem;}
-.form-submit-secondary{background:transparent;border:1px solid rgba(255,255,255,.2);color:rgba(255,255,255,.7);}
-.form-submit-secondary:hover{background:rgba(255,255,255,.07);border-color:rgba(255,255,255,.35);}
+.form-submit-secondary{background:transparent;border:1px solid var(--wine);color:var(--wine);}
+.form-submit-secondary:hover{background:rgba(122,31,53,.06);}
 @media(max-width:600px){.form-btns{grid-template-columns:1fr;}}
 
 /* ── FOOTER ── */
