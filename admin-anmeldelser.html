@@ -735,8 +735,11 @@ async function gemForbrug() {
 
 // ── REGISTRÉR BETALING ──
 async function registrerBetaling(bookingId, skylder) {
-  const beloeb = prompt(`Registrér betaling (udestående: €${Math.round(skylder)})\nBeløb i €:`);
-  if (!beloeb || isNaN(parseFloat(beloeb))) return;
+  await visBekraeft(
+    'Registrér betaling',
+    `Udestående beløb: <strong>€${Math.round(skylder)}</strong><br><br>Registrér fuld betaling modtaget?`
+  );
+  const beloeb = skylder;
 
   try {
     const { error } = await sb.from('payments').insert({
