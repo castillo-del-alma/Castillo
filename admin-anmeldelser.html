@@ -417,6 +417,8 @@ body{font-family:'Manrope',sans-serif;background:#1e1810;color:#e8dcc8;min-heigh
 <div class="toast" id="toast"></div>
 
 <script>
+let ulaesteBeskeder = {};
+
 // ── SUPABASE ──
 const SUPABASE_URL = 'https://niniwgiytyqvdqejigxg.supabase.co';
 const SUPABASE_ANON_KEY = 'sb_publishable_GwrNUpIuWzdg1oswOY5HzA_mKWqhd6y';
@@ -625,8 +627,6 @@ function updateKundeStats() {
   document.getElementById('statIndtjent').textContent = Math.round(indtjent);
   document.getElementById('statUbetalt').textContent = Math.round(udestaaende);
 }
-
-let ulaesteBeskeder = {};
 
 function renderKunder() {
   const search = (document.getElementById('kundeSearch').value || '').toLowerCase();
