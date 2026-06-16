@@ -625,6 +625,54 @@ function updateKundeStats() {
   document.getElementById('statUbetalt').textContent = Math.round(udestaaende);
 }
 
+async function opdaterBeskedBadges() {
+  const { data } = await sb.from('messages')
+    .select('booking_id')
+    .eq('sender', 'kunde')
+    .eq('read', false);
+  
+  if (!data) return;
+  const counts = {};
+  data.forEach(m => { counts[m.booking_id] = (counts[m.booking_id] || 0) + 1; });
+  
+  document.querySelectorAll('[data-booking-id]').forEach(el => {
+    const bid = el.getAttribute('data-booking-id');
+    const existing = el.querySelector('.besked-badge');
+    if (existing) existing.remove();
+    if (counts[bid]) {
+      const badge = document.createElement('span');
+      badge.className = 'besked-badge';
+      badge.textContent = counts[bid];
+      badge.style.cssText = 'background:#7a1f35;color:#fff;font-size:.55rem;padding:.1rem .35rem;margin-left:.4rem;';
+      el.appendChild(badge);
+    }
+  });
+}
+
+async function opdaterBeskedBadges() {
+  const { data } = await sb.from('messages')
+    .select('booking_id')
+    .eq('sender', 'kunde')
+    .eq('read', false);
+  
+  if (!data) return;
+  const counts = {};
+  data.forEach(m => { counts[m.booking_id] = (counts[m.booking_id] || 0) + 1; });
+  
+  document.querySelectorAll('[data-booking-id]').forEach(el => {
+    const bid = el.getAttribute('data-booking-id');
+    const existing = el.querySelector('.besked-badge');
+    if (existing) existing.remove();
+    if (counts[bid]) {
+      const badge = document.createElement('span');
+      badge.className = 'besked-badge';
+      badge.textContent = counts[bid];
+      badge.style.cssText = 'background:#7a1f35;color:#fff;font-size:.55rem;padding:.1rem .35rem;margin-left:.4rem;';
+      el.appendChild(badge);
+    }
+  });
+}
+
 function renderKunder() {
   const search = (document.getElementById('kundeSearch').value || '').toLowerCase();
   const filtered = allKunder.filter(k =>
@@ -685,6 +733,7 @@ function renderKunder() {
       </div>
     </div>`;
   }).join('');
+  opdaterBeskedBadges();
 }
 
 function renderKundeCardIngen(k) {
