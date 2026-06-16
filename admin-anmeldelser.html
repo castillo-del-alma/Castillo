@@ -460,6 +460,7 @@ function showDashboard() {
   document.getElementById('dashboard').style.display = 'block';
   loadReviews();
   loadKunder();
+  startRealtimeBadges();
 }
 // Auto-login hvis tidligere logget ind
 document.addEventListener('DOMContentLoaded', () => {
@@ -1120,6 +1121,20 @@ async function sendBesked() {
   if (error) { showToast('Fejl: ' + error.message, true); return; }
   input.value = '';
   loadBeskeder();
+}
+
+// ── REAL-TIME BADGE OPDATERING ──
+function startRealtimeBadges() {
+  sb.channel('alle-beskeder')
+    .on('postgres_changes', {
+      event: 'INSERT',
+      schema: 'public',
+      table: 'messages',
+      filter: 'sender=eq.kunde'
+    }, (payload) => {
+      opdaterBeskedBadges();
+    })
+    .subscribe();
 }
 
 // ── REAL-TIME BESKEDER ADMIN ──
