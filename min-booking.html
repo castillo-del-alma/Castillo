@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Min Booking — Castillo del Alma</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@300;400&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=Manrope:wght@300;400;500&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+:root{--cream:#faf6ee;--beige:#f0e8d5;--sand:#e0d0b0;--charcoal:#2c2318;--text-mid:#5c4e3a;--text-light:#9a8c7a;--wine:#7a1f35;--gold:#b88a1e;}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Manrope',sans-serif;background:var(--cream);color:var(--charcoal);min-height:100vh;}
+.header{background:#fff;border-bottom:1px solid var(--sand);padding:1.2rem 2rem;display:flex;justify-content:space-between;align-items:center;}
+.header-logo{font-family:'Cinzel',serif;font-weight:300;font-size:.85rem;letter-spacing:.2em;text-transform:uppercase;color:var(--charcoal);text-decoration:none;}
+.logout-btn{font-size:.62rem;letter-spacing:.15em;text-transform:uppercase;color:var(--text-light);background:none;border:1px solid var(--sand);padding:.4rem .9rem;cursor:pointer;}
+.logout-btn:hover{border-color:var(--wine);color:var(--wine);}
+.login-wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;}
+.login-box{background:#fff;border:1px solid var(--sand);padding:3rem;width:100%;max-width:400px;text-align:center;}
+.eyebrow{font-size:.68rem;letter-spacing:.3em;text-transform:uppercase;color:var(--gold);margin-bottom:.8rem;}
+.login-box h2{font-family:'Cinzel',serif;font-weight:300;font-size:1.6rem;letter-spacing:.08em;color:var(--charcoal);margin-bottom:.5rem;}
+.login-box p{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1rem;color:var(--text-light);margin-bottom:2rem;line-height:1.6;}
+.login-box input{width:100%;padding:.85rem 1rem;margin-bottom:.8rem;background:var(--cream);border:1px solid var(--sand);color:var(--charcoal);font-family:'Manrope',sans-serif;font-size:.85rem;outline:none;transition:border-color .3s;text-align:center;}
+.login-box input:focus{border-color:var(--gold);}
+.btn{width:100%;padding:.85rem;background:var(--wine);color:#fff;border:none;font-family:'Manrope',sans-serif;font-size:.7rem;font-weight:500;letter-spacing:.2em;text-transform:uppercase;cursor:pointer;transition:background .3s;}
+.btn:hover{background:#a03048;}
+.btn-outline{background:transparent!important;border:1px solid var(--wine)!important;color:var(--wine)!important;margin-top:.6rem;}
+.login-msg{font-size:.75rem;color:var(--text-light);margin-top:1rem;line-height:1.6;}
+.otp-input{font-size:1.4rem!important;letter-spacing:.3em!important;text-align:center!important;}
+.portal{max-width:780px;margin:0 auto;padding:3rem 2rem;}
+.portal-welcome{margin-bottom:2.5rem;}
+.portal-welcome h1{font-family:'Cinzel',serif;font-weight:300;font-size:1.8rem;letter-spacing:.06em;color:var(--charcoal);}
+.tabs{display:flex;border-bottom:1px solid var(--sand);margin-bottom:2rem;}
+.tab-btn{font-family:'Cinzel',serif;font-weight:300;font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;padding:.9rem 1.8rem;background:none;border:none;color:var(--text-light);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;transition:all .3s;}
+.tab-btn.active{color:var(--gold);border-bottom-color:var(--gold);}
+.tab-content{display:none;}
+.tab-content.active{display:block;}
+.booking-card{background:#fff;border:1px solid var(--sand);padding:2rem;}
+.booking-card-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:1.5rem;padding-bottom:1.5rem;border-bottom:1px solid var(--beige);}
+.booking-retreat{font-family:'Cinzel',serif;font-weight:300;font-size:1.1rem;letter-spacing:.06em;color:var(--charcoal);}
+.booking-status{font-size:.58rem;letter-spacing:.15em;text-transform:uppercase;padding:.3rem .7rem;}
+.status-forespørgsel{color:var(--gold);background:rgba(184,138,30,.1);border:1px solid rgba(184,138,30,.2);}
+.status-afventer{color:#3a6e6a;background:rgba(58,110,106,.1);border:1px solid rgba(58,110,106,.2);}
+.status-bekræftet{color:#6a7240;background:rgba(106,114,64,.1);border:1px solid rgba(106,114,64,.2);}
+.booking-info-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;}
+.booking-info-item .label{font-size:.58rem;letter-spacing:.15em;text-transform:uppercase;color:var(--text-light);margin-bottom:.3rem;}
+.booking-info-item .value{font-size:.9rem;color:var(--charcoal);}
+.betaling-oversigt{background:#fff;border:1px solid var(--sand);padding:1.5rem 2rem;margin-bottom:1rem;}
+.betaling-bar{height:6px;background:var(--beige);margin:1rem 0;}
+.betaling-bar-fill{height:100%;background:var(--gold);}
+.betaling-row{display:flex;justify-content:space-between;align-items:center;padding:.7rem 0;border-bottom:1px solid var(--beige);}
+.betaling-row:last-child{border-bottom:none;}
+.betaling-label{font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;color:var(--text-light);}
+.betaling-value{font-size:.85rem;color:var(--charcoal);}
+.betaling-value.gold{color:var(--gold);}
+.betaling-value.green{color:#6a7240;}
+.payment-item{display:flex;justify-content:space-between;align-items:center;padding:.7rem 1rem;background:var(--cream);border:1px solid var(--beige);margin-bottom:.5rem;}
+.payment-item .type{font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;color:var(--charcoal);}
+.payment-item .dato{font-size:.6rem;color:var(--text-light);margin-top:.1rem;}
+.payment-item .beloeb{font-size:.85rem;color:#6a7240;}
+.besked-liste{display:flex;flex-direction:column;gap:.8rem;margin-bottom:1.5rem;min-height:200px;}
+.besked-item{display:flex;flex-direction:column;}
+.besked-bubble{max-width:75%;padding:.8rem 1rem;font-size:.82rem;line-height:1.6;color:var(--charcoal);}
+.besked-fra-admin{align-items:flex-start;}
+.besked-fra-admin .besked-bubble{background:#fff;border:1px solid var(--sand);}
+.besked-fra-kunde{align-items:flex-end;}
+.besked-fra-kunde .besked-bubble{background:rgba(122,31,53,.08);border:1px solid rgba(122,31,53,.15);}
+.besked-meta{font-size:.58rem;color:var(--text-light);margin-top:.2rem;}
+.besked-input-wrap{display:flex;gap:.8rem;border-top:1px solid var(--sand);padding-top:1.2rem;}
+.besked-input{flex:1;padding:.8rem 1rem;background:var(--cream);border:1px solid var(--sand);color:var(--charcoal);font-family:'Manrope',sans-serif;font-size:.82rem;outline:none;}
+.besked-input:focus{border-color:var(--gold);}
+.besked-send{background:var(--wine);border:none;color:#fff;padding:.8rem 1.4rem;font-size:.65rem;letter-spacing:.15em;text-transform:uppercase;cursor:pointer;font-family:'Manrope',sans-serif;}
+.empty-state{text-align:center;padding:3rem;color:var(--text-light);font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1rem;}
+</style>
+</head>
+<body>
+
+<div class="header" id="portalHeader" style="display:none;">
+  <a href="index.html" class="header-logo">Castillo del Alma</a>
+  <button class="logout-btn" onclick="logOut()">Log ud</button>
+</div>
+
+<div class="login-wrap" id="loginWrap">
+  <div class="login-box">
+    <div class="eyebrow">Castillo del Alma</div>
+    <h2>Min Booking</h2>
+    <p>Skriv din email for at modtage et login-link</p>
+    <div id="step1">
+      <input type="email" id="loginEmail" placeholder="din@email.com" onkeydown="if(event.key==='Enter')sendOTP()">
+      <button class="btn" onclick="sendOTP()">Send login-kode</button>
+      <div class="login-msg" id="loginMsg"></div>
+    </div>
+    <div id="step2" style="display:none;">
+      <p style="margin-bottom:1.5rem;font-size:.82rem;color:var(--text-light);">Vi har sendt en 8-cifret kode til <strong id="sentToEmail"></strong></p>
+      <input type="text" class="otp-input" id="otpInput" placeholder="--------" maxlength="8" onkeydown="if(event.key==='Enter')verifyOTP()">
+      <button class="btn" onclick="verifyOTP()" style="margin-top:.8rem;">Bekræft kode</button>
+      <button class="btn btn-outline" onclick="backToEmail()">Skift email</button>
+      <div class="login-msg" id="otpMsg"></div>
+    </div>
+  </div>
+</div>
+
+<div id="portalWrap" style="display:none;">
+  <div class="portal">
+    <div class="portal-welcome">
+      <div class="eyebrow">Velkommen tilbage</div>
+      <h1 id="portalNavn">—</h1>
+    </div>
+    <div class="tabs">
+      <button class="tab-btn active" onclick="switchTab('booking',this)">Min booking</button>
+      <button class="tab-btn" onclick="switchTab('betalinger',this)">Betalinger</button>
+      <button class="tab-btn" onclick="switchTab('beskeder',this)">Beskeder <span id="kundeUnreadBadge" style="display:none;background:var(--wine);color:#fff;font-size:.55rem;padding:.1rem .4rem;margin-left:.3rem;">0</span></button>
+    </div>
+    <div class="tab-content active" id="tab-booking">
+      <div class="booking-card" id="bookingCard"><div class="empty-state">Henter booking...</div></div>
+    </div>
+    <div class="tab-content" id="tab-betalinger">
+      <div id="betalingerIndhold"><div class="empty-state">Henter betalinger...</div></div>
+    </div>
+    <div class="tab-content" id="tab-beskeder">
+      <div class="besked-liste" id="kundeBeskedListe"><div class="empty-state">Henter beskeder...</div></div>
+      <div class="besked-input-wrap">
+        <input type="text" class="besked-input" id="kundeBeskedInput" placeholder="Skriv en besked til Castillo del Alma..." onkeydown="if(event.key==='Enter')sendKundeBesked()">
+        <button class="besked-send" onclick="sendKundeBesked()">Send</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const SUPABASE_URL = 'https://niniwgiytyqvdqejigxg.supabase.co';
+const SUPABASE_ANON_KEY = 'sb_publishable_GwrNUpIuWzdg1oswOY5HzA_mKWqhd6y';
+const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+let bookingData = null;
+let userEmail = '';
+
+sb.auth.onAuthStateChange(async (event, session) => {
+  if (session) await loadPortal(session.user.email);
+});
+
+async function sendOTP() {
+  const email = document.getElementById('loginEmail').value.trim();
+  if (!email) { document.getElementById('loginMsg').textContent = 'Indtast din email'; return; }
+  document.getElementById('loginMsg').textContent = 'Sender kode...';
+  const { error } = await sb.auth.signInWithOtp({ email, options: { shouldCreateUser: false } });
+  if (error) { document.getElementById('loginMsg').textContent = 'Ingen booking fundet med denne email.'; return; }
+  userEmail = email;
+  document.getElementById('sentToEmail').textContent = email;
+  document.getElementById('step1').style.display = 'none';
+  document.getElementById('step2').style.display = 'block';
+}
+
+async function verifyOTP() {
+  const token = document.getElementById('otpInput').value.trim();
+  if (!token) { document.getElementById('otpMsg').textContent = 'Indtast koden'; return; }
+  document.getElementById('otpMsg').textContent = 'Bekræfter...';
+  const { error } = await sb.auth.verifyOtp({ email: userEmail, token, type: 'email' });
+  if (error) { document.getElementById('otpMsg').textContent = 'Forkert eller udløbet kode.'; return; }
+}
+
+function backToEmail() {
+  document.getElementById('step1').style.display = 'block';
+  document.getElementById('step2').style.display = 'none';
+}
+
+async function logOut() {
+  await sb.auth.signOut();
+  location.reload();
+}
+
+async function loadPortal(email) {
+  document.getElementById('loginWrap').style.display = 'none';
+  document.getElementById('portalHeader').style.display = 'flex';
+  document.getElementById('portalWrap').style.display = 'block';
+
+  const { data: kunde } = await sb.from('customers')
+    .select('*, bookings(*, payments(*), charges(*))')
+    .eq('email', email)
+    .single();
+
+  if (!kunde) { document.getElementById('portalNavn').textContent = 'Ingen booking fundet'; return; }
+
+  bookingData = (kunde.bookings || [])[0] || null;
+  document.getElementById('portalNavn').textContent = kunde.full_name;
+  renderBooking();
+  renderBetalinger();
+  checkUnread();
+}
+
+function renderBooking() {
+  if (!bookingData) { document.getElementById('bookingCard').innerHTML = '<div class="empty-state">Ingen aktiv booking fundet</div>'; return; }
+  const b = bookingData;
+  const statusMap = { 'forespørgsel': ['Forespørgsel', 'status-forespørgsel'], 'afventer_betaling': ['Afventer betaling', 'status-afventer'], 'bekræftet': ['Bekræftet', 'status-bekræftet'] };
+  const [statusLabel, statusClass] = statusMap[b.status] || ['—', ''];
+  document.getElementById('bookingCard').innerHTML = `
+    <div class="booking-card-header">
+      <div class="booking-retreat">${b.retreat_name}</div>
+      <span class="booking-status ${statusClass}">${statusLabel}</span>
+    </div>
+    <div class="booking-info-grid">
+      <div class="booking-info-item"><div class="label">Ankomst</div><div class="value">${fmt(b.arrival_date)}</div></div>
+      <div class="booking-info-item"><div class="label">Afrejse</div><div class="value">${fmt(b.departure_date)}</div></div>
+      <div class="booking-info-item"><div class="label">Gæster</div><div class="value">${b.guests}</div></div>
+      <div class="booking-info-item"><div class="label">Værelse</div><div class="value">${b.room || '—'}</div></div>
+      ${b.notes ? `<div class="booking-info-item" style="grid-column:1/-1"><div class="label">Særlige ønsker</div><div class="value">${b.notes}</div></div>` : ''}
+      ${b.deadline ? `<div class="booking-info-item" style="grid-column:1/-1"><div class="label" style="color:var(--wine)">Betalingsfrist</div><div class="value" style="color:var(--wine)">${new Date(b.deadline).toLocaleString('da-DK',{weekday:'long',day:'numeric',month:'long',hour:'2-digit',minute:'2-digit'})}</div></div>` : ''}
+    </div>`;
+}
+
+function renderBetalinger() {
+  if (!bookingData) return;
+  const b = bookingData;
+  const betalt = (b.payments||[]).filter(p=>p.status==='paid').reduce((s,p)=>s+parseFloat(p.amount),0);
+  const ekstra = (b.charges||[]).reduce((s,c)=>s+parseFloat(c.amount),0);
+  const total = parseFloat(b.total_price) + ekstra;
+  const skylder = Math.max(0, total - betalt);
+  const pct = total > 0 ? Math.min(100, Math.round(betalt/total*100)) : 0;
+  document.getElementById('betalingerIndhold').innerHTML = `
+    <div class="betaling-oversigt">
+      <div class="betaling-row"><span class="betaling-label">Retreat pris</span><span class="betaling-value">€${parseFloat(b.total_price).toFixed(2)}</span></div>
+      ${ekstra>0?`<div class="betaling-row"><span class="betaling-label">Ekstra forbrug</span><span class="betaling-value">€${ekstra.toFixed(2)}</span></div>`:''}
+      <div class="betaling-row"><span class="betaling-label">Total</span><span class="betaling-value">€${total.toFixed(2)}</span></div>
+      <div class="betaling-bar"><div class="betaling-bar-fill" style="width:${pct}%"></div></div>
+      <div class="betaling-row"><span class="betaling-label">Betalt</span><span class="betaling-value green">€${betalt.toFixed(2)}</span></div>
+      <div class="betaling-row"><span class="betaling-label">Udestående</span><span class="betaling-value gold">€${skylder.toFixed(2)}</span></div>
+    </div>
+    ${(b.payments||[]).filter(p=>p.status==='paid').map(p=>`
+      <div class="payment-item">
+        <div><div class="type">${p.type==='deposit'?'Depositum':p.type==='final'?'Slutbetaling':'Betaling'}</div><div class="dato">${fmt(p.paid_at)}</div></div>
+        <div class="beloeb">€${parseFloat(p.amount).toFixed(2)} ✓</div>
+      </div>`).join('')}`;
+}
+
+async function loadKundeBeskeder() {
+  if (!bookingData) return;
+  const { data } = await sb.from('messages').select('*').eq('booking_id', bookingData.id).order('created_at', { ascending: true });
+  await sb.from('messages').update({ read: true }).eq('booking_id', bookingData.id).eq('sender', 'admin');
+  document.getElementById('kundeUnreadBadge').style.display = 'none';
+  const liste = document.getElementById('kundeBeskedListe');
+  if (!data || !data.length) { liste.innerHTML = '<div class="empty-state">Ingen beskeder endnu — skriv til os herunder</div>'; return; }
+  liste.innerHTML = data.map(m => {
+    const erAdmin = m.sender === 'admin';
+    const tid = new Date(m.created_at).toLocaleString('da-DK', { day:'numeric', month:'short', hour:'2-digit', minute:'2-digit' });
+    return `<div class="besked-item ${erAdmin?'besked-fra-admin':'besked-fra-kunde'}">
+      <div class="besked-bubble">${m.message}</div>
+      <div class="besked-meta">${erAdmin?'Castillo del Alma':'Dig'} · ${tid}</div>
+    </div>`;
+  }).join('');
+  liste.scrollTop = liste.scrollHeight;
+}
+
+async function sendKundeBesked() {
+  const input = document.getElementById('kundeBeskedInput');
+  const msg = input.value.trim();
+  if (!msg || !bookingData) return;
+  await sb.from('messages').insert({ booking_id: bookingData.id, sender: 'kunde', message: msg });
+  input.value = '';
+  loadKundeBeskeder();
+}
+
+async function checkUnread() {
+  if (!bookingData) return;
+  const { count } = await sb.from('messages').select('id', { count: 'exact' }).eq('booking_id', bookingData.id).eq('sender', 'admin').eq('read', false);
+  if (count > 0) { const b = document.getElementById('kundeUnreadBadge'); b.style.display = 'inline'; b.textContent = count; }
+}
+
+function switchTab(tab, btn) {
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('tab-'+tab).classList.add('active');
+  if (tab === 'beskeder') loadKundeBeskeder();
+}
+
+function fmt(d) {
+  if (!d) return '—';
+  return new Date(d).toLocaleDateString('da-DK', { day:'numeric', month:'long', year:'numeric' });
+}
+</script>
+</body>
+</html>
