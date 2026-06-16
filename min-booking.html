@@ -134,16 +134,27 @@ const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 let bookingData = null;
 let userEmail = '';
 
-sb.auth.onAuthStateChange(async (event, session) => {
-  if (session) await loadPortal(session.user.email);
-});
+// Check om allerede logget ind
+const savedEmail = localStorage.getItem('cda_kunde_email');
+if (savedEmail) loadPortal(savedEmail);
 
 async function sendOTP() {
   const email = document.getElementById('loginEmail').value.trim();
   if (!email) { document.getElementById('loginMsg').textContent = 'Indtast din email'; return; }
   document.getElementById('loginMsg').textContent = 'Sender kode...';
-  const { error } = await sb.auth.signInWithOtp({ email, options: { shouldCreateUser: false } });
-  if (error) { document.getElementById('loginMsg').textContent = 'Ingen booking fundet med denne email.'; return; }
+
+  const res = await fetch('/.netlify/functions/send-login-code', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ email })
+  });
+
+  if (!res.ok) {
+    const data = await res.json();
+    document.getElementById('loginMsg').textContent = data.error || 'Ingen booking fundet med denne email.';
+    return;
+  }
+
   userEmail = email;
   document.getElementById('sentToEmail').textContent = email;
   document.getElementById('step1').style.display = 'none';
@@ -151,11 +162,24 @@ async function sendOTP() {
 }
 
 async function verifyOTP() {
-  const token = document.getElementById('otpInput').value.trim();
-  if (!token) { document.getElementById('otpMsg').textContent = 'Indtast koden'; return; }
+  const code = document.getElementById('otpInput').value.trim();
+  if (!code) { document.getElementById('otpMsg').textContent = 'Indtast koden'; return; }
   document.getElementById('otpMsg').textContent = 'Bekræfter...';
-  const { error } = await sb.auth.verifyOtp({ email: userEmail, token, type: 'email' });
-  if (error) { document.getElementById('otpMsg').textContent = 'Forkert eller udløbet kode.'; return; }
+
+  const res = await fetch('/.netlify/functions/verify-login-code', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ email: userEmail, code })
+  });
+
+  if (!res.ok) {
+    document.getElementById('otpMsg').textContent = 'Forkert eller udløbet kode.';
+    return;
+  }
+
+  // Gem session i localStorage
+  localStorage.setItem('cda_kunde_email', userEmail);
+  await loadPortal(userEmail);
 }
 
 function backToEmail() {
@@ -163,8 +187,8 @@ function backToEmail() {
   document.getElementById('step2').style.display = 'none';
 }
 
-async function logOut() {
-  await sb.auth.signOut();
+function logOut() {
+  localStorage.removeItem('cda_kunde_email');
   location.reload();
 }
 
