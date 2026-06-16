@@ -209,6 +209,7 @@ async function loadPortal(email) {
   renderBooking();
   renderBetalinger();
   checkUnread();
+  startRealtimeBeskeder();
 }
 
 function renderBooking() {
@@ -280,6 +281,31 @@ async function sendKundeBesked() {
   await sb.from('messages').insert({ booking_id: bookingData.id, sender: 'kunde', message: msg });
   input.value = '';
   loadKundeBeskeder();
+}
+
+// ── REAL-TIME BESKEDER ──
+function startRealtimeBeskeder() {
+  if (!bookingData) return;
+  sb.channel('beskeder-' + bookingData.id)
+    .on('postgres_changes', {
+      event: 'INSERT',
+      schema: 'public',
+      table: 'messages',
+      filter: `booking_id=eq.${bookingData.id}`
+    }, (payload) => {
+      if (payload.new.sender === 'admin') {
+        // Opdater badge hvis ikke på besked-fanen
+        const beskedTab = document.getElementById('tab-beskeder');
+        if (!beskedTab.classList.contains('active')) {
+          const badge = document.getElementById('kundeUnreadBadge');
+          badge.style.display = 'inline';
+          badge.textContent = parseInt(badge.textContent || 0) + 1;
+        } else {
+          loadKundeBeskeder();
+        }
+      }
+    })
+    .subscribe();
 }
 
 async function checkUnread() {
