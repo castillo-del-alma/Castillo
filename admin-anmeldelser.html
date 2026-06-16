@@ -927,6 +927,7 @@ async function visDetalje(kundeId) {
   }
 
   document.getElementById('modalDetalje').classList.add('open');
+  if (booking) startAdminRealtime(booking.id);
 }
 
 // ── BETALINGSTYPE VÆLGER ──
@@ -1070,6 +1071,31 @@ async function sendBesked() {
   if (error) { showToast('Fejl: ' + error.message, true); return; }
   input.value = '';
   loadBeskeder();
+}
+
+// ── REAL-TIME BESKEDER ADMIN ──
+let realtimeChannel = null;
+
+function startAdminRealtime(bookingId) {
+  if (realtimeChannel) sb.removeChannel(realtimeChannel);
+  realtimeChannel = sb.channel('admin-beskeder-' + bookingId)
+    .on('postgres_changes', {
+      event: 'INSERT',
+      schema: 'public',
+      table: 'messages',
+      filter: `booking_id=eq.${bookingId}`
+    }, (payload) => {
+      if (payload.new.sender === 'kunde') {
+        const beskedTab = document.getElementById('detaljeTabBeskeder');
+        if (beskedTab && beskedTab.style.display !== 'none') {
+          loadBeskeder();
+        } else {
+          const badge = document.getElementById('unreadBadge');
+          if (badge) { badge.style.display = 'inline'; badge.textContent = parseInt(badge.textContent || 0) + 1; }
+        }
+      }
+    })
+    .subscribe();
 }
 
 // ── MODAL HELPERS ──
