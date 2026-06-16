@@ -601,6 +601,7 @@ async function loadKunder() {
 
     if (error) throw error;
     allKunder = data || [];
+    ulaesteBeskeder = await hentUlaesteBeskeder();
     updateKundeStats();
     renderKunder();
   } catch(e) {
@@ -624,6 +625,8 @@ function updateKundeStats() {
   document.getElementById('statIndtjent').textContent = Math.round(indtjent);
   document.getElementById('statUbetalt').textContent = Math.round(udestaaende);
 }
+
+let ulaesteBeskeder = {};
 
 function renderKunder() {
   const search = (document.getElementById('kundeSearch').value || '').toLowerCase();
@@ -676,7 +679,7 @@ function renderKunder() {
         ${skylder > 0 ? `<div style="font-size:.62rem;color:rgba(232,220,200,.35);margin-top:.4rem;">Udestående: €${Math.round(skylder)}</div>` : '<div style="font-size:.62rem;color:#a0c880;margin-top:.4rem;">✓ Fuldt betalt</div>'}
       </div>
       <div class="kunde-actions">
-        <button class="kunde-btn kunde-btn-view" onclick="visDetalje('${k.id}')">Se detaljer</button>
+        <button class="kunde-btn kunde-btn-view" onclick="visDetalje('${k.id}')">Se detaljer ${booking && ulaesteBeskeder[booking.id] ? `<span style="background:var(--wine);color:#fff;font-size:.55rem;padding:.1rem .35rem;margin-left:.3rem;">${ulaesteBeskeder[booking.id]}</span>` : ''}</button>
         <button class="kunde-btn kunde-btn-charge" onclick="openForbrug('${booking.id}','${k.full_name}')">+ Forbrug</button>
         ${skylder > 0 ? `<button class="kunde-btn kunde-btn-pay" onclick="registrerBetaling('${booking.id}',${skylder})">Registrér betaling</button>` : ''}
         ${booking.status === 'forespørgsel' ? `<button class="kunde-btn" style="background:rgba(184,138,30,.15);color:var(--gold);border:1px solid rgba(184,138,30,.3);" onclick="aktiverFrist('${booking.id}','${k.email}','${k.full_name}')">Aktivér 48-timers frist</button>` : ''}
