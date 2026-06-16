@@ -37,7 +37,7 @@ exports.handler = async (event) => {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${RESEND_KEY}` },
     body: JSON.stringify({
-      from: 'Castillo del Alma <hello@booking.lacasadelalma.es>',
+      from: 'Castillo del Alma <booking@castillodelalma.es>',
       to: email,
       subject: 'Din login-kode — Castillo del Alma',
       html: `<!DOCTYPE html><html><body style="margin:0;padding:0;background:#1a1208;font-family:Georgia,serif;">

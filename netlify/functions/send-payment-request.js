@@ -21,7 +21,7 @@ exports.handler = async (event) => {
         'Authorization': `Bearer ${RESEND_KEY}`
       },
       body: JSON.stringify({
-        from: 'Castillo del Alma <hello@booking.lacasadelalma.es>',
+        from: 'Castillo del Alma <booking@castillodelalma.es>',
         to: email,
         subject: 'Din plads er reserveret — betal depositum inden 48 timer',
         html: `<!DOCTYPE html><html lang="da"><head><meta charset="UTF-8"></head>
