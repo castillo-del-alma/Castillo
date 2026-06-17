@@ -1159,24 +1159,47 @@ async function sendForespørgsel() {
 }
 
 async function betalDepositum() {
-  const { name, fornavn, email } = getFormData();
+  const { fornavn, efternavn, name, email } = getFormData();
+  const telefon = document.getElementById('f-telefon').value;
   if (!fornavn || !email) { showFormError('Udfyld mindst fornavn og e-mail.'); return; }
   showFormError('');
 
   const btn = document.getElementById('btn-depositum');
   btn.disabled = true;
-  btn.innerHTML = '<span style="display:inline-block;width:12px;height:12px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .6s linear infinite;vertical-align:middle;margin-right:.4rem;"></span>Opretter link…';
+  btn.innerHTML = '<span style="display:inline-block;width:12px;height:12px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .6s linear infinite;vertical-align:middle;margin-right:.4rem;"></span>Opretter booking…';
 
   try {
-    const res = await fetch('/.netlify/functions/create-payment-link', {
+    // Opret booking først
+    const room = document.getElementById('room-select')?.value || '';
+    const kommentar = document.getElementById('f-kommentar')?.value || '';
+    const addonFoer = document.getElementById('addon-foer')?.checked || false;
+    const addonEfter = document.getElementById('addon-efter')?.checked || false;
+    const addonMassage = document.getElementById('addon-massage')?.checked || false;
+
+    const bookingRes = await fetch('/.netlify/functions/create-booking', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        name,
+        fornavn, efternavn, email, telefon,
+        vaerelse: room, kommentar,
+        addon_foer: addonFoer, addon_efter: addonEfter, addon_massage: addonMassage,
+        ekstra_gaester: []
+      }),
+    });
+    const bookingData = await bookingRes.json();
+    if (!bookingRes.ok || bookingData.error) throw new Error(bookingData.error || 'Kunne ikke oprette booking');
+
+    btn.innerHTML = '<span style="display:inline-block;width:12px;height:12px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .6s linear infinite;vertical-align:middle;margin-right:.4rem;"></span>Åbner betaling…';
+
+    // Opret Stripe checkout
+    const res = await fetch('/.netlify/functions/create-checkout', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        bookingId: bookingData.bookingId,
+        navn: name,
         email,
-        amount: DEPOSIT_DKK,
-        currency: 'DKK',
-        description: `Depositum (30%) — Kunsten at sænke tempoet · Castillo del Alma`,
+        amount: 4470
       }),
     });
     const data = await res.json();

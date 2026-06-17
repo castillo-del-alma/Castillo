@@ -214,7 +214,7 @@ exports.handler = async (event) => {
     return {
       statusCode: 200,
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ success: true, email: emailData })
+      body: JSON.stringify({ success: true, email: emailData, bookingId: booking.id })
     };
 
   } catch (e) {
