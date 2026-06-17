@@ -537,6 +537,7 @@ function showDashboard() {
   document.getElementById('dashboard').style.display = 'block';
   loadReviews();
   loadKunder();
+  loadRetreats();
   startRealtimeBadges();
 }
 // Auto-login hvis tidligere logget ind
@@ -1121,6 +1122,152 @@ async function aktiverFrist(bookingId, email, navn) {
   } catch(e) {
     showToast('Fejl: ' + e.message, true);
   }
+}
+
+// ── RETREATS ──
+let allRetreats = [];
+let heroFileData = null;
+let cardFileData = null;
+
+async function loadRetreats() {
+  const { data, error } = await sb.from('retreats').select('*').order('created_at', { ascending: false });
+  if (error) { console.error(error); return; }
+  allRetreats = data || [];
+  renderRetreats();
+}
+
+function renderRetreats() {
+  const grid = document.getElementById('retreatsGrid');
+  if (!allRetreats.length) {
+    grid.innerHTML = '<div class="loading">Ingen retreats oprettet endnu</div>';
+    return;
+  }
+
+  grid.innerHTML = allRetreats.map(r => `
+    <div class="kunde-card">
+      <div class="kunde-card-header">
+        <div>
+          <div class="kunde-navn">${r.title}</div>
+          <div class="kunde-email">${r.subtitle || ''}</div>
+        </div>
+        <span class="kunde-status ${r.active ? 'status-aktiv' : 'status-afsluttet'}">${r.active ? 'Aktiv' : 'Skjult'}</span>
+      </div>
+      <div class="kunde-booking">
+        <strong>${fmt(r.arrival_date)} – ${fmt(r.departure_date)}</strong>
+      </div>
+      <div style="font-size:.85rem;color:rgba(232,220,200,.6);margin:.5rem 0;">€${r.price ? Math.round(r.price/7.46) : '—'} pr. gæst</div>
+      <div class="kunde-actions">
+        <button class="kunde-btn kunde-btn-view" onclick="redigerRetreat('${r.id}')">Redigér</button>
+        <button class="kunde-btn" style="background:rgba(192,92,48,.1);color:rgba(192,92,48,.7);border:1px solid rgba(192,92,48,.2);" onclick="sletRetreat('${r.id}','${r.title}')">Slet</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+function openNytRetreat() {
+  document.getElementById('retreatModalTitel').textContent = 'Nyt retreat';
+  document.getElementById('retreat_id').value = '';
+  document.getElementById('retreat_title').value = '';
+  document.getElementById('retreat_slug').value = '';
+  document.getElementById('retreat_subtitle').value = '';
+  document.getElementById('retreat_description').value = '';
+  document.getElementById('retreat_arrival').value = '';
+  document.getElementById('retreat_departure').value = '';
+  document.getElementById('retreat_price').value = '';
+  document.getElementById('retreat_deposit_pct').value = '30';
+  document.getElementById('retreat_active').value = 'true';
+  document.getElementById('retreat_hero_preview').innerHTML = '';
+  document.getElementById('retreat_card_preview').innerHTML = '';
+  heroFileData = null;
+  cardFileData = null;
+  document.getElementById('retreatSaveBtn').textContent = 'Opret retreat';
+  document.getElementById('modalRetreat').classList.add('open');
+}
+
+function redigerRetreat(id) {
+  const r = allRetreats.find(x => x.id === id);
+  if (!r) return;
+  document.getElementById('retreatModalTitel').textContent = 'Redigér retreat';
+  document.getElementById('retreat_id').value = r.id;
+  document.getElementById('retreat_title').value = r.title || '';
+  document.getElementById('retreat_slug').value = r.slug || '';
+  document.getElementById('retreat_subtitle').value = r.subtitle || '';
+  document.getElementById('retreat_description').value = r.description || '';
+  document.getElementById('retreat_arrival').value = r.arrival_date || '';
+  document.getElementById('retreat_departure').value = r.departure_date || '';
+  document.getElementById('retreat_price').value = r.price || '';
+  document.getElementById('retreat_deposit_pct').value = r.deposit_pct ? Math.round(r.deposit_pct * 100) : '30';
+  document.getElementById('retreat_active').value = r.active ? 'true' : 'false';
+  document.getElementById('retreat_hero_preview').innerHTML = r.hero_image ? `<img src="${r.hero_image}" style="max-width:100%;max-height:120px;">` : '';
+  document.getElementById('retreat_card_preview').innerHTML = r.card_image ? `<img src="${r.card_image}" style="max-width:100%;max-height:120px;">` : '';
+  heroFileData = null;
+  cardFileData = null;
+  document.getElementById('retreatSaveBtn').textContent = 'Gem ændringer';
+  document.getElementById('modalRetreat').classList.add('open');
+}
+
+async function uploadRetreatImage(file) {
+  const ext = file.name.split('.').pop();
+  const filename = `${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
+  const { data, error } = await sb.storage.from('retreat-images').upload(filename, file);
+  if (error) throw error;
+  const { data: urlData } = sb.storage.from('retreat-images').getPublicUrl(filename);
+  return urlData.publicUrl;
+}
+
+async function gemRetreat() {
+  const id = document.getElementById('retreat_id').value;
+  const title = document.getElementById('retreat_title').value.trim();
+  const slug = document.getElementById('retreat_slug').value.trim();
+  if (!title || !slug) { showToast('Titel og slug er påkrævet', true); return; }
+
+  const btn = document.getElementById('retreatSaveBtn');
+  btn.disabled = true;
+  btn.textContent = 'Gemmer...';
+
+  try {
+    const payload = {
+      title,
+      slug,
+      subtitle: document.getElementById('retreat_subtitle').value.trim() || null,
+      description: document.getElementById('retreat_description').value.trim() || null,
+      arrival_date: document.getElementById('retreat_arrival').value || null,
+      departure_date: document.getElementById('retreat_departure').value || null,
+      price: parseFloat(document.getElementById('retreat_price').value) || 0,
+      deposit_pct: (parseFloat(document.getElementById('retreat_deposit_pct').value) || 30) / 100,
+      active: document.getElementById('retreat_active').value === 'true'
+    };
+
+    const heroFile = document.getElementById('retreat_hero_file').files[0];
+    if (heroFile) payload.hero_image = await uploadRetreatImage(heroFile);
+
+    const cardFile = document.getElementById('retreat_card_file').files[0];
+    if (cardFile) payload.card_image = await uploadRetreatImage(cardFile);
+
+    if (id) {
+      const { error } = await sb.from('retreats').update(payload).eq('id', id);
+      if (error) throw error;
+    } else {
+      const { error } = await sb.from('retreats').insert(payload);
+      if (error) throw error;
+    }
+
+    closeModal('modalRetreat');
+    showToast('Retreat gemt ✓');
+    loadRetreats();
+  } catch(e) {
+    showToast('Fejl: ' + e.message, true);
+  } finally {
+    btn.disabled = false;
+  }
+}
+
+async function sletRetreat(id, title) {
+  await visBekraeft('Slet retreat', `Er du sikker på at du vil slette <strong>${title}</strong>?`);
+  const { error } = await sb.from('retreats').delete().eq('id', id);
+  if (error) { showToast('Fejl: ' + error.message, true); return; }
+  showToast('Retreat slettet');
+  loadRetreats();
 }
 
 // ── SLET KUNDE ──
