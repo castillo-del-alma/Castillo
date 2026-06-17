@@ -206,6 +206,7 @@ body{font-family:'Manrope',sans-serif;background:#1e1810;color:#e8dcc8;min-heigh
   <div class="tabs">
     <button class="tab-btn" onclick="switchTab('anmeldelser',this)">Anmeldelser</button>
     <button class="tab-btn active" onclick="switchTab('kunder',this)">Kunder & Bookinger</button>
+    <button class="tab-btn" onclick="switchTab('retreats',this)">Retreats</button>
   </div>
 
   <!-- FANE: ANMELDELSER -->
@@ -245,6 +246,80 @@ body{font-family:'Manrope',sans-serif;background:#1e1810;color:#e8dcc8;min-heigh
     </div>
     <div class="kunder-grid" id="kunderGrid">
       <div class="loading">Henter kunder...</div>
+    </div>
+  </div>
+
+  <!-- FANE: RETREATS -->
+  <div class="tab-content" id="tab-retreats">
+    <div style="display:flex;justify-content:flex-end;margin-bottom:1.5rem;">
+      <button class="btn-primary" onclick="openNytRetreat()">+ Nyt retreat</button>
+    </div>
+    <div class="kunder-grid" id="retreatsGrid">
+      <div class="loading">Henter retreats...</div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: NYT/REDIGER RETREAT -->
+<div class="modal-overlay" id="modalRetreat">
+  <div class="modal" style="max-width:560px;max-height:85vh;overflow-y:auto;">
+    <button class="modal-close" onclick="closeModal('modalRetreat')">✕</button>
+    <h3 id="retreatModalTitel">Nyt retreat</h3>
+    <input type="hidden" id="retreat_id">
+    <div class="form-grid" style="margin-top:1.5rem;">
+      <div class="form-group full">
+        <label>Titel *</label>
+        <input type="text" id="retreat_title" placeholder="Kunsten at sænke tempoet">
+      </div>
+      <div class="form-group full">
+        <label>Slug (URL-venligt navn) *</label>
+        <input type="text" id="retreat_slug" placeholder="kunsten-at-saenke-tempoet">
+      </div>
+      <div class="form-group full">
+        <label>Undertitel</label>
+        <input type="text" id="retreat_subtitle" placeholder="Wellness Retreat">
+      </div>
+      <div class="form-group full">
+        <label>Beskrivelse</label>
+        <textarea id="retreat_description" placeholder="Beskrivelse af retreatet..." style="min-height:100px;"></textarea>
+      </div>
+      <div class="form-group">
+        <label>Ankomst</label>
+        <input type="date" id="retreat_arrival">
+      </div>
+      <div class="form-group">
+        <label>Afrejse</label>
+        <input type="date" id="retreat_departure">
+      </div>
+      <div class="form-group">
+        <label>Pris pr. gæst (kr.)</label>
+        <input type="text" inputmode="numeric" id="retreat_price" placeholder="14900">
+      </div>
+      <div class="form-group">
+        <label>Depositum (%)</label>
+        <input type="text" inputmode="numeric" id="retreat_deposit_pct" placeholder="30">
+      </div>
+      <div class="form-group full">
+        <label>Hero-billede (forsiden af retreat-siden)</label>
+        <input type="file" id="retreat_hero_file" accept="image/*" style="background:rgba(255,255,255,.06);border:1px solid rgba(184,138,30,.2);color:#e8dcc8;padding:.6rem;font-family:'Manrope',sans-serif;font-size:.78rem;">
+        <div id="retreat_hero_preview" style="margin-top:.5rem;"></div>
+      </div>
+      <div class="form-group full">
+        <label>Kort-billede (vises på forsiden som retreat-kort)</label>
+        <input type="file" id="retreat_card_file" accept="image/*" style="background:rgba(255,255,255,.06);border:1px solid rgba(184,138,30,.2);color:#e8dcc8;padding:.6rem;font-family:'Manrope',sans-serif;font-size:.78rem;">
+        <div id="retreat_card_preview" style="margin-top:.5rem;"></div>
+      </div>
+      <div class="form-group full">
+        <label>Aktiv (vis på sitet)</label>
+        <select id="retreat_active">
+          <option value="true">Ja — vis på sitet</option>
+          <option value="false">Nej — skjult</option>
+        </select>
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-secondary" onclick="closeModal('modalRetreat')">Annuller</button>
+      <button class="btn-primary" onclick="gemRetreat()" id="retreatSaveBtn">Opret retreat</button>
     </div>
   </div>
 </div>
