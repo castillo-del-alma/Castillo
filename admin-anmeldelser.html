@@ -373,6 +373,15 @@ body{font-family:'Manrope',sans-serif;background:#1e1810;color:#e8dcc8;min-heigh
       </div>
 
       <div class="form-group full" style="border-top:1px solid rgba(184,138,30,.15);padding-top:1.2rem;margin-top:.5rem;">
+        <span style="font-size:.7rem;letter-spacing:.15em;text-transform:uppercase;color:var(--gold);">Tilvalg</span>
+      </div>
+      <div class="form-group full">
+        <label>Tilvalg (ét pr. linje, format: "Tekst | pris")</label>
+        <textarea id="retreat_addons" placeholder="Ekstra overnatning før retreat, om muligt | 60&#10;Kropsmassage 60 min. | 50" style="min-height:90px;"></textarea>
+        <div style="font-size:.65rem;color:rgba(232,220,200,.35);margin-top:.4rem;">Skriv teksten, derefter et lodret stop-tegn "|" og prisen i kr. Fx: "Kropsmassage 60 min. | 50"</div>
+      </div>
+
+      <div class="form-group full" style="border-top:1px solid rgba(184,138,30,.15);padding-top:1.2rem;margin-top:.5rem;">
         <label>Aktiv (vis på sitet)</label>
         <select id="retreat_active">
           <option value="true">Ja — vis på sitet</option>
@@ -1266,6 +1275,7 @@ function openNytRetreat() {
   document.getElementById('retreat_room_double_text').value = '';
   document.getElementById('retreat_room_single_price').value = '';
   document.getElementById('retreat_room_single_text').value = '';
+  document.getElementById('retreat_addons').value = '';
   heroFileData = null;
   cardFileData = null;
   document.getElementById('retreatSaveBtn').textContent = 'Opret retreat';
@@ -1299,6 +1309,7 @@ function redigerRetreat(id) {
   document.getElementById('retreat_room_double_text').value = r.room_double_text || '';
   document.getElementById('retreat_room_single_price').value = r.room_single_price || '';
   document.getElementById('retreat_room_single_text').value = r.room_single_text || '';
+  document.getElementById('retreat_addons').value = (r.addon_items || []).map(a => `${a.text} | ${a.price}`).join('\n');
   heroFileData = null;
   cardFileData = null;
   document.getElementById('retreatSaveBtn').textContent = 'Gem ændringer';
@@ -1355,7 +1366,15 @@ async function gemRetreat() {
       room_double_price: parseFloat(document.getElementById('retreat_room_double_price').value) || null,
       room_double_text: document.getElementById('retreat_room_double_text').value.trim() || null,
       room_single_price: parseFloat(document.getElementById('retreat_room_single_price').value) || null,
-      room_single_text: document.getElementById('retreat_room_single_text').value.trim() || null
+      room_single_text: document.getElementById('retreat_room_single_text').value.trim() || null,
+      addon_items: document.getElementById('retreat_addons').value.split('\n').map(line => {
+        const parts = line.split('|');
+        if (parts.length !== 2) return null;
+        const text = parts[0].trim();
+        const price = parseFloat(parts[1].trim());
+        if (!text || isNaN(price)) return null;
+        return { text, price };
+      }).filter(Boolean)
     };
 
     const heroFile = document.getElementById('retreat_hero_file').files[0];
