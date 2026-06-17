@@ -292,8 +292,8 @@ body{font-family:'Manrope',sans-serif;background:#1e1810;color:#e8dcc8;min-heigh
         <input type="date" id="retreat_departure">
       </div>
       <div class="form-group">
-        <label>Pris pr. gæst (kr.)</label>
-        <input type="text" inputmode="numeric" id="retreat_price" placeholder="14900">
+        <label>Pris pr. gæst (€)</label>
+        <input type="text" inputmode="numeric" id="retreat_price" placeholder="0">
       </div>
       <div class="form-group">
         <label>Depositum (%)</label>
@@ -356,12 +356,12 @@ body{font-family:'Manrope',sans-serif;background:#1e1810;color:#e8dcc8;min-heigh
         <span style="font-size:.7rem;letter-spacing:.15em;text-transform:uppercase;color:var(--gold);">Værelser</span>
       </div>
       <div class="form-group">
-        <label>Dobbeltværelse – pris (kr.)</label>
-        <input type="text" inputmode="numeric" id="retreat_room_double_price" placeholder="14900">
+        <label>Dobbeltværelse – pris (€)</label>
+        <input type="text" inputmode="numeric" id="retreat_room_double_price" placeholder="0">
       </div>
       <div class="form-group">
-        <label>Enkeltværelse – pris (kr.)</label>
-        <input type="text" inputmode="numeric" id="retreat_room_single_price" placeholder="18900">
+        <label>Enkeltværelse – pris (€)</label>
+        <input type="text" inputmode="numeric" id="retreat_room_single_price" placeholder="0">
       </div>
       <div class="form-group full">
         <label>Dobbeltværelse – beskrivelse</label>
@@ -1417,7 +1417,7 @@ function renderAddonListe() {
   container.innerHTML = addonState.map((a, i) => `
     <div style="display:grid;grid-template-columns:1fr 100px auto;gap:.6rem;align-items:center;">
       <input type="text" placeholder="Fx. Kropsmassage 60 min." value="${(a.text || '').replace(/"/g,'&quot;')}" oninput="addonState[${i}].text=this.value" style="background:rgba(255,255,255,.06);border:1px solid rgba(184,138,30,.2);color:#e8dcc8;padding:.6rem .8rem;font-family:'Manrope',sans-serif;font-size:.78rem;outline:none;">
-      <input type="text" inputmode="numeric" placeholder="Pris kr." value="${a.price || ''}" oninput="addonState[${i}].price=this.value.replace(/[^0-9.]/g,'')" style="background:rgba(255,255,255,.06);border:1px solid rgba(184,138,30,.2);color:#e8dcc8;padding:.6rem .8rem;font-family:'Manrope',sans-serif;font-size:.78rem;outline:none;text-align:right;">
+      <input type="text" inputmode="numeric" placeholder="Pris €" value="${a.price || ''}" oninput="addonState[${i}].price=this.value.replace(/[^0-9.]/g,'')" style="background:rgba(255,255,255,.06);border:1px solid rgba(184,138,30,.2);color:#e8dcc8;padding:.6rem .8rem;font-family:'Manrope',sans-serif;font-size:.78rem;outline:none;text-align:right;">
       <button type="button" onclick="fjernAddon(${i})" style="background:none;border:none;color:rgba(192,92,48,.6);cursor:pointer;font-size:.85rem;padding:.4rem;">✕</button>
     </div>
   `).join('');
