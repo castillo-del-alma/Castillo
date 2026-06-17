@@ -624,11 +624,9 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:3rem
         <h3>Retreat info</h3>
         <div class="fact-row"><span class="fact-label">Varighed</span><span class="fact-value" id="factDuration">—</span></div>
         <div class="fact-row"><span class="fact-label">Maks. deltagere</span><span class="fact-value" id="factMaxGuests">—</span></div>
-        <div class="fact-row"><span class="fact-label">Niveau</span><span class="fact-value">Alle niveauer</span></div>
+        <div class="fact-row"><span class="fact-label">Niveau</span><span class="fact-value" id="factLevel">—</span></div>
         <div class="fact-row"><span class="fact-label">Sprog</span><span class="fact-value" id="factLanguages">—</span></div>
         <div class="fact-row"><span class="fact-label">Sted</span><span class="fact-value" id="factLocation">Castillo del Alma</span></div>
-        <div class="fact-row"><span class="fact-label">Mad</span><span class="fact-value">Fuldt inkluderet</span></div>
-        <div class="fact-row"><span class="fact-label">Transport</span><span class="fact-value">Ikke inkluderet</span></div>
         <div class="fact-row"><span class="fact-label">Pris fra</span><span class="fact-value" style="color:var(--wine)" id="factPrice">—</span></div>
       </div>
     </div>
@@ -1018,6 +1016,7 @@ async function loadRetreatData() {
   document.getElementById('pillLocation').textContent = data.location || 'Mollina · Málaga';
   document.getElementById('pillLanguages').textContent = data.languages || '—';
   document.getElementById('factLanguages').textContent = data.languages || '—';
+  document.getElementById('factLevel').textContent = data.level || '—';
   document.getElementById('barDuration').textContent = duration;
   document.getElementById('barArrival').textContent = fmtDateDK(data.arrival_date);
   document.getElementById('barDeparture').textContent = fmtDateDK(data.departure_date);
