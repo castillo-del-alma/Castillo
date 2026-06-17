@@ -542,6 +542,20 @@ body{font-family:'Manrope',sans-serif;background:#1e1810;color:#e8dcc8;min-heigh
   </div>
 </div>
 
+<!-- MODAL: PROGRAM EDITOR -->
+<div class="modal-overlay" id="modalProgramEditor">
+  <div class="modal" style="max-width:600px;max-height:85vh;overflow-y:auto;">
+    <button class="modal-close" onclick="closeModal('modalProgramEditor')">✕</button>
+    <h3>Redigér programdage</h3>
+    <div id="programDagListe" style="margin-top:1.5rem;display:flex;flex-direction:column;gap:1rem;"></div>
+    <button type="button" onclick="tilfoejProgramDag()" style="margin-top:1rem;width:100%;background:rgba(184,138,30,.1);border:1px solid rgba(184,138,30,.3);color:var(--gold);padding:.7rem;font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;">+ Tilføj dag</button>
+    <div class="modal-actions">
+      <button class="btn-secondary" onclick="closeModal('modalProgramEditor')">Annuller</button>
+      <button class="btn-primary" onclick="gemProgramEditor()">Brug disse dage</button>
+    </div>
+  </div>
+</div>
+
 <!-- MODAL: BEKRÆFTELSE -->
 <div class="modal-overlay" id="modalBekraeft">
   <div class="modal" style="max-width:420px;text-align:center;">
@@ -1374,6 +1388,54 @@ async function sletRetreat(id, title) {
   if (error) { showToast('Fejl: ' + error.message, true); return; }
   showToast('Retreat slettet');
   loadRetreats();
+}
+
+// ── PROGRAM EDITOR ──
+let programDagState = [];
+
+function openProgramEditor() {
+  try {
+    const raw = document.getElementById('retreat_program_days').value.trim();
+    programDagState = raw ? JSON.parse(raw) : [];
+  } catch(e) {
+    programDagState = [];
+  }
+  renderProgramDagListe();
+  document.getElementById('modalProgramEditor').classList.add('open');
+}
+
+function renderProgramDagListe() {
+  const container = document.getElementById('programDagListe');
+  if (!programDagState.length) {
+    container.innerHTML = '<div style="color:rgba(232,220,200,.3);font-style:italic;text-align:center;padding:1rem;">Ingen dage tilføjet endnu</div>';
+    return;
+  }
+  container.innerHTML = programDagState.map((d, i) => `
+    <div style="background:rgba(255,255,255,.04);border:1px solid rgba(184,138,30,.15);padding:1rem;position:relative;">
+      <button type="button" onclick="fjernProgramDag(${i})" style="position:absolute;top:.6rem;right:.6rem;background:none;border:none;color:rgba(192,92,48,.6);cursor:pointer;font-size:.8rem;">✕</button>
+      <div style="display:grid;grid-template-columns:1fr 2fr;gap:.6rem;margin-bottom:.6rem;">
+        <input type="text" placeholder="Dag 1" value="${d.num || ''}" oninput="programDagState[${i}].num=this.value" style="background:rgba(255,255,255,.06);border:1px solid rgba(184,138,30,.2);color:#e8dcc8;padding:.5rem .7rem;font-family:'Manrope',sans-serif;font-size:.8rem;outline:none;">
+        <input type="text" placeholder="Titel" value="${d.title || ''}" oninput="programDagState[${i}].title=this.value" style="background:rgba(255,255,255,.06);border:1px solid rgba(184,138,30,.2);color:#e8dcc8;padding:.5rem .7rem;font-family:'Manrope',sans-serif;font-size:.8rem;outline:none;">
+      </div>
+      <textarea placeholder="Beskrivelse af dagen..." oninput="programDagState[${i}].text=this.value" style="width:100%;min-height:70px;background:rgba(255,255,255,.06);border:1px solid rgba(184,138,30,.2);color:#e8dcc8;padding:.6rem .7rem;font-family:'Manrope',sans-serif;font-size:.8rem;outline:none;">${d.text || ''}</textarea>
+    </div>
+  `).join('');
+}
+
+function tilfoejProgramDag() {
+  programDagState.push({ num: `Dag ${programDagState.length + 1}`, title: '', text: '' });
+  renderProgramDagListe();
+}
+
+function fjernProgramDag(i) {
+  programDagState.splice(i, 1);
+  renderProgramDagListe();
+}
+
+function gemProgramEditor() {
+  document.getElementById('retreat_program_days').value = JSON.stringify(programDagState, null, 2);
+  closeModal('modalProgramEditor');
+  showToast('Programdage opdateret ✓');
 }
 
 // ── SLET KUNDE ──
