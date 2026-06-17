@@ -1122,12 +1122,17 @@ async function sendForespørgsel() {
   btn.disabled = true;
   btn.textContent = 'Sender…';
 
+  const ekstraGaesterListe = Array.from(document.querySelectorAll('.guest-row')).map(row => ({
+    navn: row.querySelector('input[placeholder="Fornavn"]') ? row.querySelector('input[placeholder="Fornavn"]').value + ' ' + row.querySelector('input[placeholder="Efternavn"]').value : '',
+    email: row.querySelector('input[type="email"]') ? row.querySelector('input[type="email"]').value : ''
+  })).filter(g => g.navn.trim());
+
   try {
     const res = await fetch('/.netlify/functions/create-booking', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ 
-        fornavn, efternavn, email, gaester: 1,
+        fornavn, efternavn, email, gaester: 1 + ekstraGaesterListe.length,
         telefon: document.getElementById('f-telefon') ? document.getElementById('f-telefon').value : '',
         ankomst: '2026-09-14', 
         afrejse: '2026-09-21',
@@ -1136,10 +1141,7 @@ async function sendForespørgsel() {
         addon_efter: document.getElementById('addon-efter') ? document.getElementById('addon-efter').checked : false,
         addon_massage: document.getElementById('addon-massage') ? document.getElementById('addon-massage').checked : false,
         kommentar: document.getElementById('f-kommentar') ? document.getElementById('f-kommentar').value : '',
-        ekstra_gaester: Array.from(document.querySelectorAll('.guest-row')).map(row => ({
-          navn: row.querySelector('input[placeholder="Fornavn"]') ? row.querySelector('input[placeholder="Fornavn"]').value + ' ' + row.querySelector('input[placeholder="Efternavn"]').value : '',
-          email: row.querySelector('input[type="email"]') ? row.querySelector('input[type="email"]').value : ''
-        })).filter(g => g.navn.trim())
+        ekstra_gaester: ekstraGaesterListe
       })
     });
     const data = await res.json();

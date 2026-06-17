@@ -56,6 +56,7 @@ exports.handler = async (event) => {
         arrival_date: '2026-09-14',
         departure_date: '2026-09-21',
         guests: gaester || 1,
+        extra_guests: ekstra_gaester || [],
         total_price: 14900,
         deposit_amount: 4470,
         status: 'forespørgsel'
@@ -158,7 +159,11 @@ exports.handler = async (event) => {
     });
 
     const emailData = await emailRes.json();
-    console.log('Email result:', JSON.stringify(emailData));
+    if (!emailRes.ok) {
+      console.log('FEJL ved afsendelse af kunde-email:', emailRes.status, JSON.stringify(emailData));
+    } else {
+      console.log('Kunde-email sendt:', JSON.stringify(emailData));
+    }
 
     // Send admin notifikation
     const addons = [
@@ -171,7 +176,7 @@ exports.handler = async (event) => {
       ? ekstra_gaester.map(g => `<p style="margin:4px 0;">👤 ${g.navn} — ${g.email}</p>`).join('')
       : '<p style="margin:4px 0;color:#999;">Ingen ekstra gæster</p>';
 
-    await fetch('https://api.resend.com/emails', {
+    const adminEmailRes = await fetch('https://api.resend.com/emails', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -199,6 +204,12 @@ exports.handler = async (event) => {
                <p>${kommentar || '—'}</p>`
       })
     });
+    const adminEmailData = await adminEmailRes.json();
+    if (!adminEmailRes.ok) {
+      console.log('FEJL ved afsendelse af admin-notifikation:', adminEmailRes.status, JSON.stringify(adminEmailData));
+    } else {
+      console.log('Admin-notifikation sendt:', JSON.stringify(adminEmailData));
+    }
 
     return {
       statusCode: 200,

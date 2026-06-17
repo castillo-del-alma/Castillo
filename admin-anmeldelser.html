@@ -902,7 +902,7 @@ async function visDetalje(kundeId) {
       <div class="detalje-row"><span class="detalje-key">Retreat</span><span class="detalje-val">${booking.retreat_name}</span></div>
       <div class="detalje-row"><span class="detalje-key">Ankomst</span><span class="detalje-val">${fmt(booking.arrival_date)}</span></div>
       <div class="detalje-row"><span class="detalje-key">Afrejse</span><span class="detalje-val">${fmt(booking.departure_date)}</span></div>
-      <div class="detalje-row"><span class="detalje-key">Gæster</span><span class="detalje-val">${booking.guests}</span></div>
+      <div class="detalje-row"><span class="detalje-key">Gæster</span><span class="detalje-val">${booking.guests}${booking.extra_guests && booking.extra_guests.length > 0 ? ' (' + booking.extra_guests.map(g => g.navn).join(', ') + ')' : ''}</span></div>
       <div class="detalje-row"><span class="detalje-key">Værelse</span><span class="detalje-val">${booking.room || '—'}</span></div>
       ${booking.notes ? `<div class="detalje-row"><span class="detalje-key">Noter</span><span class="detalje-val">${booking.notes}</span></div>` : ''}
     </div>`;
