@@ -110,6 +110,8 @@ body{font-family:'Manrope',sans-serif;background:#1e1810;color:#e8dcc8;min-heigh
 .status-kommende{color:var(--teal);background:rgba(58,110,106,.15);}
 .status-afsluttet{color:rgba(232,220,200,.4);background:rgba(232,220,200,.05);}
 .status-forespørgsel{color:#b88a1e;background:rgba(184,138,30,.15);border:1px solid rgba(184,138,30,.3);}
+.status-afventer{color:#3a6e6a;background:rgba(58,110,106,.15);border:1px solid rgba(58,110,106,.3);}
+.status-tilmeldt{color:var(--olive);background:rgba(106,114,64,.15);border:1px solid rgba(106,114,64,.3);}
 .kunde-info-row{display:flex;gap:2rem;margin-bottom:.8rem;}
 .kunde-info-item{font-size:.68rem;color:rgba(232,220,200,.5);}
 .kunde-info-item strong{color:rgba(232,220,200,.8);display:block;font-size:.75rem;margin-bottom:.1rem;}
@@ -699,8 +701,13 @@ function renderKunder() {
     const ank = new Date(booking.arrival_date);
     const afr = new Date(booking.departure_date);
     const erForespørgsel = booking.status === 'forespørgsel';
-    const status = erForespørgsel ? 'forespørgsel' : nu >= ank && nu <= afr ? 'aktiv' : ank > nu ? 'kommende' : 'afsluttet';
-    const statusLabel = status === 'forespørgsel' ? 'Forespørgsel' : status === 'aktiv' ? 'Aktiv' : status === 'kommende' ? 'Kommende' : 'Afsluttet';
+    const erBekræftet = booking.status === 'bekræftet';
+    const erAfventer = booking.status === 'afventer_betaling';
+    let status, statusLabel;
+    if (erForespørgsel) { status = 'forespørgsel'; statusLabel = 'Forespørgsel'; }
+    else if (erAfventer) { status = 'afventer'; statusLabel = 'Afventer betaling'; }
+    else if (erBekræftet) { status = 'tilmeldt'; statusLabel = 'Tilmeldt'; }
+    else { status = nu >= ank && nu <= afr ? 'aktiv' : ank > nu ? 'kommende' : 'afsluttet'; statusLabel = status === 'aktiv' ? 'Aktiv' : status === 'kommende' ? 'Kommende' : 'Afsluttet'; }
 
     return `<div class="kunde-card">
       <div class="kunde-card-header">
