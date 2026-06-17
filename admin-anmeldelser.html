@@ -1241,6 +1241,17 @@ function openNytRetreat() {
   document.getElementById('retreat_active').value = 'true';
   document.getElementById('retreat_hero_preview').innerHTML = '';
   document.getElementById('retreat_card_preview').innerHTML = '';
+  document.getElementById('retreat_location').value = '';
+  document.getElementById('retreat_about_heading').value = '';
+  document.getElementById('retreat_about_text').value = '';
+  document.getElementById('retreat_about_quote').value = '';
+  document.getElementById('retreat_program_days').value = '';
+  document.getElementById('retreat_included').value = '';
+  document.getElementById('retreat_excluded').value = '';
+  document.getElementById('retreat_room_double_price').value = '';
+  document.getElementById('retreat_room_double_text').value = '';
+  document.getElementById('retreat_room_single_price').value = '';
+  document.getElementById('retreat_room_single_text').value = '';
   heroFileData = null;
   cardFileData = null;
   document.getElementById('retreatSaveBtn').textContent = 'Opret retreat';
@@ -1263,6 +1274,17 @@ function redigerRetreat(id) {
   document.getElementById('retreat_active').value = r.active ? 'true' : 'false';
   document.getElementById('retreat_hero_preview').innerHTML = r.hero_image ? `<img src="${r.hero_image}" style="max-width:100%;max-height:120px;">` : '';
   document.getElementById('retreat_card_preview').innerHTML = r.card_image ? `<img src="${r.card_image}" style="max-width:100%;max-height:120px;">` : '';
+  document.getElementById('retreat_location').value = r.location || '';
+  document.getElementById('retreat_about_heading').value = r.about_heading || '';
+  document.getElementById('retreat_about_text').value = r.about_text || '';
+  document.getElementById('retreat_about_quote').value = r.about_quote || '';
+  document.getElementById('retreat_program_days').value = r.program_days ? JSON.stringify(r.program_days, null, 2) : '';
+  document.getElementById('retreat_included').value = (r.included_items || []).join('\n');
+  document.getElementById('retreat_excluded').value = (r.excluded_items || []).join('\n');
+  document.getElementById('retreat_room_double_price').value = r.room_double_price || '';
+  document.getElementById('retreat_room_double_text').value = r.room_double_text || '';
+  document.getElementById('retreat_room_single_price').value = r.room_single_price || '';
+  document.getElementById('retreat_room_single_text').value = r.room_single_text || '';
   heroFileData = null;
   cardFileData = null;
   document.getElementById('retreatSaveBtn').textContent = 'Gem ændringer';
@@ -1289,6 +1311,16 @@ async function gemRetreat() {
   btn.textContent = 'Gemmer...';
 
   try {
+    let programDays = [];
+    try {
+      const pdRaw = document.getElementById('retreat_program_days').value.trim();
+      programDays = pdRaw ? JSON.parse(pdRaw) : [];
+    } catch(e) {
+      showToast('Programdage er ikke gyldig JSON — tjek formatet', true);
+      btn.disabled = false;
+      return;
+    }
+
     const payload = {
       title,
       slug,
@@ -1298,7 +1330,18 @@ async function gemRetreat() {
       departure_date: document.getElementById('retreat_departure').value || null,
       price: parseFloat(document.getElementById('retreat_price').value) || 0,
       deposit_pct: (parseFloat(document.getElementById('retreat_deposit_pct').value) || 30) / 100,
-      active: document.getElementById('retreat_active').value === 'true'
+      active: document.getElementById('retreat_active').value === 'true',
+      location: document.getElementById('retreat_location').value.trim() || null,
+      about_heading: document.getElementById('retreat_about_heading').value.trim() || null,
+      about_text: document.getElementById('retreat_about_text').value.trim() || null,
+      about_quote: document.getElementById('retreat_about_quote').value.trim() || null,
+      program_days: programDays,
+      included_items: document.getElementById('retreat_included').value.split('\n').map(s => s.trim()).filter(Boolean),
+      excluded_items: document.getElementById('retreat_excluded').value.split('\n').map(s => s.trim()).filter(Boolean),
+      room_double_price: parseFloat(document.getElementById('retreat_room_double_price').value) || null,
+      room_double_text: document.getElementById('retreat_room_double_text').value.trim() || null,
+      room_single_price: parseFloat(document.getElementById('retreat_room_single_price').value) || null,
+      room_single_text: document.getElementById('retreat_room_single_text').value.trim() || null
     };
 
     const heroFile = document.getElementById('retreat_hero_file').files[0];
