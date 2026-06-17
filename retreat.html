@@ -570,7 +570,7 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:3rem
     <p class="retreat-hero-sub" id="retreatSubtitle"></p>
     <div class="retreat-hero-pills">
       <span class="pill" id="pillNights">—</span>
-      <span class="pill">Dansk & Engelsk</span>
+      <span class="pill" id="pillLanguages">—</span>
       <span class="pill">All inclusive</span>
       <span class="pill" id="pillLocation">Mollina · Málaga</span>
     </div>
@@ -625,7 +625,7 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:3rem
         <div class="fact-row"><span class="fact-label">Varighed</span><span class="fact-value" id="factDuration">—</span></div>
         <div class="fact-row"><span class="fact-label">Maks. deltagere</span><span class="fact-value" id="factMaxGuests">—</span></div>
         <div class="fact-row"><span class="fact-label">Niveau</span><span class="fact-value">Alle niveauer</span></div>
-        <div class="fact-row"><span class="fact-label">Sprog</span><span class="fact-value">Dansk / Engelsk</span></div>
+        <div class="fact-row"><span class="fact-label">Sprog</span><span class="fact-value" id="factLanguages">—</span></div>
         <div class="fact-row"><span class="fact-label">Sted</span><span class="fact-value" id="factLocation">Castillo del Alma</span></div>
         <div class="fact-row"><span class="fact-label">Mad</span><span class="fact-value">Fuldt inkluderet</span></div>
         <div class="fact-row"><span class="fact-label">Transport</span><span class="fact-value">Ikke inkluderet</span></div>
@@ -1016,6 +1016,8 @@ async function loadRetreatData() {
   }
   document.getElementById('pillNights').textContent = duration;
   document.getElementById('pillLocation').textContent = data.location || 'Mollina · Málaga';
+  document.getElementById('pillLanguages').textContent = data.languages || '—';
+  document.getElementById('factLanguages').textContent = data.languages || '—';
   document.getElementById('barDuration').textContent = duration;
   document.getElementById('barArrival').textContent = fmtDateDK(data.arrival_date);
   document.getElementById('barDeparture').textContent = fmtDateDK(data.departure_date);
