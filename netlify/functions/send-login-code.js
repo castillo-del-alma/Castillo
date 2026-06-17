@@ -40,17 +40,17 @@ exports.handler = async (event) => {
       from: 'Castillo del Alma <booking@castillodelalma.es>',
       to: email,
       subject: 'Din login-kode — Castillo del Alma',
-      html: `<!DOCTYPE html><html><body style="margin:0;padding:0;background:#1a1208;font-family:Georgia,serif;">
-<table width="100%" cellpadding="0" cellspacing="0" style="background:#1a1208;padding:48px 0;">
+      html: `<!DOCTYPE html><html><body style="margin:0;padding:0;background:#f0e8d5;font-family:Georgia,serif;">
+<table width="100%" cellpadding="0" cellspacing="0" style="background:#f0e8d5;padding:48px 0;">
 <tr><td align="center">
-<table width="500" cellpadding="0" cellspacing="0" style="background:#1e1510;border:1px solid rgba(184,138,30,.2);">
+<table width="500" cellpadding="0" cellspacing="0" style="background:#faf6ee;border:1px solid rgba(184,138,30,.2);">
 <tr><td style="background:linear-gradient(90deg,#7a1f35,#b88a1e,#7a1f35);height:2px;"></td></tr>
 <tr><td style="padding:40px 48px;text-align:center;">
   <p style="margin:0 0 8px;font-size:10px;letter-spacing:.4em;text-transform:uppercase;color:rgba(184,138,30,.6);">CASTILLO DEL ALMA</p>
-  <h2 style="margin:0 0 24px;font-weight:normal;font-size:22px;color:#e8dcc8;">Din login-kode</h2>
-  <p style="margin:0 0 24px;font-size:14px;color:rgba(232,220,200,.65);">Kære ${customers[0].full_name},<br><br>Her er din engangskode til Min Booking:</p>
+  <h2 style="margin:0 0 24px;font-weight:normal;font-size:22px;color:#2c2318;">Din login-kode</h2>
+  <p style="margin:0 0 24px;font-size:14px;color:rgba(44,35,24,.65);">Kære ${customers[0].full_name},<br><br>Her er din engangskode til Min Booking:</p>
   <div style="background:rgba(184,138,30,.1);border:1px solid rgba(184,138,30,.3);padding:20px;margin:24px 0;font-size:32px;letter-spacing:.4em;color:#b88a1e;font-family:monospace;">${code}</div>
-  <p style="font-size:12px;color:rgba(232,220,200,.35);">Koden er gyldig i 1 time.</p>
+  <p style="font-size:12px;color:rgba(44,35,24,.5);">Koden er gyldig i 1 time.</p>
 </td></tr>
 <tr><td style="background:linear-gradient(90deg,#7a1f35,#b88a1e,#7a1f35);height:1px;"></td></tr>
 </table>

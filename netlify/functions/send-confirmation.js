@@ -20,28 +20,28 @@ exports.handler = async (event) => {
           <meta charset="UTF-8">
           <meta name="viewport" content="width=device-width, initial-scale=1.0">
         </head>
-        <body style="margin:0;padding:0;background:#1e1810;font-family:'Georgia',serif;">
-          <table width="100%" cellpadding="0" cellspacing="0" style="background:#1e1810;padding:40px 0;">
+        <body style="margin:0;padding:0;background:#f0e8d5;font-family:'Georgia',serif;">
+          <table width="100%" cellpadding="0" cellspacing="0" style="background:#f0e8d5;padding:40px 0;">
             <tr>
               <td align="center">
-                <table width="580" cellpadding="0" cellspacing="0" style="background:#231e14;border:1px solid rgba(184,138,30,.2);">
+                <table width="580" cellpadding="0" cellspacing="0" style="background:#faf6ee;border:1px solid rgba(184,138,30,.2);">
                   
                   <!-- HEADER -->
                   <tr>
                     <td style="padding:40px 48px 32px;border-bottom:1px solid rgba(184,138,30,.15);">
                       <p style="margin:0;font-size:11px;letter-spacing:.3em;text-transform:uppercase;color:rgba(184,138,30,.7);">CASTILLO DEL ALMA</p>
-                      <h1 style="margin:12px 0 0;font-family:'Georgia',serif;font-weight:normal;font-size:26px;color:#e8dcc8;letter-spacing:.05em;">Tak for din forespørgsel</h1>
+                      <h1 style="margin:12px 0 0;font-family:'Georgia',serif;font-weight:normal;font-size:26px;color:#2c2318;letter-spacing:.05em;">Tak for din forespørgsel</h1>
                     </td>
                   </tr>
 
                   <!-- BODY -->
                   <tr>
                     <td style="padding:36px 48px;">
-                      <p style="margin:0 0 20px;font-size:15px;line-height:1.8;color:rgba(232,220,200,.75);">
+                      <p style="margin:0 0 20px;font-size:15px;line-height:1.8;color:rgba(44,35,24,.75);">
                         Kære ${navn},
                       </p>
-                      <p style="margin:0 0 20px;font-size:15px;line-height:1.8;color:rgba(232,220,200,.75);">
-                        Vi har modtaget din forespørgsel til <strong style="color:#e8dcc8;">${retreat}</strong> og vender tilbage inden for 24 timer.
+                      <p style="margin:0 0 20px;font-size:15px;line-height:1.8;color:rgba(44,35,24,.75);">
+                        Vi har modtaget din forespørgsel til <strong style="color:#2c2318;">${retreat}</strong> og vender tilbage inden for 24 timer.
                       </p>
 
                       <!-- BOOKING BOX -->
@@ -51,27 +51,27 @@ exports.handler = async (event) => {
                             <p style="margin:0 0 16px;font-size:10px;letter-spacing:.25em;text-transform:uppercase;color:rgba(184,138,30,.7);">DIN FORESPØRGSEL</p>
                             <table width="100%" cellpadding="0" cellspacing="0">
                               <tr>
-                                <td style="padding:8px 0;border-bottom:1px solid rgba(255,255,255,.05);">
-                                  <span style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:rgba(232,220,200,.35);">Retreat</span>
+                                <td style="padding:8px 0;border-bottom:1px solid rgba(44,35,24,.08);">
+                                  <span style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:rgba(44,35,24,.5);">Retreat</span>
                                 </td>
-                                <td style="padding:8px 0;border-bottom:1px solid rgba(255,255,255,.05);text-align:right;">
-                                  <span style="font-size:13px;color:#e8dcc8;">${retreat}</span>
+                                <td style="padding:8px 0;border-bottom:1px solid rgba(44,35,24,.08);text-align:right;">
+                                  <span style="font-size:13px;color:#2c2318;">${retreat}</span>
                                 </td>
                               </tr>
                               <tr>
-                                <td style="padding:8px 0;border-bottom:1px solid rgba(255,255,255,.05);">
-                                  <span style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:rgba(232,220,200,.35);">Ankomst</span>
+                                <td style="padding:8px 0;border-bottom:1px solid rgba(44,35,24,.08);">
+                                  <span style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:rgba(44,35,24,.5);">Ankomst</span>
                                 </td>
-                                <td style="padding:8px 0;border-bottom:1px solid rgba(255,255,255,.05);text-align:right;">
-                                  <span style="font-size:13px;color:#e8dcc8;">${ankomst}</span>
+                                <td style="padding:8px 0;border-bottom:1px solid rgba(44,35,24,.08);text-align:right;">
+                                  <span style="font-size:13px;color:#2c2318;">${ankomst}</span>
                                 </td>
                               </tr>
                               <tr>
                                 <td style="padding:8px 0;">
-                                  <span style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:rgba(232,220,200,.35);">Afrejse</span>
+                                  <span style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:rgba(44,35,24,.5);">Afrejse</span>
                                 </td>
                                 <td style="padding:8px 0;text-align:right;">
-                                  <span style="font-size:13px;color:#e8dcc8;">${afrejse}</span>
+                                  <span style="font-size:13px;color:#2c2318;">${afrejse}</span>
                                 </td>
                               </tr>
                             </table>
@@ -79,10 +79,10 @@ exports.handler = async (event) => {
                         </tr>
                       </table>
 
-                      <p style="margin:0 0 20px;font-size:15px;line-height:1.8;color:rgba(232,220,200,.75);">
+                      <p style="margin:0 0 20px;font-size:15px;line-height:1.8;color:rgba(44,35,24,.75);">
                         Når vi har bekræftet din plads, modtager du en ny email med mulighed for at betale depositum og dermed sikre din reservation.
                       </p>
-                      <p style="margin:0;font-size:15px;line-height:1.8;color:rgba(232,220,200,.75);">
+                      <p style="margin:0;font-size:15px;line-height:1.8;color:rgba(44,35,24,.75);">
                         Vi glæder os til at byde dig velkommen til Castillo del Alma.
                       </p>
                     </td>
@@ -91,7 +91,7 @@ exports.handler = async (event) => {
                   <!-- FOOTER -->
                   <tr>
                     <td style="padding:24px 48px;border-top:1px solid rgba(184,138,30,.1);">
-                      <p style="margin:0;font-size:11px;letter-spacing:.1em;color:rgba(232,220,200,.25);text-align:center;">
+                      <p style="margin:0;font-size:11px;letter-spacing:.1em;color:rgba(44,35,24,.4);text-align:center;">
                         CASTILLO DEL ALMA · MOLLINA, MÁLAGA · SPANIEN
                       </p>
                     </td>

@@ -43,15 +43,15 @@ exports.handler = async (event) => {
         from: 'Castillo del Alma <hello@booking.lacasadelalma.es>',
         to: email,
         subject: 'Du har en ny besked — Castillo del Alma',
-        html: `<!DOCTYPE html><html><body style="margin:0;padding:0;background:#1a1208;font-family:Georgia,serif;">
-<table width="100%" cellpadding="0" cellspacing="0" style="background:#1a1208;padding:48px 0;">
+        html: `<!DOCTYPE html><html><body style="margin:0;padding:0;background:#f0e8d5;font-family:Georgia,serif;">
+<table width="100%" cellpadding="0" cellspacing="0" style="background:#f0e8d5;padding:48px 0;">
 <tr><td align="center">
-<table width="500" cellpadding="0" cellspacing="0" style="background:#1e1510;border:1px solid rgba(184,138,30,.2);">
+<table width="500" cellpadding="0" cellspacing="0" style="background:#faf6ee;border:1px solid rgba(184,138,30,.2);">
 <tr><td style="background:linear-gradient(90deg,#7a1f35,#b88a1e,#7a1f35);height:2px;"></td></tr>
 <tr><td style="padding:40px 48px;text-align:center;">
   <p style="margin:0 0 8px;font-size:10px;letter-spacing:.4em;text-transform:uppercase;color:rgba(184,138,30,.6);">CASTILLO DEL ALMA</p>
-  <h2 style="margin:0 0 20px;font-weight:normal;font-size:22px;color:#e8dcc8;">Du har en ny besked</h2>
-  <p style="margin:0 0 28px;font-size:14px;color:rgba(232,220,200,.65);line-height:1.8;">Kære ${fornavn},<br><br>Vi har sendt dig en ny besked angående din booking til <em>${bookings[0].retreat_name}</em>. Log ind på din side for at læse den.</p>
+  <h2 style="margin:0 0 20px;font-weight:normal;font-size:22px;color:#2c2318;">Du har en ny besked</h2>
+  <p style="margin:0 0 28px;font-size:14px;color:rgba(44,35,24,.65);line-height:1.8;">Kære ${fornavn},<br><br>Vi har sendt dig en ny besked angående din booking til <em>${bookings[0].retreat_name}</em>. Log ind på din side for at læse den.</p>
   <a href="https://castillo-del-alma.netlify.app/min-booking.html" style="display:inline-block;background:#7a1f35;color:#fff;padding:14px 36px;font-size:11px;letter-spacing:.2em;text-transform:uppercase;text-decoration:none;font-family:sans-serif;">Læs besked</a>
 </td></tr>
 <tr><td style="background:linear-gradient(90deg,#7a1f35,#b88a1e,#7a1f35);height:1px;"></td></tr>
