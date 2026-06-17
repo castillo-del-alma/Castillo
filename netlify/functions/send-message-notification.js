@@ -19,11 +19,21 @@ exports.handler = async (event) => {
     const bookings = await bookingRes.json();
     if (!bookings || bookings.length === 0) throw new Error('Booking ikke fundet');
 
-    const customerRes = await fetch(`${SUPABASE_URL}/rest/v1/customers?id=eq.${bookings[0].customer_id}&select=email,full_name`, { headers });
+    const customerRes = await fetch(`${SUPABASE_URL}/rest/v1/customers?id=eq.${bookings[0].customer_id}&select=email,full_name,last_seen`, { headers });
     const customers = await customerRes.json();
     if (!customers || customers.length === 0) throw new Error('Kunde ikke fundet');
 
-    const { email, full_name } = customers[0];
+    const { email, full_name, last_seen } = customers[0];
+
+    // Tjek om kunden har været aktiv for nylig (sidste 2 minutter)
+    if (last_seen) {
+      const sidstSet = new Date(last_seen);
+      const nu = new Date();
+      const minutterSiden = (nu - sidstSet) / 1000 / 60;
+      if (minutterSiden < 2) {
+        return { statusCode: 200, body: JSON.stringify({ success: true, skipped: 'customer_active' }) };
+      }
+    }
     const fornavn = full_name.split(' ')[0];
 
     await fetch('https://api.resend.com/emails', {
