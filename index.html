@@ -2084,8 +2084,7 @@ async function loadRetreatsGrid() {
   grid.innerHTML = data.map((r, i) => {
     const num = String(i + 1).padStart(2, '0');
     const isPride = r.slug === 'gay-retreat-og-faellesskab';
-    const bookable = r.slug === 'kunsten-at-saenke-tempoet';
-    const clickAttr = bookable ? `onclick="window.location='retreat-sank-tempoet.html'" style="cursor:pointer;"` : '';
+    const clickAttr = `onclick="window.location='retreat.html?slug=${r.slug}'" style="cursor:pointer;"`;
     return `
       <div class="retreat-card card-${i+1}" ${clickAttr}>
         <div class="retreat-card-bg" style="background-image:url('${r.card_image || ''}');background-size:cover;background-position:center;"></div>
