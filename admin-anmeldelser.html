@@ -1121,6 +1121,13 @@ async function sendBesked() {
   if (error) { showToast('Fejl: ' + error.message, true); return; }
   input.value = '';
   loadBeskeder();
+
+  // Send email-notifikation til kunden
+  fetch('/.netlify/functions/send-message-notification', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ bookingId: aktivDetaljeBookingId })
+  }).catch(e => console.error('Notifikation fejlede:', e));
 }
 
 // ── REAL-TIME BADGE OPDATERING ──
