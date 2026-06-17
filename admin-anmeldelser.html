@@ -376,9 +376,10 @@ body{font-family:'Manrope',sans-serif;background:#1e1810;color:#e8dcc8;min-heigh
         <span style="font-size:.7rem;letter-spacing:.15em;text-transform:uppercase;color:var(--gold);">Tilvalg</span>
       </div>
       <div class="form-group full">
-        <label>Tilvalg (ét pr. linje, format: "Tekst | pris")</label>
-        <textarea id="retreat_addons" placeholder="Ekstra overnatning før retreat, om muligt | 60&#10;Kropsmassage 60 min. | 50" style="min-height:90px;"></textarea>
-        <div style="font-size:.65rem;color:rgba(232,220,200,.35);margin-top:.4rem;">Skriv teksten, derefter et lodret stop-tegn "|" og prisen i kr. Fx: "Kropsmassage 60 min. | 50"</div>
+        <label>Tilvalg</label>
+        <div id="addonListe" style="display:flex;flex-direction:column;gap:.6rem;"></div>
+        <button type="button" onclick="tilfoejAddon()" style="margin-top:.8rem;background:rgba(184,138,30,.1);border:1px solid rgba(184,138,30,.3);color:var(--gold);padding:.6rem 1rem;font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;">+ Tilføj tilvalg</button>
+        <input type="hidden" id="retreat_addons">
       </div>
 
       <div class="form-group full" style="border-top:1px solid rgba(184,138,30,.15);padding-top:1.2rem;margin-top:.5rem;">
@@ -1275,7 +1276,8 @@ function openNytRetreat() {
   document.getElementById('retreat_room_double_text').value = '';
   document.getElementById('retreat_room_single_price').value = '';
   document.getElementById('retreat_room_single_text').value = '';
-  document.getElementById('retreat_addons').value = '';
+  addonState = [];
+  renderAddonListe();
   heroFileData = null;
   cardFileData = null;
   document.getElementById('retreatSaveBtn').textContent = 'Opret retreat';
@@ -1309,7 +1311,8 @@ function redigerRetreat(id) {
   document.getElementById('retreat_room_double_text').value = r.room_double_text || '';
   document.getElementById('retreat_room_single_price').value = r.room_single_price || '';
   document.getElementById('retreat_room_single_text').value = r.room_single_text || '';
-  document.getElementById('retreat_addons').value = (r.addon_items || []).map(a => `${a.text} | ${a.price}`).join('\n');
+  addonState = r.addon_items ? JSON.parse(JSON.stringify(r.addon_items)) : [];
+  renderAddonListe();
   heroFileData = null;
   cardFileData = null;
   document.getElementById('retreatSaveBtn').textContent = 'Gem ændringer';
@@ -1367,14 +1370,7 @@ async function gemRetreat() {
       room_double_text: document.getElementById('retreat_room_double_text').value.trim() || null,
       room_single_price: parseFloat(document.getElementById('retreat_room_single_price').value) || null,
       room_single_text: document.getElementById('retreat_room_single_text').value.trim() || null,
-      addon_items: document.getElementById('retreat_addons').value.split('\n').map(line => {
-        const parts = line.split('|');
-        if (parts.length !== 2) return null;
-        const text = parts[0].trim();
-        const price = parseFloat(parts[1].trim());
-        if (!text || isNaN(price)) return null;
-        return { text, price };
-      }).filter(Boolean)
+      addon_items: addonState.filter(a => a.text && a.text.trim() && a.price !== '' && !isNaN(parseFloat(a.price))).map(a => ({ text: a.text.trim(), price: parseFloat(a.price) }))
     };
 
     const heroFile = document.getElementById('retreat_hero_file').files[0];
@@ -1407,6 +1403,34 @@ async function sletRetreat(id, title) {
   if (error) { showToast('Fejl: ' + error.message, true); return; }
   showToast('Retreat slettet');
   loadRetreats();
+}
+
+// ── ADDON EDITOR ──
+let addonState = [];
+
+function renderAddonListe() {
+  const container = document.getElementById('addonListe');
+  if (!addonState.length) {
+    container.innerHTML = '<div style="color:rgba(232,220,200,.3);font-style:italic;padding:.5rem 0;">Ingen tilvalg endnu</div>';
+    return;
+  }
+  container.innerHTML = addonState.map((a, i) => `
+    <div style="display:grid;grid-template-columns:1fr 100px auto;gap:.6rem;align-items:center;">
+      <input type="text" placeholder="Fx. Kropsmassage 60 min." value="${(a.text || '').replace(/"/g,'&quot;')}" oninput="addonState[${i}].text=this.value" style="background:rgba(255,255,255,.06);border:1px solid rgba(184,138,30,.2);color:#e8dcc8;padding:.6rem .8rem;font-family:'Manrope',sans-serif;font-size:.78rem;outline:none;">
+      <input type="text" inputmode="numeric" placeholder="Pris kr." value="${a.price || ''}" oninput="addonState[${i}].price=this.value.replace(/[^0-9.]/g,'')" style="background:rgba(255,255,255,.06);border:1px solid rgba(184,138,30,.2);color:#e8dcc8;padding:.6rem .8rem;font-family:'Manrope',sans-serif;font-size:.78rem;outline:none;text-align:right;">
+      <button type="button" onclick="fjernAddon(${i})" style="background:none;border:none;color:rgba(192,92,48,.6);cursor:pointer;font-size:.85rem;padding:.4rem;">✕</button>
+    </div>
+  `).join('');
+}
+
+function tilfoejAddon() {
+  addonState.push({ text: '', price: '' });
+  renderAddonListe();
+}
+
+function fjernAddon(i) {
+  addonState.splice(i, 1);
+  renderAddonListe();
 }
 
 // ── PROGRAM EDITOR ──
