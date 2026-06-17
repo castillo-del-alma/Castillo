@@ -292,6 +292,15 @@ body{font-family:'Manrope',sans-serif;background:#1e1810;color:#e8dcc8;min-heigh
         <input type="date" id="retreat_departure">
       </div>
       <div class="form-group">
+        <label>Antal deltagere (maks.)</label>
+        <input type="text" inputmode="numeric" id="retreat_max_guests" placeholder="10">
+      </div>
+      <div class="form-group full">
+        <label>Ekstra valgmuligheder for datoer (vises i dropdown på retreat-siden)</label>
+        <div id="extraDatesListe" style="display:flex;flex-direction:column;gap:.6rem;"></div>
+        <button type="button" onclick="tilfoejExtraDate()" style="margin-top:.8rem;background:rgba(184,138,30,.1);border:1px solid rgba(184,138,30,.3);color:var(--gold);padding:.6rem 1rem;font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;">+ Tilføj dato</button>
+      </div>
+      <div class="form-group full">
         <label>Pris pr. gæst (€)</label>
         <input type="text" inputmode="numeric" id="retreat_price" placeholder="0">
       </div>
