@@ -123,11 +123,11 @@ body{font-family:'Manrope',sans-serif;background:#f0e8d5;color:#2c2318;min-heigh
 .betaling-progress-fill{height:100%;background:var(--gold);transition:width .5s;}
 .kunde-actions{display:flex;gap:.5rem;margin-top:1rem;}
 .kunde-btn{font-size:.58rem;letter-spacing:.12em;text-transform:uppercase;padding:.35rem .8rem;border:none;cursor:pointer;transition:all .3s;}
-.kunde-btn-view{background:rgba(184,138,30,.12);color:var(--gold);border:1px solid rgba(184,138,30,.2);}
+.kunde-btn-view{background:rgba(184,138,30,.15);color:#7a5c14;border:1px solid rgba(184,138,30,.3);font-weight:600;}
 .kunde-btn-view:hover{background:rgba(184,138,30,.25);}
-.kunde-btn-charge{background:rgba(58,110,106,.12);color:rgba(90,160,156,.8);border:1px solid rgba(58,110,106,.2);}
+.kunde-btn-charge{background:rgba(58,110,106,.15);color:#2c5450;border:1px solid rgba(58,110,106,.3);}
 .kunde-btn-charge:hover{background:rgba(58,110,106,.25);}
-.kunde-btn-pay{background:rgba(106,114,64,.15);color:#a0c880;border:1px solid rgba(106,114,64,.25);}
+.kunde-btn-pay{background:rgba(106,114,64,.18);color:#4a5028;border:1px solid rgba(106,114,64,.3);}
 .kunde-btn-pay:hover{background:rgba(106,114,64,.3);}
 
 /* ── MODAL ── */
@@ -915,9 +915,9 @@ function renderKunder() {
         <button class="kunde-btn kunde-btn-view" onclick="visDetalje('${k.id}')" data-booking-id="${booking ? booking.id : ''}">Se detaljer</button>
         <button class="kunde-btn kunde-btn-charge" onclick="openForbrug('${booking.id}','${k.full_name}')">+ Forbrug</button>
         ${skylder > 0 ? `<button class="kunde-btn kunde-btn-pay" onclick="registrerBetaling('${booking.id}',${skylder})">Registrér betaling</button>` : ''}
-        ${booking.status === 'forespørgsel' ? `<button class="kunde-btn" style="background:rgba(184,138,30,.15);color:var(--gold);border:1px solid rgba(184,138,30,.3);" onclick="aktiverFrist('${booking.id}','${k.email}','${k.full_name}')">Aktivér 48-timers frist</button>` : ''}
+        ${booking.status === 'forespørgsel' ? `<button class="kunde-btn" style="background:rgba(184,138,30,.18);color:#7a5c14;border:1px solid rgba(184,138,30,.35);font-weight:600;" onclick="aktiverFrist('${booking.id}','${k.email}','${k.full_name}')">Aktivér 48-timers frist</button>` : ''}
         ${booking.deadline ? `<div style="font-size:.58rem;color:rgba(44,35,24,.4);margin-top:.3rem;">Frist: \${new Date('${booking.deadline}').toLocaleString('da-DK')}</div>` : ''}
-        <button class="kunde-btn" style="background:rgba(192,92,48,.1);color:rgba(192,92,48,.7);border:1px solid rgba(192,92,48,.2);" onclick="sletKunde('${k.id}','${k.full_name}')">Slet</button>
+        <button class="kunde-btn" style="background:rgba(192,92,48,.12);color:#7a3818;border:1px solid rgba(192,92,48,.3);font-weight:600;" onclick="sletKunde('${k.id}','${k.full_name}')">Slet</button>
       </div>
     </div>`;
   }).join('');
@@ -932,7 +932,7 @@ function renderKundeCardIngen(k) {
     <div style="font-size:.72rem;color:rgba(44,35,24,.3);padding:.5rem 0;">Ingen booking endnu</div>
     <div class="kunde-actions">
       <button class="kunde-btn kunde-btn-view" onclick="visDetalje('${k.id}')" data-booking-id="${booking ? booking.id : ''}">Se detaljer</button>
-      <button class="kunde-btn" style="background:rgba(192,92,48,.1);color:rgba(192,92,48,.7);border:1px solid rgba(192,92,48,.2);" onclick="sletKunde('${k.id}','${k.full_name}')">Slet</button>
+      <button class="kunde-btn" style="background:rgba(192,92,48,.12);color:#7a3818;border:1px solid rgba(192,92,48,.3);font-weight:600;" onclick="sletKunde('${k.id}','${k.full_name}')">Slet</button>
     </div>
   </div>`;
 }
@@ -1262,7 +1262,7 @@ function renderRetreats() {
       <div style="font-size:.85rem;color:rgba(44,35,24,.6);margin:.5rem 0;">€${r.price ? Math.round(r.price/7.46) : '—'} pr. gæst</div>
       <div class="kunde-actions">
         <button class="kunde-btn kunde-btn-view" onclick="redigerRetreat('${r.id}')">Redigér</button>
-        <button class="kunde-btn" style="background:rgba(192,92,48,.1);color:rgba(192,92,48,.7);border:1px solid rgba(192,92,48,.2);" onclick="sletRetreat('${r.id}','${r.title}')">Slet</button>
+        <button class="kunde-btn" style="background:rgba(192,92,48,.12);color:#7a3818;border:1px solid rgba(192,92,48,.3);font-weight:600;" onclick="sletRetreat('${r.id}','${r.title}')">Slet</button>
       </div>
     </div>
   `).join('');
