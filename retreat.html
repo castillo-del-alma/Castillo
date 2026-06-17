@@ -601,11 +601,8 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:3rem
     </div>
     <div class="booking-bar-actions">
       <div class="date-select-wrap">
-        <select class="date-select">
+        <select class="date-select" id="dateSelect" onchange="handleDateChange()">
           <option value="">Vælg dato</option>
-          <option value="1">14.–21. september 2026</option>
-          <option value="2">9.–16. november 2026</option>
-          <option value="3">22.–29. marts 2026</option>
         </select>
       </div>
       <button class="btn-inquire" onclick="document.getElementById('booking').scrollIntoView({behavior:'smooth'})">Reserver</button>
@@ -1098,8 +1095,60 @@ async function loadRetreatData() {
   }
   roomsContainer.innerHTML = roomsHtml || '<p style="color:rgba(44,35,24,.4);grid-column:1/-1;text-align:center;">Værelsesoplysninger opdateres snart.</p>';
 
+  // Dato-dropdown
+  buildDateOptions(data);
+
   // Tilvalg i booking-formularen
   renderAddonsInForm(data.addon_items || []);
+}
+
+function buildDateOptions(data) {
+  const select = document.getElementById('dateSelect');
+  const allDates = [];
+
+  if (data.arrival_date && data.departure_date) {
+    allDates.push({ arrival: data.arrival_date, departure: data.departure_date });
+  }
+  if (data.extra_dates && data.extra_dates.length) {
+    data.extra_dates.forEach(d => {
+      if (d.arrival && d.departure) allDates.push(d);
+    });
+  }
+
+  if (!allDates.length) {
+    select.innerHTML = '<option value="">Datoer opdateres snart</option>';
+    return;
+  }
+
+  select.innerHTML = allDates.map((d, i) => {
+    const label = `${fmtDateDK(d.arrival)} – ${fmtDateDK(d.departure)}`;
+    return `<option value="${i}">${label}</option>`;
+  }).join('');
+
+  window.ALL_RETREAT_DATES = allDates;
+  updateDatesDisplay(allDates[0]);
+}
+
+function handleDateChange() {
+  const select = document.getElementById('dateSelect');
+  const idx = parseInt(select.value);
+  if (isNaN(idx) || !window.ALL_RETREAT_DATES) return;
+  updateDatesDisplay(window.ALL_RETREAT_DATES[idx]);
+}
+
+function updateDatesDisplay(dateObj) {
+  if (!dateObj) return;
+  document.getElementById('barArrival').textContent = fmtDateDK(dateObj.arrival);
+  document.getElementById('barDeparture').textContent = fmtDateDK(dateObj.departure);
+
+  const nights = Math.round((new Date(dateObj.departure) - new Date(dateObj.arrival)) / (1000*60*60*24));
+  const durationText = `${nights} nætter · ${nights+1} dage`;
+  document.getElementById('barDuration').textContent = durationText;
+  document.getElementById('pillNights').textContent = durationText;
+  document.getElementById('factDuration').textContent = durationText;
+
+  window.SELECTED_ARRIVAL = dateObj.arrival;
+  window.SELECTED_DEPARTURE = dateObj.departure;
 }
 
 function renderAddonsInForm(addons) {
