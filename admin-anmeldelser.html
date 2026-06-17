@@ -1287,6 +1287,9 @@ function openNytRetreat() {
   document.getElementById('retreat_room_single_text').value = '';
   addonState = [];
   renderAddonListe();
+  extraDatesState = [];
+  renderExtraDatesListe();
+  document.getElementById('retreat_max_guests').value = '';
   heroFileData = null;
   cardFileData = null;
   document.getElementById('retreatSaveBtn').textContent = 'Opret retreat';
@@ -1322,6 +1325,9 @@ function redigerRetreat(id) {
   document.getElementById('retreat_room_single_text').value = r.room_single_text || '';
   addonState = r.addon_items ? JSON.parse(JSON.stringify(r.addon_items)) : [];
   renderAddonListe();
+  extraDatesState = r.extra_dates ? JSON.parse(JSON.stringify(r.extra_dates)) : [];
+  renderExtraDatesListe();
+  document.getElementById('retreat_max_guests').value = r.max_guests || '';
   heroFileData = null;
   cardFileData = null;
   document.getElementById('retreatSaveBtn').textContent = 'Gem ændringer';
@@ -1379,7 +1385,9 @@ async function gemRetreat() {
       room_double_text: document.getElementById('retreat_room_double_text').value.trim() || null,
       room_single_price: parseFloat(document.getElementById('retreat_room_single_price').value) || null,
       room_single_text: document.getElementById('retreat_room_single_text').value.trim() || null,
-      addon_items: addonState.filter(a => a.text && a.text.trim() && a.price !== '' && !isNaN(parseFloat(a.price))).map(a => ({ text: a.text.trim(), price: parseFloat(a.price) }))
+      addon_items: addonState.filter(a => a.text && a.text.trim() && a.price !== '' && !isNaN(parseFloat(a.price))).map(a => ({ text: a.text.trim(), price: parseFloat(a.price) })),
+      max_guests: parseInt(document.getElementById('retreat_max_guests').value) || null,
+      extra_dates: extraDatesState.filter(d => d.arrival && d.departure)
     };
 
     const heroFile = document.getElementById('retreat_hero_file').files[0];
@@ -1412,6 +1420,34 @@ async function sletRetreat(id, title) {
   if (error) { showToast('Fejl: ' + error.message, true); return; }
   showToast('Retreat slettet');
   loadRetreats();
+}
+
+// ── EXTRA DATES EDITOR ──
+let extraDatesState = [];
+
+function renderExtraDatesListe() {
+  const container = document.getElementById('extraDatesListe');
+  if (!extraDatesState.length) {
+    container.innerHTML = '<div style="color:rgba(232,220,200,.3);font-style:italic;padding:.5rem 0;">Ingen ekstra datoer endnu</div>';
+    return;
+  }
+  container.innerHTML = extraDatesState.map((d, i) => `
+    <div style="display:grid;grid-template-columns:1fr 1fr auto;gap:.6rem;align-items:center;">
+      <input type="date" value="${d.arrival || ''}" oninput="extraDatesState[${i}].arrival=this.value" style="background:rgba(255,255,255,.06);border:1px solid rgba(184,138,30,.2);color:#e8dcc8;padding:.6rem .8rem;font-family:'Manrope',sans-serif;font-size:.78rem;outline:none;">
+      <input type="date" value="${d.departure || ''}" oninput="extraDatesState[${i}].departure=this.value" style="background:rgba(255,255,255,.06);border:1px solid rgba(184,138,30,.2);color:#e8dcc8;padding:.6rem .8rem;font-family:'Manrope',sans-serif;font-size:.78rem;outline:none;">
+      <button type="button" onclick="fjernExtraDate(${i})" style="background:none;border:none;color:rgba(192,92,48,.6);cursor:pointer;font-size:.85rem;padding:.4rem;">✕</button>
+    </div>
+  `).join('');
+}
+
+function tilfoejExtraDate() {
+  extraDatesState.push({ arrival: '', departure: '' });
+  renderExtraDatesListe();
+}
+
+function fjernExtraDate(i) {
+  extraDatesState.splice(i, 1);
+  renderExtraDatesListe();
 }
 
 // ── ADDON EDITOR ──
