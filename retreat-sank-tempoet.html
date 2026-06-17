@@ -1248,12 +1248,23 @@ function addGuest() {
     <div class="form-field"><label>E-mail</label><input type="email" placeholder="gaest@email.com"></div>`;
   container.appendChild(row);
   updateRoomLabel();
+  updatePriceDisplay();
 }
 
 function removeGuest(id) {
   const row = document.getElementById('guest-' + id);
   if (row) row.remove();
   updateRoomLabel();
+  updatePriceDisplay();
+}
+
+function updatePriceDisplay() {
+  const antalGaester = 1 + document.querySelectorAll('.guest-row').length;
+  const depositum = Math.round(14900 * antalGaester * 0.3);
+  const btn = document.getElementById('btn-depositum');
+  if (btn && !btn.disabled) {
+    btn.textContent = `Book nu og betal depositum · ${depositum.toLocaleString('da-DK')} kr.`;
+  }
 }
 </script>
 </body>
