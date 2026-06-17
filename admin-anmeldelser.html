@@ -310,6 +310,69 @@ body{font-family:'Manrope',sans-serif;background:#1e1810;color:#e8dcc8;min-heigh
         <div id="retreat_card_preview" style="margin-top:.5rem;"></div>
       </div>
       <div class="form-group full">
+        <label>Sted</label>
+        <input type="text" id="retreat_location" placeholder="Castillo del Alma, Mollina">
+      </div>
+
+      <div class="form-group full" style="border-top:1px solid rgba(184,138,30,.15);padding-top:1.2rem;margin-top:.5rem;">
+        <span style="font-size:.7rem;letter-spacing:.15em;text-transform:uppercase;color:var(--gold);">Om retreatet</span>
+      </div>
+      <div class="form-group full">
+        <label>Overskrift</label>
+        <input type="text" id="retreat_about_heading" placeholder="Et frirum fra hverdagens tempo">
+      </div>
+      <div class="form-group full">
+        <label>Brødtekst (ét afsnit pr. linje)</label>
+        <textarea id="retreat_about_text" placeholder="Skriv hvert afsnit på sin egen linje..." style="min-height:120px;"></textarea>
+      </div>
+      <div class="form-group full">
+        <label>Citat</label>
+        <textarea id="retreat_about_quote" placeholder="Et citat om retreatet..." style="min-height:60px;"></textarea>
+      </div>
+
+      <div class="form-group full" style="border-top:1px solid rgba(184,138,30,.15);padding-top:1.2rem;margin-top:.5rem;">
+        <span style="font-size:.7rem;letter-spacing:.15em;text-transform:uppercase;color:var(--gold);">Program</span>
+      </div>
+      <div class="form-group full">
+        <label>Programdage (JSON-format — se vejledning)</label>
+        <textarea id="retreat_program_days" placeholder='[{"num":"Dag 1","title":"Ankomst","text":"Beskrivelse..."}]' style="min-height:140px;font-family:monospace;font-size:.7rem;"></textarea>
+        <div style="font-size:.65rem;color:rgba(232,220,200,.35);margin-top:.4rem;line-height:1.6;">Format: liste af objekter med "num" (fx "Dag 1" eller "Dag 2–3"), "title" og "text". Brug knappen herunder for nem redigering.</div>
+        <button type="button" onclick="openProgramEditor()" style="margin-top:.6rem;background:rgba(184,138,30,.1);border:1px solid rgba(184,138,30,.3);color:var(--gold);padding:.6rem 1rem;font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;">Redigér dage visuelt</button>
+      </div>
+
+      <div class="form-group full" style="border-top:1px solid rgba(184,138,30,.15);padding-top:1.2rem;margin-top:.5rem;">
+        <span style="font-size:.7rem;letter-spacing:.15em;text-transform:uppercase;color:var(--gold);">Inkluderet / Ikke inkluderet</span>
+      </div>
+      <div class="form-group full">
+        <label>Inkluderet i prisen (ét punkt pr. linje)</label>
+        <textarea id="retreat_included" placeholder="7 nætters indkvartering&#10;Alle måltider..." style="min-height:100px;"></textarea>
+      </div>
+      <div class="form-group full">
+        <label>Ikke inkluderet (ét punkt pr. linje)</label>
+        <textarea id="retreat_excluded" placeholder="Flybilletter&#10;Rejseforsikring..." style="min-height:80px;"></textarea>
+      </div>
+
+      <div class="form-group full" style="border-top:1px solid rgba(184,138,30,.15);padding-top:1.2rem;margin-top:.5rem;">
+        <span style="font-size:.7rem;letter-spacing:.15em;text-transform:uppercase;color:var(--gold);">Værelser</span>
+      </div>
+      <div class="form-group">
+        <label>Dobbeltværelse – pris (kr.)</label>
+        <input type="text" inputmode="numeric" id="retreat_room_double_price" placeholder="14900">
+      </div>
+      <div class="form-group">
+        <label>Enkeltværelse – pris (kr.)</label>
+        <input type="text" inputmode="numeric" id="retreat_room_single_price" placeholder="18900">
+      </div>
+      <div class="form-group full">
+        <label>Dobbeltværelse – beskrivelse</label>
+        <textarea id="retreat_room_double_text" placeholder="Deles med en anden deltager..." style="min-height:70px;"></textarea>
+      </div>
+      <div class="form-group full">
+        <label>Enkeltværelse – beskrivelse</label>
+        <textarea id="retreat_room_single_text" placeholder="Dit eget private rum..." style="min-height:70px;"></textarea>
+      </div>
+
+      <div class="form-group full" style="border-top:1px solid rgba(184,138,30,.15);padding-top:1.2rem;margin-top:.5rem;">
         <label>Aktiv (vis på sitet)</label>
         <select id="retreat_active">
           <option value="true">Ja — vis på sitet</option>
