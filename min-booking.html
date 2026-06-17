@@ -314,12 +314,28 @@ async function checkUnread() {
   if (count > 0) { const b = document.getElementById('kundeUnreadBadge'); b.style.display = 'inline'; b.textContent = count; }
 }
 
+let heartbeatInterval = null;
+
+async function sendHeartbeat() {
+  if (!bookingData) return;
+  await sb.from('customers')
+    .update({ last_seen: new Date().toISOString() })
+    .eq('id', bookingData.customer_id);
+}
+
 function switchTab(tab, btn) {
   document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
   document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
   btn.classList.add('active');
   document.getElementById('tab-'+tab).classList.add('active');
-  if (tab === 'beskeder') loadKundeBeskeder();
+  if (tab === 'beskeder') {
+    loadKundeBeskeder();
+    sendHeartbeat();
+    if (heartbeatInterval) clearInterval(heartbeatInterval);
+    heartbeatInterval = setInterval(sendHeartbeat, 30000); // hvert 30 sek
+  } else {
+    if (heartbeatInterval) { clearInterval(heartbeatInterval); heartbeatInterval = null; }
+  }
 }
 
 function fmt(d) {
