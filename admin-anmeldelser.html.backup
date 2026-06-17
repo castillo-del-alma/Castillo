@@ -13,14 +13,14 @@
   --wine:#7a1f35;--gold:#b88a1e;--teal:#3a6e6a;--olive:#6a7240;
 }
 *{margin:0;padding:0;box-sizing:border-box;}
-body{font-family:'Manrope',sans-serif;background:#f0e8d5;color:#2c2318;min-height:100vh;}
+body{font-family:'Manrope',sans-serif;background:#1e1810;color:#e8dcc8;min-height:100vh;}
 
 /* ── LOGIN ── */
-.login-screen{min-height:100vh;display:flex;align-items:center;justify-content:center;background:#f0e8d5;}
+.login-screen{min-height:100vh;display:flex;align-items:center;justify-content:center;background:#1e1810;}
 .login-box{background:rgba(250,246,238,.05);border:1px solid rgba(184,138,30,.2);padding:3rem;text-align:center;width:360px;}
-.login-box h2{font-family:'Cinzel',serif;font-weight:300;font-size:1.4rem;letter-spacing:.1em;color:#2c2318;margin-bottom:.5rem;}
-.login-box p{font-size:.75rem;color:rgba(44,35,24,.4);margin-bottom:2rem;letter-spacing:.1em;}
-.login-box input{width:100%;padding:.85rem 1rem;margin-bottom:.8rem;background:rgba(44,35,24,.06);border:1px solid rgba(184,138,30,.2);color:#2c2318;font-family:'Manrope',sans-serif;font-size:.85rem;outline:none;transition:border-color .3s;}
+.login-box h2{font-family:'Cinzel',serif;font-weight:300;font-size:1.4rem;letter-spacing:.1em;color:#e8dcc8;margin-bottom:.5rem;}
+.login-box p{font-size:.75rem;color:rgba(232,220,200,.4);margin-bottom:2rem;letter-spacing:.1em;}
+.login-box input{width:100%;padding:.85rem 1rem;margin-bottom:.8rem;background:rgba(255,255,255,.06);border:1px solid rgba(184,138,30,.2);color:#e8dcc8;font-family:'Manrope',sans-serif;font-size:.85rem;outline:none;transition:border-color .3s;}
 .login-box input:focus{border-color:rgba(184,138,30,.5);}
 .login-box button{width:100%;padding:.85rem;background:var(--wine);color:#fff;border:none;font-family:'Manrope',sans-serif;font-size:.7rem;font-weight:500;letter-spacing:.2em;text-transform:uppercase;cursor:pointer;transition:background .3s;}
 .login-box button:hover{background:#a03048;}
@@ -29,52 +29,52 @@ body{font-family:'Manrope',sans-serif;background:#f0e8d5;color:#2c2318;min-heigh
 /* ── DASHBOARD ── */
 .dashboard{display:none;min-height:100vh;}
 .dash-header{background:rgba(0,0,0,.3);border-bottom:1px solid rgba(184,138,30,.15);padding:1.2rem 3rem;display:flex;justify-content:space-between;align-items:center;}
-.dash-header h1{font-family:'Cinzel',serif;font-weight:300;font-size:1.1rem;letter-spacing:.1em;color:#2c2318;}
+.dash-header h1{font-family:'Cinzel',serif;font-weight:300;font-size:1.1rem;letter-spacing:.1em;color:#e8dcc8;}
 .dash-header-right{display:flex;gap:1rem;align-items:center;}
-.dash-header-right a{font-size:.65rem;letter-spacing:.15em;text-transform:uppercase;color:rgba(44,35,24,.4);text-decoration:none;transition:color .3s;}
+.dash-header-right a{font-size:.65rem;letter-spacing:.15em;text-transform:uppercase;color:rgba(232,220,200,.4);text-decoration:none;transition:color .3s;}
 .dash-header-right a:hover{color:var(--gold);}
-.logout-btn{font-size:.65rem;letter-spacing:.15em;text-transform:uppercase;color:rgba(44,35,24,.35);background:none;border:1px solid rgba(44,35,24,.15);padding:.4rem .9rem;cursor:pointer;transition:all .3s;}
-.logout-btn:hover{border-color:rgba(44,35,24,.4);color:rgba(44,35,24,.7);}
+.logout-btn{font-size:.65rem;letter-spacing:.15em;text-transform:uppercase;color:rgba(232,220,200,.35);background:none;border:1px solid rgba(232,220,200,.15);padding:.4rem .9rem;cursor:pointer;transition:all .3s;}
+.logout-btn:hover{border-color:rgba(232,220,200,.4);color:rgba(232,220,200,.7);}
 
 /* ── FANER ── */
 .tabs{display:flex;gap:0;border-bottom:1px solid rgba(184,138,30,.2);padding:0 3rem;}
-.tab-btn{font-family:'Cinzel',serif;font-weight:300;font-size:.75rem;letter-spacing:.15em;text-transform:uppercase;padding:1rem 2rem;background:none;border:none;color:rgba(44,35,24,.35);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;transition:all .3s;}
-.tab-btn:hover{color:rgba(44,35,24,.6);}
+.tab-btn{font-family:'Cinzel',serif;font-weight:300;font-size:.75rem;letter-spacing:.15em;text-transform:uppercase;padding:1rem 2rem;background:none;border:none;color:rgba(232,220,200,.35);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;transition:all .3s;}
+.tab-btn:hover{color:rgba(232,220,200,.6);}
 .tab-btn.active{color:var(--gold);border-bottom-color:var(--gold);}
 .tab-content{display:none;}
 .tab-content.active{display:block;}
 
 /* ── STATS BAR ── */
 .stats-bar{padding:2rem 3rem;display:flex;gap:2rem;flex-wrap:wrap;border-bottom:1px solid rgba(184,138,30,.1);}
-.stat{background:rgba(44,35,24,.04);border:1px solid rgba(184,138,30,.12);padding:1.2rem 1.8rem;min-width:140px;}
+.stat{background:rgba(255,255,255,.04);border:1px solid rgba(184,138,30,.12);padding:1.2rem 1.8rem;min-width:140px;}
 .stat-num{font-family:'Cinzel',serif;font-size:2rem;color:var(--gold);font-weight:300;display:block;line-height:1;}
-.stat-label{font-size:.58rem;letter-spacing:.2em;text-transform:uppercase;color:rgba(44,35,24,.35);margin-top:.3rem;display:block;}
+.stat-label{font-size:.58rem;letter-spacing:.2em;text-transform:uppercase;color:rgba(232,220,200,.35);margin-top:.3rem;display:block;}
 
 /* ── FILTERS ── */
 .filters{padding:1.5rem 3rem;display:flex;gap:.8rem;align-items:center;flex-wrap:wrap;border-bottom:1px solid rgba(184,138,30,.1);}
-.filter-btn{font-size:.62rem;letter-spacing:.15em;text-transform:uppercase;padding:.45rem 1rem;background:none;border:1px solid rgba(184,138,30,.2);color:rgba(44,35,24,.5);cursor:pointer;transition:all .3s;}
+.filter-btn{font-size:.62rem;letter-spacing:.15em;text-transform:uppercase;padding:.45rem 1rem;background:none;border:1px solid rgba(184,138,30,.2);color:rgba(232,220,200,.5);cursor:pointer;transition:all .3s;}
 .filter-btn:hover,.filter-btn.active{background:rgba(184,138,30,.12);color:var(--gold);border-color:rgba(184,138,30,.4);}
-.filter-label{font-size:.62rem;letter-spacing:.15em;text-transform:uppercase;color:rgba(44,35,24,.25);margin-right:.3rem;}
-#searchInput{margin-left:auto;padding:.45rem .9rem;background:rgba(44,35,24,.05);border:1px solid rgba(184,138,30,.15);color:#2c2318;font-size:.78rem;font-family:'Manrope',sans-serif;outline:none;width:200px;transition:border-color .3s;}
+.filter-label{font-size:.62rem;letter-spacing:.15em;text-transform:uppercase;color:rgba(232,220,200,.25);margin-right:.3rem;}
+#searchInput{margin-left:auto;padding:.45rem .9rem;background:rgba(255,255,255,.05);border:1px solid rgba(184,138,30,.15);color:#e8dcc8;font-size:.78rem;font-family:'Manrope',sans-serif;outline:none;width:200px;transition:border-color .3s;}
 #searchInput:focus{border-color:rgba(184,138,30,.4);}
 
 /* ── REVIEWS GRID ── */
 .reviews-grid{padding:2rem 3rem;display:grid;grid-template-columns:repeat(auto-fill,minmax(380px,1fr));gap:1.2rem;}
-.review-card{background:rgba(44,35,24,.04);border:1px solid rgba(184,138,30,.12);padding:1.8rem;position:relative;transition:border-color .3s;}
+.review-card{background:rgba(255,255,255,.04);border:1px solid rgba(184,138,30,.12);padding:1.8rem;position:relative;transition:border-color .3s;}
 .review-card:hover{border-color:rgba(184,138,30,.3);}
 .review-card.approved{border-left:3px solid var(--olive);}
 .review-card.rejected{opacity:.4;}
 .rc-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:1.2rem;}
-.rc-name{font-family:'Cinzel',serif;font-weight:300;font-size:.95rem;color:#2c2318;letter-spacing:.05em;}
-.rc-meta{font-size:.62rem;color:rgba(44,35,24,.35);margin-top:.2rem;letter-spacing:.05em;}
+.rc-name{font-family:'Cinzel',serif;font-weight:300;font-size:.95rem;color:#e8dcc8;letter-spacing:.05em;}
+.rc-meta{font-size:.62rem;color:rgba(232,220,200,.35);margin-top:.2rem;letter-spacing:.05em;}
 .rc-retreat{font-size:.58rem;letter-spacing:.15em;text-transform:uppercase;color:var(--gold);background:rgba(184,138,30,.1);padding:.2rem .6rem;white-space:nowrap;}
 .rc-stars{display:flex;flex-direction:column;gap:.35rem;margin-bottom:1.2rem;}
 .rc-star-row{display:flex;justify-content:space-between;align-items:center;}
-.rc-star-label{font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(44,35,24,.4);}
+.rc-star-label{font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(232,220,200,.4);}
 .rc-star-val{display:flex;align-items:center;gap:.3rem;font-size:.75rem;color:var(--gold);}
-.rc-star-num{font-size:.62rem;color:rgba(44,35,24,.4);margin-left:.2rem;}
-.rc-quote{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.98rem;color:rgba(44,35,24,.7);line-height:1.7;margin-bottom:1.2rem;padding-left:1rem;border-left:1px solid rgba(184,138,30,.25);}
-.rc-quote-empty{color:rgba(44,35,24,.2);font-style:italic;font-size:.85rem;}
+.rc-star-num{font-size:.62rem;color:rgba(232,220,200,.4);margin-left:.2rem;}
+.rc-quote{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.98rem;color:rgba(232,220,200,.7);line-height:1.7;margin-bottom:1.2rem;padding-left:1rem;border-left:1px solid rgba(184,138,30,.25);}
+.rc-quote-empty{color:rgba(232,220,200,.2);font-style:italic;font-size:.85rem;}
 .rc-consent{font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;padding:.2rem .6rem;display:inline-block;margin-bottom:1rem;}
 .rc-consent.ja{color:var(--olive);background:rgba(106,114,64,.12);}
 .rc-consent.anonymt{color:var(--teal);background:rgba(58,110,106,.12);}
@@ -96,30 +96,30 @@ body{font-family:'Manrope',sans-serif;background:#f0e8d5;color:#2c2318;min-heigh
 .btn-primary:hover{background:#a03048;}
 .btn-secondary{font-size:.65rem;letter-spacing:.15em;text-transform:uppercase;padding:.6rem 1.4rem;background:none;color:var(--gold);border:1px solid rgba(184,138,30,.3);cursor:pointer;transition:all .3s;}
 .btn-secondary:hover{background:rgba(184,138,30,.1);}
-#kundeSearch{margin-left:auto;padding:.45rem .9rem;background:rgba(44,35,24,.05);border:1px solid rgba(184,138,30,.15);color:#2c2318;font-size:.78rem;font-family:'Manrope',sans-serif;outline:none;width:220px;transition:border-color .3s;}
+#kundeSearch{margin-left:auto;padding:.45rem .9rem;background:rgba(255,255,255,.05);border:1px solid rgba(184,138,30,.15);color:#e8dcc8;font-size:.78rem;font-family:'Manrope',sans-serif;outline:none;width:220px;transition:border-color .3s;}
 #kundeSearch:focus{border-color:rgba(184,138,30,.4);}
 
 .kunder-grid{padding:2rem 3rem;display:grid;grid-template-columns:repeat(auto-fill,minmax(420px,1fr));gap:1.2rem;}
-.kunde-card{background:rgba(44,35,24,.04);border:1px solid rgba(184,138,30,.12);padding:1.8rem;transition:border-color .3s;cursor:pointer;}
+.kunde-card{background:rgba(255,255,255,.04);border:1px solid rgba(184,138,30,.12);padding:1.8rem;transition:border-color .3s;cursor:pointer;}
 .kunde-card:hover{border-color:rgba(184,138,30,.35);}
 .kunde-card-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:1rem;}
-.kunde-navn{font-family:'Cinzel',serif;font-weight:300;font-size:1rem;color:#2c2318;letter-spacing:.05em;}
-.kunde-email{font-size:.68rem;color:rgba(44,35,24,.4);margin-top:.2rem;}
+.kunde-navn{font-family:'Cinzel',serif;font-weight:300;font-size:1rem;color:#e8dcc8;letter-spacing:.05em;}
+.kunde-email{font-size:.68rem;color:rgba(232,220,200,.4);margin-top:.2rem;}
 .kunde-status{font-size:.58rem;letter-spacing:.15em;text-transform:uppercase;padding:.2rem .6rem;}
 .status-aktiv{color:var(--olive);background:rgba(106,114,64,.15);}
 .status-kommende{color:var(--teal);background:rgba(58,110,106,.15);}
-.status-afsluttet{color:rgba(44,35,24,.4);background:rgba(44,35,24,.05);}
+.status-afsluttet{color:rgba(232,220,200,.4);background:rgba(232,220,200,.05);}
 .status-forespørgsel{color:#b88a1e;background:rgba(184,138,30,.15);border:1px solid rgba(184,138,30,.3);}
 .status-afventer{color:#3a6e6a;background:rgba(58,110,106,.15);border:1px solid rgba(58,110,106,.3);}
 .status-tilmeldt{color:var(--olive);background:rgba(106,114,64,.15);border:1px solid rgba(106,114,64,.3);}
 .kunde-info-row{display:flex;gap:2rem;margin-bottom:.8rem;}
-.kunde-info-item{font-size:.68rem;color:rgba(44,35,24,.5);}
-.kunde-info-item strong{color:rgba(44,35,24,.8);display:block;font-size:.75rem;margin-bottom:.1rem;}
+.kunde-info-item{font-size:.68rem;color:rgba(232,220,200,.5);}
+.kunde-info-item strong{color:rgba(232,220,200,.8);display:block;font-size:.75rem;margin-bottom:.1rem;}
 .kunde-betaling-bar{margin-top:1rem;padding-top:1rem;border-top:1px solid rgba(184,138,30,.1);}
 .betaling-labels{display:flex;justify-content:space-between;margin-bottom:.4rem;}
-.betaling-label{font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(44,35,24,.3);}
+.betaling-label{font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(232,220,200,.3);}
 .betaling-beloeb{font-size:.75rem;color:var(--gold);}
-.betaling-progress{height:3px;background:rgba(44,35,24,.06);position:relative;}
+.betaling-progress{height:3px;background:rgba(255,255,255,.06);position:relative;}
 .betaling-progress-fill{height:100%;background:var(--gold);transition:width .5s;}
 .kunde-actions{display:flex;gap:.5rem;margin-top:1rem;}
 .kunde-btn{font-size:.58rem;letter-spacing:.12em;text-transform:uppercase;padding:.35rem .8rem;border:none;cursor:pointer;transition:all .3s;}
@@ -133,18 +133,18 @@ body{font-family:'Manrope',sans-serif;background:#f0e8d5;color:#2c2318;min-heigh
 /* ── MODAL ── */
 .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.7);display:none;align-items:center;justify-content:center;z-index:1000;padding:2rem;}
 .modal-overlay.open{display:flex;}
-.modal{background:#f0e8d5;border:1px solid rgba(184,138,30,.25);padding:2.5rem;width:100%;max-width:580px;max-height:90vh;overflow-y:auto;position:relative;}
-.modal h3{font-family:'Cinzel',serif;font-weight:300;font-size:1.1rem;letter-spacing:.1em;color:#2c2318;margin-bottom:.4rem;}
-.modal-sub{font-size:.65rem;letter-spacing:.15em;text-transform:uppercase;color:rgba(44,35,24,.3);margin-bottom:2rem;}
-.modal-close{position:absolute;top:1.2rem;right:1.5rem;background:none;border:none;color:rgba(44,35,24,.3);font-size:1.2rem;cursor:pointer;transition:color .3s;}
-.modal-close:hover{color:rgba(44,35,24,.7);}
+.modal{background:#1e1810;border:1px solid rgba(184,138,30,.25);padding:2.5rem;width:100%;max-width:580px;max-height:90vh;overflow-y:auto;position:relative;}
+.modal h3{font-family:'Cinzel',serif;font-weight:300;font-size:1.1rem;letter-spacing:.1em;color:#e8dcc8;margin-bottom:.4rem;}
+.modal-sub{font-size:.65rem;letter-spacing:.15em;text-transform:uppercase;color:rgba(232,220,200,.3);margin-bottom:2rem;}
+.modal-close{position:absolute;top:1.2rem;right:1.5rem;background:none;border:none;color:rgba(232,220,200,.3);font-size:1.2rem;cursor:pointer;transition:color .3s;}
+.modal-close:hover{color:rgba(232,220,200,.7);}
 .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;}
 .form-grid.full{grid-template-columns:1fr;}
 .form-group{display:flex;flex-direction:column;gap:.4rem;}
-.form-group label{font-size:.62rem;letter-spacing:.12em;text-transform:uppercase;color:rgba(44,35,24,.4);}
-.form-group input,.form-group select,.form-group textarea{padding:.75rem .9rem;background:rgba(44,35,24,.06);border:1px solid rgba(184,138,30,.2);color:#2c2318;font-family:'Manrope',sans-serif;font-size:.85rem;outline:none;transition:border-color .3s;}
+.form-group label{font-size:.62rem;letter-spacing:.12em;text-transform:uppercase;color:rgba(232,220,200,.4);}
+.form-group input,.form-group select,.form-group textarea{padding:.75rem .9rem;background:rgba(255,255,255,.06);border:1px solid rgba(184,138,30,.2);color:#e8dcc8;font-family:'Manrope',sans-serif;font-size:.85rem;outline:none;transition:border-color .3s;}
 .form-group input:focus,.form-group select:focus,.form-group textarea:focus{border-color:rgba(184,138,30,.5);}
-.form-group select option{background:#f0e8d5;}
+.form-group select option{background:#1e1810;}
 .form-group textarea{resize:vertical;min-height:80px;}
 .form-divider{grid-column:1/-1;border:none;border-top:1px solid rgba(184,138,30,.1);margin:.5rem 0;}
 .form-section-title{grid-column:1/-1;font-size:.62rem;letter-spacing:.2em;text-transform:uppercase;color:rgba(184,138,30,.6);padding-top:.5rem;}
@@ -153,25 +153,25 @@ body{font-family:'Manrope',sans-serif;background:#f0e8d5;color:#2c2318;min-heigh
 /* ── KUNDE DETALJE ── */
 .detalje-modal{max-width:720px;}
 .detalje-sections{display:flex;flex-direction:column;gap:1.5rem;margin-top:1.5rem;}
-.detalje-section{background:rgba(44,35,24,.03);border:1px solid rgba(184,138,30,.1);padding:1.4rem;}
+.detalje-section{background:rgba(255,255,255,.03);border:1px solid rgba(184,138,30,.1);padding:1.4rem;}
 .detalje-section h4{font-family:'Cinzel',serif;font-weight:300;font-size:.8rem;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);margin-bottom:1rem;}
-.detalje-row{display:flex;justify-content:space-between;align-items:center;padding:.4rem 0;border-bottom:1px solid rgba(44,35,24,.04);}
+.detalje-row{display:flex;justify-content:space-between;align-items:center;padding:.4rem 0;border-bottom:1px solid rgba(255,255,255,.04);}
 .detalje-row:last-child{border-bottom:none;}
-.detalje-key{font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(44,35,24,.35);}
-.detalje-val{font-size:.82rem;color:rgba(44,35,24,.8);}
+.detalje-key{font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(232,220,200,.35);}
+.detalje-val{font-size:.82rem;color:rgba(232,220,200,.8);}
 .charge-list{display:flex;flex-direction:column;gap:.5rem;}
-.charge-item{display:flex;justify-content:space-between;align-items:center;padding:.5rem .8rem;background:rgba(44,35,24,.03);}
-.charge-desc{font-size:.78rem;color:rgba(44,35,24,.7);}
+.charge-item{display:flex;justify-content:space-between;align-items:center;padding:.5rem .8rem;background:rgba(255,255,255,.03);}
+.charge-desc{font-size:.78rem;color:rgba(232,220,200,.7);}
 .charge-amt{font-size:.82rem;color:var(--gold);}
-.charge-date{font-size:.6rem;color:rgba(44,35,24,.3);}
+.charge-date{font-size:.6rem;color:rgba(232,220,200,.3);}
 .total-row{display:flex;justify-content:space-between;padding:.8rem;background:rgba(184,138,30,.08);border:1px solid rgba(184,138,30,.15);margin-top:.8rem;}
-.total-label{font-size:.65rem;letter-spacing:.15em;text-transform:uppercase;color:rgba(44,35,24,.5);}
+.total-label{font-size:.65rem;letter-spacing:.15em;text-transform:uppercase;color:rgba(232,220,200,.5);}
 .total-amt{font-size:1rem;font-family:'Cinzel',serif;color:var(--gold);}
 
 /* ── EMPTY & LOADING ── */
-.empty-state{text-align:center;padding:5rem 2rem;color:rgba(44,35,24,.25);}
+.empty-state{text-align:center;padding:5rem 2rem;color:rgba(232,220,200,.25);}
 .empty-state p{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.1rem;}
-.loading{text-align:center;padding:4rem;font-family:'Cormorant Garamond',serif;font-style:italic;color:rgba(44,35,24,.3);font-size:1rem;}
+.loading{text-align:center;padding:4rem;font-family:'Cormorant Garamond',serif;font-style:italic;color:rgba(232,220,200,.3);font-size:1rem;}
 
 /* ── TOAST ── */
 .toast{position:fixed;bottom:2rem;right:2rem;background:rgba(106,114,64,.9);color:#fff;padding:.8rem 1.5rem;font-size:.72rem;letter-spacing:.1em;opacity:0;transform:translateY(10px);transition:all .3s;pointer-events:none;z-index:2000;}
@@ -318,12 +318,12 @@ body{font-family:'Manrope',sans-serif;background:#f0e8d5;color:#2c2318;min-heigh
       </div>
       <div class="form-group full">
         <label>Hero-billede (forsiden af retreat-siden)</label>
-        <input type="file" id="retreat_hero_file" accept="image/*" style="background:rgba(44,35,24,.06);border:1px solid rgba(184,138,30,.2);color:#2c2318;padding:.6rem;font-family:'Manrope',sans-serif;font-size:.78rem;">
+        <input type="file" id="retreat_hero_file" accept="image/*" style="background:rgba(255,255,255,.06);border:1px solid rgba(184,138,30,.2);color:#e8dcc8;padding:.6rem;font-family:'Manrope',sans-serif;font-size:.78rem;">
         <div id="retreat_hero_preview" style="margin-top:.5rem;"></div>
       </div>
       <div class="form-group full">
         <label>Kort-billede (vises på forsiden som retreat-kort)</label>
-        <input type="file" id="retreat_card_file" accept="image/*" style="background:rgba(44,35,24,.06);border:1px solid rgba(184,138,30,.2);color:#2c2318;padding:.6rem;font-family:'Manrope',sans-serif;font-size:.78rem;">
+        <input type="file" id="retreat_card_file" accept="image/*" style="background:rgba(255,255,255,.06);border:1px solid rgba(184,138,30,.2);color:#e8dcc8;padding:.6rem;font-family:'Manrope',sans-serif;font-size:.78rem;">
         <div id="retreat_card_preview" style="margin-top:.5rem;"></div>
       </div>
       <div class="form-group full">
@@ -353,7 +353,7 @@ body{font-family:'Manrope',sans-serif;background:#f0e8d5;color:#2c2318;min-heigh
       <div class="form-group full">
         <label>Programdage (JSON-format — se vejledning)</label>
         <textarea id="retreat_program_days" placeholder='[{"num":"Dag 1","title":"Ankomst","text":"Beskrivelse..."}]' style="min-height:140px;font-family:monospace;font-size:.7rem;"></textarea>
-        <div style="font-size:.65rem;color:rgba(44,35,24,.35);margin-top:.4rem;line-height:1.6;">Format: liste af objekter med "num" (fx "Dag 1" eller "Dag 2–3"), "title" og "text". Brug knappen herunder for nem redigering.</div>
+        <div style="font-size:.65rem;color:rgba(232,220,200,.35);margin-top:.4rem;line-height:1.6;">Format: liste af objekter med "num" (fx "Dag 1" eller "Dag 2–3"), "title" og "text". Brug knappen herunder for nem redigering.</div>
         <button type="button" onclick="openProgramEditor()" style="margin-top:.6rem;background:rgba(184,138,30,.1);border:1px solid rgba(184,138,30,.3);color:var(--gold);padding:.6rem 1rem;font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;">Redigér dage visuelt</button>
       </div>
 
@@ -513,7 +513,7 @@ body{font-family:'Manrope',sans-serif;background:#f0e8d5;color:#2c2318;min-heigh
     <!-- FANER -->
     <div style="display:flex;gap:0;border-bottom:1px solid rgba(184,138,30,.2);margin:1.5rem 0 0;">
       <button class="detalje-tab active" onclick="switchDetaljeTab('info',this)" style="font-family:'Cinzel',serif;font-weight:300;font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;padding:.8rem 1.5rem;background:none;border:none;color:var(--gold);cursor:pointer;border-bottom:2px solid var(--gold);margin-bottom:-1px;">Info</button>
-      <button class="detalje-tab" onclick="switchDetaljeTab('beskeder',this)" style="font-family:'Cinzel',serif;font-weight:300;font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;padding:.8rem 1.5rem;background:none;border:none;color:rgba(44,35,24,.35);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;">Beskeder <span id="unreadBadge" style="display:none;background:var(--wine);color:#fff;font-size:.55rem;padding:.1rem .4rem;margin-left:.3rem;">0</span></button>
+      <button class="detalje-tab" onclick="switchDetaljeTab('beskeder',this)" style="font-family:'Cinzel',serif;font-weight:300;font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;padding:.8rem 1.5rem;background:none;border:none;color:rgba(232,220,200,.35);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;">Beskeder <span id="unreadBadge" style="display:none;background:var(--wine);color:#fff;font-size:.55rem;padding:.1rem .4rem;margin-left:.3rem;">0</span></button>
     </div>
 
     <div id="detaljeTabInfo">
@@ -523,7 +523,7 @@ body{font-family:'Manrope',sans-serif;background:#f0e8d5;color:#2c2318;min-heigh
     <div id="detaljeTabBeskeder" style="display:none;">
       <div id="beskedListe" style="max-height:320px;overflow-y:auto;padding:1rem 0;display:flex;flex-direction:column;gap:.8rem;"></div>
       <div style="margin-top:1rem;display:flex;gap:.8rem;">
-        <input type="text" id="beskedInput" placeholder="Skriv en besked til kunden..." style="flex:1;background:rgba(44,35,24,.06);border:1px solid rgba(184,138,30,.2);color:#2c2318;padding:.75rem 1rem;font-family:'Manrope',sans-serif;font-size:.82rem;outline:none;" onkeydown="if(event.key==='Enter')sendBesked()">
+        <input type="text" id="beskedInput" placeholder="Skriv en besked til kunden..." style="flex:1;background:rgba(255,255,255,.06);border:1px solid rgba(184,138,30,.2);color:#e8dcc8;padding:.75rem 1rem;font-family:'Manrope',sans-serif;font-size:.82rem;outline:none;" onkeydown="if(event.key==='Enter')sendBesked()">
         <button onclick="sendBesked()" style="background:var(--wine);border:none;color:#fff;padding:.75rem 1.2rem;font-size:.65rem;letter-spacing:.15em;text-transform:uppercase;cursor:pointer;font-family:'Manrope',sans-serif;">Send</button>
       </div>
     </div>
@@ -538,28 +538,28 @@ body{font-family:'Manrope',sans-serif;background:#f0e8d5;color:#2c2318;min-heigh
     <div class="modal-sub" id="regBetalingKunde">—</div>
 
     <div style="background:rgba(184,138,30,.06);border:1px solid rgba(184,138,30,.15);padding:1rem 1.2rem;display:flex;justify-content:space-between;align-items:center;margin-top:1.5rem;">
-      <span style="font-size:.6rem;letter-spacing:.15em;text-transform:uppercase;color:rgba(44,35,24,.35);font-family:'Manrope',sans-serif;">Udestående</span>
+      <span style="font-size:.6rem;letter-spacing:.15em;text-transform:uppercase;color:rgba(232,220,200,.35);font-family:'Manrope',sans-serif;">Udestående</span>
       <span id="regBetalingSkylder" style="font-size:.9rem;color:var(--gold);font-family:'Manrope',sans-serif;">—</span>
     </div>
 
     <div style="margin-top:1.2rem;">
-      <span style="font-size:.6rem;letter-spacing:.15em;text-transform:uppercase;color:rgba(44,35,24,.35);font-family:'Manrope',sans-serif;">Betalingstype</span>
+      <span style="font-size:.6rem;letter-spacing:.15em;text-transform:uppercase;color:rgba(232,220,200,.35);font-family:'Manrope',sans-serif;">Betalingstype</span>
       <input type="hidden" id="reg_type" value="final">
       <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:.5rem;margin-top:.5rem;">
-        <button type="button" onclick="setBetalType('deposit',this)" style="padding:.6rem .4rem;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;border:1px solid rgba(184,138,30,.25);background:none;color:rgba(44,35,24,.5);cursor:pointer;font-family:'Manrope',sans-serif;transition:all .3s;">Depositum</button>
-        <button type="button" onclick="setBetalType('partial',this)" style="padding:.6rem .4rem;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;border:1px solid rgba(184,138,30,.25);background:none;color:rgba(44,35,24,.5);cursor:pointer;font-family:'Manrope',sans-serif;transition:all .3s;">Delvis</button>
+        <button type="button" onclick="setBetalType('deposit',this)" style="padding:.6rem .4rem;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;border:1px solid rgba(184,138,30,.25);background:none;color:rgba(232,220,200,.5);cursor:pointer;font-family:'Manrope',sans-serif;transition:all .3s;">Depositum</button>
+        <button type="button" onclick="setBetalType('partial',this)" style="padding:.6rem .4rem;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;border:1px solid rgba(184,138,30,.25);background:none;color:rgba(232,220,200,.5);cursor:pointer;font-family:'Manrope',sans-serif;transition:all .3s;">Delvis</button>
         <button type="button" id="btnFinal" onclick="setBetalType('final',this)" style="padding:.6rem .4rem;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;border:1px solid rgba(184,138,30,.5);background:rgba(184,138,30,.15);color:var(--gold);cursor:pointer;font-family:'Manrope',sans-serif;transition:all .3s;">Fuld betaling</button>
       </div>
     </div>
 
     <div style="margin-top:1.2rem;">
-      <span style="font-size:.6rem;letter-spacing:.15em;text-transform:uppercase;color:rgba(44,35,24,.35);font-family:'Manrope',sans-serif;">Beløb modtaget (€)</span>
-      <input type="text" inputmode="numeric" id="reg_beloeb" placeholder="0" style="width:100%;text-align:right;background:rgba(44,35,24,.06);border:1px solid rgba(184,138,30,.2);color:#2c2318;padding:.85rem 1rem;font-size:.85rem;font-family:'Manrope',sans-serif;outline:none;margin-top:.5rem;" oninput="this.value=this.value.replace(/[^0-9.]/g,'')">
+      <span style="font-size:.6rem;letter-spacing:.15em;text-transform:uppercase;color:rgba(232,220,200,.35);font-family:'Manrope',sans-serif;">Beløb modtaget (€)</span>
+      <input type="text" inputmode="numeric" id="reg_beloeb" placeholder="0" style="width:100%;text-align:right;background:rgba(255,255,255,.06);border:1px solid rgba(184,138,30,.2);color:#e8dcc8;padding:.85rem 1rem;font-size:.85rem;font-family:'Manrope',sans-serif;outline:none;margin-top:.5rem;" oninput="this.value=this.value.replace(/[^0-9.]/g,'')">
     </div>
 
     <div style="margin-top:1.2rem;">
-      <span style="font-size:.6rem;letter-spacing:.15em;text-transform:uppercase;color:rgba(44,35,24,.35);font-family:'Manrope',sans-serif;">Note (valgfri)</span>
-      <input type="text" id="reg_note" placeholder="Fx. bankoverførsel, kontant..." style="width:100%;background:rgba(44,35,24,.06);border:1px solid rgba(184,138,30,.2);color:#2c2318;padding:.75rem 1rem;font-size:.82rem;font-family:'Manrope',sans-serif;outline:none;margin-top:.5rem;">
+      <span style="font-size:.6rem;letter-spacing:.15em;text-transform:uppercase;color:rgba(232,220,200,.35);font-family:'Manrope',sans-serif;">Note (valgfri)</span>
+      <input type="text" id="reg_note" placeholder="Fx. bankoverførsel, kontant..." style="width:100%;background:rgba(255,255,255,.06);border:1px solid rgba(184,138,30,.2);color:#e8dcc8;padding:.75rem 1rem;font-size:.82rem;font-family:'Manrope',sans-serif;outline:none;margin-top:.5rem;">
     </div>
 
     <div class="modal-actions" style="margin-top:2rem;">
@@ -909,14 +909,14 @@ function renderKunder() {
           <span class="betaling-beloeb">€${Math.round(betalt)} / €${Math.round(total)}</span>
         </div>
         <div class="betaling-progress"><div class="betaling-progress-fill" style="width:${pct}%"></div></div>
-        ${skylder > 0 ? `<div style="font-size:.62rem;color:rgba(44,35,24,.35);margin-top:.4rem;">Udestående: €${Math.round(skylder)}</div>` : '<div style="font-size:.62rem;color:#a0c880;margin-top:.4rem;">✓ Fuldt betalt</div>'}
+        ${skylder > 0 ? `<div style="font-size:.62rem;color:rgba(232,220,200,.35);margin-top:.4rem;">Udestående: €${Math.round(skylder)}</div>` : '<div style="font-size:.62rem;color:#a0c880;margin-top:.4rem;">✓ Fuldt betalt</div>'}
       </div>
       <div class="kunde-actions">
         <button class="kunde-btn kunde-btn-view" onclick="visDetalje('${k.id}')" data-booking-id="${booking ? booking.id : ''}">Se detaljer</button>
         <button class="kunde-btn kunde-btn-charge" onclick="openForbrug('${booking.id}','${k.full_name}')">+ Forbrug</button>
         ${skylder > 0 ? `<button class="kunde-btn kunde-btn-pay" onclick="registrerBetaling('${booking.id}',${skylder})">Registrér betaling</button>` : ''}
         ${booking.status === 'forespørgsel' ? `<button class="kunde-btn" style="background:rgba(184,138,30,.15);color:var(--gold);border:1px solid rgba(184,138,30,.3);" onclick="aktiverFrist('${booking.id}','${k.email}','${k.full_name}')">Aktivér 48-timers frist</button>` : ''}
-        ${booking.deadline ? `<div style="font-size:.58rem;color:rgba(44,35,24,.4);margin-top:.3rem;">Frist: \${new Date('${booking.deadline}').toLocaleString('da-DK')}</div>` : ''}
+        ${booking.deadline ? `<div style="font-size:.58rem;color:rgba(232,220,200,.4);margin-top:.3rem;">Frist: \${new Date('${booking.deadline}').toLocaleString('da-DK')}</div>` : ''}
         <button class="kunde-btn" style="background:rgba(192,92,48,.1);color:rgba(192,92,48,.7);border:1px solid rgba(192,92,48,.2);" onclick="sletKunde('${k.id}','${k.full_name}')">Slet</button>
       </div>
     </div>`;
@@ -929,7 +929,7 @@ function renderKundeCardIngen(k) {
     <div class="kunde-card-header">
       <div><div class="kunde-navn">${k.full_name}</div><div class="kunde-email">${k.email}</div></div>
     </div>
-    <div style="font-size:.72rem;color:rgba(44,35,24,.3);padding:.5rem 0;">Ingen booking endnu</div>
+    <div style="font-size:.72rem;color:rgba(232,220,200,.3);padding:.5rem 0;">Ingen booking endnu</div>
     <div class="kunde-actions">
       <button class="kunde-btn kunde-btn-view" onclick="visDetalje('${k.id}')" data-booking-id="${booking ? booking.id : ''}">Se detaljer</button>
       <button class="kunde-btn" style="background:rgba(192,92,48,.1);color:rgba(192,92,48,.7);border:1px solid rgba(192,92,48,.2);" onclick="sletKunde('${k.id}','${k.full_name}')">Slet</button>
@@ -1135,7 +1135,7 @@ async function visDetalje(kundeId) {
       </div>`;
     }
   } else {
-    html = '<div class="detalje-section"><p style="color:rgba(44,35,24,.3);font-style:italic;">Ingen booking registreret</p></div>';
+    html = '<div class="detalje-section"><p style="color:rgba(232,220,200,.3);font-style:italic;">Ingen booking registreret</p></div>';
   }
 
   document.getElementById('detaljeSections').innerHTML = html;
@@ -1143,7 +1143,7 @@ async function visDetalje(kundeId) {
   
   // Reset til info fane
   document.querySelectorAll('.detalje-tab').forEach((b,i) => {
-    b.style.color = i === 0 ? 'var(--gold)' : 'rgba(44,35,24,.35)';
+    b.style.color = i === 0 ? 'var(--gold)' : 'rgba(232,220,200,.35)';
     b.style.borderBottomColor = i === 0 ? 'var(--gold)' : 'transparent';
   });
   document.getElementById('detaljeTabInfo').style.display = 'block';
@@ -1172,7 +1172,7 @@ function setBetalType(type, btn) {
   document.getElementById('reg_type').value = type;
   btn.closest('div').querySelectorAll('button').forEach(b => {
     b.style.background = 'none';
-    b.style.color = 'rgba(44,35,24,.5)';
+    b.style.color = 'rgba(232,220,200,.5)';
     b.style.borderColor = 'rgba(184,138,30,.25)';
   });
   btn.style.background = 'rgba(184,138,30,.15)';
@@ -1259,7 +1259,7 @@ function renderRetreats() {
       <div class="kunde-booking">
         <strong>${fmt(r.arrival_date)} – ${fmt(r.departure_date)}</strong>
       </div>
-      <div style="font-size:.85rem;color:rgba(44,35,24,.6);margin:.5rem 0;">€${r.price ? Math.round(r.price/7.46) : '—'} pr. gæst</div>
+      <div style="font-size:.85rem;color:rgba(232,220,200,.6);margin:.5rem 0;">€${r.price ? Math.round(r.price/7.46) : '—'} pr. gæst</div>
       <div class="kunde-actions">
         <button class="kunde-btn kunde-btn-view" onclick="redigerRetreat('${r.id}')">Redigér</button>
         <button class="kunde-btn" style="background:rgba(192,92,48,.1);color:rgba(192,92,48,.7);border:1px solid rgba(192,92,48,.2);" onclick="sletRetreat('${r.id}','${r.title}')">Slet</button>
@@ -1442,13 +1442,13 @@ let extraDatesState = [];
 function renderExtraDatesListe() {
   const container = document.getElementById('extraDatesListe');
   if (!extraDatesState.length) {
-    container.innerHTML = '<div style="color:rgba(44,35,24,.3);font-style:italic;padding:.5rem 0;">Ingen ekstra datoer endnu</div>';
+    container.innerHTML = '<div style="color:rgba(232,220,200,.3);font-style:italic;padding:.5rem 0;">Ingen ekstra datoer endnu</div>';
     return;
   }
   container.innerHTML = extraDatesState.map((d, i) => `
     <div style="display:grid;grid-template-columns:1fr 1fr auto;gap:.6rem;align-items:center;">
-      <input type="date" value="${d.arrival || ''}" oninput="extraDatesState[${i}].arrival=this.value" style="background:rgba(44,35,24,.06);border:1px solid rgba(184,138,30,.2);color:#2c2318;padding:.6rem .8rem;font-family:'Manrope',sans-serif;font-size:.78rem;outline:none;">
-      <input type="date" value="${d.departure || ''}" oninput="extraDatesState[${i}].departure=this.value" style="background:rgba(44,35,24,.06);border:1px solid rgba(184,138,30,.2);color:#2c2318;padding:.6rem .8rem;font-family:'Manrope',sans-serif;font-size:.78rem;outline:none;">
+      <input type="date" value="${d.arrival || ''}" oninput="extraDatesState[${i}].arrival=this.value" style="background:rgba(255,255,255,.06);border:1px solid rgba(184,138,30,.2);color:#e8dcc8;padding:.6rem .8rem;font-family:'Manrope',sans-serif;font-size:.78rem;outline:none;">
+      <input type="date" value="${d.departure || ''}" oninput="extraDatesState[${i}].departure=this.value" style="background:rgba(255,255,255,.06);border:1px solid rgba(184,138,30,.2);color:#e8dcc8;padding:.6rem .8rem;font-family:'Manrope',sans-serif;font-size:.78rem;outline:none;">
       <button type="button" onclick="fjernExtraDate(${i})" style="background:none;border:none;color:rgba(192,92,48,.6);cursor:pointer;font-size:.85rem;padding:.4rem;">✕</button>
     </div>
   `).join('');
@@ -1470,13 +1470,13 @@ let addonState = [];
 function renderAddonListe() {
   const container = document.getElementById('addonListe');
   if (!addonState.length) {
-    container.innerHTML = '<div style="color:rgba(44,35,24,.3);font-style:italic;padding:.5rem 0;">Ingen tilvalg endnu</div>';
+    container.innerHTML = '<div style="color:rgba(232,220,200,.3);font-style:italic;padding:.5rem 0;">Ingen tilvalg endnu</div>';
     return;
   }
   container.innerHTML = addonState.map((a, i) => `
     <div style="display:grid;grid-template-columns:1fr 100px auto;gap:.6rem;align-items:center;">
-      <input type="text" placeholder="Fx. Kropsmassage 60 min." value="${(a.text || '').replace(/"/g,'&quot;')}" oninput="addonState[${i}].text=this.value" style="background:rgba(44,35,24,.06);border:1px solid rgba(184,138,30,.2);color:#2c2318;padding:.6rem .8rem;font-family:'Manrope',sans-serif;font-size:.78rem;outline:none;">
-      <input type="text" inputmode="numeric" placeholder="Pris €" value="${a.price || ''}" oninput="addonState[${i}].price=this.value.replace(/[^0-9.]/g,'')" style="background:rgba(44,35,24,.06);border:1px solid rgba(184,138,30,.2);color:#2c2318;padding:.6rem .8rem;font-family:'Manrope',sans-serif;font-size:.78rem;outline:none;text-align:right;">
+      <input type="text" placeholder="Fx. Kropsmassage 60 min." value="${(a.text || '').replace(/"/g,'&quot;')}" oninput="addonState[${i}].text=this.value" style="background:rgba(255,255,255,.06);border:1px solid rgba(184,138,30,.2);color:#e8dcc8;padding:.6rem .8rem;font-family:'Manrope',sans-serif;font-size:.78rem;outline:none;">
+      <input type="text" inputmode="numeric" placeholder="Pris €" value="${a.price || ''}" oninput="addonState[${i}].price=this.value.replace(/[^0-9.]/g,'')" style="background:rgba(255,255,255,.06);border:1px solid rgba(184,138,30,.2);color:#e8dcc8;padding:.6rem .8rem;font-family:'Manrope',sans-serif;font-size:.78rem;outline:none;text-align:right;">
       <button type="button" onclick="fjernAddon(${i})" style="background:none;border:none;color:rgba(192,92,48,.6);cursor:pointer;font-size:.85rem;padding:.4rem;">✕</button>
     </div>
   `).join('');
@@ -1509,17 +1509,17 @@ function openProgramEditor() {
 function renderProgramDagListe() {
   const container = document.getElementById('programDagListe');
   if (!programDagState.length) {
-    container.innerHTML = '<div style="color:rgba(44,35,24,.3);font-style:italic;text-align:center;padding:1rem;">Ingen dage tilføjet endnu</div>';
+    container.innerHTML = '<div style="color:rgba(232,220,200,.3);font-style:italic;text-align:center;padding:1rem;">Ingen dage tilføjet endnu</div>';
     return;
   }
   container.innerHTML = programDagState.map((d, i) => `
-    <div style="background:rgba(44,35,24,.04);border:1px solid rgba(184,138,30,.15);padding:1rem;position:relative;">
+    <div style="background:rgba(255,255,255,.04);border:1px solid rgba(184,138,30,.15);padding:1rem;position:relative;">
       <button type="button" onclick="fjernProgramDag(${i})" style="position:absolute;top:.6rem;right:.6rem;background:none;border:none;color:rgba(192,92,48,.6);cursor:pointer;font-size:.8rem;">✕</button>
       <div style="display:grid;grid-template-columns:1fr 2fr;gap:.6rem;margin-bottom:.6rem;">
-        <input type="text" placeholder="Dag 1" value="${d.num || ''}" oninput="programDagState[${i}].num=this.value" style="background:rgba(44,35,24,.06);border:1px solid rgba(184,138,30,.2);color:#2c2318;padding:.5rem .7rem;font-family:'Manrope',sans-serif;font-size:.8rem;outline:none;">
-        <input type="text" placeholder="Titel" value="${d.title || ''}" oninput="programDagState[${i}].title=this.value" style="background:rgba(44,35,24,.06);border:1px solid rgba(184,138,30,.2);color:#2c2318;padding:.5rem .7rem;font-family:'Manrope',sans-serif;font-size:.8rem;outline:none;">
+        <input type="text" placeholder="Dag 1" value="${d.num || ''}" oninput="programDagState[${i}].num=this.value" style="background:rgba(255,255,255,.06);border:1px solid rgba(184,138,30,.2);color:#e8dcc8;padding:.5rem .7rem;font-family:'Manrope',sans-serif;font-size:.8rem;outline:none;">
+        <input type="text" placeholder="Titel" value="${d.title || ''}" oninput="programDagState[${i}].title=this.value" style="background:rgba(255,255,255,.06);border:1px solid rgba(184,138,30,.2);color:#e8dcc8;padding:.5rem .7rem;font-family:'Manrope',sans-serif;font-size:.8rem;outline:none;">
       </div>
-      <textarea placeholder="Beskrivelse af dagen..." oninput="programDagState[${i}].text=this.value" style="width:100%;min-height:70px;background:rgba(44,35,24,.06);border:1px solid rgba(184,138,30,.2);color:#2c2318;padding:.6rem .7rem;font-family:'Manrope',sans-serif;font-size:.8rem;outline:none;">${d.text || ''}</textarea>
+      <textarea placeholder="Beskrivelse af dagen..." oninput="programDagState[${i}].text=this.value" style="width:100%;min-height:70px;background:rgba(255,255,255,.06);border:1px solid rgba(184,138,30,.2);color:#e8dcc8;padding:.6rem .7rem;font-family:'Manrope',sans-serif;font-size:.8rem;outline:none;">${d.text || ''}</textarea>
     </div>
   `).join('');
 }
@@ -1562,7 +1562,7 @@ let aktivDetaljeBookingId = null;
 
 function switchDetaljeTab(tab, btn) {
   document.querySelectorAll('.detalje-tab').forEach(b => {
-    b.style.color = 'rgba(44,35,24,.35)';
+    b.style.color = 'rgba(232,220,200,.35)';
     b.style.borderBottomColor = 'transparent';
   });
   btn.style.color = 'var(--gold)';
@@ -1590,7 +1590,7 @@ async function loadBeskeder() {
 
   const liste = document.getElementById('beskedListe');
   if (!data || data.length === 0) {
-    liste.innerHTML = '<div style="text-align:center;color:rgba(44,35,24,.25);font-style:italic;font-size:.85rem;padding:2rem;">Ingen beskeder endnu</div>';
+    liste.innerHTML = '<div style="text-align:center;color:rgba(232,220,200,.25);font-style:italic;font-size:.85rem;padding:2rem;">Ingen beskeder endnu</div>';
     return;
   }
 
@@ -1598,8 +1598,8 @@ async function loadBeskeder() {
     const erAdmin = m.sender === 'admin';
     const tid = new Date(m.created_at).toLocaleString('da-DK', { day:'numeric', month:'short', hour:'2-digit', minute:'2-digit' });
     return `<div style="display:flex;flex-direction:column;align-items:${erAdmin ? 'flex-end' : 'flex-start'};">
-      <div style="max-width:80%;background:${erAdmin ? 'rgba(122,31,53,.3)' : 'rgba(44,35,24,.06)'};border:1px solid ${erAdmin ? 'rgba(122,31,53,.4)' : 'rgba(184,138,30,.15)'};padding:.7rem 1rem;font-size:.82rem;color:#2c2318;line-height:1.6;">${m.message}</div>
-      <div style="font-size:.58rem;color:rgba(44,35,24,.25);margin-top:.2rem;">${erAdmin ? 'Castillo del Alma' : 'Gæst'} · ${tid}</div>
+      <div style="max-width:80%;background:${erAdmin ? 'rgba(122,31,53,.3)' : 'rgba(255,255,255,.06)'};border:1px solid ${erAdmin ? 'rgba(122,31,53,.4)' : 'rgba(184,138,30,.15)'};padding:.7rem 1rem;font-size:.82rem;color:#e8dcc8;line-height:1.6;">${m.message}</div>
+      <div style="font-size:.58rem;color:rgba(232,220,200,.25);margin-top:.2rem;">${erAdmin ? 'Castillo del Alma' : 'Gæst'} · ${tid}</div>
     </div>`;
   }).join('');
 
