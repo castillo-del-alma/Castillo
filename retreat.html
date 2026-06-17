@@ -960,10 +960,172 @@ function toggleFaq(q){
 }
 </script>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-const RETREAT_PRICE = 14900;
-const DEPOSIT_PCT   = 0.30;
-const DEPOSIT_DKK   = Math.round(RETREAT_PRICE * DEPOSIT_PCT);
+const SUPABASE_URL_R = 'https://niniwgiytyqvdqejigxg.supabase.co';
+const SUPABASE_ANON_KEY_R = 'sb_publishable_GwrNUpIuWzdg1oswOY5HzA_mKWqhd6y';
+const sbR = supabase.createClient(SUPABASE_URL_R, SUPABASE_ANON_KEY_R);
+
+let RETREAT_PRICE = 0;
+let DEPOSIT_PCT = 0.30;
+let DEPOSIT_DKK = 0;
+let CURRENT_RETREAT = null;
+
+function getSlugFromUrl() {
+  const params = new URLSearchParams(window.location.search);
+  return params.get('slug');
+}
+
+function fmtDateDK(d) {
+  if (!d) return '—';
+  return new Date(d).toLocaleDateString('da-DK', { day: 'numeric', month: 'long', year: 'numeric' });
+}
+
+async function loadRetreatData() {
+  const slug = getSlugFromUrl();
+  if (!slug) {
+    document.getElementById('retreatTitle').textContent = 'Retreat ikke fundet';
+    return;
+  }
+
+  const { data, error } = await sbR.from('retreats').select('*').eq('slug', slug).single();
+  if (error || !data) {
+    document.getElementById('retreatTitle').textContent = 'Retreat ikke fundet';
+    return;
+  }
+
+  CURRENT_RETREAT = data;
+  RETREAT_PRICE = parseFloat(data.price) || 0;
+  DEPOSIT_PCT = parseFloat(data.deposit_pct) || 0.30;
+  DEPOSIT_DKK = Math.round(RETREAT_PRICE * DEPOSIT_PCT);
+
+  // Titel og hero
+  document.getElementById('pageTitle').textContent = `${data.title} — Castillo del Alma`;
+  document.getElementById('retreatTitle').innerHTML = (data.title || '').replace(' & ', '<br>&amp; ');
+  document.getElementById('retreatCategory').textContent = data.subtitle || '';
+  document.getElementById('retreatSubtitle').textContent = data.description || '';
+  document.getElementById('retreatNameField').value = `${data.title}${data.subtitle ? ' — ' + data.subtitle : ''}`;
+
+  if (data.hero_image) {
+    document.getElementById('heroBg').style.backgroundImage = `url('${data.hero_image}')`;
+    document.getElementById('heroBg').classList.add('loaded');
+  }
+
+  // Varighed
+  let duration = '—';
+  if (data.arrival_date && data.departure_date) {
+    const nights = Math.round((new Date(data.departure_date) - new Date(data.arrival_date)) / (1000*60*60*24));
+    duration = `${nights} nætter · ${nights+1} dage`;
+  }
+  document.getElementById('pillNights').textContent = duration;
+  document.getElementById('pillLocation').textContent = data.location || 'Mollina · Málaga';
+  document.getElementById('barDuration').textContent = duration;
+  document.getElementById('barArrival').textContent = fmtDateDK(data.arrival_date);
+  document.getElementById('barDeparture').textContent = fmtDateDK(data.departure_date);
+  document.getElementById('barPrice').textContent = RETREAT_PRICE ? `€${RETREAT_PRICE.toLocaleString('da-DK')}` : 'Kontakt os';
+
+  // Om retreatet
+  if (data.about_heading) document.getElementById('aboutHeading').textContent = data.about_heading;
+  const aboutContainer = document.getElementById('aboutTextContainer');
+  let aboutHtml = '';
+  if (data.about_text) {
+    aboutHtml += data.about_text.split('\n').filter(Boolean).map(p => `<p>${p}</p>`).join('');
+  }
+  if (data.about_quote) {
+    aboutHtml += `<blockquote>"${data.about_quote}"</blockquote>`;
+  }
+  aboutContainer.innerHTML = aboutHtml || '<p>Information om dette retreat opdateres snart.</p>';
+
+  // Quick facts
+  document.getElementById('factDuration').textContent = duration;
+  document.getElementById('factMaxGuests').textContent = data.max_guests ? `${data.max_guests} personer` : '—';
+  document.getElementById('factLocation').textContent = data.location || 'Castillo del Alma';
+  document.getElementById('factPrice').textContent = RETREAT_PRICE ? `€${RETREAT_PRICE.toLocaleString('da-DK')}` : 'Kontakt os';
+
+  // Program
+  const programContainer = document.getElementById('programDaysContainer');
+  if (data.program_days && data.program_days.length > 0) {
+    programContainer.innerHTML = data.program_days.map((d, i) => `
+      <div class="program-day${i === 0 ? ' open' : ''}">
+        <div class="program-day-header" onclick="toggleDay(this)">
+          <span class="program-day-num">${d.num || ''}</span>
+          <span class="program-day-title">${d.title || ''}</span>
+          <span class="program-day-toggle">↓</span>
+        </div>
+        <div class="program-day-body">
+          <div class="program-day-content">
+            <p>${d.text || ''}</p>
+          </div>
+        </div>
+      </div>
+    `).join('');
+  } else {
+    document.getElementById('program').style.display = 'none';
+  }
+
+  // Inkluderet / ikke inkluderet
+  const inclContainer = document.getElementById('includedListContainer');
+  const exclContainer = document.getElementById('excludedListContainer');
+  if (data.included_items && data.included_items.length > 0) {
+    inclContainer.innerHTML = data.included_items.map(item => `<div class="included-item">${item}</div>`).join('');
+  } else {
+    inclContainer.innerHTML = '<div class="included-item">Opdateres snart</div>';
+  }
+  if (data.excluded_items && data.excluded_items.length > 0) {
+    exclContainer.innerHTML = data.excluded_items.map(item => `<div class="included-item">${item}</div>`).join('');
+  } else {
+    exclContainer.innerHTML = '<div class="included-item">Opdateres snart</div>';
+  }
+
+  // Værelser
+  const roomsContainer = document.getElementById('roomsContainer');
+  let roomsHtml = '';
+  if (data.room_double_price) {
+    roomsHtml += `
+      <div class="room-option">
+        <h4>Delt dobbeltværelse</h4>
+        <div class="room-price">€${parseFloat(data.room_double_price).toLocaleString('da-DK')}</div>
+        <p>${data.room_double_text || ''}</p>
+      </div>`;
+  }
+  if (data.room_single_price) {
+    roomsHtml += `
+      <div class="room-option">
+        <h4>Enkeltværelse</h4>
+        <div class="room-price">€${parseFloat(data.room_single_price).toLocaleString('da-DK')}</div>
+        <p>${data.room_single_text || ''}</p>
+      </div>`;
+  }
+  roomsContainer.innerHTML = roomsHtml || '<p style="color:rgba(44,35,24,.4);grid-column:1/-1;text-align:center;">Værelsesoplysninger opdateres snart.</p>';
+
+  // Tilvalg i booking-formularen
+  renderAddonsInForm(data.addon_items || []);
+}
+
+function renderAddonsInForm(addons) {
+  const container = document.querySelector('.form-addons');
+  if (!container) return;
+  if (!addons.length) {
+    container.style.display = 'none';
+    return;
+  }
+  container.innerHTML = '<span class="form-addons-label">Tilvalg</span>' + addons.map((a, i) => `
+    <label class="addon-item">
+      <input type="checkbox" class="dynamic-addon" data-text="${(a.text||'').replace(/"/g,'&quot;')}" data-price="${a.price}">
+      <span class="addon-box"></span>
+      <span class="addon-text">${a.text}</span>
+      <span class="addon-price">€${a.price}</span>
+    </label>
+  `).join('');
+}
+
+document.addEventListener('DOMContentLoaded', loadRetreatData);
+</script>
+
+<script>
+const RETREAT_PRICE_OLD = 14900;
+const DEPOSIT_PCT_OLD   = 0.30;
+const DEPOSIT_DKK_OLD   = Math.round(RETREAT_PRICE_OLD * DEPOSIT_PCT_OLD);
 
 function getFormData() {
   const fornavn   = document.getElementById('f-fornavn').value.trim();
