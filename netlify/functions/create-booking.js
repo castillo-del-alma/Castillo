@@ -57,8 +57,8 @@ exports.handler = async (event) => {
         departure_date: '2026-09-21',
         guests: gaester || 1,
         extra_guests: ekstra_gaester || [],
-        total_price: 14900,
-        deposit_amount: 4470,
+        total_price: 14900 * (gaester || 1),
+        deposit_amount: Math.round(14900 * (gaester || 1) * 0.3),
         status: 'forespørgsel'
       })
     });

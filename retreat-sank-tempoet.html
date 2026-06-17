@@ -1169,21 +1169,29 @@ async function betalDepositum() {
   btn.innerHTML = '<span style="display:inline-block;width:12px;height:12px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .6s linear infinite;vertical-align:middle;margin-right:.4rem;"></span>Opretter booking…';
 
   try {
-    // Opret booking først
     const room = document.getElementById('room-select')?.value || '';
     const kommentar = document.getElementById('f-kommentar')?.value || '';
     const addonFoer = document.getElementById('addon-foer')?.checked || false;
     const addonEfter = document.getElementById('addon-efter')?.checked || false;
     const addonMassage = document.getElementById('addon-massage')?.checked || false;
 
+    const ekstraGaesterListe = Array.from(document.querySelectorAll('.guest-row')).map(row => ({
+      navn: row.querySelector('input[placeholder="Fornavn"]') ? row.querySelector('input[placeholder="Fornavn"]').value + ' ' + row.querySelector('input[placeholder="Efternavn"]').value : '',
+      email: row.querySelector('input[type="email"]') ? row.querySelector('input[type="email"]').value : ''
+    })).filter(g => g.navn.trim());
+
+    const antalGaester = 1 + ekstraGaesterListe.length;
+    const depositum = Math.round(14900 * antalGaester * 0.3);
+
     const bookingRes = await fetch('/.netlify/functions/create-booking', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         fornavn, efternavn, email, telefon,
+        gaester: antalGaester,
         vaerelse: room, kommentar,
         addon_foer: addonFoer, addon_efter: addonEfter, addon_massage: addonMassage,
-        ekstra_gaester: []
+        ekstra_gaester: ekstraGaesterListe
       }),
     });
     const bookingData = await bookingRes.json();
@@ -1191,7 +1199,6 @@ async function betalDepositum() {
 
     btn.innerHTML = '<span style="display:inline-block;width:12px;height:12px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .6s linear infinite;vertical-align:middle;margin-right:.4rem;"></span>Åbner betaling…';
 
-    // Opret Stripe checkout
     const res = await fetch('/.netlify/functions/create-checkout', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -1199,7 +1206,7 @@ async function betalDepositum() {
         bookingId: bookingData.bookingId,
         navn: name,
         email,
-        amount: 4470
+        amount: depositum
       }),
     });
     const data = await res.json();
