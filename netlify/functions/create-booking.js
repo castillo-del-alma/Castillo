@@ -8,11 +8,21 @@ exports.handler = async (event) => {
   const RESEND_KEY = process.env.RESEND_API_KEY;
 
   try {
-    const { fornavn, efternavn, email, telefon, gaester, vaerelse, addon_foer, addon_efter, addon_massage, kommentar, ekstra_gaester } = JSON.parse(event.body);
+    const { fornavn, efternavn, email, telefon, gaester, vaerelse, addon_foer, addon_efter, addon_massage, kommentar, ekstra_gaester, retreat_id, retreat_name, arrival_date, departure_date, price_per_guest, deposit_pct } = JSON.parse(event.body);
 
     if (!fornavn || !email) {
       return { statusCode: 400, body: JSON.stringify({ error: 'Fornavn og email er påkrævet' }) };
     }
+
+    function fmtDateDK(iso) {
+      if (!iso) return '—';
+      const months = ['januar','februar','marts','april','maj','juni','juli','august','september','oktober','november','december'];
+      const d = new Date(iso);
+      return `${d.getDate()}. ${months[d.getMonth()]} ${d.getFullYear()}`;
+    }
+    const antalGaesterTotal = gaester || 1;
+    const totalPrice = Math.round((price_per_guest || 0) * antalGaesterTotal);
+    const depositAmount = Math.round((price_per_guest || 0) * antalGaesterTotal * (deposit_pct || 0.30));
 
     const headers = {
       'Content-Type': 'application/json',
@@ -52,13 +62,14 @@ exports.handler = async (event) => {
       headers,
       body: JSON.stringify({
         customer_id: kunde.id,
-        retreat_name: 'Kunsten at sænke tempoet — Wellness Retreat',
-        arrival_date: '2026-09-14',
-        departure_date: '2026-09-21',
+        retreat_id: retreat_id || null,
+        retreat_name: retreat_name || 'Ukendt retreat',
+        arrival_date: arrival_date || null,
+        departure_date: departure_date || null,
         guests: gaester || 1,
         extra_guests: ekstra_gaester || [],
-        total_price: 14900 * (gaester || 1),
-        deposit_amount: Math.round(14900 * (gaester || 1) * 0.3),
+        total_price: totalPrice,
+        deposit_amount: depositAmount,
         status: 'forespørgsel'
       })
     });
@@ -72,7 +83,7 @@ exports.handler = async (event) => {
       headers,
       body: JSON.stringify({
         booking_id: booking.id,
-        amount: 4470,
+        amount: depositAmount,
         type: 'deposit',
         status: 'pending'
       })
@@ -91,64 +102,64 @@ exports.handler = async (event) => {
         to: email,
         subject: 'Vi har modtaget din reservation — Castillo del Alma',
         html: `<!DOCTYPE html><html lang="da"><head><meta charset="UTF-8"></head>
-<body style="margin:0;padding:0;background:#1a1208;font-family:Georgia,serif;">
-<table width="100%" cellpadding="0" cellspacing="0" style="background:#1a1208;padding:48px 0;">
+<body style="margin:0;padding:0;background:#faf6ee;font-family:Georgia,serif;">
+<table width="100%" cellpadding="0" cellspacing="0" style="background:#faf6ee;padding:48px 0;">
   <tr><td align="center">
-    <table width="600" cellpadding="0" cellspacing="0" style="background:#1e1510;border:1px solid rgba(184,138,30,.2);">
+    <table width="600" cellpadding="0" cellspacing="0" style="background:#f0e8d5;border:1px solid rgba(184,138,30,.25);">
       <tr><td style="background:linear-gradient(90deg,#7a1f35,#b88a1e,#7a1f35);height:2px;"></td></tr>
-      <tr><td style="padding:48px 56px 40px;text-align:center;border-bottom:1px solid rgba(184,138,30,.12);">
-        <p style="margin:0 0 16px;font-size:10px;letter-spacing:.4em;text-transform:uppercase;color:rgba(184,138,30,.6);">CASTILLO DEL ALMA</p>
-        <h1 style="margin:0 0 8px;font-size:28px;font-weight:normal;color:#e8dcc8;letter-spacing:.08em;">Tak for din reservation</h1>
-        <p style="margin:0;font-size:13px;color:rgba(232,220,200,.35);letter-spacing:.15em;text-transform:uppercase;">MOLLINA · MÁLAGA · SPANIEN</p>
+      <tr><td style="padding:48px 56px 40px;text-align:center;border-bottom:1px solid rgba(184,138,30,.15);">
+        <p style="margin:0 0 16px;font-size:10px;letter-spacing:.4em;text-transform:uppercase;color:#8a6315;">CASTILLO DEL ALMA</p>
+        <h1 style="margin:0 0 8px;font-size:28px;font-weight:normal;color:#2c2318;letter-spacing:.08em;">Tak for din reservation</h1>
+        <p style="margin:0;font-size:13px;color:rgba(44,35,24,.45);letter-spacing:.15em;text-transform:uppercase;">MOLLINA · MÁLAGA · SPANIEN</p>
       </td></tr>
       <tr><td style="padding:44px 56px;">
-        <p style="margin:0 0 24px;font-size:16px;line-height:1.9;color:rgba(232,220,200,.8);">Kære <em>${fornavn}</em>,</p>
-        <p style="margin:0 0 24px;font-size:15px;line-height:1.9;color:rgba(232,220,200,.65);">Vi har modtaget din reservation og er glade for at byde dig velkommen til Castillo del Alma. Vi vender tilbage inden for 24 timer for at bekræfte din plads.</p>
-        <table width="100%" cellpadding="0" cellspacing="0" style="background:rgba(184,138,30,.05);border:1px solid rgba(184,138,30,.18);margin:32px 0;">
+        <p style="margin:0 0 24px;font-size:16px;line-height:1.9;color:rgba(44,35,24,.85);">Kære <em>${fornavn}</em>,</p>
+        <p style="margin:0 0 24px;font-size:15px;line-height:1.9;color:rgba(44,35,24,.7);">Vi har modtaget din reservation og er glade for at byde dig velkommen til Castillo del Alma. Vi vender tilbage inden for 24 timer for at bekræfte din plads.</p>
+        <table width="100%" cellpadding="0" cellspacing="0" style="background:rgba(184,138,30,.08);border:1px solid rgba(184,138,30,.2);margin:32px 0;">
           <tr><td style="padding:28px 32px;">
-            <p style="margin:0 0 20px;font-size:9px;letter-spacing:.35em;text-transform:uppercase;color:rgba(184,138,30,.6);">DIN RESERVATION</p>
+            <p style="margin:0 0 20px;font-size:9px;letter-spacing:.35em;text-transform:uppercase;color:#8a6315;">DIN RESERVATION</p>
             <table width="100%" cellpadding="0" cellspacing="0">
               <tr>
-                <td style="padding:10px 0;border-bottom:1px solid rgba(255,255,255,.05);"><span style="font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:rgba(232,220,200,.3);">Retreat</span></td>
-                <td style="padding:10px 0;border-bottom:1px solid rgba(255,255,255,.05);text-align:right;"><span style="font-size:13px;color:#e8dcc8;">Kunsten at sænke tempoet</span></td>
+                <td style="padding:10px 0;border-bottom:1px solid rgba(44,35,24,.08);"><span style="font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:rgba(44,35,24,.4);">Retreat</span></td>
+                <td style="padding:10px 0;border-bottom:1px solid rgba(44,35,24,.08);text-align:right;"><span style="font-size:13px;color:#2c2318;">${retreat_name || '—'}</span></td>
               </tr>
               <tr>
-                <td style="padding:10px 0;border-bottom:1px solid rgba(255,255,255,.05);"><span style="font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:rgba(232,220,200,.3);">Ankomst</span></td>
-                <td style="padding:10px 0;border-bottom:1px solid rgba(255,255,255,.05);text-align:right;"><span style="font-size:13px;color:#e8dcc8;">14. september 2026</span></td>
+                <td style="padding:10px 0;border-bottom:1px solid rgba(44,35,24,.08);"><span style="font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:rgba(44,35,24,.4);">Ankomst</span></td>
+                <td style="padding:10px 0;border-bottom:1px solid rgba(44,35,24,.08);text-align:right;"><span style="font-size:13px;color:#2c2318;">${fmtDateDK(arrival_date)}</span></td>
               </tr>
               <tr>
-                <td style="padding:10px 0;border-bottom:1px solid rgba(255,255,255,.05);"><span style="font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:rgba(232,220,200,.3);">Afrejse</span></td>
-                <td style="padding:10px 0;border-bottom:1px solid rgba(255,255,255,.05);text-align:right;"><span style="font-size:13px;color:#e8dcc8;">21. september 2026</span></td>
+                <td style="padding:10px 0;border-bottom:1px solid rgba(44,35,24,.08);"><span style="font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:rgba(44,35,24,.4);">Afrejse</span></td>
+                <td style="padding:10px 0;border-bottom:1px solid rgba(44,35,24,.08);text-align:right;"><span style="font-size:13px;color:#2c2318;">${fmtDateDK(departure_date)}</span></td>
               </tr>
               <tr>
-                <td style="padding:10px 0;border-bottom:1px solid rgba(255,255,255,.05);"><span style="font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:rgba(232,220,200,.3);">Værelse</span></td>
-                <td style="padding:10px 0;border-bottom:1px solid rgba(255,255,255,.05);text-align:right;"><span style="font-size:13px;color:#e8dcc8;">${vaerelse || '—'}</span></td>
+                <td style="padding:10px 0;border-bottom:1px solid rgba(44,35,24,.08);"><span style="font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:rgba(44,35,24,.4);">Værelse</span></td>
+                <td style="padding:10px 0;border-bottom:1px solid rgba(44,35,24,.08);text-align:right;"><span style="font-size:13px;color:#2c2318;">${vaerelse || '—'}</span></td>
               </tr>
               ${addon_foer || addon_efter || addon_massage ? `<tr>
-                <td style="padding:10px 0;border-bottom:1px solid rgba(255,255,255,.05);"><span style="font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:rgba(232,220,200,.3);">Tilvalg</span></td>
-                <td style="padding:10px 0;border-bottom:1px solid rgba(255,255,255,.05);text-align:right;"><span style="font-size:13px;color:#e8dcc8;">${[addon_foer?'Ekstra overnatning før':'',addon_efter?'Ekstra overnatning efter':'',addon_massage?'Kropsmassage 60 min.':''].filter(Boolean).join(', ')}</span></td>
+                <td style="padding:10px 0;border-bottom:1px solid rgba(44,35,24,.08);"><span style="font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:rgba(44,35,24,.4);">Tilvalg</span></td>
+                <td style="padding:10px 0;border-bottom:1px solid rgba(44,35,24,.08);text-align:right;"><span style="font-size:13px;color:#2c2318;">${[addon_foer?'Ekstra overnatning før':'',addon_efter?'Ekstra overnatning efter':'',addon_massage?'Kropsmassage 60 min.':''].filter(Boolean).join(', ')}</span></td>
               </tr>` : ''}
               ${ekstra_gaester && ekstra_gaester.length > 0 ? `<tr>
-                <td style="padding:10px 0;border-bottom:1px solid rgba(255,255,255,.05);"><span style="font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:rgba(232,220,200,.3);">Ekstra gæster</span></td>
-                <td style="padding:10px 0;border-bottom:1px solid rgba(255,255,255,.05);text-align:right;"><span style="font-size:13px;color:#e8dcc8;">${ekstra_gaester.map(g=>g.navn).join(', ')}</span></td>
+                <td style="padding:10px 0;border-bottom:1px solid rgba(44,35,24,.08);"><span style="font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:rgba(44,35,24,.4);">Ekstra gæster</span></td>
+                <td style="padding:10px 0;border-bottom:1px solid rgba(44,35,24,.08);text-align:right;"><span style="font-size:13px;color:#2c2318;">${ekstra_gaester.map(g=>g.navn).join(', ')}</span></td>
               </tr>` : ''}
               ${kommentar ? `<tr>
-                <td style="padding:10px 0;border-bottom:1px solid rgba(255,255,255,.05);"><span style="font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:rgba(232,220,200,.3);">Særlige ønsker</span></td>
-                <td style="padding:10px 0;border-bottom:1px solid rgba(255,255,255,.05);text-align:right;"><span style="font-size:13px;color:#e8dcc8;">${kommentar}</span></td>
+                <td style="padding:10px 0;border-bottom:1px solid rgba(44,35,24,.08);"><span style="font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:rgba(44,35,24,.4);">Særlige ønsker</span></td>
+                <td style="padding:10px 0;border-bottom:1px solid rgba(44,35,24,.08);text-align:right;"><span style="font-size:13px;color:#2c2318;">${kommentar}</span></td>
               </tr>` : ''}
               <tr>
-                <td style="padding:10px 0;"><span style="font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:rgba(232,220,200,.3);">Depositum</span></td>
-                <td style="padding:10px 0;text-align:right;"><span style="font-size:13px;color:#b88a1e;">€4.470</span></td>
+                <td style="padding:10px 0;"><span style="font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:rgba(44,35,24,.4);">Depositum</span></td>
+                <td style="padding:10px 0;text-align:right;"><span style="font-size:13px;color:#8a6315;">€${depositAmount.toLocaleString('da-DK')}</span></td>
               </tr>
             </table>
           </td></tr>
         </table>
-        <p style="margin:0 0 24px;font-size:15px;line-height:1.9;color:rgba(232,220,200,.65);">Når vi har bekræftet din plads, modtager du en email med mulighed for at betale depositum og dermed sikre din reservation endeligt.</p>
-        <p style="margin:0;font-size:15px;line-height:1.9;color:rgba(232,220,200,.5);font-style:italic;">Med venlig hilsen,<br><span style="color:#e8dcc8;">Castillo del Alma</span></p>
+        <p style="margin:0 0 24px;font-size:15px;line-height:1.9;color:rgba(44,35,24,.7);">Når vi har bekræftet din plads, modtager du en email med mulighed for at betale depositum og dermed sikre din reservation endeligt.</p>
+        <p style="margin:0;font-size:15px;line-height:1.9;color:rgba(44,35,24,.55);font-style:italic;">Med venlig hilsen,<br><span style="color:#2c2318;">Castillo del Alma</span></p>
       </td></tr>
-      <tr><td style="padding:0 56px;"><div style="border-top:1px solid rgba(184,138,30,.1);"></div></td></tr>
+      <tr><td style="padding:0 56px;"><div style="border-top:1px solid rgba(184,138,30,.15);"></div></td></tr>
       <tr><td style="padding:28px 56px;text-align:center;">
-        <p style="margin:0;font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:rgba(232,220,200,.2);">CASTILLO DEL ALMA · MOLLINA · MÁLAGA · SPANIEN</p>
+        <p style="margin:0;font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:rgba(44,35,24,.3);">CASTILLO DEL ALMA · MOLLINA · MÁLAGA · SPANIEN</p>
       </td></tr>
       <tr><td style="background:linear-gradient(90deg,#7a1f35,#b88a1e,#7a1f35);height:1px;"></td></tr>
     </table>
@@ -192,9 +203,9 @@ exports.handler = async (event) => {
                <p><strong>Email:</strong> ${email}</p>
                <p><strong>Telefon:</strong> ${telefon || '—'}</p>
                <h3>Booking</h3>
-               <p><strong>Retreat:</strong> Kunsten at sænke tempoet</p>
-               <p><strong>Ankomst:</strong> 14. september 2026</p>
-               <p><strong>Afrejse:</strong> 21. september 2026</p>
+               <p><strong>Retreat:</strong> ${retreat_name || '—'}</p>
+               <p><strong>Ankomst:</strong> ${fmtDateDK(arrival_date)}</p>
+               <p><strong>Afrejse:</strong> ${fmtDateDK(departure_date)}</p>
                <p><strong>Værelse:</strong> ${vaerelse || '—'}</p>
                <h3>Tilvalg</h3>
                <p>${addons.length > 0 ? addons.join('<br>') : 'Ingen tilvalg'}</p>

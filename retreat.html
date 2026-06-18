@@ -1401,7 +1401,13 @@ async function betalDepositum() {
         gaester: antalGaester,
         vaerelse: room, kommentar,
         addon_foer: addonFoer, addon_efter: addonEfter, addon_massage: addonMassage,
-        ekstra_gaester: ekstraGaesterListe
+        ekstra_gaester: ekstraGaesterListe,
+        retreat_id: CURRENT_RETREAT?.id || null,
+        retreat_name: CURRENT_RETREAT?.title || '',
+        arrival_date: window.SELECTED_ARRIVAL || CURRENT_RETREAT?.arrival_date || '',
+        departure_date: window.SELECTED_DEPARTURE || CURRENT_RETREAT?.departure_date || '',
+        price_per_guest: RETREAT_PRICE,
+        deposit_pct: DEPOSIT_PCT
       }),
     });
     const bookingData = await bookingRes.json();
