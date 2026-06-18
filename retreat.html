@@ -1310,10 +1310,6 @@ sectionAnimators.forEach(({canvas})=>canvasObs.observe(canvas));
 </script>
 
 <script>
-const RETREAT_PRICE_OLD = 14900;
-const DEPOSIT_PCT_OLD   = 0.30;
-const DEPOSIT_DKK_OLD   = Math.round(RETREAT_PRICE_OLD * DEPOSIT_PCT_OLD);
-
 function getFormData() {
   const fornavn   = document.getElementById('f-fornavn').value.trim();
   const efternavn = document.getElementById('f-efternavn').value.trim();
@@ -1395,7 +1391,7 @@ async function betalDepositum() {
     })).filter(g => g.navn.trim());
 
     const antalGaester = 1 + ekstraGaesterListe.length;
-    const depositum = Math.round(14900 * antalGaester * 0.3);
+    const depositum = Math.round(RETREAT_PRICE * DEPOSIT_PCT * antalGaester);
 
     const bookingRes = await fetch('/.netlify/functions/create-booking', {
       method: 'POST',
