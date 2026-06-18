@@ -1235,9 +1235,18 @@ let heroFileData = null;
 let cardFileData = null;
 
 async function loadRetreats() {
-  const { data, error } = await sb.from('retreats').select('*').order('created_at', { ascending: false });
+  const { data, error } = await sb.from('retreats').select('*').order('sort_order', { ascending: true }).order('created_at', { ascending: false });
   if (error) { console.error(error); return; }
   allRetreats = data || [];
+
+  const needsBackfill = allRetreats.some(r => r.sort_order === null || r.sort_order === undefined);
+  if (needsBackfill) {
+    for (let i = 0; i < allRetreats.length; i++) {
+      allRetreats[i].sort_order = i;
+      await sb.from('retreats').update({ sort_order: i }).eq('id', allRetreats[i].id);
+    }
+  }
+
   renderRetreats();
 }
 
@@ -1248,7 +1257,10 @@ function renderRetreats() {
     return;
   }
 
-  grid.innerHTML = allRetreats.map(r => `
+  grid.innerHTML = allRetreats.map((r, i) => {
+    const upAttrs = i === 0 ? 'disabled style="opacity:.3;cursor:default;"' : '';
+    const downAttrs = i === allRetreats.length - 1 ? 'disabled style="opacity:.3;cursor:default;"' : '';
+    return `
     <div class="kunde-card">
       <div class="kunde-card-header">
         <div>
@@ -1262,11 +1274,38 @@ function renderRetreats() {
       </div>
       <div style="font-size:.85rem;color:rgba(44,35,24,.6);margin:.5rem 0;">€${r.price ? Math.round(r.price/7.46) : '—'} pr. gæst</div>
       <div class="kunde-actions">
+        <button class="kunde-btn" style="padding:.35rem .6rem;" onclick="moveRetreat('${r.id}','up')" ${upAttrs}>↑</button>
+        <button class="kunde-btn" style="padding:.35rem .6rem;" onclick="moveRetreat('${r.id}','down')" ${downAttrs}>↓</button>
         <button class="kunde-btn kunde-btn-view" onclick="redigerRetreat('${r.id}')">Redigér</button>
         <button class="kunde-btn" style="background:rgba(192,92,48,.12);color:#7a3818;border:1px solid rgba(192,92,48,.3);font-weight:600;" onclick="sletRetreat('${r.id}','${r.title}')">Slet</button>
       </div>
     </div>
-  `).join('');
+  `;
+  }).join('');
+}
+
+async function moveRetreat(id, direction) {
+  const idx = allRetreats.findIndex(r => r.id === id);
+  if (idx === -1) return;
+  const swapIdx = direction === 'up' ? idx - 1 : idx + 1;
+  if (swapIdx < 0 || swapIdx >= allRetreats.length) return;
+
+  const current = allRetreats[idx];
+  const other = allRetreats[swapIdx];
+
+  const currentOrder = current.sort_order;
+  const otherOrder = other.sort_order;
+
+  current.sort_order = otherOrder;
+  other.sort_order = currentOrder;
+
+  allRetreats[idx] = other;
+  allRetreats[swapIdx] = current;
+
+  renderRetreats();
+
+  await sb.from('retreats').update({ sort_order: current.sort_order }).eq('id', current.id);
+  await sb.from('retreats').update({ sort_order: other.sort_order }).eq('id', other.id);
 }
 
 function openNytRetreat() {
