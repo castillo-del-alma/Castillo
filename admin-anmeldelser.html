@@ -932,7 +932,7 @@ function renderKundeCardIngen(k) {
     </div>
     <div style="font-size:.72rem;color:rgba(44,35,24,.3);padding:.5rem 0;">Ingen booking endnu</div>
     <div class="kunde-actions">
-      <button class="kunde-btn kunde-btn-view" onclick="visDetalje('${k.id}')" data-booking-id="${booking ? booking.id : ''}">Se detaljer</button>
+      <button class="kunde-btn kunde-btn-view" onclick="visDetalje('${k.id}')">Se detaljer</button>
       <button class="kunde-btn" style="background:rgba(192,92,48,.12);color:#7a3818;border:1px solid rgba(192,92,48,.3);font-weight:600;" onclick="sletKunde('${k.id}','${k.full_name}')">Slet</button>
     </div>
   </div>`;
