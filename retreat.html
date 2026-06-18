@@ -869,11 +869,8 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:3rem
           </button>
           <div class="form-field">
             <label>Vælg dato</label>
-            <select>
+            <select id="formDateSelect" onchange="handleFormDateChange()">
               <option value="">Vælg foretrukken dato</option>
-              <option>14.–21. september 2026</option>
-              <option>9.–16. november 2026</option>
-              <option>22.–29. marts 2026</option>
             </select>
           </div>
           <div class="form-field">
@@ -1102,6 +1099,7 @@ async function loadRetreatData() {
 
 function buildDateOptions(data) {
   const select = document.getElementById('dateSelect');
+  const formSelect = document.getElementById('formDateSelect');
   const allDates = [];
 
   if (data.arrival_date && data.departure_date) {
@@ -1115,13 +1113,17 @@ function buildDateOptions(data) {
 
   if (!allDates.length) {
     select.innerHTML = '<option value="">Datoer opdateres snart</option>';
+    if (formSelect) formSelect.innerHTML = '<option value="">Datoer opdateres snart</option>';
     return;
   }
 
-  select.innerHTML = allDates.map((d, i) => {
+  const optionsHtml = allDates.map((d, i) => {
     const label = `${fmtDateDK(d.arrival)} – ${fmtDateDK(d.departure)}`;
     return `<option value="${i}">${label}</option>`;
   }).join('');
+
+  select.innerHTML = optionsHtml;
+  if (formSelect) formSelect.innerHTML = optionsHtml;
 
   window.ALL_RETREAT_DATES = allDates;
   updateDatesDisplay(allDates[0]);
@@ -1129,8 +1131,19 @@ function buildDateOptions(data) {
 
 function handleDateChange() {
   const select = document.getElementById('dateSelect');
+  const formSelect = document.getElementById('formDateSelect');
   const idx = parseInt(select.value);
   if (isNaN(idx) || !window.ALL_RETREAT_DATES) return;
+  if (formSelect) formSelect.value = select.value;
+  updateDatesDisplay(window.ALL_RETREAT_DATES[idx]);
+}
+
+function handleFormDateChange() {
+  const formSelect = document.getElementById('formDateSelect');
+  const select = document.getElementById('dateSelect');
+  const idx = parseInt(formSelect.value);
+  if (isNaN(idx) || !window.ALL_RETREAT_DATES) return;
+  if (select) select.value = formSelect.value;
   updateDatesDisplay(window.ALL_RETREAT_DATES[idx]);
 }
 
