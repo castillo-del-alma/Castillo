@@ -920,7 +920,7 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:3rem
           <div id="form-error" style="display:none;font-size:.78rem;color:#c05c30;margin-top:.2rem;"></div>
           <div class="form-btns">
             <button type="button" class="form-submit form-submit-secondary" onclick="sendForespørgsel()">Reserver din plads</button>
-            <button type="button" class="form-submit" id="btn-depositum" onclick="betalDepositum()">Book nu og betal depositum · 4.470 kr.</button>
+            <button type="button" class="form-submit" id="btn-depositum" onclick="betalDepositum()">Book nu og betal depositum</button>
           </div>
         </div>
       </div>
@@ -1104,6 +1104,7 @@ async function loadRetreatData() {
 
   // Tilvalg i booking-formularen
   renderAddonsInForm(data.addon_items || []);
+  updatePriceDisplay();
 }
 
 function buildDateOptions(data) {
@@ -1428,7 +1429,7 @@ async function betalDepositum() {
   } catch (err) {
     showFormError('Fejl ved oprettelse af betaling: ' + err.message);
     btn.disabled = false;
-    btn.textContent = 'Book nu og betal depositum · 4.470 kr.';
+    updatePriceDisplay();
   }
 }
 
@@ -1473,10 +1474,10 @@ function removeGuest(id) {
 
 function updatePriceDisplay() {
   const antalGaester = 1 + document.querySelectorAll('.guest-row').length;
-  const depositum = Math.round(14900 * antalGaester * 0.3);
+  const depositum = Math.round(RETREAT_PRICE * DEPOSIT_PCT * antalGaester);
   const btn = document.getElementById('btn-depositum');
   if (btn && !btn.disabled) {
-    btn.textContent = `Book nu og betal depositum · ${depositum.toLocaleString('da-DK')} kr.`;
+    btn.textContent = `Book nu og betal depositum · €${depositum.toLocaleString('da-DK')}`;
   }
 }
 </script>
