@@ -4,6 +4,8 @@ exports.handler = async (event) => {
   }
 
   const RESEND_KEY = process.env.RESEND_API_KEY;
+  const SUPABASE_URL = process.env.SUPABASE_URL;
+  const SUPABASE_KEY = process.env.SUPABASE_ANON_KEY;
   const { email, navn, deadline, bookingId } = JSON.parse(event.body);
 
   const fornavn = navn.split(' ')[0];
@@ -12,6 +14,34 @@ exports.handler = async (event) => {
     weekday: 'long', day: 'numeric', month: 'long',
     hour: '2-digit', minute: '2-digit'
   });
+
+  function fmtDateDK(iso) {
+    if (!iso) return '—';
+    const months = ['januar','februar','marts','april','maj','juni','juli','august','september','oktober','november','december'];
+    const d = new Date(iso);
+    return `${d.getDate()}. ${months[d.getMonth()]} ${d.getFullYear()}`;
+  }
+
+  let retreatName = 'dit retreat';
+  let arrivalStr = '—';
+  let departureStr = '—';
+  let depositAmount = 0;
+
+  try {
+    const bookingRes = await fetch(`${SUPABASE_URL}/rest/v1/bookings?id=eq.${bookingId}&select=retreat_name,arrival_date,departure_date,deposit_amount`, {
+      headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
+    });
+    const bookingArr = await bookingRes.json();
+    const bookingInfo = Array.isArray(bookingArr) ? bookingArr[0] : null;
+    if (bookingInfo) {
+      retreatName = bookingInfo.retreat_name || retreatName;
+      arrivalStr = fmtDateDK(bookingInfo.arrival_date);
+      departureStr = fmtDateDK(bookingInfo.departure_date);
+      depositAmount = bookingInfo.deposit_amount || 0;
+    }
+  } catch (e) {
+    console.log('Kunne ikke hente booking-info:', e.message);
+  }
 
   try {
     const emailRes = await fetch('https://api.resend.com/emails', {
@@ -37,12 +67,20 @@ exports.handler = async (event) => {
       </td></tr>
       <tr><td style="padding:44px 56px;">
         <p style="margin:0 0 24px;font-size:16px;line-height:1.9;color:rgba(44,35,24,.8);">Kære <em>${fornavn}</em>,</p>
-        <p style="margin:0 0 24px;font-size:15px;line-height:1.9;color:rgba(44,35,24,.65);">Vi har reserveret en plads til dig på <strong style="color:#2c2318;">Kunsten at sænke tempoet — Wellness Retreat</strong>. For at bekræfte din reservation skal du betale depositum inden fristen.</p>
+        <p style="margin:0 0 24px;font-size:15px;line-height:1.9;color:rgba(44,35,24,.65);">Vi har reserveret en plads til dig på <strong style="color:#2c2318;">${retreatName}</strong>. For at bekræfte din reservation skal du betale depositum inden fristen.</p>
         
         <table width="100%" cellpadding="0" cellspacing="0" style="background:rgba(122,31,53,.12);border:1px solid rgba(122,31,53,.3);margin:28px 0;">
           <tr><td style="padding:20px 28px;">
             <p style="margin:0;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:rgba(44,35,24,.5);">BETALINGSFRIST</p>
             <p style="margin:8px 0 0;font-size:18px;color:#2c2318;">${deadlineStr}</p>
+          </td></tr>
+        </table>
+
+        <p style="margin:0 0 16px;font-size:14px;line-height:1.8;color:rgba(44,35,24,.65);">Har du spørgsmål til os omkring dit retreat ophold, kan du logge ind på din profil her hos Castillo del Alma. Under din profil kan du se din reservation, betalingsbevægelser og du skrive til os på chatten.</p>
+
+        <table width="100%" cellpadding="0" cellspacing="0" style="margin:0 0 28px;">
+          <tr><td align="center">
+            <a href="https://castillodelalma.es/min-booking" style="display:inline-block;background:#7a1f35;color:#fff;padding:14px 32px;font-size:11px;letter-spacing:.2em;text-transform:uppercase;text-decoration:none;font-family:sans-serif;">Min booking</a>
           </td></tr>
         </table>
 
@@ -52,19 +90,19 @@ exports.handler = async (event) => {
             <table width="100%" cellpadding="0" cellspacing="0">
               <tr>
                 <td style="padding:8px 0;border-bottom:1px solid rgba(44,35,24,.08);"><span style="font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:rgba(44,35,24,.4);">Retreat</span></td>
-                <td style="padding:8px 0;border-bottom:1px solid rgba(44,35,24,.08);text-align:right;"><span style="font-size:13px;color:#2c2318;">Kunsten at sænke tempoet</span></td>
+                <td style="padding:8px 0;border-bottom:1px solid rgba(44,35,24,.08);text-align:right;"><span style="font-size:13px;color:#2c2318;">${retreatName}</span></td>
               </tr>
               <tr>
                 <td style="padding:8px 0;border-bottom:1px solid rgba(44,35,24,.08);"><span style="font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:rgba(44,35,24,.4);">Ankomst</span></td>
-                <td style="padding:8px 0;border-bottom:1px solid rgba(44,35,24,.08);text-align:right;"><span style="font-size:13px;color:#2c2318;">14. september 2026</span></td>
+                <td style="padding:8px 0;border-bottom:1px solid rgba(44,35,24,.08);text-align:right;"><span style="font-size:13px;color:#2c2318;">${arrivalStr}</span></td>
               </tr>
               <tr>
                 <td style="padding:8px 0;border-bottom:1px solid rgba(44,35,24,.08);"><span style="font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:rgba(44,35,24,.4);">Afrejse</span></td>
-                <td style="padding:8px 0;border-bottom:1px solid rgba(44,35,24,.08);text-align:right;"><span style="font-size:13px;color:#2c2318;">21. september 2026</span></td>
+                <td style="padding:8px 0;border-bottom:1px solid rgba(44,35,24,.08);text-align:right;"><span style="font-size:13px;color:#2c2318;">${departureStr}</span></td>
               </tr>
               <tr>
                 <td style="padding:8px 0;"><span style="font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:rgba(44,35,24,.4);">Depositum</span></td>
-                <td style="padding:8px 0;text-align:right;"><span style="font-size:15px;color:#b88a1e;font-weight:bold;">€4.470</span></td>
+                <td style="padding:8px 0;text-align:right;"><span style="font-size:15px;color:#b88a1e;font-weight:bold;">€${depositAmount.toLocaleString('da-DK')}</span></td>
               </tr>
             </table>
           </td></tr>
