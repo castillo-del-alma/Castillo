@@ -1036,7 +1036,6 @@ async function loadRetreatData() {
   document.getElementById('factDuration').textContent = duration;
   document.getElementById('factMaxGuests').textContent = data.max_guests ? `${data.max_guests} personer` : '—';
   document.getElementById('factLocation').textContent = data.location || 'Castillo del Alma';
-  document.getElementById('factPrice').textContent = RETREAT_PRICE ? `€${RETREAT_PRICE.toLocaleString('da-DK')}` : 'Kontakt os';
 
   // Program
   const programContainer = document.getElementById('programDaysContainer');
