@@ -62,7 +62,6 @@ exports.handler = async (event) => {
       headers,
       body: JSON.stringify({
         customer_id: kunde.id,
-        retreat_id: retreat_id || null,
         retreat_name: retreat_name || 'Ukendt retreat',
         arrival_date: arrival_date || null,
         departure_date: departure_date || null,
