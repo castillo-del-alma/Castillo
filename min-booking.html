@@ -134,6 +134,7 @@ const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 let bookingData = null;
 let userEmail = '';
 let portalKundeNavn = '';
+let retreatData = null;
 
 // Check om allerede logget ind
 const savedEmail = localStorage.getItem('cda_kunde_email');
@@ -207,6 +208,11 @@ async function loadPortal(email) {
 
   bookingData = (kunde.bookings || [])[0] || null;
   portalKundeNavn = kunde.full_name;
+  retreatData = null;
+  if (bookingData?.retreat_id) {
+    const { data: rd } = await sb.from('retreats').select('addon_items').eq('id', bookingData.retreat_id).single();
+    retreatData = rd;
+  }
   document.getElementById('portalNavn').textContent = kunde.full_name;
   renderBooking();
   renderBetalinger();
@@ -232,52 +238,47 @@ function renderBooking() {
       ${b.notes ? `<div class="booking-info-item" style="grid-column:1/-1"><div class="label">Særlige ønsker</div><div class="value">${b.notes}</div></div>` : ''}
       ${b.deadline ? `<div class="booking-info-item" style="grid-column:1/-1"><div class="label" style="color:var(--wine)">Betalingsfrist</div><div class="value" style="color:var(--wine)">${new Date(b.deadline).toLocaleString('da-DK',{weekday:'long',day:'numeric',month:'long',hour:'2-digit',minute:'2-digit'})}</div></div>` : ''}
     </div>
+    ${(retreatData?.addon_items||[]).length ? `
     <div style="margin-top:1.5rem;border-top:1px solid var(--sand);padding-top:1.2rem;">
       <div class="label" style="margin-bottom:.8rem;font-size:.65rem;letter-spacing:.15em;">Tilvalg</div>
       <div style="display:flex;flex-direction:column;gap:.7rem;">
-        <label style="display:flex;align-items:center;gap:.8rem;cursor:pointer;">
-          <input type="checkbox" id="addonFoer" ${b.addon_foer?'checked':''} style="accent-color:#b88a1e;width:16px;height:16px;">
-          <span style="font-size:.82rem;color:var(--charcoal);">Ekstra overnatning <em>før</em> retreat &nbsp;<span style="color:var(--gold);font-weight:600;">€60</span></span>
-        </label>
-        <label style="display:flex;align-items:center;gap:.8rem;cursor:pointer;">
-          <input type="checkbox" id="addonEfter" ${b.addon_efter?'checked':''} style="accent-color:#b88a1e;width:16px;height:16px;">
-          <span style="font-size:.82rem;color:var(--charcoal);">Ekstra overnatning <em>efter</em> retreat &nbsp;<span style="color:var(--gold);font-weight:600;">€60</span></span>
-        </label>
-        <label style="display:flex;align-items:center;gap:.8rem;cursor:pointer;">
-          <input type="checkbox" id="addonMassage" ${b.addon_massage?'checked':''} style="accent-color:#b88a1e;width:16px;height:16px;">
-          <span style="font-size:.82rem;color:var(--charcoal);">Kropsmassage 60 min. &nbsp;<span style="color:var(--gold);font-weight:600;">€50</span></span>
-        </label>
+        ${(()=>{
+          const activeTexts = new Set((b.charges||[]).filter(c=>c.description?.startsWith('Tilvalg:')).map(c=>c.description.replace('Tilvalg: ','')));
+          return (retreatData.addon_items||[]).map((a,i)=>`
+            <label style="display:flex;align-items:center;gap:.8rem;cursor:pointer;">
+              <input type="checkbox" class="dynamic-addon" data-text="${(a.text||'').replace(/"/g,'&quot;')}" data-price="${a.price||0}" ${activeTexts.has(a.text)?'checked':''} style="accent-color:#b88a1e;width:16px;height:16px;">
+              <span style="font-size:.82rem;color:var(--charcoal);">${a.text} &nbsp;<span style="color:var(--gold);font-weight:600;">€${a.price}</span></span>
+            </label>`).join('');
+        })()}
       </div>
       <button onclick="gemTilvalg()" style="margin-top:1rem;background:#b88a1e;border:none;color:#fff;padding:.65rem 1.5rem;font-size:.62rem;letter-spacing:.18em;text-transform:uppercase;cursor:pointer;font-family:'Manrope',sans-serif;">Gem tilvalg</button>
       <div id="tilvalgMsg" style="font-size:.72rem;margin-top:.5rem;min-height:1rem;"></div>
-    </div>`;
+    </div>` : ''}`;
 }
 
 async function gemTilvalg() {
   if (!bookingData) return;
-  const foer = document.getElementById('addonFoer').checked;
-  const efter = document.getElementById('addonEfter').checked;
-  const massage = document.getElementById('addonMassage').checked;
   const msg = document.getElementById('tilvalgMsg');
   msg.style.color = 'rgba(44,35,24,.5)';
   msg.textContent = 'Gemmer…';
   try {
-    const { error } = await sb.from('bookings').update({ addon_foer: foer, addon_efter: efter, addon_massage: massage }).eq('id', bookingData.id);
-    if (error) throw error;
     await sb.from('charges').delete().eq('booking_id', bookingData.id).like('description', 'Tilvalg:%');
+    const checkboxes = document.querySelectorAll('.dynamic-addon');
     const newCharges = [];
-    if (foer) newCharges.push({ booking_id: bookingData.id, description: 'Tilvalg: Ekstra overnatning før', amount: 60 });
-    if (efter) newCharges.push({ booking_id: bookingData.id, description: 'Tilvalg: Ekstra overnatning efter', amount: 60 });
-    if (massage) newCharges.push({ booking_id: bookingData.id, description: 'Tilvalg: Kropsmassage 60 min.', amount: 50 });
+    checkboxes.forEach(cb => {
+      if (cb.checked) newCharges.push({
+        booking_id: bookingData.id,
+        description: 'Tilvalg: ' + cb.dataset.text,
+        amount: parseFloat(cb.dataset.price)
+      });
+    });
     if (newCharges.length) await sb.from('charges').insert(newCharges);
-    bookingData.addon_foer = foer;
-    bookingData.addon_efter = efter;
-    bookingData.addon_massage = massage;
     const { data: freshCharges } = await sb.from('charges').select('*').eq('booking_id', bookingData.id);
     bookingData.charges = freshCharges || [];
     msg.textContent = '✓ Tilvalg gemt';
     msg.style.color = '#6a7240';
     renderBetalinger();
+    renderBooking();
     setTimeout(() => { msg.textContent = ''; }, 3000);
   } catch(e) {
     msg.textContent = 'Fejl: ' + e.message;

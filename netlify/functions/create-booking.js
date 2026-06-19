@@ -72,6 +72,7 @@ exports.handler = async (event) => {
         total_price: totalPrice,
         deposit_amount: depositAmount,
         status: 'forespørgsel',
+        retreat_id: retreat_id || null,
         addon_foer: addon_foer || false,
         addon_efter: addon_efter || false,
         addon_massage: addon_massage || false
