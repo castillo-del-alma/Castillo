@@ -909,6 +909,10 @@ function renderKundeList(liste) {
     const statusLabels = {'forespørgsel':'Forespørgsel','afventer_betaling':'Afventer bet.','bekræftet':'Tilmeldt'};
     const statusLabel = statusLabels[status] || status || '—';
     const statusClass = status === 'forespørgsel' ? 'status-forespørgsel' : status === 'afventer_betaling' ? 'status-afventer' : status === 'bekræftet' ? 'status-tilmeldt' : '';
+    const betalt = booking ? (booking.payments || []).filter(p => p.status === 'paid').reduce((s,p) => s + parseFloat(p.amount), 0) : 0;
+    const charges = booking ? (booking.charges || []).reduce((s,c) => s + parseFloat(c.amount), 0) : 0;
+    const total = booking ? parseFloat(booking.total_price || 0) + charges : 0;
+    const skylder = Math.max(0, total - betalt);
     return `<div class="kunde-list-row">
       <div class="klist-navn">
         <div class="klist-navn-text">${k.full_name}</div>
@@ -917,12 +921,22 @@ function renderKundeList(liste) {
       <div class="klist-retreat">${retreatNavn}</div>
       <div class="klist-dato">${ankomst}</div>
       <div class="klist-status"><span class="kunde-status ${statusClass}">${statusLabel}</span></div>
+      <div class="klist-betaling" style="flex:1;font-size:.68rem;color:rgba(44,35,24,.6);white-space:nowrap;">
+        <span style="color:#4a5028;">€${Math.round(betalt)}</span>
+        <span style="color:rgba(44,35,24,.3);margin:0 .2rem;">/</span>
+        <span>€${Math.round(total)}</span>
+        ${skylder > 0 ? `<span style="display:block;font-size:.6rem;color:rgba(122,31,53,.7);">Skylder €${Math.round(skylder)}</span>` : '<span style="display:block;font-size:.6rem;color:#4a5028;">✓ Fuldt betalt</span>'}
+      </div>
+      <div class="klist-besked" style="flex:0 0 auto;">
+        <span data-booking-id="${booking ? booking.id : ''}"></span>
+      </div>
       <div class="klist-actions">
         <button class="kunde-btn kunde-btn-view" onclick="visDetalje('${k.id}')">Se detaljer</button>
         ${booking ? `<button class="kunde-btn kunde-btn-charge" onclick="openForbrug('${booking.id}','${k.full_name}')">+ Forbrug</button>` : ''}
       </div>
     </div>`;
   }).join('');
+  opdaterBeskedBadges();
 }
 
 function sortKunder(liste) {
