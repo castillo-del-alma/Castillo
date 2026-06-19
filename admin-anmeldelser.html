@@ -913,6 +913,19 @@ function clearSort() {
   renderKunder();
 }
 
+function gaaKortvisning(kundeId) {
+  clearSort();
+  setTimeout(() => {
+    const el = document.getElementById('kunde-' + kundeId);
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      el.style.transition = 'box-shadow .3s';
+      el.style.boxShadow = '0 0 0 2px rgba(184,138,30,.6)';
+      setTimeout(() => { el.style.boxShadow = ''; }, 1800);
+    }
+  }, 120);
+}
+
 function toggleRetreatDropdown(event) {
   event.stopPropagation();
   const dd = document.getElementById('retreatDd');
@@ -976,7 +989,7 @@ function renderKundeList(liste) {
         <div class="klist-navn-text">${k.full_name}</div>
         <div class="klist-email">${k.email}</div>
       </div>
-      <button class="kunde-btn kunde-btn-view" style="flex:0 0 auto;" onclick="visDetalje('${k.id}')">Se kunde</button>
+      <button class="kunde-btn kunde-btn-view" style="flex:0 0 auto;" onclick="gaaKortvisning('${k.id}')">Se kunde</button>
       <div class="klist-retreat">${retreatNavn}</div>
       <div class="klist-dato">${ankomst}</div>
       <div class="klist-status"><span class="kunde-status ${statusClass}">${statusLabel}</span></div>
@@ -1046,7 +1059,7 @@ function renderKunder() {
     else if (erBekræftet) { status = 'tilmeldt'; statusLabel = 'Tilmeldt'; }
     else { status = nu >= ank && nu <= afr ? 'aktiv' : ank > nu ? 'kommende' : 'afsluttet'; statusLabel = status === 'aktiv' ? 'Aktiv' : status === 'kommende' ? 'Kommende' : 'Afsluttet'; }
 
-    return `<div class="kunde-card">
+    return `<div class="kunde-card" id="kunde-${k.id}">
       <div class="kunde-card-header">
         <div>
           <div class="kunde-navn">${k.full_name}</div>
