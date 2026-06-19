@@ -3,7 +3,7 @@ const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 exports.handler = async (event) => {
   if (event.httpMethod !== 'POST') return { statusCode: 405, body: 'Method Not Allowed' };
 
-  const { bookingId, navn, email, amount } = JSON.parse(event.body);
+  const { bookingId, navn, email, amount, productName, cancelPath } = JSON.parse(event.body);
 
   try {
     const session = await stripe.checkout.sessions.create({
@@ -14,7 +14,7 @@ exports.handler = async (event) => {
         price_data: {
           currency: 'eur',
           product_data: {
-            name: 'Depositum — Kunsten at sænke tempoet',
+            name: productName || 'Depositum — Castillo del Alma',
             description: 'Castillo del Alma · Wellness Retreat'
           },
           unit_amount: Math.round(amount * 100)
@@ -22,7 +22,7 @@ exports.handler = async (event) => {
         quantity: 1
       }],
       success_url: `${process.env.URL}/betal-success?booking=${bookingId}`,
-      cancel_url: `${process.env.URL}/betal?booking=${bookingId}`,
+      cancel_url: `${process.env.URL}/${cancelPath || 'betal'}?booking=${bookingId}`,
       metadata: { booking_id: bookingId }
     });
 

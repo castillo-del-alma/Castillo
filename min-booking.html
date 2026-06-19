@@ -286,14 +286,21 @@ async function gemTilvalg() {
 }
 
 async function betalResten(amount) {
-  const btn = event.currentTarget;
+  const btn = event.target.closest('button');
   btn.disabled = true;
   btn.textContent = 'Opretter betaling…';
   try {
     const res = await fetch('/.netlify/functions/create-checkout', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ bookingId: bookingData.id, navn: portalKundeNavn, email: userEmail, amount: Math.round(amount) })
+      body: JSON.stringify({
+        bookingId: bookingData.id,
+        navn: portalKundeNavn,
+        email: userEmail,
+        amount: Math.round(amount),
+        productName: 'Restbetaling — ' + (bookingData.retreat_name || 'Castillo del Alma'),
+        cancelPath: 'min-booking'
+      })
     });
     const data = await res.json();
     if (!res.ok || data.error) throw new Error(data.error || 'Ukendt fejl');
