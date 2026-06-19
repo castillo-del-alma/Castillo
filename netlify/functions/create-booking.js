@@ -69,7 +69,10 @@ exports.handler = async (event) => {
         extra_guests: ekstra_gaester || [],
         total_price: totalPrice,
         deposit_amount: depositAmount,
-        status: 'forespørgsel'
+        status: 'forespørgsel',
+        addon_foer: addon_foer || false,
+        addon_efter: addon_efter || false,
+        addon_massage: addon_massage || false
       })
     });
     const bookingData = await bookingRes.json();
