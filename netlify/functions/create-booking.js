@@ -8,7 +8,7 @@ exports.handler = async (event) => {
   const RESEND_KEY = process.env.RESEND_API_KEY;
 
   try {
-    const { fornavn, efternavn, email, telefon, gaester, vaerelse, addon_foer, addon_efter, addon_massage, kommentar, ekstra_gaester, retreat_id, retreat_name, arrival_date, departure_date, price_per_guest, deposit_pct, direct_payment } = JSON.parse(event.body);
+    const { fornavn, efternavn, email, telefon, nationalitet, gaester, vaerelse, addon_foer, addon_efter, addon_massage, kommentar, ekstra_gaester, retreat_id, retreat_name, arrival_date, departure_date, price_per_guest, deposit_pct, direct_payment } = JSON.parse(event.body);
 
     if (!fornavn || !email) {
       return { statusCode: 400, body: JSON.stringify({ error: 'Fornavn og email er påkrævet' }) };
@@ -48,6 +48,7 @@ exports.handler = async (event) => {
           full_name: `${fornavn} ${efternavn}`.trim(),
           email: email,
           phone: telefon || null,
+          nationality: nationalitet || null,
         })
       });
       const kundeData = await kundeRes.json();
