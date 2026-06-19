@@ -74,6 +74,7 @@ exports.handler = async (event) => {
             return `${d.getDate()}. ${months[d.getMonth()]} ${d.getFullYear()}`;
           }
 
+          let savedHtml = '';
           await fetch('https://api.resend.com/emails', {
             method: 'POST',
             headers: {
@@ -84,7 +85,7 @@ exports.handler = async (event) => {
               from: 'Castillo del Alma <booking@castillodelalma.es>',
               to: kundeInfo.email,
               subject: 'Tak for din booking — Castillo del Alma',
-              html: `<!DOCTYPE html><html lang="da"><head><meta charset="UTF-8"></head>
+              html: savedHtml = `<!DOCTYPE html><html lang="da"><head><meta charset="UTF-8"></head>
 <body style="margin:0;padding:0;background:#faf6ee;font-family:Georgia,serif;">
 <table width="100%" cellpadding="0" cellspacing="0" style="background:#faf6ee;padding:48px 0;">
   <tr><td align="center">
@@ -146,7 +147,8 @@ exports.handler = async (event) => {
                 booking_id: bookingId,
                 subject: 'Tak for din booking — Castillo del Alma',
                 type: 'booking_confirmed',
-                status: 'sent'
+                status: 'sent',
+                body: savedHtml
               })
             });
           } catch(le) { console.log('Email log fejl:', le.message); }

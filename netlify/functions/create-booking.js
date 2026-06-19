@@ -91,6 +91,7 @@ exports.handler = async (event) => {
     // Send email via Resend API direkte (kun ved forespørgsel, ikke ved direkte betaling)
     let emailData = null;
     if (!direct_payment) {
+    let savedHtml = '';
     console.log('Sender email til:', email);
     const emailRes = await fetch('https://api.resend.com/emails', {
       method: 'POST',
@@ -102,7 +103,7 @@ exports.handler = async (event) => {
         from: 'Castillo del Alma <booking@castillodelalma.es>',
         to: email,
         subject: 'Vi har modtaget din reservation — Castillo del Alma',
-        html: `<!DOCTYPE html><html lang="da"><head><meta charset="UTF-8"></head>
+        html: savedHtml = `<!DOCTYPE html><html lang="da"><head><meta charset="UTF-8"></head>
 <body style="margin:0;padding:0;background:#faf6ee;font-family:Georgia,serif;">
 <table width="100%" cellpadding="0" cellspacing="0" style="background:#faf6ee;padding:48px 0;">
   <tr><td align="center">
@@ -183,7 +184,8 @@ exports.handler = async (event) => {
           booking_id: booking.id,
           subject: 'Vi har modtaget din reservation — Castillo del Alma',
           type: 'reservation',
-          status: 'sent'
+          status: 'sent',
+          body: savedHtml
         })
       });
     }

@@ -44,6 +44,7 @@ exports.handler = async (event) => {
   }
 
   try {
+    let savedHtml = '';
     const emailRes = await fetch('https://api.resend.com/emails', {
       method: 'POST',
       headers: {
@@ -54,7 +55,7 @@ exports.handler = async (event) => {
         from: 'Castillo del Alma <booking@castillodelalma.es>',
         to: email,
         subject: 'Din plads er reserveret — betal depositum inden 48 timer',
-        html: `<!DOCTYPE html><html lang="da"><head><meta charset="UTF-8"></head>
+        html: savedHtml = `<!DOCTYPE html><html lang="da"><head><meta charset="UTF-8"></head>
 <body style="margin:0;padding:0;background:#f0e8d5;font-family:Georgia,serif;">
 <table width="100%" cellpadding="0" cellspacing="0" style="background:#f0e8d5;padding:48px 0;">
   <tr><td align="center">
@@ -142,7 +143,8 @@ exports.handler = async (event) => {
             booking_id: bookingId || null,
             subject: 'Din plads er reserveret — betal depositum inden 48 timer',
             type: 'payment_request',
-            status: 'sent'
+            status: 'sent',
+            body: savedHtml
           })
         });
       } catch(le) { console.log('Email log fejl:', le.message); }
