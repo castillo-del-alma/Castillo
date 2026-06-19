@@ -127,14 +127,19 @@ body{font-family:'Manrope',sans-serif;background:#f0e8d5;color:#2c2318;min-heigh
 .sort-btn:hover{border-color:rgba(184,138,30,.5);color:#2c2318;}
 .sort-btn-active{background:rgba(184,138,30,.15);border-color:rgba(184,138,30,.4);color:#7a5c14;font-weight:600;}
 .kunder-list{display:block;padding:.5rem 3rem 2rem;}
+.klist-header{display:flex;align-items:center;gap:1.2rem;padding:.4rem 1rem .4rem;border-bottom:1px solid rgba(184,138,30,.2);margin-bottom:.2rem;}
+.klist-header span{font-size:.58rem;letter-spacing:.15em;text-transform:uppercase;color:rgba(44,35,24,.35);}
 .kunde-list-row{display:flex;align-items:center;gap:1.2rem;padding:.65rem 1rem;border-bottom:1px solid rgba(184,138,30,.08);transition:background .2s;cursor:pointer;}
 .kunde-list-row:hover{background:rgba(184,138,30,.05);}
-.klist-navn{flex:2;min-width:0;}
+.klist-navn{flex:1.2;min-width:0;}
 .klist-navn-text{font-size:.82rem;color:#2c2318;font-family:'Cinzel',serif;font-weight:300;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.klist-email{font-size:.62rem;color:rgba(44,35,24,.38);}
-.klist-retreat{flex:2;font-size:.72rem;color:rgba(44,35,24,.7);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.klist-dato{flex:1;font-size:.72rem;color:rgba(44,35,24,.55);white-space:nowrap;}
-.klist-status{flex:0 0 auto;}
+.klist-email{font-size:.6rem;color:rgba(44,35,24,.38);}
+.klist-retreat{flex:1.4;font-size:.72rem;color:rgba(44,35,24,.7);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.klist-dato{flex:0 0 90px;font-size:.72rem;color:rgba(44,35,24,.55);white-space:nowrap;}
+.klist-status{flex:0 0 100px;}
+.klist-betaling{flex:0 0 160px;display:grid;grid-template-columns:auto auto;gap:.05rem .6rem;align-items:center;}
+.klist-bet-label{font-size:.56rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(44,35,24,.35);}
+.klist-bet-val{font-size:.72rem;text-align:right;font-weight:600;}
 .klist-actions{flex:0 0 auto;display:flex;gap:.35rem;}
 .kunde-btn{font-size:.58rem;letter-spacing:.12em;text-transform:uppercase;padding:.35rem .8rem;border:none;cursor:pointer;transition:all .3s;}
 .kunde-btn-view{background:rgba(184,138,30,.15);color:#7a5c14;border:1px solid rgba(184,138,30,.3);font-weight:600;}
@@ -901,7 +906,15 @@ function renderKundeList(liste) {
     document.getElementById('kunderGrid').innerHTML = '<div class="empty-state"><p>Ingen kunder endnu.</p></div>';
     return;
   }
-  document.getElementById('kunderGrid').innerHTML = liste.map(k => {
+  const header = `<div class="klist-header">
+    <span style="flex:1.2;">Kunde</span>
+    <span style="flex:1.4;">Retreat</span>
+    <span style="flex:0 0 90px;">Ankomst</span>
+    <span style="flex:0 0 100px;">Status</span>
+    <span style="flex:0 0 160px;">Betaling</span>
+    <span style="flex:0 0 auto;visibility:hidden;">Se detaljer</span>
+  </div>`;
+  document.getElementById('kunderGrid').innerHTML = header + liste.map(k => {
     const booking = (k.bookings || [])[0];
     const retreatNavn = booking?.retreat_name || '—';
     const ankomst = booking?.arrival_date ? fmt(booking.arrival_date) : '—';
@@ -913,6 +926,8 @@ function renderKundeList(liste) {
     const charges = booking ? (booking.charges || []).reduce((s,c) => s + parseFloat(c.amount), 0) : 0;
     const total = booking ? parseFloat(booking.total_price || 0) + charges : 0;
     const skylder = Math.max(0, total - betalt);
+    const skyldColor = skylder > 0 ? 'color:rgba(122,31,53,.8);' : 'color:#4a5028;';
+    const skyldTekst = skylder > 0 ? `€${Math.round(skylder)}` : '✓ 0';
     return `<div class="kunde-list-row">
       <div class="klist-navn">
         <div class="klist-navn-text">${k.full_name}</div>
@@ -921,15 +936,12 @@ function renderKundeList(liste) {
       <div class="klist-retreat">${retreatNavn}</div>
       <div class="klist-dato">${ankomst}</div>
       <div class="klist-status"><span class="kunde-status ${statusClass}">${statusLabel}</span></div>
-      <div class="klist-betaling" style="flex:1;font-size:.68rem;color:rgba(44,35,24,.6);white-space:nowrap;">
-        <span style="color:#4a5028;">€${Math.round(betalt)}</span>
-        <span style="color:rgba(44,35,24,.3);margin:0 .2rem;">/</span>
-        <span>€${Math.round(total)}</span>
-        ${skylder > 0 ? `<span style="display:block;font-size:.6rem;color:rgba(122,31,53,.7);">Skylder €${Math.round(skylder)}</span>` : '<span style="display:block;font-size:.6rem;color:#4a5028;">✓ Fuldt betalt</span>'}
+      <div class="klist-betaling">
+        <span class="klist-bet-label">Betalt</span><span class="klist-bet-val" style="color:#4a5028;">€${Math.round(betalt)}</span>
+        <span class="klist-bet-label">Skylder</span><span class="klist-bet-val" style="${skyldColor}">${skyldTekst}</span>
+        <span class="klist-bet-label">Total</span><span class="klist-bet-val" style="color:rgba(44,35,24,.6);">€${Math.round(total)}</span>
       </div>
-      <div class="klist-besked" style="flex:0 0 auto;">
-        <span data-booking-id="${booking ? booking.id : ''}"></span>
-      </div>
+      <div class="klist-besked" style="flex:0 0 auto;"><span data-booking-id="${booking ? booking.id : ''}"></span></div>
       <div class="klist-actions">
         <button class="kunde-btn kunde-btn-view" onclick="visDetalje('${k.id}')">Se detaljer</button>
         ${booking ? `<button class="kunde-btn kunde-btn-charge" onclick="openForbrug('${booking.id}','${k.full_name}')">+ Forbrug</button>` : ''}
