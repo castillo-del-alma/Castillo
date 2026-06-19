@@ -131,16 +131,20 @@ body{font-family:'Manrope',sans-serif;background:#f0e8d5;color:#2c2318;min-heigh
 .klist-header span{font-size:.58rem;letter-spacing:.15em;text-transform:uppercase;color:rgba(44,35,24,.35);}
 .kunde-list-row{display:flex;align-items:center;gap:1.2rem;padding:.65rem 1rem;border-bottom:1px solid rgba(184,138,30,.08);transition:background .2s;cursor:pointer;}
 .kunde-list-row:hover{background:rgba(184,138,30,.05);}
-.klist-navn{flex:1.2;min-width:0;}
+.klist-navn{flex:0 0 140px;min-width:0;}
 .klist-navn-text{font-size:.82rem;color:#2c2318;font-family:'Cinzel',serif;font-weight:300;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .klist-email{font-size:.6rem;color:rgba(44,35,24,.38);}
-.klist-retreat{flex:1.4;font-size:.72rem;color:rgba(44,35,24,.7);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.klist-dato{flex:0 0 90px;font-size:.72rem;color:rgba(44,35,24,.55);white-space:nowrap;}
-.klist-status{flex:0 0 100px;}
-.klist-betaling{flex:0 0 160px;display:grid;grid-template-columns:auto auto;gap:.05rem .6rem;align-items:center;}
-.klist-bet-label{font-size:.56rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(44,35,24,.35);}
+.klist-retreat{flex:0 0 160px;font-size:.72rem;color:rgba(44,35,24,.7);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.klist-dato{flex:0 0 95px;font-size:.72rem;color:rgba(44,35,24,.55);white-space:nowrap;}
+.klist-status{flex:0 0 110px;}
+.klist-betaling{flex:1;min-width:180px;display:grid;grid-template-columns:auto 1fr;gap:.08rem .5rem;align-items:center;}
+.klist-bet-label{font-size:.56rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(44,35,24,.35);text-align:left;}
 .klist-bet-val{font-size:.72rem;text-align:right;font-weight:600;}
-.klist-actions{flex:0 0 auto;display:flex;gap:.35rem;}
+.klist-besked-col{flex:0 0 32px;text-align:center;}
+.klist-actions{flex:0 0 auto;display:flex;gap:.35rem;justify-content:flex-end;}
+.klist-hdr{cursor:pointer;transition:color .15s;user-select:none;}
+.klist-hdr:hover{color:rgba(44,35,24,.7)!important;}
+.klist-hdr-active{color:#7a5c14!important;font-weight:700;}
 .kunde-btn{font-size:.58rem;letter-spacing:.12em;text-transform:uppercase;padding:.35rem .8rem;border:none;cursor:pointer;transition:all .3s;}
 .kunde-btn-view{background:rgba(184,138,30,.15);color:#7a5c14;border:1px solid rgba(184,138,30,.3);font-weight:600;}
 .kunde-btn-view:hover{background:rgba(184,138,30,.25);}
@@ -906,12 +910,17 @@ function renderKundeList(liste) {
     document.getElementById('kunderGrid').innerHTML = '<div class="empty-state"><p>Ingen kunder endnu.</p></div>';
     return;
   }
+  function hdr(label, key, style) {
+    const a = currentSort === key;
+    return `<span class="klist-hdr${a?' klist-hdr-active':''}" onclick="setSort('${key}')" style="${style}">${label}${a?' ↓':''}</span>`;
+  }
   const header = `<div class="klist-header">
-    <span style="flex:1.2;">Kunde</span>
-    <span style="flex:1.4;">Retreat</span>
-    <span style="flex:0 0 90px;">Ankomst</span>
-    <span style="flex:0 0 100px;">Status</span>
-    <span style="flex:0 0 160px;">Betaling</span>
+    ${hdr('Kunde','navn','flex:0 0 140px;')}
+    ${hdr('Retreat','retreat','flex:0 0 160px;')}
+    ${hdr('Ankomst','ankomst','flex:0 0 95px;')}
+    ${hdr('Status','status','flex:0 0 110px;')}
+    <span style="flex:1;min-width:180px;">Betaling</span>
+    <span style="flex:0 0 32px;"></span>
     <span style="flex:0 0 auto;visibility:hidden;">Se detaljer</span>
   </div>`;
   document.getElementById('kunderGrid').innerHTML = header + liste.map(k => {
@@ -941,7 +950,7 @@ function renderKundeList(liste) {
         <span class="klist-bet-label">Skylder</span><span class="klist-bet-val" style="${skyldColor}">${skyldTekst}</span>
         <span class="klist-bet-label">Total</span><span class="klist-bet-val" style="color:rgba(44,35,24,.6);">€${Math.round(total)}</span>
       </div>
-      <div class="klist-besked" style="flex:0 0 auto;"><span data-booking-id="${booking ? booking.id : ''}"></span></div>
+      <div class="klist-besked-col"><span data-booking-id="${booking ? booking.id : ''}"></span></div>
       <div class="klist-actions">
         <button class="kunde-btn kunde-btn-view" onclick="visDetalje('${k.id}')">Se detaljer</button>
         ${booking ? `<button class="kunde-btn kunde-btn-charge" onclick="openForbrug('${booking.id}','${k.full_name}')">+ Forbrug</button>` : ''}
