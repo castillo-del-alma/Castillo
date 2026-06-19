@@ -1069,7 +1069,7 @@ function renderKunder() {
         ${skylder > 0 ? `<div style="font-size:.62rem;color:rgba(44,35,24,.35);margin-top:.4rem;">Udestående: €${Math.round(skylder)}</div>` : '<div style="font-size:.62rem;color:#a0c880;margin-top:.4rem;">✓ Fuldt betalt</div>'}
       </div>
       <div class="kunde-actions">
-        <button class="kunde-btn kunde-btn-view" onclick="visDetalje('${k.id}')" data-booking-id="${booking ? booking.id : ''}">Se detaljer</button>
+        <button class="kunde-btn kunde-btn-view" onclick="visDetalje('${k.id}')" data-booking-id="${booking ? booking.id : ''}">Se kunde</button>
         <button class="kunde-btn kunde-btn-charge" onclick="openForbrug('${booking.id}','${k.full_name}')">+ Forbrug</button>
         ${skylder > 0 ? `<button class="kunde-btn kunde-btn-pay" onclick="registrerBetaling('${booking.id}',${skylder})">Registrér betaling</button>` : ''}
         ${booking.status === 'forespørgsel' ? `<button class="kunde-btn" style="background:rgba(184,138,30,.18);color:#7a5c14;border:1px solid rgba(184,138,30,.35);font-weight:600;" onclick="aktiverFrist('${booking.id}','${k.email}','${k.full_name}')">Aktivér 48-timers frist</button>` : ''}
