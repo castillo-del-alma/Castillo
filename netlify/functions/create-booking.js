@@ -8,7 +8,7 @@ exports.handler = async (event) => {
   const RESEND_KEY = process.env.RESEND_API_KEY;
 
   try {
-    const { fornavn, efternavn, email, telefon, gaester, vaerelse, addon_foer, addon_efter, addon_massage, kommentar, ekstra_gaester, retreat_id, retreat_name, arrival_date, departure_date, price_per_guest, deposit_pct } = JSON.parse(event.body);
+    const { fornavn, efternavn, email, telefon, gaester, vaerelse, addon_foer, addon_efter, addon_massage, kommentar, ekstra_gaester, retreat_id, retreat_name, arrival_date, departure_date, price_per_guest, deposit_pct, direct_payment } = JSON.parse(event.body);
 
     if (!fornavn || !email) {
       return { statusCode: 400, body: JSON.stringify({ error: 'Fornavn og email er påkrævet' }) };
@@ -88,7 +88,9 @@ exports.handler = async (event) => {
       })
     });
 
-    // Send email via Resend API direkte
+    // Send email via Resend API direkte (kun ved forespørgsel, ikke ved direkte betaling)
+    let emailData = null;
+    if (!direct_payment) {
     console.log('Sender email til:', email);
     const emailRes = await fetch('https://api.resend.com/emails', {
       method: 'POST',
@@ -168,11 +170,14 @@ exports.handler = async (event) => {
       })
     });
 
-    const emailData = await emailRes.json();
+    emailData = await emailRes.json();
     if (!emailRes.ok) {
       console.log('FEJL ved afsendelse af kunde-email:', emailRes.status, JSON.stringify(emailData));
     } else {
       console.log('Kunde-email sendt:', JSON.stringify(emailData));
+    }
+    } else {
+      console.log('Springer "Tak for din reservation" over (direkte betalingsflow)');
     }
 
     // Send admin notifikation

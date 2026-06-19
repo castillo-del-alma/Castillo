@@ -1407,7 +1407,8 @@ async function betalDepositum() {
         arrival_date: window.SELECTED_ARRIVAL || CURRENT_RETREAT?.arrival_date || '',
         departure_date: window.SELECTED_DEPARTURE || CURRENT_RETREAT?.departure_date || '',
         price_per_guest: RETREAT_PRICE,
-        deposit_pct: DEPOSIT_PCT
+        deposit_pct: DEPOSIT_PCT,
+        direct_payment: true
       }),
     });
     const bookingData = await bookingRes.json();
