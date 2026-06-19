@@ -66,6 +66,7 @@ exports.handler = async (event) => {
         arrival_date: arrival_date || null,
         departure_date: departure_date || null,
         guests: gaester || 1,
+        room: vaerelse || null,
         extra_guests: ekstra_gaester || [],
         total_price: totalPrice,
         deposit_amount: depositAmount,
