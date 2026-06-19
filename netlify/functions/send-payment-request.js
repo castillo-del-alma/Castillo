@@ -132,6 +132,22 @@ exports.handler = async (event) => {
     const data = await emailRes.json();
     console.log('Payment request email:', JSON.stringify(data));
 
+    if (emailRes.ok) {
+      try {
+        await fetch(`${SUPABASE_URL}/rest/v1/emails`, {
+          method: 'POST',
+          headers: { 'Content-Type':'application/json','apikey':SUPABASE_KEY,'Authorization':`Bearer ${SUPABASE_KEY}`,'Prefer':'return=minimal' },
+          body: JSON.stringify({
+            customer_id: bookingInfo?.customer_id || null,
+            booking_id: bookingId || null,
+            subject: 'Din plads er reserveret — betal depositum inden 48 timer',
+            type: 'payment_request',
+            status: 'sent'
+          })
+        });
+      } catch(le) { console.log('Email log fejl:', le.message); }
+    }
+
     return {
       statusCode: 200,
       body: JSON.stringify({ success: true })

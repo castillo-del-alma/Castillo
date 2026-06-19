@@ -175,6 +175,17 @@ exports.handler = async (event) => {
       console.log('FEJL ved afsendelse af kunde-email:', emailRes.status, JSON.stringify(emailData));
     } else {
       console.log('Kunde-email sendt:', JSON.stringify(emailData));
+      await fetch(`${SUPABASE_URL}/rest/v1/emails`, {
+        method: 'POST',
+        headers: { ...headers, 'Prefer': 'return=minimal' },
+        body: JSON.stringify({
+          customer_id: kunde.id,
+          booking_id: booking.id,
+          subject: 'Vi har modtaget din reservation — Castillo del Alma',
+          type: 'reservation',
+          status: 'sent'
+        })
+      });
     }
     } else {
       console.log('Springer "Tak for din reservation" over (direkte betalingsflow)');

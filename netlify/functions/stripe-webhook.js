@@ -135,6 +135,21 @@ exports.handler = async (event) => {
 </body></html>`
             })
           });
+          try {
+            const SUPABASE_URL = process.env.SUPABASE_URL;
+            const SUPABASE_KEY = process.env.SUPABASE_ANON_KEY;
+            await fetch(`${SUPABASE_URL}/rest/v1/emails`, {
+              method: 'POST',
+              headers: { 'Content-Type':'application/json','apikey':SUPABASE_KEY,'Authorization':`Bearer ${SUPABASE_KEY}`,'Prefer':'return=minimal' },
+              body: JSON.stringify({
+                customer_id: bookingInfo.customer_id,
+                booking_id: bookingId,
+                subject: 'Tak for din booking — Castillo del Alma',
+                type: 'booking_confirmed',
+                status: 'sent'
+              })
+            });
+          } catch(le) { console.log('Email log fejl:', le.message); }
         }
       }
 
