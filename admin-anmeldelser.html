@@ -137,9 +137,13 @@ body{font-family:'Manrope',sans-serif;background:#f0e8d5;color:#2c2318;min-heigh
 .klist-retreat{flex:0 0 160px;font-size:.72rem;color:rgba(44,35,24,.7);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .klist-dato{flex:0 0 95px;font-size:.72rem;color:rgba(44,35,24,.55);white-space:nowrap;}
 .klist-status{flex:0 0 110px;}
-.klist-betaling{flex:1;min-width:180px;display:grid;grid-template-columns:auto 1fr;gap:.08rem .5rem;align-items:center;}
-.klist-bet-label{font-size:.56rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(44,35,24,.35);text-align:left;}
-.klist-bet-val{font-size:.72rem;text-align:right;font-weight:600;}
+.klist-betaling{flex:1;min-width:180px;display:grid;grid-template-columns:auto auto;gap:.08rem .8rem;align-items:center;justify-content:flex-start;}
+.klist-bet-label{font-size:.56rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(44,35,24,.35);}
+.klist-bet-val{font-size:.72rem;font-weight:600;}
+#retreatDd{display:none;position:fixed;z-index:1000;background:#faf6ee;border:1px solid rgba(184,138,30,.3);min-width:220px;max-height:280px;overflow-y:auto;box-shadow:0 4px 20px rgba(44,35,24,.12);}
+.rdd-item{padding:.5rem 1rem;font-size:.72rem;color:rgba(44,35,24,.7);cursor:pointer;border-bottom:1px solid rgba(184,138,30,.08);}
+.rdd-item:hover{background:rgba(184,138,30,.08);color:#2c2318;}
+.rdd-active{color:#7a5c14;font-weight:600;background:rgba(184,138,30,.1);}
 .klist-besked-col{flex:0 0 32px;text-align:center;}
 .klist-actions{flex:0 0 auto;display:flex;gap:.35rem;justify-content:flex-end;}
 .klist-hdr{cursor:pointer;transition:color .15s;user-select:none;}
@@ -888,22 +892,47 @@ async function opdaterBeskedBadges() {
 }
 
 let currentSort = null;
+let sortDir = 'asc';
+let currentRetreatFilter = null;
 
 function setSort(key) {
-  currentSort = currentSort === key ? null : key;
+  if (currentSort === key) { sortDir = sortDir === 'asc' ? 'desc' : 'asc'; }
+  else { currentSort = key; sortDir = 'asc'; }
   document.querySelectorAll('.sort-btn').forEach(b => b.classList.remove('sort-btn-active'));
-  if (currentSort) document.getElementById('sort-' + currentSort).classList.add('sort-btn-active');
-  const grid = document.getElementById('kunderGrid');
-  grid.className = currentSort ? 'kunder-list' : 'kunder-grid';
+  document.getElementById('sort-' + currentSort)?.classList.add('sort-btn-active');
+  document.getElementById('kunderGrid').className = 'kunder-list';
   renderKunder();
 }
 
 function clearSort() {
   currentSort = null;
+  sortDir = 'asc';
+  currentRetreatFilter = null;
   document.querySelectorAll('.sort-btn').forEach(b => b.classList.remove('sort-btn-active'));
   document.getElementById('kunderGrid').className = 'kunder-grid';
   renderKunder();
 }
+
+function toggleRetreatDropdown(event) {
+  event.stopPropagation();
+  const dd = document.getElementById('retreatDd');
+  if (dd.style.display === 'block') { dd.style.display = 'none'; return; }
+  const rect = event.target.getBoundingClientRect();
+  dd.style.left = rect.left + 'px';
+  dd.style.top = (rect.bottom + 4) + 'px';
+  const retreats = [...new Set(allKunder.flatMap(k => (k.bookings||[]).map(b=>b.retreat_name)).filter(Boolean))].sort((a,b)=>a.localeCompare(b,'da'));
+  dd.innerHTML = `<div class="rdd-item${!currentRetreatFilter?' rdd-active':''}" onclick="setRetreatFilter(null)">Alle retreats</div>` +
+    retreats.map(r => `<div class="rdd-item${currentRetreatFilter===r?' rdd-active':''}" onclick="setRetreatFilter(this.dataset.r)" data-r="${r.replace(/"/g,'&quot;')}">${r}</div>`).join('');
+  dd.style.display = 'block';
+}
+
+function setRetreatFilter(name) {
+  currentRetreatFilter = name;
+  document.getElementById('retreatDd').style.display = 'none';
+  renderKunder();
+}
+
+document.addEventListener('click', () => { const dd = document.getElementById('retreatDd'); if (dd) dd.style.display = 'none'; });
 
 function renderKundeList(liste) {
   if (!liste.length) {
@@ -912,18 +941,23 @@ function renderKundeList(liste) {
   }
   function hdr(label, key, style) {
     const a = currentSort === key;
-    return `<span class="klist-hdr${a?' klist-hdr-active':''}" onclick="setSort('${key}')" style="${style}">${label}${a?' ↓':''}</span>`;
+    const arrow = a ? (sortDir === 'asc' ? ' ↓' : ' ↑') : '';
+    return `<span class="klist-hdr${a?' klist-hdr-active':''}" onclick="setSort('${key}')" style="${style}">${label}${arrow}</span>`;
   }
+  const rfl = currentRetreatFilter;
+  const retreatHdrLabel = rfl ? '▼ '+(rfl.length>16?rfl.substring(0,16)+'…':rfl) : 'Retreat ▾';
+  const count = `<div style="font-size:.62rem;color:rgba(44,35,24,.4);padding:.1rem 1rem .4rem;letter-spacing:.08em;">${liste.length} ${liste.length===1?'kunde':'kunder'} vist${rfl?' · '+rfl:''}</div>`;
   const header = `<div class="klist-header">
     ${hdr('Kunde','navn','flex:0 0 140px;')}
-    ${hdr('Retreat','retreat','flex:0 0 160px;')}
+    <span style="flex:0 0 auto;visibility:hidden;font-size:.58rem;letter-spacing:.12em;">Se detaljer</span>
+    <span class="klist-hdr${rfl?' klist-hdr-active':''}" onclick="toggleRetreatDropdown(event)" style="flex:0 0 160px;">${retreatHdrLabel}</span>
     ${hdr('Ankomst','ankomst','flex:0 0 95px;')}
     ${hdr('Status','status','flex:0 0 110px;')}
     <span style="flex:1;min-width:180px;">Betaling</span>
     <span style="flex:0 0 32px;"></span>
-    <span style="flex:0 0 auto;visibility:hidden;">Se detaljer</span>
+    <span style="flex:0 0 auto;visibility:hidden;font-size:.58rem;letter-spacing:.12em;">+ Forbrug</span>
   </div>`;
-  document.getElementById('kunderGrid').innerHTML = header + liste.map(k => {
+  document.getElementById('kunderGrid').innerHTML = count + header + liste.map(k => {
     const booking = (k.bookings || [])[0];
     const retreatNavn = booking?.retreat_name || '—';
     const ankomst = booking?.arrival_date ? fmt(booking.arrival_date) : '—';
@@ -942,6 +976,7 @@ function renderKundeList(liste) {
         <div class="klist-navn-text">${k.full_name}</div>
         <div class="klist-email">${k.email}</div>
       </div>
+      <button class="kunde-btn kunde-btn-view" style="flex:0 0 auto;" onclick="visDetalje('${k.id}')">Se detaljer</button>
       <div class="klist-retreat">${retreatNavn}</div>
       <div class="klist-dato">${ankomst}</div>
       <div class="klist-status"><span class="kunde-status ${statusClass}">${statusLabel}</span></div>
@@ -952,7 +987,6 @@ function renderKundeList(liste) {
       </div>
       <div class="klist-besked-col"><span data-booking-id="${booking ? booking.id : ''}"></span></div>
       <div class="klist-actions">
-        <button class="kunde-btn kunde-btn-view" onclick="visDetalje('${k.id}')">Se detaljer</button>
         ${booking ? `<button class="kunde-btn kunde-btn-charge" onclick="openForbrug('${booking.id}','${k.full_name}')">+ Forbrug</button>` : ''}
       </div>
     </div>`;
@@ -961,33 +995,27 @@ function renderKundeList(liste) {
 }
 
 function sortKunder(liste) {
+  if (!currentSort) return liste;
   return [...liste].sort((a, b) => {
-    if (currentSort === 'navn') return (a.full_name || '').localeCompare(b.full_name || '', 'da');
-    if (currentSort === 'retreat') {
-      const ra = (a.bookings?.[0]?.retreat_name || '').toLowerCase();
-      const rb = (b.bookings?.[0]?.retreat_name || '').toLowerCase();
-      return ra.localeCompare(rb, 'da');
+    let res = 0;
+    if (currentSort === 'navn') res = (a.full_name||'').localeCompare(b.full_name||'','da');
+    else if (currentSort === 'retreat') res = (a.bookings?.[0]?.retreat_name||'').localeCompare(b.bookings?.[0]?.retreat_name||'','da');
+    else if (currentSort === 'ankomst') res = (a.bookings?.[0]?.arrival_date||'').localeCompare(b.bookings?.[0]?.arrival_date||'');
+    else if (currentSort === 'status') {
+      const order = {'forespørgsel':0,'afventer_betaling':1,'bekræftet':2};
+      res = (order[a.bookings?.[0]?.status]??9) - (order[b.bookings?.[0]?.status]??9);
     }
-    if (currentSort === 'ankomst') {
-      const da = a.bookings?.[0]?.arrival_date || '';
-      const db = b.bookings?.[0]?.arrival_date || '';
-      return da.localeCompare(db);
-    }
-    if (currentSort === 'status') {
-      const order = { 'forespørgsel': 0, 'afventer_betaling': 1, 'bekræftet': 2 };
-      const sa = order[a.bookings?.[0]?.status] ?? 9;
-      const sb = order[b.bookings?.[0]?.status] ?? 9;
-      return sa - sb;
-    }
-    return 0;
+    return sortDir === 'desc' ? -res : res;
   });
 }
 
 function renderKunder() {
   const search = (document.getElementById('kundeSearch').value || '').toLowerCase();
-  const filtered = sortKunder(allKunder.filter(k =>
-    !search || (k.full_name + k.email).toLowerCase().includes(search)
-  ));
+  const filtered = sortKunder(allKunder.filter(k => {
+    const matchSearch = !search || (k.full_name + k.email).toLowerCase().includes(search);
+    const matchRetreat = !currentRetreatFilter || (k.bookings||[]).some(b => b.retreat_name === currentRetreatFilter);
+    return matchSearch && matchRetreat;
+  }));
 
   if (currentSort) { renderKundeList(filtered); return; }
 
@@ -1851,6 +1879,7 @@ function showToast(msg, isError = false) {
   setTimeout(() => t.classList.remove('show'), 2800);
 }
 </script>
+<div id="retreatDd"></div>
 </body>
 </html>
 <!-- redeploy -->
