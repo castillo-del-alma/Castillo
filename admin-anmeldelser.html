@@ -126,6 +126,16 @@ body{font-family:'Manrope',sans-serif;background:#f0e8d5;color:#2c2318;min-heigh
 .sort-btn{font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;padding:.3rem .7rem;border:1px solid rgba(184,138,30,.25);background:transparent;color:rgba(44,35,24,.5);cursor:pointer;transition:all .2s;}
 .sort-btn:hover{border-color:rgba(184,138,30,.5);color:#2c2318;}
 .sort-btn-active{background:rgba(184,138,30,.15);border-color:rgba(184,138,30,.4);color:#7a5c14;font-weight:600;}
+.kunder-list{display:block;padding:.5rem 3rem 2rem;}
+.kunde-list-row{display:flex;align-items:center;gap:1.2rem;padding:.65rem 1rem;border-bottom:1px solid rgba(184,138,30,.08);transition:background .2s;cursor:pointer;}
+.kunde-list-row:hover{background:rgba(184,138,30,.05);}
+.klist-navn{flex:2;min-width:0;}
+.klist-navn-text{font-size:.82rem;color:#2c2318;font-family:'Cinzel',serif;font-weight:300;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.klist-email{font-size:.62rem;color:rgba(44,35,24,.38);}
+.klist-retreat{flex:2;font-size:.72rem;color:rgba(44,35,24,.7);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.klist-dato{flex:1;font-size:.72rem;color:rgba(44,35,24,.55);white-space:nowrap;}
+.klist-status{flex:0 0 auto;}
+.klist-actions{flex:0 0 auto;display:flex;gap:.35rem;}
 .kunde-btn{font-size:.58rem;letter-spacing:.12em;text-transform:uppercase;padding:.35rem .8rem;border:none;cursor:pointer;transition:all .3s;}
 .kunde-btn-view{background:rgba(184,138,30,.15);color:#7a5c14;border:1px solid rgba(184,138,30,.3);font-weight:600;}
 .kunde-btn-view:hover{background:rgba(184,138,30,.25);}
@@ -250,10 +260,11 @@ body{font-family:'Manrope',sans-serif;background:#f0e8d5;color:#2c2318;min-heigh
     </div>
     <div style="display:flex;gap:.4rem;flex-wrap:wrap;margin-bottom:1rem;">
       <span style="font-size:.65rem;letter-spacing:.12em;text-transform:uppercase;color:rgba(44,35,24,.4);align-self:center;margin-right:.3rem;">Sortér:</span>
-      <button id="sort-navn" class="sort-btn sort-btn-active" onclick="setSort('navn')">Navn</button>
+      <button id="sort-navn" class="sort-btn" onclick="setSort('navn')">Navn</button>
       <button id="sort-retreat" class="sort-btn" onclick="setSort('retreat')">Retreat</button>
       <button id="sort-ankomst" class="sort-btn" onclick="setSort('ankomst')">Ankomst</button>
       <button id="sort-status" class="sort-btn" onclick="setSort('status')">Status</button>
+      <button id="sort-ryd" class="sort-btn" onclick="clearSort()" style="color:rgba(44,35,24,.35);border-style:dashed;">× Ryd</button>
     </div>
     <div class="kunder-grid" id="kunderGrid">
       <div class="loading">Henter kunder...</div>
@@ -867,13 +878,51 @@ async function opdaterBeskedBadges() {
   });
 }
 
-let currentSort = 'navn';
+let currentSort = null;
 
 function setSort(key) {
-  currentSort = key;
+  currentSort = currentSort === key ? null : key;
   document.querySelectorAll('.sort-btn').forEach(b => b.classList.remove('sort-btn-active'));
-  document.getElementById('sort-' + key).classList.add('sort-btn-active');
+  if (currentSort) document.getElementById('sort-' + currentSort).classList.add('sort-btn-active');
+  const grid = document.getElementById('kunderGrid');
+  grid.className = currentSort ? 'kunder-list' : 'kunder-grid';
   renderKunder();
+}
+
+function clearSort() {
+  currentSort = null;
+  document.querySelectorAll('.sort-btn').forEach(b => b.classList.remove('sort-btn-active'));
+  document.getElementById('kunderGrid').className = 'kunder-grid';
+  renderKunder();
+}
+
+function renderKundeList(liste) {
+  if (!liste.length) {
+    document.getElementById('kunderGrid').innerHTML = '<div class="empty-state"><p>Ingen kunder endnu.</p></div>';
+    return;
+  }
+  document.getElementById('kunderGrid').innerHTML = liste.map(k => {
+    const booking = (k.bookings || [])[0];
+    const retreatNavn = booking?.retreat_name || '—';
+    const ankomst = booking?.arrival_date ? fmt(booking.arrival_date) : '—';
+    const status = booking?.status || '';
+    const statusLabels = {'forespørgsel':'Forespørgsel','afventer_betaling':'Afventer bet.','bekræftet':'Tilmeldt'};
+    const statusLabel = statusLabels[status] || status || '—';
+    const statusClass = status === 'forespørgsel' ? 'status-forespørgsel' : status === 'afventer_betaling' ? 'status-afventer' : status === 'bekræftet' ? 'status-tilmeldt' : '';
+    return `<div class="kunde-list-row">
+      <div class="klist-navn">
+        <div class="klist-navn-text">${k.full_name}</div>
+        <div class="klist-email">${k.email}</div>
+      </div>
+      <div class="klist-retreat">${retreatNavn}</div>
+      <div class="klist-dato">${ankomst}</div>
+      <div class="klist-status"><span class="kunde-status ${statusClass}">${statusLabel}</span></div>
+      <div class="klist-actions">
+        <button class="kunde-btn kunde-btn-view" onclick="visDetalje('${k.id}')">Se detaljer</button>
+        ${booking ? `<button class="kunde-btn kunde-btn-charge" onclick="openForbrug('${booking.id}','${k.full_name}')">+ Forbrug</button>` : ''}
+      </div>
+    </div>`;
+  }).join('');
 }
 
 function sortKunder(liste) {
@@ -904,6 +953,8 @@ function renderKunder() {
   const filtered = sortKunder(allKunder.filter(k =>
     !search || (k.full_name + k.email).toLowerCase().includes(search)
   ));
+
+  if (currentSort) { renderKundeList(filtered); return; }
 
   if (!filtered.length) {
     document.getElementById('kunderGrid').innerHTML = '<div class="empty-state"><p>Ingen kunder endnu.</p></div>';
