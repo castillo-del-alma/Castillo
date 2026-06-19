@@ -74,6 +74,7 @@ exports.handler = async (event) => {
             return `${d.getDate()}. ${months[d.getMonth()]} ${d.getFullYear()}`;
           }
 
+          const isFinal = session.metadata?.payment_type === 'final';
           let savedHtml = '';
           await fetch('https://api.resend.com/emails', {
             method: 'POST',
@@ -84,7 +85,7 @@ exports.handler = async (event) => {
             body: JSON.stringify({
               from: 'Castillo del Alma <booking@castillodelalma.es>',
               to: kundeInfo.email,
-              subject: 'Tak for din booking — Castillo del Alma',
+              subject: isFinal ? 'Tak for din sidste betaling — Castillo del Alma' : 'Tak for din booking og betaling af depositum — Castillo del Alma',
               html: savedHtml = `<!DOCTYPE html><html lang="da"><head><meta charset="UTF-8"></head>
 <body style="margin:0;padding:0;background:#faf6ee;font-family:Georgia,serif;">
 <table width="100%" cellpadding="0" cellspacing="0" style="background:#faf6ee;padding:48px 0;">
@@ -93,13 +94,13 @@ exports.handler = async (event) => {
       <tr><td style="background:linear-gradient(90deg,#7a1f35,#5c3f0e,#7a1f35);height:2px;"></td></tr>
       <tr><td style="padding:48px 56px 40px;text-align:center;border-bottom:1px solid rgba(184,138,30,.15);">
         <p style="margin:0 0 16px;font-size:10px;letter-spacing:.4em;text-transform:uppercase;color:#5c3f0e;">CASTILLO DEL ALMA</p>
-        <h1 style="margin:0 0 8px;font-size:28px;font-weight:normal;color:#2c2318;letter-spacing:.08em;">Tak for din booking</h1>
+        <h1 style="margin:0 0 8px;font-size:28px;font-weight:normal;color:#2c2318;letter-spacing:.08em;">${isFinal ? 'Tak for din sidste betaling' : 'Tak for din booking og betaling af depositum'}</h1>
         <p style="margin:0;font-size:13px;color:rgba(44,35,24,.7);letter-spacing:.15em;text-transform:uppercase;">MOLLINA · MÁLAGA · SPANIEN</p>
       </td></tr>
       <tr><td style="padding:44px 56px;">
         <p style="margin:0 0 24px;font-size:16px;line-height:1.9;color:rgba(44,35,24,.95);">Kære <em>${fornavn}</em>,</p>
-        <p style="margin:0 0 24px;font-size:15px;line-height:1.9;color:rgba(44,35,24,.88);">Vi har modtaget dit depositum og er glade for at byde dig velkommen til Castillo del Alma.</p>
-        <p style="margin:0 0 28px;font-size:15px;line-height:1.9;color:rgba(44,35,24,.88);">Du er velkommen til at logge ind på din profil på Castillo del Alma. Her kan du se dit retreat, dine betalinger, bestille tilvalg og chatte med os.</p>
+        <p style="margin:0 0 24px;font-size:15px;line-height:1.9;color:rgba(44,35,24,.88);">${isFinal ? 'Vi har nu modtaget din sidste betaling til dit Retreat hos os. Vi glæder os til at se dig i Castillo del Alma.' : 'Vi har modtaget dit depositum og er glade for at byde dig velkommen til Castillo del Alma.'}</p>
+        <p style="margin:0 0 28px;font-size:15px;line-height:1.9;color:rgba(44,35,24,.88);">Du er velkommen til at logge ind på din profil på Castillo del Alma. Her kan du se dit retreat, dine betalinger, tilvalg, afsendte mails og chatte med os, hvis du har nogen spørgsmål.${isFinal ? '<br><br>Vi ses' : ''}</p>
         <table width="100%" cellpadding="0" cellspacing="0" style="margin:0 0 28px;">
           <tr><td align="center">
             <a href="https://castillodelalma.es/min-booking" style="display:inline-block;background:#7a1f35;color:#fff;padding:14px 32px;font-size:12px;letter-spacing:.2em;text-transform:uppercase;text-decoration:none;font-family:Georgia,serif;">Min booking</a>
@@ -145,8 +146,8 @@ exports.handler = async (event) => {
               body: JSON.stringify({
                 customer_id: bookingInfo.customer_id,
                 booking_id: bookingId,
-                subject: 'Tak for din booking — Castillo del Alma',
-                type: 'booking_confirmed',
+                subject: isFinal ? 'Tak for din sidste betaling — Castillo del Alma' : 'Tak for din booking og betaling af depositum — Castillo del Alma',
+                type: isFinal ? 'final_payment' : 'booking_confirmed',
                 status: 'sent',
                 body: savedHtml
               })
