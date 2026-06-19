@@ -3,7 +3,7 @@ const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 exports.handler = async (event) => {
   if (event.httpMethod !== 'POST') return { statusCode: 405, body: 'Method Not Allowed' };
 
-  const { bookingId, navn, email, amount, productName, cancelPath } = JSON.parse(event.body);
+  const { bookingId, navn, email, amount, productName, cancelPath, paymentType } = JSON.parse(event.body);
 
   try {
     const session = await stripe.checkout.sessions.create({
@@ -23,7 +23,7 @@ exports.handler = async (event) => {
       }],
       success_url: `${process.env.URL}/betal-success?booking=${bookingId}`,
       cancel_url: `${process.env.URL}/${cancelPath || 'betal'}?booking=${bookingId}`,
-      metadata: { booking_id: bookingId }
+      metadata: { booking_id: bookingId, payment_type: paymentType || 'deposit' }
     });
 
     return { statusCode: 200, body: JSON.stringify({ url: session.url }) };

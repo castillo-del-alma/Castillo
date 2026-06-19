@@ -44,7 +44,7 @@ exports.handler = async (event) => {
         body: JSON.stringify({
           booking_id: bookingId,
           amount: amount,
-          type: 'deposit',
+          type: session.metadata?.payment_type || 'deposit',
           status: 'paid',
           stripe_payment_id: session.payment_intent,
           paid_at: new Date().toISOString()
