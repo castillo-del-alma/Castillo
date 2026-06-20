@@ -137,7 +137,7 @@ exports.handler = async (event) => {
       </td></tr>
       <tr><td style="padding:44px 56px;">
         <p style="margin:0 0 24px;font-size:16px;line-height:1.9;color:rgba(44,35,24,.95);">Kære <em>${fornavn}</em>,</p>
-        <p style="margin:0 0 24px;font-size:15px;line-height:1.9;color:rgba(44,35,24,.88);">Vi har modtaget din reservation og er glade for at byde dig velkommen til Castillo del Alma. Vi vender tilbage inden for 24 timer for at bekræfte din plads.</p>
+        <p style="margin:0 0 24px;font-size:15px;line-height:1.9;color:rgba(44,35,24,.88);">Vi har modtaget din reservation og er glade for at byde dig velkommen til Castillo del Alma. For at sikre din plads på det valgte retreat skal depositum indbetales inden for 48 timer.</p>
         <table width="100%" cellpadding="0" cellspacing="0" style="background:rgba(184,138,30,.08);border:1px solid rgba(184,138,30,.2);margin:32px 0;">
           <tr><td style="padding:28px 32px;">
             <p style="margin:0 0 20px;font-size:9px;letter-spacing:.35em;text-transform:uppercase;color:#5c3f0e;">DIN RESERVATION</p>
@@ -177,7 +177,7 @@ exports.handler = async (event) => {
             </table>
           </td></tr>
         </table>
-        <p style="margin:0 0 20px;font-size:15px;line-height:1.9;color:rgba(44,35,24,.88);">Når vi har bekræftet din plads, modtager du en email med mulighed for at betale depositum og dermed sikre din reservation endeligt.</p>
+        <p style="margin:0 0 20px;font-size:15px;line-height:1.9;color:rgba(44,35,24,.88);">Log ind og se dine detaljer om dit valgte retreat, betalingsmetoder, dine modtagne e-mails samt en chat, hvor du kan chatte med os. Du har måske nogle spørgsmål inden du beslutter dig — så er du velkommen til at starte en chat eller sende en mail på <a href="mailto:booking@castillodelalma.es" style="color:#7a1f35;">booking@castillodelalma.es</a></p>
         <table width="100%" cellpadding="0" cellspacing="0" style="margin:0 0 28px;">
           <tr><td align="center">
             <a href="https://castillodelalma.es/min-booking" style="display:inline-block;background:#7a1f35;color:#fff;padding:14px 32px;font-size:11px;letter-spacing:.2em;text-transform:uppercase;text-decoration:none;font-family:sans-serif;">Min booking</a>
