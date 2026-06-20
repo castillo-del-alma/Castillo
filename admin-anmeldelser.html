@@ -967,7 +967,7 @@ function renderKundeList(liste) {
   const count = `<div style="font-size:.62rem;color:rgba(44,35,24,.4);padding:.1rem 1rem .4rem;letter-spacing:.08em;">${liste.length} ${liste.length===1?'kunde':'kunder'} vist${rfl?' · '+rfl:''}</div>`;
   const header = `<div class="klist-header">
     ${hdr('Kunde','navn','flex:0 0 140px;')}
-    <span style="flex:0 0 auto;visibility:hidden;font-size:.58rem;letter-spacing:.12em;">Se detaljer</span>
+    <span style="flex:0 0 auto;visibility:hidden;font-size:.58rem;letter-spacing:.12em;padding:.35rem .8rem;">Se kunde</span>
     <span class="klist-hdr${rfl?' klist-hdr-active':''}" onclick="toggleRetreatDropdown(event)" style="flex:0 0 160px;">${retreatHdrLabel}</span>
     ${hdr('Ankomst','ankomst','flex:0 0 95px;')}
     ${hdr('Status','status','flex:0 0 110px;')}
