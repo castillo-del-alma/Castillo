@@ -158,9 +158,9 @@ exports.handler = async (event) => {
                 <td style="padding:10px 0;border-bottom:1px solid rgba(44,35,24,.08);"><span style="font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:rgba(44,35,24,.65);">Værelse</span></td>
                 <td style="padding:10px 0;border-bottom:1px solid rgba(44,35,24,.08);text-align:right;"><span style="font-size:13px;color:#2c2318;">${vaerelse || '—'}</span></td>
               </tr>
-              ${addon_foer || addon_efter || addon_massage ? `<tr>
+              ${(selected_addons||[]).length > 0 ? `<tr>
                 <td style="padding:10px 0;border-bottom:1px solid rgba(44,35,24,.08);"><span style="font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:rgba(44,35,24,.65);">Tilvalg</span></td>
-                <td style="padding:10px 0;border-bottom:1px solid rgba(44,35,24,.08);text-align:right;"><span style="font-size:13px;color:#2c2318;">${[addon_foer?'Ekstra overnatning før':'',addon_efter?'Ekstra overnatning efter':'',addon_massage?'Kropsmassage 60 min.':''].filter(Boolean).join(', ')}</span></td>
+                <td style="padding:10px 0;border-bottom:1px solid rgba(44,35,24,.08);text-align:right;"><span style="font-size:13px;color:#2c2318;">${(selected_addons||[]).map(a=>a.text).join(', ')}</span></td>
               </tr>` : ''}
               ${ekstra_gaester && ekstra_gaester.length > 0 ? `<tr>
                 <td style="padding:10px 0;border-bottom:1px solid rgba(44,35,24,.08);"><span style="font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:rgba(44,35,24,.65);">Ekstra gæster</span></td>

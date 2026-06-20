@@ -1045,7 +1045,10 @@ function renderKunder() {
     if (!booking) return renderKundeCardIngen(k);
 
     const betalt = (booking.payments || []).filter(p => p.status === 'paid').reduce((s,p) => s + parseFloat(p.amount), 0);
+    const tilvalgCharges = (booking.charges || []).filter(c => c.description?.startsWith('Tilvalg:'));
+    const forbrugCharges = (booking.charges || []).filter(c => !c.description?.startsWith('Tilvalg:'));
     const charges = (booking.charges || []).reduce((s,c) => s + parseFloat(c.amount), 0);
+    const forbrugTotal = forbrugCharges.reduce((s,c) => s + parseFloat(c.amount), 0);
     const total = parseFloat(booking.total_price) + charges;
     const pct = total > 0 ? Math.min(100, Math.round(betalt / total * 100)) : 0;
     const skylder = Math.max(0, total - betalt);
@@ -1268,6 +1271,7 @@ async function visDetalje(kundeId) {
       <div class="detalje-row"><span class="detalje-key">Gæster</span><span class="detalje-val">${booking.guests}${booking.extra_guests && booking.extra_guests.length > 0 ? ' (' + booking.extra_guests.map(g => g.navn).join(', ') + ')' : ''}</span></div>
       <div class="detalje-row"><span class="detalje-key">Værelse</span><span class="detalje-val">${booking.room || '—'}</span></div>
       ${booking.notes ? `<div class="detalje-row"><span class="detalje-key">Noter</span><span class="detalje-val">${booking.notes}</span></div>` : ''}
+      ${tilvalgCharges.length > 0 ? `<div class="detalje-row"><span class="detalje-key">Tilvalg</span><span class="detalje-val" style="color:rgba(44,35,24,.7);">${tilvalgCharges.map(c=>c.description.replace('Tilvalg: ','')).join(', ')}</span></div>` : ''}
     </div>`;
 
     html += `<div class="detalje-section">
@@ -1283,17 +1287,17 @@ async function visDetalje(kundeId) {
       <div class="detalje-row"><span class="detalje-key">Udestående</span><span class="detalje-val" style="color:var(--gold)">€${Math.max(0, total - betalt).toFixed(2)}</span></div>
     </div>`;
 
-    if (booking.charges && booking.charges.length > 0) {
+    if (forbrugCharges.length > 0) {
       html += `<div class="detalje-section">
         <h4>Forbrug under retreat</h4>
         <div class="charge-list">
-          ${booking.charges.map(c => `
+          ${forbrugCharges.map(c => `
             <div class="charge-item">
               <div><div class="charge-desc">${c.description}</div><div class="charge-date">${fmt(c.created_at)}</div></div>
               <span class="charge-amt">€${parseFloat(c.amount).toFixed(2)}</span>
             </div>`).join('')}
         </div>
-        <div class="total-row"><span class="total-label">Forbrug i alt</span><span class="total-amt">€${charges.toFixed(2)}</span></div>
+        <div class="total-row"><span class="total-label">Forbrug i alt</span><span class="total-amt">€${forbrugTotal.toFixed(2)}</span></div>
       </div>`;
     }
 
