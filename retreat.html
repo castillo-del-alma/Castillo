@@ -460,6 +460,20 @@ nav{
   border-top:1px solid rgba(184,138,30,.1);padding-top:1.2rem;
 }
 
+/* ── BETALINGSVALG OVERLAY ── */
+#betalingsvalg-overlay{position:fixed;inset:0;background:rgba(44,35,24,.78);z-index:2000;display:none;align-items:center;justify-content:center;}
+.bv-box{background:#faf6ee;border:1px solid rgba(184,138,30,.25);padding:2.5rem 2rem;max-width:440px;width:92%;text-align:center;}
+.bv-eyebrow{font-size:.65rem;letter-spacing:.35em;text-transform:uppercase;color:#5c3f0e;margin:0 0 .6rem;}
+.bv-title{font-family:'Cinzel',serif;font-size:1.3rem;font-weight:300;color:#2c2318;margin:0 0 .4rem;letter-spacing:.06em;}
+.bv-sub{font-size:.82rem;color:rgba(44,35,24,.55);margin:0 0 1.8rem;}
+.bv-btn{display:block;width:100%;padding:.85rem 1rem;margin:.6rem 0;border:none;cursor:pointer;font-size:.72rem;letter-spacing:.18em;text-transform:uppercase;font-family:'Manrope',sans-serif;transition:opacity .2s;}
+.bv-btn-primary{background:#7a1f35;color:#fff;}
+.bv-btn-secondary{background:rgba(122,31,53,.12);color:#7a1f35;border:1px solid rgba(122,31,53,.3);}
+.bv-btn:hover{opacity:.85;}
+.bv-divider{border:none;border-top:1px solid rgba(184,138,30,.15);margin:1.2rem 0;}
+.bv-input-row{display:flex;gap:.5rem;margin:.6rem 0;}
+.bv-input-row input{flex:1;border:1px solid rgba(184,138,30,.3);background:rgba(184,138,30,.05);color:#2c2318;padding:.75rem 1rem;font-size:.85rem;font-family:'Manrope',sans-serif;outline:none;}
+.bv-cancel{font-size:.65rem;letter-spacing:.15em;text-transform:uppercase;color:rgba(44,35,24,.35);background:none;border:none;cursor:pointer;margin-top:.8rem;}
 /* ── BOOKING FORM ── */
 .booking-section{background:#f0ead8;padding:7rem 0;}
 .booking-grid{display:grid;grid-template-columns:1fr 1fr;gap:7rem;align-items:start;}
@@ -993,7 +1007,7 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:3rem
           <div id="form-error" style="display:none;font-size:.78rem;color:#c05c30;margin-top:.2rem;"></div>
           <div class="form-btns">
             <button type="button" class="form-submit form-submit-secondary" onclick="sendForespørgsel()">Reserver din plads</button>
-            <button type="button" class="form-submit" id="btn-depositum" onclick="betalDepositum()">Book nu og betal depositum</button>
+            <button type="button" class="form-submit" id="btn-depositum" onclick="visBetalingsvalg()">Book og betal</button>
           </div>
         </div>
       </div>
@@ -1443,7 +1457,45 @@ async function sendForespørgsel() {
   }
 }
 
-async function betalDepositum() {
+let _bvAntalGaester = 1;
+let _bvDepositum = 0;
+let _bvFuldt = 0;
+
+function visBetalingsvalg() {
+  const { fornavn, efternavn, email } = getFormData();
+  const telefon = document.getElementById('f-telefon').value;
+  if (!fornavn || !email || !telefon) { showFormError('Udfyld fornavn, e-mail og telefon.'); return; }
+  showFormError('');
+  const ekstraGaesterListe = Array.from(document.querySelectorAll('.guest-row')).map(row => ({
+    navn: row.querySelector('input[placeholder="Fornavn"]') ? row.querySelector('input[placeholder="Fornavn"]').value + ' ' + row.querySelector('input[placeholder="Efternavn"]').value : '',
+    email: row.querySelector('input[type="email"]') ? row.querySelector('input[type="email"]').value : ''
+  })).filter(g => g.navn.trim());
+  _bvAntalGaester = 1 + ekstraGaesterListe.length;
+  _bvDepositum = Math.round(RETREAT_PRICE * DEPOSIT_PCT * _bvAntalGaester);
+  _bvFuldt = Math.round(RETREAT_PRICE * _bvAntalGaester);
+  document.getElementById('bv-deposit-amount').textContent = _bvDepositum.toLocaleString('da-DK');
+  document.getElementById('bv-full-amount').textContent = _bvFuldt.toLocaleString('da-DK');
+  document.getElementById('betalingsvalg-overlay').style.display = 'flex';
+}
+
+function lukBetalingsvalg() {
+  document.getElementById('betalingsvalg-overlay').style.display = 'none';
+}
+
+async function gennemfoerBetaling(type) {
+  let amount, paymentType;
+  if (type === 'deposit') { amount = _bvDepositum; paymentType = 'deposit'; }
+  else if (type === 'full') { amount = _bvFuldt; paymentType = 'full'; }
+  else {
+    amount = Math.round(parseFloat(document.getElementById('bv-eget').value));
+    if (!amount || amount < 1) { alert('Indtast et gyldigt beløb i €'); return; }
+    paymentType = 'custom';
+  }
+  lukBetalingsvalg();
+  await betalDepositum(amount, paymentType);
+}
+
+async function betalDepositum(overrideAmount = null, paymentType = 'deposit') {
   const { fornavn, efternavn, name, email } = getFormData();
   const telefon = document.getElementById('f-telefon').value;
   if (!fornavn || !email || !telefon) { showFormError('Udfyld fornavn, e-mail og telefon.'); return; }
@@ -1468,8 +1520,8 @@ async function betalDepositum() {
       email: row.querySelector('input[type="email"]') ? row.querySelector('input[type="email"]').value : ''
     })).filter(g => g.navn.trim());
 
-    const antalGaester = 1 + ekstraGaesterListe.length;
-    const depositum = Math.round(RETREAT_PRICE * DEPOSIT_PCT * antalGaester);
+    const antalGaester = overrideAmount !== null ? _bvAntalGaester : 1 + ekstraGaesterListe.length;
+    const depositum = overrideAmount !== null ? overrideAmount : Math.round(RETREAT_PRICE * DEPOSIT_PCT * antalGaester);
 
     const bookingRes = await fetch('/.netlify/functions/create-booking', {
       method: 'POST',
@@ -1503,7 +1555,9 @@ async function betalDepositum() {
         bookingId: bookingData.bookingId,
         navn: name,
         email,
-        amount: depositum
+        amount: depositum,
+        paymentType: paymentType,
+        productName: (paymentType==='full'?'Fuld betaling':paymentType==='deposit'?'Depositum':'Betaling') + ' — ' + (CURRENT_RETREAT?.title||'Castillo del Alma')
       }),
     });
     const data = await res.json();
@@ -1564,6 +1618,22 @@ function updatePriceDisplay() {
   }
 }
 </script>
+<div id="betalingsvalg-overlay">
+  <div class="bv-box">
+    <p class="bv-eyebrow">Castillo del Alma</p>
+    <h3 class="bv-title">Vælg betalingsform</h3>
+    <p class="bv-sub">Hvor meget ønsker du at betale nu?</p>
+    <button class="bv-btn bv-btn-primary" onclick="gennemfoerBetaling('deposit')">Depositum (30%) — €<span id="bv-deposit-amount">—</span></button>
+    <button class="bv-btn bv-btn-secondary" onclick="gennemfoerBetaling('full')">Fuldt beløb — €<span id="bv-full-amount">—</span></button>
+    <hr class="bv-divider">
+    <p style="font-size:.72rem;color:rgba(44,35,24,.5);margin:0 0 .6rem;">Eller vælg eget beløb</p>
+    <div class="bv-input-row">
+      <input type="number" id="bv-eget" placeholder="Beløb i €" min="1">
+      <button class="bv-btn bv-btn-secondary" style="width:auto;white-space:nowrap;" onclick="gennemfoerBetaling('custom')">Betal</button>
+    </div>
+    <button class="bv-cancel" onclick="lukBetalingsvalg()">Annuller</button>
+  </div>
+</div>
 </body>
 </html>
 <!-- v2 -->
