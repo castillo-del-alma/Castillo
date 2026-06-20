@@ -542,8 +542,26 @@ body{font-family:'Manrope',sans-serif;background:#f0e8d5;color:#2c2318;min-heigh
 <div class="modal-overlay" id="modalDetalje">
   <div class="modal detalje-modal">
     <button class="modal-close" onclick="closeModal('modalDetalje')">✕</button>
-    <h3 id="detaljeNavn">—</h3>
-    <div class="modal-sub" id="detaljeEmail">—</div>
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:.5rem;">
+      <div>
+        <h3 id="detaljeNavn">—</h3>
+        <div class="modal-sub" id="detaljeEmail">—</div>
+      </div>
+      <button onclick="toggleRediger()" id="redigerBtn" style="font-size:.58rem;letter-spacing:.12em;text-transform:uppercase;padding:.3rem .7rem;background:rgba(184,138,30,.12);border:1px solid rgba(184,138,30,.3);color:#7a5c14;cursor:pointer;white-space:nowrap;">✎ Rediger</button>
+    </div>
+    <div id="redigerForm" style="display:none;background:rgba(184,138,30,.06);border:1px solid rgba(184,138,30,.15);padding:1rem;margin-top:.8rem;">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:.6rem;margin-bottom:.6rem;">
+        <div><label style="font-size:.58rem;letter-spacing:.12em;text-transform:uppercase;color:rgba(44,35,24,.85);display:block;margin-bottom:.3rem;">Navn</label><input id="red-navn" type="text" style="width:100%;border:1px solid rgba(184,138,30,.25);background:#faf6ee;color:#2c2318;padding:.5rem .7rem;font-family:'Manrope',sans-serif;font-size:.82rem;outline:none;"></div>
+        <div><label style="font-size:.58rem;letter-spacing:.12em;text-transform:uppercase;color:rgba(44,35,24,.85);display:block;margin-bottom:.3rem;">E-mail</label><input id="red-email" type="email" style="width:100%;border:1px solid rgba(184,138,30,.25);background:#faf6ee;color:#2c2318;padding:.5rem .7rem;font-family:'Manrope',sans-serif;font-size:.82rem;outline:none;"></div>
+        <div><label style="font-size:.58rem;letter-spacing:.12em;text-transform:uppercase;color:rgba(44,35,24,.85);display:block;margin-bottom:.3rem;">Telefon</label><input id="red-telefon" type="tel" style="width:100%;border:1px solid rgba(184,138,30,.25);background:#faf6ee;color:#2c2318;padding:.5rem .7rem;font-family:'Manrope',sans-serif;font-size:.82rem;outline:none;"></div>
+        <div><label style="font-size:.58rem;letter-spacing:.12em;text-transform:uppercase;color:rgba(44,35,24,.85);display:block;margin-bottom:.3rem;">Land</label><input id="red-land" type="text" style="width:100%;border:1px solid rgba(184,138,30,.25);background:#faf6ee;color:#2c2318;padding:.5rem .7rem;font-family:'Manrope',sans-serif;font-size:.82rem;outline:none;"></div>
+      </div>
+      <div style="display:flex;gap:.5rem;align-items:center;">
+        <button onclick="gemKundeInfo()" style="background:var(--wine);border:none;color:#fff;padding:.5rem 1.2rem;font-size:.62rem;letter-spacing:.15em;text-transform:uppercase;cursor:pointer;font-family:'Manrope',sans-serif;">Gem</button>
+        <button onclick="toggleRediger()" style="background:none;border:1px solid rgba(44,35,24,.2);color:rgba(44,35,24,.85);padding:.5rem 1rem;font-size:.62rem;letter-spacing:.15em;text-transform:uppercase;cursor:pointer;font-family:'Manrope',sans-serif;">Annuller</button>
+        <span id="redigerMsg" style="font-size:.7rem;color:var(--olive);"></span>
+      </div>
+    </div>
     
     <!-- FANER -->
     <div style="display:flex;gap:0;border-bottom:1px solid rgba(184,138,30,.2);margin:1.5rem 0 0;">
@@ -1245,12 +1263,52 @@ async function gemRegistrerBetaling() {
 }
 
 // ── DETALJE MODAL ──
+function toggleRediger() {
+  const f = document.getElementById('redigerForm');
+  f.style.display = f.style.display === 'none' ? 'block' : 'none';
+}
+
+async function gemKundeInfo() {
+  const kunde = allKunder.find(k => k.id === aktivDetaljeBookingId?.split('-')[0]) ||
+    allKunder.find(k => (k.bookings||[]).some(b => b.id === aktivDetaljeBookingId)) ||
+    allKunder.find(k => k.id === document.getElementById('detaljeNavn').dataset.kundeId);
+
+  const navn = document.getElementById('red-navn').value.trim();
+  const email = document.getElementById('red-email').value.trim();
+  const telefon = document.getElementById('red-telefon').value.trim();
+  const land = document.getElementById('red-land').value.trim();
+  const msg = document.getElementById('redigerMsg');
+
+  if (!navn || !email) { msg.style.color='var(--wine)'; msg.textContent='Navn og e-mail er påkrævet'; return; }
+  msg.style.color='rgba(44,35,24,.85)'; msg.textContent='Gemmer…';
+
+  const kundeId = document.getElementById('detaljeNavn').dataset.kundeId;
+  const { error } = await sb.from('customers').update({
+    full_name: navn, email: email, phone: telefon || null, nationality: land || null
+  }).eq('id', kundeId);
+
+  if (error) { msg.style.color='var(--wine)'; msg.textContent='Fejl: '+error.message; return; }
+
+  document.getElementById('detaljeNavn').textContent = navn;
+  document.getElementById('detaljeEmail').textContent = email + (telefon ? ' · '+telefon : '');
+  msg.style.color='var(--olive)'; msg.textContent='✓ Gemt';
+  await loadKunder();
+  setTimeout(() => { document.getElementById('redigerForm').style.display='none'; msg.textContent=''; }, 1500);
+}
+
 async function visDetalje(kundeId) {
   const kunde = allKunder.find(k => k.id === kundeId);
   if (!kunde) return;
 
   document.getElementById('detaljeNavn').textContent = kunde.full_name;
+  document.getElementById('detaljeNavn').dataset.kundeId = kunde.id;
   document.getElementById('detaljeEmail').textContent = kunde.email + (kunde.phone ? ' · ' + kunde.phone : '');
+  document.getElementById('red-navn').value = kunde.full_name || '';
+  document.getElementById('red-email').value = kunde.email || '';
+  document.getElementById('red-telefon').value = kunde.phone || '';
+  document.getElementById('red-land').value = kunde.nationality || '';
+  document.getElementById('redigerForm').style.display = 'none';
+  document.getElementById('redigerMsg').textContent = '';
 
   const booking = (kunde.bookings || [])[0];
   let html = '';
