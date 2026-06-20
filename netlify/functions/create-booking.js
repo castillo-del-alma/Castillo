@@ -180,7 +180,8 @@ exports.handler = async (event) => {
         <p style="margin:0 0 20px;font-size:15px;line-height:1.9;color:rgba(44,35,24,.88);">Log ind og se dine detaljer om dit valgte retreat, betalingsmetoder, dine modtagne e-mails samt en chat, hvor du kan chatte med os. Du har måske nogle spørgsmål inden du beslutter dig — så er du velkommen til at starte en chat eller sende en mail på <a href="mailto:booking@castillodelalma.es" style="color:#7a1f35;">booking@castillodelalma.es</a></p>
         <table width="100%" cellpadding="0" cellspacing="0" style="margin:0 0 28px;">
           <tr><td align="center">
-            <a href="https://castillodelalma.es/min-booking" style="display:inline-block;background:#7a1f35;color:#fff;padding:14px 32px;font-size:11px;letter-spacing:.2em;text-transform:uppercase;text-decoration:none;font-family:sans-serif;">Min booking</a>
+            <a href="https://castillodelalma.es/min-booking" style="display:inline-block;background:#7a1f35;color:#fff;padding:14px 32px;font-size:11px;letter-spacing:.2em;text-transform:uppercase;text-decoration:none;font-family:sans-serif;margin-right:10px;">Min booking</a>
+            <a href="https://castillodelalma.es/betal?booking=${booking.id}" style="display:inline-block;background:transparent;color:#7a1f35;border:1px solid #7a1f35;padding:13px 32px;font-size:11px;letter-spacing:.2em;text-transform:uppercase;text-decoration:none;font-family:sans-serif;">Betal depositum</a>
           </td></tr>
         </table>
         <p style="margin:0;font-size:15px;line-height:1.9;color:rgba(44,35,24,.78);font-style:italic;">Med venlig hilsen,<br><span style="color:#2c2318;">Castillo del Alma</span></p>
