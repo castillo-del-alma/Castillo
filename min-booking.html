@@ -290,7 +290,32 @@ async function gemTilvalg() {
   }
 }
 
-async function betalResten(amount) {
+let _mbSkylder = 0;
+let _mbDepositum = 0;
+
+function visBetalMinBooking(skylder, depositum) {
+  _mbSkylder = skylder;
+  _mbDepositum = depositum > 0 && depositum <= skylder ? depositum : Math.round(skylder * 0.3);
+  document.getElementById('mb-dep-amt').textContent = _mbDepositum.toLocaleString('da-DK');
+  document.getElementById('mb-full-amt').textContent = Math.round(skylder).toLocaleString('da-DK');
+  const ov = document.getElementById('mb-betal-overlay');
+  ov.style.display = 'flex';
+}
+
+async function gennemfoerBetalingMB(type) {
+  let amount, paymentType;
+  if (type === 'deposit') { amount = _mbDepositum; paymentType = 'deposit'; }
+  else if (type === 'full') { amount = _mbSkylder; paymentType = 'final'; }
+  else {
+    amount = Math.round(parseFloat(document.getElementById('mb-eget-amt').value));
+    if (!amount || amount < 1) { alert('Indtast et gyldigt beløb'); return; }
+    paymentType = 'custom';
+  }
+  document.getElementById('mb-betal-overlay').style.display = 'none';
+  await betalResten(amount, paymentType);
+}
+
+async function betalResten(amount, paymentType = 'final') {
   const btn = event.target.closest('button');
   btn.disabled = true;
   btn.textContent = 'Opretter betaling…';
@@ -305,7 +330,7 @@ async function betalResten(amount) {
         amount: Math.round(amount),
         productName: 'Restbetaling — ' + (bookingData.retreat_name || 'Castillo del Alma'),
         cancelPath: 'min-booking',
-        paymentType: 'final'
+        paymentType: paymentType
       })
     });
     const data = await res.json();
@@ -333,7 +358,7 @@ function renderBetalinger() {
       <div class="betaling-bar"><div class="betaling-bar-fill" style="width:${pct}%"></div></div>
       <div class="betaling-row"><span class="betaling-label">Betalt</span><span class="betaling-value green">€${betalt.toFixed(2)}</span></div>
       <div class="betaling-row"><span class="betaling-label">Udestående</span><span class="betaling-value gold">€${skylder.toFixed(2)}</span></div>
-      ${skylder > 0 ? `<div style="margin-top:1rem;"><button onclick="betalResten(${skylder})" style="width:100%;background:#7a1f35;border:none;color:#fff;padding:.85rem;font-size:.68rem;letter-spacing:.18em;text-transform:uppercase;cursor:pointer;font-family:'Manrope',sans-serif;">Betal udestående — €${skylder.toFixed(2)}</button></div>` : ''}
+      ${skylder > 0 ? `<div style="margin-top:1rem;"><button onclick="visBetalMinBooking(${skylder},${parseFloat(bookingData.deposit_amount)||0})" style="width:100%;background:#7a1f35;border:none;color:#fff;padding:.85rem;font-size:.68rem;letter-spacing:.18em;text-transform:uppercase;cursor:pointer;font-family:'Manrope',sans-serif;">Vælg betalingsform</button></div>` : ''}
     </div>
     ${(b.payments||[]).filter(p=>p.status==='paid').map(p=>`
       <div class="payment-item">
@@ -470,5 +495,26 @@ function fmt(d) {
   return new Date(d).toLocaleDateString('da-DK', { day:'numeric', month:'long', year:'numeric' });
 }
 </script>
+<style>
+#mb-betal-overlay{display:none;position:fixed;inset:0;background:rgba(44,35,24,.78);z-index:2000;align-items:center;justify-content:center;}
+.mb-bv-box{background:#faf6ee;border:1px solid rgba(184,138,30,.25);padding:2.2rem 1.8rem;max-width:400px;width:92%;text-align:center;}
+.mb-bv-btn{display:block;width:100%;padding:.8rem 1rem;margin:.5rem 0;border:none;cursor:pointer;font-size:.68rem;letter-spacing:.18em;text-transform:uppercase;font-family:'Manrope',sans-serif;}
+</style>
+<div id="mb-betal-overlay" style="display:none;position:fixed;inset:0;background:rgba(44,35,24,.78);z-index:2000;align-items:center;justify-content:center;">
+  <div class="mb-bv-box">
+    <p style="font-size:.65rem;letter-spacing:.35em;text-transform:uppercase;color:#5c3f0e;margin:0 0 .5rem;">Castillo del Alma</p>
+    <h3 style="font-family:'Cinzel',serif;font-size:1.2rem;font-weight:300;color:#2c2318;margin:0 0 .4rem;">Vælg betalingsform</h3>
+    <p style="font-size:.78rem;color:rgba(44,35,24,.6);margin:0 0 1.5rem;">Hvor meget ønsker du at betale nu?</p>
+    <button class="mb-bv-btn" id="mb-btn-dep" onclick="gennemfoerBetalingMB('deposit')" style="background:#7a1f35;color:#fff;">Depositum — €<span id="mb-dep-amt">—</span></button>
+    <button class="mb-bv-btn" id="mb-btn-full" onclick="gennemfoerBetalingMB('full')" style="background:rgba(122,31,53,.12);color:#7a1f35;border:1px solid rgba(122,31,53,.3);">Fuldt udestående — €<span id="mb-full-amt">—</span></button>
+    <hr style="border:none;border-top:1px solid rgba(184,138,30,.15);margin:1rem 0;">
+    <p style="font-size:.68rem;color:rgba(44,35,24,.5);margin:0 0 .5rem;">Eller vælg eget beløb</p>
+    <div style="display:flex;gap:.5rem;">
+      <input type="number" id="mb-eget-amt" placeholder="Beløb i €" min="1" style="flex:1;border:1px solid rgba(184,138,30,.3);background:rgba(184,138,30,.05);color:#2c2318;padding:.7rem 1rem;font-size:.85rem;font-family:'Manrope',sans-serif;outline:none;">
+      <button class="mb-bv-btn" onclick="gennemfoerBetalingMB('custom')" style="width:auto;background:rgba(122,31,53,.12);color:#7a1f35;border:1px solid rgba(122,31,53,.3);white-space:nowrap;">Betal</button>
+    </div>
+    <button onclick="document.getElementById('mb-betal-overlay').style.display='none'" style="font-size:.62rem;letter-spacing:.15em;text-transform:uppercase;color:rgba(44,35,24,.35);background:none;border:none;cursor:pointer;margin-top:.9rem;">Annuller</button>
+  </div>
+</div>
 </body>
 </html>
