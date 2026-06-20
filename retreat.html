@@ -888,7 +888,7 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:3rem
           </div>
           <div class="form-field">
             <label>Land</label>
-            <select id="f-land">
+            <select id="f-land" required>
               <option value="">Vælg dit land</option>
               <option value="Danmark">Danmark</option>
               <option value="Norge">Norge</option>
@@ -1414,7 +1414,8 @@ function showFormError(msg) {
 async function sendForespørgsel() {
   const { fornavn, efternavn, email } = getFormData();
   const _telefon1 = document.getElementById('f-telefon')?.value.trim();
-  if (!fornavn || !email || !_telefon1) { showFormError('Udfyld fornavn, e-mail og telefon.'); return; }
+  const _land1 = document.getElementById('f-land')?.value;
+  if (!fornavn || !email || !_telefon1 || !_land1) { showFormError('Udfyld fornavn, e-mail, telefon og land.'); return; }
   showFormError('');
 
   const btn = document.querySelector('.form-submit-secondary');
@@ -1471,7 +1472,8 @@ let _bvFuldt = 0;
 function visBetalingsvalg() {
   const { fornavn, efternavn, email } = getFormData();
   const telefon = document.getElementById('f-telefon').value;
-  if (!fornavn || !email || !telefon) { showFormError('Udfyld fornavn, e-mail og telefon.'); return; }
+  const _land2 = document.getElementById('f-land')?.value;
+  if (!fornavn || !email || !telefon || !_land2) { showFormError('Udfyld fornavn, e-mail, telefon og land.'); return; }
   showFormError('');
   const ekstraGaesterListe = Array.from(document.querySelectorAll('.guest-row')).map(row => ({
     navn: row.querySelector('input[placeholder="Fornavn"]') ? row.querySelector('input[placeholder="Fornavn"]').value + ' ' + row.querySelector('input[placeholder="Efternavn"]').value : '',
