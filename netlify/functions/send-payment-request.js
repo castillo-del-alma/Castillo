@@ -111,7 +111,7 @@ exports.handler = async (event) => {
 
         <table width="100%" cellpadding="0" cellspacing="0" style="margin:32px 0;">
           <tr><td align="center">
-            <a href="https://castillo-del-alma.netlify.app/betal?booking=${bookingId}" style="display:inline-block;background:#7a1f35;color:#fff;padding:16px 40px;font-size:11px;letter-spacing:.2em;text-transform:uppercase;text-decoration:none;font-family:sans-serif;">Betal depositum nu</a>
+            <a href="https://castillodelalma.es/betal?booking=${bookingId}" style="display:inline-block;background:#7a1f35;color:#fff;padding:16px 40px;font-size:11px;letter-spacing:.2em;text-transform:uppercase;text-decoration:none;font-family:sans-serif;">Betal depositum nu</a>
           </td></tr>
         </table>
 
