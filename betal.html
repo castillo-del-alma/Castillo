@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Betal depositum — Castillo del Alma</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@300;400&family=Manrope:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Manrope',sans-serif;background:#f0e8d5;color:#2c2318;min-height:100vh;display:flex;align-items:center;justify-content:center;}
+.box{background:#faf6ee;border:1px solid rgba(184,138,30,.25);padding:3rem 2.5rem;max-width:420px;width:92%;text-align:center;}
+.eyebrow{font-size:.62rem;letter-spacing:.35em;text-transform:uppercase;color:#5c3f0e;margin-bottom:.8rem;}
+h1{font-family:'Cinzel',serif;font-size:1.4rem;font-weight:300;letter-spacing:.08em;margin-bottom:.5rem;}
+p{font-size:.82rem;color:rgba(44,35,24,.65);line-height:1.7;margin-bottom:1.5rem;}
+.spinner{display:inline-block;width:20px;height:20px;border:2px solid rgba(122,31,53,.2);border-top-color:#7a1f35;border-radius:50%;animation:spin .7s linear infinite;margin-bottom:1rem;}
+@keyframes spin{to{transform:rotate(360deg);}}
+.err{color:#c05c30;font-size:.8rem;margin-top:1rem;}
+</style>
+</head>
+<body>
+<div class="box">
+  <p class="eyebrow">Castillo del Alma</p>
+  <div class="spinner" id="spinner"></div>
+  <h1 id="heading">Henter booking…</h1>
+  <p id="msg">Et øjeblik — vi sender dig videre til betaling.</p>
+  <p class="err" id="err" style="display:none;"></p>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+const SUPABASE_URL = 'https://niniwgiytyqvdqejigxg.supabase.co';
+const SUPABASE_ANON_KEY = 'sb_publishable_GwrNUpIuWzdg1oswOY5HzA_mKWqhd6y';
+const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+async function init() {
+  const params = new URLSearchParams(window.location.search);
+  const bookingId = params.get('booking');
+  if (!bookingId) { showErr('Ingen booking ID fundet i linket.'); return; }
+
+  try {
+    const { data: booking } = await sb.from('bookings').select('*, customers(full_name, email)').eq('id', bookingId).single();
+    if (!booking) { showErr('Booking ikke fundet.'); return; }
+
+    const kunde = booking.customers;
+    const amount = booking.deposit_amount || Math.round(parseFloat(booking.total_price) * 0.3);
+
+    document.getElementById('heading').textContent = 'Sender dig til betaling…';
+    document.getElementById('msg').textContent = booking.retreat_name || 'Castillo del Alma';
+
+    const res = await fetch('/.netlify/functions/create-checkout', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        bookingId: booking.id,
+        navn: kunde?.full_name || '',
+        email: kunde?.email || '',
+        amount: amount,
+        paymentType: 'deposit',
+        productName: 'Depositum — ' + (booking.retreat_name || 'Castillo del Alma')
+      })
+    });
+    const data = await res.json();
+    if (!res.ok || data.error) throw new Error(data.error || 'Fejl ved oprettelse af betaling');
+    window.location.href = data.url;
+  } catch(e) {
+    showErr('Fejl: ' + e.message);
+  }
+}
+
+function showErr(msg) {
+  document.getElementById('spinner').style.display = 'none';
+  document.getElementById('heading').textContent = 'Noget gik galt';
+  document.getElementById('msg').textContent = '';
+  const err = document.getElementById('err');
+  err.textContent = msg;
+  err.style.display = 'block';
+}
+
+init();
+</script>
+</body>
+</html>
