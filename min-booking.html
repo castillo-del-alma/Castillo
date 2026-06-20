@@ -304,7 +304,8 @@ async function betalResten(amount) {
         email: userEmail,
         amount: Math.round(amount),
         productName: 'Restbetaling — ' + (bookingData.retreat_name || 'Castillo del Alma'),
-        cancelPath: 'min-booking'
+        cancelPath: 'min-booking',
+        paymentType: 'final'
       })
     });
     const data = await res.json();
