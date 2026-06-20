@@ -177,7 +177,12 @@ exports.handler = async (event) => {
             </table>
           </td></tr>
         </table>
-        <p style="margin:0 0 24px;font-size:15px;line-height:1.9;color:rgba(44,35,24,.88);">Når vi har bekræftet din plads, modtager du en email med mulighed for at betale depositum og dermed sikre din reservation endeligt.</p>
+        <p style="margin:0 0 20px;font-size:15px;line-height:1.9;color:rgba(44,35,24,.88);">Når vi har bekræftet din plads, modtager du en email med mulighed for at betale depositum og dermed sikre din reservation endeligt.</p>
+        <table width="100%" cellpadding="0" cellspacing="0" style="margin:0 0 28px;">
+          <tr><td align="center">
+            <a href="https://castillodelalma.es/min-booking" style="display:inline-block;background:#7a1f35;color:#fff;padding:14px 32px;font-size:11px;letter-spacing:.2em;text-transform:uppercase;text-decoration:none;font-family:sans-serif;">Min booking</a>
+          </td></tr>
+        </table>
         <p style="margin:0;font-size:15px;line-height:1.9;color:rgba(44,35,24,.78);font-style:italic;">Med venlig hilsen,<br><span style="color:#2c2318;">Castillo del Alma</span></p>
       </td></tr>
       <tr><td style="padding:0 56px;"><div style="border-top:1px solid rgba(184,138,30,.15);"></div></td></tr>
