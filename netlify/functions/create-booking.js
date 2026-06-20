@@ -8,7 +8,7 @@ exports.handler = async (event) => {
   const RESEND_KEY = process.env.RESEND_API_KEY;
 
   try {
-    const { fornavn, efternavn, email, telefon, nationalitet, gaester, vaerelse, addon_foer, addon_efter, addon_massage, kommentar, ekstra_gaester, retreat_id, retreat_name, arrival_date, departure_date, price_per_guest, deposit_pct, direct_payment } = JSON.parse(event.body);
+    const { fornavn, efternavn, email, telefon, nationalitet, gaester, vaerelse, addon_foer, addon_efter, addon_massage, selected_addons, kommentar, ekstra_gaester, retreat_id, retreat_name, arrival_date, departure_date, price_per_guest, deposit_pct, direct_payment } = JSON.parse(event.body);
 
     if (!fornavn || !email) {
       return { statusCode: 400, body: JSON.stringify({ error: 'Fornavn og email er påkrævet' }) };
@@ -75,7 +75,8 @@ exports.handler = async (event) => {
         retreat_id: retreat_id || null,
         addon_foer: addon_foer || false,
         addon_efter: addon_efter || false,
-        addon_massage: addon_massage || false
+        addon_massage: addon_massage || false,
+        notes: kommentar || null
       })
     });
     const bookingData = await bookingRes.json();
@@ -93,6 +94,20 @@ exports.handler = async (event) => {
         status: 'pending'
       })
     });
+
+    // Opret charges for valgte addons
+    const addonListe = selected_addons || [];
+    if (addonListe.length) {
+      await fetch(`${SUPABASE_URL}/rest/v1/charges`, {
+        method: 'POST',
+        headers,
+        body: JSON.stringify(addonListe.map(a => ({
+          booking_id: booking.id,
+          description: 'Tilvalg: ' + a.text,
+          amount: parseFloat(a.price) || 0
+        })))
+      });
+    }
 
     // Send email via Resend API direkte (kun ved forespørgsel, ikke ved direkte betaling)
     let emailData = null;

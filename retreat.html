@@ -1459,6 +1459,9 @@ async function betalDepositum() {
     const addonFoer = document.getElementById('addon-foer')?.checked || false;
     const addonEfter = document.getElementById('addon-efter')?.checked || false;
     const addonMassage = document.getElementById('addon-massage')?.checked || false;
+    const selectedAddons = Array.from(document.querySelectorAll('.dynamic-addon:checked')).map(cb => ({
+      text: cb.dataset.text, price: parseFloat(cb.dataset.price) || 0
+    }));
 
     const ekstraGaesterListe = Array.from(document.querySelectorAll('.guest-row')).map(row => ({
       navn: row.querySelector('input[placeholder="Fornavn"]') ? row.querySelector('input[placeholder="Fornavn"]').value + ' ' + row.querySelector('input[placeholder="Efternavn"]').value : '',
@@ -1476,6 +1479,7 @@ async function betalDepositum() {
         gaester: antalGaester,
         vaerelse: room, kommentar,
         addon_foer: addonFoer, addon_efter: addonEfter, addon_massage: addonMassage,
+        selected_addons: selectedAddons,
         ekstra_gaester: ekstraGaesterListe,
         nationalitet: document.getElementById('f-land')?.value || '',
         retreat_id: CURRENT_RETREAT?.id || null,
