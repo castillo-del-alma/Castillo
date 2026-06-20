@@ -1398,7 +1398,8 @@ function showFormError(msg) {
 
 async function sendForespørgsel() {
   const { fornavn, efternavn, email } = getFormData();
-  if (!fornavn || !email) { showFormError('Udfyld mindst fornavn og e-mail.'); return; }
+  const _telefon1 = document.getElementById('f-telefon')?.value.trim();
+  if (!fornavn || !email || !_telefon1) { showFormError('Udfyld fornavn, e-mail og telefon.'); return; }
   showFormError('');
 
   const btn = document.querySelector('.form-submit-secondary');
@@ -1445,7 +1446,7 @@ async function sendForespørgsel() {
 async function betalDepositum() {
   const { fornavn, efternavn, name, email } = getFormData();
   const telefon = document.getElementById('f-telefon').value;
-  if (!fornavn || !email) { showFormError('Udfyld mindst fornavn og e-mail.'); return; }
+  if (!fornavn || !email || !telefon) { showFormError('Udfyld fornavn, e-mail og telefon.'); return; }
   showFormError('');
 
   const btn = document.getElementById('btn-depositum');
