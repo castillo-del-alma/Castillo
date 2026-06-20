@@ -1069,7 +1069,10 @@ function renderKunder() {
           <div class="kunde-email">${k.email}</div>
           <div class="kunde-email" style="margin-top:.3rem;font-size:.6rem;opacity:.5;">Oprettet ${fmt(k.created_at)}</div>
         </div>
-        <span class="kunde-status status-${status}">${statusLabel}</span>
+        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:.35rem;">
+          ${k.nationality ? `<span style="font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;background:rgba(184,138,30,.12);color:#7a5c14;border:1px solid rgba(184,138,30,.25);padding:.15rem .5rem;">${k.nationality}</span>` : ''}
+          <span class="kunde-status status-${status}">${statusLabel}</span>
+        </div>
       </div>
       <div class="kunde-info-row">
         <div class="kunde-info-item"><strong>${booking.retreat_name}</strong></div>
