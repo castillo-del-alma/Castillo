@@ -2121,10 +2121,10 @@ async function loadReviews() {
       const truncated = words.length > 30 ? words.slice(0,30).join(' ') + '…' : fullQuote;
       const needsMore = words.length > 30;
       const rData = encodeURIComponent(JSON.stringify(r));
-      return `<div class="review-card">
+      return `<div class="review-card" onclick="visReviewDetalje('${rData}')">
         <div class="review-stars">${stars} <span style="font-size:.75rem;color:rgba(44,35,24,.5);">${avg}/5</span></div>
         <div class="review-quote">“${truncated}”</div>
-        ${needsMore ? `<div style="margin-top:.8rem;text-align:center;"><span onclick="visReviewDetalje('${rData}')" style="font-size:.62rem;letter-spacing:.15em;text-transform:uppercase;color:#7a5c14;cursor:pointer;">Læs mere →</span></div>` : ''}
+
         <div class="review-author"><strong>${navn}</strong>${r.retreat_navn ? '<br><span style="display:block;margin-top:.3rem;"><strong>' + r.retreat_navn + '</strong></span>' : ''}</div>
       </div>`;
     }).join('');
