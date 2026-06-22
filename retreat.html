@@ -1267,7 +1267,7 @@ function renderAddonsInForm(addons) {
     container.style.display = 'none';
     return;
   }
-  container.innerHTML = '<span class="form-addons-label">Tilvalg</span>' + addons.map((a, i) => `
+  container.innerHTML = '<span class="form-addons-label">Tilvalg</span><p style="font-size:.72rem;color:rgba(44,35,24,.65);margin:.3rem 0 .8rem;font-style:italic;">Tilvalg kan bestilles her. Afregning foretages ved afrejse.</p>' + addons.map((a, i) => `
     <label class="addon-item">
       <input type="checkbox" class="dynamic-addon" data-text="${(a.text||'').replace(/"/g,'&quot;')}" data-price="${a.price}">
       <span class="addon-box"></span>
@@ -1480,9 +1480,8 @@ function visBetalingsvalg() {
     email: row.querySelector('input[type="email"]') ? row.querySelector('input[type="email"]').value : ''
   })).filter(g => g.navn.trim());
   _bvAntalGaester = 1 + ekstraGaesterListe.length;
-  const _addonTotal = Array.from(document.querySelectorAll('.dynamic-addon:checked')).reduce((s,cb) => s + (parseFloat(cb.dataset.price)||0), 0);
   _bvDepositum = Math.round(RETREAT_PRICE * DEPOSIT_PCT * _bvAntalGaester);
-  _bvFuldt = Math.round(RETREAT_PRICE * _bvAntalGaester + _addonTotal);
+  _bvFuldt = Math.round(RETREAT_PRICE * _bvAntalGaester);
   document.getElementById('bv-deposit-amount').textContent = _bvDepositum.toLocaleString('da-DK');
   document.getElementById('bv-full-amount').textContent = _bvFuldt.toLocaleString('da-DK');
   document.getElementById('betalingsvalg-overlay').style.display = 'flex';

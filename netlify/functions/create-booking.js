@@ -95,19 +95,7 @@ exports.handler = async (event) => {
       })
     });
 
-    // Opret charges for valgte addons
-    const addonListe = selected_addons || [];
-    if (addonListe.length) {
-      await fetch(`${SUPABASE_URL}/rest/v1/charges`, {
-        method: 'POST',
-        headers,
-        body: JSON.stringify(addonListe.map(a => ({
-          booking_id: booking.id,
-          description: 'Tilvalg: ' + a.text,
-          amount: parseFloat(a.price) || 0
-        })))
-      });
-    }
+    // Tilvalg gemmes kun som info på bookingen - afregnes ved afrejse, opretter ikke charges
 
     // Send email via Resend API direkte (kun ved forespørgsel, ikke ved direkte betaling)
     let emailData = null;
