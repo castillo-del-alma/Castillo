@@ -2106,7 +2106,7 @@ async function loadReviews() {
   try {
     const SUPABASE_URL = 'https://niniwgiytyqvdqejigxg.supabase.co';
     const SUPABASE_ANON_KEY = 'sb_publishable_GwrNUpIuWzdg1oswOY5HzA_mKWqhd6y';
-    const res = await fetch(`${SUPABASE_URL}/rest/v1/reviews?approved=eq.true&order=created_at.desc&limit=3`, {
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/reviews?approved=eq.true&order=sort_order.asc&order=created_at.desc&limit=3`, {
       headers: { 'apikey': SUPABASE_ANON_KEY, 'Authorization': `Bearer ${SUPABASE_ANON_KEY}` }
     });
     const reviews = await res.json();
