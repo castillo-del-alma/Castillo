@@ -9,7 +9,7 @@ exports.handler = async (event) => {
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ['card'],
       mode: 'payment',
-      customer_email: email,
+      ...(email ? { customer_email: email } : {}),
       line_items: [{
         price_data: {
           currency: 'eur',
