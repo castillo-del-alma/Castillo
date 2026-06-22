@@ -2070,6 +2070,54 @@ const SUPABASE_URL_RETREATS = 'https://niniwgiytyqvdqejigxg.supabase.co';
 const SUPABASE_ANON_KEY_RETREATS = 'sb_publishable_GwrNUpIuWzdg1oswOY5HzA_mKWqhd6y';
 const sbRetreats = supabase.createClient(SUPABASE_URL_RETREATS, SUPABASE_ANON_KEY_RETREATS);
 
+async function loadReviews() {
+  const grid = document.getElementById('reviewsGrid');
+  if (!grid) return;
+  try {
+    const SUPABASE_URL = 'https://niniwgiytyqvdqejigxg.supabase.co';
+    const SUPABASE_ANON_KEY = 'sb_publishable_GwrNUpIuWzdg1oswOY5HzA_mKWqhd6y';
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/reviews?approved=eq.true&order=created_at.desc&limit=4`, {
+      headers: { 'apikey': SUPABASE_ANON_KEY, 'Authorization': `Bearer ${SUPABASE_ANON_KEY}` }
+    });
+    const reviews = await res.json();
+    if (!reviews || !reviews.length) { grid.innerHTML = ''; return; }
+    grid.innerHTML = reviews.map(r => {
+      const vals = [r.r1_modtagelse,r.r2_vaerelse,r.r3_mad,r.r4_omgivelser,r.r5_program,r.r6_terapeuter,r.r7_faellesskab,r.r8_personlig,r.r9_ro,r.r10_samlet].filter(Boolean);
+      const avg = vals.length ? Math.round(vals.reduce((a,b)=>a+b,0)/vals.length*10)/10 : 0;
+      const stars = '★'.repeat(Math.round(avg)) + '☆'.repeat(5-Math.round(avg));
+      const navn = r.fornavn ? (r.fornavn + (r.efternavn ? ' ' + r.efternavn[0] + '.' : '')) : 'Anonym';
+      const quote = r.markedsfoering ? r.markedsfoering : (r.bedste ? r.bedste.substring(0,120)+'...' : '');
+      const rData = encodeURIComponent(JSON.stringify(r));
+      return `<div class="review-card" onclick="visReviewDetalje('${rData}')">
+        <div class="review-stars">${stars} <span style="font-size:.75rem;color:rgba(44,35,24,.5);">${avg}/5</span></div>
+        <div class="review-quote">${quote ? '“' + quote + '”' : ''}</div>
+        <div class="review-author">${navn}${r.retreat_navn ? ' · ' + r.retreat_navn : ''}</div>
+      </div>`;
+    }).join('');
+  } catch(e) { console.log('Reviews fejl:', e); }
+}
+
+function visReviewDetalje(rEncoded) {
+  const r = JSON.parse(decodeURIComponent(rEncoded));
+  const vals = [r.r1_modtagelse,r.r2_vaerelse,r.r3_mad,r.r4_omgivelser,r.r5_program,r.r6_terapeuter,r.r7_faellesskab,r.r8_personlig,r.r9_ro,r.r10_samlet].filter(Boolean);
+  const avg = vals.length ? Math.round(vals.reduce((a,b)=>a+b,0)/vals.length*10)/10 : 0;
+  const navn = r.fornavn ? (r.fornavn + (r.efternavn ? ' ' + r.efternavn[0] + '.' : '')) : 'Anonym';
+  document.getElementById('reviewModalContent').innerHTML = `
+    <p style="font-size:.6rem;letter-spacing:.3em;text-transform:uppercase;color:#7a5c14;margin:0 0 .5rem;">${r.retreat_navn||'Castillo del Alma'}</p>
+    <h3 style="font-family:'Cinzel',serif;font-weight:300;font-size:1.2rem;color:#2c2318;margin:0 0 .3rem;">${navn}</h3>
+    <div style="color:#b88a1e;margin-bottom:1.2rem;">${'★'.repeat(Math.round(avg))}${'☆'.repeat(5-Math.round(avg))} <span style="font-size:.8rem;color:rgba(44,35,24,.5);">${avg}/5 gennemsnit</span></div>
+    ${r.markedsfoering?`<p style="font-family:'Cormorant Garamond',serif;font-size:1.15rem;font-style:italic;line-height:1.8;color:#2c2318;margin:0 0 1.5rem;">&#8220;${r.markedsfoering}&#8221;</p>`:''}
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:.4rem .8rem;margin-bottom:1.2rem;">
+      ${[['Modtagelse',r.r1_modtagelse],['Værelse',r.r2_vaerelse],['Mad',r.r3_mad],['Omgivelser',r.r4_omgivelser],['Program',r.r5_program],['Terapeuter',r.r6_terapeuter],['Fællesskab',r.r7_faellesskab],['Personlig',r.r8_personlig],['Ro',r.r9_ro],['Samlet',r.r10_samlet],['Anbefaling',r.r11_anbefaling]].filter(([,v])=>v).map(([l,v])=>`<div style="font-size:.75rem;color:rgba(44,35,24,.85);">${l}: ${'★'.repeat(v)}${'☆'.repeat(5-v)}</div>`).join('')}
+    </div>
+    ${r.bedste?`<p style="font-size:.85rem;line-height:1.7;color:rgba(44,35,24,.85);margin:0 0 .8rem;"><strong>Det bedste:</strong> ${r.bedste}</p>`:''}
+    ${r.forandring?`<p style="font-size:.85rem;line-height:1.7;color:rgba(44,35,24,.85);margin:0;"><strong>Forandring:</strong> ${r.forandring}</p>`:''}
+  `;
+  const modal = document.getElementById('reviewModal');
+  modal.style.display = 'flex';
+  modal.onclick = e => { if (e.target === modal) modal.style.display = 'none'; };
+}
+
 async function loadRetreatsGrid() {
   const grid = document.getElementById('retreatsGrid');
   if (!grid) return;
@@ -2125,7 +2173,7 @@ async function loadRetreatsGrid() {
   }).join('');
 }
 
-document.addEventListener('DOMContentLoaded', loadRetreatsGrid);
+document.addEventListener('DOMContentLoaded', () => { loadRetreatsGrid(); loadReviews(); });
 </script>
 </body>
 </html>
