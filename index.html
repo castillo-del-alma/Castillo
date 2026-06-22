@@ -1181,6 +1181,26 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:5rem
   </div>
 </section>
 
+<!-- ══════ ANMELDELSER ══════ -->
+<section class="reviews-section" id="reviews">
+  <div class="section-inner">
+    <div class="reveal">
+      <span class="section-label">Gæsternes oplevelser</span>
+      <h2 class="split-h">Hvad siger vores <em>gæster</em></h2>
+    </div>
+    <div class="reviews-grid reveal d1" id="reviewsGrid">
+      <div style="grid-column:1/-1;text-align:center;padding:2rem;color:rgba(44,35,24,.4);font-size:.85rem;">Henter anmeldelser…</div>
+    </div>
+  </div>
+</section>
+
+<div id="reviewModal" style="display:none;position:fixed;inset:0;background:rgba(44,35,24,.75);z-index:3000;align-items:center;justify-content:center;cursor:pointer;" onclick="this.style.display='none'">
+  <div style="background:#faf6ee;max-width:580px;width:92%;max-height:85vh;overflow-y:auto;padding:3rem 2.8rem;position:relative;cursor:default;" onclick="event.stopPropagation()">
+    <button onclick="document.getElementById('reviewModal').style.display='none'" style="position:absolute;top:1rem;right:1.2rem;background:none;border:none;font-size:1.3rem;cursor:pointer;color:rgba(44,35,24,.4);line-height:1;">✕</button>
+    <div id="reviewModalContent"></div>
+  </div>
+</div>
+
 <!-- ══════ ESTATE ══════ -->
 <section class="estate" id="estate">
   <div class="section-inner">
@@ -1201,26 +1221,6 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:5rem
     </div>
   </div>
 </section>
-
-<!-- ══════ ANMELDELSER ══════ -->
-<section class="reviews-section" id="reviews">
-  <div class="section-inner">
-    <div class="reveal">
-      <span class="section-label">Gæsternes oplevelser</span>
-      <h2 class="split-h">Hvad siger vores <em>gæster</em></h2>
-    </div>
-    <div class="reviews-grid reveal d1" id="reviewsGrid">
-      <div style="grid-column:1/-1;text-align:center;padding:2rem;color:rgba(44,35,24,.4);font-size:.85rem;">Henter anmeldelser…</div>
-    </div>
-  </div>
-</section>
-
-<div id="reviewModal" style="display:none;position:fixed;inset:0;background:rgba(44,35,24,.75);z-index:3000;align-items:center;justify-content:center;cursor:pointer;" onclick="this.style.display='none'">
-  <div style="background:#faf6ee;max-width:580px;width:92%;max-height:85vh;overflow-y:auto;padding:3rem 2.8rem;position:relative;cursor:default;" onclick="event.stopPropagation()">
-    <button onclick="document.getElementById('reviewModal').style.display='none'" style="position:absolute;top:1rem;right:1.2rem;background:none;border:none;font-size:1.3rem;cursor:pointer;color:rgba(44,35,24,.4);line-height:1;">✕</button>
-    <div id="reviewModalContent"></div>
-  </div>
-</div>
 
 <!-- ══════ VINEYARD — circles bg ══════ -->
 <section class="vineyard has-canvas" id="vineyard">
