@@ -295,6 +295,27 @@ body{font-family:'Manrope',sans-serif;background:#f0e8d5;color:#2c2318;min-heigh
   </div>
 </div>
 
+<!-- MODAL: FAKTURA PREVIEW -->
+<div class="modal-overlay" id="modalFaktura">
+  <div class="modal" style="max-width:780px;width:95%;max-height:90vh;overflow-y:auto;">
+    <button class="modal-close" onclick="closeModal('modalFaktura')">✕</button>
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.2rem;flex-wrap:wrap;gap:.8rem;">
+      <div>
+        <h3 style="margin:0;">Faktura Preview</h3>
+        <div class="modal-sub" id="fakturaNummerLabel">—</div>
+      </div>
+      <div style="display:flex;gap:.6rem;">
+        <button onclick="printFaktura()" style="background:rgba(184,138,30,.15);border:1px solid rgba(184,138,30,.3);color:#7a5c14;padding:.5rem 1rem;font-size:.62rem;letter-spacing:.15em;text-transform:uppercase;cursor:pointer;font-family:'Manrope',sans-serif;">🖨 Print / PDF</button>
+        <button id="sendFakturaBtn" onclick="sendFaktura()" style="background:var(--wine);border:none;color:#fff;padding:.5rem 1.2rem;font-size:.62rem;letter-spacing:.15em;text-transform:uppercase;cursor:pointer;font-family:'Manrope',sans-serif;">✉ Send til kunde</button>
+      </div>
+    </div>
+    <div id="fakturaPreviewWrap" style="border:1px solid rgba(184,138,30,.2);background:#fff;">
+      <iframe id="fakturaIframe" style="width:100%;height:600px;border:none;" sandbox="allow-same-origin"></iframe>
+    </div>
+    <div id="fakturaMsg" style="font-size:.75rem;margin-top:.8rem;min-height:1.2rem;text-align:center;"></div>
+  </div>
+</div>
+
 <!-- MODAL: NYT/REDIGER RETREAT -->
 <div class="modal-overlay" id="modalRetreat">
   <div class="modal" style="max-width:900px;max-height:92vh;overflow-y:auto;">
@@ -568,6 +589,7 @@ body{font-family:'Manrope',sans-serif;background:#f0e8d5;color:#2c2318;min-heigh
       <button class="detalje-tab active" onclick="switchDetaljeTab('info',this)" style="font-family:'Cinzel',serif;font-weight:300;font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;padding:.8rem 1.5rem;background:none;border:none;color:var(--gold);cursor:pointer;border-bottom:2px solid var(--gold);margin-bottom:-1px;">Info</button>
       <button class="detalje-tab" onclick="switchDetaljeTab('beskeder',this)" style="font-family:'Cinzel',serif;font-weight:300;font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;padding:.8rem 1.5rem;background:none;border:none;color:rgba(44,35,24,.75);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;">Beskeder <span id="unreadBadge" style="display:none;background:var(--wine);color:#fff;font-size:.55rem;padding:.1rem .4rem;margin-left:.3rem;">0</span></button>
       <button class="detalje-tab" onclick="switchDetaljeTab('mails',this)" style="font-family:'Cinzel',serif;font-weight:300;font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;padding:.8rem 1.5rem;background:none;border:none;color:rgba(44,35,24,.75);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;">Mails</button>
+      <button id="fakturaBtn" onclick="skabFaktura()" style="margin-left:auto;font-size:.6rem;letter-spacing:.15em;text-transform:uppercase;padding:.5rem 1rem;background:var(--olive);border:none;color:#fff;cursor:pointer;font-family:'Manrope',sans-serif;">⬡ Skab faktura</button>
     </div>
 
     <div id="detaljeTabInfo">
@@ -1294,6 +1316,67 @@ async function gemKundeInfo() {
   msg.style.color='var(--olive)'; msg.textContent='✓ Gemt';
   await loadKunder();
   setTimeout(() => { document.getElementById('redigerForm').style.display='none'; msg.textContent=''; }, 1500);
+}
+
+let aktivFakturaBookingId = null;
+
+async function skabFaktura() {
+  const btn = document.getElementById('fakturaBtn');
+  btn.textContent = '⏳ Genererer…';
+  btn.disabled = true;
+
+  const booking = (allKunder.find(k => k.id === document.getElementById('detaljeNavn').dataset.kundeId)?.bookings||[])[0];
+  if (!booking) { showToast('Ingen booking fundet', true); btn.textContent='⬡ Skab faktura'; btn.disabled=false; return; }
+
+  aktivFakturaBookingId = booking.id;
+
+  try {
+    const res = await fetch('/.netlify/functions/generate-invoice', {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ bookingId: booking.id })
+    });
+    const data = await res.json();
+    if (!res.ok || data.error) throw new Error(data.error);
+
+    document.getElementById('fakturaNummerLabel').textContent = 'Faktura ' + data.invoiceNumber;
+    const iframe = document.getElementById('fakturaIframe');
+    iframe.srcdoc = data.html;
+    window._fakturaPdfBase64 = data.pdfBase64;
+    window._fakturaNumber = data.invoiceNumber;
+
+    document.getElementById('modalFaktura').classList.add('open');
+    document.getElementById('fakturaMsg').textContent = '';
+  } catch(e) {
+    showToast('Fejl: ' + e.message, true);
+  }
+  btn.textContent = '⬡ Skab faktura'; btn.disabled = false;
+}
+
+function printFaktura() {
+  if (!window._fakturaPdfBase64) return;
+  const blob = new Blob([Uint8Array.from(atob(window._fakturaPdfBase64), c=>c.charCodeAt(0))], {type:'application/pdf'});
+  const url = URL.createObjectURL(blob);
+  window.open(url, '_blank');
+}
+
+async function sendFaktura() {
+  const btn = document.getElementById('sendFakturaBtn');
+  const msg = document.getElementById('fakturaMsg');
+  btn.disabled = true; btn.textContent = 'Sender…';
+  msg.style.color = 'rgba(44,35,24,.85)'; msg.textContent = 'Sender faktura til kunde…';
+  try {
+    const res = await fetch('/.netlify/functions/send-invoice', {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ bookingId: aktivFakturaBookingId })
+    });
+    const data = await res.json();
+    if (!res.ok || data.error) throw new Error(data.error);
+    msg.style.color = 'var(--olive)'; msg.textContent = '✓ Faktura sendt til kunden';
+    btn.textContent = '✓ Sendt';
+  } catch(e) {
+    msg.style.color = 'var(--wine)'; msg.textContent = 'Fejl: ' + e.message;
+    btn.disabled = false; btn.textContent = '✉ Send til kunde';
+  }
 }
 
 async function visDetalje(kundeId) {
