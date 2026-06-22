@@ -611,30 +611,55 @@ Forbedringsforslag:
 ${improve}
 `.trim();
 
-  // Send via Formspree
+  // Gem i Supabase
+  const SUPABASE_URL = 'https://niniwgiytyqvdqejigxg.supabase.co';
+  const SUPABASE_ANON_KEY = 'sb_publishable_GwrNUpIuWzdg1oswOY5HzA_mKWqhd6y';
+
   try {
-    const res = await fetch('https://formspree.io/f/xykawbvk', {
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/reviews`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      headers: {
+        'apikey': SUPABASE_ANON_KEY,
+        'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+        'Content-Type': 'application/json',
+        'Prefer': 'return=minimal'
+      },
       body: JSON.stringify({
-        _replyto: 'erik@rybtke.dk',
-        _subject: `⭐ Ny anmeldelse — ${fname} ${lname} (${retreat})`,
-        message: body,
-        navn: `${fname} ${lname}`,
-        retreat, land: country, besøgt: visit,
-        samlet: stars(10) + '/5',
-        anbefaling: stars(11) + '/5',
+        fornavn: fname,
+        efternavn: lname,
+        retreat_navn: retreat,
+        land: country,
+        gruppe: group,
+        besog_dato: visit,
         samtykke: consent,
+        r1_modtagelse: stars(1),
+        r2_vaerelse: stars(2),
+        r3_mad: stars(3),
+        r4_omgivelser: stars(4),
+        r5_program: stars(5),
+        r6_terapeuter: stars(6),
+        r7_faellesskab: stars(7),
+        r8_personlig: stars(8),
+        r9_ro: stars(9),
+        r10_samlet: stars(10),
+        r11_anbefaling: stars(11),
         bedste: best,
         forandring: change,
+        forbedringsforslag: improve,
+        approved: false
       })
     });
 
     if (res.ok) {
+      // Send notifikation til Erik
+      await fetch('/.netlify/functions/notify-review', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ fname, lname, retreat, samlet: stars(10), anbefaling: stars(11), bedste: best })
+      }).catch(() => {});
       showThankyou();
     } else {
-      // Fallback — mailto
-      sendMailto(body, fname, lname, retreat);
+      throw new Error('Supabase fejl');
     }
   } catch(e) {
     sendMailto(body, fname, lname, retreat);
