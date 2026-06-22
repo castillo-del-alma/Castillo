@@ -339,8 +339,8 @@ async function betalResten(amount, paymentType = 'final') {
     if (!res.ok || data.error) throw new Error(data.error || 'Ukendt fejl');
     window.location.href = data.url;
   } catch(e) {
-    btn.disabled = false;
-    btn.textContent = 'Betal udestående — €' + parseFloat(amount).toFixed(2);
+    if (btn) { btn.disabled = false; btn.textContent = 'Betal udestående — €' + parseFloat(amount).toFixed(2); }
+    alert('Fejl: ' + e.message);
   }
 }
 
