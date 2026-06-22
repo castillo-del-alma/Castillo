@@ -319,9 +319,8 @@ async function gennemfoerBetalingMB(type) {
 }
 
 async function betalResten(amount, paymentType = 'final') {
-  const btn = event.target.closest('button');
-  btn.disabled = true;
-  btn.textContent = 'Opretter betaling…';
+  const btn = (typeof event !== 'undefined' && event?.target) ? event.target.closest('button') : null;
+  if (btn) { btn.disabled = true; btn.textContent = 'Opretter betaling…'; }
   try {
     const res = await fetch('/.netlify/functions/create-checkout', {
       method: 'POST',
