@@ -765,8 +765,8 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:5rem
    GALLERY
 ══════════════════════════════ */
 .reviews-section{background:var(--cream);padding:9rem 0;}
-.reviews-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:2rem;margin-top:4rem;}
-.review-card{background:#fff;border:1px solid rgba(184,138,30,.2);border-top:3px solid #b88a1e;padding:2.8rem 2.2rem;cursor:pointer;transition:box-shadow .4s,transform .4s;display:flex;flex-direction:column;min-height:280px;}
+.reviews-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2rem;margin-top:4rem;}
+.review-card{background:#fff;border:1px solid rgba(184,138,30,.2);border-top:3px solid #b88a1e;padding:2.4rem 2.2rem;cursor:pointer;transition:box-shadow .4s,transform .4s;display:flex;flex-direction:column;}
 .review-card:hover{box-shadow:0 16px 48px rgba(44,35,24,.13);transform:translateY(-5px);}
 .review-stars{color:#b88a1e;font-size:1.15rem;letter-spacing:.15em;margin-bottom:1.4rem;}
 .review-quote{font-family:'Cormorant Garamond',serif;font-size:1.2rem;font-style:italic;color:#2c2318;line-height:1.85;flex:1;}
@@ -1203,9 +1203,9 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:5rem
 <!-- ══════ ANMELDELSER ══════ -->
 <section class="reviews-section" id="reviews">
   <div class="section-inner">
-    <div class="reveal" style="text-align:center;margin-bottom:0;">
-      <span class="section-label" style="justify-content:center;">Gæsternes oplevelser</span>
-      <h2 class="split-h" style="text-align:center;">Hvad <em>siger de</em></h2>
+    <div class="reveal">
+      <span class="section-label">Gæsternes oplevelser</span>
+      <h2 class="split-h">Hvad siger vores <em>gæster</em></h2>
     </div>
     <div class="reviews-grid reveal d1" id="reviewsGrid">
       <div style="grid-column:1/-1;text-align:center;padding:2rem;color:rgba(44,35,24,.4);font-size:.85rem;">Henter anmeldelser…</div>
@@ -2102,7 +2102,7 @@ async function loadReviews() {
   try {
     const SUPABASE_URL = 'https://niniwgiytyqvdqejigxg.supabase.co';
     const SUPABASE_ANON_KEY = 'sb_publishable_GwrNUpIuWzdg1oswOY5HzA_mKWqhd6y';
-    const res = await fetch(`${SUPABASE_URL}/rest/v1/reviews?approved=eq.true&order=created_at.desc&limit=4`, {
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/reviews?approved=eq.true&order=created_at.desc&limit=3`, {
       headers: { 'apikey': SUPABASE_ANON_KEY, 'Authorization': `Bearer ${SUPABASE_ANON_KEY}` }
     });
     const reviews = await res.json();
@@ -2112,11 +2112,15 @@ async function loadReviews() {
       const avg = vals.length ? Math.round(vals.reduce((a,b)=>a+b,0)/vals.length*10)/10 : 0;
       const stars = '★'.repeat(Math.round(avg)) + '☆'.repeat(5-Math.round(avg));
       const navn = r.fornavn ? (r.fornavn + (r.efternavn ? ' ' + r.efternavn[0] + '.' : '')) : 'Anonym';
-      const quote = r.markedsfoering ? r.markedsfoering : (r.bedste ? r.bedste.substring(0,120)+'...' : '');
+      const fullQuote = r.markedsfoering || r.bedste || '';
+      const words = fullQuote.split(' ');
+      const truncated = words.length > 30 ? words.slice(0,30).join(' ') + '…' : fullQuote;
+      const needsMore = words.length > 30;
       const rData = encodeURIComponent(JSON.stringify(r));
-      return `<div class="review-card" onclick="visReviewDetalje('${rData}')">
+      return `<div class="review-card">
         <div class="review-stars">${stars} <span style="font-size:.75rem;color:rgba(44,35,24,.5);">${avg}/5</span></div>
-        <div class="review-quote">${quote ? '“' + quote + '”' : ''}</div>
+        <div class="review-quote">“${truncated}”</div>
+        ${needsMore ? `<div style="margin-top:.8rem;"><span onclick="visReviewDetalje('${rData}')" style="font-size:.62rem;letter-spacing:.15em;text-transform:uppercase;color:#7a5c14;cursor:pointer;border-bottom:1px solid rgba(122,92,20,.3);">Læs mere →</span></div>` : ''}
         <div class="review-author">${navn}${r.retreat_navn ? ' · ' + r.retreat_navn : ''}</div>
       </div>`;
     }).join('');
