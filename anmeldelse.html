@@ -443,6 +443,11 @@ body{font-family:'Manrope',sans-serif;background:var(--cream);color:var(--text);
       <textarea id="improve" placeholder="Del dine tanker om hvad vi kan forbedre..."></textarea>
     </div>
 
+    <div class="text-question" style="margin-top:1.5rem;">
+      <label><strong>Din oplevelse i én sætning</strong>Skriv en kort sætning om dit ophold — som vi evt. må bruge på vores hjemmeside og sociale medier</label>
+      <textarea id="markedsfoering" placeholder="F.eks. &quot;Det var en uge der forandrede mig — jeg fandt roen og kom hjem som et nyt menneske.&quot;" style="min-height:80px;"></textarea>
+    </div>
+
     <div class="form-nav">
       <button class="btn-prev" onclick="goTo(2)">← Tilbage</button>
       <button class="btn-next" onclick="goTo(4)">Næste →</button>
@@ -557,6 +562,60 @@ function getStarValue(name) {
   return checked ? parseInt(checked.value) : 0;
 }
 
+async function prefillFromBooking() {
+  const params = new URLSearchParams(window.location.search);
+  const bookingId = params.get('booking');
+  if (!bookingId) return;
+
+  try {
+    const SUPABASE_URL = 'https://niniwgiytyqvdqejigxg.supabase.co';
+    const SUPABASE_ANON_KEY = 'sb_publishable_GwrNUpIuWzdg1oswOY5HzA_mKWqhd6y';
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/bookings?id=eq.${bookingId}&select=*,customers(*)`, {
+      headers: { 'apikey': SUPABASE_ANON_KEY, 'Authorization': `Bearer ${SUPABASE_ANON_KEY}` }
+    });
+    const arr = await res.json();
+    const b = arr[0];
+    if (!b) return;
+
+    const kunde = b.customers;
+    if (kunde?.full_name) {
+      const parts = kunde.full_name.trim().split(' ');
+      const el = document.getElementById('fname');
+      if (el) el.value = parts[0];
+      const el2 = document.getElementById('lname');
+      if (el2) el2.value = parts.slice(1).join(' ');
+    }
+    if (b.retreat_name) {
+      const sel = document.getElementById('retreatName');
+      if (sel) {
+        for (let opt of sel.options) {
+          if (opt.value === b.retreat_name || opt.text === b.retreat_name) { opt.selected = true; break; }
+        }
+        if (sel.value === '' || sel.value === undefined) {
+          const opt = document.createElement('option');
+          opt.value = b.retreat_name; opt.text = b.retreat_name; opt.selected = true;
+          sel.appendChild(opt);
+        }
+      }
+    }
+    if (b.arrival_date) {
+      const d = new Date(b.arrival_date);
+      const el = document.getElementById('visitDate');
+      if (el) el.value = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`;
+    }
+    if (kunde?.nationality) {
+      const sel = document.getElementById('country');
+      if (sel) {
+        for (let opt of sel.options) {
+          if (opt.value === kunde.nationality || opt.text === kunde.nationality) { opt.selected = true; break; }
+        }
+      }
+    }
+  } catch(e) { console.log('Prefill fejl:', e); }
+}
+
+document.addEventListener('DOMContentLoaded', prefillFromBooking);
+
 async function submitReview() {
   const btn = document.querySelector('#page4 .btn-next');
   btn.disabled = true;
@@ -646,6 +705,7 @@ ${improve}
         bedste: best,
         forandring: change,
         forbedringsforslag: improve,
+        markedsfoering: document.getElementById('markedsfoering')?.value || null,
         approved: false
       })
     });

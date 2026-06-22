@@ -269,6 +269,7 @@ body{font-family:'Manrope',sans-serif;background:#f0e8d5;color:#2c2318;min-heigh
     <div class="kunde-toolbar">
       <button class="btn-primary" onclick="openNyKunde()">+ Ny kunde</button>
       <button class="btn-secondary" onclick="loadKunder()">↺ Opdater</button>
+      <button class="btn-secondary" onclick="visAnmeldelser()" style="background:rgba(184,138,30,.12);border-color:rgba(184,138,30,.3);color:#7a5c14;">★ Anmeldelser</button>
       <input type="text" id="kundeSearch" placeholder="Søg navn eller email..." oninput="renderKunder()">
     </div>
     <div style="display:flex;gap:.4rem;flex-wrap:nowrap;overflow-x:auto;padding-left:3rem;margin-bottom:1rem;align-items:center;">
@@ -292,6 +293,16 @@ body{font-family:'Manrope',sans-serif;background:#f0e8d5;color:#2c2318;min-heigh
     <div class="kunder-grid" id="retreatsGrid">
       <div class="loading">Henter retreats...</div>
     </div>
+  </div>
+</div>
+
+<!-- MODAL: ANMELDELSER -->
+<div class="modal-overlay" id="modalAnmeldelser">
+  <div class="modal" style="max-width:860px;width:95%;max-height:90vh;overflow-y:auto;">
+    <button class="modal-close" onclick="closeModal('modalAnmeldelser')">✕</button>
+    <h3 style="margin:0 0 .5rem;">Anmeldelser</h3>
+    <div class="modal-sub" id="anmeldelserCount">Henter…</div>
+    <div id="anmeldelserListe" style="margin-top:1.5rem;display:flex;flex-direction:column;gap:1rem;"></div>
   </div>
 </div>
 
@@ -589,6 +600,7 @@ body{font-family:'Manrope',sans-serif;background:#f0e8d5;color:#2c2318;min-heigh
       <button class="detalje-tab active" onclick="switchDetaljeTab('info',this)" style="font-family:'Cinzel',serif;font-weight:300;font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;padding:.8rem 1.5rem;background:none;border:none;color:var(--gold);cursor:pointer;border-bottom:2px solid var(--gold);margin-bottom:-1px;">Info</button>
       <button class="detalje-tab" onclick="switchDetaljeTab('beskeder',this)" style="font-family:'Cinzel',serif;font-weight:300;font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;padding:.8rem 1.5rem;background:none;border:none;color:rgba(44,35,24,.75);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;">Beskeder <span id="unreadBadge" style="display:none;background:var(--wine);color:#fff;font-size:.55rem;padding:.1rem .4rem;margin-left:.3rem;">0</span></button>
       <button class="detalje-tab" onclick="switchDetaljeTab('mails',this)" style="font-family:'Cinzel',serif;font-weight:300;font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;padding:.8rem 1.5rem;background:none;border:none;color:rgba(44,35,24,.75);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;">Mails</button>
+      <button onclick="sendAnmeldelsesLink()" style="font-size:.6rem;letter-spacing:.15em;text-transform:uppercase;padding:.5rem 1rem;background:rgba(58,110,106,.15);border:1px solid rgba(58,110,106,.3);color:#2c5450;cursor:pointer;font-family:'Manrope',sans-serif;">✉ Anmeldelseslink</button>
       <button id="fakturaBtn" onclick="skabFaktura()" style="margin-left:auto;font-size:.6rem;letter-spacing:.15em;text-transform:uppercase;padding:.5rem 1rem;background:var(--olive);border:none;color:#fff;cursor:pointer;font-family:'Manrope',sans-serif;">⬡ Skab faktura</button>
     </div>
 
@@ -1319,6 +1331,66 @@ async function gemKundeInfo() {
 }
 
 let aktivFakturaBookingId = null;
+
+async function sendAnmeldelsesLink() {
+  const kundeId = document.getElementById('detaljeNavn').dataset.kundeId;
+  const kunde = allKunder.find(k => k.id === kundeId);
+  if (!kunde) return;
+  const booking = (kunde.bookings||[])[0];
+  if (!booking) { alert('Ingen booking fundet'); return; }
+  const btn = event.target;
+  btn.disabled = true; btn.textContent = 'Sender…';
+  try {
+    const res = await fetch('/.netlify/functions/send-review-link', {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ bookingId: booking.id, kundeNavn: kunde.full_name, kundeEmail: kunde.email, retreatNavn: booking.retreat_name||'Castillo del Alma' })
+    });
+    const data = await res.json();
+    if (!res.ok || data.error) throw new Error(data.error);
+    btn.textContent = '✓ Sendt';
+    setTimeout(() => { btn.disabled = false; btn.textContent = '✉ Anmeldelseslink'; }, 3000);
+  } catch(e) { alert('Fejl: ' + e.message); btn.disabled = false; btn.textContent = '✉ Anmeldelseslink'; }
+}
+
+async function visAnmeldelser() {
+  document.getElementById('modalAnmeldelser').classList.add('open');
+  const liste = document.getElementById('anmeldelserListe');
+  const count = document.getElementById('anmeldelserCount');
+  liste.innerHTML = '<p style="font-size:.82rem;color:rgba(44,35,24,.5);">Henter…</p>';
+  const { data, error } = await sb.from('reviews').select('*').order('created_at', { ascending: false });
+  if (error || !data) { liste.innerHTML = '<p style="color:var(--wine);">Fejl</p>'; return; }
+  count.textContent = data.length + ' anmeldelser · ' + data.filter(r=>!r.approved).length + ' afventer godkendelse';
+  if (!data.length) { liste.innerHTML = '<p style="font-size:.82rem;color:rgba(44,35,24,.5);">Ingen anmeldelser endnu.</p>'; return; }
+  liste.innerHTML = data.map(r => `
+    <div style="background:${r.approved?'rgba(74,80,40,.06)':'rgba(184,138,30,.06)'};border:1px solid ${r.approved?'rgba(74,80,40,.2)':'rgba(184,138,30,.2)'};padding:1.2rem 1.5rem;">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:.5rem;margin-bottom:.8rem;">
+        <div>
+          <span style="font-size:.95rem;font-family:'Cinzel',serif;color:#2c2318;">${r.fornavn||''} ${r.efternavn||''}</span>
+          <span style="font-size:.65rem;color:rgba(44,35,24,.5);margin-left:.8rem;">${r.retreat_navn||'—'}</span>
+        </div>
+        <div style="display:flex;gap:.5rem;align-items:center;flex-wrap:wrap;">
+          <span style="font-size:.7rem;color:rgba(44,35,24,.5);">${new Date(r.created_at).toLocaleDateString('da-DK',{day:'numeric',month:'short',year:'numeric'})}</span>
+          <span style="font-size:.6rem;padding:.2rem .5rem;background:${r.approved?'rgba(74,80,40,.15)':'rgba(184,138,30,.15)'};color:${r.approved?'#4a5028':'#7a5c14'};">${r.approved?'Godkendt':'Afventer'}</span>
+          ${!r.approved?`<button onclick="godkendAnmeldelse('${r.id}',this)" style="font-size:.58rem;padding:.2rem .6rem;background:var(--olive);border:none;color:#fff;cursor:pointer;font-family:'Manrope',sans-serif;letter-spacing:.1em;text-transform:uppercase;">Godkend</button>`:''}
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:.3rem .8rem;margin-bottom:.8rem;">
+        ${[['Modtagelse',r.r1_modtagelse],['Værelse',r.r2_vaerelse],['Mad',r.r3_mad],['Omgivelser',r.r4_omgivelser],['Program',r.r5_program],['Terapeuter',r.r6_terapeuter],['Fællesskab',r.r7_faellesskab],['Personlig',r.r8_personlig],['Ro',r.r9_ro],['Samlet',r.r10_samlet],['Anbefaling',r.r11_anbefaling]].map(([l,v])=>v?`<div style="font-size:.68rem;color:rgba(44,35,24,.85);">${l}: <strong>${'●'.repeat(v)}${'○'.repeat(5-v)}</strong> ${v}/5</div>`:'').join('')}
+      </div>
+      ${r.markedsfoering?`<div style="background:rgba(184,138,30,.08);border-left:2px solid #b88a1e;padding:.6rem .8rem;margin-bottom:.6rem;font-size:.82rem;font-style:italic;color:#2c2318;">"${r.markedsfoering}"</div>`:''}
+      ${r.bedste?`<div style="font-size:.75rem;color:rgba(44,35,24,.85);margin-bottom:.3rem;"><strong>Bedste:</strong> ${r.bedste}</div>`:''}
+      ${r.forandring?`<div style="font-size:.75rem;color:rgba(44,35,24,.85);margin-bottom:.3rem;"><strong>Forandring:</strong> ${r.forandring}</div>`:''}
+      ${r.forbedringsforslag?`<div style="font-size:.75rem;color:rgba(44,35,24,.85);"><strong>Forbedring:</strong> ${r.forbedringsforslag}</div>`:''}
+    </div>`).join('');
+}
+
+async function godkendAnmeldelse(id, btn) {
+  btn.disabled = true; btn.textContent = '…';
+  const { error } = await sb.from('reviews').update({ approved: true }).eq('id', id);
+  if (error) { btn.textContent = 'Fejl'; return; }
+  btn.remove();
+  await visAnmeldelser();
+}
 
 async function skabFaktura() {
   const btn = document.getElementById('fakturaBtn');

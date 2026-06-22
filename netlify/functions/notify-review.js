@@ -2,7 +2,7 @@ exports.handler = async (event) => {
   if (event.httpMethod !== 'POST') return { statusCode: 405, body: 'Method Not Allowed' };
   const { fname, lname, retreat, samlet, anbefaling, bedste } = JSON.parse(event.body);
   const RESEND_KEY = process.env.RESEND_API_KEY;
-  const stars = n => '★'.repeat(n) + '☆'.repeat(5 - n);
+  const stars = n => `${n}/5 (${'●'.repeat(n)}${'○'.repeat(5-n)})`;
 
   try {
     await fetch('https://api.resend.com/emails', {
@@ -19,8 +19,8 @@ exports.handler = async (event) => {
   <h2 style="font-size:20px;font-weight:normal;margin:6px 0 20px;">${fname} ${lname}</h2>
   <table style="width:100%;font-size:13px;border-collapse:collapse;">
     <tr><td style="padding:6px 0;color:#7a5c14;width:140px;">Retreat</td><td>${retreat}</td></tr>
-    <tr><td style="padding:6px 0;color:#7a5c14;">Samlet oplevelse</td><td>${stars(samlet)} (${samlet}/5)</td></tr>
-    <tr><td style="padding:6px 0;color:#7a5c14;">Anbefaling</td><td>${stars(anbefaling)} (${anbefaling}/5)</td></tr>
+    <tr><td style="padding:6px 0;color:#7a5c14;">Samlet oplevelse</td><td>${stars(samlet)}</td></tr>
+    <tr><td style="padding:6px 0;color:#7a5c14;">Anbefaling</td><td>${stars(anbefaling)}</td></tr>
   </table>
   ${bedste ? `<div style="margin-top:20px;padding:16px;background:rgba(184,138,30,.08);border-left:2px solid #b88a1e;">
     <p style="font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:#7a5c14;margin:0 0 8px;">Det bedste ved opholdet</p>
