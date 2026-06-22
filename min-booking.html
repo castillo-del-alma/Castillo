@@ -247,7 +247,10 @@ function renderBooking() {
       <div class="label" style="margin-bottom:.8rem;font-size:.65rem;letter-spacing:.15em;">Tilvalg</div>
       <div style="display:flex;flex-direction:column;gap:.7rem;">
         ${(()=>{
-          const activeTexts = new Set((b.charges||[]).filter(c=>c.description?.startsWith('Tilvalg:')).map(c=>c.description.replace('Tilvalg: ','')));
+          const activeTexts = new Set([
+            ...((b.selected_addons||[]).map(a=>a.text)),
+            ...(b.charges||[]).filter(c=>c.description?.startsWith('Tilvalg:')).map(c=>c.description.replace('Tilvalg: ',''))
+          ]);
           return (retreatData.addon_items||[]).map((a,i)=>`
             <label style="display:flex;align-items:center;gap:.8rem;cursor:pointer;">
               <input type="checkbox" class="dynamic-addon" data-text="${(a.text||'').replace(/"/g,'&quot;')}" data-price="${a.price||0}" ${activeTexts.has(a.text)?'checked':''} style="accent-color:#b88a1e;width:16px;height:16px;">

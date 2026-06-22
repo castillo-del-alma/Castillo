@@ -95,7 +95,15 @@ exports.handler = async (event) => {
       })
     });
 
-    // Tilvalg gemmes kun som info på bookingen - afregnes ved afrejse, opretter ikke charges
+    // Gem valgte tilvalg på bookingen
+    const addonListe = selected_addons || [];
+    if (addonListe.length) {
+      await fetch(`${SUPABASE_URL}/rest/v1/bookings?id=eq.${booking.id}`, {
+        method: 'PATCH',
+        headers: { ...headers, 'Prefer': 'return=minimal' },
+        body: JSON.stringify({ selected_addons: addonListe })
+      });
+    }
 
     // Send email via Resend API direkte (kun ved forespørgsel, ikke ved direkte betaling)
     let emailData = null;
