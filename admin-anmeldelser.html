@@ -1352,16 +1352,25 @@ async function sendAnmeldelsesLink() {
   } catch(e) { alert('Fejl: ' + e.message); btn.disabled = false; btn.textContent = '✉ Anmeldelseslink'; }
 }
 
+let _alleAnmeldelser = [];
+
 async function visAnmeldelser() {
   document.getElementById('modalAnmeldelser').classList.add('open');
   const liste = document.getElementById('anmeldelserListe');
   const count = document.getElementById('anmeldelserCount');
   liste.innerHTML = '<p style="font-size:.82rem;color:rgba(44,35,24,.5);">Henter…</p>';
-  const { data, error } = await sb.from('reviews').select('*').order('created_at', { ascending: false });
+  const { data, error } = await sb.from('reviews').select('*').order('sort_order', { ascending: true }).order('created_at', { ascending: false });
   if (error || !data) { liste.innerHTML = '<p style="color:var(--wine);">Fejl</p>'; return; }
+  _alleAnmeldelser = data;
   count.textContent = data.length + ' anmeldelser · ' + data.filter(r=>!r.approved).length + ' afventer godkendelse';
   if (!data.length) { liste.innerHTML = '<p style="font-size:.82rem;color:rgba(44,35,24,.5);">Ingen anmeldelser endnu.</p>'; return; }
-  liste.innerHTML = data.map(r => `
+  renderAnmeldelserListe();
+}
+
+function renderAnmeldelserListe() {
+  const liste = document.getElementById('anmeldelserListe');
+  const data = _alleAnmeldelser;
+  liste.innerHTML = data.map((r,idx) => `
     <div style="background:${r.approved?'rgba(74,80,40,.06)':'rgba(184,138,30,.06)'};border:1px solid ${r.approved?'rgba(74,80,40,.2)':'rgba(184,138,30,.2)'};padding:1.2rem 1.5rem;">
       <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:.5rem;margin-bottom:.8rem;">
         <div>
@@ -1381,7 +1390,25 @@ async function visAnmeldelser() {
       ${r.bedste?`<div style="font-size:.75rem;color:rgba(44,35,24,.85);margin-bottom:.3rem;"><strong>Bedste:</strong> ${r.bedste}</div>`:''}
       ${r.forandring?`<div style="font-size:.75rem;color:rgba(44,35,24,.85);margin-bottom:.3rem;"><strong>Forandring:</strong> ${r.forandring}</div>`:''}
       ${r.forbedringsforslag?`<div style="font-size:.75rem;color:rgba(44,35,24,.85);"><strong>Forbedring:</strong> ${r.forbedringsforslag}</div>`:''}
+    <div style="display:flex;gap:.4rem;margin-top:.6rem;">
+        <button onclick="flytAnmeldelse(${idx},-1)" ${idx===0?'disabled':''} style="font-size:.65rem;padding:.2rem .6rem;background:rgba(44,35,24,.06);border:1px solid rgba(44,35,24,.15);color:#2c2318;cursor:pointer;font-family:'Manrope',sans-serif;">↑ Op</button>
+        <button onclick="flytAnmeldelse(${idx},1)" ${idx===data.length-1?'disabled':''} style="font-size:.65rem;padding:.2rem .6rem;background:rgba(44,35,24,.06);border:1px solid rgba(44,35,24,.15);color:#2c2318;cursor:pointer;font-family:'Manrope',sans-serif;">↓ Ned</button>
+      </div>
     </div>`).join('');
+}
+
+async function flytAnmeldelse(idx, dir) {
+  const other = idx + dir;
+  if (other < 0 || other >= _alleAnmeldelser.length) return;
+  const a = _alleAnmeldelser[idx];
+  const b = _alleAnmeldelser[other];
+  const aOrder = a.sort_order ?? idx;
+  const bOrder = b.sort_order ?? other;
+  _alleAnmeldelser[idx] = b;
+  _alleAnmeldelser[other] = a;
+  renderAnmeldelserListe();
+  await sb.from('reviews').update({ sort_order: bOrder }).eq('id', a.id);
+  await sb.from('reviews').update({ sort_order: aOrder }).eq('id', b.id);
 }
 
 async function godkendAnmeldelse(id, btn) {
