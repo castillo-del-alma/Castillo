@@ -199,6 +199,7 @@ function logOut() {
 }
 
 async function loadPortal(email) {
+  userEmail = email;
   document.getElementById('loginWrap').style.display = 'none';
   document.getElementById('portalHeader').style.display = 'flex';
   document.getElementById('portalWrap').style.display = 'block';
