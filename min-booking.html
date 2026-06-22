@@ -110,6 +110,7 @@ body{font-family:'Manrope',sans-serif;background:var(--cream);color:var(--charco
       <button class="tab-btn" onclick="switchTab('betalinger',this)">Betalinger</button>
       <button class="tab-btn" onclick="switchTab('beskeder',this)">Beskeder <span id="kundeUnreadBadge" style="display:none;background:var(--wine);color:#fff;font-size:.55rem;padding:.1rem .4rem;margin-left:.3rem;">0</span></button>
       <button class="tab-btn" onclick="switchTab('emails',this)">E-mails</button>
+      <button class="tab-btn" onclick="switchTab('faktura',this)">Faktura</button>
     </div>
     <div class="tab-content active" id="tab-booking">
       <div class="booking-card" id="bookingCard"><div class="empty-state">Henter booking...</div></div>
@@ -119,6 +120,9 @@ body{font-family:'Manrope',sans-serif;background:var(--cream);color:var(--charco
     </div>
     <div class="tab-content" id="tab-emails">
       <div id="kundeEmailListe" style="padding:.5rem 0;display:flex;flex-direction:column;gap:.8rem;"></div>
+    </div>
+    <div class="tab-content" id="tab-faktura">
+      <div id="fakturaTabContent" style="padding:1rem 0;"></div>
     </div>
     <div class="tab-content" id="tab-beskeder">
       <div class="besked-liste" id="kundeBeskedListe"><div class="empty-state">Henter beskeder...</div></div>
@@ -477,10 +481,55 @@ function toggleKundeMailPreview(id) {
   if (el) el.style.display = el.style.display === 'none' ? 'block' : 'none';
 }
 
+async function loadFakturaTab() {
+  const el = document.getElementById('fakturaTabContent');
+  if (!bookingData?.id) { el.innerHTML = '<p style="font-size:.82rem;color:rgba(44,35,24,.5);">Ingen booking fundet.</p>'; return; }
+  el.innerHTML = '<p style="font-size:.82rem;color:rgba(44,35,24,.5);">Henter faktura…</p>';
+  const SUPABASE_URL = 'https://niniwgiytyqvdqejigxg.supabase.co';
+  const SUPABASE_ANON_KEY = 'sb_publishable_GwrNUpIuWzdg1oswOY5HzA_mKWqhd6y';
+  const res = await fetch(`${SUPABASE_URL}/rest/v1/invoices?booking_id=eq.${bookingData.id}&select=*`, {
+    headers: { 'apikey': SUPABASE_ANON_KEY, 'Authorization': `Bearer ${SUPABASE_ANON_KEY}` }
+  });
+  const invoices = await res.json();
+  if (!invoices || invoices.length === 0) {
+    el.innerHTML = '<p style="font-size:.82rem;color:rgba(44,35,24,.5);">Ingen faktura er udstedt endnu.</p>';
+    return;
+  }
+  const inv = invoices[0];
+  const sentDate = inv.sent_at ? new Date(inv.sent_at).toLocaleDateString('da-DK',{day:'numeric',month:'short',year:'numeric'}) : null;
+  el.innerHTML = `<div style="background:rgba(184,138,30,.06);border:1px solid rgba(184,138,30,.2);padding:1.2rem 1.5rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:.8rem;">
+    <div>
+      <div style="font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;color:#7a5c14;margin-bottom:.3rem;">Faktura</div>
+      <div style="font-size:1rem;font-family:'Cinzel',serif;font-weight:300;color:#2c2318;">Nr. ${inv.invoice_number}</div>
+      <div style="font-size:.75rem;color:rgba(44,35,24,.7);margin-top:.2rem;">Total: €${parseFloat(inv.total_amount).toFixed(2)}</div>
+      ${sentDate ? `<div style="font-size:.68rem;color:rgba(44,35,24,.5);margin-top:.2rem;">Sendt ${sentDate}</div>` : ''}
+    </div>
+    <button onclick="downloadFaktura('${bookingData.id}')" style="background:#7a1f35;border:none;color:#fff;padding:.65rem 1.2rem;font-size:.62rem;letter-spacing:.15em;text-transform:uppercase;cursor:pointer;font-family:'Manrope',sans-serif;">⬇ Download PDF</button>
+  </div>`;
+}
+
+async function downloadFaktura(bookingId) {
+  const btn = event.target;
+  btn.textContent = 'Henter…'; btn.disabled = true;
+  try {
+    const res = await fetch('/.netlify/functions/generate-invoice', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ bookingId })
+    });
+    const data = await res.json();
+    if (!res.ok || data.error) throw new Error(data.error);
+    const blob = new Blob([Uint8Array.from(atob(data.pdfBase64), c=>c.charCodeAt(0))], {type:'application/pdf'});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a'); a.href = url; a.download = `faktura-${data.invoiceNumber}.pdf`; a.click();
+  } catch(e) { alert('Fejl: ' + e.message); }
+  btn.textContent = '⬇ Download PDF'; btn.disabled = false;
+}
+
 function switchTab(tab, btn) {
   document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
   document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
   if (tab === 'emails') loadKundeEmails();
+  if (tab === 'faktura') loadFakturaTab();
   btn.classList.add('active');
   document.getElementById('tab-'+tab).classList.add('active');
   if (tab === 'beskeder') {
