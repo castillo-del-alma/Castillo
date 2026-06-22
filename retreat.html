@@ -1267,7 +1267,7 @@ function renderAddonsInForm(addons) {
     container.style.display = 'none';
     return;
   }
-  container.innerHTML = '<span class="form-addons-label">Tilvalg</span><p style="font-size:.72rem;color:rgba(44,35,24,.65);margin:.3rem 0 .8rem;font-style:italic;">Tilvalg kan bestilles her. Afregning foretages ved afrejse.</p>' + addons.map((a, i) => `
+  container.innerHTML = '<span class="form-addons-label">Tilvalg</span><p style="font-size:12px;color:rgba(44,35,24,.8);margin:.3rem 0 .8rem;font-family:Manrope,sans-serif;font-weight:400;">Tilvalg kan bestilles her. Afregning foretages ved afrejse.</p>' + addons.map((a, i) => `
     <label class="addon-item">
       <input type="checkbox" class="dynamic-addon" data-text="${(a.text||'').replace(/"/g,'&quot;')}" data-price="${a.price}">
       <span class="addon-box"></span>
