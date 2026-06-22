@@ -1329,7 +1329,7 @@ async function visDetalje(kundeId) {
       <div class="detalje-row"><span class="detalje-key">Gæster</span><span class="detalje-val">${booking.guests}${booking.extra_guests && booking.extra_guests.length > 0 ? ' (' + booking.extra_guests.map(g => g.navn).join(', ') + ')' : ''}</span></div>
       <div class="detalje-row"><span class="detalje-key">Værelse</span><span class="detalje-val">${booking.room || '—'}</span></div>
       ${booking.notes ? `<div class="detalje-row"><span class="detalje-key">Noter</span><span class="detalje-val">${booking.notes}</span></div>` : ''}
-      ${tilvalgCharges.length > 0 ? `<div class="detalje-row"><span class="detalje-key">Tilvalg</span><span class="detalje-val" style="color:rgba(44,35,24,.95);">${tilvalgCharges.map(c=>c.description.replace('Tilvalg: ','')).join(', ')}</span></div>` : ''}
+      ${(booking.selected_addons||[]).length > 0 ? `<div class="detalje-row"><span class="detalje-key">Tilvalg (bestilt)</span><span class="detalje-val" style="color:rgba(44,35,24,.85);">${(booking.selected_addons||[]).map(a=>a.text+(a.price?' (€'+a.price+')':'')).join(', ')}</span></div>` : tilvalgCharges.length > 0 ? `<div class="detalje-row"><span class="detalje-key">Tilvalg</span><span class="detalje-val" style="color:rgba(44,35,24,.85);">${tilvalgCharges.map(c=>c.description.replace('Tilvalg: ','')).join(', ')}</span></div>` : ''}
     </div>`;
 
     html += `<div class="detalje-section">
