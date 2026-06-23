@@ -117,6 +117,7 @@ exports.handler = async (event) => {
     });
 
     const emailData = await emailRes.json();
+    console.log('Resend response:', JSON.stringify(emailData));
     if (!emailRes.ok) throw new Error('Email fejlede: ' + JSON.stringify(emailData));
 
     await fetch(`${SUPABASE_URL}/rest/v1/invoices?booking_id=eq.${bookingId}`,{
@@ -125,7 +126,27 @@ exports.handler = async (event) => {
       body:JSON.stringify({sent_at:new Date().toISOString()})
     });
 
-    // Log til emails tabel
+    // Log til emails tabel med HTML body
+    const invoiceEmailHtml = `<!DOCTYPE html><html><head><meta charset="UTF-8"></head><body style="font-family:Georgia,serif;background:#faf6ee;padding:40px 20px;color:#2c2318;">
+<div style="max-width:560px;margin:0 auto;background:#f0e8d5;border:1px solid rgba(184,138,30,.2);padding:40px;">
+  <div style="height:2px;background:linear-gradient(90deg,#7a1f35,#b88a1e,#7a1f35);margin-bottom:30px;"></div>
+  <p style="font-size:10px;letter-spacing:.3em;text-transform:uppercase;color:#5c3f0e;">Castillo del Alma</p>
+  <h1 style="font-size:22px;font-weight:normal;margin:8px 0 20px;">Din faktura</h1>
+  <p style="font-size:14px;line-height:1.8;">Kære ${customer.full_name.split(' ')[0]},</p>
+  <p style="font-size:14px;line-height:1.8;">Tak for dit ophold hos Castillo del Alma. Hermed din faktura <strong>${invoice.invoice_number}</strong> på <strong>€${totalPaid.toFixed(2)}</strong>.</p>
+  <p style="font-size:14px;line-height:1.8;">Fakturaen er vedhæftet som PDF.</p>
+  <table style="width:100%;font-size:13px;border-collapse:collapse;margin:16px 0;">
+    ${paidPayments.map(p => {
+      const label = p.type==='deposit'?'Depositum':p.type==='final'?'Slutbetaling':p.type==='full'?'Fuld betaling':'Betaling';
+      return `<tr><td style="padding:6px 0;border-bottom:1px solid rgba(184,138,30,.1);color:rgba(44,35,24,.7);">${label}</td><td style="text-align:right;padding:6px 0;border-bottom:1px solid rgba(184,138,30,.1);">€${parseFloat(p.amount).toFixed(2)}</td></tr>`;
+    }).join('')}
+    <tr><td style="padding:10px 0;font-weight:bold;">Total</td><td style="text-align:right;padding:10px 0;font-weight:bold;">€${totalPaid.toFixed(2)}</td></tr>
+    <tr><td style="font-size:11px;color:rgba(44,35,24,.5);">Heraf moms 10%</td><td style="text-align:right;font-size:11px;color:rgba(44,35,24,.5);">€${(totalPaid/1.1*0.1).toFixed(2)}</td></tr>
+  </table>
+  <p style="font-size:13px;font-style:italic;color:rgba(44,35,24,.6);">Med venlig hilsen,<br>Castillo del Alma</p>
+  <div style="height:1px;background:linear-gradient(90deg,#7a1f35,#b88a1e,#7a1f35);margin-top:28px;"></div>
+</div></body></html>`;
+
     await fetch(`${SUPABASE_URL}/rest/v1/emails`,{
       method:'POST',
       headers:{...hdrs,'Prefer':'return=minimal'},
@@ -135,7 +156,7 @@ exports.handler = async (event) => {
         subject: `Faktura ${invoice.invoice_number} — Castillo del Alma`,
         type: 'invoice',
         status: 'sent',
-        body: `Faktura ${invoice.invoice_number} sendt som PDF vedhæftning. Total: €${totalPaid.toFixed(2)}`
+        body: invoiceEmailHtml
       })
     });
 
