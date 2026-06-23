@@ -1570,12 +1570,12 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:5rem
       <div class="reveal-right d2">
         <div class="nl-form">
           <div class="form-row">
-            <div class="form-field"><label>Navn</label><input type="text" placeholder="Dit navn"></div>
-            <div class="form-field"><label>E-mail</label><input type="email" placeholder="din@email.com"></div>
+            <div class="form-field"><label>Navn</label><input type="text" id="nl-navn" placeholder="Dit navn"></div>
+            <div class="form-field"><label>E-mail</label><input type="email" id="nl-email" placeholder="din@email.com"></div>
           </div>
           <div class="form-field">
             <label>Land</label>
-            <select><option value="">Vælg land</option><option>Danmark</option><option>Sverige</option><option>Norge</option><option>Tyskland</option><option>Spanien</option><option>Andet</option></select>
+            <select id="nl-land"><option value="">Vælg land</option><option>Danmark</option><option>Sverige</option><option>Norge</option><option>Tyskland</option><option>Spanien</option><option>Andet</option></select>
           </div>
           <div class="form-field">
             <label>Interesser</label>
@@ -1586,7 +1586,8 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:5rem
               <label class="cb-item"><input type="checkbox"><span class="cb-box"></span>Private Stays</label>
             </div>
           </div>
-          <button class="nl-submit">Tilmeld nyhedsbrev</button>
+          <button class="nl-submit" onclick="tilmeldNyhedsbrev(this)">Tilmeld nyhedsbrev</button>
+          <p id="nl-msg" style="font-size:.78rem;margin-top:.8rem;min-height:1rem;"></p>
         </div>
       </div>
     </div>
@@ -2207,6 +2208,41 @@ async function loadRetreatsGrid() {
         </div>
       </div>`;
   }).join('');
+}
+
+async function tilmeldNyhedsbrev(btn) {
+  const navn = document.getElementById('nl-navn')?.value.trim();
+  const email = document.getElementById('nl-email')?.value.trim();
+  const land = document.getElementById('nl-land')?.value;
+  const interesser = Array.from(document.querySelectorAll('.nl-form .cb-item input:checked')).map(cb => cb.closest('.cb-item').textContent.trim()).join(', ');
+  const msg = document.getElementById('nl-msg');
+
+  if (!navn || !email) { msg.style.color='#7a1f35'; msg.textContent='Udfyld venligst navn og e-mail.'; return; }
+
+  btn.disabled = true; btn.textContent = 'Tilmelder…';
+  const SUPABASE_URL = 'https://niniwgiytyqvdqejigxg.supabase.co';
+  const SUPABASE_ANON_KEY = 'sb_publishable_GwrNUpIuWzdg1oswOY5HzA_mKWqhd6y';
+
+  try {
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/newsletter`, {
+      method: 'POST',
+      headers: { 'apikey': SUPABASE_ANON_KEY, 'Authorization': `Bearer ${SUPABASE_ANON_KEY}`, 'Content-Type': 'application/json', 'Prefer': 'return=minimal' },
+      body: JSON.stringify({ navn, email, land: land||null, interesser: interesser||null })
+    });
+    if (res.ok) {
+      msg.style.color = '#4a5028'; msg.textContent = '✓ Du er nu tilmeldt — tak!';
+      btn.textContent = 'Tilmeldt ✓';
+      document.getElementById('nl-navn').value = '';
+      document.getElementById('nl-email').value = '';
+      document.getElementById('nl-land').value = '';
+      document.querySelectorAll('.nl-form .cb-item input').forEach(cb => cb.checked = false);
+    } else {
+      throw new Error('Tilmelding fejlede');
+    }
+  } catch(e) {
+    msg.style.color = '#7a1f35'; msg.textContent = 'Noget gik galt — prøv igen.';
+    btn.disabled = false; btn.textContent = 'Tilmeld nyhedsbrev';
+  }
 }
 
 document.addEventListener('DOMContentLoaded', () => { loadRetreatsGrid(); loadReviews(); });
