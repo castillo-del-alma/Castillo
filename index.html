@@ -1594,7 +1594,8 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:5rem
 </section>
 
 <!-- ══════ FOOTER ══════ -->
-<footer>
+<footer class="has-canvas" style="position:relative;">
+  <canvas class="section-canvas" data-palette="dark"></canvas>
   <div class="footer-grid">
     <div>
       <img src="img/logo-castillo-ny-keylay.jpg" alt="Castillo del Alma" class="footer-logo-img">
@@ -1619,6 +1620,7 @@ const PALETTES = {
   warm: [[184,138,30],[192,92,48],[122,31,53],[212,168,48]],
   green:[[106,114,64],[138,148,88],[184,138,30],[58,110,50]],
   teal: [[58,110,106],[90,140,136],[106,114,64],[184,138,30]],
+  dark: [[255,220,120],[200,160,80],[180,130,60],[240,190,100]],
 };
 
 class SectionRings {
