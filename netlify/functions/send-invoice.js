@@ -15,7 +15,7 @@ async function buildPDF(data) {
     doc.on('error', reject);
     const WINE='#7a1f35', GOLD='#7a5c14', DARK='#2c2318', LIGHT='#6a5c4a', BG='#f0e8d5';
     doc.rect(50,50,495,3).fill(WINE);
-    doc.fontSize(18).font('Helvetica-Bold').fillColor(DARK).text('ALMA EVENT GROUP S.L.',50,65);
+    doc.fontSize(18).font('Helvetica-Bold').fillColor(DARK).text('CASTILLO DEL ALMA',50,65);
     doc.fontSize(8).font('Helvetica').fillColor(LIGHT)
       .text('Castillo del Alma, Polígono 34 Parcela 57',50,86)
       .text('29532 Mollina, Málaga, Spain',50,97)
@@ -60,7 +60,7 @@ async function buildPDF(data) {
       .text(`€${vatAmt.toFixed(2)}`,450,y,{align:'right',width:90});
     doc.rect(50,755,495,2).fill(WINE);
     doc.fontSize(7).fillColor(LIGHT)
-      .text('Alma Event Group S.L. · NIF B67914515 · Polígono 34 Parcela 57, 29532 Mollina, Málaga, Spain',50,762,{align:'center',width:495});
+      .text('NEO Studio Mijas SL · NIF B67914515 · Polígono 34 Parcela 57, 29532 Mollina, Málaga, Spain',50,762,{align:'center',width:495});
     doc.end();
   });
 }
