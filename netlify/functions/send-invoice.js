@@ -123,6 +123,20 @@ exports.handler = async (event) => {
       body:JSON.stringify({sent_at:new Date().toISOString()})
     });
 
+    // Log til emails tabel
+    await fetch(`${SUPABASE_URL}/rest/v1/emails`,{
+      method:'POST',
+      headers:{...hdrs,'Prefer':'return=minimal'},
+      body:JSON.stringify({
+        customer_id: customer.id,
+        booking_id: bookingId,
+        subject: `Faktura ${invoice.invoice_number} — Castillo del Alma`,
+        type: 'invoice',
+        status: 'sent',
+        body: `Faktura ${invoice.invoice_number} sendt som PDF vedhæftning. Total: €${totalPaid.toFixed(2)}`
+      })
+    });
+
     return { statusCode:200, body:JSON.stringify({success:true}) };
   } catch(e) {
     return { statusCode:500, body:JSON.stringify({error:e.message}) };
