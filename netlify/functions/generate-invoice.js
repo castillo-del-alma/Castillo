@@ -19,9 +19,11 @@ async function buildPDF(data) {
     doc.rect(50,50,495,3).fill(WINE);
     doc.fontSize(18).font('Helvetica-Bold').fillColor(DARK).text('CASTILLO DEL ALMA',50,65);
     doc.fontSize(8).font('Helvetica').fillColor(LIGHT)
-      .text('Castillo del Alma, Polígono 34 Parcela 57',50,86)
-      .text('29532 Mollina, Málaga, Spain',50,97)
-      .text('NIF: B67914515  ·  +34 601 526 750  ·  hello@castillodelalma.es',50,108);
+      .text('Castillo del Alma, Polígono 34 Parcela 57',50,80)
+      .text('29532 Mollina, Málaga, Spain',50,91)
+      .text('+34 601 526 750',50,102)
+      .text('NEO Studio Mijas SL  ·  NIF: B67914515',50,113)
+      .text('hello@castillodelalma.es',50,124);
 
     doc.fontSize(26).font('Helvetica').fillColor(WINE).text('FAKTURA',350,62,{align:'right',width:195});
     doc.fontSize(10).fillColor(LIGHT).text('INVOICE',350,92,{align:'right',width:195});
@@ -123,11 +125,11 @@ td:last-child{text-align:right;}
   <div class="top-bar"></div>
   <div class="header">
     <div class="company">
-      <p style="font-size:12px;letter-spacing:.15em;text-transform:uppercase;color:#7a1f35;margin:0 0 3px;">Castillo del Alma</p>
-      <h2>NEO Studio Mijas SL</h2>
+      <h2 style="color:#7a1f35;margin:0 0 8px;">Castillo del Alma</h2>
       <p>Castillo del Alma, Polígono 34 Parcela 57</p>
       <p>29532 Mollina, Málaga, Spain</p>
-      <p>NIF: B67914515  ·  +34 601 526 750</p>
+      <p>+34 601 526 750</p>
+      <p>NEO Studio Mijas SL &nbsp;·&nbsp; NIF: B67914515</p>
       <p>hello@castillodelalma.es</p>
     </div>
     <div class="invoice-title">
