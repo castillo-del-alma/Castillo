@@ -234,6 +234,22 @@ body{font-family:'Manrope',sans-serif;background:#f0e8d5;color:#2c2318;min-heigh
     <button class="tab-btn" onclick="switchTab('anmeldelser',this)">Anmeldelser</button>
     <button class="tab-btn active" onclick="switchTab('kunder',this)">Kunder & Bookinger</button>
     <button class="tab-btn" onclick="switchTab('retreats',this)">Retreats</button>
+    <button class="tab-btn" onclick="switchTab('newsletter',this)">Nyhedsbrev</button>
+  </div>
+
+  <!-- FANE: NYHEDSBREV -->
+  <div class="tab-content" id="tab-newsletter" style="padding:2rem 3rem;">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.5rem;">
+      <div>
+        <h3 style="font-family:'Cinzel',serif;font-weight:300;font-size:1.2rem;color:#2c2318;margin:0 0 .3rem;">Nyhedsbrev tilmeldte</h3>
+        <div id="nlCount" style="font-size:.72rem;color:rgba(44,35,24,.6);">Henter...</div>
+      </div>
+      <button onclick="exportNewsletter()" style="font-size:.62rem;letter-spacing:.15em;text-transform:uppercase;padding:.5rem 1rem;background:rgba(74,80,40,.15);border:1px solid rgba(74,80,40,.3);color:#4a5028;cursor:pointer;font-family:'Manrope',sans-serif;">Eksporter CSV</button>
+    </div>
+    <table style="width:100%;border-collapse:collapse;font-size:.78rem;">
+      <thead><tr style="border-bottom:2px solid rgba(184,138,30,.2);"><th style="text-align:left;padding:.6rem .8rem;font-size:.6rem;letter-spacing:.15em;text-transform:uppercase;color:#7a5c14;">Navn</th><th style="text-align:left;padding:.6rem .8rem;font-size:.6rem;letter-spacing:.15em;text-transform:uppercase;color:#7a5c14;">E-mail</th><th style="text-align:left;padding:.6rem .8rem;font-size:.6rem;letter-spacing:.15em;text-transform:uppercase;color:#7a5c14;">Land</th><th style="text-align:left;padding:.6rem .8rem;font-size:.6rem;letter-spacing:.15em;text-transform:uppercase;color:#7a5c14;">Interesser</th><th style="text-align:left;padding:.6rem .8rem;font-size:.6rem;letter-spacing:.15em;text-transform:uppercase;color:#7a5c14;">Dato</th></tr></thead>
+      <tbody id="nlTbody"></tbody>
+    </table>
   </div>
 
   <!-- FANE: ANMELDELSER -->
@@ -1354,6 +1370,26 @@ async function sendAnmeldelsesLink() {
 
 let _alleAnmeldelser = [];
 
+async function loadNewsletter() {
+  const tbody = document.getElementById('nlTbody');
+  const count = document.getElementById('nlCount');
+  if (!tbody) return;
+  const { data, error } = await sb.from('newsletter').select('*').order('created_at', { ascending: false });
+  if (error || !data) { tbody.innerHTML = '<tr><td colspan="5">Fejl</td></tr>'; return; }
+  count.textContent = data.length + ' tilmeldte';
+  window._nlData = data;
+  if (!data.length) { tbody.innerHTML = '<tr><td colspan="5" style="padding:1rem;color:rgba(44,35,24,.4);">Ingen endnu.</td></tr>'; return; }
+  tbody.innerHTML = data.map(r => '<tr style="border-bottom:1px solid rgba(184,138,30,.1);"><td style="padding:.6rem .8rem;">' + (r.navn||'') + '</td><td style="padding:.6rem .8rem;"><a href="mailto:' + r.email + '" style="color:#7a1f35;">' + (r.email||'') + '</a></td><td style="padding:.6rem .8rem;">' + (r.land||'') + '</td><td style="padding:.6rem .8rem;">' + (r.interesser||'') + '</td><td style="padding:.6rem .8rem;color:rgba(44,35,24,.5);">' + new Date(r.created_at).toLocaleDateString('da-DK',{day:'numeric',month:'short',year:'numeric'}) + '</td></tr>').join('');
+}
+function exportNewsletter() {
+  const data = window._nlData;
+  if (!data||!data.length) return;
+  const rows = data.map(r => '"'+(r.navn||'')+'","'+(r.email||'')+'","'+(r.land||'')+'","'+(r.interesser||'')+'","'+new Date(r.created_at).toLocaleDateString('da-DK')+'"');
+  const csv = ['Navn,E-mail,Land,Interesser,Dato',...rows].join('\n');
+  const blob=new Blob([csv],{type:'text/csv;charset=utf-8;'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');a.href=url;a.download='newsletter.csv';a.click();
+}
 async function visAnmeldelser() {
   document.getElementById('modalAnmeldelser').classList.add('open');
   const liste = document.getElementById('anmeldelserListe');
@@ -2031,6 +2067,7 @@ function switchDetaljeTab(tab, btn) {
   document.getElementById('detaljeTabBeskeder').style.display = tab === 'beskeder' ? 'block' : 'none';
   document.getElementById('detaljeTabMails').style.display = tab === 'mails' ? 'block' : 'none';
   if (tab === 'beskeder') loadBeskeder();
+  if (tab === 'newsletter') loadNewsletter();
   if (tab === 'mails') loadDetaljeMails();
 }
 
