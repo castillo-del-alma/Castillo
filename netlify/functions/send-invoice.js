@@ -91,6 +91,8 @@ exports.handler = async (event) => {
 
     const invoiceDate = new Date(invoice.created_at).toLocaleDateString('da-DK',{day:'numeric',month:'long',year:'numeric'});
     const pdfBuffer = await buildPDF({ invoiceNumber:invoice.invoice_number, invoiceDate, customer, booking, paidPayments, totalPaid });
+    console.log('PDF buffer size:', pdfBuffer?.length);
+    if (!pdfBuffer || pdfBuffer.length < 100) throw new Error('PDF generering fejlede - tom buffer');
 
     const emailRes = await fetch('https://api.resend.com/emails', {
       method:'POST',
