@@ -92,7 +92,8 @@ exports.handler = async (event) => {
     const invoiceDate = new Date(invoice.created_at).toLocaleDateString('da-DK',{day:'numeric',month:'long',year:'numeric'});
     const pdfBuffer = await buildPDF({ invoiceNumber:invoice.invoice_number, invoiceDate, customer, booking, paidPayments, totalPaid });
     console.log('PDF buffer size:', pdfBuffer?.length);
-    if (!pdfBuffer || pdfBuffer.length < 100) throw new Error('PDF generering fejlede - tom buffer');
+    console.log('PDF type:', typeof pdfBuffer, Array.isArray(pdfBuffer));
+    if (!pdfBuffer || pdfBuffer.length < 100) throw new Error('PDF generering fejlede - tom buffer: ' + pdfBuffer?.length);
 
     const emailRes = await fetch('https://api.resend.com/emails', {
       method:'POST',
@@ -112,7 +113,7 @@ exports.handler = async (event) => {
   <p style="font-size:14px;line-height:1.8;font-style:italic;">Med venlig hilsen,<br><span style="color:#2c2318;">Castillo del Alma</span></p>
   <div style="height:1px;background:linear-gradient(90deg,#7a1f35,#b88a1e,#7a1f35);margin-top:30px;"></div>
 </div></body></html>`,
-        attachments:[{ filename:`faktura-${invoice.invoice_number}.pdf`, content:pdfBuffer.toString('base64') }]
+        attachments:[{ filename:`faktura-${invoice.invoice_number}.pdf`, content:Buffer.from(pdfBuffer).toString('base64') }]
       })
     });
 
