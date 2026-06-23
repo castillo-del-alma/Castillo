@@ -237,6 +237,46 @@ body{font-family:'Manrope',sans-serif;background:#f0e8d5;color:#2c2318;min-heigh
     <button class="tab-btn" onclick="switchTab('newsletter',this)">Nyhedsbrev</button>
   </div>
 
+  <!-- FANE: MANUEL FAKTURA -->
+  <div class="tab-content" id="tab-faktura" style="padding:2rem 3rem;max-width:900px;">
+    <h3 style="font-family:'Cinzel',serif;font-weight:300;font-size:1.2rem;color:#2c2318;margin:0 0 1.5rem;">Manuel faktura</h3>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-bottom:1.5rem;">
+      <div>
+        <p style="font-size:.6rem;letter-spacing:.15em;text-transform:uppercase;color:#7a5c14;margin-bottom:.8rem;">Kundeoplysninger</p>
+        <div style="display:flex;flex-direction:column;gap:.6rem;">
+          <input id="mf-navn" type="text" placeholder="Navn / Firmanavn" style="border:1px solid rgba(184,138,30,.3);background:#faf6ee;color:#2c2318;padding:.6rem .9rem;font-family:'Manrope',sans-serif;font-size:.82rem;outline:none;">
+          <input id="mf-email" type="email" placeholder="E-mail" style="border:1px solid rgba(184,138,30,.3);background:#faf6ee;color:#2c2318;padding:.6rem .9rem;font-family:'Manrope',sans-serif;font-size:.82rem;outline:none;">
+          <input id="mf-adresse" type="text" placeholder="Adresse" style="border:1px solid rgba(184,138,30,.3);background:#faf6ee;color:#2c2318;padding:.6rem .9rem;font-family:'Manrope',sans-serif;font-size:.82rem;outline:none;">
+          <input id="mf-vat" type="text" placeholder="CVR / NIF / VAT-nummer" style="border:1px solid rgba(184,138,30,.3);background:#faf6ee;color:#2c2318;padding:.6rem .9rem;font-family:'Manrope',sans-serif;font-size:.82rem;outline:none;">
+        </div>
+      </div>
+      <div>
+        <p style="font-size:.6rem;letter-spacing:.15em;text-transform:uppercase;color:#7a5c14;margin-bottom:.8rem;">Faktura info</p>
+        <div style="display:flex;flex-direction:column;gap:.6rem;">
+          <input id="mf-dato" type="date" style="border:1px solid rgba(184,138,30,.3);background:#faf6ee;color:#2c2318;padding:.6rem .9rem;font-family:'Manrope',sans-serif;font-size:.82rem;outline:none;">
+          <textarea id="mf-noter" placeholder="Noter / betalingsbetingelser (valgfrit)" rows="3" style="border:1px solid rgba(184,138,30,.3);background:#faf6ee;color:#2c2318;padding:.6rem .9rem;font-family:'Manrope',sans-serif;font-size:.82rem;outline:none;resize:vertical;"></textarea>
+        </div>
+      </div>
+    </div>
+
+    <p style="font-size:.6rem;letter-spacing:.15em;text-transform:uppercase;color:#7a5c14;margin-bottom:.6rem;">Varelinjer</p>
+    <div id="mf-linjer" style="display:flex;flex-direction:column;gap:.5rem;margin-bottom:.8rem;"></div>
+    <button onclick="mfTilfoejLinje()" style="font-size:.62rem;letter-spacing:.12em;text-transform:uppercase;padding:.4rem .9rem;background:rgba(184,138,30,.1);border:1px solid rgba(184,138,30,.3);color:#7a5c14;cursor:pointer;font-family:'Manrope',sans-serif;margin-bottom:1.5rem;">+ Tilføj linje</button>
+
+    <div id="mf-total" style="background:rgba(184,138,30,.06);border:1px solid rgba(184,138,30,.2);padding:1rem 1.2rem;margin-bottom:1.5rem;font-size:.82rem;color:#2c2318;">
+      <div style="display:flex;justify-content:space-between;"><span>Subtotal ekskl. moms</span><span id="mf-subtotal">€0.00</span></div>
+      <div style="display:flex;justify-content:space-between;"><span>Moms</span><span id="mf-momstal">€0.00</span></div>
+      <div style="display:flex;justify-content:space-between;font-weight:700;margin-top:.5rem;padding-top:.5rem;border-top:1px solid rgba(184,138,30,.2);"><span>TOTAL inkl. moms</span><span id="mf-totaltal">€0.00</span></div>
+    </div>
+
+    <div style="display:flex;gap:.8rem;align-items:center;flex-wrap:wrap;">
+      <button onclick="mfPreview()" style="background:rgba(184,138,30,.15);border:1px solid rgba(184,138,30,.3);color:#7a5c14;padding:.7rem 1.4rem;font-size:.65rem;letter-spacing:.15em;text-transform:uppercase;cursor:pointer;font-family:'Manrope',sans-serif;">👁 Preview PDF</button>
+      <button onclick="mfSend()" style="background:var(--wine);border:none;color:#fff;padding:.7rem 1.4rem;font-size:.65rem;letter-spacing:.15em;text-transform:uppercase;cursor:pointer;font-family:'Manrope',sans-serif;">✉ Gem & Send</button>
+      <button onclick="mfGem()" style="background:rgba(44,35,24,.08);border:1px solid rgba(44,35,24,.15);color:#2c2318;padding:.7rem 1.4rem;font-size:.65rem;letter-spacing:.15em;text-transform:uppercase;cursor:pointer;font-family:'Manrope',sans-serif;">💾 Gem uden at sende</button>
+      <span id="mf-msg" style="font-size:.75rem;color:rgba(44,35,24,.7);"></span>
+    </div>
+  </div>
+
   <!-- FANE: NYHEDSBREV -->
   <div class="tab-content" id="tab-newsletter" style="padding:2rem 3rem;">
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.5rem;">
@@ -764,6 +804,7 @@ function switchTab(tab, btn) {
   btn.classList.add('active');
   document.getElementById('tab-' + tab).classList.add('active');
   if (tab === 'newsletter') loadNewsletter();
+  if (tab === 'faktura') { if (!document.querySelector('#mf-linjer [id^="mf-linje-"]')) mfTilfoejLinje(); }
 }
 
 // ── ANMELDELSER ──
@@ -1370,6 +1411,93 @@ async function sendAnmeldelsesLink() {
 }
 
 let _alleAnmeldelser = [];
+
+// Manuel faktura
+let mfLinjeCount = 0;
+
+function mfTilfoejLinje() {
+  const id = ++mfLinjeCount;
+  const div = document.createElement('div');
+  div.id = 'mf-linje-' + id;
+  div.style.cssText = 'display:grid;grid-template-columns:3fr 1fr 1.2fr 1fr auto;gap:.4rem;align-items:center;';
+  div.innerHTML = '<input placeholder="Beskrivelse" oninput="mfBeregnTotal()" style="border:1px solid rgba(184,138,30,.3);background:#faf6ee;color:#2c2318;padding:.5rem .7rem;font-family:Manrope,sans-serif;font-size:.78rem;outline:none;">' +
+    '<input type="number" placeholder="Antal" value="1" min="1" oninput="mfBeregnTotal()" style="border:1px solid rgba(184,138,30,.3);background:#faf6ee;color:#2c2318;padding:.5rem .7rem;font-family:Manrope,sans-serif;font-size:.78rem;outline:none;text-align:right;">' +
+    '<input type="number" placeholder="Pris €" step="0.01" oninput="mfBeregnTotal()" style="border:1px solid rgba(184,138,30,.3);background:#faf6ee;color:#2c2318;padding:.5rem .7rem;font-family:Manrope,sans-serif;font-size:.78rem;outline:none;text-align:right;">' +
+    '<input type="number" placeholder="Moms %" value="10" min="0" max="100" oninput="mfBeregnTotal()" style="border:1px solid rgba(184,138,30,.3);background:#faf6ee;color:#2c2318;padding:.5rem .7rem;font-family:Manrope,sans-serif;font-size:.78rem;outline:none;text-align:right;">' +
+    '<button onclick="document.getElementById('mf-linje-'+id+'').remove();mfBeregnTotal();" style="background:rgba(122,31,53,.1);border:1px solid rgba(122,31,53,.2);color:#7a1f35;padding:.5rem .7rem;cursor:pointer;font-size:.75rem;">✕</button>';
+  document.getElementById('mf-linjer').appendChild(div);
+  mfBeregnTotal();
+}
+
+function mfGetLinjer() {
+  return Array.from(document.querySelectorAll('[id^="mf-linje-"]')).map(div => {
+    const inputs = div.querySelectorAll('input');
+    return { description: inputs[0].value, qty: parseFloat(inputs[1].value)||1, price: parseFloat(inputs[2].value)||0, vat: parseFloat(inputs[3].value)||0 };
+  }).filter(l => l.description || l.price);
+}
+
+function mfBeregnTotal() {
+  let ex = 0, vat = 0;
+  mfGetLinjer().forEach(l => {
+    const lineEx = l.qty * l.price;
+    ex += lineEx;
+    vat += lineEx * (l.vat/100);
+  });
+  document.getElementById('mf-subtotal').textContent = '€' + ex.toFixed(2);
+  document.getElementById('mf-momstal').textContent = '€' + vat.toFixed(2);
+  document.getElementById('mf-totaltal').textContent = '€' + (ex+vat).toFixed(2);
+}
+
+function mfGetData(sendEmail) {
+  return {
+    customer: { name: document.getElementById('mf-navn').value, email: document.getElementById('mf-email').value, address: document.getElementById('mf-adresse').value, vat: document.getElementById('mf-vat').value },
+    lines: mfGetLinjer(),
+    notes: document.getElementById('mf-noter').value,
+    invoiceDate: document.getElementById('mf-dato').value,
+    sendEmail
+  };
+}
+
+async function mfPreview() {
+  const msg = document.getElementById('mf-msg');
+  msg.textContent = 'Genererer...';
+  try {
+    const res = await fetch('/.netlify/functions/create-manual-invoice', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(mfGetData(false)) });
+    const data = await res.json();
+    if (!res.ok || data.error) throw new Error(data.error);
+    const blob = new Blob([Uint8Array.from(atob(data.pdfBase64), c=>c.charCodeAt(0))], {type:'application/pdf'});
+    window.open(URL.createObjectURL(blob), '_blank');
+    msg.textContent = 'Faktura ' + data.invoiceNumber + ' genereret';
+  } catch(e) { msg.textContent = 'Fejl: ' + e.message; }
+}
+
+async function mfSend() {
+  const msg = document.getElementById('mf-msg');
+  if (!document.getElementById('mf-navn').value || !document.getElementById('mf-email').value) { msg.textContent = 'Udfyld navn og e-mail'; return; }
+  msg.textContent = 'Sender...';
+  try {
+    const res = await fetch('/.netlify/functions/create-manual-invoice', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(mfGetData(true)) });
+    const data = await res.json();
+    if (!res.ok || data.error) throw new Error(data.error);
+    msg.style.color = 'var(--olive)';
+    msg.textContent = '✓ Faktura ' + data.invoiceNumber + ' sendt til ' + document.getElementById('mf-email').value;
+  } catch(e) { msg.style.color='var(--wine)'; msg.textContent = 'Fejl: ' + e.message; }
+}
+
+async function mfGem() {
+  const msg = document.getElementById('mf-msg');
+  msg.textContent = 'Gemmer...';
+  try {
+    const res = await fetch('/.netlify/functions/create-manual-invoice', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(mfGetData(false)) });
+    const data = await res.json();
+    if (!res.ok || data.error) throw new Error(data.error);
+    msg.style.color = 'var(--olive)';
+    msg.textContent = '✓ Faktura ' + data.invoiceNumber + ' gemt';
+  } catch(e) { msg.style.color='var(--wine)'; msg.textContent = 'Fejl: ' + e.message; }
+}
+
+// Tilføj én linje som standard
+document.addEventListener('DOMContentLoaded', () => { mfTilfoejLinje(); });
 
 async function loadNewsletter() {
   const tbody = document.getElementById('nlTbody');
