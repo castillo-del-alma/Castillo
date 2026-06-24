@@ -273,6 +273,11 @@ body{font-family:'Manrope',sans-serif;background:#f0e8d5;color:#2c2318;min-heigh
           <input id="mf-navn" type="text" placeholder="Navn / Firmanavn" style="border:1px solid rgba(184,138,30,.3);background:#faf6ee;color:#2c2318;padding:.6rem .9rem;font-family:'Manrope',sans-serif;font-size:.82rem;outline:none;">
           <input id="mf-email" type="email" placeholder="E-mail" style="border:1px solid rgba(184,138,30,.3);background:#faf6ee;color:#2c2318;padding:.6rem .9rem;font-family:'Manrope',sans-serif;font-size:.82rem;outline:none;">
           <input id="mf-adresse" type="text" placeholder="Adresse" style="border:1px solid rgba(184,138,30,.3);background:#faf6ee;color:#2c2318;padding:.6rem .9rem;font-family:'Manrope',sans-serif;font-size:.82rem;outline:none;">
+          <div style="display:grid;grid-template-columns:1fr 2fr;gap:.4rem;">
+            <input id="mf-postnr" type="text" placeholder="Postnr." style="border:1px solid rgba(184,138,30,.3);background:#faf6ee;color:#2c2318;padding:.6rem .9rem;font-family:'Manrope',sans-serif;font-size:.82rem;outline:none;">
+            <input id="mf-by" type="text" placeholder="By" style="border:1px solid rgba(184,138,30,.3);background:#faf6ee;color:#2c2318;padding:.6rem .9rem;font-family:'Manrope',sans-serif;font-size:.82rem;outline:none;">
+          </div>
+          <input id="mf-land" type="text" placeholder="Land" style="border:1px solid rgba(184,138,30,.3);background:#faf6ee;color:#2c2318;padding:.6rem .9rem;font-family:'Manrope',sans-serif;font-size:.82rem;outline:none;">
           <input id="mf-vat" type="text" placeholder="CVR / NIF / VAT-nummer" style="border:1px solid rgba(184,138,30,.3);background:#faf6ee;color:#2c2318;padding:.6rem .9rem;font-family:'Manrope',sans-serif;font-size:.82rem;outline:none;">
         </div>
       </div>
@@ -1529,7 +1534,7 @@ function mfBeregnTotal() {
 
 function mfGetData(sendEmail) {
   return {
-    customer: { name: document.getElementById('mf-navn').value, email: document.getElementById('mf-email').value, address: document.getElementById('mf-adresse').value, vat: document.getElementById('mf-vat').value },
+    customer: { name: document.getElementById('mf-navn').value, email: document.getElementById('mf-email').value, address: (document.getElementById('mf-adresse').value + (document.getElementById('mf-postnr').value ? ', ' + document.getElementById('mf-postnr').value : '') + (document.getElementById('mf-by').value ? ' ' + document.getElementById('mf-by').value : '') + (document.getElementById('mf-land')?.value ? ', ' + document.getElementById('mf-land').value : '')).trim(), vat: document.getElementById('mf-vat').value },
     lines: mfGetLinjer(),
     notes: document.getElementById('mf-noter').value,
     invoiceDate: document.getElementById('mf-dato').value,
