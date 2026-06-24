@@ -1449,13 +1449,13 @@ async function loadFakturaHistorik() {
   const count = document.getElementById('fhCount');
   if (!tbody) return;
   tbody.innerHTML = '<tr><td colspan="7" style="padding:1rem;color:rgba(44,35,24,.4);">Henter...</td></tr>';
-  const { data, error } = await sb.from('invoices').select('*, customers(full_name, email)').order('created_at', { ascending: false });
+  const { data, error } = await sb.from('invoices').select('*').order('created_at', { ascending: false });
   if (error || !data) { tbody.innerHTML = '<tr><td colspan="7" style="color:var(--wine);">Fejl</td></tr>'; return; }
   count.textContent = data.length + ' fakturaer';
   if (!data.length) { tbody.innerHTML = '<tr><td colspan="7" style="padding:1rem;color:rgba(44,35,24,.4);">Ingen fakturaer endnu.</td></tr>'; return; }
   tbody.innerHTML = data.map(f => {
-    const kundeNavn = f.customer_name || f.customers?.full_name || '—';
-    const kundeEmail = f.customer_email || f.customers?.email || null;
+    const kundeNavn = f.customer_name || '—';
+    const kundeEmail = f.customer_email || null;
     const type = f.is_manual ? 'Manuel' : 'Booking';
     const sendt = f.sent_at ? new Date(f.sent_at).toLocaleDateString('da-DK',{day:'numeric',month:'short',year:'numeric'}) : '—';
     const dato = new Date(f.created_at).toLocaleDateString('da-DK',{day:'numeric',month:'short',year:'numeric'});
