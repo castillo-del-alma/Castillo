@@ -146,7 +146,7 @@ exports.handler = async (event) => {
       }
     }
 
-    if (!existingNumber || isDraft) await fetch(`${SUPABASE_URL}/rest/v1/invoices`,{
+    const _invRes = await fetch(`${SUPABASE_URL}/rest/v1/invoices`,{
       method:'POST', headers:{...hdrs,'Prefer':'return=minimal'},
       body:JSON.stringify({
         customer_id: customerId, invoice_number: invoiceNumber,
@@ -157,6 +157,7 @@ exports.handler = async (event) => {
         status: isDraft ? 'kladde' : 'sendt'
       })
     });
+    console.log('DB insert status:', _invRes.status, await _invRes.text());
 
     // Send email hvis ønsket
     if (sendEmail && customer.email) {
