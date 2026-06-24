@@ -1840,7 +1840,7 @@ async function visDetalje(kundeId) {
     }
 
     // Fakturaer for kunden
-    const { data: kundeInvoices } = await sb.from('invoices').select('*').eq('customer_id', k.id).order('created_at', { ascending: false });
+    const { data: kundeInvoices } = await sb.from('invoices').select('*').eq('customer_id', kunde.id).order('created_at', { ascending: false });
     if (kundeInvoices && kundeInvoices.length > 0) {
       html += '<div class="detalje-section"><h4>Fakturaer</h4>';
       kundeInvoices.forEach(inv => {
