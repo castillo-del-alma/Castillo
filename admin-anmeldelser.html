@@ -1466,13 +1466,13 @@ async function loadFakturaHistorik() {
   tbody.innerHTML = data.map(f => {
     const kundeNavn = f.customer_name || '—';
     const kundeEmail = f.customer_email || null;
-    const type = f.is_manual ? 'Manuel' : 'Booking';
+    const type = f.status === 'kladde' ? 'Kladde' : (f.is_manual ? 'Manuel' : 'Booking');
     const sendt = f.sent_at ? new Date(f.sent_at).toLocaleDateString('da-DK',{day:'numeric',month:'short',year:'numeric'}) : '—';
     const dato = new Date(f.created_at).toLocaleDateString('da-DK',{day:'numeric',month:'short',year:'numeric'});
     return '<tr style="border-bottom:1px solid rgba(184,138,30,.1);">' +
       '<td style="padding:.6rem .8rem;font-family:Cinzel,serif;font-weight:300;">' + (f.invoice_number||'—') + '</td>' +
       '<td style="padding:.6rem .8rem;">' + kundeNavn + (kundeEmail ? '<br><span style="font-size:.65rem;color:rgba(44,35,24,.5);">' + kundeEmail + '</span>' : '') + '</td>' +
-      '<td style="padding:.6rem .8rem;"><span style="font-size:.6rem;padding:.2rem .5rem;background:' + (f.is_manual?'rgba(58,110,106,.12)':'rgba(184,138,30,.12)') + ';color:' + (f.is_manual?'#2c5450':'#7a5c14') + ';">' + type + '</span></td>' +
+      '<td style="padding:.6rem .8rem;"><span style="font-size:.6rem;padding:.2rem .5rem;background:' + (f.status==='kladde'?'rgba(44,35,24,.08)':(f.is_manual?'rgba(58,110,106,.12)':'rgba(184,138,30,.12)')) + ';color:' + (f.status==='kladde'?'rgba(44,35,24,.5)':(f.is_manual?'#2c5450':'#7a5c14')) + ';">' + type + '</span></td>' +
       '<td style="padding:.6rem .8rem;font-weight:600;">€' + parseFloat(f.total_amount||0).toFixed(2) + '</td>' +
       '<td style="padding:.6rem .8rem;color:rgba(44,35,24,.6);">' + dato + '</td>' +
       '<td style="padding:.6rem .8rem;color:rgba(44,35,24,.5);">' + sendt + '</td>' +
@@ -1621,11 +1621,11 @@ async function mfGem() {
   const msg = document.getElementById('mf-msg');
   msg.textContent = 'Gemmer...';
   try {
-    const res = await fetch('/.netlify/functions/create-manual-invoice', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(mfGetData(false)) });
+    const res = await fetch('/.netlify/functions/create-manual-invoice', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({...mfGetData(false), isDraft: true}) });
     const data = await res.json();
     if (!res.ok || data.error) throw new Error(data.error);
     msg.style.color = 'var(--olive)';
-    msg.textContent = '✓ Faktura ' + data.invoiceNumber + ' gemt';
+    msg.textContent = '✓ Kladde gemt';
   } catch(e) { msg.style.color='var(--wine)'; msg.textContent = 'Fejl: ' + e.message; }
 }
 

@@ -89,7 +89,7 @@ async function buildPDF(data) {
 
 exports.handler = async (event) => {
   if (event.httpMethod !== 'POST') return { statusCode:405, body:'Method Not Allowed' };
-  const { customer, lines, notes, invoiceDate, sendEmail, existingNumber } = JSON.parse(event.body);
+  const { customer, lines, notes, invoiceDate, sendEmail, existingNumber, isDraft } = JSON.parse(event.body);
   const SUPABASE_URL = process.env.SUPABASE_URL;
   const SUPABASE_KEY = process.env.SUPABASE_ANON_KEY;
   const RESEND_KEY = process.env.RESEND_API_KEY;
@@ -108,7 +108,7 @@ exports.handler = async (event) => {
 
     // Fakturanummer
     let invoiceNumber = existingNumber || null;
-    if (!invoiceNumber) {
+    if (!invoiceNumber && !isDraft) {
       const maxRes = await fetch(`${SUPABASE_URL}/rest/v1/invoices?select=invoice_number&order=created_at.desc&limit=1`,{headers:hdrs});
       const maxArr = await maxRes.json();
       const year = new Date().getFullYear().toString().slice(-2);
@@ -153,7 +153,8 @@ exports.handler = async (event) => {
         total_amount: totalIncVat, is_manual: true,
         customer_name: customer.name, customer_email: customer.email,
         customer_address: customer.address||null, customer_vat: customer.vat||null,
-        lines: lines, notes: notes||null
+        lines: lines, notes: notes||null,
+        status: isDraft ? 'kladde' : 'sendt'
       })
     });
 
