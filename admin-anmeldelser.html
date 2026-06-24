@@ -236,6 +236,31 @@ body{font-family:'Manrope',sans-serif;background:#f0e8d5;color:#2c2318;min-heigh
     <button class="tab-btn" onclick="switchTab('anmeldelser',this)">Anmeldelser</button>
     <button class="tab-btn" onclick="switchTab('retreats',this)">Retreats</button>
     <button class="tab-btn" onclick="switchTab('newsletter',this)">Nyhedsbrev</button>
+    <button class="tab-btn" onclick="switchTab('faktura-historik',this)">Faktura historik</button>
+  </div>
+
+  <!-- FANE: FAKTURA HISTORIK -->
+  <div class="tab-content" id="tab-faktura-historik" style="padding:2rem 3rem;">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.5rem;">
+      <div>
+        <h3 style="font-family:'Cinzel',serif;font-weight:300;font-size:1.2rem;color:#2c2318;margin:0 0 .3rem;">Faktura historik</h3>
+        <div id="fhCount" style="font-size:.72rem;color:rgba(44,35,24,.6);">Henter...</div>
+      </div>
+    </div>
+    <table style="width:100%;border-collapse:collapse;font-size:.78rem;">
+      <thead>
+        <tr style="border-bottom:2px solid rgba(184,138,30,.2);">
+          <th style="text-align:left;padding:.6rem .8rem;font-size:.6rem;letter-spacing:.15em;text-transform:uppercase;color:#7a5c14;">Nr.</th>
+          <th style="text-align:left;padding:.6rem .8rem;font-size:.6rem;letter-spacing:.15em;text-transform:uppercase;color:#7a5c14;">Kunde</th>
+          <th style="text-align:left;padding:.6rem .8rem;font-size:.6rem;letter-spacing:.15em;text-transform:uppercase;color:#7a5c14;">Type</th>
+          <th style="text-align:left;padding:.6rem .8rem;font-size:.6rem;letter-spacing:.15em;text-transform:uppercase;color:#7a5c14;">Total</th>
+          <th style="text-align:left;padding:.6rem .8rem;font-size:.6rem;letter-spacing:.15em;text-transform:uppercase;color:#7a5c14;">Dato</th>
+          <th style="text-align:left;padding:.6rem .8rem;font-size:.6rem;letter-spacing:.15em;text-transform:uppercase;color:#7a5c14;">Sendt</th>
+          <th style="padding:.6rem .8rem;"></th>
+        </tr>
+      </thead>
+      <tbody id="fhTbody"></tbody>
+    </table>
   </div>
 
   <!-- FANE: MANUEL FAKTURA -->
@@ -805,6 +830,7 @@ function switchTab(tab, btn) {
   btn.classList.add('active');
   document.getElementById('tab-' + tab).classList.add('active');
   if (tab === 'newsletter') loadNewsletter();
+  if (tab === 'faktura-historik') loadFakturaHistorik();
   if (tab === 'faktura') { if (!document.querySelector('#mf-linjer [id^="mf-linje-"]')) mfTilfoejLinje(); }
 }
 
@@ -1412,6 +1438,57 @@ async function sendAnmeldelsesLink() {
 }
 
 let _alleAnmeldelser = [];
+
+async function loadFakturaHistorik() {
+  const tbody = document.getElementById('fhTbody');
+  const count = document.getElementById('fhCount');
+  if (!tbody) return;
+  tbody.innerHTML = '<tr><td colspan="7" style="padding:1rem;color:rgba(44,35,24,.4);">Henter...</td></tr>';
+  const { data, error } = await sb.from('invoices').select('*').order('created_at', { ascending: false });
+  if (error || !data) { tbody.innerHTML = '<tr><td colspan="7" style="color:var(--wine);">Fejl</td></tr>'; return; }
+  count.textContent = data.length + ' fakturaer';
+  if (!data.length) { tbody.innerHTML = '<tr><td colspan="7" style="padding:1rem;color:rgba(44,35,24,.4);">Ingen fakturaer endnu.</td></tr>'; return; }
+  tbody.innerHTML = data.map(f => {
+    const kundeNavn = f.customer_name || '—';
+    const type = f.is_manual ? 'Manuel' : 'Booking';
+    const sendt = f.sent_at ? new Date(f.sent_at).toLocaleDateString('da-DK',{day:'numeric',month:'short',year:'numeric'}) : '—';
+    const dato = new Date(f.created_at).toLocaleDateString('da-DK',{day:'numeric',month:'short',year:'numeric'});
+    return '<tr style="border-bottom:1px solid rgba(184,138,30,.1);">' +
+      '<td style="padding:.6rem .8rem;font-family:Cinzel,serif;font-weight:300;">' + (f.invoice_number||'—') + '</td>' +
+      '<td style="padding:.6rem .8rem;">' + kundeNavn + (f.customer_email ? '<br><span style="font-size:.65rem;color:rgba(44,35,24,.5);">' + f.customer_email + '</span>' : '') + '</td>' +
+      '<td style="padding:.6rem .8rem;"><span style="font-size:.6rem;padding:.2rem .5rem;background:' + (f.is_manual?'rgba(58,110,106,.12)':'rgba(184,138,30,.12)') + ';color:' + (f.is_manual?'#2c5450':'#7a5c14') + ';">' + type + '</span></td>' +
+      '<td style="padding:.6rem .8rem;font-weight:600;">€' + parseFloat(f.total_amount||0).toFixed(2) + '</td>' +
+      '<td style="padding:.6rem .8rem;color:rgba(44,35,24,.6);">' + dato + '</td>' +
+      '<td style="padding:.6rem .8rem;color:rgba(44,35,24,.5);">' + sendt + '</td>' +
+      '<td style="padding:.6rem .8rem;"><button onclick="downloadFakturaFraId(' + JSON.stringify(f) + ')" style="font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;padding:.3rem .6rem;background:rgba(122,31,53,.1);border:1px solid rgba(122,31,53,.2);color:#7a1f35;cursor:pointer;font-family:Manrope,sans-serif;">PDF</button></td>' +
+      '</tr>';
+  }).join('');
+}
+
+async function downloadFakturaFraId(f) {
+  const btn = event.target;
+  btn.textContent = '...'; btn.disabled = true;
+  try {
+    let pdfBase64, invNum;
+    if (f.is_manual && f.lines) {
+      const res = await fetch('/.netlify/functions/create-manual-invoice', {
+        method:'POST', headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({ customer: { name: f.customer_name, email: f.customer_email, address: f.customer_address, vat: f.customer_vat }, lines: f.lines, notes: f.notes, invoiceDate: f.created_at, sendEmail: false, existingNumber: f.invoice_number })
+      });
+      const data = await res.json();
+      pdfBase64 = data.pdfBase64; invNum = f.invoice_number;
+    } else if (f.booking_id) {
+      const res = await fetch('/.netlify/functions/generate-invoice', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ bookingId: f.booking_id }) });
+      const data = await res.json();
+      pdfBase64 = data.pdfBase64; invNum = data.invoiceNumber;
+    }
+    if (pdfBase64) {
+      const blob = new Blob([Uint8Array.from(atob(pdfBase64), c=>c.charCodeAt(0))], {type:'application/pdf'});
+      const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'faktura-' + invNum + '.pdf'; a.click();
+    }
+  } catch(e) { alert('Fejl: ' + e.message); }
+  btn.textContent = 'PDF'; btn.disabled = false;
+}
 
 // Manuel faktura
 let mfLinjeCount = 0;
