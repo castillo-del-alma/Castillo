@@ -1449,8 +1449,18 @@ async function loadFakturaHistorik() {
   const count = document.getElementById('fhCount');
   if (!tbody) return;
   tbody.innerHTML = '<tr><td colspan="7" style="padding:1rem;color:rgba(44,35,24,.4);">Henter...</td></tr>';
-  const { data, error } = await sb.from('invoices').select('*').order('created_at', { ascending: false });
-  if (error || !data) { tbody.innerHTML = '<tr><td colspan="7" style="color:var(--wine);">Fejl</td></tr>'; return; }
+  const { data: invData, error } = await sb.from('invoices').select('*').order('created_at', { ascending: false });
+  if (error || !invData) { tbody.innerHTML = '<tr><td colspan="7" style="color:var(--wine);">Fejl</td></tr>'; return; }
+  // Hent kundenavne for de der mangler customer_name
+  const missingIds = [...new Set(invData.filter(f => !f.customer_name && f.customer_id).map(f => f.customer_id))];
+  let customerMap = {};
+  if (missingIds.length) {
+    const { data: custs } = await sb.from('customers').select('id,full_name,email').in('id', missingIds);
+    if (custs) custs.forEach(c => { customerMap[c.id] = c; });
+  }
+  const data = invData.map(f => ({ ...f, customer_name: f.customer_name || customerMap[f.customer_id]?.full_name || null, customer_email: f.customer_email || customerMap[f.customer_id]?.email || null }));
+  const dummy = null;
+  const dummy2 = null;
   count.textContent = data.length + ' fakturaer';
   if (!data.length) { tbody.innerHTML = '<tr><td colspan="7" style="padding:1rem;color:rgba(44,35,24,.4);">Ingen fakturaer endnu.</td></tr>'; return; }
   tbody.innerHTML = data.map(f => {
@@ -1466,9 +1476,45 @@ async function loadFakturaHistorik() {
       '<td style="padding:.6rem .8rem;font-weight:600;">€' + parseFloat(f.total_amount||0).toFixed(2) + '</td>' +
       '<td style="padding:.6rem .8rem;color:rgba(44,35,24,.6);">' + dato + '</td>' +
       '<td style="padding:.6rem .8rem;color:rgba(44,35,24,.5);">' + sendt + '</td>' +
-      '<td style="padding:.6rem .8rem;"><button onclick="downloadFakturaFraId(\''+f.id+'\',\''+f.invoice_number+'\','+JSON.stringify(!!f.is_manual)+',\''+((f.booking_id)||'')+'\')" style="font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;padding:.3rem .6rem;background:rgba(122,31,53,.1);border:1px solid rgba(122,31,53,.2);color:#7a1f35;cursor:pointer;font-family:Manrope,sans-serif;">PDF</button></td>' +
+      '<td style="padding:.6rem .8rem;display:flex;gap:.4rem;">' + (f.is_manual ? '<button onclick="redigerFaktura(\''+f.id+'\')" style="font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;padding:.3rem .6rem;background:rgba(74,80,40,.12);border:1px solid rgba(74,80,40,.25);color:#4a5028;cursor:pointer;font-family:Manrope,sans-serif;">Rediger</button>' : '') + '<button onclick="downloadFakturaFraId(\''+f.id+'\',\''+f.invoice_number+'\','+JSON.stringify(!!f.is_manual)+',\''+((f.booking_id)||'')+'\')" style="font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;padding:.3rem .6rem;background:rgba(122,31,53,.1);border:1px solid rgba(122,31,53,.2);color:#7a1f35;cursor:pointer;font-family:Manrope,sans-serif;">PDF</button></td>' +
       '</tr>';
   }).join('');
+}
+
+async function redigerFaktura(id) {
+  const { data: inv } = await sb.from('invoices').select('*').eq('id', id).single();
+  if (!inv) { alert('Faktura ikke fundet'); return; }
+  // Skift til manuel faktura fane
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+  document.querySelector('[onclick*="switchTab(\'faktura\'"]')?.classList.add('active');
+  document.getElementById('tab-faktura').classList.add('active');
+  // Udfyld formularen
+  document.getElementById('mf-navn').value = inv.customer_name || '';
+  document.getElementById('mf-email').value = inv.customer_email || '';
+  const addrParts = (inv.customer_address || '').split(',');
+  document.getElementById('mf-adresse').value = addrParts[0]?.trim() || '';
+  document.getElementById('mf-vat').value = inv.customer_vat || '';
+  document.getElementById('mf-noter').value = inv.notes || '';
+  // Ryd og genopbyg varelinjer
+  document.getElementById('mf-linjer').innerHTML = '';
+  mfLinjeCount = 0;
+  if (inv.lines && inv.lines.length) {
+    inv.lines.forEach(l => {
+      mfTilfoejLinje();
+      const inputs = document.querySelector('[id^="mf-linje-"]:last-child').querySelectorAll('input');
+      inputs[0].value = l.description || '';
+      inputs[1].value = l.qty || 1;
+      inputs[2].value = l.price || 0;
+      inputs[3].value = l.vat || 0;
+    });
+  }
+  mfBeregnTotal();
+  // Gem eksisterende nummer
+  window._editingInvoiceId = id;
+  window._editingInvoiceNumber = inv.invoice_number;
+  document.getElementById('mf-msg').textContent = 'Redigerer faktura ' + inv.invoice_number;
+  document.getElementById('mf-msg').style.color = 'var(--gold)';
 }
 
 async function downloadFakturaFraId(id, invNum, isManual, bookingId) {
@@ -1492,7 +1538,7 @@ async function downloadFakturaFraId(id, invNum, isManual, bookingId) {
     }
     if (pdfBase64) {
       const blob = new Blob([Uint8Array.from(atob(pdfBase64), c=>c.charCodeAt(0))], {type:'application/pdf'});
-      const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'faktura-' + invNum + '.pdf'; a.click();
+      window.open(URL.createObjectURL(blob), '_blank');
     }
   } catch(e) { alert('Fejl: ' + e.message); }
   btn.textContent = 'PDF'; btn.disabled = false;
