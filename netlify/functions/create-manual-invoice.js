@@ -109,7 +109,7 @@ exports.handler = async (event) => {
     // Fakturanummer
     let invoiceNumber = existingNumber || null;
     if (!invoiceNumber && !isDraft) {
-      const maxRes = await fetch(`${SUPABASE_URL}/rest/v1/invoices?select=invoice_number&order=created_at.desc&limit=1`,{headers:hdrs});
+      const maxRes = await fetch(`${SUPABASE_URL}/rest/v1/invoices?select=invoice_number&invoice_number=not.is.null&order=invoice_number.desc&limit=1`,{headers:hdrs});
       const maxArr = await maxRes.json();
       const year = new Date().getFullYear().toString().slice(-2);
       let nextNum = 1;
