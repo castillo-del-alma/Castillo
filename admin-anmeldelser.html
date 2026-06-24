@@ -1851,8 +1851,8 @@ async function visDetalje(kundeId) {
           '<span style="font-size:.65rem;color:rgba(44,35,24,.5);margin-left:.8rem;">' + dato + ' · ' + sendt + '</span></div>' +
           '<div style="display:flex;gap:.4rem;align-items:center;">' +
           '<span style="font-size:.85rem;font-weight:600;">€' + parseFloat(inv.total_amount||0).toFixed(2) + '</span>' +
-          (inv.is_manual ? '<button onclick="redigerFaktura('' + inv.id + '')" style="font-size:.58rem;padding:.2rem .5rem;background:rgba(74,80,40,.12);border:1px solid rgba(74,80,40,.25);color:#4a5028;cursor:pointer;font-family:Manrope,sans-serif;letter-spacing:.1em;text-transform:uppercase;">Rediger</button>' : '') +
-          '<button onclick="downloadFakturaFraId('' + inv.id + '','' + inv.invoice_number + '',' + JSON.stringify(!!inv.is_manual) + ','' + (inv.booking_id||'') + '')" style="font-size:.58rem;padding:.2rem .5rem;background:rgba(122,31,53,.1);border:1px solid rgba(122,31,53,.2);color:#7a1f35;cursor:pointer;font-family:Manrope,sans-serif;letter-spacing:.1em;text-transform:uppercase;">PDF</button>' +
+          (inv.is_manual ? '<button onclick="redigerFaktura(&quot;' + inv.id + '&quot;)" style="font-size:.58rem;padding:.2rem .5rem;background:rgba(74,80,40,.12);border:1px solid rgba(74,80,40,.25);color:#4a5028;cursor:pointer;font-family:Manrope,sans-serif;letter-spacing:.1em;text-transform:uppercase;">Rediger</button>' : '') +
+          '<button onclick="downloadFakturaFraId(&quot;' + inv.id + '&quot;,&quot;' + inv.invoice_number + '&quot;,' + JSON.stringify(!!inv.is_manual) + ',&quot;' + (inv.booking_id||'') + '&quot;)" style="font-size:.58rem;padding:.2rem .5rem;background:rgba(122,31,53,.1);border:1px solid rgba(122,31,53,.2);color:#7a1f35;cursor:pointer;font-family:Manrope,sans-serif;letter-spacing:.1em;text-transform:uppercase;">PDF</button>' +
           '</div></div>';
       });
       html += '</div>';
