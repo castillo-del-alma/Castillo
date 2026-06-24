@@ -89,7 +89,7 @@ async function buildPDF(data) {
 
 exports.handler = async (event) => {
   if (event.httpMethod !== 'POST') return { statusCode:405, body:'Method Not Allowed' };
-  const { customer, lines, notes, invoiceDate, sendEmail, existingNumber, isDraft } = JSON.parse(event.body);
+  const { customer, lines, notes, invoiceDate, sendEmail, existingNumber, existingId, isDraft } = JSON.parse(event.body);
   const SUPABASE_URL = process.env.SUPABASE_URL;
   const SUPABASE_KEY = process.env.SUPABASE_ANON_KEY;
   const RESEND_KEY = process.env.RESEND_API_KEY;
@@ -149,7 +149,23 @@ exports.handler = async (event) => {
       }
     }
 
-    const _invRes = await fetch(`${SUPABASE_URL}/rest/v1/invoices`,{
+    let _invRes;
+    if (existingId) {
+      // Opdater eksisterende kladde
+      _invRes = await fetch(`${SUPABASE_URL}/rest/v1/invoices?id=eq.${existingId}`,{
+        method:'PATCH', headers:{...hdrs,'Prefer':'return=minimal'},
+        body:JSON.stringify({
+          customer_id: customerId, invoice_number: invoiceNumber,
+          total_amount: totalIncVat, is_manual: true,
+          customer_name: customer.name, customer_email: customer.email,
+          customer_address: customer.address||null, customer_vat: customer.vat||null,
+          lines: lines, notes: notes||null,
+          status: isDraft ? 'kladde' : 'sendt',
+          sent_at: (!isDraft && sendEmail) ? new Date().toISOString() : null
+        })
+      });
+    } else {
+      _invRes = await fetch(`${SUPABASE_URL}/rest/v1/invoices`,{
       method:'POST', headers:{...hdrs,'Prefer':'return=minimal'},
       body:JSON.stringify({
         customer_id: customerId, invoice_number: invoiceNumber,
@@ -160,6 +176,7 @@ exports.handler = async (event) => {
         status: isDraft ? 'kladde' : 'sendt'
       })
     });
+    } // end else
     console.log('DB insert status:', _invRes.status, await _invRes.text());
 
     // Send email hvis ønsket

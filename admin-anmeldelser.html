@@ -1583,6 +1583,8 @@ function mfBeregnTotal() {
 
 function mfGetData(sendEmail) {
   return {
+    existingNumber: window._editingInvoiceNumber || null,
+    existingId: window._editingInvoiceId || null,
     customer: { name: document.getElementById('mf-navn').value, email: document.getElementById('mf-email').value, address: (document.getElementById('mf-adresse').value + (document.getElementById('mf-postnr').value ? ', ' + document.getElementById('mf-postnr').value : '') + (document.getElementById('mf-by').value ? ' ' + document.getElementById('mf-by').value : '') + (document.getElementById('mf-land')?.value ? ', ' + document.getElementById('mf-land').value : '')).trim(), vat: document.getElementById('mf-vat').value },
     lines: mfGetLinjer(),
     notes: document.getElementById('mf-noter').value,
