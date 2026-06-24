@@ -89,7 +89,7 @@ async function buildPDF(data) {
 
 exports.handler = async (event) => {
   if (event.httpMethod !== 'POST') return { statusCode:405, body:'Method Not Allowed' };
-  const { customer, lines, notes, invoiceDate, sendEmail } = JSON.parse(event.body);
+  const { customer, lines, notes, invoiceDate, sendEmail, existingNumber } = JSON.parse(event.body);
   const SUPABASE_URL = process.env.SUPABASE_URL;
   const SUPABASE_KEY = process.env.SUPABASE_ANON_KEY;
   const RESEND_KEY = process.env.RESEND_API_KEY;
@@ -107,14 +107,17 @@ exports.handler = async (event) => {
     const totalIncVat = totalExVat + totalVat;
 
     // Fakturanummer
-    const maxRes = await fetch(`${SUPABASE_URL}/rest/v1/invoices?select=invoice_number&order=created_at.desc&limit=1`,{headers:hdrs});
-    const maxArr = await maxRes.json();
-    const year = new Date().getFullYear().toString().slice(-2);
-    let nextNum = 1;
-    if (maxArr && maxArr.length > 0 && maxArr[0].invoice_number) {
-      nextNum = parseInt(maxArr[0].invoice_number.split('-')[1]||'0')+1;
+    let invoiceNumber = existingNumber || null;
+    if (!invoiceNumber) {
+      const maxRes = await fetch(`${SUPABASE_URL}/rest/v1/invoices?select=invoice_number&order=created_at.desc&limit=1`,{headers:hdrs});
+      const maxArr = await maxRes.json();
+      const year = new Date().getFullYear().toString().slice(-2);
+      let nextNum = 1;
+      if (maxArr && maxArr.length > 0 && maxArr[0].invoice_number) {
+        nextNum = parseInt(maxArr[0].invoice_number.split('-')[1]||'0')+1;
+      }
+      invoiceNumber = `${year}-${String(nextNum).padStart(3,'0')}`;
     }
-    const invoiceNumber = `${year}-${String(nextNum).padStart(3,'0')}`;
     const invoiceDateFmt = fmtDate(invoiceDate || new Date().toISOString());
     const invoiceData = { invoiceNumber, invoiceDate: invoiceDateFmt, customer, lines, notes, totalExVat, totalVat, totalIncVat };
 
@@ -143,7 +146,7 @@ exports.handler = async (event) => {
       }
     }
 
-    await fetch(`${SUPABASE_URL}/rest/v1/invoices`,{
+    if (!existingNumber) await fetch(`${SUPABASE_URL}/rest/v1/invoices`,{
       method:'POST', headers:{...hdrs,'Prefer':'return=minimal'},
       body:JSON.stringify({
         customer_id: customerId, invoice_number: invoiceNumber,

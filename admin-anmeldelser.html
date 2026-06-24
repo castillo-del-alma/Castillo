@@ -1449,43 +1449,46 @@ async function loadFakturaHistorik() {
   const count = document.getElementById('fhCount');
   if (!tbody) return;
   tbody.innerHTML = '<tr><td colspan="7" style="padding:1rem;color:rgba(44,35,24,.4);">Henter...</td></tr>';
-  const { data, error } = await sb.from('invoices').select('*').order('created_at', { ascending: false });
+  const { data, error } = await sb.from('invoices').select('*, customers(full_name, email)').order('created_at', { ascending: false });
   if (error || !data) { tbody.innerHTML = '<tr><td colspan="7" style="color:var(--wine);">Fejl</td></tr>'; return; }
   count.textContent = data.length + ' fakturaer';
   if (!data.length) { tbody.innerHTML = '<tr><td colspan="7" style="padding:1rem;color:rgba(44,35,24,.4);">Ingen fakturaer endnu.</td></tr>'; return; }
   tbody.innerHTML = data.map(f => {
-    const kundeNavn = f.customer_name || '—';
+    const kundeNavn = f.customer_name || f.customers?.full_name || '—';
+    const kundeEmail = f.customer_email || f.customers?.email || null;
     const type = f.is_manual ? 'Manuel' : 'Booking';
     const sendt = f.sent_at ? new Date(f.sent_at).toLocaleDateString('da-DK',{day:'numeric',month:'short',year:'numeric'}) : '—';
     const dato = new Date(f.created_at).toLocaleDateString('da-DK',{day:'numeric',month:'short',year:'numeric'});
     return '<tr style="border-bottom:1px solid rgba(184,138,30,.1);">' +
       '<td style="padding:.6rem .8rem;font-family:Cinzel,serif;font-weight:300;">' + (f.invoice_number||'—') + '</td>' +
-      '<td style="padding:.6rem .8rem;">' + kundeNavn + (f.customer_email ? '<br><span style="font-size:.65rem;color:rgba(44,35,24,.5);">' + f.customer_email + '</span>' : '') + '</td>' +
+      '<td style="padding:.6rem .8rem;">' + kundeNavn + (kundeEmail ? '<br><span style="font-size:.65rem;color:rgba(44,35,24,.5);">' + kundeEmail + '</span>' : '') + '</td>' +
       '<td style="padding:.6rem .8rem;"><span style="font-size:.6rem;padding:.2rem .5rem;background:' + (f.is_manual?'rgba(58,110,106,.12)':'rgba(184,138,30,.12)') + ';color:' + (f.is_manual?'#2c5450':'#7a5c14') + ';">' + type + '</span></td>' +
       '<td style="padding:.6rem .8rem;font-weight:600;">€' + parseFloat(f.total_amount||0).toFixed(2) + '</td>' +
       '<td style="padding:.6rem .8rem;color:rgba(44,35,24,.6);">' + dato + '</td>' +
       '<td style="padding:.6rem .8rem;color:rgba(44,35,24,.5);">' + sendt + '</td>' +
-      '<td style="padding:.6rem .8rem;"><button onclick="downloadFakturaFraId(' + JSON.stringify(f) + ')" style="font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;padding:.3rem .6rem;background:rgba(122,31,53,.1);border:1px solid rgba(122,31,53,.2);color:#7a1f35;cursor:pointer;font-family:Manrope,sans-serif;">PDF</button></td>' +
+      '<td style="padding:.6rem .8rem;"><button onclick="downloadFakturaFraId(\''+f.id+'\',\''+f.invoice_number+'\','+JSON.stringify(!!f.is_manual)+',\''+((f.booking_id)||'')+'\')" style="font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;padding:.3rem .6rem;background:rgba(122,31,53,.1);border:1px solid rgba(122,31,53,.2);color:#7a1f35;cursor:pointer;font-family:Manrope,sans-serif;">PDF</button></td>' +
       '</tr>';
   }).join('');
 }
 
-async function downloadFakturaFraId(f) {
+async function downloadFakturaFraId(id, invNum, isManual, bookingId) {
   const btn = event.target;
   btn.textContent = '...'; btn.disabled = true;
   try {
-    let pdfBase64, invNum;
-    if (f.is_manual && f.lines) {
+    let pdfBase64;
+    if (isManual) {
+      const { data: inv } = await sb.from('invoices').select('*').eq('id', id).single();
+      if (!inv) throw new Error('Faktura ikke fundet');
       const res = await fetch('/.netlify/functions/create-manual-invoice', {
         method:'POST', headers:{'Content-Type':'application/json'},
-        body: JSON.stringify({ customer: { name: f.customer_name, email: f.customer_email, address: f.customer_address, vat: f.customer_vat }, lines: f.lines, notes: f.notes, invoiceDate: f.created_at, sendEmail: false, existingNumber: f.invoice_number })
+        body: JSON.stringify({ customer: { name: inv.customer_name, email: inv.customer_email, address: inv.customer_address, vat: inv.customer_vat }, lines: inv.lines||[], notes: inv.notes, invoiceDate: inv.created_at, sendEmail: false, existingNumber: inv.invoice_number })
       });
       const data = await res.json();
-      pdfBase64 = data.pdfBase64; invNum = f.invoice_number;
-    } else if (f.booking_id) {
-      const res = await fetch('/.netlify/functions/generate-invoice', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ bookingId: f.booking_id }) });
+      pdfBase64 = data.pdfBase64;
+    } else if (bookingId) {
+      const res = await fetch('/.netlify/functions/generate-invoice', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ bookingId }) });
       const data = await res.json();
-      pdfBase64 = data.pdfBase64; invNum = data.invoiceNumber;
+      pdfBase64 = data.pdfBase64;
     }
     if (pdfBase64) {
       const blob = new Blob([Uint8Array.from(atob(pdfBase64), c=>c.charCodeAt(0))], {type:'application/pdf'});
