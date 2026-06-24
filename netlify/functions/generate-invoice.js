@@ -212,7 +212,7 @@ exports.handler = async (event) => {
       await fetch(`${SUPABASE_URL}/rest/v1/invoices`,{
         method:'POST',
         headers:{...hdrs,'Prefer':'return=minimal'},
-        body:JSON.stringify({booking_id:bookingId,customer_id:customer.id,invoice_number:invoiceNumber,total_amount:totalPaid})
+        body:JSON.stringify({booking_id:bookingId,customer_id:customer.id,invoice_number:invoiceNumber,total_amount:totalPaid,customer_name:customer.full_name||null,customer_email:customer.email||null})
       });
     }
 

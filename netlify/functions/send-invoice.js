@@ -124,7 +124,7 @@ exports.handler = async (event) => {
     await fetch(`${SUPABASE_URL}/rest/v1/invoices?booking_id=eq.${bookingId}`,{
       method:'PATCH',
       headers:{...hdrs,'Prefer':'return=minimal'},
-      body:JSON.stringify({sent_at:new Date().toISOString()})
+      body:JSON.stringify({sent_at:new Date().toISOString(),customer_name:customer.full_name||null,customer_email:customer.email||null})
     });
 
     // Log til emails tabel med HTML body
