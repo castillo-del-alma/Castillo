@@ -1639,6 +1639,14 @@ function exportNewsletter() {
   const url=URL.createObjectURL(blob);
   const a=document.createElement('a');a.href=url;a.download='newsletter.csv';a.click();
 }
+async function flytAnmeldelseOgGenindlaes(idx, dir) {
+  // Genindlaes godkendte anmeldelser i _alleAnmeldelser
+  const { data } = await sb.from('reviews').select('*').eq('approved', true).order('sort_order', { ascending: true }).order('created_at', { ascending: false });
+  if (data) _alleAnmeldelser = data;
+  await flytAnmeldelse(idx, dir);
+  setTimeout(loadAnmeldelserFane, 500);
+}
+
 async function loadAnmeldelserFane() {
   const el = document.getElementById('anmeldelserFaneIndhold');
   if (!el) return;
@@ -1672,8 +1680,8 @@ function anmeldelseKortFane(r, isApproved, idx, total) {
     [['Modtagelse',r.r1_modtagelse],['Værelse',r.r2_vaerelse],['Mad',r.r3_mad],['Omgivelser',r.r4_omgivelser],['Program',r.r5_program],['Terapeuter',r.r6_terapeuter],['Fællesskab',r.r7_faellesskab],['Personlig',r.r8_personlig],['Ro',r.r9_ro],['Samlet',r.r10_samlet],['Anbefaling',r.r11_anbefaling]].filter(([,v])=>v).map(([l,v])=>'<span style="font-size:.65rem;color:rgba(44,35,24,.85);">'+l+': '+'●'.repeat(v)+'○'.repeat(5-v)+' '+v+'/5</span>').join('') +
     '</div></div>' +
     '<div style="display:flex;gap:.4rem;align-items:center;">' +
-    (isApproved && idx > 0 ? '<button onclick="_alleAnmeldelser=[];flytAnmeldelse(' + idx + ',-1);setTimeout(loadAnmeldelserFane,300);" style="font-size:.6rem;padding:.3rem .6rem;background:rgba(44,35,24,.06);border:1px solid rgba(44,35,24,.15);cursor:pointer;">↑ Op</button>' : '') +
-    (isApproved && idx < total-1 ? '<button onclick="_alleAnmeldelser=[];flytAnmeldelse(' + idx + ',1);setTimeout(loadAnmeldelserFane,300);" style="font-size:.6rem;padding:.3rem .6rem;background:rgba(44,35,24,.06);border:1px solid rgba(44,35,24,.15);cursor:pointer;">↓ Ned</button>' : '') +
+    (isApproved && idx > 0 ? '<button onclick="flytAnmeldelseOgGenindlaes(' + idx + ',-1);" style="font-size:.6rem;padding:.3rem .6rem;background:rgba(44,35,24,.06);border:1px solid rgba(44,35,24,.15);cursor:pointer;">↑ Op</button>' : '') +
+    (isApproved && idx < total-1 ? '<button onclick="flytAnmeldelseOgGenindlaes(' + idx + ',1);" style="font-size:.6rem;padding:.3rem .6rem;background:rgba(44,35,24,.06);border:1px solid rgba(44,35,24,.15);cursor:pointer;">↓ Ned</button>' : '') +
     (!isApproved ? '<button onclick="godkendAnmeldelse(&quot;' + r.id + '&quot;,this);setTimeout(loadAnmeldelserFane,500);" style="font-size:.6rem;padding:.3rem .6rem;background:var(--olive);border:none;color:#fff;cursor:pointer;font-family:Manrope,sans-serif;letter-spacing:.1em;text-transform:uppercase;">Godkend</button>' : '<span style="font-size:.6rem;padding:.2rem .5rem;background:rgba(74,80,40,.12);color:#4a5028;">Godkendt</span>') +
     '</div></div></div>';
 }
