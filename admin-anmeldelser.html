@@ -1674,7 +1674,7 @@ function anmeldelseKortFane(r, isApproved, idx, total) {
     '<div style="display:flex;gap:.4rem;align-items:center;">' +
     (isApproved && idx > 0 ? '<button onclick="_alleAnmeldelser=[];flytAnmeldelse(' + idx + ',-1);setTimeout(loadAnmeldelserFane,300);" style="font-size:.6rem;padding:.3rem .6rem;background:rgba(44,35,24,.06);border:1px solid rgba(44,35,24,.15);cursor:pointer;">↑ Op</button>' : '') +
     (isApproved && idx < total-1 ? '<button onclick="_alleAnmeldelser=[];flytAnmeldelse(' + idx + ',1);setTimeout(loadAnmeldelserFane,300);" style="font-size:.6rem;padding:.3rem .6rem;background:rgba(44,35,24,.06);border:1px solid rgba(44,35,24,.15);cursor:pointer;">↓ Ned</button>' : '') +
-    (!isApproved ? '<button onclick="godkendAnmeldelse('' + r.id + '',this);setTimeout(loadAnmeldelserFane,500);" style="font-size:.6rem;padding:.3rem .6rem;background:var(--olive);border:none;color:#fff;cursor:pointer;font-family:Manrope,sans-serif;letter-spacing:.1em;text-transform:uppercase;">Godkend</button>' : '<span style="font-size:.6rem;padding:.2rem .5rem;background:rgba(74,80,40,.12);color:#4a5028;">Godkendt</span>') +
+    (!isApproved ? '<button onclick="godkendAnmeldelse(&quot;' + r.id + '&quot;,this);setTimeout(loadAnmeldelserFane,500);" style="font-size:.6rem;padding:.3rem .6rem;background:var(--olive);border:none;color:#fff;cursor:pointer;font-family:Manrope,sans-serif;letter-spacing:.1em;text-transform:uppercase;">Godkend</button>' : '<span style="font-size:.6rem;padding:.2rem .5rem;background:rgba(74,80,40,.12);color:#4a5028;">Godkendt</span>') +
     '</div></div></div>';
 }
 
