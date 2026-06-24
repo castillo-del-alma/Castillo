@@ -121,9 +121,12 @@ exports.handler = async (event) => {
     const invoiceDateFmt = fmtDate(invoiceDate || new Date().toISOString());
     const invoiceData = { invoiceNumber, invoiceDate: invoiceDateFmt, customer, lines, notes, totalExVat, totalVat, totalIncVat };
 
-    // PDF
-    const pdfBuffer = await buildPDF(invoiceData);
-    const pdfBase64 = pdfBuffer.toString('base64');
+    // PDF - spring over for kladder
+    let pdfBuffer = null, pdfBase64 = null;
+    if (!isDraft) {
+      pdfBuffer = await buildPDF(invoiceData);
+      pdfBase64 = pdfBuffer.toString('base64');
+    }
 
     // Gem i Supabase
     let customerId = null;
