@@ -326,24 +326,7 @@ body{font-family:'Manrope',sans-serif;background:#f0e8d5;color:#2c2318;min-heigh
 
   <!-- FANE: ANMELDELSER -->
   <div class="tab-content" id="tab-anmeldelser">
-    <div class="stats-bar" id="statsBar">
-      <div class="stat"><span class="stat-num" id="statTotal">—</span><span class="stat-label">Anmeldelser</span></div>
-      <div class="stat"><span class="stat-num" id="statAvg">—</span><span class="stat-label">Gns. samlet</span></div>
-      <div class="stat"><span class="stat-num" id="statRecommend">—</span><span class="stat-label">Gns. anbefaling</span></div>
-      <div class="stat"><span class="stat-num" id="statConsent">—</span><span class="stat-label">Samtykke givet</span></div>
-    </div>
-    <div class="filters">
-      <span class="filter-label">Filter:</span>
-      <button class="filter-btn active" onclick="setFilter('all',this)">Alle</button>
-      <button class="filter-btn" onclick="setFilter('ja',this)">Samtykke: Ja</button>
-      <button class="filter-btn" onclick="setFilter('anonymt',this)">Anonymt</button>
-      <button class="filter-btn" onclick="setFilter('approved',this)">Godkendt</button>
-      <button class="filter-btn" onclick="setFilter('5star',this)">★★★★★</button>
-      <input type="text" id="searchInput" placeholder="Søg navn, retreat..." oninput="renderReviews()">
-    </div>
-    <div class="reviews-grid" id="reviewsGrid">
-      <div class="loading">Henter anmeldelser...</div>
-    </div>
+    <div id="anmeldelserFaneIndhold" style="padding:2rem 3rem;"></div>
   </div>
 
   <!-- FANE: KUNDER -->
@@ -836,6 +819,7 @@ function switchTab(tab, btn) {
   btn.classList.add('active');
   document.getElementById('tab-' + tab).classList.add('active');
   if (tab === 'newsletter') loadNewsletter();
+  if (tab === 'anmeldelser') loadAnmeldelserFane();
   if (tab === 'faktura-historik') loadFakturaHistorik();
   if (tab === 'faktura') { if (!document.querySelector('#mf-linjer [id^="mf-linje-"]')) mfTilfoejLinje(); }
 }
@@ -1655,6 +1639,45 @@ function exportNewsletter() {
   const url=URL.createObjectURL(blob);
   const a=document.createElement('a');a.href=url;a.download='newsletter.csv';a.click();
 }
+async function loadAnmeldelserFane() {
+  const el = document.getElementById('anmeldelserFaneIndhold');
+  if (!el) return;
+  el.innerHTML = '<p style="color:rgba(44,35,24,.4);font-size:.82rem;">Henter…</p>';
+  const { data, error } = await sb.from('reviews').select('*').order('sort_order', { ascending: true }).order('created_at', { ascending: false });
+  if (error || !data) { el.innerHTML = '<p style="color:var(--wine);">Fejl</p>'; return; }
+  const approved = data.filter(r => r.approved);
+  const pending = data.filter(r => !r.approved);
+  let html = '<h3 style="font-family:Cinzel,serif;font-weight:300;font-size:1.1rem;color:#2c2318;margin:0 0 .3rem;">Anmeldelser</h3>';
+  html += '<p style="font-size:.72rem;color:rgba(44,35,24,.6);margin:0 0 1.5rem;">' + data.length + ' total · ' + pending.length + ' afventer · ' + approved.length + ' godkendt</p>';
+  if (pending.length > 0) {
+    html += '<p style="font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;color:#7a5c14;margin-bottom:.6rem;">Afventer godkendelse</p>';
+    pending.forEach(r => { html += anmeldelseKortFane(r, false, 0, 0); });
+    html += '<div style="height:1px;background:rgba(184,138,30,.15);margin:1.5rem 0;"></div>';
+  }
+  html += '<p style="font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;color:#7a5c14;margin-bottom:.6rem;">Godkendte — rækkefølge på forsiden</p>';
+  approved.forEach((r, idx) => { html += anmeldelseKortFane(r, true, idx, approved.length); });
+  el.innerHTML = html;
+}
+
+function anmeldelseKortFane(r, isApproved, idx, total) {
+  const dato = new Date(r.created_at).toLocaleDateString('da-DK',{day:'numeric',month:'short',year:'numeric'});
+  const navn = ((r.fornavn||'') + ' ' + (r.efternavn||'')).trim();
+  return '<div style="background:' + (isApproved?'rgba(74,80,40,.05)':'rgba(184,138,30,.06)') + ';border:1px solid ' + (isApproved?'rgba(74,80,40,.15)':'rgba(184,138,30,.2)') + ';padding:1rem 1.2rem;margin-bottom:.6rem;">' +
+    '<div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:.5rem;">' +
+    '<div style="flex:1;">' +
+    '<span style="font-family:Cinzel,serif;font-size:.9rem;color:#2c2318;">' + navn + '</span>' +
+    '<span style="font-size:.65rem;color:rgba(44,35,24,.5);margin-left:.8rem;">' + (r.retreat_navn||'') + ' · ' + dato + '</span>' +
+    (r.markedsfoering ? '<div style="font-size:.78rem;font-style:italic;color:rgba(44,35,24,.7);margin-top:.3rem;">“' + r.markedsfoering + '”</div>' : '') +
+    '<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:.2rem .6rem;margin-top:.5rem;">' +
+    [['Modtagelse',r.r1_modtagelse],['Værelse',r.r2_vaerelse],['Mad',r.r3_mad],['Omgivelser',r.r4_omgivelser],['Program',r.r5_program],['Terapeuter',r.r6_terapeuter],['Fællesskab',r.r7_faellesskab],['Personlig',r.r8_personlig],['Ro',r.r9_ro],['Samlet',r.r10_samlet],['Anbefaling',r.r11_anbefaling]].filter(([,v])=>v).map(([l,v])=>'<span style="font-size:.65rem;color:rgba(44,35,24,.85);">'+l+': '+'●'.repeat(v)+'○'.repeat(5-v)+' '+v+'/5</span>').join('') +
+    '</div></div>' +
+    '<div style="display:flex;gap:.4rem;align-items:center;">' +
+    (isApproved && idx > 0 ? '<button onclick="_alleAnmeldelser=[];flytAnmeldelse(' + idx + ',-1);setTimeout(loadAnmeldelserFane,300);" style="font-size:.6rem;padding:.3rem .6rem;background:rgba(44,35,24,.06);border:1px solid rgba(44,35,24,.15);cursor:pointer;">↑ Op</button>' : '') +
+    (isApproved && idx < total-1 ? '<button onclick="_alleAnmeldelser=[];flytAnmeldelse(' + idx + ',1);setTimeout(loadAnmeldelserFane,300);" style="font-size:.6rem;padding:.3rem .6rem;background:rgba(44,35,24,.06);border:1px solid rgba(44,35,24,.15);cursor:pointer;">↓ Ned</button>' : '') +
+    (!isApproved ? '<button onclick="godkendAnmeldelse('' + r.id + '',this);setTimeout(loadAnmeldelserFane,500);" style="font-size:.6rem;padding:.3rem .6rem;background:var(--olive);border:none;color:#fff;cursor:pointer;font-family:Manrope,sans-serif;letter-spacing:.1em;text-transform:uppercase;">Godkend</button>' : '<span style="font-size:.6rem;padding:.2rem .5rem;background:rgba(74,80,40,.12);color:#4a5028;">Godkendt</span>') +
+    '</div></div></div>';
+}
+
 async function visAnmeldelser() {
   document.getElementById('modalAnmeldelser').classList.add('open');
   const liste = document.getElementById('anmeldelserListe');
