@@ -146,7 +146,7 @@ exports.handler = async (event) => {
       }
     }
 
-    if (!existingNumber) await fetch(`${SUPABASE_URL}/rest/v1/invoices`,{
+    if (!existingNumber || isDraft) await fetch(`${SUPABASE_URL}/rest/v1/invoices`,{
       method:'POST', headers:{...hdrs,'Prefer':'return=minimal'},
       body:JSON.stringify({
         customer_id: customerId, invoice_number: invoiceNumber,
