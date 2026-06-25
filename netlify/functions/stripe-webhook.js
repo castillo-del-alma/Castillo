@@ -1,4 +1,108 @@
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
+const { buildEmail, getLang, fmtDate, texts } = require('./email-template');
+
+exports.handler = async (event) => {
+  const sig = event.headers['stripe-signature'];
+  let stripeEvent;
+
+  try {
+    stripeEvent = stripe.webhooks.constructEvent(
+      event.body,
+      sig,
+      process.env.STRIPE_WEBHOOK_SECRET
+    );
+  } catch (err) {
+    return { statusCode: 400, body: `Webhook fejl: ${err.message}` };
+  }
+
+  if (stripeEvent.type === 'checkout.session.completed') {
+    const session = stripeEvent.data.object;
+    const bookingId = session.metadata.booking_id;
+    const amount = session.amount_total / 100;
+
+    const SUPABASE_URL = process.env.SUPABASE_URL;
+    const SUPABASE_KEY = process.env.SUPABASE_ANON_KEY;
+    const RESEND_KEY = process.env.RESEND_API_KEY;
+
+    const headers = {
+      'Content-Type': 'application/json',
+      'apikey': SUPABASE_KEY,
+      'Authorization': `Bearer ${SUPABASE_KEY}`
+    };
+
+    try {
+      // Opdater booking status
+      await fetch(`${SUPABASE_URL}/rest/v1/bookings?id=eq.${bookingId}`, {
+        method: 'PATCH',
+        headers: { ...headers, 'Prefer': 'return=minimal' },
+        body: JSON.stringify({ status: 'bekræftet' })
+      });
+
+      // Registrer betaling
+      await fetch(`${SUPABASE_URL}/rest/v1/payments`, {
+        method: 'POST',
+        headers: { ...headers, 'Prefer': 'return=minimal' },
+        body: JSON.stringify({
+          booking_id: bookingId,
+          amount: amount,
+          type: session.metadata?.payment_type || 'deposit',
+          status: 'paid',
+          stripe_payment_id: session.payment_intent,
+          paid_at: new Date().toISOString()
+        })
+      });
+
+      console.log('Booking opdateret og betaling registreret:', bookingId);
+
+      // Hent booking- og kundeinfo til bekræftelsesmail
+      const bookingInfoRes = await fetch(`${SUPABASE_URL}/rest/v1/bookings?id=eq.${bookingId}&select=retreat_name,arrival_date,customer_id`, { headers });
+      const bookingInfoArr = await bookingInfoRes.json();
+      const bookingInfo = Array.isArray(bookingInfoArr) ? bookingInfoArr[0] : null;
+
+      if (bookingInfo && bookingInfo.customer_id) {
+        const kundeInfoRes = await fetch(`${SUPABASE_URL}/rest/v1/customers?id=eq.${bookingInfo.customer_id}&select=full_name,email`, { headers });
+        const kundeInfoArr = await kundeInfoRes.json();
+        const kundeInfo = Array.isArray(kundeInfoArr) ? kundeInfoArr[0] : null;
+
+        if (kundeInfo && kundeInfo.email) {
+          const fornavn = (kundeInfo.full_name || '').split(' ')[0] || 'der';
+          const retreatName = bookingInfo.retreat_name || 'dit retreat';
+
+          function fmtDateDK(iso) {
+            if (!iso) return '—';
+            const months = ['januar','februar','marts','april','maj','juni','juli','august','september','oktober','november','december'];
+            const d = new Date(iso);
+            return `${d.getDate()}. ${months[d.getMonth()]} ${d.getFullYear()}`;
+          }
+
+          const isFinal = session.metadata?.payment_type === 'final';
+          const isFull = session.metadata?.payment_type === 'full' || session.metadata?.payment_type === 'custom';
+          let savedHtml = '';
+          await fetch('https://api.resend.com/emails', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${RESEND_KEY}`
+            },
+            body: JSON.stringify({
+              from: 'Castillo del Alma <booking@castillodelalma.es>',
+              to: kundeInfo.email,
+              subject: isFinal ? t.final_subject : isFull ? t.confirmed_full_subject : t.confirmed_deposit_subject,
+        html: buildEmail({
+          lang,
+          title: isFinal ? t.final_title : isFull ? t.confirmed_full_title : t.confirmed_deposit_title,
+          intro: isFinal ? t.final_intro : isFull ? t.confirmed_full_intro : t.confirmed_deposit_intro,
+          sections: [{
+            label: t.reservation_details,
+            rows: [
+              [t.label_retreat, session.metadata?.retreat_name || 'Castillo del Alma'],
+              [t.label_paid, '€' + (amount/100).toFixed(2)],
+            ]
+          }],
+          buttons: [{ label: t.btn_minbooking, url: 'https://castillodelalma.es/min-booking', primary: true }]
+        })
+    });stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
+const { buildEmail, getLang, fmtDate, texts } = require('./email-template');
 
 exports.handler = async (event) => {
   const sig = event.headers['stripe-signature'];
