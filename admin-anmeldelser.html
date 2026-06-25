@@ -1219,7 +1219,7 @@ function renderKunder() {
         <button class="kunde-btn kunde-btn-charge" onclick="openForbrug('${booking.id}','${k.full_name}')">+ Forbrug</button>
         ${skylder > 0 ? `<button class="kunde-btn kunde-btn-pay" onclick="registrerBetaling('${booking.id}',${skylder})">Registrér betaling</button>` : ''}
         ${booking.status === 'forespørgsel' ? `<button class="kunde-btn" style="background:rgba(184,138,30,.18);color:#7a5c14;border:1px solid rgba(184,138,30,.35);font-weight:600;" onclick="aktiverFrist('${booking.id}','${k.email}','${k.full_name}')">Aktivér 48-timers frist</button>` : ''}
-        ${booking.deadline ? `<div style="font-size:.58rem;color:rgba(44,35,24,.8);margin-top:.3rem;">Frist: \${new Date('${booking.deadline}').toLocaleString('da-DK')}</div>` : ''}
+        ${booking.deadline ? `<div style="font-size:.58rem;color:rgba(44,35,24,.8);margin-top:.3rem;">Frist: ${new Date(booking.deadline).toLocaleString('da-DK')}</div>` : ''}
         <button class="kunde-btn" style="background:rgba(192,92,48,.12);color:#7a3818;border:1px solid rgba(192,92,48,.3);font-weight:600;" onclick="sletKunde('${k.id}','${k.full_name}')">Slet</button>
       </div>
     </div>`;
