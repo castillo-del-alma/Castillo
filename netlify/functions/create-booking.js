@@ -83,7 +83,8 @@ exports.handler = async (event) => {
     });
     const bookingData = await bookingRes.json();
     const booking = Array.isArray(bookingData) ? bookingData[0] : bookingData;
-    if (!booking || !booking.id) throw new Error('Booking fejlede');
+    console.log('Booking data:', JSON.stringify(bookingData));
+    if (!booking || !booking.id) throw new Error('Booking fejlede: ' + JSON.stringify(bookingData));
 
     // Opret betaling
     await fetch(`${SUPABASE_URL}/rest/v1/payments`, {
