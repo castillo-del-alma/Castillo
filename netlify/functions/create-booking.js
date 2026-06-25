@@ -146,7 +146,7 @@ exports.handler = async (event) => {
             { label: t.btn_pay_deposit, url: 'https://castillodelalma.es/betal?booking=' + booking.id, primary: false }
           ],
           note: t.reservation_login + ' <a href="mailto:booking@castillodelalma.es" style="color:#7a1f35;">booking@castillodelalma.es</a>'
-        })`
+        })
       })
     });
 
