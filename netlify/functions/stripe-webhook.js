@@ -21,7 +21,7 @@ exports.handler = async (event) => {
     const amount = session.amount_total / 100;
 
     const SUPABASE_URL = process.env.SUPABASE_URL;
-    const SUPABASE_KEY = process.env.SUPABASE_ANON_KEY;
+    const SUPABASE_KEY = process.env.SUPABASE_SERVICE_KEY || process.env.SUPABASE_ANON_KEY;
     const RESEND_KEY = process.env.RESEND_API_KEY;
 
     const headers = {
@@ -124,7 +124,7 @@ exports.handler = async (event) => {
     const amount = session.amount_total / 100;
 
     const SUPABASE_URL = process.env.SUPABASE_URL;
-    const SUPABASE_KEY = process.env.SUPABASE_ANON_KEY;
+    const SUPABASE_KEY = process.env.SUPABASE_SERVICE_KEY || process.env.SUPABASE_ANON_KEY;
     const RESEND_KEY = process.env.RESEND_API_KEY;
 
     const headers = {
@@ -244,7 +244,7 @@ exports.handler = async (event) => {
           });
           try {
             const SUPABASE_URL = process.env.SUPABASE_URL;
-            const SUPABASE_KEY = process.env.SUPABASE_ANON_KEY;
+            const SUPABASE_KEY = process.env.SUPABASE_SERVICE_KEY || process.env.SUPABASE_ANON_KEY;
             await fetch(`${SUPABASE_URL}/rest/v1/emails`, {
               method: 'POST',
               headers: { 'Content-Type':'application/json','apikey':SUPABASE_KEY,'Authorization':`Bearer ${SUPABASE_KEY}`,'Prefer':'return=minimal' },

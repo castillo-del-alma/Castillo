@@ -7,7 +7,7 @@ exports.handler = async (event) => {
 
   const RESEND_KEY = process.env.RESEND_API_KEY;
   const SUPABASE_URL = process.env.SUPABASE_URL;
-  const SUPABASE_KEY = process.env.SUPABASE_ANON_KEY;
+  const SUPABASE_KEY = process.env.SUPABASE_SERVICE_KEY || process.env.SUPABASE_ANON_KEY;
   const { email, navn, deadline, bookingId } = JSON.parse(event.body);
 
   const fornavn = navn.split(' ')[0];

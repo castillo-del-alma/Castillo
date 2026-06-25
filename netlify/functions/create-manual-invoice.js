@@ -92,7 +92,7 @@ exports.handler = async (event) => {
   if (event.httpMethod !== 'POST') return { statusCode:405, body:'Method Not Allowed' };
   const { customer, lines, notes, invoiceDate, sendEmail, existingNumber, existingId, isDraft } = JSON.parse(event.body);
   const SUPABASE_URL = process.env.SUPABASE_URL;
-  const SUPABASE_KEY = process.env.SUPABASE_ANON_KEY;
+  const SUPABASE_KEY = process.env.SUPABASE_SERVICE_KEY || process.env.SUPABASE_ANON_KEY;
   const RESEND_KEY = process.env.RESEND_API_KEY;
   const hdrs = { 'apikey':SUPABASE_KEY,'Authorization':`Bearer ${SUPABASE_KEY}`,'Content-Type':'application/json' };
 
@@ -298,7 +298,7 @@ exports.handler = async (event) => {
   if (event.httpMethod !== 'POST') return { statusCode:405, body:'Method Not Allowed' };
   const { customer, lines, notes, invoiceDate, sendEmail, existingNumber, existingId, isDraft } = JSON.parse(event.body);
   const SUPABASE_URL = process.env.SUPABASE_URL;
-  const SUPABASE_KEY = process.env.SUPABASE_ANON_KEY;
+  const SUPABASE_KEY = process.env.SUPABASE_SERVICE_KEY || process.env.SUPABASE_ANON_KEY;
   const RESEND_KEY = process.env.RESEND_API_KEY;
   const hdrs = { 'apikey':SUPABASE_KEY,'Authorization':`Bearer ${SUPABASE_KEY}`,'Content-Type':'application/json' };
 
