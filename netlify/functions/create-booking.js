@@ -1,3 +1,5 @@
+const { buildEmail, getLang, fmtDate, texts } = require('./email-template');
+
 exports.handler = async (event) => {
   if (event.httpMethod !== 'POST') {
     return { statusCode: 405, body: 'Method Not Allowed' };
@@ -108,6 +110,8 @@ exports.handler = async (event) => {
     // Send email via Resend API direkte (kun ved forespørgsel, ikke ved direkte betaling)
     let emailData = null;
     if (!direct_payment) {
+    const lang = getLang(nationalitet);
+    const t = texts[lang];
     let savedHtml = '';
     console.log('Sender email til:', email);
     const emailRes = await fetch('https://api.resend.com/emails', {
@@ -119,78 +123,30 @@ exports.handler = async (event) => {
       body: JSON.stringify({
         from: 'Castillo del Alma <booking@castillodelalma.es>',
         to: email,
-        subject: 'Vi har modtaget din reservation — Castillo del Alma',
-        html: savedHtml = `<!DOCTYPE html><html lang="da"><head><meta charset="UTF-8"></head>
-<body style="margin:0;padding:0;background:#faf6ee;font-family:Georgia,serif;">
-<table width="100%" cellpadding="0" cellspacing="0" style="background:#faf6ee;padding:48px 0;">
-  <tr><td align="center">
-    <table width="600" cellpadding="0" cellspacing="0" style="background:#f0e8d5;border:1px solid rgba(184,138,30,.25);">
-      <tr><td style="background:linear-gradient(90deg,#7a1f35,#b88a1e,#7a1f35);height:2px;"></td></tr>
-      <tr><td style="padding:48px 56px 40px;text-align:center;border-bottom:1px solid rgba(184,138,30,.15);">
-        <p style="margin:0 0 16px;font-size:10px;letter-spacing:.4em;text-transform:uppercase;color:#5c3f0e;">CASTILLO DEL ALMA</p>
-        <h1 style="margin:0 0 8px;font-size:28px;font-weight:normal;color:#2c2318;letter-spacing:.08em;">Tak for din reservation</h1>
-        <p style="margin:0;font-size:13px;color:rgba(44,35,24,.7);letter-spacing:.15em;text-transform:uppercase;">MOLLINA · MÁLAGA · SPANIEN</p>
-      </td></tr>
-      <tr><td style="padding:44px 56px;">
-        <p style="margin:0 0 24px;font-size:16px;line-height:1.9;color:rgba(44,35,24,.95);">Kære <em>${fornavn}</em>,</p>
-        <p style="margin:0 0 24px;font-size:15px;line-height:1.9;color:rgba(44,35,24,.88);">Vi har modtaget din reservation og er glade for at byde dig velkommen til Castillo del Alma. For at sikre din plads på det valgte retreat skal depositum indbetales inden for 48 timer.</p>
-        <table width="100%" cellpadding="0" cellspacing="0" style="background:rgba(184,138,30,.08);border:1px solid rgba(184,138,30,.2);margin:32px 0;">
-          <tr><td style="padding:28px 32px;">
-            <p style="margin:0 0 20px;font-size:9px;letter-spacing:.35em;text-transform:uppercase;color:#5c3f0e;">DIN RESERVATION</p>
-            <table width="100%" cellpadding="0" cellspacing="0">
-              <tr>
-                <td style="padding:10px 0;border-bottom:1px solid rgba(44,35,24,.08);"><span style="font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:rgba(44,35,24,.65);">Retreat</span></td>
-                <td style="padding:10px 0;border-bottom:1px solid rgba(44,35,24,.08);text-align:right;"><span style="font-size:13px;color:#2c2318;">${retreat_name || '—'}</span></td>
-              </tr>
-              <tr>
-                <td style="padding:10px 0;border-bottom:1px solid rgba(44,35,24,.08);"><span style="font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:rgba(44,35,24,.65);">Ankomst</span></td>
-                <td style="padding:10px 0;border-bottom:1px solid rgba(44,35,24,.08);text-align:right;"><span style="font-size:13px;color:#2c2318;">${fmtDateDK(arrival_date)}</span></td>
-              </tr>
-              <tr>
-                <td style="padding:10px 0;border-bottom:1px solid rgba(44,35,24,.08);"><span style="font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:rgba(44,35,24,.65);">Afrejse</span></td>
-                <td style="padding:10px 0;border-bottom:1px solid rgba(44,35,24,.08);text-align:right;"><span style="font-size:13px;color:#2c2318;">${fmtDateDK(departure_date)}</span></td>
-              </tr>
-              <tr>
-                <td style="padding:10px 0;border-bottom:1px solid rgba(44,35,24,.08);"><span style="font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:rgba(44,35,24,.65);">Værelse</span></td>
-                <td style="padding:10px 0;border-bottom:1px solid rgba(44,35,24,.08);text-align:right;"><span style="font-size:13px;color:#2c2318;">${vaerelse || '—'}</span></td>
-              </tr>
-              ${(selected_addons||[]).length > 0 ? `<tr>
-                <td style="padding:10px 0;border-bottom:1px solid rgba(44,35,24,.08);"><span style="font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:rgba(44,35,24,.65);">Tilvalg</span></td>
-                <td style="padding:10px 0;border-bottom:1px solid rgba(44,35,24,.08);text-align:right;"><span style="font-size:13px;color:#2c2318;">${(selected_addons||[]).map(a=>a.text).join(', ')}</span></td>
-              </tr>` : ''}
-              ${ekstra_gaester && ekstra_gaester.length > 0 ? `<tr>
-                <td style="padding:10px 0;border-bottom:1px solid rgba(44,35,24,.08);"><span style="font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:rgba(44,35,24,.65);">Ekstra gæster</span></td>
-                <td style="padding:10px 0;border-bottom:1px solid rgba(44,35,24,.08);text-align:right;"><span style="font-size:13px;color:#2c2318;">${ekstra_gaester.map(g=>g.navn).join(', ')}</span></td>
-              </tr>` : ''}
-              ${kommentar ? `<tr>
-                <td style="padding:10px 0;border-bottom:1px solid rgba(44,35,24,.08);"><span style="font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:rgba(44,35,24,.65);">Særlige ønsker</span></td>
-                <td style="padding:10px 0;border-bottom:1px solid rgba(44,35,24,.08);text-align:right;"><span style="font-size:13px;color:#2c2318;">${kommentar}</span></td>
-              </tr>` : ''}
-              <tr>
-                <td style="padding:10px 0;"><span style="font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:rgba(44,35,24,.65);">Depositum</span></td>
-                <td style="padding:10px 0;text-align:right;"><span style="font-size:13px;color:#5c3f0e;">€${depositAmount.toLocaleString('da-DK')}</span></td>
-              </tr>
-            </table>
-          </td></tr>
-        </table>
-        <p style="margin:0 0 20px;font-size:15px;line-height:1.9;color:rgba(44,35,24,.88);">Log ind og se dine detaljer om dit valgte retreat, betalingsmetoder, dine modtagne e-mails samt en chat, hvor du kan chatte med os. Du har måske nogle spørgsmål inden du beslutter dig — så er du velkommen til at starte en chat eller sende en mail på <a href="mailto:booking@castillodelalma.es" style="color:#7a1f35;">booking@castillodelalma.es</a></p>
-        <table width="100%" cellpadding="0" cellspacing="0" style="margin:0 0 28px;">
-          <tr><td align="center">
-            <a href="https://castillodelalma.es/min-booking" style="display:inline-block;background:#7a1f35;color:#fff;padding:14px 32px;font-size:11px;letter-spacing:.2em;text-transform:uppercase;text-decoration:none;font-family:sans-serif;margin-right:10px;">Min booking</a>
-            <a href="https://castillodelalma.es/betal?booking=${booking.id}" style="display:inline-block;background:transparent;color:#7a1f35;border:1px solid #7a1f35;padding:13px 32px;font-size:11px;letter-spacing:.2em;text-transform:uppercase;text-decoration:none;font-family:sans-serif;">Betal depositum</a>
-          </td></tr>
-        </table>
-        <p style="margin:0;font-size:15px;line-height:1.9;color:rgba(44,35,24,.78);font-style:italic;">Med venlig hilsen,<br><span style="color:#2c2318;">Castillo del Alma</span></p>
-      </td></tr>
-      <tr><td style="padding:0 56px;"><div style="border-top:1px solid rgba(184,138,30,.15);"></div></td></tr>
-      <tr><td style="padding:28px 56px;text-align:center;">
-        <p style="margin:0;font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:rgba(44,35,24,.55);">CASTILLO DEL ALMA · MOLLINA · MÁLAGA · SPANIEN</p>
-      </td></tr>
-      <tr><td style="background:linear-gradient(90deg,#7a1f35,#b88a1e,#7a1f35);height:1px;"></td></tr>
-    </table>
-  </td></tr>
-</table>
-</body></html>`
+        subject: lang === 'en' ? t.reservation_subject : 'Vi har modtaget din reservation — Castillo del Alma',
+        html: savedHtml = buildEmail({
+          lang,
+          title: t.reservation_title,
+          intro: t.reservation_intro,
+          sections: [{
+            label: t.reservation_details,
+            rows: [
+              [t.label_retreat, retreat_name],
+              [t.label_arrival, fmtDate(arrival_date, lang)],
+              [t.label_departure, fmtDate(departure_date, lang)],
+              [t.label_guests, String(gaester || 1)],
+              [t.label_room, vaerelse || null],
+              [t.label_addons, (selected_addons||[]).length > 0 ? (selected_addons.map(a=>a.text).join(', ') + ' (' + t.addons_note + ')') : null],
+              [t.label_deposit, '€' + depositAmount.toFixed(2)],
+              [t.label_total, '€' + totalPrice.toFixed(2)],
+            ]
+          }],
+          buttons: [
+            { label: t.btn_minbooking, url: 'https://castillodelalma.es/min-booking', primary: true },
+            { label: t.btn_pay_deposit, url: 'https://castillodelalma.es/betal?booking=' + booking.id, primary: false }
+          ],
+          note: t.reservation_login + ' <a href="mailto:booking@castillodelalma.es" style="color:#7a1f35;">booking@castillodelalma.es</a>'
+        })`
       })
     });
 
