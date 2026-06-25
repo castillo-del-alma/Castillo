@@ -1,4 +1,5 @@
 const PDFDocument = require('pdfkit');
+const { buildEmail, getLang, texts } = require('./email-template');
 
 function fmtDate(iso) {
   if (!iso) return '—';
@@ -102,17 +103,20 @@ exports.handler = async (event) => {
         from:'Castillo del Alma <booking@castillodelalma.es>',
         to: customer.email,
         subject:`Faktura ${invoice.invoice_number} — Castillo del Alma`,
-        html:`<!DOCTYPE html><html><head><meta charset="UTF-8"></head><body style="font-family:Georgia,serif;background:#faf6ee;padding:40px 20px;color:#2c2318;">
-<div style="max-width:560px;margin:0 auto;background:#f0e8d5;border:1px solid rgba(184,138,30,.2);padding:40px;">
-  <div style="height:2px;background:linear-gradient(90deg,#7a1f35,#b88a1e,#7a1f35);margin-bottom:30px;"></div>
-  <p style="font-size:10px;letter-spacing:.3em;text-transform:uppercase;color:#5c3f0e;">Castillo del Alma</p>
-  <h1 style="font-size:24px;font-weight:normal;margin:8px 0 20px;">Din faktura</h1>
-  <p style="font-size:14px;line-height:1.8;">Kære ${customer.full_name.split(' ')[0]},</p>
-  <p style="font-size:14px;line-height:1.8;">Tak for dit ophold hos Castillo del Alma. Hermed din faktura <strong>${invoice.invoice_number}</strong> på <strong>€${totalPaid.toFixed(2)}</strong>.</p>
-  <p style="font-size:14px;line-height:1.8;">Fakturaen er vedhæftet som PDF.</p>
-  <p style="font-size:14px;line-height:1.8;font-style:italic;">Med venlig hilsen,<br><span style="color:#2c2318;">Castillo del Alma</span></p>
-  <div style="height:1px;background:linear-gradient(90deg,#7a1f35,#b88a1e,#7a1f35);margin-top:30px;"></div>
-</div></body></html>`,
+        html: buildEmail({
+          lang: getLang(null),
+          title: texts['da'].invoice_title,
+          intro: texts['da'].invoice_intro,
+          sections: [{
+            label: '',
+            rows: [
+              ['Faktura nr.', invoice.invoice_number],
+              ['Total', '€' + totalPaid.toFixed(2)],
+              ['Moms 10%', '€' + (totalPaid/1.1*0.1).toFixed(2)]
+            ]
+          }],
+          note: texts['da'].invoice_attached
+        }),
         attachments:[{ filename:`faktura-${invoice.invoice_number}.pdf`, content:Buffer.from(pdfBuffer).toString('base64') }]
       })
     });
