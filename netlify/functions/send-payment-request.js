@@ -79,7 +79,7 @@ exports.handler = async (event) => {
           note: t.payment_deadline
         })
       })
-    }););
+    });
 
     const data = await emailRes.json();
     console.log('Payment request email:', JSON.stringify(data));
