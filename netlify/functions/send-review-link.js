@@ -18,7 +18,8 @@ exports.handler = async (event) => {
         to: kundeEmail,
         subject: t.review_subject,
         html: buildEmail({ lang, title: t.review_title, intro: t.review_intro + ' ' + t.review_prefilled, sections: [], buttons: [{ label: t.review_btn, url: link, primary: true }], note: t.review_time })
-    });;
+      })
+    });
     const data = await res.json();
     if (!res.ok) throw new Error(JSON.stringify(data));
     return { statusCode: 200, body: JSON.stringify({ success: true }) };

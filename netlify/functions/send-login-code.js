@@ -4,62 +4,6 @@ exports.handler = async (event) => {
   if (event.httpMethod !== 'POST') return { statusCode: 405, body: 'Method Not Allowed' };
 
   const SUPABASE_URL = process.env.SUPABASE_URL;
-  const SUPABASE_KEY = process.env.SUPABASE_SERVICE_KEY || process.env.SUPABASE_ANON_KEY;
-  const RESEND_KEY = process.env.RESEND_API_KEY;
-
-  const lang = getLang(null);
-  const t = texts[lang];
-  const { email } = JSON.parse(event.body);
-
-  const headers = {
-    'Content-Type': 'application/json',
-    'apikey': SUPABASE_KEY,
-    'Authorization': `Bearer ${SUPABASE_KEY}`
-  };
-
-  // Tjek om email findes i customers
-  const checkRes = await fetch(`${SUPABASE_URL}/rest/v1/customers?email=eq.${encodeURIComponent(email)}&select=id,full_name`, { headers });
-  const customers = await checkRes.json();
-
-  if (!customers || customers.length === 0) {
-    return { statusCode: 404, body: JSON.stringify({ error: 'Ingen booking fundet med denne email' }) };
-  }
-
-  // Generer 6-cifret kode
-  const code = Math.floor(100000 + Math.random() * 900000).toString();
-  const expires = new Date(Date.now() + 60 * 60 * 1000).toISOString(); // 1 time
-
-  // Gem kode i database
-  await fetch(`${SUPABASE_URL}/rest/v1/login_codes`, {
-    method: 'POST',
-    headers: { ...headers, 'Prefer': 'return=minimal' },
-    body: JSON.stringify({ email, code, expires_at: expires })
-  });
-
-  // Send email med kode
-  await fetch('https://api.resend.com/emails', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${RESEND_KEY}` },
-    body: JSON.stringify({
-      from: 'Castillo del Alma <booking@castillodelalma.es>',
-      to: email,
-      subject: t.login_subject,
-      html: buildEmail({
-        lang,
-        title: t.login_title,
-        intro: t.login_intro,
-        sections: [{
-          label: '',
-          rows: [['Kode / Code', `<span style="font-size:28px;letter-spacing:.3em;font-family:monospace;color:#7a1f35;">${code}</span>`]]
-        }],
-        note: t.login_expires
-      })
-    });
-
-exports.handler = async (event) => {
-  if (event.httpMethod !== 'POST') return { statusCode: 405, body: 'Method Not Allowed' };
-
-  const SUPABASE_URL = process.env.SUPABASE_URL;
   const SUPABASE_KEY = process.env.SUPABASE_ANON_KEY;
   const RESEND_KEY = process.env.RESEND_API_KEY;
 
