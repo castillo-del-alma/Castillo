@@ -54,7 +54,7 @@ exports.handler = async (event) => {
         }],
         note: t.login_expires
       })
-    });{ buildEmail, getLang, texts } = require('./email-template');
+    });
 
 exports.handler = async (event) => {
   if (event.httpMethod !== 'POST') return { statusCode: 405, body: 'Method Not Allowed' };
