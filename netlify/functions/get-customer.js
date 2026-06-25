@@ -1,7 +1,12 @@
-const { supabase } = require('./supabase-client');
+const { createClient } = require('@supabase/supabase-js');
 
 exports.handler = async (event) => {
   const { email } = JSON.parse(event.body);
+
+  const supabase = createClient(
+    process.env.SUPABASE_URL,
+    process.env.SUPABASE_SERVICE_KEY || process.env.SUPABASE_ANON_KEY
+  );
 
   const { data, error } = await supabase
     .from('customers')
