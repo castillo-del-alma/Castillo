@@ -14,10 +14,9 @@ exports.handler = async (event) => {
   const {
     navn, telefon, email, hjemmeside, land,
     deltagere, periode, varighed, formaal,
-    budget, besked, kilde
+    besked, kilde
   } = data;
 
-  // Valider påkrævede felter
   if (!navn || !telefon || !email || !land || !deltagere || !periode || !varighed || !formaal || !besked) {
     return { statusCode: 400, body: 'Manglende påkrævede felter' };
   }
@@ -34,14 +33,13 @@ exports.handler = async (event) => {
 
   const resend = new Resend(process.env.RESEND_API_KEY);
 
-  // Email til Erik (intern notifikation)
   const internHtml = buildEmail({
     lang: 'da',
-    title: `Ny udlejningsforespørgsel fra ${navn}`,
-    intro: `Der er indkommet en ny forespørgsel om leje af Castillo del Alma.`,
+    title: `UDLEJNING — ${navn}`,
+    intro: `Ny forespørgsel om leje af Castillo del Alma.`,
     sections: [
       {
-        heading: 'Kontaktperson',
+        label: 'Kontaktperson',
         rows: [
           ['Navn', navn],
           ['Telefon', telefon],
@@ -51,31 +49,31 @@ exports.handler = async (event) => {
         ]
       },
       {
-        heading: 'Arrangement',
+        label: 'Arrangement',
         rows: [
           ['Type', formaalLabels[formaal] || formaal],
           ['Antal deltagere', deltagere],
           ['Ønsket periode', periode],
           ['Varighed', varighed],
-          ...(budget ? [['Budget', budget]] : []),
           ...(kilde ? [['Fundet via', kildeLabels[kilde] || kilde]] : []),
         ]
       },
       {
-        heading: 'Besked',
-        text: besked
+        label: 'Besked fra afsender',
+        rows: [
+          ['', besked]
+        ]
       }
     ]
   });
 
-  // Bekræftelsesmail til afsender
   const bekræftHtml = buildEmail({
     lang: 'da',
     title: 'Tak for din forespørgsel',
-    intro: `Kære ${navn},\n\nTak for din interesse i at afholde dit retreat på Castillo del Alma. Vi har modtaget din forespørgsel og vender tilbage inden for 24 timer til en uforpligtende samtale.`,
+    intro: `Kære ${navn},\n\nTak for din interesse i at afholde dit retreat på Castillo del Alma. Vi har modtaget din forespørgsel og vender tilbage inden for 24 timer.`,
     sections: [
       {
-        heading: 'Din forespørgsel',
+        label: 'Din forespørgsel',
         rows: [
           ['Type arrangement', formaalLabels[formaal] || formaal],
           ['Antal deltagere', deltagere],
@@ -84,12 +82,11 @@ exports.handler = async (event) => {
         ]
       }
     ],
-    note: 'Har du spørgsmål i mellemtiden, er du velkommen til at skrive direkte til booking@castillodelalma.es'
+    note: 'Har du spørgsmål i mellemtiden, er du velkommen til at skrive direkte til hello@castillodelalma.es'
   });
 
   try {
     await Promise.all([
-      // Til Erik
       resend.emails.send({
         from: 'Castillo del Alma <booking@castillodelalma.es>',
         to: 'hello@castillodelalma.es',
@@ -97,7 +94,6 @@ exports.handler = async (event) => {
         subject: `UDLEJNING — ${navn}`,
         html: internHtml
       }),
-      // Bekræftelse til afsender
       resend.emails.send({
         from: 'Castillo del Alma <booking@castillodelalma.es>',
         to: email,
