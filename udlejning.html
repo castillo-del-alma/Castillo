@@ -226,32 +226,92 @@ nav{
 }
 .mere-img img{width:100%;height:100%;object-fit:cover;display:block;}
 
-/* ── CTA ── */
-.cta{background:var(--cream);padding:8rem 0;text-align:center;}
-.cta h2{
+/* ── KONTAKT FORMULAR ── */
+.kontakt{background:var(--cream);padding:8rem 0;}
+.kontakt-grid{display:grid;grid-template-columns:1fr 1.6fr;gap:7rem;align-items:start;}
+.kontakt-intro h2{
   font-family:'Cinzel',serif;font-weight:300;
-  font-size:clamp(2rem,4vw,3rem);letter-spacing:.1em;
-  color:var(--charcoal);margin-bottom:1.2rem;
+  font-size:clamp(1.8rem,3vw,2.8rem);letter-spacing:.08em;
+  color:var(--charcoal);margin-bottom:1.5rem;line-height:1.2;
 }
-.cta p{
-  font-family:'Cormorant Garamond',serif;font-style:italic;
-  font-size:1.2rem;font-weight:300;
-  color:var(--text-light);margin-bottom:3rem;
-  max-width:580px;margin-left:auto;margin-right:auto;
+.kontakt-intro h2 em{color:var(--wine);font-style:normal;}
+.kontakt-intro p{
+  font-family:'Cormorant Garamond',serif;font-size:1.08rem;
+  font-weight:300;line-height:1.95;color:var(--text-mid);margin-bottom:1.2rem;
 }
-.cta-btns{display:flex;gap:1.2rem;justify-content:center;flex-wrap:wrap;}
+.kontakt-detail{
+  display:flex;align-items:center;gap:.8rem;margin-top:2.5rem;
+  padding-top:2rem;border-top:1px solid rgba(184,138,30,.2);
+  font-family:'Cormorant Garamond',serif;font-size:1rem;
+  font-weight:300;color:var(--text-mid);
+}
+.kontakt-detail a{color:var(--wine);text-decoration:none;}
+.kontakt-detail a:hover{text-decoration:underline;}
+
+/* Form */
+.retreat-form{background:var(--beige);padding:3rem;border-top:2px solid var(--gold);}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;margin-bottom:1.2rem;}
+.form-group{display:flex;flex-direction:column;gap:.5rem;margin-bottom:1.2rem;}
+.form-group label{
+  font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--text-light);font-family:'Manrope',sans-serif;
+}
+.form-group input,
+.form-group select,
+.form-group textarea{
+  background:#fff;border:1px solid var(--sand);
+  padding:.85rem 1rem;
+  font-family:'Cormorant Garamond',serif;font-size:1rem;
+  color:var(--text);outline:none;
+  transition:border-color .3s;
+  border-radius:0;
+  -webkit-appearance:none;
+}
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus{border-color:var(--gold);}
+.form-group textarea{resize:vertical;min-height:120px;}
+.form-group select{cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%239a8c7a' fill='none' stroke-width='1.5'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 1rem center;padding-right:2.5rem;}
+.form-math{
+  display:flex;align-items:center;gap:1rem;margin-bottom:1.5rem;
+  padding:1rem;background:rgba(184,138,30,.06);border:1px solid rgba(184,138,30,.2);
+}
+.form-math span{font-family:'Cormorant Garamond',serif;font-size:1rem;color:var(--text-mid);}
+.form-math input{width:80px;text-align:center;}
+.form-math .math-label{font-size:.6rem;letter-spacing:.15em;text-transform:uppercase;color:var(--text-light);}
+
+/* Honeypot — skjult for mennesker, synlig for bots */
+.hp-field{position:absolute;left:-9999px;top:-9999px;opacity:0;height:0;width:0;overflow:hidden;}
+
 .btn-wine{
   font-size:.7rem;font-weight:500;letter-spacing:.2em;text-transform:uppercase;
   color:#fff;background:var(--wine);padding:1rem 2.5rem;
-  text-decoration:none;transition:background .3s;
+  border:none;cursor:pointer;transition:background .3s;width:100%;margin-top:.5rem;
 }
 .btn-wine:hover{background:var(--wine-light);}
 .btn-outline{
   font-size:.7rem;font-weight:500;letter-spacing:.2em;text-transform:uppercase;
   color:var(--charcoal);border:1px solid rgba(44,35,24,.3);padding:1rem 2.5rem;
-  text-decoration:none;transition:all .4s;
+  text-decoration:none;transition:all .4s;display:inline-block;
 }
 .btn-outline:hover{border-color:var(--wine);color:var(--wine);}
+
+.form-success{
+  display:none;text-align:center;padding:3rem 2rem;
+}
+.form-success h3{
+  font-family:'Cinzel',serif;font-weight:300;font-size:1.5rem;
+  letter-spacing:.08em;color:var(--charcoal);margin-bottom:1rem;
+}
+.form-success p{
+  font-family:'Cormorant Garamond',serif;font-size:1.05rem;
+  font-weight:300;color:var(--text-mid);line-height:1.8;
+}
+.form-error{
+  display:none;padding:.8rem 1rem;background:rgba(122,31,53,.08);
+  border-left:3px solid var(--wine);margin-bottom:1rem;
+  font-family:'Cormorant Garamond',serif;font-size:.95rem;color:var(--wine);
+}
 
 /* ── FOOTER ── */
 footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:3rem 4rem;}
@@ -455,17 +515,156 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:3rem
   </div>
 </section>
 
-<!-- ── CTA ── -->
-<section class="cta" id="kontakt">
+<!-- ── KONTAKT FORMULAR ── -->
+<section class="kontakt" id="kontakt">
   <div class="section-inner">
-    <div class="reveal">
-      <div class="section-label" style="justify-content:center;">Tag det første skridt</div>
-      <h2>Kontakt os for en uforpligtende samtale</h2>
-      <p>Vi glæder os til at høre om din vision og drøfte mulighederne for dit næste retreat eller arrangement på Castillo del Alma.</p>
-      <div class="cta-btns">
-        <a href="mailto:booking@castillodelalma.es" class="btn-wine">Skriv til os</a>
-        <a href="ejendommen.html" class="btn-outline">Se ejendommen</a>
+    <div class="kontakt-grid">
+
+      <!-- Venstre: intro -->
+      <div class="reveal-left">
+        <div class="section-label">Tag det første skridt</div>
+        <h2>Fortæl os om din <em>vision</em></h2>
+        <p>Vi glæder os til at høre om dit projekt og drøfte mulighederne for dit næste retreat eller arrangement på Castillo del Alma.</p>
+        <p>Udfyld formularen, så vender vi tilbage inden for 24 timer til en uforpligtende samtale.</p>
+        <div class="kontakt-detail">
+          <span>Eller skriv direkte til</span>
+          <a href="mailto:booking@castillodelalma.es">booking@castillodelalma.es</a>
+        </div>
       </div>
+
+      <!-- Højre: formular -->
+      <div class="reveal-right d1">
+        <div class="retreat-form" id="formWrap">
+          <div class="form-error" id="formError">Der opstod en fejl. Prøv igen eller skriv direkte til os.</div>
+
+          <form id="retreatForm" novalidate>
+
+            <!-- HONEYPOT — skjult felt, bots udfylder det, mennesker ikke -->
+            <div class="hp-field" aria-hidden="true">
+              <label for="website_url">Lad dette felt være tomt</label>
+              <input type="text" id="website_url" name="website_url" tabindex="-1" autocomplete="off">
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="navn">Navn *</label>
+                <input type="text" id="navn" name="navn" required placeholder="Dit fulde navn">
+              </div>
+              <div class="form-group">
+                <label for="telefon">Telefon *</label>
+                <input type="tel" id="telefon" name="telefon" required placeholder="+45 12 34 56 78">
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="email">E-mail *</label>
+                <input type="email" id="email" name="email" required placeholder="din@email.dk">
+              </div>
+              <div class="form-group">
+                <label for="hjemmeside">Hjemmeside</label>
+                <input type="url" id="hjemmeside" name="hjemmeside" placeholder="www.dinside.dk">
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="land">Land *</label>
+                <input type="text" id="land" name="land" required placeholder="Danmark">
+              </div>
+              <div class="form-group">
+                <label for="deltagere">Antal deltagere *</label>
+                <select id="deltagere" name="deltagere" required>
+                  <option value="" disabled selected>Vælg antal</option>
+                  <option value="1-5">1–5 deltagere</option>
+                  <option value="6-10">6–10 deltagere</option>
+                  <option value="11-14">11–14 deltagere</option>
+                  <option value="14+">14+ (kontakt os)</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="periode">Ønsket periode *</label>
+                <input type="text" id="periode" name="periode" required placeholder="f.eks. marts 2026">
+              </div>
+              <div class="form-group">
+                <label for="varighed">Varighed *</label>
+                <select id="varighed" name="varighed" required>
+                  <option value="" disabled selected>Antal nætter</option>
+                  <option value="2-3">2–3 nætter</option>
+                  <option value="4-5">4–5 nætter</option>
+                  <option value="6-7">6–7 nætter</option>
+                  <option value="8+">8+ nætter</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="formaal">Hvad ønsker I at bruge stedet til? *</label>
+              <select id="formaal" name="formaal" required>
+                <option value="" disabled selected>Vælg type arrangement</option>
+                <option value="yoga">Yoga retreat</option>
+                <option value="meditation">Meditation / mindfulness</option>
+                <option value="coaching">Coaching / personlig udvikling</option>
+                <option value="terapi">Terapeutisk retreat</option>
+                <option value="kreativt">Kreativt retreat</option>
+                <option value="corporate">Corporate / teambuilding</option>
+                <option value="andet">Andet</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="budget">Budget (valgfrit)</label>
+              <select id="budget" name="budget">
+                <option value="" disabled selected>Omtrentligt budget</option>
+                <option value="under5k">Under €5.000</option>
+                <option value="5-10k">€5.000–€10.000</option>
+                <option value="10-20k">€10.000–€20.000</option>
+                <option value="over20k">Over €20.000</option>
+                <option value="ukendt">Ønsker ikke at oplyse</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="besked">Fortæl os mere om dit projekt *</label>
+              <textarea id="besked" name="besked" required placeholder="Beskriv din vision, dine deltagere, og hvad du drømmer om at skabe på Castillo del Alma..."></textarea>
+            </div>
+
+            <div class="form-group">
+              <label for="kilde">Hvordan hørte du om os?</label>
+              <select id="kilde" name="kilde">
+                <option value="" disabled selected>Vælg en mulighed</option>
+                <option value="google">Google-søgning</option>
+                <option value="instagram">Instagram</option>
+                <option value="facebook">Facebook</option>
+                <option value="anbefaling">Anbefaling fra andre</option>
+                <option value="andet">Andet</option>
+              </select>
+            </div>
+
+            <!-- Simpel matematisk check -->
+            <div class="form-math">
+              <span class="math-label">Sikkerhedstjek</span>
+              <span id="mathQuestion"></span>
+              <div class="form-group" style="margin:0;">
+                <input type="number" id="mathAnswer" name="mathAnswer" placeholder="?" required style="width:80px;text-align:center;">
+              </div>
+            </div>
+
+            <button type="submit" class="btn-wine" id="submitBtn">Send forespørgsel</button>
+          </form>
+
+          <!-- Succes besked -->
+          <div class="form-success" id="formSuccess">
+            <div class="section-label" style="justify-content:center;">Tak for din henvendelse</div>
+            <h3>Vi vender tilbage inden for 24 timer</h3>
+            <p>Vi glæder os til at høre mere om din vision og drøfte, hvordan Castillo del Alma kan blive rammen for dit næste retreat.</p>
+          </div>
+        </div>
+      </div>
+
     </div>
   </div>
 </section>
@@ -506,6 +705,92 @@ window.addEventListener('scroll', () => {
   navLinks.forEach(a => {
     a.style.color = a.getAttribute('href') === '#' + current ? 'var(--wine)' : '';
   });
+});
+
+// ── KONTAKTFORMULAR ──
+// Matematik spørgsmål
+const mathPairs = [
+  [3,4],[5,2],[6,3],[2,7],[4,5],[8,1],[3,6],[9,2],[4,3],[7,3]
+];
+const pair = mathPairs[Math.floor(Math.random() * mathPairs.length)];
+const mathAnswer = pair[0] + pair[1];
+document.getElementById('mathQuestion').textContent = `Hvad er ${pair[0]} + ${pair[1]}?`;
+
+document.getElementById('retreatForm').addEventListener('submit', async function(e) {
+  e.preventDefault();
+
+  const form = e.target;
+  const errorEl = document.getElementById('formError');
+  const submitBtn = document.getElementById('submitBtn');
+  errorEl.style.display = 'none';
+
+  // Honeypot check — hvis udfyldt er det en bot
+  if (document.getElementById('website_url').value !== '') {
+    console.log('Bot detected via honeypot');
+    document.getElementById('formWrap').querySelector('form').style.display = 'none';
+    document.getElementById('formSuccess').style.display = 'block';
+    return;
+  }
+
+  // Matematik check
+  const userMath = parseInt(document.getElementById('mathAnswer').value);
+  if (userMath !== mathAnswer) {
+    errorEl.textContent = `Sikkerhedstjekket er forkert. Prøv igen.`;
+    errorEl.style.display = 'block';
+    document.getElementById('mathAnswer').value = '';
+    document.getElementById('mathAnswer').focus();
+    return;
+  }
+
+  // Valider påkrævede felter
+  const required = ['navn','telefon','email','land','deltagere','periode','varighed','formaal','besked'];
+  for (const id of required) {
+    if (!form[id] || !form[id].value.trim()) {
+      errorEl.textContent = 'Udfyld venligst alle påkrævede felter (*).';
+      errorEl.style.display = 'block';
+      document.getElementById(id).focus();
+      return;
+    }
+  }
+
+  // Send via Netlify Function
+  submitBtn.textContent = 'Sender...';
+  submitBtn.disabled = true;
+
+  const data = {
+    navn:       form.navn.value.trim(),
+    telefon:    form.telefon.value.trim(),
+    email:      form.email.value.trim(),
+    hjemmeside: form.hjemmeside.value.trim(),
+    land:       form.land.value.trim(),
+    deltagere:  form.deltagere.value,
+    periode:    form.periode.value.trim(),
+    varighed:   form.varighed.value,
+    formaal:    form.formaal.value,
+    budget:     form.budget.value,
+    besked:     form.besked.value.trim(),
+    kilde:      form.kilde.value,
+  };
+
+  try {
+    const res = await fetch('/.netlify/functions/send-udlejning-inquiry', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    });
+
+    if (res.ok) {
+      form.style.display = 'none';
+      document.getElementById('formSuccess').style.display = 'block';
+    } else {
+      throw new Error('Server fejl');
+    }
+  } catch(err) {
+    errorEl.textContent = 'Der opstod en fejl. Prøv igen eller skriv direkte til booking@castillodelalma.es';
+    errorEl.style.display = 'block';
+    submitBtn.textContent = 'Send forespørgsel';
+    submitBtn.disabled = false;
+  }
 });
 </script>
 </body>
