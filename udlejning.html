@@ -616,18 +616,6 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:3rem
             </div>
 
             <div class="form-group">
-              <label for="budget">Budget (valgfrit)</label>
-              <select id="budget" name="budget">
-                <option value="" disabled selected>Omtrentligt budget</option>
-                <option value="under5k">Under €5.000</option>
-                <option value="5-10k">€5.000–€10.000</option>
-                <option value="10-20k">€10.000–€20.000</option>
-                <option value="over20k">Over €20.000</option>
-                <option value="ukendt">Ønsker ikke at oplyse</option>
-              </select>
-            </div>
-
-            <div class="form-group">
               <label for="besked">Fortæl os mere om dit projekt *</label>
               <textarea id="besked" name="besked" required placeholder="Beskriv din vision, dine deltagere, og hvad du drømmer om at skabe på Castillo del Alma..."></textarea>
             </div>
@@ -767,7 +755,6 @@ document.getElementById('retreatForm').addEventListener('submit', async function
     periode:    form.periode.value.trim(),
     varighed:   form.varighed.value,
     formaal:    form.formaal.value,
-    budget:     form.budget.value,
     besked:     form.besked.value.trim(),
     kilde:      form.kilde.value,
   };
