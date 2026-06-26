@@ -44,24 +44,24 @@ exports.handler = async (event) => {
           ['Navn', navn],
           ['Telefon', telefon],
           ['E-mail', email],
-          ...(hjemmeside ? [['Hjemmeside', hjemmeside]] : []),
+          ['Hjemmeside', hjemmeside || '—'],
           ['Land', land],
         ]
       },
       {
         label: 'Arrangement',
         rows: [
-          ['Type', formaalLabels[formaal] || formaal],
+          ['Type arrangement', formaalLabels[formaal] || formaal],
           ['Antal deltagere', deltagere],
           ['Ønsket periode', periode],
           ['Varighed', varighed],
-          ...(kilde ? [['Fundet via', kildeLabels[kilde] || kilde]] : []),
+          ['Fundet via', kildeLabels[kilde] || kilde || '—'],
         ]
       },
       {
         label: 'Besked fra afsender',
         rows: [
-          ['', besked]
+          ['Besked', besked]
         ]
       }
     ]
