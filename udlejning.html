@@ -173,6 +173,66 @@ nav{
 .fac-img:hover img{transform:scale(1.04);}
 
 /* ── EKSTRA OPLEVELSER ── */
+/* ── DESIGN ET OPHOLD ── */
+.design{background:var(--section-alt);padding:8rem 0;}
+.design-intro{text-align:center;max-width:720px;margin:0 auto 5rem;}
+.design-intro h2{
+  font-family:'Cinzel',serif;font-weight:300;
+  font-size:clamp(2rem,3.5vw,3rem);letter-spacing:.08em;
+  color:var(--charcoal);margin-bottom:1.5rem;line-height:1.2;
+}
+.design-intro h2 em{color:var(--terracotta);font-style:normal;}
+.design-intro p{
+  font-family:'Cormorant Garamond',serif;font-size:1.15rem;
+  font-weight:300;line-height:1.95;color:var(--text-mid);margin-bottom:1rem;
+}
+.design-kategorier{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(260px,1fr));
+  gap:2px;
+}
+.kat-kort{
+  background:var(--cream);padding:2.5rem 2rem;
+  transition:background .3s,transform .3s;
+  position:relative;overflow:hidden;
+}
+.kat-kort::before{
+  content:'';position:absolute;top:0;left:0;right:0;
+  height:2px;background:var(--gold);
+  transform:scaleX(0);transform-origin:left;
+  transition:transform .4s ease;
+}
+.kat-kort:hover{background:#fff;transform:translateY(-3px);}
+.kat-kort:hover::before{transform:scaleX(1);}
+.kat-titel{
+  font-family:'Cinzel',serif;font-weight:400;font-size:.75rem;
+  letter-spacing:.18em;text-transform:uppercase;
+  color:var(--charcoal);margin-bottom:1.2rem;display:block;
+}
+.kat-liste{list-style:none;}
+.kat-liste li{
+  font-family:'Cormorant Garamond',serif;font-size:.98rem;
+  font-weight:300;color:var(--text-mid);
+  padding:.3rem 0;border-bottom:1px solid rgba(184,138,30,.08);
+  display:flex;align-items:center;gap:.6rem;
+}
+.kat-liste li:last-child{border-bottom:none;}
+.kat-liste li::before{content:'·';color:var(--gold);font-size:1.2rem;line-height:0;}
+.design-cta{
+  text-align:center;margin-top:5rem;
+  padding-top:4rem;border-top:1px solid rgba(184,138,30,.2);
+}
+.design-cta p{
+  font-family:'Cormorant Garamond',serif;font-style:italic;
+  font-size:1.3rem;font-weight:300;color:var(--text-mid);
+  max-width:600px;margin:0 auto 1.5rem;line-height:1.7;
+}
+.design-cta strong{
+  font-family:'Cinzel',serif;font-weight:300;font-style:normal;
+  font-size:.85rem;letter-spacing:.12em;color:var(--charcoal);
+  display:block;margin-bottom:2rem;
+}
+
 .ekstra{background:var(--section-alt);padding:8rem 0;}
 .ekstra-grid{display:grid;grid-template-columns:1fr 1fr;gap:7rem;align-items:center;}
 .ekstra h2{
@@ -339,6 +399,7 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:3rem
   <ul class="nav-links">
     <li><a href="#intro">Om stedet</a></li>
     <li><a href="#faciliteter">Vi tilbyder</a></li>
+    <li><a href="#design">Design et ophold</a></li>
     <li><a href="#ekstra">Ekstra oplevelser</a></li>
     <li><a href="#mere">Mere end et kursussted</a></li>
     <li><a href="#kontakt">Kontakt</a></li>
@@ -447,6 +508,176 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:3rem
     </div>
   </div>
 </section>
+
+<div class="divider"></div>
+
+<!-- ── DESIGN ET OPHOLD ── -->
+<section class="design" id="design">
+  <div class="section-inner">
+    <div class="design-intro reveal">
+      <div class="section-label" style="justify-content:center;">Skræddersyede oplevelser</div>
+      <h2>Design et <em>ophold</em></h2>
+      <p>Der findes ferier, og så findes der oplevelser, man husker resten af livet.</p>
+      <p>På Castillo del Alma skaber vi ikke standardophold. Vi skaber skræddersyede oplevelser for grupper, der ønsker noget helt særligt. Uanset om I er en vennegruppe, en familie, en virksomhed, en forening eller en gruppe med en fælles passion, designer vi opholdet sammen med jer.</p>
+      <p>Midt blandt vinmarker, olivenlunde og de andalusiske bjerge kan I sammensætte præcis den ferie eller det retreat, I drømmer om. Vi tager os af planlægningen — I skal blot nyde oplevelsen.</p>
+    </div>
+
+    <div class="design-kategorier">
+
+      <div class="kat-kort reveal d1">
+        <span class="kat-titel">Gastronomi</span>
+        <ul class="kat-liste">
+          <li>Gourmet middage</li>
+          <li>Gourmet workshops</li>
+          <li>Tapas-aftener</li>
+          <li>BBQ under stjernerne</li>
+          <li>Paella-kurser</li>
+          <li>Ostesmagning</li>
+          <li>Olivenolie-smagning</li>
+        </ul>
+      </div>
+
+      <div class="kat-kort reveal d1">
+        <span class="kat-titel">Vinoplevelser</span>
+        <ul class="kat-liste">
+          <li>Rundvisning i vores vinmarker</li>
+          <li>Vinsmagninger</li>
+          <li>Besøg på lokale vingårde</li>
+          <li>Mød vinproducenterne</li>
+          <li>Introduktion til vinfremstilling</li>
+          <li>Høstoplevelser (i sæson)</li>
+          <li>Wine & Dine-arrangementer</li>
+        </ul>
+      </div>
+
+      <div class="kat-kort reveal d2">
+        <span class="kat-titel">Kultur og historie</span>
+        <ul class="kat-liste">
+          <li>Guidede byture</li>
+          <li>Historiske landsbyer</li>
+          <li>Lokale markeder</li>
+          <li>Museer</li>
+          <li>Romerske ruiner</li>
+          <li>Maurisk arkitektur</li>
+          <li>Kunstgallerier</li>
+        </ul>
+      </div>
+
+      <div class="kat-kort reveal d2">
+        <span class="kat-titel">Aktiv ferie</span>
+        <ul class="kat-liste">
+          <li>Vandreture</li>
+          <li>Mountainbike</li>
+          <li>Landevejscykling</li>
+          <li>Yoga</li>
+          <li>Qi Gong</li>
+          <li>Meditation</li>
+          <li>Breathwork</li>
+          <li>Personlig træning</li>
+        </ul>
+      </div>
+
+      <div class="kat-kort reveal d1">
+        <span class="kat-titel">Velvære</span>
+        <ul class="kat-liste">
+          <li>Massage</li>
+          <li>Sauna</li>
+          <li>Isbad</li>
+          <li>Meditation</li>
+          <li>Mindfulness</li>
+          <li>Spa-behandlinger</li>
+          <li>Stressreduktion</li>
+          <li>Afslapning ved poolen</li>
+        </ul>
+      </div>
+
+      <div class="kat-kort reveal d2">
+        <span class="kat-titel">Kreativitet</span>
+        <ul class="kat-liste">
+          <li>Malekurser</li>
+          <li>Akvarel & akryl</li>
+          <li>Smykkefremstilling</li>
+          <li>Kreative workshops</li>
+          <li>Musik & sang</li>
+          <li>Skriveværksteder</li>
+        </ul>
+      </div>
+
+      <div class="kat-kort reveal d1">
+        <span class="kat-titel">Personlig udvikling</span>
+        <ul class="kat-liste">
+          <li>Enneagram-workshops</li>
+          <li>Teamudvikling</li>
+          <li>Kommunikation</li>
+          <li>Ledelsesudvikling</li>
+          <li>Mindset & motivation</li>
+          <li>Livsbalance</li>
+          <li>Stresshåndtering</li>
+        </ul>
+      </div>
+
+      <div class="kat-kort reveal d2">
+        <span class="kat-titel">Foredrag & undervisning</span>
+        <ul class="kat-liste">
+          <li>Enneagrammet</li>
+          <li>Sundhed & ernæring</li>
+          <li>LCHF / Keto</li>
+          <li>Mental trivsel</li>
+          <li>Ledelse & kommunikation</li>
+          <li>Iværksætteri</li>
+          <li>Kunst og kultur</li>
+        </ul>
+      </div>
+
+      <div class="kat-kort reveal d1">
+        <span class="kat-titel">Hobbyophold</span>
+        <ul class="kat-liste">
+          <li>Strikning & hækling</li>
+          <li>Fotografi</li>
+          <li>Fuglekiggeri</li>
+          <li>Slægtsforskning</li>
+          <li>Læseklubber</li>
+          <li>Brætspil & bridge & skak</li>
+          <li>Madlavning</li>
+        </ul>
+      </div>
+
+      <div class="kat-kort reveal d2">
+        <span class="kat-titel">Udflugter</span>
+        <ul class="kat-liste">
+          <li>Málaga & Ronda</li>
+          <li>Granada & Córdoba</li>
+          <li>Sevilla</li>
+          <li>Caminito del Rey</li>
+          <li>El Torcal</li>
+          <li>Nerja & Frigiliana</li>
+          <li>Delfinsafari</li>
+        </ul>
+      </div>
+
+      <div class="kat-kort reveal d1">
+        <span class="kat-titel">Særlige arrangementer</span>
+        <ul class="kat-liste">
+          <li>Fødselsdage & jubilæer</li>
+          <li>Bryllupper & sølvbryllup</li>
+          <li>Firmaevents & kick-off</li>
+          <li>Lederseminarer</li>
+          <li>Netværksmøder</li>
+          <li>Familietræf</li>
+          <li>Venneophold</li>
+        </ul>
+      </div>
+
+    </div>
+
+    <div class="design-cta reveal">
+      <p>Ønsker I et gourmetophold med fokus på vin? Et aktivt cykelophold? En uge med yoga og meditation? En kreativ malerejse? Eller måske en kombination af det hele?</p>
+      <strong>Hos Castillo del Alma er ingen grupper ens. Derfor bliver ingen ophold det heller.</strong>
+      <p>Vi hjælper jer med at sammensætte det perfekte program — fra ankomst til afrejse.</p>
+    </div>
+  </div>
+</section>
+
 
 <div class="divider"></div>
 
