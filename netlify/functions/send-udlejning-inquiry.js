@@ -92,9 +92,9 @@ exports.handler = async (event) => {
       // Til Erik
       resend.emails.send({
         from: 'Castillo del Alma <booking@castillodelalma.es>',
-        to: 'booking@castillodelalma.es',
+        to: 'hello@castillodelalma.es',
         replyTo: email,
-        subject: `🏡 Ny udlejningsforespørgsel — ${navn} (${deltagere} deltagere, ${periode})`,
+        subject: `UDLEJNING — ${navn}`,
         html: internHtml
       }),
       // Bekræftelse til afsender
