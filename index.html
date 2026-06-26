@@ -212,6 +212,27 @@ nav.scrolled .nav-book{color:#fff!important;}
   opacity:0;animation:fadeUp .8s ease 2.5s forwards;
 }
 .hero-scroll span{font-size:.58rem;letter-spacing:.3em;text-transform:uppercase;color:rgba(255,255,255,.38);}
+
+/* ── HERO responsive — mindre skærme ── */
+@media (max-height: 900px) {
+  .hero-content{ padding:5rem 2rem 0; }
+  .hero-logo{ width:clamp(100px,12vw,160px);margin-bottom:1.2rem; }
+  .hero-rule{ margin-bottom:1rem; }
+  .hero-eyebrow{ margin-bottom:1.2rem; }
+  .hero h1{ margin-bottom:.6rem; }
+  .hero-sub{ margin-bottom:1.6rem; }
+  .hero-place{ margin-bottom:1.8rem; }
+}
+@media (max-height: 780px) {
+  .hero-content{ padding:4rem 2rem 0; }
+  .hero-logo{ width:clamp(80px,10vw,130px);margin-bottom:.8rem; }
+  .hero-rule{ display:none; }
+  .hero-eyebrow{ margin-bottom:.8rem; }
+  .hero h1{ font-size:clamp(2.8rem,7vw,6rem);margin-bottom:.4rem; }
+  .hero-sub{ margin-bottom:1.2rem;font-size:clamp(1rem,2vw,1.3rem); }
+  .hero-place{ margin-bottom:1.2rem; }
+  .hero-scroll{ display:none; }
+}
 .scroll-line{width:1px;height:44px;background:linear-gradient(to bottom,rgba(238,222,160,.7),transparent);animation:scrollPulse 2.2s ease-in-out infinite;}
 @keyframes scrollPulse{0%,100%{opacity:.3;transform:scaleY(1);}55%{opacity:1;transform:scaleY(1.08);}}
 @keyframes fadeUp{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);}}
