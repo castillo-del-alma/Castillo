@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Afhold dit eget retreat — Castillo del Alma</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@300;400;500&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Manrope:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --cream:      #faf6ee;
+  --beige:      #f0e8d5;
+  --sand:       #e0d0b0;
+  --stone:      #c8b898;
+  --charcoal:   #2c2318;
+  --text:       #2c2318;
+  --text-mid:   #5c4e3a;
+  --text-light: #9a8c7a;
+  --wine:       #7a1f35;
+  --wine-light: #a03048;
+  --terracotta: #c05c30;
+  --olive:      #6a7240;
+  --gold:       #b88a1e;
+  --gold-light: #d4a830;
+  --teal:       #3a6e6a;
+  --section-alt:#ede4d0;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{font-family:'Manrope',sans-serif;background:var(--cream);color:var(--text);overflow-x:hidden;}
+
+/* ── NAV ── */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:200;
+  padding:1.4rem 4rem;
+  display:flex;justify-content:space-between;align-items:center;
+  background:rgba(250,246,238,.96);
+  backdrop-filter:blur(16px);
+  border-bottom:1px solid rgba(184,138,30,.15);
+  box-shadow:0 2px 28px rgba(44,35,24,.06);
+}
+.nav-logo img{height:42px;width:auto;}
+.nav-links{display:flex;gap:2rem;list-style:none;align-items:center;}
+.nav-links a{font-size:.68rem;font-weight:400;letter-spacing:.14em;text-transform:uppercase;color:var(--text-mid);text-decoration:none;transition:color .3s;}
+.nav-links a:hover{color:var(--wine);}
+.nav-back{
+  font-size:.68rem;font-weight:500;letter-spacing:.15em;text-transform:uppercase;
+  color:var(--wine);text-decoration:none;display:flex;align-items:center;gap:.5rem;
+  transition:gap .3s;
+}
+.nav-back:hover{gap:.8rem;}
+
+/* ── HERO ── */
+.page-hero{
+  height:70vh;min-height:500px;
+  position:relative;overflow:hidden;
+  display:flex;align-items:flex-end;
+  margin-top:0;
+}
+.page-hero-img{
+  position:absolute;inset:0;
+  background-image:url('img/group-people-making-breathworks-castillo-del-alma.jpg');
+  background-size:cover;background-position:center 40%;
+  transform:scale(1.03);
+  transition:transform 8s ease;
+}
+.page-hero-img.loaded{transform:scale(1);}
+.page-hero-overlay{
+  position:absolute;inset:0;
+  background:linear-gradient(to bottom,rgba(44,35,24,.2) 0%,rgba(44,35,24,.15) 40%,rgba(44,35,24,.75) 100%);
+}
+.page-hero-content{
+  position:relative;z-index:2;
+  padding:0 4rem 4rem;
+  max-width:1320px;margin:0 auto;width:100%;
+}
+.page-hero-eyebrow{
+  font-size:.62rem;letter-spacing:.4em;text-transform:uppercase;
+  color:rgba(238,222,160,.8);margin-bottom:1rem;display:block;
+}
+.page-hero h1{
+  font-family:'Cinzel',serif;font-weight:300;
+  font-size:clamp(2.5rem,6vw,5rem);
+  letter-spacing:.1em;color:#fff;line-height:1.1;
+  text-shadow:0 2px 32px rgba(0,0,0,.4);
+}
+.page-hero h1 em{color:transparent;-webkit-text-stroke:1px rgba(255,255,255,.7);font-style:normal;}
+
+/* ── LAYOUT ── */
+.section-inner{max-width:1320px;margin:0 auto;padding:0 4rem;}
+.section-label{
+  font-size:.6rem;letter-spacing:.4em;text-transform:uppercase;
+  color:var(--gold);margin-bottom:1.4rem;
+  display:flex;align-items:center;gap:1rem;
+}
+.section-label::before{content:'';width:28px;height:1px;background:var(--gold);flex-shrink:0;}
+.divider{height:1px;background:linear-gradient(to right,transparent,rgba(184,138,30,.22),transparent);max-width:1320px;margin:0 auto;}
+
+/* ── INTRO ── */
+.intro{background:var(--cream);padding:8rem 0 7rem;}
+.intro-two-col{display:grid;grid-template-columns:1fr 1fr;gap:7rem;align-items:start;}
+.intro-two-col h2{
+  font-family:'Cinzel',serif;font-weight:300;
+  font-size:clamp(2rem,3.5vw,3rem);letter-spacing:.08em;
+  color:var(--charcoal);margin-bottom:2rem;line-height:1.2;
+}
+.intro-two-col h2 em{color:var(--terracotta);font-style:normal;}
+.intro-two-col p{
+  font-family:'Cormorant Garamond',serif;font-size:1.1rem;
+  font-weight:300;line-height:1.95;color:var(--text-mid);margin-bottom:1.4rem;
+}
+.intro-two-col p strong{
+  font-family:'Cinzel',serif;font-weight:300;font-size:.95rem;
+  letter-spacing:.06em;color:var(--charcoal);font-style:normal;
+}
+.intro-img-stack{position:relative;}
+.intro-main-img{
+  width:100%;aspect-ratio:4/5;overflow:hidden;
+  box-shadow:8px 8px 0 var(--sand),9px 9px 0 var(--stone);
+}
+.intro-main-img img{width:100%;height:100%;object-fit:cover;object-position:center;display:block;}
+.intro-small-img{
+  position:absolute;bottom:-2rem;left:-2.5rem;
+  width:55%;aspect-ratio:4/3;overflow:hidden;
+  border:4px solid var(--cream);
+  box-shadow:0 8px 32px rgba(44,35,24,.15);
+}
+.intro-small-img img{width:100%;height:100%;object-fit:cover;display:block;}
+
+/* ── PHOTO STRIP ── */
+.photo-strip{background:var(--section-alt);padding:0;}
+.photo-strip-grid{
+  display:grid;grid-template-columns:repeat(4,1fr);
+  height:280px;
+}
+.strip-item{overflow:hidden;cursor:pointer;position:relative;}
+.strip-item img{width:100%;height:100%;object-fit:cover;transition:transform .8s cubic-bezier(.23,1,.32,1);}
+.strip-item:hover img{transform:scale(1.07);}
+
+/* ── FACILITETER ── */
+.faciliteter{background:var(--cream);padding:8rem 0;}
+.faciliteter-grid{display:grid;grid-template-columns:1fr 1.2fr;gap:7rem;align-items:start;}
+.faciliteter h2{
+  font-family:'Cinzel',serif;font-weight:300;
+  font-size:clamp(2rem,3.5vw,3rem);letter-spacing:.08em;
+  color:var(--charcoal);margin-bottom:2.5rem;
+}
+.faciliteter h2 em{color:var(--teal);font-style:normal;}
+.fac-list{list-style:none;display:grid;grid-template-columns:1fr 1fr;gap:0;}
+.fac-list li{
+  padding:1rem 1rem 1rem 0;
+  border-bottom:1px solid rgba(184,138,30,.12);
+  display:flex;align-items:flex-start;gap:.8rem;
+  font-family:'Cormorant Garamond',serif;font-size:1rem;
+  font-weight:300;color:var(--text-mid);line-height:1.5;
+  transition:background .3s;
+}
+.fac-list li:hover{background:var(--beige);padding-left:.5rem;}
+.fac-list li::before{
+  content:'—';color:var(--gold);
+  font-family:'Cinzel',serif;font-size:.7rem;
+  margin-top:.15rem;flex-shrink:0;
+}
+.fac-visual{
+  display:grid;grid-template-columns:1fr 1fr;
+  grid-template-rows:auto auto;gap:2px;
+}
+.fac-img{overflow:hidden;}
+.fac-img:first-child{grid-column:1/-1;aspect-ratio:16/8;}
+.fac-img:not(:first-child){aspect-ratio:1;}
+.fac-img img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .8s ease;}
+.fac-img:hover img{transform:scale(1.04);}
+
+/* ── EKSTRA OPLEVELSER ── */
+.ekstra{background:var(--section-alt);padding:8rem 0;}
+.ekstra-grid{display:grid;grid-template-columns:1fr 1fr;gap:7rem;align-items:center;}
+.ekstra h2{
+  font-family:'Cinzel',serif;font-weight:300;
+  font-size:clamp(2rem,3.5vw,3rem);letter-spacing:.08em;
+  color:var(--charcoal);margin-bottom:2rem;line-height:1.2;
+}
+.ekstra h2 em{color:var(--wine);font-style:normal;}
+.ekstra p{font-family:'Cormorant Garamond',serif;font-size:1.08rem;font-weight:300;line-height:1.95;color:var(--text-mid);margin-bottom:1.4rem;}
+.ekstra-list{list-style:none;}
+.ekstra-list li{
+  padding:.9rem 0;
+  border-bottom:1px solid rgba(184,138,30,.12);
+  display:flex;align-items:center;gap:1rem;
+  font-family:'Cormorant Garamond',serif;font-size:1.05rem;
+  font-weight:300;color:var(--text-mid);
+}
+.ekstra-list li::before{content:'✦';color:var(--gold);font-size:.5rem;flex-shrink:0;}
+.ekstra-img{
+  width:100%;aspect-ratio:3/4;overflow:hidden;
+  box-shadow:8px 8px 0 var(--sand),9px 9px 0 var(--stone);
+}
+.ekstra-img img{width:100%;height:100%;object-fit:cover;display:block;}
+
+/* ── MER END ET KURSUSSTED ── */
+.mere{background:var(--charcoal);padding:8rem 0;position:relative;overflow:hidden;}
+.mere::before{
+  content:'';position:absolute;inset:0;
+  background-image:url('img/vinmark1.jpg');
+  background-size:cover;background-position:center;
+  opacity:.12;
+}
+.mere-inner{position:relative;z-index:1;}
+.mere-grid{display:grid;grid-template-columns:1fr 1fr;gap:7rem;align-items:center;}
+.mere h2{
+  font-family:'Cinzel',serif;font-weight:300;
+  font-size:clamp(2rem,3.5vw,3rem);letter-spacing:.08em;
+  color:#fff;margin-bottom:2rem;line-height:1.2;
+}
+.mere h2 em{color:transparent;-webkit-text-stroke:1px rgba(255,255,255,.6);font-style:normal;}
+.mere p{font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-weight:300;line-height:1.95;color:rgba(255,255,255,.7);margin-bottom:1.4rem;}
+.mere-quote{
+  font-family:'Cormorant Garamond',serif;font-style:italic;
+  font-size:1.5rem;font-weight:300;color:rgba(255,255,255,.9);
+  border-left:2px solid var(--gold);
+  padding-left:2rem;margin-top:3rem;line-height:1.6;
+}
+.mere-img{
+  width:100%;aspect-ratio:4/5;overflow:hidden;
+  position:relative;
+}
+.mere-img img{width:100%;height:100%;object-fit:cover;display:block;}
+
+/* ── CTA ── */
+.cta{background:var(--cream);padding:8rem 0;text-align:center;}
+.cta h2{
+  font-family:'Cinzel',serif;font-weight:300;
+  font-size:clamp(2rem,4vw,3rem);letter-spacing:.1em;
+  color:var(--charcoal);margin-bottom:1.2rem;
+}
+.cta p{
+  font-family:'Cormorant Garamond',serif;font-style:italic;
+  font-size:1.2rem;font-weight:300;
+  color:var(--text-light);margin-bottom:3rem;
+  max-width:580px;margin-left:auto;margin-right:auto;
+}
+.cta-btns{display:flex;gap:1.2rem;justify-content:center;flex-wrap:wrap;}
+.btn-wine{
+  font-size:.7rem;font-weight:500;letter-spacing:.2em;text-transform:uppercase;
+  color:#fff;background:var(--wine);padding:1rem 2.5rem;
+  text-decoration:none;transition:background .3s;
+}
+.btn-wine:hover{background:var(--wine-light);}
+.btn-outline{
+  font-size:.7rem;font-weight:500;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--charcoal);border:1px solid rgba(44,35,24,.3);padding:1rem 2.5rem;
+  text-decoration:none;transition:all .4s;
+}
+.btn-outline:hover{border-color:var(--wine);color:var(--wine);}
+
+/* ── FOOTER ── */
+footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:3rem 4rem;}
+.footer-bottom{max-width:1320px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;}
+.footer-bottom p{font-size:.68rem;color:rgba(255,255,255,.48);letter-spacing:.04em;}
+.footer-bottom a{font-size:.68rem;color:rgba(255,255,255,.62);text-decoration:none;transition:color .3s;}
+.footer-bottom a:hover{color:var(--gold);}
+
+/* ── REVEAL ── */
+.reveal{opacity:0;transform:translateY(28px);transition:opacity .9s ease,transform .9s ease;}
+.reveal.visible{opacity:1;transform:translateY(0);}
+.reveal-left{opacity:0;transform:translateX(-28px);transition:opacity .9s ease,transform .9s ease;}
+.reveal-left.visible{opacity:1;transform:translateX(0);}
+.reveal-right{opacity:0;transform:translateX(28px);transition:opacity .9s ease,transform .9s ease;}
+.reveal-right.visible{opacity:1;transform:translateX(0);}
+.d1{transition-delay:.1s;}.d2{transition-delay:.2s;}.d3{transition-delay:.3s;}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-logo">
+    <img src="img/logo-castillo-hvid_transperant.png" alt="Castillo del Alma" style="filter:brightness(0);">
+  </a>
+  <ul class="nav-links">
+    <li><a href="#intro">Om stedet</a></li>
+    <li><a href="#faciliteter">Vi tilbyder</a></li>
+    <li><a href="#ekstra">Ekstra oplevelser</a></li>
+    <li><a href="#mere">Mere end et kursussted</a></li>
+    <li><a href="#kontakt">Kontakt</a></li>
+  </ul>
+  <a href="index.html" class="nav-back">← Tilbage til forsiden</a>
+</nav>
+
+<!-- ── HERO ── -->
+<section class="page-hero">
+  <div class="page-hero-img" id="heroImg"></div>
+  <div class="page-hero-overlay"></div>
+  <div class="page-hero-content">
+    <span class="page-hero-eyebrow">Castillo del Alma · Mollina, Andalusien</span>
+    <h1>Afhold dit eget<br><em>retreat</em></h1>
+  </div>
+</section>
+
+<!-- ── INTRO ── -->
+<section class="intro" id="intro">
+  <div class="section-inner">
+    <div class="intro-two-col">
+      <div class="reveal-left">
+        <div class="section-label">Du bringer visionen</div>
+        <h2>Vi skaber <em>rammerne</em></h2>
+        <p>Har du en passion for at skabe udvikling, fordybelse og nærvær? Drømmer du om at afholde dit eget retreat, kursus eller workshop i inspirerende omgivelser?</p>
+        <p>Midt i den andalusiske natur, omgivet af vinmarker, olivenlunde, bjerge og stilhed, finder du et sted, hvor dine gæster kan slippe hverdagens travlhed og være fuldt til stede.</p>
+        <p>Uanset om du er coach, terapeut, yogalærer, underviser, facilitator, kunstner eller arbejder med personlig udvikling, giver Castillo del Alma dig de optimale rammer for en mindeværdig oplevelse.</p>
+        <p><strong>På Castillo del Alma skaber vi de perfekte rammer — du skaber indholdet.</strong></p>
+      </div>
+      <div class="intro-img-stack reveal-right d1">
+        <div class="intro-main-img">
+          <img src="img/group-people-making-breathworks-castillo-del-alma.jpg" alt="Retreat på Castillo del Alma">
+        </div>
+        <div class="intro-small-img">
+          <img src="img/estate-pool.jpg" alt="Pool og have — Castillo del Alma">
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ── PHOTO STRIP ── -->
+<section class="photo-strip">
+  <div class="photo-strip-grid">
+    <div class="strip-item">
+      <img src="img/wellness-yoga-castillo.png" alt="Yoga på Castillo del Alma">
+    </div>
+    <div class="strip-item">
+      <img src="img/estate-dining.jpg" alt="Måltider på Castillo del Alma">
+    </div>
+    <div class="strip-item">
+      <img src="img/IMG_0603.JPG" alt="Pool og have">
+    </div>
+    <div class="strip-item">
+      <img src="img/vinmark1.jpg" alt="Vinmarker ved Castillo del Alma">
+    </div>
+  </div>
+</section>
+
+<!-- ── FACILITETER ── -->
+<section class="faciliteter" id="faciliteter">
+  <div class="section-inner">
+    <div class="faciliteter-grid">
+      <div class="reveal-left">
+        <div class="section-label">Hvad du får</div>
+        <h2>Vi stiller <em>rammerne</em> til rådighed</h2>
+        <ul class="fac-list">
+          <li>Plads til op til 14 kursister og 2 undervisere</li>
+          <li>Smukke en suite værelser med høj komfort</li>
+          <li>Alle værelser er dobbeltværelser med enkeltsenge</li>
+          <li>Fælles stuer til ophold og samtale</li>
+          <li>Store terrasser og græsarealer til yoga og meditation</li>
+          <li>Lyse undervisnings- og samlingslokaler</li>
+          <li>Vandrestier på egen grund</li>
+          <li>Swimmingpool med afslapningsområder</li>
+          <li>Sund, hjemmelavet forplejning</li>
+          <li>Fokus på anti-inflammatorisk kost</li>
+          <li>Hurtigt WiFi på hele ejendommen</li>
+          <li>Daglig rengøring af fællesarealer</li>
+          <li>Hjælp med planlægning og koordinering</li>
+          <li>Transfer til og fra lufthavnen</li>
+          <li>Praktisk assistance under hele opholdet</li>
+          <li>Mulighed for markedsføring af jeres retreat</li>
+          <li>Gratis introduktion til NEO-frekvensbehandling</li>
+          <li>Gratis parkering på ejendommen</li>
+          <li>Rolige omgivelser uden trafik og støj</li>
+          <li>Skræddersy opholdet efter dine ønsker</li>
+        </ul>
+        <p style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.95rem;color:var(--text-light);margin-top:2rem;line-height:1.7;">
+          Castillo del Alma kan ikke lejes uden værterne. Hvilken rolle vi skal spille, er op til dig.
+        </p>
+      </div>
+      <div class="fac-visual reveal-right d1">
+        <div class="fac-img">
+          <img src="img/estate-aerial.jpg" alt="Castillo del Alma — luftfoto">
+        </div>
+        <div class="fac-img">
+          <img src="img/close-up-woman-meditating-lotus-position-sunset.jpg" alt="Meditation">
+        </div>
+        <div class="fac-img">
+          <img src="img/yoga-class-concept.jpg" alt="Yoga">
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ── EKSTRA OPLEVELSER ── -->
+<section class="ekstra" id="ekstra">
+  <div class="section-inner">
+    <div class="ekstra-grid">
+      <div class="ekstra-img reveal-left">
+        <img src="img/vaerelse-1-1.jpg" alt="Castillo del Alma — oplevelser">
+      </div>
+      <div class="reveal-right d1">
+        <div class="section-label">Noget helt særligt</div>
+        <h2>Ekstra <em>oplevelser</em></h2>
+        <p>Ønsker du at give dine gæster noget helt særligt, hjælper vi gerne med at arrangere uforglemmelige oplevelser i og omkring Mollina.</p>
+        <ul class="ekstra-list">
+          <li>Vinsmagning på lokale vingårde</li>
+          <li>Smagning af andalusisk olivenolie</li>
+          <li>Guidede vandreture i bjergene</li>
+          <li>Kokkeskole i Antequera</li>
+          <li>Udflugter til nærliggende landsbyer</li>
+          <li>Massage- og wellnessbehandlinger</li>
+          <li>Transport til og fra lufthavnen</li>
+          <li>Andre oplevelser efter ønske</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── MERE END ET KURSUSSTED ── -->
+<section class="mere" id="mere">
+  <div class="section-inner mere-inner">
+    <div class="mere-grid">
+      <div class="reveal-left">
+        <div class="section-label" style="color:rgba(238,222,160,.7);">
+          <span style="background:rgba(238,222,160,.7);"></span>
+          Mere end et kursussted
+        </div>
+        <h2>Et sted for <em>transformation</em></h2>
+        <p>Castillo del Alma er ikke blot en smuk ejendom. Det er et sted, hvor naturen, stilheden og den autentiske andalusiske atmosfære skaber plads til fordybelse, udvikling og ægte nærvær.</p>
+        <p>Mange oplever, at omgivelserne bliver en aktiv del af deres retreat og giver deltagerne ro til at mærke sig selv og skabe varige forandringer.</p>
+        <p>Som arrangør skal du kunne koncentrere dig om det vigtigste — dine deltagere. Vi hjælper gerne med logistik, indkvartering, måltider og koordinering, så du kan fokusere på at skabe en nærværende og inspirerende oplevelse.</p>
+        <div class="mere-quote">
+          Du bringer visionen —<br>vi skaber rammerne.
+        </div>
+      </div>
+      <div class="mere-img reveal-right d1">
+        <img src="img/group-people-walking-along-path-dirt-stones-jungle.jpg" alt="Retreat oplevelse på Castillo del Alma">
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── PHOTO STRIP 2 ── -->
+<section class="photo-strip">
+  <div class="photo-strip-grid" style="grid-template-columns:repeat(3,1fr);height:340px;">
+    <div class="strip-item">
+      <img src="img/aerial-view-people-having-dinner-backyard.jpg" alt="Fælles måltider">
+    </div>
+    <div class="strip-item">
+      <img src="img/faceless-woman-lying-grass.jpg" alt="Afslapning i naturen">
+    </div>
+    <div class="strip-item">
+      <img src="img/group-men-sit-hill-overlooking-mountain.jpg" alt="Udsigt over Andalusien">
+    </div>
+  </div>
+</section>
+
+<!-- ── CTA ── -->
+<section class="cta" id="kontakt">
+  <div class="section-inner">
+    <div class="reveal">
+      <div class="section-label" style="justify-content:center;">Tag det første skridt</div>
+      <h2>Kontakt os for en uforpligtende samtale</h2>
+      <p>Vi glæder os til at høre om din vision og drøfte mulighederne for dit næste retreat eller arrangement på Castillo del Alma.</p>
+      <div class="cta-btns">
+        <a href="mailto:booking@castillodelalma.es" class="btn-wine">Skriv til os</a>
+        <a href="ejendommen.html" class="btn-outline">Se ejendommen</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-bottom">
+    <p>© 2026 Castillo del Alma · Mollina, Málaga · All rights reserved</p>
+    <a href="index.html">← Tilbage til forsiden</a>
+  </div>
+</footer>
+
+<script>
+// Hero parallax load
+window.addEventListener('load', () => {
+  document.getElementById('heroImg').classList.add('loaded');
+});
+
+// Scroll reveal
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.classList.add('visible');
+      observer.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.12 });
+
+document.querySelectorAll('.reveal, .reveal-left, .reveal-right').forEach(el => observer.observe(el));
+
+// Nav active links
+const sections = document.querySelectorAll('section[id]');
+const navLinks = document.querySelectorAll('.nav-links a');
+window.addEventListener('scroll', () => {
+  let current = '';
+  sections.forEach(s => {
+    if (window.scrollY >= s.offsetTop - 120) current = s.id;
+  });
+  navLinks.forEach(a => {
+    a.style.color = a.getAttribute('href') === '#' + current ? 'var(--wine)' : '';
+  });
+});
+</script>
+</body>
+</html>
