@@ -218,6 +218,33 @@ nav{
 }
 .kat-liste li:last-child{border-bottom:none;}
 .kat-liste li::before{content:'·';color:var(--gold);font-size:1.2rem;line-height:0;}
+/* Video kort */
+.kat-video{
+  position:relative;overflow:hidden;
+  background:#1a1208;
+  padding:0;
+}
+.kat-video video{
+  width:100%;height:100%;
+  object-fit:cover;display:block;
+  transition:opacity .4s ease;
+}
+.kat-video-overlay{
+  position:absolute;inset:0;
+  display:flex;align-items:center;justify-content:center;
+  background:rgba(26,18,8,.35);
+  transition:opacity .4s ease;
+  pointer-events:none;
+}
+.kat-video-overlay svg{
+  width:48px;height:48px;
+  fill:rgba(255,255,255,.85);
+  filter:drop-shadow(0 2px 8px rgba(0,0,0,.4));
+  transition:transform .3s ease,opacity .3s ease;
+}
+.kat-video:hover .kat-video-overlay{opacity:0;}
+.kat-video:hover .kat-video-overlay svg{transform:scale(1.1);}
+
 .design-cta{
   text-align:center;margin-top:5rem;
   padding-top:4rem;border-top:1px solid rgba(184,138,30,.2);
@@ -522,6 +549,23 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:3rem
     </div>
 
     <div class="design-kategorier">
+
+      <div class="kat-kort kat-video reveal d1">
+        <video
+          src="video/Chef-castillo-del-alma.mp4"
+          muted
+          playsinline
+          loop
+          preload="none"
+          onmouseenter="this.play()"
+          onmouseleave="this.pause();this.currentTime=0;">
+        </video>
+        <div class="kat-video-overlay">
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M8 5v14l11-7z"/>
+          </svg>
+        </div>
+      </div>
 
       <div class="kat-kort reveal d1">
         <span class="kat-titel">Gastronomi</span>
