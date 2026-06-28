@@ -666,6 +666,26 @@ body{font-family:'Manrope',sans-serif;background:#f0e8d5;color:#2c2318;min-heigh
           <input type="text" id="ui_retreat_info_heading_en" placeholder="Retreat Info" style="background:#e8f4f3;border:1px solid #7fb3af;width:100%;padding:.6rem .8rem;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;">
         </div>
       </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;margin-bottom:1rem;">
+        <div>
+          <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(44,35,24,.6);display:block;margin-bottom:.4rem;">Fra (over prisen) <span style="font-size:.58rem;background:#b88a1e;color:#fff;padding:.1rem .4rem;letter-spacing:.08em;border-radius:2px;margin-left:.4rem;vertical-align:middle;">🇩🇰 DA</span></label>
+          <input type="text" id="ui_price_from" placeholder="Fra" style="background:#fffef8;border:1px solid rgba(184,138,30,.3);width:100%;padding:.6rem .8rem;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;">
+        </div>
+        <div>
+          <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:#2a7a74;display:block;margin-bottom:.4rem;">From (above price) <span style="font-size:.58rem;background:#2a7a74;color:#fff;padding:.1rem .4rem;letter-spacing:.08em;border-radius:2px;margin-left:.4rem;vertical-align:middle;">🇬🇧 EN</span></label>
+          <input type="text" id="ui_price_from_en" placeholder="From" style="background:#e8f4f3;border:1px solid #7fb3af;width:100%;padding:.6rem .8rem;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;">
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;margin-bottom:1rem;">
+        <div>
+          <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(44,35,24,.6);display:block;margin-bottom:.4rem;">Pris-undertekst <span style="font-size:.58rem;background:#b88a1e;color:#fff;padding:.1rem .4rem;letter-spacing:.08em;border-radius:2px;margin-left:.4rem;vertical-align:middle;">🇩🇰 DA</span></label>
+          <input type="text" id="ui_price_per_person" placeholder="pr. person · delt værelse" style="background:#fffef8;border:1px solid rgba(184,138,30,.3);width:100%;padding:.6rem .8rem;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;">
+        </div>
+        <div>
+          <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:#2a7a74;display:block;margin-bottom:.4rem;">Price subtext <span style="font-size:.58rem;background:#2a7a74;color:#fff;padding:.1rem .4rem;letter-spacing:.08em;border-radius:2px;margin-left:.4rem;vertical-align:middle;">🇬🇧 EN</span></label>
+          <input type="text" id="ui_price_per_person_en" placeholder="per person · shared room" style="background:#e8f4f3;border:1px solid #7fb3af;width:100%;padding:.6rem .8rem;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;">
+        </div>
+      </div>
 
       <div style="grid-column:1/-1;border-top:2px solid rgba(184,138,30,.2);padding-top:1rem;margin-top:1.2rem;margin-bottom:.5rem;">
         <span style="font-size:.65rem;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);font-weight:600;">Program</span>
@@ -2692,6 +2712,10 @@ function openNytRetreat() {
   document.getElementById('ui_label_departure_en').value = '';
   document.getElementById('ui_label_guests_en').value = '';
   document.getElementById('ui_retreat_info_heading_en').value = '';
+  document.getElementById('ui_price_from').value = '';
+  document.getElementById('ui_price_from_en').value = '';
+  document.getElementById('ui_price_per_person').value = '';
+  document.getElementById('ui_price_per_person_en').value = '';
   document.getElementById('ui_included_heading').value = '';
   document.getElementById('ui_excluded_heading').value = '';
   document.getElementById('ui_included_heading_en').value = '';
@@ -2829,6 +2853,10 @@ function redigerRetreat(id) {
   document.getElementById('ui_label_departure_en').value = r.ui_label_departure_en || '';
   document.getElementById('ui_label_guests_en').value = r.ui_label_guests_en || '';
   document.getElementById('ui_retreat_info_heading_en').value = r.ui_retreat_info_heading_en || '';
+  document.getElementById('ui_price_from').value = r.ui_price_from || '';
+  document.getElementById('ui_price_from_en').value = r.ui_price_from_en || '';
+  document.getElementById('ui_price_per_person').value = r.ui_price_per_person || '';
+  document.getElementById('ui_price_per_person_en').value = r.ui_price_per_person_en || '';
   document.getElementById('ui_included_heading').value = r.ui_included_heading || '';
   document.getElementById('ui_excluded_heading').value = r.ui_excluded_heading || '';
   document.getElementById('ui_included_heading_en').value = r.ui_included_heading_en || '';
@@ -2991,6 +3019,10 @@ async function gemRetreat() {
       ui_label_departure_en: document.getElementById('ui_label_departure_en').value.trim() || null,
       ui_label_guests_en: document.getElementById('ui_label_guests_en').value.trim() || null,
       ui_retreat_info_heading_en: document.getElementById('ui_retreat_info_heading_en').value.trim() || null,
+      ui_price_from: document.getElementById('ui_price_from').value.trim() || null,
+      ui_price_from_en: document.getElementById('ui_price_from_en').value.trim() || null,
+      ui_price_per_person: document.getElementById('ui_price_per_person').value.trim() || null,
+      ui_price_per_person_en: document.getElementById('ui_price_per_person_en').value.trim() || null,
       ui_included_heading: document.getElementById('ui_included_heading').value.trim() || null,
       ui_excluded_heading: document.getElementById('ui_excluded_heading').value.trim() || null,
       ui_included_heading_en: document.getElementById('ui_included_heading_en').value.trim() || null,
