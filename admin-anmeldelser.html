@@ -465,23 +465,39 @@ body{font-family:'Manrope',sans-serif;background:#f0e8d5;color:#2c2318;min-heigh
           <input type="text" inputmode="numeric" id="retreat_price" placeholder="0" style="width:100%;padding:.6rem .8rem;border:1px solid rgba(184,138,30,.3);background:rgba(44,35,24,.03);font-family:Manrope,sans-serif;font-size:.8rem;outline:none;">
         </div>
       </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:1.2rem;margin-bottom:1rem;">
+      <div style="margin-bottom:1rem;">
+        <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(44,35,24,.6);display:block;margin-bottom:.4rem;">Depositum (%)</label>
+        <input type="text" inputmode="numeric" id="retreat_deposit_pct" placeholder="30" style="width:200px;padding:.6rem .8rem;border:1px solid rgba(184,138,30,.3);background:rgba(44,35,24,.03);font-family:Manrope,sans-serif;font-size:.8rem;outline:none;">
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;margin-bottom:1rem;">
         <div>
-          <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(44,35,24,.6);display:block;margin-bottom:.4rem;">Depositum (%)</label>
-          <input type="text" inputmode="numeric" id="retreat_deposit_pct" placeholder="30" style="width:100%;padding:.6rem .8rem;border:1px solid rgba(184,138,30,.3);background:rgba(44,35,24,.03);font-family:Manrope,sans-serif;font-size:.8rem;outline:none;">
+          <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(44,35,24,.6);display:block;margin-bottom:.4rem;">Sprog <span style="font-size:.58rem;background:#b88a1e;color:#fff;padding:.1rem .4rem;letter-spacing:.08em;border-radius:2px;margin-left:.4rem;vertical-align:middle;">🇩🇰 DA</span></label>
+          <input type="text" id="retreat_languages" placeholder="Dansk / Engelsk" style="background:#fffef8;border:1px solid rgba(184,138,30,.3);width:100%;padding:.6rem .8rem;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;">
         </div>
         <div>
-          <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(44,35,24,.6);display:block;margin-bottom:.4rem;">Sprog</label>
-          <input type="text" id="retreat_languages" placeholder="Dansk / Engelsk" style="width:100%;padding:.6rem .8rem;border:1px solid rgba(184,138,30,.3);background:rgba(44,35,24,.03);font-family:Manrope,sans-serif;font-size:.8rem;outline:none;">
-        </div>
-        <div>
-          <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(44,35,24,.6);display:block;margin-bottom:.4rem;">Niveau</label>
-          <input type="text" id="retreat_level" placeholder="Alle niveauer" style="width:100%;padding:.6rem .8rem;border:1px solid rgba(184,138,30,.3);background:rgba(44,35,24,.03);font-family:Manrope,sans-serif;font-size:.8rem;outline:none;">
+          <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:#2a7a74;display:block;margin-bottom:.4rem;">Language <span style="font-size:.58rem;background:#2a7a74;color:#fff;padding:.1rem .4rem;letter-spacing:.08em;border-radius:2px;margin-left:.4rem;vertical-align:middle;">🇬🇧 EN</span></label>
+          <input type="text" id="retreat_languages_en" placeholder="Danish / English" style="background:#e8f4f3;border:1px solid #7fb3af;width:100%;padding:.6rem .8rem;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;">
         </div>
       </div>
-      <div style="margin-bottom:1rem;">
-        <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(44,35,24,.6);display:block;margin-bottom:.4rem;">Sted</label>
-        <input type="text" id="retreat_location" placeholder="Castillo del Alma, Mollina" style="width:100%;padding:.6rem .8rem;border:1px solid rgba(184,138,30,.3);background:rgba(44,35,24,.03);font-family:Manrope,sans-serif;font-size:.8rem;outline:none;">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;margin-bottom:1rem;">
+        <div>
+          <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(44,35,24,.6);display:block;margin-bottom:.4rem;">Niveau <span style="font-size:.58rem;background:#b88a1e;color:#fff;padding:.1rem .4rem;letter-spacing:.08em;border-radius:2px;margin-left:.4rem;vertical-align:middle;">🇩🇰 DA</span></label>
+          <input type="text" id="retreat_level" placeholder="Alle niveauer" style="background:#fffef8;border:1px solid rgba(184,138,30,.3);width:100%;padding:.6rem .8rem;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;">
+        </div>
+        <div>
+          <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:#2a7a74;display:block;margin-bottom:.4rem;">Level <span style="font-size:.58rem;background:#2a7a74;color:#fff;padding:.1rem .4rem;letter-spacing:.08em;border-radius:2px;margin-left:.4rem;vertical-align:middle;">🇬🇧 EN</span></label>
+          <input type="text" id="retreat_level_en" placeholder="All levels" style="background:#e8f4f3;border:1px solid #7fb3af;width:100%;padding:.6rem .8rem;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;">
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;margin-bottom:1rem;">
+        <div>
+          <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(44,35,24,.6);display:block;margin-bottom:.4rem;">Sted <span style="font-size:.58rem;background:#b88a1e;color:#fff;padding:.1rem .4rem;letter-spacing:.08em;border-radius:2px;margin-left:.4rem;vertical-align:middle;">🇩🇰 DA</span></label>
+          <input type="text" id="retreat_location" placeholder="Castillo del Alma, Mollina" style="background:#fffef8;border:1px solid rgba(184,138,30,.3);width:100%;padding:.6rem .8rem;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;">
+        </div>
+        <div>
+          <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:#2a7a74;display:block;margin-bottom:.4rem;">Location <span style="font-size:.58rem;background:#2a7a74;color:#fff;padding:.1rem .4rem;letter-spacing:.08em;border-radius:2px;margin-left:.4rem;vertical-align:middle;">🇬🇧 EN</span></label>
+          <input type="text" id="retreat_location_en" placeholder="Castillo del Alma, Mollina" style="background:#e8f4f3;border:1px solid #7fb3af;width:100%;padding:.6rem .8rem;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;">
+        </div>
       </div>
       <div style="margin-bottom:1rem;">
         <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(44,35,24,.6);display:block;margin-bottom:.4rem;">Ekstra datoer (dropdown)</label>
@@ -2663,6 +2679,9 @@ function openNytRetreat() {
   document.getElementById('retreat_hero_preview').innerHTML = '';
   document.getElementById('retreat_card_preview').innerHTML = '';
   document.getElementById('retreat_location').value = '';
+  document.getElementById('retreat_languages_en').value = '';
+  document.getElementById('retreat_level_en').value = '';
+  document.getElementById('retreat_location_en').value = '';
   document.getElementById('retreat_about_heading').value = '';
   document.getElementById('retreat_about_heading_en').value = '';
   document.getElementById('retreat_about_text').value = '';
@@ -2804,6 +2823,9 @@ function redigerRetreat(id) {
   document.getElementById('retreat_hero_preview').innerHTML = r.hero_image ? `<img src="${r.hero_image}" style="max-width:100%;max-height:120px;">` : '';
   document.getElementById('retreat_card_preview').innerHTML = r.card_image ? `<img src="${r.card_image}" style="max-width:100%;max-height:120px;">` : '';
   document.getElementById('retreat_location').value = r.location || '';
+  document.getElementById('retreat_languages_en').value = r.languages_en || '';
+  document.getElementById('retreat_level_en').value = r.level_en || '';
+  document.getElementById('retreat_location_en').value = r.location_en || '';
   document.getElementById('retreat_about_heading').value = r.about_heading || '';
   document.getElementById('retreat_about_heading_en').value = r.about_heading_en || '';
   document.getElementById('retreat_about_text').value = r.about_text || '';
@@ -3081,7 +3103,10 @@ async function gemRetreat() {
       max_guests: parseInt(document.getElementById('retreat_max_guests').value) || null,
       extra_dates: extraDatesState.filter(d => d.arrival && d.departure),
       languages: document.getElementById('retreat_languages').value.trim() || null,
-      level: document.getElementById('retreat_level').value.trim() || null
+      languages_en: document.getElementById('retreat_languages_en').value.trim() || null,
+      level: document.getElementById('retreat_level').value.trim() || null,
+      level_en: document.getElementById('retreat_level_en').value.trim() || null,
+      location_en: document.getElementById('retreat_location_en').value.trim() || null
     };
 
     const heroFile = document.getElementById('retreat_hero_file').files[0];
