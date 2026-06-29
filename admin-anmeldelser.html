@@ -892,6 +892,12 @@ Travel insurance..." style="background:#e8f4f3;border:1px solid #7fb3af;width:10
         <span style="font-size:.65rem;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);font-weight:600;">Highlights</span>
         <button type="button" onclick="gemRetreat()" style="background:rgba(184,138,30,.15);border:1px solid rgba(184,138,30,.4);color:#7a5000;padding:.35rem 1rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;margin-left:auto;">💾 Gem</button>
       </div>
+      <input type="hidden" id="ui_highlight1_icon">
+      <input type="hidden" id="ui_highlight2_icon">
+      <input type="hidden" id="ui_highlight3_icon">
+      <input type="hidden" id="ui_highlight4_icon">
+      <input type="hidden" id="ui_highlight5_icon">
+      <input type="hidden" id="ui_highlight6_icon">
       <input type="hidden" id="ui_highlight1_title">
       <input type="hidden" id="ui_highlight1_title_en">
       <input type="hidden" id="ui_highlight1_text">
@@ -3142,26 +3148,38 @@ function openNytRetreat() {
   document.getElementById('retreat_teacher_bio_en').value = '';
   document.getElementById('ui_highlights_heading').value = 'Hvad gør dette retreat særligt?';
   document.getElementById('ui_highlights_heading_en').value = 'What makes this retreat special?';
+  document.getElementById('ui_highlight1_icon').value = r.ui_highlight1_icon || 'globe';
+  document.getElementById('ui_highlight1_icon').value = 'globe';
   document.getElementById('ui_highlight1_title').value = 'Nervous System Reset';
   document.getElementById('ui_highlight1_title_en').value = 'Nervous System Reset';
   document.getElementById('ui_highlight1_text').value = 'Et samlet forløb designet til at bringe dit nervesystem tilbage i balance — fra kronisk alarmberedskab til ro og regulering.';
   document.getElementById('ui_highlight1_text_en').value = 'A complete programme designed to bring your nervous system back into balance — from chronic alarm mode to calm and regulation.';
+  document.getElementById('ui_highlight2_icon').value = r.ui_highlight2_icon || 'shield';
+  document.getElementById('ui_highlight2_icon').value = 'shield';
   document.getElementById('ui_highlight2_title').value = 'Intimt & eksklusivt';
   document.getElementById('ui_highlight2_title_en').value = 'Intimate & Exclusive';
   document.getElementById('ui_highlight2_text').value = 'Max 10 deltagere sikrer tæt opmærksomhed, ægte fællesskab og et trygt rum for personlig fordybelse.';
   document.getElementById('ui_highlight2_text_en').value = 'Max 10 participants ensures close attention, genuine community and a safe space for personal exploration.';
+  document.getElementById('ui_highlight3_icon').value = r.ui_highlight3_icon || 'home';
+  document.getElementById('ui_highlight3_icon').value = 'home';
   document.getElementById('ui_highlight3_title').value = 'Eksklusiv ejendom';
   document.getElementById('ui_highlight3_title_en').value = 'Exclusive Property';
   document.getElementById('ui_highlight3_text').value = 'Hele Castillo del Alma er kun til jer — vinmarker, pool, sauna, terrasser og det andalusiske landskab som ramme.';
   document.getElementById('ui_highlight3_text_en').value = 'The entire Castillo del Alma is exclusively yours — vineyards, pool, sauna, terraces and the Andalusian landscape as your backdrop.';
+  document.getElementById('ui_highlight4_icon').value = r.ui_highlight4_icon || 'drop';
+  document.getElementById('ui_highlight4_icon').value = 'drop';
   document.getElementById('ui_highlight4_title').value = 'Guidede breathwork-sessioner';
   document.getElementById('ui_highlight4_title_en').value = 'Guided Breathwork Sessions';
   document.getElementById('ui_highlight4_text').value = 'Daglige breathwork-sessioner med erfaren facilitator — et af de mest kraftfulde redskaber til at frisætte spændinger.';
   document.getElementById('ui_highlight4_text_en').value = 'Daily breathwork sessions with an experienced facilitator — one of the most powerful tools for releasing tension and stress.';
+  document.getElementById('ui_highlight5_icon').value = r.ui_highlight5_icon || 'fork';
+  document.getElementById('ui_highlight5_icon').value = 'fork';
   document.getElementById('ui_highlight5_title').value = 'Nærende andalusisk mad';
   document.getElementById('ui_highlight5_title_en').value = 'Nourishing Andalusian Food';
   document.getElementById('ui_highlight5_text').value = 'Alle måltider er tilberedt med friske, lokale råvarer — enkelt, nærende og tilpasset restitution og den anti-inflammatoriske livsstil.';
   document.getElementById('ui_highlight5_text_en').value = 'All meals are prepared with fresh, local ingredients — simple, nourishing and adapted to recovery and the anti-inflammatory lifestyle.';
+  document.getElementById('ui_highlight6_icon').value = r.ui_highlight6_icon || 'star';
+  document.getElementById('ui_highlight6_icon').value = 'star';
   document.getElementById('ui_highlight6_title').value = 'Stilhed & stjernekiggeri';
   document.getElementById('ui_highlight6_title_en').value = 'Silence & Stargazing';
   document.getElementById('ui_highlight6_text').value = 'Nætter under Andalusiens klare himmel — langt fra byernes lys. En meditativ og åndedrætsgivende oplevelse.';
@@ -3620,6 +3638,12 @@ async function gemRetreat() {
       teacher_bio_en: document.getElementById('retreat_teacher_bio_en').value.trim() || null,
       ui_highlights_heading: document.getElementById('ui_highlights_heading').value.trim() || null,
       ui_highlights_heading_en: document.getElementById('ui_highlights_heading_en').value.trim() || null,
+      ui_highlight1_icon: document.getElementById('ui_highlight1_icon').value.trim() || null,
+      ui_highlight2_icon: document.getElementById('ui_highlight2_icon').value.trim() || null,
+      ui_highlight3_icon: document.getElementById('ui_highlight3_icon').value.trim() || null,
+      ui_highlight4_icon: document.getElementById('ui_highlight4_icon').value.trim() || null,
+      ui_highlight5_icon: document.getElementById('ui_highlight5_icon').value.trim() || null,
+      ui_highlight6_icon: document.getElementById('ui_highlight6_icon').value.trim() || null,
       ui_highlight1_title: document.getElementById('ui_highlight1_title').value.trim() || null,
       ui_highlight1_title_en: document.getElementById('ui_highlight1_title_en').value.trim() || null,
       ui_highlight1_text: document.getElementById('ui_highlight1_text').value.trim() || null,
@@ -3995,22 +4019,29 @@ function gemFaqEditor() {
 }
 
 // ── HIGHLIGHTS EDITOR ──
+const ICON_LIBRARY = {"globe": "<circle cx="12" cy="12" r="10"/><path d="M12 2 C12 2 6 6 6 12 C6 18 12 22 12 22"/><path d="M12 2 C12 2 18 6 18 12 C18 18 12 22 12 22"/>", "shield": "<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>", "home": "<path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>", "drop": "<path d="M12 2 Q16 8 16 14 A4 4 0 0 1 8 14 Q8 8 12 2Z"/>", "fork": "<path d="M6 3v6a3 3 0 0 0 6 0V3"/><line x1="9" y1="9" x2="9" y2="21"/>", "star": "<polygon points="12 2 15 9 22 9 16.5 13.5 18.5 21 12 17 5.5 21 7.5 13.5 2 9 9 9"/>", "heart": "<path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>", "sun": "<circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>", "moon": "<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>", "leaf": "<path d="M2 22c0 0 4-2 8-6s6-8 6-8S12 12 6 16 2 22 2 22z"/><path d="M16 8s0 6-6 10"/>", "wind": "<path d="M9.59 4.59A2 2 0 1 1 11 8H2m10.59 11.41A2 2 0 1 0 14 16H2m15.73-8.27A2.5 2.5 0 1 1 19.5 12H2"/>", "mountain": "<polygon points="3 17 12 3 21 17"/>", "waves": "<path d="M2 12s3-4 6-4 6 4 6 4 3-4 6-4"/><path d="M2 18s3-4 6-4 6 4 6 4 3-4 6-4"/>", "people": "<path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>", "clock": "<circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>", "flower": "<circle cx="12" cy="12" r="3"/><path d="M12 2a4 4 0 0 1 0 8 4 4 0 0 1 0-8z" transform="rotate(0 12 12)"/><path d="M12 14a4 4 0 0 1 0 8 4 4 0 0 1 0-8z" transform="rotate(0 12 12)"/><path d="M4.93 4.93a4 4 0 0 1 5.66 5.66 4 4 0 0 1-5.66-5.66z"/><path d="M13.41 13.41a4 4 0 0 1 5.66 5.66 4 4 0 0 1-5.66-5.66z"/>", "eye": "<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>", "zap": "<polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>", "feather": "<path d="M20.24 12.24a6 6 0 0 0-8.49-8.49L5 10.5V19h8.5z"/><line x1="16" y1="8" x2="2" y2="22"/><line x1="17.5" y1="15" x2="9" y2="15"/>", "compass": "<circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/>"};
+const ICON_KEYS = ['globe', 'shield', 'home', 'drop', 'fork', 'star', 'heart', 'sun', 'moon', 'leaf', 'wind', 'mountain', 'waves', 'people', 'clock', 'flower', 'eye', 'zap', 'feather', 'compass'];
+
 let highlightsState = [];
 let highlightsStateEN = [];
+let highlightsStateIcons = [];
 const MAX_HIGHLIGHTS = 6;
 
 function openHighlightsEditor() {
-  // Load fra hidden felter
+  const defaultIcons = ["globe", "shield", "home", "drop", "fork", "star"];
   highlightsState = [];
   highlightsStateEN = [];
+  highlightsStateIcons = [];
   for (let i = 1; i <= MAX_HIGHLIGHTS; i++) {
     const t = document.getElementById(`ui_highlight${i}_title`)?.value || '';
     const tx = document.getElementById(`ui_highlight${i}_text`)?.value || '';
     const tEN = document.getElementById(`ui_highlight${i}_title_en`)?.value || '';
     const txEN = document.getElementById(`ui_highlight${i}_text_en`)?.value || '';
+    const icon = document.getElementById(`ui_highlight${i}_icon`)?.value || defaultIcons[i-1] || 'globe';
     if (t || tx || tEN || txEN) {
       highlightsState.push({ title: t, text: tx });
       highlightsStateEN.push({ title: tEN, text: txEN });
+      highlightsStateIcons.push(icon);
     }
   }
   renderHighlightsListe();
@@ -4027,13 +4058,30 @@ function renderHighlightsListe() {
   }
   const DA = 'background:#fffef8;border:1px solid rgba(184,138,30,.3);color:#2c2318;padding:.5rem .7rem;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;width:100%;';
   const EN = 'background:#e8f4f3;border:1px solid #7fb3af;color:#2c2318;padding:.5rem .7rem;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;width:100%;';
+
   container.innerHTML = highlightsState.map((h, i) => {
     const en = highlightsStateEN[i] || { title: '', text: '' };
+    const currentIcon = highlightsStateIcons[i] || 'globe';
+
+    const iconPickerHTML = ICON_KEYS.map(key => {
+      const selected = key === currentIcon ? 'background:rgba(184,138,30,.25);border-color:rgba(184,138,30,.6);' : '';
+      return `<button type="button" onclick="setHighlightIcon(${i},'${key}')" title="${key}"
+        style="width:36px;height:36px;border:1px solid rgba(184,138,30,.2);background:rgba(44,35,24,.03);cursor:pointer;padding:6px;transition:all .2s;${selected}">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="width:100%;height:100%;">
+          ${ICON_LIBRARY[key]}
+        </svg>
+      </button>`;
+    }).join('');
+
     return `
     <div style="border:1px solid rgba(184,138,30,.15);overflow:hidden;">
       <div style="display:flex;justify-content:space-between;align-items:center;background:rgba(44,35,24,.04);padding:.5rem 1rem;border-bottom:1px solid rgba(184,138,30,.1);">
         <span style="font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;color:rgba(44,35,24,.5);">Highlight ${i + 1}</span>
         <button type="button" onclick="fjernHighlight(${i})" style="background:none;border:none;color:rgba(192,92,48,.6);cursor:pointer;font-size:.85rem;">✕ Fjern</button>
+      </div>
+      <div style="padding:.8rem;border-bottom:1px solid rgba(184,138,30,.1);">
+        <div style="font-size:.6rem;letter-spacing:.15em;text-transform:uppercase;color:rgba(44,35,24,.5);margin-bottom:.6rem;">Vælg ikon</div>
+        <div style="display:flex;flex-wrap:wrap;gap:.3rem;">${iconPickerHTML}</div>
       </div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:1px;background:rgba(184,138,30,.1);">
         <div style="background:#fff;padding:.8rem;display:flex;flex-direction:column;gap:.5rem;">
@@ -4049,32 +4097,41 @@ function renderHighlightsListe() {
   }).join('');
 }
 
+function setHighlightIcon(i, key) {
+  highlightsStateIcons[i] = key;
+  renderHighlightsListe();
+}
+
 function tilfoejHighlight() {
   if (highlightsState.length >= MAX_HIGHLIGHTS) return;
   highlightsState.push({ title: '', text: '' });
   highlightsStateEN.push({ title: '', text: '' });
+  highlightsStateIcons.push('globe');
   renderHighlightsListe();
 }
 
 function fjernHighlight(i) {
   highlightsState.splice(i, 1);
   highlightsStateEN.splice(i, 1);
+  highlightsStateIcons.splice(i, 1);
   renderHighlightsListe();
 }
 
 function gemHighlightsEditor() {
-  // Gem tilbage i hidden felter
   for (let i = 1; i <= MAX_HIGHLIGHTS; i++) {
     const h = highlightsState[i-1] || { title: '', text: '' };
     const en = highlightsStateEN[i-1] || { title: '', text: '' };
+    const icon = highlightsStateIcons[i-1] || 'globe';
     const tEl = document.getElementById(`ui_highlight${i}_title`);
     const txEl = document.getElementById(`ui_highlight${i}_text`);
     const tEnEl = document.getElementById(`ui_highlight${i}_title_en`);
     const txEnEl = document.getElementById(`ui_highlight${i}_text_en`);
+    const iconEl = document.getElementById(`ui_highlight${i}_icon`);
     if (tEl) tEl.value = h.title || '';
     if (txEl) txEl.value = h.text || '';
     if (tEnEl) tEnEl.value = en.title || '';
     if (txEnEl) txEnEl.value = en.text || '';
+    if (iconEl) iconEl.value = icon;
   }
   const preview = document.getElementById('highlightsPreview');
   if (preview) preview.textContent = highlightsState.length ? `${highlightsState.length} highlights gemt (DA + EN)` : '';
