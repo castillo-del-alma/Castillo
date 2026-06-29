@@ -3058,6 +3058,7 @@ async function moveRetreat(id, direction) {
 }
 
 function openNytRetreat() {
+  try {
   document.getElementById('retreatModalTitel').textContent = 'Nyt retreat';
   document.getElementById('retreat_id').value = '';
   document.getElementById('retreat_title').value = '';
@@ -3290,6 +3291,10 @@ function openNytRetreat() {
   cardFileData = null;
   document.getElementById('retreatSaveBtn').textContent = 'Opret retreat';
   document.getElementById('modalRetreat').classList.add('open');
+  } catch(e) {
+    console.error('openNytRetreat fejl:', e.message, e.stack);
+    alert('Fejl ved åbning: ' + e.message);
+  }
 }
 
 function redigerRetreat(id) {
