@@ -660,11 +660,11 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:3rem
       </div>
       <div class="quick-facts reveal-right d2">
         <h3 id="retreatInfoHeading">Retreat info</h3>
-        <div class="fact-row"><span class="fact-label">Varighed</span><span class="fact-value" id="factDuration">—</span></div>
-        <div class="fact-row"><span class="fact-label">Maks. deltagere</span><span class="fact-value" id="factMaxGuests">—</span></div>
-        <div class="fact-row"><span class="fact-label">Niveau</span><span class="fact-value" id="factLevel">—</span></div>
-        <div class="fact-row"><span class="fact-label">Sprog</span><span class="fact-value" id="factLanguages">—</span></div>
-        <div class="fact-row"><span class="fact-label">Sted</span><span class="fact-value" id="factLocation">Castillo del Alma</span></div>
+        <div class="fact-row"><span class="fact-label" id="factLabelDuration">Varighed</span><span class="fact-value" id="factDuration">—</span></div>
+        <div class="fact-row"><span class="fact-label" id="factLabelGuests">Maks. deltagere</span><span class="fact-value" id="factMaxGuests">—</span></div>
+        <div class="fact-row"><span class="fact-label" id="factLabelLevel">Niveau</span><span class="fact-value" id="factLevel">—</span></div>
+        <div class="fact-row"><span class="fact-label" id="factLabelLanguages">Sprog</span><span class="fact-value" id="factLanguages">—</span></div>
+        <div class="fact-row"><span class="fact-label" id="factLabelLocation">Sted</span><span class="fact-value" id="factLocation">Castillo del Alma</span></div>
       </div>
     </div>
   </div>
@@ -1345,6 +1345,26 @@ function applyLang(data, lang) {
   const th = document.getElementById('teacherHeading');
   if(th) th.textContent = isEN ? (d.ui_teacher_heading_en||'Your Guide on the Journey') : (d.ui_teacher_heading||'Din guide på rejsen');
 
+  // Fact labels og værdier
+  const factLabels = {
+    factLabelDuration:  isEN ? (d.ui_label_duration_en||'Duration')    : (d.ui_label_duration||'Varighed'),
+    factLabelGuests:    isEN ? (d.ui_label_guests_en||'Max participants'): (d.ui_label_guests||'Maks. deltagere'),
+    factLabelLevel:     isEN ? 'Level'                                  : 'Niveau',
+    factLabelLanguages: isEN ? 'Language'                               : 'Sprog',
+    factLabelLocation:  isEN ? 'Location'                               : 'Sted',
+  };
+  Object.entries(factLabels).forEach(([id,txt]) => { const el=document.getElementById(id); if(el) el.textContent=txt; });
+
+  // Fact værdier
+  const fv = document.getElementById('factLanguages');
+  if(fv) fv.textContent = isEN ? (d.languages_en||d.languages||'—') : (d.languages||'—');
+  const fl2 = document.getElementById('factLevel');
+  if(fl2) fl2.textContent = isEN ? (d.level_en||d.level||'—') : (d.level||'—');
+  const floc = document.getElementById('factLocation');
+  if(floc) floc.textContent = isEN ? (d.location_en||d.location||'—') : (d.location||'—');
+  const fmax = document.getElementById('factMaxGuests');
+  if(fmax) fmax.textContent = d.max_guests ? (isEN ? d.max_guests+' participants' : d.max_guests+' personer') : '—';
+
   // Opdater dato-labels og værdier
   const bl2 = {
     barLabelDuration:  isEN ? (d.ui_label_duration_en||'Duration') : (d.ui_label_duration||'Varighed'),
@@ -1412,6 +1432,7 @@ async function loadRetreatData() {
   document.getElementById('pillNights').textContent = duration;
   document.getElementById('pillLocation').textContent = data.location || 'Mollina · Málaga';
   document.getElementById('pillLanguages').textContent = data.languages || '—';
+  // Disse opdateres af applyLang — sæt kun hvis currentLang er da
   document.getElementById('factLanguages').textContent = data.languages || '—';
   document.getElementById('factLevel').textContent = data.level || '—';
   document.getElementById('barDuration').textContent = duration;
