@@ -1686,6 +1686,22 @@ Travel insurance..." style="background:#e8f4f3;border:1px solid #7fb3af;width:10
   </div>
 </div>
 
+<div class="tab-content" id="tab-indstillinger">
+  <h2 style="font-family:Cinzel,serif;font-weight:300;font-size:1.4rem;letter-spacing:.08em;color:#2c2318;margin-bottom:2rem;">Globale indstillinger</h2>
+
+  <div style="background:rgba(184,138,30,.06);border:1px solid rgba(184,138,30,.2);padding:1.5rem;margin-bottom:2rem;">
+    <h3 style="font-family:Cinzel,serif;font-weight:300;font-size:1rem;letter-spacing:.08em;color:#2c2318;margin-bottom:1rem;">Rating-kategorier (anmeldelser popup)</h3>
+    <p style="font-size:.72rem;color:rgba(44,35,24,.5);margin-bottom:1.5rem;">Disse labels vises i popup-vinduet når en gæst klikker på en anmeldelse.</p>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;margin-bottom:1rem;">
+      <div style="font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;color:#b88a1e;font-weight:600;padding-bottom:.4rem;border-bottom:1px solid rgba(184,138,30,.2);">🇩🇰 DANSK</div>
+      <div style="font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;color:#2a7a74;font-weight:600;padding-bottom:.4rem;border-bottom:1px solid #7fb3af;">🇬🇧 ENGLISH</div>
+    </div>
+    <div id="settingsRatingGrid" style="display:grid;grid-template-columns:1fr 1fr;gap:.6rem;"></div>
+    <button onclick="gemSettings()" style="margin-top:1.2rem;background:var(--wine);color:#fff;border:none;padding:.7rem 2rem;font-family:Manrope,sans-serif;font-size:.68rem;font-weight:500;letter-spacing:.18em;text-transform:uppercase;cursor:pointer;">💾 Gem indstillinger</button>
+    <span id="settingsSavedMsg" style="display:none;margin-left:1rem;font-size:.75rem;color:#2a7a74;">✓ Gemt!</span>
+  </div>
+</div>
+
 <!-- MODAL: FAQ EDITOR -->
 <div class="modal-overlay" id="modalFaqEditor">
   <div class="modal" style="max-width:1100px;width:95vw;max-height:90vh;overflow-y:auto;">
@@ -1785,6 +1801,7 @@ function showDashboard() {
   loadKunder();
   loadRetreats();
   startRealtimeBadges();
+  initSettings();
 }
 // Auto-login hvis tidligere logget ind
 document.addEventListener('DOMContentLoaded', () => {
@@ -1799,6 +1816,7 @@ function switchTab(tab, btn) {
   document.getElementById('tab-' + tab).classList.add('active');
   if (tab === 'newsletter') loadNewsletter();
   if (tab === 'anmeldelser') loadAnmeldelserFane();
+  if (tab === 'indstillinger') loadSettings();
   if (tab === 'faktura-historik') loadFakturaHistorik();
   if (tab === 'faktura') { if (!document.querySelector('#mf-linjer [id^="mf-linje-"]')) mfTilfoejLinje(); }
 }
@@ -4319,6 +4337,75 @@ function gemHighlightsEditor() {
   if (preview) preview.textContent = highlightsState.length ? `${highlightsState.length} highlights gemt (DA + EN)` : '';
   closeModal('modalHighlightsEditor');
   showToast('Highlights opdateret (DA + EN) ✓');
+}
+
+// ── GLOBAL SETTINGS ──
+let globalSettings = {};
+
+const SETTINGS_KEYS = [
+  ['label_modtagelse', 'Modtagelse', 'Reception'],
+  ['label_vaerelse', 'Værelse', 'Room'],
+  ['label_mad', 'Mad', 'Food'],
+  ['label_omgivelser', 'Omgivelser', 'Surroundings'],
+  ['label_program', 'Program', 'Programme'],
+  ['label_terapeuter', 'Terapeuter', 'Facilitators'],
+  ['label_faellesskab', 'Fællesskab', 'Community'],
+  ['label_personlig', 'Personlig', 'Personal'],
+  ['label_ro', 'Ro', 'Calm'],
+  ['label_samlet', 'Samlet', 'Overall'],
+  ['label_anbefaling', 'Anbefaling', 'Recommendation'],
+  ['label_gennemsnit', 'gennemsnit', 'average'],
+  ['label_det_bedste', 'Det bedste:', 'Best part:'],
+  ['label_forandring', 'Forandring:', 'Change:'],
+];
+
+async function loadSettings() {
+  const { data, error } = await sb.from('settings').select('key,value');
+  if (error) { showToast('Fejl ved hentning af indstillinger: ' + error.message, true); return; }
+  globalSettings = {};
+  (data || []).forEach(r => { globalSettings[r.key] = r.value; });
+  renderSettingsGrid();
+}
+
+function renderSettingsGrid() {
+  const grid = document.getElementById('settingsRatingGrid');
+  if (!grid) return;
+  grid.innerHTML = SETTINGS_KEYS.map(([key, defDA, defEN]) => `
+    <div>
+      <input type="text" id="setting_${key}_da"
+        value="${(globalSettings[key+'_da'] || defDA).replace(/"/g,'&quot;')}"
+        style="width:100%;padding:.5rem .7rem;border:1px solid rgba(184,138,30,.3);background:#fffef8;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;">
+    </div>
+    <div>
+      <input type="text" id="setting_${key}_en"
+        value="${(globalSettings[key+'_en'] || defEN).replace(/"/g,'&quot;')}"
+        style="width:100%;padding:.5rem .7rem;border:1px solid #7fb3af;background:#e8f4f3;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;">
+    </div>
+  `).join('');
+}
+
+async function gemSettings() {
+  const upserts = [];
+  SETTINGS_KEYS.forEach(([key]) => {
+    const da = document.getElementById('setting_' + key + '_da')?.value || '';
+    const en = document.getElementById('setting_' + key + '_en')?.value || '';
+    upserts.push({ key: key + '_da', value: da });
+    upserts.push({ key: key + '_en', value: en });
+    globalSettings[key + '_da'] = da;
+    globalSettings[key + '_en'] = en;
+  });
+  const { error } = await sb.from('settings').upsert(upserts, { onConflict: 'key' });
+  if (error) { showToast('Fejl: ' + error.message, true); return; }
+  const msg = document.getElementById('settingsSavedMsg');
+  if (msg) { msg.style.display = 'inline'; setTimeout(() => msg.style.display = 'none', 3000); }
+  showToast('Indstillinger gemt ✓');
+}
+
+// Hent settings ved opstart så de er tilgængelige i review popup
+async function initSettings() {
+  const { data } = await sb.from('settings').select('key,value');
+  globalSettings = {};
+  (data || []).forEach(r => { globalSettings[r.key] = r.value; });
 }
 
 // ── SLET KUNDE ──

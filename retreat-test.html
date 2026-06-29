@@ -1051,6 +1051,24 @@ function toggleFaq(q){
 }
 
 let allReviewsData = [];
+let siteSettings = {};
+
+async function loadSiteSettings() {
+  try {
+    const SUPABASE_URL = 'https://niniwgiytyqvdqejigxg.supabase.co';
+    const SUPABASE_ANON_KEY = 'sb_publishable_GwrNUpIuWzdg1oswOY5HzA_mKWqhd6y';
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/settings?select=key,value`, {
+      headers: { 'apikey': SUPABASE_ANON_KEY, 'Authorization': `Bearer ${SUPABASE_ANON_KEY}` }
+    });
+    const data = await res.json();
+    siteSettings = {};
+    (data || []).forEach(r => { siteSettings[r.key] = r.value; });
+  } catch(e) { console.warn('Settings fejl:', e); }
+}
+
+function getSetting(key, lang, fallback) {
+  return siteSettings[key + '_' + lang] || fallback;
+}
 
 async function loadReviews() {
   const grid = document.getElementById('reviewsGrid');
@@ -1100,14 +1118,26 @@ function visReviewDetalje(rEncoded) {
   const avg = vals.length ? Math.round(vals.reduce((a,b)=>a+b,0)/vals.length*10)/10 : 0;
   const navn = r.reviewer_name_display || (r.fornavn ? (r.fornavn + (r.efternavn ? ' ' + r.efternavn[0] + '.' : '')) : 'Anonym');
   const quote = isEN ? (r.comment_en || r.markedsfoering || '') : (r.comment_da || r.markedsfoering || '');
-  const avgLabel = isEN ? 'average' : 'gennemsnit';
-  const bestLabel = isEN ? 'Best part:' : 'Det bedste:';
-  const changeLabel = isEN ? 'Change:' : 'Forandring:';
+
   const bedste = isEN ? (r.bedste_en || r.bedste || '') : (r.bedste || '');
   const forandring = isEN ? (r.forandring_en || r.forandring || '') : (r.forandring || '');
-  const ratingLabels = isEN
-    ? [['Reception',r.r1_modtagelse],['Room',r.r2_vaerelse],['Food',r.r3_mad],['Surroundings',r.r4_omgivelser],['Programme',r.r5_program],['Facilitators',r.r6_terapeuter],['Community',r.r7_faellesskab],['Personal',r.r8_personlig],['Calm',r.r9_ro],['Overall',r.r10_samlet],['Recommend',r.r11_anbefaling]]
-    : [['Modtagelse',r.r1_modtagelse],['Værelse',r.r2_vaerelse],['Mad',r.r3_mad],['Omgivelser',r.r4_omgivelser],['Program',r.r5_program],['Terapeuter',r.r6_terapeuter],['Fællesskab',r.r7_faellesskab],['Personlig',r.r8_personlig],['Ro',r.r9_ro],['Samlet',r.r10_samlet],['Anbefaling',r.r11_anbefaling]];
+  const L = (key, defDA, defEN) => getSetting(key, lang, isEN ? defEN : defDA);
+  const avgLabel = L('label_gennemsnit', 'gennemsnit', 'average');
+  const bestLabel = L('label_det_bedste', 'Det bedste:', 'Best part:');
+  const changeLabel = L('label_forandring', 'Forandring:', 'Change:');
+  const ratingLabels = [
+    [L('label_modtagelse', 'Modtagelse', 'Reception'),    r.r1_modtagelse],
+    [L('label_vaerelse',   'Værelse',    'Room'),         r.r2_vaerelse],
+    [L('label_mad',        'Mad',        'Food'),         r.r3_mad],
+    [L('label_omgivelser', 'Omgivelser', 'Surroundings'), r.r4_omgivelser],
+    [L('label_program',    'Program',    'Programme'),    r.r5_program],
+    [L('label_terapeuter', 'Terapeuter', 'Facilitators'), r.r6_terapeuter],
+    [L('label_faellesskab','Fællesskab', 'Community'),    r.r7_faellesskab],
+    [L('label_personlig',  'Personlig',  'Personal'),     r.r8_personlig],
+    [L('label_ro',         'Ro',         'Calm'),         r.r9_ro],
+    [L('label_samlet',     'Samlet',     'Overall'),      r.r10_samlet],
+    [L('label_anbefaling', 'Anbefaling', 'Recommendation'), r.r11_anbefaling],
+  ];
   document.getElementById('reviewModalContent').innerHTML = `
     <p style="font-size:.6rem;letter-spacing:.3em;text-transform:uppercase;color:#7a5c14;margin:0 0 .5rem;">${r.retreat_navn||'Castillo del Alma'}</p>
     <h3 style="font-family:'Cinzel',serif;font-weight:300;font-size:1.2rem;color:#2c2318;margin:0 0 .3rem;">${navn}</h3>
@@ -1123,7 +1153,10 @@ function visReviewDetalje(rEncoded) {
   modal.style.display = 'flex';
   modal.onclick = e => { if (e.target === modal) modal.style.display = 'none'; };
 }
-document.addEventListener('DOMContentLoaded', loadReviews);
+document.addEventListener('DOMContentLoaded', () => {
+  loadSiteSettings();
+  loadReviews();
+});
 </script>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
