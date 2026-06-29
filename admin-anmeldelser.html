@@ -4361,10 +4361,15 @@ const SETTINGS_KEYS = [
 ];
 
 async function loadSettings() {
-  const { data, error } = await sb.from('settings').select('key,value');
-  if (error) { showToast('Fejl ved hentning af indstillinger: ' + error.message, true); return; }
-  globalSettings = {};
-  (data || []).forEach(r => { globalSettings[r.key] = r.value; });
+  try {
+    const client = typeof sbService !== 'undefined' ? sbService : sb;
+    const { data, error } = await client.from('settings').select('key,value');
+    if (error) throw error;
+    globalSettings = {};
+    (data || []).forEach(r => { globalSettings[r.key] = r.value; });
+  } catch(e) {
+    console.warn('Settings hentning fejlede:', e.message, '— bruger defaults');
+  }
   renderSettingsGrid();
 }
 
@@ -4395,7 +4400,8 @@ async function gemSettings() {
     globalSettings[key + '_da'] = da;
     globalSettings[key + '_en'] = en;
   });
-  const { error } = await sb.from('settings').upsert(upserts, { onConflict: 'key' });
+  const client = typeof sbService !== 'undefined' ? sbService : sb;
+  const { error } = await client.from('settings').upsert(upserts, { onConflict: 'key' });
   if (error) { showToast('Fejl: ' + error.message, true); return; }
   const msg = document.getElementById('settingsSavedMsg');
   if (msg) { msg.style.display = 'inline'; setTimeout(() => msg.style.display = 'none', 3000); }
@@ -4404,7 +4410,8 @@ async function gemSettings() {
 
 // Hent settings ved opstart så de er tilgængelige i review popup
 async function initSettings() {
-  const { data } = await sb.from('settings').select('key,value');
+  const client = typeof sbService !== 'undefined' ? sbService : sb;
+  const { data } = await client.from('settings').select('key,value');
   globalSettings = {};
   (data || []).forEach(r => { globalSettings[r.key] = r.value; });
 }
