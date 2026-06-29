@@ -4361,16 +4361,19 @@ const SETTINGS_KEYS = [
 ];
 
 async function loadSettings() {
+  // Vis defaults straks
+  renderSettingsGrid();
+  // Prøv at hente fra Supabase
   try {
-    const client = typeof sbService !== 'undefined' ? sbService : sb;
-    const { data, error } = await client.from('settings').select('key,value');
+    if (!sb) return;
+    const { data, error } = await sb.from('settings').select('key,value');
     if (error) throw error;
     globalSettings = {};
     (data || []).forEach(r => { globalSettings[r.key] = r.value; });
+    renderSettingsGrid(); // Opdater med rigtige værdier
   } catch(e) {
-    console.warn('Settings hentning fejlede:', e.message, '— bruger defaults');
+    console.warn('Settings:', e.message);
   }
-  renderSettingsGrid();
 }
 
 function renderSettingsGrid() {
