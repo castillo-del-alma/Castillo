@@ -873,7 +873,7 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:3rem
       <div class="reveal-left">
         <span class="section-label" style="color:rgba(184,138,30,.7);">Book dit retreat</span>
         <h2 id="bookHeading">Tag det første skridt</h2>
-        <p>Udfyld formularen og vi vender tilbage inden for 24 timer med bekræftelse og information om næste trin.</p>
+        <p id="bookIntroP1">Udfyld formularen og vi vender tilbage inden for 24 timer med bekræftelse og information om næste trin.</p>
         <p id="bookIntroP2">Har du spørgsmål inden du tilmelder dig, er du altid velkommen til at skrive eller ringe.</p>
         <p class="policy-note">Ved tilmelding accepterer du vores betalings- og afbestillingsbetingelser. Depositum på 30% forfalder ved tilmelding og reserverer din plads. Restbeløbet forfalder 8 dage før retreatstart.</p>
       </div>
@@ -1311,9 +1311,7 @@ function applyLang(data, lang) {
   if (roomsIntroEl) roomsIntroEl.textContent = DA(d.ui_rooms_intro, d.ui_rooms_intro_en, 'Alle værelser har eget badeværelse og er fuldt inkluderet i retreatprisen', 'All rooms have en-suite bathrooms and are fully included in the retreat price');
 
   // ── BOOKING ──
-  set('bookIntro', DA(d.ui_book_intro, d.ui_book_intro_en,
-    'Udfyld formularen og vi vender tilbage inden for 24 timer med bekræftelse og information om næste trin.',
-    'Fill in the form and we will get back to you within 24 hours with a confirmation and information about next steps.'));
+
   set('bookLabelRetreat', DA(d.ui_book_label_retreat, d.ui_book_label_retreat_en, 'Retreat', 'Retreat'));
   set('bookLabelCountry', DA(d.ui_book_label_country, d.ui_book_label_country_en, 'Land', 'Country'));
   set('bookLabelDate',    DA(d.ui_book_label_date,    d.ui_book_label_date_en,    'Vælg dato', 'Choose date'));
@@ -1366,6 +1364,15 @@ function applyLang(data, lang) {
   if(addonMassage) addonMassage.textContent = DA(d.ui_addon_massage, d.ui_addon_massage_en, 'Kropsmassage 60 min.', 'Body massage 60 min.');
 
   // Booking intro tekster (hardcodede paragraffer)
+  // Booking intro paragraffer
+  const bookP1 = document.getElementById('bookIntroP1');
+  if(bookP1) bookP1.textContent = DA(d.ui_book_intro, d.ui_book_intro_en,
+    'Udfyld formularen og vi vender tilbage inden for 24 timer med bekræftelse og information om næste trin.',
+    'Fill in the form and we will get back to you within 24 hours with a confirmation and information about next steps.');
+
+  // Genrender addons med korrekt sprog
+  if(currentAddons.length) renderAddonsInForm(currentAddons, lang);
+
   const bookP2 = document.getElementById('bookIntroP2');
   if(bookP2) bookP2.textContent = isEN
     ? 'If you have any questions before registering, please do not hesitate to write or call.'
@@ -1572,6 +1579,8 @@ function renderRooms(data, lang) {
 }
 
 function buildDateOptions(data) {
+  // Gem dates data til genbrug ved sprog-skift
+  window._retreatDatesData = data;
   const select = document.getElementById('dateSelect');
   const formSelect = document.getElementById('formDateSelect');
   const allDates = [];
@@ -1636,21 +1645,28 @@ function updateDatesDisplay(dateObj) {
   window.SELECTED_DEPARTURE = dateObj.departure;
 }
 
-function renderAddonsInForm(addons) {
+let currentAddons = [];
+
+function renderAddonsInForm(addons, lang) {
+  currentAddons = addons;
+  const isEN = (lang || currentLang) === 'en';
   const container = document.querySelector('.form-addons');
   if (!container) return;
   if (!addons.length) {
     container.style.display = 'none';
     return;
   }
-  container.innerHTML = '<span class="form-addons-label" id="addonsLabel">Tilvalg</span><p style="font-size:13px;color:rgba(44,35,24,.8);margin:.3rem 0 .8rem;font-family:Manrope,sans-serif;font-weight:400;font-style:normal;">Tilvalg kan bestilles her. Afregning foretages ved afrejse.</p>' + addons.map((a, i) => `
-    <label class="addon-item">
-      <input type="checkbox" class="dynamic-addon" data-text="${(a.text||'').replace(/"/g,'&quot;')}" data-price="${a.price}">
+  const addonsTitle = isEN ? 'Add-ons' : 'Tilvalg';
+  const addonsNote = isEN ? 'Add-ons can be ordered here. Payment is made on departure.' : 'Tilvalg kan bestilles her. Afregning foretages ved afrejse.';
+  container.innerHTML = '<span class="form-addons-label" id="addonsLabel">' + addonsTitle + '</span><p id="addonsNote" style="font-size:13px;color:rgba(44,35,24,.8);margin:.3rem 0 .8rem;font-family:Manrope,sans-serif;font-weight:400;font-style:normal;">' + addonsNote + '</p>' + addons.map((a, i) => {
+    const txt = isEN ? (a.text_en || a.text || '') : (a.text || '');
+    return `<label class="addon-item">
+      <input type="checkbox" class="dynamic-addon" data-text="${(a.text||'').replace(/"/g,'&quot;')}" data-text-en="${(a.text_en||a.text||'').replace(/"/g,'&quot;')}" data-price="${a.price}">
       <span class="addon-box"></span>
-      <span class="addon-text">${a.text}</span>
+      <span class="addon-text">${txt}</span>
       <span class="addon-price">€${a.price}</span>
-    </label>
-  `).join('');
+    </label>`;
+  }).join('');
 }
 
 document.addEventListener('DOMContentLoaded', loadRetreatData);
