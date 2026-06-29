@@ -1375,6 +1375,11 @@ async function loadRetreatData() {
   // Tilvalg i booking-formularen
   renderAddonsInForm(data.addon_items || []);
   updatePriceDisplay();
+  applyLang(data, currentLang);
+  } catch(e) {
+    document.getElementById('retreatTitle').textContent = 'Fejl: ' + e.message;
+    console.error('loadRetreatData fejl:', e);
+  }
 }
 
 function buildDateOptions(data) {
@@ -1457,7 +1462,6 @@ function renderAddonsInForm(addons) {
       <span class="addon-price">€${a.price}</span>
     </label>
   `).join('');
-  applyLang(data, currentLang);
   } catch(e) {
     document.getElementById('retreatTitle').textContent = 'Fejl: ' + e.message;
     console.error(e);
