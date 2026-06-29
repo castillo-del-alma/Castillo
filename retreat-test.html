@@ -1121,7 +1121,7 @@ function visReviewDetalje(rEncoded) {
 
   const bedste = isEN ? (r.bedste_en || r.bedste || '') : (r.bedste || '');
   const forandring = isEN ? (r.forandring_en || r.forandring || '') : (r.forandring || '');
-  const L = (key, defDA, defEN) => getSetting(key, lang, isEN ? defEN : defDA);
+  const L = (key, defDA, defEN) => getSetting(key, currentLang, isEN ? defEN : defDA);
   const avgLabel = L('label_gennemsnit', 'gennemsnit', 'average');
   const bestLabel = L('label_det_bedste', 'Det bedste:', 'Best part:');
   const changeLabel = L('label_forandring', 'Forandring:', 'Change:');
