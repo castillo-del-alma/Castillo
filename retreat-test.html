@@ -589,7 +589,14 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:3rem
     <li><a href="#reviews">Anmeldelser</a></li>
     <li><a href="#booking">Book</a></li>
   </ul>
-  <a href="index.html#retreats" class="nav-back">← Alle retreats</a>
+  <div style="display:flex;align-items:center;gap:.8rem;">
+    <span style="font-size:.58rem;letter-spacing:.12em;text-transform:uppercase;background:var(--terracotta);color:#fff;padding:.2rem .6rem;">TEST</span>
+    <div style="display:flex;border:1px solid rgba(184,138,30,.3);overflow:hidden;border-radius:2px;">
+      <button id="btn-da" onclick="setLang('da')" style="font-size:.62rem;letter-spacing:.12em;text-transform:uppercase;padding:.35rem .8rem;border:none;cursor:pointer;background:var(--wine);color:#fff;font-family:Manrope,sans-serif;">🇩🇰 DA</button>
+      <button id="btn-en" onclick="setLang('en')" style="font-size:.62rem;letter-spacing:.12em;text-transform:uppercase;padding:.35rem .8rem;border:none;cursor:pointer;background:transparent;color:var(--text-mid);font-family:Manrope,sans-serif;">🇬🇧 EN</button>
+    </div>
+    <a href="index.html#retreats" class="nav-back">← Alle retreats</a>
+  </div>
 </nav>
 
 <!-- HERO -->
