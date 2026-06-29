@@ -1216,8 +1216,8 @@ function applyLang(data, lang) {
   if(excludedContainer) excludedContainer.innerHTML = excludedItems.map(i => '<div class="included-item">' + i + '</div>').join('');
 
   // Mad
-  const foodHeading = document.getElementById('foodHeading');
-  if(foodHeading) foodHeading.textContent = isEN && d.ui_food_heading_en ? d.ui_food_heading_en : (d.ui_food_heading || 'Nærende andalusisk køkken');
+  const foodEl = document.getElementById('foodHeading');
+  if(foodEl) foodEl.textContent = isEN && d.ui_food_heading_en ? d.ui_food_heading_en : (d.ui_food_heading || 'Nærende andalusisk køkken');
 
 
   // Underviser
@@ -1291,8 +1291,8 @@ function applyLang(data, lang) {
   if(rsh) rsh.textContent = isEN ? (d.ui_room_single_heading_en||'Single Room') : (d.ui_room_single_heading||'Enkeltværelse');
 
   // Mad heading (med <em> tag)
-  const foodH = document.getElementById('foodHeading');
-  if(foodH2) {
+
+  if(foodEl) {
     const ft = isEN ? (d.ui_food_heading_en||'Nourishing Andalusian Cuisine') : (d.ui_food_heading||'Nærende andalusisk køkken');
     foodH.innerHTML = ft.replace(/(\S+)\s+(\S+)$/, '$1 <em>$2</em>');
   }
@@ -1390,10 +1390,10 @@ function applyLang(data, lang) {
   }
 
   // Mad tekster
-  const foodH2 = document.getElementById('foodHeading');
-  if(foodH2) {
+
+  if(foodEl) {
     const ft = isEN ? (d.ui_food_heading_en||'Nourishing Andalusian Cuisine') : (d.ui_food_heading||'Nærende andalusisk køkken');
-    foodH2.innerHTML = ft;
+    foodEl.innerHTML = ft;
   }
   console.log('DEBUG food:', d.ui_food_text ? d.ui_food_text.substring(0,50) : 'NULL', '| EN:', d.ui_food_text_en ? d.ui_food_text_en.substring(0,50) : 'NULL');
   console.log('DEBUG bio:', d.teacher_bio ? d.teacher_bio.substring(0,50) : 'NULL', '| EN:', d.teacher_bio_en ? d.teacher_bio_en.substring(0,50) : 'NULL');
