@@ -874,7 +874,7 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:3rem
         <span class="section-label" style="color:rgba(184,138,30,.7);">Book dit retreat</span>
         <h2 id="bookHeading">Tag det første skridt</h2>
         <p>Udfyld formularen og vi vender tilbage inden for 24 timer med bekræftelse og information om næste trin.</p>
-        <p>Har du spørgsmål inden du tilmelder dig, er du altid velkommen til at skrive eller ringe.</p>
+        <p id="bookIntroP2">Har du spørgsmål inden du tilmelder dig, er du altid velkommen til at skrive eller ringe.</p>
         <p class="policy-note">Ved tilmelding accepterer du vores betalings- og afbestillingsbetingelser. Depositum på 30% forfalder ved tilmelding og reserverer din plads. Restbeløbet forfalder 8 dage før retreatstart.</p>
       </div>
       <div class="reveal-right d2">
@@ -894,7 +894,7 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:3rem
           <div class="form-field">
             <label id="bookLabelCountry">Land</label>
             <select id="f-land" required>
-              <option value="">Vælg dit land</option>
+              <option value="" id="optSelectCountry">Vælg dit land</option>
               <option value="Danmark">Danmark</option>
               <option value="Norge">Norge</option>
               <option value="Sverige">Sverige</option>
@@ -967,41 +967,41 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:3rem
           <div id="extra-guests"></div>
           <button type="button" class="add-guest-btn" onclick="addGuest()">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-            Tilføj gæst
+            <span id="addGuestLabel">Tilføj gæst</span>
           </button>
           <div class="form-field">
             <label id="bookLabelDate">Vælg dato</label>
             <select id="formDateSelect" onchange="handleFormDateChange()">
-              <option value="">Vælg foretrukken dato</option>
+              <option value="" id="optSelectDate">Vælg foretrukken dato</option>
             </select>
           </div>
           <div class="form-field">
             <label id="bookLabelRoom">Værelses-præference</label>
             <select id="room-select">
-              <option value="">Vælg værelse</option>
+              <option value="" id="optSelectRoom">Vælg værelse</option>
               <option id="opt-delt">Delt dobbeltværelse</option>
-              <option>Forespørg på enkeltværelse</option>
+              <option id="opt-enkelt">Forespørg på enkeltværelse</option>
             </select>
           </div>
           <div class="form-field">
-            <span class="form-addons-label">Tilvalg</span>
+            <span class="form-addons-label" id="addonsLabel">Tilvalg</span>
             <div class="form-addons">
               <label class="addon-item">
                 <input type="checkbox" id="addon-foer">
                 <span class="addon-box"></span>
-                <span class="addon-text">Ekstra overnatning før retreat, om muligt</span>
+                <span class="addon-text" id="addonTextFoer">Ekstra overnatning før retreat, om muligt</span>
                 <span class="addon-price">€60</span>
               </label>
               <label class="addon-item">
                 <input type="checkbox" id="addon-efter">
                 <span class="addon-box"></span>
-                <span class="addon-text">Ekstra overnatning efter retreat, om muligt</span>
+                <span class="addon-text" id="addonTextEfter">Ekstra overnatning efter retreat, om muligt</span>
                 <span class="addon-price">€60</span>
               </label>
               <label class="addon-item">
                 <input type="checkbox" id="addon-massage">
                 <span class="addon-box"></span>
-                <span class="addon-text">Kropsmassage 60 min.</span>
+                <span class="addon-text" id="addonTextMassage">Kropsmassage 60 min.</span>
                 <span class="addon-price">€50</span>
               </label>
             </div>
@@ -1339,6 +1339,54 @@ function applyLang(data, lang) {
   const addonsIntro = document.querySelector('.addons-note');
   if(addonsIntro) addonsIntro.textContent = isEN ? 'Add-ons can be ordered here. Payment is made on departure.' : 'Tilvalg kan bestilles her. Afregning foretages ved afrejse.';
 
+  // Vælg dit land / dato / værelse options
+  const optCountry = document.getElementById('optSelectCountry');
+  if(optCountry) optCountry.textContent = isEN ? 'Select your country' : 'Vælg dit land';
+  const optDate = document.getElementById('optSelectDate');
+  if(optDate) optDate.textContent = isEN ? 'Select preferred date' : 'Vælg foretrukken dato';
+  const optRoom = document.getElementById('optSelectRoom');
+  if(optRoom) optRoom.textContent = isEN ? 'Select room' : 'Vælg værelse';
+  const optDelt = document.getElementById('opt-delt');
+  if(optDelt) optDelt.textContent = isEN ? 'Shared double room' : 'Delt dobbeltværelse';
+  const optEnkelt = document.getElementById('opt-enkelt');
+  if(optEnkelt) optEnkelt.textContent = isEN ? 'Request single room' : 'Forespørg på enkeltværelse';
+
+  // Tilføj gæst
+  const addGuestLbl = document.getElementById('addGuestLabel');
+  if(addGuestLbl) addGuestLbl.textContent = DA(d.ui_form_add_guest, d.ui_form_add_guest_en, 'Tilføj gæst', 'Add guest');
+
+  // Tilvalg labels
+  const addonsLbl = document.getElementById('addonsLabel');
+  if(addonsLbl) addonsLbl.textContent = isEN ? 'Add-ons' : 'Tilvalg';
+  const addonFoer = document.getElementById('addonTextFoer');
+  if(addonFoer) addonFoer.textContent = DA(d.ui_addon_before, d.ui_addon_before_en, 'Ekstra overnatning før retreat, om muligt', 'Extra night before retreat, if possible');
+  const addonEfter = document.getElementById('addonTextEfter');
+  if(addonEfter) addonEfter.textContent = DA(d.ui_addon_after, d.ui_addon_after_en, 'Ekstra overnatning efter retreat, om muligt', 'Extra night after retreat, if possible');
+  const addonMassage = document.getElementById('addonTextMassage');
+  if(addonMassage) addonMassage.textContent = DA(d.ui_addon_massage, d.ui_addon_massage_en, 'Kropsmassage 60 min.', 'Body massage 60 min.');
+
+  // Booking intro tekster (hardcodede paragraffer)
+  const bookP2 = document.getElementById('bookIntroP2');
+  if(bookP2) bookP2.textContent = isEN
+    ? 'If you have any questions before registering, please do not hesitate to write or call.'
+    : 'Har du spørgsmål inden du tilmelder dig, er du altid velkommen til at skrive eller ringe.';
+  const bookP3 = document.getElementById('bookIntroP3');
+  if(bookP3) bookP3.textContent = isEN
+    ? 'By registering you accept our payment and cancellation terms. A deposit of 30% is due upon registration and reserves your place. The remaining balance is due 8 days before the retreat starts.'
+    : 'Ved tilmelding accepterer du vores betalings- og afbestillingsbetingelser. Depositum på 30% forfalder ved tilmelding og reserverer din plads. Restbeløbet forfalder 8 dage før retreatstart.';
+
+  // Datoformat i datofeltet
+  const barDateSel = document.getElementById('dateSelect');
+  if(barDateSel) {
+    Array.from(barDateSel.options).forEach(opt => {
+      if(opt.value && opt.dataset.arrival) {
+        const locale = isEN ? 'en-GB' : 'da-DK';
+        const fmt = dt => new Date(dt).toLocaleDateString(locale, {day:'numeric',month:'long',year:'numeric'});
+        opt.textContent = fmt(opt.dataset.arrival) + ' – ' + fmt(opt.dataset.departure);
+      }
+    });
+  }
+
   // Reserver og Book knapper i formularen
   const reserveBtn = document.getElementById('btn-reserver-form');
   if(reserveBtn) reserveBtn.textContent = DA(d.ui_form_reserve_btn, d.ui_form_reserve_btn_en, 'Reserver din plads', 'Reserve your place');
@@ -1595,7 +1643,7 @@ function renderAddonsInForm(addons) {
     container.style.display = 'none';
     return;
   }
-  container.innerHTML = '<span class="form-addons-label">Tilvalg</span><p style="font-size:13px;color:rgba(44,35,24,.8);margin:.3rem 0 .8rem;font-family:Manrope,sans-serif;font-weight:400;font-style:normal;">Tilvalg kan bestilles her. Afregning foretages ved afrejse.</p>' + addons.map((a, i) => `
+  container.innerHTML = '<span class="form-addons-label" id="addonsLabel">Tilvalg</span><p style="font-size:13px;color:rgba(44,35,24,.8);margin:.3rem 0 .8rem;font-family:Manrope,sans-serif;font-weight:400;font-style:normal;">Tilvalg kan bestilles her. Afregning foretages ved afrejse.</p>' + addons.map((a, i) => `
     <label class="addon-item">
       <input type="checkbox" class="dynamic-addon" data-text="${(a.text||'').replace(/"/g,'&quot;')}" data-price="${a.price}">
       <span class="addon-box"></span>
