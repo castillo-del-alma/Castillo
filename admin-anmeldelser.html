@@ -4019,8 +4019,29 @@ function gemFaqEditor() {
 }
 
 // ── HIGHLIGHTS EDITOR ──
-const ICON_LIBRARY = {"globe": "<circle cx="12" cy="12" r="10"/><path d="M12 2 C12 2 6 6 6 12 C6 18 12 22 12 22"/><path d="M12 2 C12 2 18 6 18 12 C18 18 12 22 12 22"/>", "shield": "<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>", "home": "<path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>", "drop": "<path d="M12 2 Q16 8 16 14 A4 4 0 0 1 8 14 Q8 8 12 2Z"/>", "fork": "<path d="M6 3v6a3 3 0 0 0 6 0V3"/><line x1="9" y1="9" x2="9" y2="21"/>", "star": "<polygon points="12 2 15 9 22 9 16.5 13.5 18.5 21 12 17 5.5 21 7.5 13.5 2 9 9 9"/>", "heart": "<path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>", "sun": "<circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>", "moon": "<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>", "leaf": "<path d="M2 22c0 0 4-2 8-6s6-8 6-8S12 12 6 16 2 22 2 22z"/><path d="M16 8s0 6-6 10"/>", "wind": "<path d="M9.59 4.59A2 2 0 1 1 11 8H2m10.59 11.41A2 2 0 1 0 14 16H2m15.73-8.27A2.5 2.5 0 1 1 19.5 12H2"/>", "mountain": "<polygon points="3 17 12 3 21 17"/>", "waves": "<path d="M2 12s3-4 6-4 6 4 6 4 3-4 6-4"/><path d="M2 18s3-4 6-4 6 4 6 4 3-4 6-4"/>", "people": "<path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>", "clock": "<circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>", "flower": "<circle cx="12" cy="12" r="3"/><path d="M12 2a4 4 0 0 1 0 8 4 4 0 0 1 0-8z" transform="rotate(0 12 12)"/><path d="M12 14a4 4 0 0 1 0 8 4 4 0 0 1 0-8z" transform="rotate(0 12 12)"/><path d="M4.93 4.93a4 4 0 0 1 5.66 5.66 4 4 0 0 1-5.66-5.66z"/><path d="M13.41 13.41a4 4 0 0 1 5.66 5.66 4 4 0 0 1-5.66-5.66z"/>", "eye": "<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>", "zap": "<polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>", "feather": "<path d="M20.24 12.24a6 6 0 0 0-8.49-8.49L5 10.5V19h8.5z"/><line x1="16" y1="8" x2="2" y2="22"/><line x1="17.5" y1="15" x2="9" y2="15"/>", "compass": "<circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/>"};
-const ICON_KEYS = ['globe', 'shield', 'home', 'drop', 'fork', 'star', 'heart', 'sun', 'moon', 'leaf', 'wind', 'mountain', 'waves', 'people', 'clock', 'flower', 'eye', 'zap', 'feather', 'compass'];
+const ICON_LIBRARY = {
+  "globe": `<circle cx="12" cy="12" r="10"/><path d="M12 2 C12 2 6 6 6 12 C6 18 12 22 12 22"/><path d="M12 2 C12 2 18 6 18 12 C18 18 12 22 12 22"/>`,
+  "shield": `<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>`,
+  "home": `<path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>`,
+  "drop": `<path d="M12 2 Q16 8 16 14 A4 4 0 0 1 8 14 Q8 8 12 2Z"/>`,
+  "fork": `<path d="M6 3v6a3 3 0 0 0 6 0V3"/><line x1="9" y1="9" x2="9" y2="21"/>`,
+  "star": `<polygon points="12 2 15 9 22 9 16.5 13.5 18.5 21 12 17 5.5 21 7.5 13.5 2 9 9 9"/>`,
+  "heart": `<path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>`,
+  "sun": `<circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>`,
+  "moon": `<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>`,
+  "leaf": `<path d="M2 22c0 0 4-2 8-6s6-8 6-8S12 12 6 16 2 22 2 22z"/><path d="M16 8s0 6-6 10"/>`,
+  "wind": `<path d="M9.59 4.59A2 2 0 1 1 11 8H2m10.59 11.41A2 2 0 1 0 14 16H2m15.73-8.27A2.5 2.5 0 1 1 19.5 12H2"/>`,
+  "mountain": `<polygon points="3 17 12 3 21 17"/>`,
+  "waves": `<path d="M2 12s3-4 6-4 6 4 6 4 3-4 6-4"/><path d="M2 18s3-4 6-4 6 4 6 4 3-4 6-4"/>`,
+  "people": `<path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>`,
+  "clock": `<circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>`,
+  "flower": `<circle cx="12" cy="12" r="3"/><path d="M12 2a4 4 0 0 1 0 8 4 4 0 0 1 0-8z"/><path d="M12 14a4 4 0 0 1 0 8 4 4 0 0 1 0-8z"/><path d="M4.93 4.93a4 4 0 0 1 5.66 5.66 4 4 0 0 1-5.66-5.66z"/><path d="M13.41 13.41a4 4 0 0 1 5.66 5.66 4 4 0 0 1-5.66-5.66z"/>`,
+  "eye": `<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>`,
+  "zap": `<polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>`,
+  "feather": `<path d="M20.24 12.24a6 6 0 0 0-8.49-8.49L5 10.5V19h8.5z"/><line x1="16" y1="8" x2="2" y2="22"/><line x1="17.5" y1="15" x2="9" y2="15"/>`,
+  "compass": `<circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/>`
+};
+const ICON_KEYS = ["globe", "shield", "home", "drop", "fork", "star", "heart", "sun", "moon", "leaf", "wind", "mountain", "waves", "people", "clock", "flower", "eye", "zap", "feather", "compass"];
 
 let highlightsState = [];
 let highlightsStateEN = [];
