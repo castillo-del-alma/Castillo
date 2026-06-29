@@ -1236,7 +1236,7 @@ function applyLang(data, lang) {
   const faqItems = isEN && d.faq_items_en && d.faq_items_en.length ? d.faq_items_en : (d.faq_items || []);
   const faqContainer = document.getElementById('faqList');
   if(faqContainer && faqItems.length) {
-    faqContainer.innerHTML = faqItems.map(f => '<div class="faq-item"><div class="faq-q" onclick="this.parentElement.classList.toggle('open')"><span>' + (f.q||'') + '</span><i>↓</i></div><div class="faq-a"><p>' + (f.a||'') + '</p></div></div>').join('');
+    faqContainer.innerHTML = faqItems.map(f => '<div class="faq-item"><div class="faq-q" onclick="this.parentElement.classList.toggle(\'open\')"><span>' + (f.q||'') + '</span><i>↓</i></div><div class="faq-a"><p>' + (f.a||'') + '</p></div></div>').join('');
   }
 
   // Anmeldelser
