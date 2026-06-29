@@ -1395,6 +1395,8 @@ function applyLang(data, lang) {
     const ft = isEN ? (d.ui_food_heading_en||'Nourishing Andalusian Cuisine') : (d.ui_food_heading||'Nærende andalusisk køkken');
     foodH2.innerHTML = ft;
   }
+  console.log('DEBUG food:', d.ui_food_text ? d.ui_food_text.substring(0,50) : 'NULL', '| EN:', d.ui_food_text_en ? d.ui_food_text_en.substring(0,50) : 'NULL');
+  console.log('DEBUG bio:', d.teacher_bio ? d.teacher_bio.substring(0,50) : 'NULL', '| EN:', d.teacher_bio_en ? d.teacher_bio_en.substring(0,50) : 'NULL');
   const foodTC = document.getElementById('foodTextContainer');
   if(foodTC) {
     const defaultFoodDA = 'Mad er en central del af retreatoplevelsen. Alle måltider tilberedes med friske, lokale og sæsonbestemte råvarer fra regionen. Vi spiser enkelt, nærende og med respekt for kroppen.\nMorgenmaden er let og energigivende — frugt, yoghurt, æg og brød. Frokosten er større og ofte et fælles bord med salater, grøntsager og proteiner. Aftensmaden er dagens sociale samlingspunkt — tre retter med lokale vine.\nSærlige kostbehov imødekommes fuldt ud — vegetar, vegansk, glutenfri mv. Oplys ved tilmelding.';
