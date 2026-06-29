@@ -2748,10 +2748,22 @@ function anmeldelseKortFane(r, isApproved, idx, total) {
     '<div style="margin-bottom:.5rem;"><label style="font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;color:#b88a1e;display:block;margin-bottom:.3rem;">🇩🇰 Visningsnavn</label>' +
     '<input type="text" id="anm_name_' + r.id + '" value="' + (r.reviewer_name_display || navn) + '" style="width:100%;padding:.5rem .7rem;border:1px solid rgba(184,138,30,.3);background:#fffef8;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;"></div>' +
     '<div style="display:grid;grid-template-columns:1fr 1fr;gap:.8rem;margin-bottom:.6rem;">' +
-    '<div><label style="font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;color:#b88a1e;display:block;margin-bottom:.3rem;">🇩🇰 Citat på dansk</label>' +
-    '<textarea id="anm_da_' + r.id + '" style="width:100%;min-height:80px;padding:.5rem .7rem;border:1px solid rgba(184,138,30,.3);background:#fffef8;font-family:Cormorant Garamond,serif;font-size:.95rem;outline:none;resize:vertical;">' + (r.comment_da || r.markedsfoering || '') + '</textarea></div>' +
+    '<div><label style="font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;color:#b88a1e;display:block;margin-bottom:.3rem;">🇩🇰 Citat / markedsføring</label>' +
+    '<textarea id="anm_da_' + r.id + '" style="width:100%;min-height:80px;padding:.5rem .7rem;border:1px solid rgba(184,138,30,.3);background:#fffef8;font-family:Cormorant Garamond,serif;font-size:.9rem;outline:none;resize:vertical;">' + (r.comment_da || r.markedsfoering || '') + '</textarea></div>' +
     '<div><label style="font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;color:#2a7a74;display:block;margin-bottom:.3rem;">🇬🇧 Quote in English</label>' +
-    '<textarea id="anm_en_' + r.id + '" style="width:100%;min-height:80px;padding:.5rem .7rem;border:1px solid #7fb3af;background:#e8f4f3;font-family:Cormorant Garamond,serif;font-size:.95rem;outline:none;resize:vertical;">' + (r.comment_en || '') + '</textarea></div>' +
+    '<textarea id="anm_en_' + r.id + '" style="width:100%;min-height:80px;padding:.5rem .7rem;border:1px solid #7fb3af;background:#e8f4f3;font-family:Cormorant Garamond,serif;font-size:.9rem;outline:none;resize:vertical;">' + (r.comment_en || '') + '</textarea></div>' +
+    '</div>' +
+    '<div style="display:grid;grid-template-columns:1fr 1fr;gap:.8rem;margin-bottom:.6rem;">' +
+    '<div><label style="font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;color:#b88a1e;display:block;margin-bottom:.3rem;">🇩🇰 Det bedste</label>' +
+    '<textarea id="anm_bedste_da_' + r.id + '" style="width:100%;min-height:60px;padding:.5rem .7rem;border:1px solid rgba(184,138,30,.3);background:#fffef8;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;resize:vertical;">' + (r.bedste || '') + '</textarea></div>' +
+    '<div><label style="font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;color:#2a7a74;display:block;margin-bottom:.3rem;">🇬🇧 Best part</label>' +
+    '<textarea id="anm_bedste_en_' + r.id + '" style="width:100%;min-height:60px;padding:.5rem .7rem;border:1px solid #7fb3af;background:#e8f4f3;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;resize:vertical;">' + (r.bedste_en || '') + '</textarea></div>' +
+    '</div>' +
+    '<div style="display:grid;grid-template-columns:1fr 1fr;gap:.8rem;margin-bottom:.8rem;">' +
+    '<div><label style="font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;color:#b88a1e;display:block;margin-bottom:.3rem;">🇩🇰 Forandring</label>' +
+    '<textarea id="anm_forandring_da_' + r.id + '" style="width:100%;min-height:60px;padding:.5rem .7rem;border:1px solid rgba(184,138,30,.3);background:#fffef8;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;resize:vertical;">' + (r.forandring || '') + '</textarea></div>' +
+    '<div><label style="font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;color:#2a7a74;display:block;margin-bottom:.3rem;">🇬🇧 Change</label>' +
+    '<textarea id="anm_forandring_en_' + r.id + '" style="width:100%;min-height:60px;padding:.5rem .7rem;border:1px solid #7fb3af;background:#e8f4f3;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;resize:vertical;">' + (r.forandring_en || '') + '</textarea></div>' +
     '</div>' +
     '<button onclick="gemAnmeldelseOversaet(\'' + r.id + '\')" style="background:#2a7a74;color:#fff;border:none;padding:.5rem 1.2rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.15em;text-transform:uppercase;cursor:pointer;">💾 Gem oversættelse</button>' +
     '</div>' +
