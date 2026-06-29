@@ -712,7 +712,7 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:3rem
     <div class="reveal">
       <span class="section-label" id="labelRooms">Indkvartering & Priser</span>
       <h2 id="roomsHeading">Vælg dit værelse</h2>
-      <p class="intro">Alle værelser har eget badeværelse og er fuldt inkluderet i retreatprisen</p>
+      <p class="intro" id="roomsIntro">Alle værelser har eget badeværelse og er fuldt inkluderet i retreatprisen</p>
     </div>
     <div class="rooms-options reveal d1" id="roomsContainer"></div>
   </div>
@@ -1394,6 +1394,9 @@ function applyLang(data, lang) {
     const dep = document.getElementById('barDeparture'); if(dep) dep.textContent = fmt(d.departure_date);
   }
 
+  // Rum — genbyg med korrekt sprog
+  if(d) renderRooms(d, lang);
+
   // HTML lang attribut
   document.documentElement.lang = lang;
 }
@@ -1505,26 +1508,8 @@ async function loadRetreatData() {
     exclContainer.innerHTML = '<div class="included-item">Opdateres snart</div>';
   }
 
-  // Værelser
-  const roomsContainer = document.getElementById('roomsContainer');
-  let roomsHtml = '';
-  if (data.room_double_price) {
-    roomsHtml += `
-      <div class="room-option">
-        <h4 id="roomDoubleHeading">Delt dobbeltværelse</h4>
-        <div class="room-price">€${parseFloat(data.room_double_price).toLocaleString('da-DK')}</div>
-        <p>${data.room_double_text || ''}</p>
-      </div>`;
-  }
-  if (data.room_single_price) {
-    roomsHtml += `
-      <div class="room-option">
-        <h4 id="roomSingleHeading">Enkeltværelse</h4>
-        <div class="room-price">€${parseFloat(data.room_single_price).toLocaleString('da-DK')}</div>
-        <p>${data.room_single_text || ''}</p>
-      </div>`;
-  }
-  roomsContainer.innerHTML = roomsHtml || '<p style="color:rgba(44,35,24,.4);grid-column:1/-1;text-align:center;">Værelsesoplysninger opdateres snart.</p>';
+  // Værelser — bygges af renderRooms så det kan genkaldes ved sprog-skift
+  renderRooms(data, currentLang);
 
   // Dato-dropdown
   buildDateOptions(data);
@@ -1537,6 +1522,27 @@ async function loadRetreatData() {
     document.getElementById('retreatTitle').textContent = 'Fejl: ' + e.message;
     console.error('loadRetreatData fejl:', e);
   }
+}
+
+function renderRooms(data, lang) {
+  const isEN = lang === 'en';
+  const roomsContainer = document.getElementById('roomsContainer');
+  if (!roomsContainer) return;
+  let roomsHtml = '';
+  if (data.room_double_price) {
+    const heading = isEN ? (data.ui_room_double_heading_en||'Shared Double Room') : (data.ui_room_double_heading||'Delt dobbeltværelse');
+    const text = isEN ? (data.room_double_text_en||data.room_double_text||'') : (data.room_double_text||'');
+    roomsHtml += `<div class="room-option"><h4>${heading}</h4><div class="room-price">€${parseFloat(data.room_double_price).toLocaleString('da-DK')}</div><p>${text}</p></div>`;
+  }
+  if (data.room_single_price) {
+    const heading = isEN ? (data.ui_room_single_heading_en||'Single Room') : (data.ui_room_single_heading||'Enkeltværelse');
+    const text = isEN ? (data.room_single_text_en||data.room_single_text||'') : (data.room_single_text||'');
+    roomsHtml += `<div class="room-option"><h4>${heading}</h4><div class="room-price">€${parseFloat(data.room_single_price).toLocaleString('da-DK')}</div><p>${text}</p></div>`;
+  }
+  roomsContainer.innerHTML = roomsHtml || '<p style="color:rgba(44,35,24,.4);grid-column:1/-1;text-align:center;">Opdateres snart.</p>';
+  // Rooms intro
+  const intro = document.getElementById('roomsIntro');
+  if(intro) intro.textContent = isEN ? (data.ui_rooms_intro_en||'All rooms have en-suite bathrooms and are fully included in the retreat price') : (data.ui_rooms_intro||'Alle værelser har eget badeværelse og er fuldt inkluderet i retreatprisen');
 }
 
 function buildDateOptions(data) {
