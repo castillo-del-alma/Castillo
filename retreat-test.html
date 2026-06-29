@@ -1402,19 +1402,21 @@ function applyLang(data, lang) {
   }
   const foodTC = document.getElementById('foodTextContainer');
   if(foodTC) {
-    const foodTxt = isEN ? (d.ui_food_text_en||d.ui_food_text||'') : (d.ui_food_text||'');
-    if(foodTxt) {
-      foodTC.innerHTML = foodTxt.split('\n').filter(Boolean).map(p => '<p>' + p + '</p>').join('');
-    }
+    const defaultFoodDA = 'Mad er en central del af retreatoplevelsen. Alle måltider tilberedes med friske, lokale og sæsonbestemte råvarer fra regionen. Vi spiser enkelt, nærende og med respekt for kroppen.\nMorgenmaden er let og energigivende — frugt, yoghurt, æg og brød. Frokosten er større og ofte et fælles bord med salater, grøntsager og proteiner. Aftensmaden er dagens sociale samlingspunkt — tre retter med lokale vine.\nSærlige kostbehov imødekommes fuldt ud — vegetar, vegansk, glutenfri mv. Oplys ved tilmelding.';
+    const defaultFoodEN = 'Food is a central part of the retreat experience. All meals are prepared with fresh, local and seasonal ingredients from the region. We eat simply, nutritiously and with respect for the body.\nBreakfast is light and energising — fruit, yoghurt, eggs and bread. Lunch is more substantial, often a shared table with salads, vegetables and proteins. Dinner is the social highlight of the day — three courses with local wines.\nSpecial dietary requirements are fully accommodated — vegetarian, vegan, gluten-free etc. Please inform us at registration.';
+    const foodTxt = isEN ? (d.ui_food_text_en || defaultFoodEN) : (d.ui_food_text || defaultFoodDA);
+    foodTC.innerHTML = foodTxt.split('\n').filter(Boolean).map(p => '<p>' + p + '</p>').join('');
   }
 
   // Facilitator
   const facRole = document.getElementById('facilitatorRole');
-  if(facRole) facRole.textContent = isEN ? (d.ui_facilitator_role_en||'Wellness Facilitator · Breathwork Practitioner · Somatic Therapist') : (d.ui_facilitator_role||'Wellness Facilitator · Breathwork Practitioner · Somatic Therapist');
+  if(facRole) facRole.textContent = isEN ? (d.ui_facilitator_role_en||d.ui_facilitator_role||'Wellness Facilitator · Breathwork Practitioner · Somatic Therapist') : (d.ui_facilitator_role||'Wellness Facilitator · Breathwork Practitioner · Somatic Therapist');
   const bioTC = document.getElementById('teacherBioContainer');
   if(bioTC) {
-    const bio = isEN ? (d.teacher_bio_en||d.teacher_bio||'') : (d.teacher_bio||'');
-    if(bio) bioTC.innerHTML = bio.split('\n').filter(Boolean).map(p => '<p>' + p + '</p>').join('');
+    const defaultBioDA = 'Retreatet ledes af en erfaren wellness-facilitator med speciale i nervesystemsregulering, breathwork og somatic therapy. Med mange års erfaring fra retreats i Skandinavien og Sydeuropa skabes et trygt og professionelt rum for transformation.\nFacilitatoren kombinerer videnskabelig forankring med en dyb menneskelig tilgang — og møder hver deltager præcis der, hvor de er.\nFacilitatorinfo opdateres løbende. Kontakt os for mere information om den specifikke facilitator for en given dato.';
+    const defaultBioEN = 'The retreat is led by an experienced wellness facilitator specialising in nervous system regulation, breathwork and somatic therapy. With many years of experience from retreats in Scandinavia and Southern Europe, a safe and professional space for transformation is created.\nThe facilitator combines scientific grounding with a deeply human approach — meeting each participant exactly where they are.\nFacilitator information is updated continuously. Contact us for more information about the specific facilitator for a given date.';
+    const bio = isEN ? (d.teacher_bio_en || defaultBioEN) : (d.teacher_bio || defaultBioDA);
+    bioTC.innerHTML = bio.split('\n').filter(Boolean).map(p => '<p>' + p + '</p>').join('');
   }
 
   // Rum — genbyg med korrekt sprog
