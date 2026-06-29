@@ -725,9 +725,7 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:3rem
       <div class="reveal-left">
         <span class="section-label" id="labelFood">Mad & Drikke</span>
         <h2 id="foodHeading">Nærende <em>andalusisk</em> køkken</h2>
-        <div id="foodTextContainer"><p>Mad er en central del af retreatoplevelsen. Alle måltider tilberedes med friske, lokale og sæsonbestemte råvarer fra regionen. Vi spiser enkelt, nærende og med respekt for kroppen.</p>
-        <p>Morgenmaden er let og energigivende — frugt, yoghurt, æg og brød. Frokosten er større og ofte et fælles bord med salater, grøntsager og proteiner. Aftensmaden er dagens sociale samlingspunkt — tre retter med lokale vine.</p>
-        <p>Særlige kostbehov imødekommes fuldt ud — vegetar, vegansk, glutenfri mv. Oplys ved tilmelding.</p></div>
+        <div id="foodTextContainer"></div>
       </div>
       <div class="food-img reveal-right d2">
         <img src="img/estate-dining.jpg" alt="Mad på Castillo del Alma">
@@ -749,9 +747,7 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:3rem
       <div>
         <h2 id="teacherHeading">Din guide på rejsen</h2>
         <span class="role" id="facilitatorRole">Wellness Facilitator · Breathwork Practitioner · Somatic Therapist</span>
-        <div id="teacherBioContainer"><p>Retreatet ledes af en erfaren wellness-facilitator med speciale i nervesystemsregulering, breathwork og somatic therapy. Med mange års erfaring fra retreats i Skandinavien og Sydeuropa skabes et trygt og professionelt rum for transformation.</p>
-        <p>Facilitatoren kombinerer videnskabelig forankring med en dyb menneskelig tilgang — og møder hver deltager præcis der, hvor de er.</p>
-        <p style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1rem;color:var(--text-light);">Facilitatorinfo opdateres løbende. Kontakt os for mere information om den specifikke facilitator for en given dato.</p></div>
+        <div id="teacherBioContainer"></div>
       </div>
     </div>
   </div>
@@ -1222,8 +1218,7 @@ function applyLang(data, lang) {
   // Mad
   const foodHeading = document.getElementById('foodHeading');
   if(foodHeading) foodHeading.textContent = isEN && d.ui_food_heading_en ? d.ui_food_heading_en : (d.ui_food_heading || 'Nærende andalusisk køkken');
-  const foodText = document.getElementById('foodText');
-  if(foodText) foodText.textContent = isEN && d.ui_food_text_en ? d.ui_food_text_en : (d.ui_food_text || '');
+
 
   // Underviser
   const teacherHeading = document.getElementById('teacherHeading');
