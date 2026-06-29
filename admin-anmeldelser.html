@@ -1880,6 +1880,10 @@ function renderCard(r) {
   const quote = r.bedste || r.forandring || '';
   const samtalNum = parseInt(r.samlet) || 0;
   const anbNum = parseInt(r.anbefaling) || 0;
+  const trans = reviewTranslations[r.id] || { da: '', en: '', name: '' };
+  const transDa = trans.da || '';
+  const transEn = trans.en || '';
+  const transName = trans.name || '';
   return `<div class="review-card ${isApproved?'approved':''} ${isRejected?'rejected':''}" id="card_${r.id}">
     <div class="rc-header">
       <div><div class="rc-name">${r.navn}</div><div class="rc-meta">${r.land} · ${r.besøgt||r.date||'—'}</div></div>
@@ -1902,19 +1906,19 @@ function renderCard(r) {
       <div style="font-size:.6rem;letter-spacing:.15em;text-transform:uppercase;color:#2a7a74;margin-bottom:.8rem;font-weight:600;">🌐 Oversættelser & visningsnavn</div>
       <div style="margin-bottom:.6rem;">
         <label style="font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;color:#b88a1e;display:block;margin-bottom:.3rem;">🇩🇰 Visningsnavn</label>
-        <input type="text" id="name_${r.id}" placeholder="${r.navn}" value="${(reviewTranslations['${r.id}']?.name)||''}"
+        <input type="text" id="name_${r.id}" placeholder="${r.navn}" value="${transName}"
           style="width:100%;padding:.5rem .7rem;border:1px solid rgba(184,138,30,.3);background:#fffef8;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;">
       </div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:.8rem;margin-bottom:.8rem;">
         <div>
           <label style="font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;color:#b88a1e;display:block;margin-bottom:.3rem;">🇩🇰 Citat på dansk</label>
           <textarea id="trans_da_${r.id}" placeholder="Skriv eller indsæt dansk version..."
-            style="width:100%;min-height:100px;padding:.5rem .7rem;border:1px solid rgba(184,138,30,.3);background:#fffef8;font-family:Cormorant Garamond,serif;font-size:.95rem;outline:none;resize:vertical;">${(reviewTranslations['${r.id}']?.da)||''}</textarea>
+            style="width:100%;min-height:100px;padding:.5rem .7rem;border:1px solid rgba(184,138,30,.3);background:#fffef8;font-family:Cormorant Garamond,serif;font-size:.95rem;outline:none;resize:vertical;">${transDa}</textarea>
         </div>
         <div>
           <label style="font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;color:#2a7a74;display:block;margin-bottom:.3rem;">🇬🇧 Quote in English</label>
           <textarea id="trans_en_${r.id}" placeholder="Write or paste English version..."
-            style="width:100%;min-height:100px;padding:.5rem .7rem;border:1px solid #7fb3af;background:#e8f4f3;font-family:Cormorant Garamond,serif;font-size:.95rem;outline:none;resize:vertical;">${(reviewTranslations['${r.id}']?.en)||''}</textarea>
+            style="width:100%;min-height:100px;padding:.5rem .7rem;border:1px solid #7fb3af;background:#e8f4f3;font-family:Cormorant Garamond,serif;font-size:.95rem;outline:none;resize:vertical;">${transEn}</textarea>
         </div>
       </div>
       <button onclick="gemOversaettelse('${r.id}','${r.navn}')"
@@ -1965,7 +1969,8 @@ function copyQuote(id) {
   const r = allReviews.find(x => x.id === id);
   if (!r) return;
   const name = r.consent === 'anonymt' ? 'Anonym gæst' : r.navn;
-  navigator.clipboard.writeText(`"${r.bedste||r.forandring}" — ${name}`).then(() => showToast('Citat kopieret'));
+  const citattekst = '"' + (r.bedste||r.forandring) + '" — ' + name;
+  navigator.clipboard.writeText(citattekst).then(() => showToast('Citat kopieret'));
 }
 function showFull(id) {
   const r = allReviews.find(x => x.id === id);
