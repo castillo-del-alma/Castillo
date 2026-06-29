@@ -3269,10 +3269,7 @@ function openNytRetreat() {
   document.getElementById('modalRetreat').classList.add('open');
 }
 
-function redigerRetreat(id) {
-  const r = allRetreats.find(x => x.id === id);
-  if (!r) return;
-  document.getElementById('retreatModalTitel').textContent = 'Redigér retreat';
+function udfyldRetreatForm(r) {
   document.getElementById('retreat_id').value = r.id;
   document.getElementById('retreat_title').value = r.title || '';
   document.getElementById('retreat_title_en').value = r.title_en || '';
@@ -3755,13 +3752,17 @@ async function gemRetreat() {
     }
     showToast('Retreat gemt ✓');
     loadRetreats();
-    // Opdater knaptekst til "Opdater retreat" hvis nyt retreat
-    if (!id) {
-      const newData = await sb.from('retreats').select('id').eq('slug', slug).single();
-      if (newData.data) document.getElementById('retreat_id').value = newData.data.id;
-      document.getElementById('retreatModalTitel').textContent = 'Redigér retreat';
-      document.getElementById('retreatSaveBtn').textContent = 'Gem ændringer';
+    // Reload retreat data ind i formularen så hidden felter er opdaterede
+    const reloadSlug = slug || document.getElementById('retreat_slug')?.value;
+    if (reloadSlug) {
+      const { data: fresh } = await sb.from('retreats').select('*').eq('slug', reloadSlug).single();
+      if (fresh) {
+        udfyldRetreatForm(fresh);
+        document.getElementById('retreat_id').value = fresh.id;
+      }
     }
+    document.getElementById('retreatModalTitel').textContent = 'Redigér retreat';
+    document.getElementById('retreatSaveBtn').textContent = 'Gem ændringer';
   } catch(e) {
     showToast('Fejl: ' + e.message, true);
   } finally {
