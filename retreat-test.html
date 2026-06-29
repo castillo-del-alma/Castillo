@@ -884,12 +884,12 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:3rem
             <input type="text" id="retreatNameField" value="" readonly style="background:#fff;color:#7a1f35;cursor:default;border-color:#d4c4a0;font-size:.68rem;font-weight:500;letter-spacing:.08em;text-transform:uppercase;">
           </div>
           <div class="form-row">
-            <div class="form-field"><label>Fornavn *</label><input id="f-fornavn" type="text" placeholder="Dit fornavn" id="f-fornavn-placeholder" required></div>
-            <div class="form-field"><label>Efternavn *</label><input id="f-efternavn" type="text" placeholder="Dit efternavn" required></div>
+            <div class="form-field"><label id="lblFornavn">Fornavn *</label><input id="f-fornavn" type="text" placeholder="Dit fornavn" required></div>
+            <div class="form-field"><label id="lblEfternavn">Efternavn *</label><input id="f-efternavn" type="text" placeholder="Dit efternavn" required></div>
           </div>
           <div class="form-row">
-            <div class="form-field"><label>E-mail *</label><input id="f-email" type="email" placeholder="din@email.com" required></div>
-            <div class="form-field"><label>Telefon *</label><input id="f-telefon" type="tel" placeholder="+45 xx xx xx xx" required></div>
+            <div class="form-field"><label id="lblEmail">E-mail *</label><input id="f-email" type="email" placeholder="din@email.com" required></div>
+            <div class="form-field"><label id="lblTelefon">Telefon *</label><input id="f-telefon" type="tel" placeholder="+45 xx xx xx xx" required></div>
           </div>
           <div class="form-field">
             <label id="bookLabelCountry">Land</label>
@@ -1336,6 +1336,12 @@ function applyLang(data, lang) {
   if(addonsHeading) addonsHeading.textContent = isEN ? 'Add-ons' : 'Tilvalg';
   const addonsIntro = document.querySelector('.addons-note');
   if(addonsIntro) addonsIntro.textContent = isEN ? 'Add-ons can be ordered here. Payment is made on departure.' : 'Tilvalg kan bestilles her. Afregning foretages ved afrejse.';
+
+  // Form felt labels
+  set('lblFornavn',  DA(d.ui_form_firstname,  d.ui_form_firstname_en,  'Fornavn *',  'First name *'));
+  set('lblEfternavn',DA(d.ui_form_lastname,   d.ui_form_lastname_en,   'Efternavn *','Last name *'));
+  set('lblEmail',    DA(d.ui_form_email,      d.ui_form_email_en,      'E-mail *',   'Email *'));
+  set('lblTelefon',  DA(d.ui_form_phone,      d.ui_form_phone_en,      'Telefon *',  'Phone *'));
 
   // Vælg dit land / dato / værelse options
   const optCountry = document.getElementById('optSelectCountry');
