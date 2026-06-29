@@ -984,7 +984,6 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:3rem
             </select>
           </div>
           <div class="form-field">
-            <span class="form-addons-label" id="addonsLabel">Tilvalg</span>
             <div class="form-addons">
               <label class="addon-item">
                 <input type="checkbox" id="addon-foer">
@@ -1360,8 +1359,6 @@ function applyLang(data, lang) {
   if(addGuestLbl) addGuestLbl.textContent = DA(d.ui_form_add_guest, d.ui_form_add_guest_en, 'Tilføj gæst', 'Add guest');
 
   // Tilvalg labels
-  const addonsLbl = document.getElementById('addonsLabel');
-  if(addonsLbl) addonsLbl.textContent = isEN ? 'Add-ons' : 'Tilvalg';
   const addonFoer = document.getElementById('addonTextFoer');
   if(addonFoer) addonFoer.textContent = DA(d.ui_addon_before, d.ui_addon_before_en, 'Ekstra overnatning før retreat, om muligt', 'Extra night before retreat, if possible');
   const addonEfter = document.getElementById('addonTextEfter');
