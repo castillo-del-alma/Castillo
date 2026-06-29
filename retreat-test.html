@@ -1213,11 +1213,11 @@ function applyLang(data, lang) {
 
   // Inkluderet
   const includedItems = isEN && d.included_en ? d.included_en.split('\n').filter(Boolean) : (d.included_items || []);
-  const includedContainer = document.getElementById('includedList');
-  if(includedContainer) includedContainer.innerHTML = includedItems.map(i => '<li>' + i + '</li>').join('');
+  const includedContainer = document.getElementById('includedListContainer');
+  if(includedContainer) includedContainer.innerHTML = includedItems.map(i => '<div class="included-item">' + i + '</div>').join('');
   const excludedItems = isEN && d.excluded_en ? d.excluded_en.split('\n').filter(Boolean) : (d.excluded_items || []);
-  const excludedContainer = document.getElementById('excludedList');
-  if(excludedContainer) excludedContainer.innerHTML = excludedItems.map(i => '<li>' + i + '</li>').join('');
+  const excludedContainer = document.getElementById('excludedListContainer');
+  if(excludedContainer) excludedContainer.innerHTML = excludedItems.map(i => '<div class="included-item">' + i + '</div>').join('');
 
   // Mad
   const foodHeading = document.getElementById('foodHeading');
@@ -1492,13 +1492,15 @@ async function loadRetreatData() {
   // Inkluderet / ikke inkluderet
   const inclContainer = document.getElementById('includedListContainer');
   const exclContainer = document.getElementById('excludedListContainer');
-  if (data.included_items && data.included_items.length > 0) {
-    inclContainer.innerHTML = data.included_items.map(item => `<div class="included-item">${item}</div>`).join('');
+  const inclItems = (currentLang==='en' && data.included_en) ? data.included_en.split('\n').filter(Boolean) : (data.included_items || []);
+  if (inclItems.length > 0) {
+    inclContainer.innerHTML = inclItems.map(item => `<div class="included-item">${item}</div>`).join('');
   } else {
     inclContainer.innerHTML = '<div class="included-item">Opdateres snart</div>';
   }
-  if (data.excluded_items && data.excluded_items.length > 0) {
-    exclContainer.innerHTML = data.excluded_items.map(item => `<div class="included-item">${item}</div>`).join('');
+  const exclItems = (currentLang==='en' && data.excluded_en) ? data.excluded_en.split('\n').filter(Boolean) : (data.excluded_items || []);
+  if (exclItems.length > 0) {
+    exclContainer.innerHTML = exclItems.map(item => `<div class="included-item">${item}</div>`).join('');
   } else {
     exclContainer.innerHTML = '<div class="included-item">Opdateres snart</div>';
   }
