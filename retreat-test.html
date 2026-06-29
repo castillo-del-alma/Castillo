@@ -1247,19 +1247,23 @@ function applyLang(data, lang) {
 async function loadRetreatData() {
   const slug = getSlugFromUrl();
   if (!slug) {
-    document.getElementById('retreatTitle').textContent = 'Retreat ikke fundet';
+    document.getElementById('retreatTitle').textContent = 'Mangler ?slug= i URL';
     return;
   }
 
-  const { data, error } = await sbR.from('retreats').select('*').eq('slug', slug).single();
-  if (error || !data) {
-    document.getElementById('retreatTitle').textContent = 'Retreat ikke fundet';
-    return;
-  }
+  try {
+    const { data, error } = await sbR.from('retreats').select('*').eq('slug', slug).single();
+    if (error) {
+      document.getElementById('retreatTitle').textContent = 'Fejl: ' + error.message;
+      return;
+    }
+    if (!data) {
+      document.getElementById('retreatTitle').textContent = 'Retreat "' + slug + '" ikke fundet';
+      return;
+    }
 
   CURRENT_RETREAT = data;
   retreatData = data;
-  applyLang(data, currentLang);
   RETREAT_PRICE = parseFloat(data.price) || 0;
   DEPOSIT_PCT = parseFloat(data.deposit_pct) || 0.30;
   DEPOSIT_DKK = Math.round(RETREAT_PRICE * DEPOSIT_PCT);
@@ -1453,6 +1457,11 @@ function renderAddonsInForm(addons) {
       <span class="addon-price">€${a.price}</span>
     </label>
   `).join('');
+  applyLang(data, currentLang);
+  } catch(e) {
+    document.getElementById('retreatTitle').textContent = 'Fejl: ' + e.message;
+    console.error(e);
+  }
 }
 
 document.addEventListener('DOMContentLoaded', loadRetreatData);
