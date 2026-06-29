@@ -3228,7 +3228,7 @@ function openNytRetreat() {
   document.getElementById('ui_nav_included_en').value = "What's Included";
   document.getElementById('ui_nav_rooms_en').value = 'Rooms';
   document.getElementById('ui_food_heading_en').value = 'Nourishing Andalusian Cuisine';
-  document.getElementById('ui_food_text_en').value = 'Food is a central part of the retreat experience. We serve healthy, delicious and home-cooked meals with a focus on anti-inflammatory cuisine.';
+  document.getElementById('ui_food_text_en').value = 'Food is a central part of the retreat experience. All meals are prepared with fresh, local and seasonal ingredients from the region. We eat simply, nutritiously and with respect for the body.\nBreakfast is light and energising — fruit, yoghurt, eggs and bread. Lunch is more substantial, often a shared table with salads, vegetables and proteins. Dinner is the social highlight of the day — three courses with local wines.\nSpecial dietary requirements are fully accommodated — vegetarian, vegan, gluten-free etc. Please inform us at registration.';
   document.getElementById('ui_teacher_heading_en').value = 'Your Guide on the Journey';
   document.getElementById('ui_book_heading_en').value = 'Take the First Step';
   document.getElementById('ui_book_intro_en').value = 'Fill in the form and we will get back to you within 24 hours with a confirmation.';
@@ -3268,7 +3268,7 @@ function openNytRetreat() {
   document.getElementById('ui_room_single_heading').value = 'Enkeltværelse';
   document.getElementById('ui_room_single_heading_en').value = 'Single Room';
   document.getElementById('ui_food_heading').value = 'Nærende andalusisk køkken';
-  document.getElementById('ui_food_text').value = 'Mad er en central del af retreatoplevelsen. Vi serverer sund, velsmagende og hjemmelavet mad med fokus på anti-inflammatorisk kost.';
+  document.getElementById('ui_food_text').value = 'Mad er en central del af retreatoplevelsen. Alle måltider tilberedes med friske, lokale og sæsonbestemte råvarer fra regionen. Vi spiser enkelt, nærende og med respekt for kroppen.\nMorgenmaden er let og energigivende — frugt, yoghurt, æg og brød. Frokosten er større og ofte et fælles bord med salater, grøntsager og proteiner. Aftensmaden er dagens sociale samlingspunkt — tre retter med lokale vine.\nSærlige kostbehov imødekommes fuldt ud — vegetar, vegansk, glutenfri mv. Oplys ved tilmelding.';
   document.getElementById('ui_teacher_heading').value = 'Din guide på rejsen';
   document.getElementById('retreat_teacher_bio').value = '';
   document.getElementById('retreat_teacher_bio_en').value = '';
@@ -3508,7 +3508,8 @@ function udfyldRetreatForm(r) {
   document.getElementById('ui_room_single_heading').value = r.ui_room_single_heading || 'Enkeltværelse';
   document.getElementById('ui_room_single_heading_en').value = r.ui_room_single_heading_en || 'Single Room';
   document.getElementById('ui_food_heading').value = r.ui_food_heading || 'Nærende andalusisk køkken';
-  document.getElementById('ui_food_text').value = r.ui_food_text || 'Mad er en central del af retreatoplevelsen. Vi serverer sund, velsmagende og hjemmelavet mad med fokus på anti-inflammatorisk kost.';
+  document.getElementById('ui_food_text').value = r.ui_food_text || 'Mad er en central del af retreatoplevelsen. Alle måltider tilberedes med friske, lokale og sæsonbestemte råvarer fra regionen. Vi spiser enkelt, nærende og med respekt for kroppen.\nMorgenmaden er let og energigivende — frugt, yoghurt, æg og brød. Frokosten er større og ofte et fælles bord med salater, grøntsager og proteiner. Aftensmaden er dagens sociale samlingspunkt — tre retter med lokale vine.\nSærlige kostbehov imødekommes fuldt ud — vegetar, vegansk, glutenfri mv. Oplys ved tilmelding.';
+  document.getElementById('ui_food_text_en').value = r.ui_food_text_en || 'Food is a central part of the retreat experience. All meals are prepared with fresh, local and seasonal ingredients from the region. We eat simply, nutritiously and with respect for the body.\nBreakfast is light and energising — fruit, yoghurt, eggs and bread. Lunch is more substantial, often a shared table with salads, vegetables and proteins. Dinner is the social highlight of the day — three courses with local wines.\nSpecial dietary requirements are fully accommodated — vegetarian, vegan, gluten-free etc. Please inform us at registration.';
   document.getElementById('ui_teacher_heading').value = r.ui_teacher_heading || 'Din guide på rejsen';
   document.getElementById('retreat_teacher_bio').value = r.teacher_bio || '';
   document.getElementById('retreat_teacher_bio_en').value = r.teacher_bio_en || '';
