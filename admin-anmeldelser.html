@@ -1759,6 +1759,7 @@ let approved   = JSON.parse(localStorage.getItem('cda_approved') || '[]');
 let rejected   = JSON.parse(localStorage.getItem('cda_rejected') || '[]');
 let currentFilter = 'all';
 let aktivBookingId = null;
+let reviewTranslations = {}; // { [id]: { da: '', en: '' } }
 
 // ── LOGIN ──
 function doLogin() {
@@ -1809,6 +1810,15 @@ async function loadReviews() {
     if (!res.ok) throw new Error('API fejl');
     const data = await res.json();
     allReviews = (data.submissions || []).map(parseSubmission);
+    // Hent oversættelser fra Supabase
+    try {
+      const { data: trans } = await sb.from('reviews').select('form_id, comment_da, comment_en, reviewer_name_display');
+      if (trans) {
+        trans.forEach(t => {
+          reviewTranslations[t.form_id] = { da: t.comment_da || '', en: t.comment_en || '', name: t.reviewer_name_display || '' };
+        });
+      }
+    } catch(e2) { console.warn('Kunne ikke hente oversættelser:', e2); }
     updateStats();
     renderReviews();
   } catch(e) {
@@ -1886,8 +1896,55 @@ function renderCard(r) {
       <button class="rc-btn rc-btn-reject" onclick="rejectReview('${r.id}')">Afvis</button>
       <button class="rc-btn rc-btn-copy" onclick="copyQuote('${r.id}')">Kopiér citat</button>
       <button class="rc-btn rc-btn-export" onclick="showFull('${r.id}')">Se fuld</button>
+      <button class="rc-btn" onclick="toggleTranslation('${r.id}')" style="background:rgba(42,122,116,.1);color:#2a7a74;border-color:#2a7a74;">🌐 Oversæt</button>
     </div>
-  </div>`;
+    <div id="trans_${r.id}" style="display:none;margin-top:1rem;border-top:1px solid rgba(184,138,30,.15);padding-top:1rem;">
+      <div style="font-size:.6rem;letter-spacing:.15em;text-transform:uppercase;color:#2a7a74;margin-bottom:.8rem;font-weight:600;">🌐 Oversættelser & visningsnavn</div>
+      <div style="margin-bottom:.6rem;">
+        <label style="font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;color:#b88a1e;display:block;margin-bottom:.3rem;">🇩🇰 Visningsnavn</label>
+        <input type="text" id="name_${r.id}" placeholder="${r.navn}" value="${(reviewTranslations['${r.id}']?.name)||''}"
+          style="width:100%;padding:.5rem .7rem;border:1px solid rgba(184,138,30,.3);background:#fffef8;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;">
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:.8rem;margin-bottom:.8rem;">
+        <div>
+          <label style="font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;color:#b88a1e;display:block;margin-bottom:.3rem;">🇩🇰 Citat på dansk</label>
+          <textarea id="trans_da_${r.id}" placeholder="Skriv eller indsæt dansk version..."
+            style="width:100%;min-height:100px;padding:.5rem .7rem;border:1px solid rgba(184,138,30,.3);background:#fffef8;font-family:Cormorant Garamond,serif;font-size:.95rem;outline:none;resize:vertical;">${(reviewTranslations['${r.id}']?.da)||''}</textarea>
+        </div>
+        <div>
+          <label style="font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;color:#2a7a74;display:block;margin-bottom:.3rem;">🇬🇧 Quote in English</label>
+          <textarea id="trans_en_${r.id}" placeholder="Write or paste English version..."
+            style="width:100%;min-height:100px;padding:.5rem .7rem;border:1px solid #7fb3af;background:#e8f4f3;font-family:Cormorant Garamond,serif;font-size:.95rem;outline:none;resize:vertical;">${(reviewTranslations['${r.id}']?.en)||''}</textarea>
+        </div>
+      </div>
+      <button onclick="gemOversaettelse('${r.id}','${r.navn}')"
+        style="background:#2a7a74;color:#fff;border:none;padding:.6rem 1.5rem;font-family:Manrope,sans-serif;font-size:.65rem;font-weight:500;letter-spacing:.15em;text-transform:uppercase;cursor:pointer;">
+        💾 Gem oversættelse
+      </button>
+    </div>
+  </div>\`;
+}
+
+function toggleTranslation(id) {
+  const el = document.getElementById('trans_' + id);
+  if (el) el.style.display = el.style.display === 'none' ? 'block' : 'none';
+}
+
+async function gemOversaettelse(id, navn) {
+  const da = document.getElementById('trans_da_' + id)?.value || '';
+  const en = document.getElementById('trans_en_' + id)?.value || '';
+  const name = document.getElementById('name_' + id)?.value || navn;
+  try {
+    // Gem i Supabase reviews tabel
+    const { error } = await sb.from('reviews')
+      .upsert({ form_id: id, comment_da: da, comment_en: en, reviewer_name_display: name }, { onConflict: 'form_id' });
+    if (error) throw error;
+    // Opdater lokal state
+    reviewTranslations[id] = { da, en, name };
+    showToast('Oversættelse gemt ✓');
+  } catch(e) {
+    showToast('Fejl: ' + e.message, true);
+  }
 }
 
 function approveReview(id) {
