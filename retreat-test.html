@@ -643,8 +643,8 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:3rem
           <option value="">Vælg dato</option>
         </select>
       </div>
-      <button class="btn-inquire" onclick="document.getElementById('booking').scrollIntoView({behavior:'smooth'})">Reserver</button>
-      <button class="btn-book" onclick="document.getElementById('booking').scrollIntoView({behavior:'smooth'})">Book nu</button>
+      <button class="btn-inquire" onclick="document.getElementById('booking').scrollIntoView({behavior:'smooth'})" id="btnReserver">Reserver</button>
+      <button class="btn-book" onclick="document.getElementById('booking').scrollIntoView({behavior:'smooth'})" id="btnBook">Book nu</button>
     </div>
   </div>
 </div>
@@ -654,12 +654,12 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:3rem
   <div class="section-inner">
     <div class="overview-grid">
       <div class="overview-text reveal-left">
-        <span class="section-label">Om retreatet</span>
+        <span class="section-label" id="labelAbout">Om retreatet</span>
         <h2 id="aboutHeading">Et frirum fra hverdagens tempo</h2>
         <div id="aboutTextContainer"></div>
       </div>
       <div class="quick-facts reveal-right d2">
-        <h3>Retreat info</h3>
+        <h3 id="retreatInfoHeading">Retreat info</h3>
         <div class="fact-row"><span class="fact-label">Varighed</span><span class="fact-value" id="factDuration">—</span></div>
         <div class="fact-row"><span class="fact-label">Maks. deltagere</span><span class="fact-value" id="factMaxGuests">—</span></div>
         <div class="fact-row"><span class="fact-label">Niveau</span><span class="fact-value" id="factLevel">—</span></div>
@@ -677,8 +677,8 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:3rem
 <section class="program" id="program">
   <div class="section-inner">
     <div class="reveal">
-      <span class="section-label">Program</span>
-      <h2>En uge for dig selv</h2>
+      <span class="section-label" id="labelProgram">Program</span>
+      <h2 id="programHeading">En uge for dig selv</h2>
     </div>
     <div class="program-days reveal d1" id="programDaysContainer"></div>
   </div>
@@ -690,16 +690,16 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:3rem
 <section class="included" id="included">
   <div class="section-inner">
     <div class="reveal">
-      <span class="section-label">Hvad er inkluderet</span>
-      <h2>Alt hvad du behøver</h2>
+      <span class="section-label" id="labelIncluded">Hvad er inkluderet</span>
+      <h2 id="includedHeading">Alt hvad du behøver</h2>
     </div>
     <div class="included-cols reveal d1">
       <div class="included-list incl-yes">
-        <h3><span>✓</span> Inkluderet i prisen</h3>
+        <h3 id="includedSubheading"><span>✓</span> Inkluderet i prisen</h3>
         <div id="includedListContainer"></div>
       </div>
       <div class="included-list incl-no">
-        <h3><span>✗</span> Ikke inkluderet</h3>
+        <h3 id="excludedSubheading"><span>✗</span> Ikke inkluderet</h3>
         <div id="excludedListContainer"></div>
       </div>
     </div>
@@ -710,8 +710,8 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:3rem
 <section class="retreat-rooms" id="rooms">
   <div class="section-inner">
     <div class="reveal">
-      <span class="section-label">Indkvartering & Priser</span>
-      <h2>Vælg dit værelse</h2>
+      <span class="section-label" id="labelRooms">Indkvartering & Priser</span>
+      <h2 id="roomsHeading">Vælg dit værelse</h2>
       <p class="intro">Alle værelser har eget badeværelse og er fuldt inkluderet i retreatprisen</p>
     </div>
     <div class="rooms-options reveal d1" id="roomsContainer"></div>
@@ -723,7 +723,7 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:3rem
   <div class="section-inner">
     <div class="food-grid">
       <div class="reveal-left">
-        <span class="section-label">Mad & Drikke</span>
+        <span class="section-label" id="labelFood">Mad & Drikke</span>
         <h2>Nærende <em>andalusisk</em> køkken</h2>
         <p>Mad er en central del af retreatoplevelsen. Alle måltider tilberedes med friske, lokale og sæsonbestemte råvarer fra regionen. Vi spiser enkelt, nærende og med respekt for kroppen.</p>
         <p>Morgenmaden er let og energigivende — frugt, yoghurt, æg og brød. Frokosten er større og ofte et fælles bord med salater, grøntsager og proteiner. Aftensmaden er dagens sociale samlingspunkt — tre retter med lokale vine.</p>
@@ -740,14 +740,14 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:3rem
 <section class="facilitator">
   <div class="section-inner">
     <div class="reveal">
-      <span class="section-label">Facilitator</span>
+      <span class="section-label" id="labelFacilitator">Facilitator</span>
     </div>
     <div class="facilitator-grid reveal d1">
       <div class="facilitator-photo">
         <div class="facilitator-photo-placeholder">CdA</div>
       </div>
       <div>
-        <h2>Din guide på rejsen</h2>
+        <h2 id="teacherHeading">Din guide på rejsen</h2>
         <span class="role">Wellness Facilitator · Breathwork Practitioner · Somatic Therapist</span>
         <p>Retreatet ledes af en erfaren wellness-facilitator med speciale i nervesystemsregulering, breathwork og somatic therapy. Med mange års erfaring fra retreats i Skandinavien og Sydeuropa skabes et trygt og professionelt rum for transformation.</p>
         <p>Facilitatoren kombinerer videnskabelig forankring med en dyb menneskelig tilgang — og møder hver deltager præcis der, hvor de er.</p>
@@ -764,38 +764,38 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:3rem
   <canvas class="section-canvas" data-palette="warm"></canvas>
   <div class="section-inner">
     <div class="reveal">
-      <span class="section-label">Retreat Highlights</span>
-      <h2>Hvad gør dette retreat særligt?</h2>
+      <span class="section-label" id="labelHighlights">Retreat Highlights</span>
+      <h2 id="highlightsHeading">Hvad gør dette retreat særligt?</h2>
     </div>
     <div class="highlights-grid reveal d1">
       <div class="highlight-item">
         <div class="highlight-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M12 2 C12 2 6 6 6 12 C6 18 12 22 12 22"/><path d="M12 2 C12 2 18 6 18 12 C18 18 12 22 12 22"/></svg></div>
-        <h4>Nervous System Reset</h4>
+        <h4 id="hl1Title">Nervous System Reset</h4>
         <p>Et samlet forløb designet til at bringe dit nervesystem tilbage i balance — fra kronisk alarmberedskab til ro og regulering.</p>
       </div>
       <div class="highlight-item">
         <div class="highlight-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
-        <h4>Intimt & eksklusivt</h4>
+        <h4 id="hl2Title">Intimt & eksklusivt</h4>
         <p>Max 10 deltagere sikrer tæt opmærksomhed, ægte fællesskab og et trygt rum for personlig fordybelse.</p>
       </div>
       <div class="highlight-item">
         <div class="highlight-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg></div>
-        <h4>Eksklusiv ejendom</h4>
+        <h4 id="hl3Title">Eksklusiv ejendom</h4>
         <p>Hele Castillo del Alma er kun til jer — vinmarker, pool, sauna, terrasser og det andalusiske landskab som ramme.</p>
       </div>
       <div class="highlight-item">
         <div class="highlight-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M12 2 Q16 8 16 14 A4 4 0 0 1 8 14 Q8 8 12 2Z"/></svg></div>
-        <h4>Guidede breathwork-sessioner</h4>
+        <h4 id="hl4Title">Guidede breathwork-sessioner</h4>
         <p>Daglige breathwork-sessioner med erfaren facilitator — et af de mest kraftfulde redskaber til at frisætte spændinger.</p>
       </div>
       <div class="highlight-item">
         <div class="highlight-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M6 3v6a3 3 0 0 0 6 0V3"/><line x1="9" y1="9" x2="9" y2="21"/></svg></div>
-        <h4>Nærende andalusisk mad</h4>
+        <h4 id="hl5Title">Nærende andalusisk mad</h4>
         <p>Alle måltider er tilberedt med friske, lokale råvarer — enkelt, nærende og tilpasset restitution og den anti-inflammatoriske livsstil. Vi anvender derfor heller ikke sukker i vores måltider og så få stivelser som muligt.</p>
       </div>
       <div class="highlight-item">
         <div class="highlight-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><polygon points="12 2 15 9 22 9 16.5 13.5 18.5 21 12 17 5.5 21 7.5 13.5 2 9 9 9"/></svg></div>
-        <h4>Stilhed & stjernekiggeri</h4>
+        <h4 id="hl6Title">Stilhed & stjernekiggeri</h4>
         <p>Nætter under Andalusiens klare himmel — langt fra byernes lys. En meditativ og åndedrætsgivende oplevelse.</p>
       </div>
     </div>
@@ -809,8 +809,8 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:3rem
   <canvas class="section-canvas" data-palette="green"></canvas>
   <div class="section-inner">
     <div class="reveal">
-      <span class="section-label">Gæsternes oplevelser</span>
-      <h2 class="split-h">Hvad siger vores <em>gæster</em></h2>
+      <span class="section-label" id="labelReviews">Gæsternes oplevelser</span>
+      <h2 class="split-h" id="reviewsSectionHeading">Hvad siger vores <em>gæster</em></h2>
     </div>
     <div class="reviews-grid reveal d1" id="reviewsGrid">
       <div style="grid-column:1/-1;text-align:center;padding:2rem;color:rgba(44,35,24,.4);font-size:.85rem;">Henter anmeldelser…</div>
@@ -832,8 +832,8 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:3rem
 <section class="faq">
   <div class="section-inner">
     <div class="reveal">
-      <span class="section-label">Ofte stillede spørgsmål</span>
-      <h2>FAQ</h2>
+      <span class="section-label" id="labelFaq">Ofte stillede spørgsmål</span>
+      <h2 id="faqHeading">FAQ</h2>
     </div>
     <div class="faq-list reveal d1">
       <div class="faq-item open">
@@ -876,7 +876,7 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:3rem
     <div class="booking-grid">
       <div class="reveal-left">
         <span class="section-label" style="color:rgba(184,138,30,.7);">Book dit retreat</span>
-        <h2>Tag det første skridt</h2>
+        <h2 id="bookHeading">Tag det første skridt</h2>
         <p>Udfyld formularen og vi vender tilbage inden for 24 timer med bekræftelse og information om næste trin.</p>
         <p>Har du spørgsmål inden du tilmelder dig, er du altid velkommen til at skrive eller ringe.</p>
         <p class="policy-note">Ved tilmelding accepterer du vores betalings- og afbestillingsbetingelser. Depositum på 30% forfalder ved tilmelding og reserverer din plads. Restbeløbet forfalder 8 dage før retreatstart.</p>
@@ -884,7 +884,7 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:3rem
       <div class="reveal-right d2">
         <div class="booking-form">
           <div class="form-field">
-            <label>Retreat</label>
+            <label id="bookLabelRetreat">Retreat</label>
             <input type="text" id="retreatNameField" value="" readonly style="background:#fff;color:#7a1f35;cursor:default;border-color:#d4c4a0;font-size:.68rem;font-weight:500;letter-spacing:.08em;text-transform:uppercase;">
           </div>
           <div class="form-row">
@@ -896,7 +896,7 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:3rem
             <div class="form-field"><label>Telefon *</label><input id="f-telefon" type="tel" placeholder="+45 xx xx xx xx" required></div>
           </div>
           <div class="form-field">
-            <label>Land</label>
+            <label id="bookLabelCountry">Land</label>
             <select id="f-land" required>
               <option value="">Vælg dit land</option>
               <option value="Danmark">Danmark</option>
@@ -974,13 +974,13 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:3rem
             Tilføj gæst
           </button>
           <div class="form-field">
-            <label>Vælg dato</label>
+            <label id="bookLabelDate">Vælg dato</label>
             <select id="formDateSelect" onchange="handleFormDateChange()">
               <option value="">Vælg foretrukken dato</option>
             </select>
           </div>
           <div class="form-field">
-            <label>Værelses-præference</label>
+            <label id="bookLabelRoom">Værelses-præference</label>
             <select id="room-select">
               <option value="">Vælg værelse</option>
               <option id="opt-delt">Delt dobbeltværelse</option>
@@ -1011,7 +1011,7 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:3rem
             </div>
           </div>
           <div class="form-field">
-            <label>Særlige ønsker</label>
+            <label id="bookLabelWishes">Særlige ønsker</label>
             <textarea id="f-kommentar" placeholder="Skriv dine særlige ønsker eller behov"></textarea>
           </div>
           <div id="form-error" style="display:none;font-size:.78rem;color:#c05c30;margin-top:.2rem;"></div>
@@ -1248,7 +1248,103 @@ function applyLang(data, lang) {
 
   // Anmeldelser
   const reviewsHeading = document.getElementById('reviewsSectionHeading');
-  if(reviewsHeading) reviewsHeading.textContent = isEN && d.ui_reviews_heading_en ? d.ui_reviews_heading_en : (d.ui_reviews_heading || 'Hvad siger vores gæster');
+  if(reviewsHeading) reviewsHeading.innerHTML = isEN ? 'What our <em>guests</em> say' : 'Hvad siger vores <em>gæster</em>';
+
+  // Section labels
+  const sl = {
+    labelAbout:       isEN ? (d.ui_label_about_en||'About the Retreat')    : (d.ui_label_about||'Om retreatet'),
+    labelProgram:     isEN ? (d.ui_label_program_en||'Program')             : (d.ui_label_program||'Program'),
+    labelIncluded:    isEN ? (d.ui_label_included_en||"What's included")    : (d.ui_label_included||'Hvad er inkluderet'),
+    labelRooms:       isEN ? (d.ui_label_rooms_en||'Accommodation & Prices'): (d.ui_label_rooms||'Indkvartering & Priser'),
+    labelFood:        isEN ? (d.ui_label_food_en||'Food & Drink')           : (d.ui_label_food||'Mad & Drikke'),
+    labelFacilitator: isEN ? (d.ui_label_facilitator_en||'Facilitator')     : (d.ui_label_facilitator||'Facilitator'),
+    labelHighlights:  isEN ? (d.ui_label_highlights_en||'Retreat Highlights'): (d.ui_label_highlights||'Retreat Highlights'),
+    labelReviews:     isEN ? (d.ui_label_reviews_en||'Guest experiences')   : (d.ui_label_reviews||'Gæsternes oplevelser'),
+    labelFaq:         isEN ? (d.ui_label_faq_en||'Frequently asked questions'): (d.ui_label_faq||'Ofte stillede spørgsmål'),
+  };
+  Object.entries(sl).forEach(([id, txt]) => { const el = document.getElementById(id); if(el) el.textContent = txt; });
+
+  // H2/H3 overskrifter
+  const h = {
+    retreatInfoHeading:  isEN ? (d.ui_retreat_info_heading_en||'Retreat Info')     : (d.ui_retreat_info_heading||'Retreat info'),
+    programHeading:      isEN ? (d.ui_program_heading_en||'A week for yourself')    : (d.ui_program_heading||'En uge for dig selv'),
+    includedHeading:     isEN ? (d.ui_included_section_heading_en||'Everything you need'): (d.ui_included_section_heading||'Alt hvad du behøver'),
+    includedSubheading:  isEN ? '✓ '+( d.ui_included_heading_en||'Included in the price'): '✓ '+(d.ui_included_heading||'Inkluderet i prisen'),
+    excludedSubheading:  isEN ? '✗ '+(d.ui_excluded_heading_en||'Not included')    : '✗ '+(d.ui_excluded_heading||'Ikke inkluderet'),
+    roomsHeading:        isEN ? (d.ui_rooms_heading_en||'Choose Your Room')         : (d.ui_rooms_heading||'Vælg dit værelse'),
+    highlightsHeading:   isEN ? (d.ui_highlights_heading_en||'What makes this retreat special?'): (d.ui_highlights_heading||'Hvad gør dette retreat særligt?'),
+    faqHeading:          isEN ? (d.ui_faq_heading_en||'FAQ')                        : (d.ui_faq_heading||'FAQ'),
+    bookHeading:         isEN ? (d.ui_book_heading_en||'Take the First Step')       : (d.ui_book_heading||'Tag det første skridt'),
+  };
+  Object.entries(h).forEach(([id, txt]) => { const el = document.getElementById(id); if(el) el.textContent = txt; });
+
+  // Highlights individuelle titler
+  for(let i=1;i<=6;i++) {
+    const el = document.getElementById('hl'+i+'Title');
+    if(el) el.textContent = isEN ? (d['ui_highlight'+i+'_title_en']||d['ui_highlight'+i+'_title']||'') : (d['ui_highlight'+i+'_title']||'');
+    // Highlight tekster
+    const pEls = el?.parentElement?.querySelectorAll('p');
+    if(pEls && pEls.length) pEls[0].textContent = isEN ? (d['ui_highlight'+i+'_text_en']||d['ui_highlight'+i+'_text']||'') : (d['ui_highlight'+i+'_text']||'');
+  }
+
+  // Rum overskrifter og tekster
+  const rdh = document.getElementById('roomDoubleHeading');
+  if(rdh) rdh.textContent = isEN ? (d.ui_room_double_heading_en||'Shared Double Room') : (d.ui_room_double_heading||'Delt dobbeltværelse');
+  const rsh = document.getElementById('roomSingleHeading');
+  if(rsh) rsh.textContent = isEN ? (d.ui_room_single_heading_en||'Single Room') : (d.ui_room_single_heading||'Enkeltværelse');
+
+  // Mad heading (med <em> tag)
+  const foodH = document.getElementById('foodHeading');
+  if(foodH) {
+    const ft = isEN ? (d.ui_food_heading_en||'Nourishing Andalusian Cuisine') : (d.ui_food_heading||'Nærende andalusisk køkken');
+    foodH.innerHTML = ft.replace(/(\S+)\s+(\S+)$/, '$1 <em>$2</em>');
+  }
+
+  // Bar labels
+  const bl = {
+    barLabelDuration:  isEN ? (d.ui_label_duration_en||'Duration') : (d.ui_label_duration||'Varighed'),
+    barLabelArrival:   isEN ? (d.ui_label_arrival_en||'Arrival')   : (d.ui_label_arrival||'Ankomst'),
+    barLabelDeparture: isEN ? (d.ui_label_departure_en||'Departure'): (d.ui_label_departure||'Afrejse'),
+    factLabelDuration: isEN ? (d.ui_label_duration_en||'Duration') : (d.ui_label_duration||'Varighed'),
+    factLabelGuests:   isEN ? (d.ui_label_guests_en||'Participants'): (d.ui_label_guests||'Maks. deltagere'),
+    factLabelLevel:    isEN ? 'Level'                               : 'Niveau',
+    factLabelLanguages:isEN ? 'Language'                            : 'Sprog',
+    factLabelLocation: isEN ? 'Location'                            : 'Sted',
+    priceFrom:         isEN ? (d.ui_price_from_en||'From')          : (d.ui_price_from||'Fra'),
+    priceSub:          isEN ? (d.ui_price_per_person_en||'per person · shared room') : (d.ui_price_per_person||'pr. person · delt værelse'),
+  };
+  Object.entries(bl).forEach(([id, txt]) => { const el = document.getElementById(id); if(el) el.textContent = txt; });
+
+  // Booking knapper
+  const btnR = document.getElementById('btnReserver');
+  if(btnR) btnR.textContent = isEN ? (d.ui_bar_reserve_en||'Reserve') : (d.ui_bar_reserve||'Reserver');
+  const btnB = document.getElementById('btnBook');
+  if(btnB) btnB.textContent = isEN ? (d.ui_bar_book_en||'Book now') : (d.ui_bar_book||'Book nu');
+
+  // Booking form labels
+  const fl = {
+    bookLabelRetreat: isEN ? (d.ui_book_label_retreat_en||'Retreat')         : (d.ui_book_label_retreat||'Retreat'),
+    bookLabelCountry: isEN ? (d.ui_book_label_country_en||'Country')         : (d.ui_book_label_country||'Land'),
+    bookLabelDate:    isEN ? (d.ui_book_label_date_en||'Choose date')        : (d.ui_book_label_date||'Vælg dato'),
+    bookLabelRoom:    isEN ? (d.ui_book_label_room_en||'Room preference')    : (d.ui_book_label_room||'Værelses-præference'),
+    bookLabelWishes:  isEN ? (d.ui_book_label_wishes_en||'Special requests') : (d.ui_book_label_wishes||'Særlige ønsker'),
+  };
+  Object.entries(fl).forEach(([id, txt]) => { const el = document.getElementById(id); if(el) el.textContent = txt; });
+
+  // Booking intro
+  const bi = document.getElementById('bookIntro');
+  if(bi) bi.textContent = isEN ? (d.ui_book_intro_en||'Fill in the form and we will get back to you within 24 hours.') : (d.ui_book_intro||'');
+
+  // Betalingsvalg
+  const ph = document.getElementById('paymentHeading');
+  if(ph) ph.textContent = isEN ? (d.ui_payment_heading_en||'Choose payment option') : (d.ui_payment_heading||'Vælg betalingsform');
+
+  // Teacher heading
+  const th = document.getElementById('teacherHeading');
+  if(th) th.textContent = isEN ? (d.ui_teacher_heading_en||'Your Guide on the Journey') : (d.ui_teacher_heading||'Din guide på rejsen');
+
+  // HTML lang attribut
+  document.documentElement.lang = lang;
 }
 
 async function loadRetreatData() {
@@ -1361,7 +1457,7 @@ async function loadRetreatData() {
   if (data.room_double_price) {
     roomsHtml += `
       <div class="room-option">
-        <h4>Delt dobbeltværelse</h4>
+        <h4 id="roomDoubleHeading">Delt dobbeltværelse</h4>
         <div class="room-price">€${parseFloat(data.room_double_price).toLocaleString('da-DK')}</div>
         <p>${data.room_double_text || ''}</p>
       </div>`;
@@ -1369,7 +1465,7 @@ async function loadRetreatData() {
   if (data.room_single_price) {
     roomsHtml += `
       <div class="room-option">
-        <h4>Enkeltværelse</h4>
+        <h4 id="roomSingleHeading">Enkeltværelse</h4>
         <div class="room-price">€${parseFloat(data.room_single_price).toLocaleString('da-DK')}</div>
         <p>${data.room_single_text || ''}</p>
       </div>`;
@@ -1824,7 +1920,7 @@ function updatePriceDisplay() {
 <div id="betalingsvalg-overlay">
   <div class="bv-box">
     <p class="bv-eyebrow">Castillo del Alma</p>
-    <h3 class="bv-title">Vælg betalingsform</h3>
+    <h3 class="bv-title" id="paymentHeading">Vælg betalingsform</h3>
     <p class="bv-sub">Hvor meget ønsker du at betale nu?</p>
     <button class="bv-btn bv-btn-primary" onclick="gennemfoerBetaling('deposit')">Depositum (30%) — €<span id="bv-deposit-amount">—</span></button>
     <button class="bv-btn bv-btn-secondary" onclick="gennemfoerBetaling('full')">Fuldt beløb — €<span id="bv-full-amount">—</span></button>
