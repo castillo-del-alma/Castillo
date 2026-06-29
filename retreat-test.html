@@ -1051,23 +1051,36 @@ function toggleFaq(q){
   item.classList.toggle('open');
 }
 
+let allReviewsData = [];
+
 async function loadReviews() {
   const grid = document.getElementById('reviewsGrid');
   if (!grid) return;
   try {
     const SUPABASE_URL = 'https://niniwgiytyqvdqejigxg.supabase.co';
     const SUPABASE_ANON_KEY = 'sb_publishable_GwrNUpIuWzdg1oswOY5HzA_mKWqhd6y';
-    const res = await fetch(`${SUPABASE_URL}/rest/v1/reviews?approved=eq.true&order=sort_order.asc&order=created_at.desc&limit=3`, {
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/reviews?approved=eq.true&order=sort_order.asc&order=created_at.desc&limit=3&select=*,comment_da,comment_en,reviewer_name_display`, {
       headers: { 'apikey': SUPABASE_ANON_KEY, 'Authorization': `Bearer ${SUPABASE_ANON_KEY}` }
     });
     const reviews = await res.json();
     if (!reviews || !reviews.length) { grid.innerHTML = ''; return; }
-    grid.innerHTML = reviews.map(r => {
+    allReviewsData = reviews;
+    renderReviews(currentLang);
+  } catch(e) { console.log('Reviews fejl:', e); }
+}
+
+function renderReviews(lang) {
+  const grid = document.getElementById('reviewsGrid');
+  if (!grid || !allReviewsData.length) return;
+  const isEN = lang === 'en';
+  grid.innerHTML = allReviewsData.map(r => {
       const vals = [r.r1_modtagelse,r.r2_vaerelse,r.r3_mad,r.r4_omgivelser,r.r5_program,r.r6_terapeuter,r.r7_faellesskab,r.r8_personlig,r.r9_ro,r.r10_samlet].filter(Boolean);
       const avg = vals.length ? Math.round(vals.reduce((a,b)=>a+b,0)/vals.length*10)/10 : 0;
       const stars = '★'.repeat(Math.round(avg)) + '☆'.repeat(5-Math.round(avg));
-      const navn = r.fornavn ? (r.fornavn + (r.efternavn ? ' ' + r.efternavn[0] + '.' : '')) : 'Anonym';
-      const fullQuote = r.markedsfoering || r.bedste || '';
+      const fullQuote = isEN
+        ? (r.comment_en || r.markedsfoering || r.bedste || '')
+        : (r.comment_da || r.markedsfoering || r.bedste || '');
+      const displayName = r.reviewer_name_display || (r.fornavn ? (r.fornavn + (r.efternavn ? ' ' + r.efternavn[0] + '.' : '')) : 'Anonym');
       const words = fullQuote.split(' ');
       const truncated = words.length > 30 ? words.slice(0,30).join(' ') + '…' : fullQuote;
       const needsMore = words.length > 30;
@@ -1076,10 +1089,9 @@ async function loadReviews() {
         <div class="review-stars">${stars} <span style="font-size:.75rem;color:rgba(44,35,24,.5);">${avg}/5</span></div>
         <div class="review-quote">“${truncated}”</div>
 
-        <div class="review-author"><strong>${navn}</strong>${r.retreat_navn ? '<br><span style="display:block;margin-top:.3rem;"><strong>' + r.retreat_navn + '</strong></span>' : ''}</div>
+        <div class="review-author"><strong>${displayName}</strong>${r.retreat_navn ? '<br><span style="display:block;margin-top:.3rem;"><strong>' + r.retreat_navn + '</strong></span>' : ''}</div>
       </div>`;
     }).join('');
-  } catch(e) { console.log('Reviews fejl:', e); }
 }
 
 function visReviewDetalje(rEncoded) {
@@ -1308,6 +1320,8 @@ function applyLang(data, lang) {
   set('paymentHeading',   DA(d.ui_payment_heading,    d.ui_payment_heading_en,    'Vælg betalingsform', 'Choose payment option'));
 
   // ── FAQ ──
+  console.log('FAQ DA:', d.faq_items ? d.faq_items.length + ' spørgsmål' : 'NULL');
+  console.log('FAQ EN:', d.faq_items_en ? d.faq_items_en.length + ' spørgsmål' : 'NULL', typeof d.faq_items_en);
   const faqItems = (isEN && d.faq_items_en && d.faq_items_en.length) ? d.faq_items_en : (d.faq_items || []);
   const faqEl = document.getElementById('faqList');
   if (faqEl && faqItems.length) {
@@ -1317,6 +1331,9 @@ function applyLang(data, lang) {
       '<div class="faq-a"><p>' + (f.a||'') + '</p></div></div>'
     ).join('');
   }
+
+  // ── ANMELDELSER ──
+  renderReviews(lang);
 
   // ── HTML LANG ──
   document.documentElement.lang = lang;
