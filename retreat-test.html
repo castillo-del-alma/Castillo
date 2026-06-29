@@ -1133,12 +1133,6 @@ let retreatData = null;
 
 function setLang(lang) {
   currentLang = lang;
-  console.log('setLang kaldt:', lang, 'retreatData:', retreatData ? 'OK' : 'NULL');
-  document.getElementById('btn-da').style.background = lang === 'da' ? 'var(--wine)' : 'transparent';
-  document.getElementById('btn-da').style.color = lang === 'da' ? '#fff' : 'var(--text-mid)';
-  document.getElementById('btn-en').style.background = lang === 'en' ? 'var(--wine)' : 'transparent';
-  document.getElementById('btn-en').style.color = lang === 'en' ? '#fff' : 'var(--text-mid)';
-  document.documentElement.lang = lang;
   if (retreatData) applyLang(retreatData, lang);
 }
 
@@ -1149,279 +1143,189 @@ function t(da, en) {
 function applyLang(data, lang) {
   const d = data;
   const isEN = lang === 'en';
+  const DA = (da, en, fallbackDA='', fallbackEN='') => isEN ? (en || fallbackEN || da || fallbackDA) : (da || fallbackDA);
 
-  // Titel og hero
-  const title = isEN && d.title_en ? d.title_en : (d.title || '');
-  const subtitle = isEN && d.subtitle_en ? d.subtitle_en : (d.subtitle || '');
-  const description = isEN && d.description_en ? d.description_en : (d.description || '');
-  document.getElementById('pageTitle').textContent = title + ' — Castillo del Alma';
-  document.getElementById('retreatTitle').innerHTML = title.replace(' & ', '<br>&amp; ');
-  document.getElementById('retreatCategory').textContent = subtitle;
-  document.getElementById('retreatSubtitle').textContent = description;
+  // ── SIDE TITEL ──
+  document.getElementById('pageTitle').textContent = DA(d.title, d.title_en) + ' — Castillo del Alma';
+  document.getElementById('retreatTitle').innerHTML = DA(d.title, d.title_en).replace(' & ', '<br>&amp; ');
+  document.getElementById('retreatCategory').textContent = DA(d.subtitle, d.subtitle_en);
+  document.getElementById('retreatSubtitle').textContent = DA(d.description, d.description_en);
+  document.getElementById('retreatNameField').value = DA(d.title, d.title_en) + (DA(d.subtitle, d.subtitle_en) ? ' — ' + DA(d.subtitle, d.subtitle_en) : '');
 
-  // Labels
-  const labels = {
-    duration: isEN && d.ui_label_duration_en ? d.ui_label_duration_en : (d.ui_label_duration || 'Varighed'),
-    arrival:  isEN && d.ui_label_arrival_en  ? d.ui_label_arrival_en  : (d.ui_label_arrival  || 'Ankomst'),
-    departure:isEN && d.ui_label_departure_en? d.ui_label_departure_en: (d.ui_label_departure || 'Afrejse'),
-    guests:   isEN && d.ui_label_guests_en   ? d.ui_label_guests_en   : (d.ui_label_guests   || 'Deltagere'),
-    location: isEN && d.location_en          ? d.location_en          : (d.location           || 'Mollina · Málaga'),
-    languages:isEN && d.languages_en         ? d.languages_en         : (d.languages          || '—'),
-    level:    isEN && d.level_en             ? d.level_en             : (d.level              || '—'),
-    priceFrom:isEN && d.ui_price_from_en     ? d.ui_price_from_en     : (d.ui_price_from      || 'Fra'),
-    priceSub: isEN && d.ui_price_per_person_en ? d.ui_price_per_person_en : (d.ui_price_per_person || 'pr. person · delt værelse'),
-  };
-
-  // Quick info bar
-  ['pillLocation','factLocation'].forEach(id => { const el = document.getElementById(id); if(el) el.textContent = labels.location; });
-  ['pillLanguages','factLanguages'].forEach(id => { const el = document.getElementById(id); if(el) el.textContent = labels.languages; });
-  const factLevel = document.getElementById('factLevel'); if(factLevel) factLevel.textContent = labels.level;
-
-  // Nav labels
-  const navAbout = document.getElementById('navAbout');
-  if(navAbout) navAbout.textContent = isEN && d.ui_nav_about_en ? d.ui_nav_about_en : (d.ui_nav_about || 'Om retreatet');
-  const navProg = document.getElementById('navProgram');
-  if(navProg) navProg.textContent = isEN && d.ui_nav_program_en ? d.ui_nav_program_en : (d.ui_nav_program || 'Program');
-  const navIncl = document.getElementById('navIncluded');
-  if(navIncl) navIncl.textContent = isEN && d.ui_nav_included_en ? d.ui_nav_included_en : (d.ui_nav_included || 'Inkluderet');
-  const navRooms = document.getElementById('navRooms');
-  if(navRooms) navRooms.textContent = isEN && d.ui_nav_rooms_en ? d.ui_nav_rooms_en : (d.ui_nav_rooms || 'Værelser');
-
-  // Om retreatet
-  const aboutHeading = document.getElementById('aboutHeading');
-  if(aboutHeading) aboutHeading.textContent = isEN && d.about_heading_en ? d.about_heading_en : (d.about_heading || '');
-  const aboutText = isEN && d.about_text_en ? d.about_text_en : (d.about_text || '');
-  const aboutQuote = isEN && d.about_quote_en ? d.about_quote_en : (d.about_quote || '');
-  const aboutContainer = document.getElementById('aboutTextContainer');
-  if(aboutContainer) {
-    let html = '';
-    if(aboutText) html += aboutText.split('\n').filter(Boolean).map(p => '<p>' + p + '</p>').join('');
-    if(aboutQuote) html += '<blockquote>"' + aboutQuote + '"</blockquote>';
-    aboutContainer.innerHTML = html || '<p>Information om dette retreat opdateres snart.</p>';
-  }
-
-  // Program
-  const progDays = isEN && d.program_days_en && d.program_days_en.length ? d.program_days_en : (d.program_days || []);
-  const programContainer = document.getElementById('programDaysContainer');
-  if(programContainer && progDays.length) {
-    programContainer.innerHTML = progDays.map((day, i) => '<div class="program-day' + (i===0?' open':'') + '"><div class="program-day-header" onclick="toggleDay(this)"><span class="program-day-num">' + (day.num||'') + '</span><span class="program-day-title">' + (day.title||'') + '</span><span class="program-day-toggle">↓</span></div><div class="program-day-body"><div class="program-day-content"><p>' + (day.text||'') + '</p></div></div></div>').join('');
-  }
-
-  // Inkluderet
-  const includedItems = isEN && d.included_en ? d.included_en.split('\n').filter(Boolean) : (d.included_items || []);
-  const includedContainer = document.getElementById('includedListContainer');
-  if(includedContainer) includedContainer.innerHTML = includedItems.map(i => '<div class="included-item">' + i + '</div>').join('');
-  const excludedItems = isEN && d.excluded_en ? d.excluded_en.split('\n').filter(Boolean) : (d.excluded_items || []);
-  const excludedContainer = document.getElementById('excludedListContainer');
-  if(excludedContainer) excludedContainer.innerHTML = excludedItems.map(i => '<div class="included-item">' + i + '</div>').join('');
-
-  // Mad
-  const foodEl = document.getElementById('foodHeading');
-  if(foodEl) foodEl.textContent = isEN && d.ui_food_heading_en ? d.ui_food_heading_en : (d.ui_food_heading || 'Nærende andalusisk køkken');
-
-
-  // Underviser
-  const teacherHeading = document.getElementById('teacherHeading');
-  if(teacherHeading) teacherHeading.textContent = isEN && d.ui_teacher_heading_en ? d.ui_teacher_heading_en : (d.ui_teacher_heading || 'Din guide på rejsen');
-
-  // Highlights
-  const hlHeading = document.getElementById('highlightsHeading');
-  if(hlHeading) hlHeading.textContent = isEN && d.ui_highlights_heading_en ? d.ui_highlights_heading_en : (d.ui_highlights_heading || 'Hvad gør dette retreat særligt?');
-
-  // Booking sektion
-  const bookHeading = document.getElementById('bookHeading');
-  if(bookHeading) bookHeading.textContent = isEN && d.ui_book_heading_en ? d.ui_book_heading_en : (d.ui_book_heading || 'Tag det første skridt');
-  const bookIntro = document.getElementById('bookIntro');
-  if(bookIntro) bookIntro.textContent = isEN && d.ui_book_intro_en ? d.ui_book_intro_en : (d.ui_book_intro || '');
-
-  // FAQ
-  const faqHeading = document.getElementById('faqHeading');
-  if(faqHeading) faqHeading.textContent = isEN && d.ui_faq_heading_en ? d.ui_faq_heading_en : (d.ui_faq_heading || 'FAQ');
-  const faqItems = isEN && d.faq_items_en && d.faq_items_en.length ? d.faq_items_en : (d.faq_items || []);
-  const faqContainer = document.getElementById('faqList');
-  if(faqContainer && faqItems.length) {
-    faqContainer.innerHTML = faqItems.map(f => '<div class="faq-item"><div class="faq-q" onclick="this.parentElement.classList.toggle(\'open\')"><span>' + (f.q||'') + '</span><i>↓</i></div><div class="faq-a"><p>' + (f.a||'') + '</p></div></div>').join('');
-  }
-
-  // Anmeldelser
-  const reviewsHeading = document.getElementById('reviewsSectionHeading');
-  if(reviewsHeading) reviewsHeading.innerHTML = isEN ? 'What our <em>guests</em> say' : 'Hvad siger vores <em>gæster</em>';
-
-  // Section labels
-  const sl = {
-    labelAbout:       isEN ? (d.ui_label_about_en||'About the Retreat')    : (d.ui_label_about||'Om retreatet'),
-    labelProgram:     isEN ? (d.ui_label_program_en||'Program')             : (d.ui_label_program||'Program'),
-    labelIncluded:    isEN ? (d.ui_label_included_en||"What's included")    : (d.ui_label_included||'Hvad er inkluderet'),
-    labelRooms:       isEN ? (d.ui_label_rooms_en||'Accommodation & Prices'): (d.ui_label_rooms||'Indkvartering & Priser'),
-    labelFood:        isEN ? (d.ui_label_food_en||'Food & Drink')           : (d.ui_label_food||'Mad & Drikke'),
-    labelFacilitator: isEN ? (d.ui_label_facilitator_en||'Facilitator')     : (d.ui_label_facilitator||'Facilitator'),
-    labelHighlights:  isEN ? (d.ui_label_highlights_en||'Retreat Highlights'): (d.ui_label_highlights||'Retreat Highlights'),
-    labelReviews:     isEN ? (d.ui_label_reviews_en||'Guest experiences')   : (d.ui_label_reviews||'Gæsternes oplevelser'),
-    labelFaq:         isEN ? (d.ui_label_faq_en||'Frequently asked questions'): (d.ui_label_faq||'Ofte stillede spørgsmål'),
-  };
-  Object.entries(sl).forEach(([id, txt]) => { const el = document.getElementById(id); if(el) el.textContent = txt; });
-
-  // H2/H3 overskrifter
-  const h = {
-    retreatInfoHeading:  isEN ? (d.ui_retreat_info_heading_en||'Retreat Info')     : (d.ui_retreat_info_heading||'Retreat info'),
-    programHeading:      isEN ? (d.ui_program_heading_en||'A week for yourself')    : (d.ui_program_heading||'En uge for dig selv'),
-    includedHeading:     isEN ? (d.ui_included_section_heading_en||'Everything you need'): (d.ui_included_section_heading||'Alt hvad du behøver'),
-    includedSubheading:  isEN ? '✓ '+( d.ui_included_heading_en||'Included in the price'): '✓ '+(d.ui_included_heading||'Inkluderet i prisen'),
-    excludedSubheading:  isEN ? '✗ '+(d.ui_excluded_heading_en||'Not included')    : '✗ '+(d.ui_excluded_heading||'Ikke inkluderet'),
-    roomsHeading:        isEN ? (d.ui_rooms_heading_en||'Choose Your Room')         : (d.ui_rooms_heading||'Vælg dit værelse'),
-    highlightsHeading:   isEN ? (d.ui_highlights_heading_en||'What makes this retreat special?'): (d.ui_highlights_heading||'Hvad gør dette retreat særligt?'),
-    faqHeading:          isEN ? (d.ui_faq_heading_en||'FAQ')                        : (d.ui_faq_heading||'FAQ'),
-    bookHeading:         isEN ? (d.ui_book_heading_en||'Take the First Step')       : (d.ui_book_heading||'Tag det første skridt'),
-  };
-  Object.entries(h).forEach(([id, txt]) => { const el = document.getElementById(id); if(el) el.textContent = txt; });
-
-  // Highlights individuelle titler
-  for(let i=1;i<=6;i++) {
-    const el = document.getElementById('hl'+i+'Title');
-    if(el) el.textContent = isEN ? (d['ui_highlight'+i+'_title_en']||d['ui_highlight'+i+'_title']||'') : (d['ui_highlight'+i+'_title']||'');
-    // Highlight tekster
-    const pEls = el?.parentElement?.querySelectorAll('p');
-    if(pEls && pEls.length) pEls[0].textContent = isEN ? (d['ui_highlight'+i+'_text_en']||d['ui_highlight'+i+'_text']||'') : (d['ui_highlight'+i+'_text']||'');
-  }
-
-  // Rum overskrifter og tekster
-  const rdh = document.getElementById('roomDoubleHeading');
-  if(rdh) rdh.textContent = isEN ? (d.ui_room_double_heading_en||'Shared Double Room') : (d.ui_room_double_heading||'Delt dobbeltværelse');
-  const rsh = document.getElementById('roomSingleHeading');
-  if(rsh) rsh.textContent = isEN ? (d.ui_room_single_heading_en||'Single Room') : (d.ui_room_single_heading||'Enkeltværelse');
-
-  // Mad heading (med <em> tag)
-
-  if(foodEl) {
-    const ft = isEN ? (d.ui_food_heading_en||'Nourishing Andalusian Cuisine') : (d.ui_food_heading||'Nærende andalusisk køkken');
-    foodH.innerHTML = ft.replace(/(\S+)\s+(\S+)$/, '$1 <em>$2</em>');
-  }
-
-  // Bar labels
-  const bl = {
-    barLabelDuration:  isEN ? (d.ui_label_duration_en||'Duration') : (d.ui_label_duration||'Varighed'),
-    barLabelArrival:   isEN ? (d.ui_label_arrival_en||'Arrival')   : (d.ui_label_arrival||'Ankomst'),
-    barLabelDeparture: isEN ? (d.ui_label_departure_en||'Departure'): (d.ui_label_departure||'Afrejse'),
-    factLabelDuration: isEN ? (d.ui_label_duration_en||'Duration') : (d.ui_label_duration||'Varighed'),
-    factLabelGuests:   isEN ? (d.ui_label_guests_en||'Participants'): (d.ui_label_guests||'Maks. deltagere'),
-    factLabelLevel:    isEN ? 'Level'                               : 'Niveau',
-    factLabelLanguages:isEN ? 'Language'                            : 'Sprog',
-    factLabelLocation: isEN ? 'Location'                            : 'Sted',
-    priceFrom:         isEN ? (d.ui_price_from_en||'From')          : (d.ui_price_from||'Fra'),
-    priceSub:          isEN ? (d.ui_price_per_person_en||'per person · shared room') : (d.ui_price_per_person||'pr. person · delt værelse'),
-  };
-  Object.entries(bl).forEach(([id, txt]) => { const el = document.getElementById(id); if(el) el.textContent = txt; });
-
-  // Booking knapper
-  const btnR = document.getElementById('btnReserver');
-  if(btnR) btnR.textContent = isEN ? (d.ui_bar_reserve_en||'Reserve') : (d.ui_bar_reserve||'Reserver');
-  const btnB = document.getElementById('btnBook');
-  if(btnB) btnB.textContent = isEN ? (d.ui_bar_book_en||'Book now') : (d.ui_bar_book||'Book nu');
-
-  // Booking form labels
-  const fl = {
-    bookLabelRetreat: isEN ? (d.ui_book_label_retreat_en||'Retreat')         : (d.ui_book_label_retreat||'Retreat'),
-    bookLabelCountry: isEN ? (d.ui_book_label_country_en||'Country')         : (d.ui_book_label_country||'Land'),
-    bookLabelDate:    isEN ? (d.ui_book_label_date_en||'Choose date')        : (d.ui_book_label_date||'Vælg dato'),
-    bookLabelRoom:    isEN ? (d.ui_book_label_room_en||'Room preference')    : (d.ui_book_label_room||'Værelses-præference'),
-    bookLabelWishes:  isEN ? (d.ui_book_label_wishes_en||'Special requests') : (d.ui_book_label_wishes||'Særlige ønsker'),
-  };
-  Object.entries(fl).forEach(([id, txt]) => { const el = document.getElementById(id); if(el) el.textContent = txt; });
-
-  // Booking intro
-  const bi = document.getElementById('bookIntro');
-  if(bi) bi.textContent = isEN ? (d.ui_book_intro_en||'Fill in the form and we will get back to you within 24 hours.') : (d.ui_book_intro||'');
-
-  // Betalingsvalg
-  const ph = document.getElementById('paymentHeading');
-  if(ph) ph.textContent = isEN ? (d.ui_payment_heading_en||'Choose payment option') : (d.ui_payment_heading||'Vælg betalingsform');
-
-  // Teacher heading
-  const th = document.getElementById('teacherHeading');
-  if(th) th.textContent = isEN ? (d.ui_teacher_heading_en||'Your Guide on the Journey') : (d.ui_teacher_heading||'Din guide på rejsen');
-
-  // Fact labels og værdier
-  const factLabels = {
-    factLabelDuration:  isEN ? (d.ui_label_duration_en||'Duration')    : (d.ui_label_duration||'Varighed'),
-    factLabelGuests:    isEN ? (d.ui_label_guests_en||'Max participants'): (d.ui_label_guests||'Maks. deltagere'),
-    factLabelLevel:     isEN ? 'Level'                                  : 'Niveau',
-    factLabelLanguages: isEN ? 'Language'                               : 'Sprog',
-    factLabelLocation:  isEN ? 'Location'                               : 'Sted',
-  };
-  Object.entries(factLabels).forEach(([id,txt]) => { const el=document.getElementById(id); if(el) el.textContent=txt; });
-
-  // Fact værdier
-  const fv = document.getElementById('factLanguages');
-  if(fv) fv.textContent = isEN ? (d.languages_en||d.languages||'—') : (d.languages||'—');
-  const fl2 = document.getElementById('factLevel');
-  if(fl2) fl2.textContent = isEN ? (d.level_en||d.level||'—') : (d.level||'—');
-  const floc = document.getElementById('factLocation');
-  if(floc) floc.textContent = isEN ? (d.location_en||d.location||'—') : (d.location||'—');
-  const fmax = document.getElementById('factMaxGuests');
-  if(fmax) fmax.textContent = d.max_guests ? (isEN ? d.max_guests+' participants' : d.max_guests+' personer') : '—';
-
-  // Opdater duration tekst med korrekt sprog
-  if(d.arrival_date && d.departure_date) {
+  // ── DURATION ──
+  if (d.arrival_date && d.departure_date) {
     const nights = Math.round((new Date(d.departure_date) - new Date(d.arrival_date)) / (1000*60*60*24));
-    const durTxt = isEN
-      ? nights + ' nights · ' + (nights+1) + ' days'
-      : nights + ' nætter · ' + (nights+1) + ' dage';
-    ['pillNights','barDuration','factDuration'].forEach(id => {
-      const el = document.getElementById(id); if(el) el.textContent = durTxt;
-    });
+    const durTxt = isEN ? nights + ' nights · ' + (nights+1) + ' days' : nights + ' nætter · ' + (nights+1) + ' dage';
+    ['pillNights','barDuration','factDuration'].forEach(id => { const el=document.getElementById(id); if(el) el.textContent=durTxt; });
   }
 
-  // Opdater dato-labels og værdier
-  const bl2 = {
-    barLabelDuration:  isEN ? (d.ui_label_duration_en||'Duration') : (d.ui_label_duration||'Varighed'),
-    barLabelArrival:   isEN ? (d.ui_label_arrival_en||'Arrival')   : (d.ui_label_arrival||'Ankomst'),
-    barLabelDeparture: isEN ? (d.ui_label_departure_en||'Departure'): (d.ui_label_departure||'Afrejse'),
-    priceFrom:         isEN ? (d.ui_price_from_en||'From')          : (d.ui_price_from||'Fra'),
-    priceSub:          isEN ? (d.ui_price_per_person_en||'per person · shared room') : (d.ui_price_per_person||'pr. person · delt værelse'),
-  };
-  Object.entries(bl2).forEach(([id, txt]) => { const el = document.getElementById(id); if(el) el.textContent = txt; });
+  // ── BAR LABELS ──
+  const set = (id, txt) => { const el=document.getElementById(id); if(el) el.textContent=txt; };
+  set('barLabelDuration',  DA(d.ui_label_duration,  d.ui_label_duration_en,  'Varighed',  'Duration'));
+  set('barLabelArrival',   DA(d.ui_label_arrival,   d.ui_label_arrival_en,   'Ankomst',   'Arrival'));
+  set('barLabelDeparture', DA(d.ui_label_departure, d.ui_label_departure_en, 'Afrejse',   'Departure'));
+  set('priceFrom',         DA(d.ui_price_from,      d.ui_price_from_en,      'Fra',       'From'));
+  set('priceSub',          DA(d.ui_price_per_person,d.ui_price_per_person_en,'pr. person · delt værelse','per person · shared room'));
 
-  // Opdater dato-værdier med korrekt locale
-  if(d.arrival_date) {
+  // ── BAR DATOER ──
+  if (d.arrival_date) {
     const locale = isEN ? 'en-GB' : 'da-DK';
-    const fmt = (dt) => dt ? new Date(dt).toLocaleDateString(locale, {day:'numeric',month:'long',year:'numeric'}) : '—';
-    const arr = document.getElementById('barArrival'); if(arr) arr.textContent = fmt(d.arrival_date);
-    const dep = document.getElementById('barDeparture'); if(dep) dep.textContent = fmt(d.departure_date);
+    const fmt = dt => dt ? new Date(dt).toLocaleDateString(locale, {day:'numeric',month:'long',year:'numeric'}) : '—';
+    set('barArrival',   fmt(d.arrival_date));
+    set('barDeparture', fmt(d.departure_date));
   }
 
-  // Mad tekster
+  // ── BAR KNAPPER ──
+  set('btnReserver', DA(d.ui_bar_reserve, d.ui_bar_reserve_en, 'Reserver', 'Reserve'));
+  set('btnBook',     DA(d.ui_bar_book,    d.ui_bar_book_en,    'Book nu',  'Book now'));
 
-  if(foodEl) {
-    const ft = isEN ? (d.ui_food_heading_en||'Nourishing Andalusian Cuisine') : (d.ui_food_heading||'Nærende andalusisk køkken');
-    foodEl.innerHTML = ft;
+  // ── NAV LINKS ──
+  set('navAbout',    DA(d.ui_nav_about,     d.ui_nav_about_en,     'Om retreatet',     'About the Retreat'));
+  set('navProgram',  DA(d.ui_nav_program,   d.ui_nav_program_en,   'Program',          'Program'));
+  set('navIncluded', DA(d.ui_nav_included,  d.ui_nav_included_en,  'Inkluderet',       "What's Included"));
+  set('navRooms',    DA(d.ui_nav_rooms,     d.ui_nav_rooms_en,     'Værelser',         'Rooms'));
+
+  // ── RETREAT INFO BOX ──
+  set('retreatInfoHeading', DA(d.ui_retreat_info_heading, d.ui_retreat_info_heading_en, 'Retreat info', 'Retreat Info'));
+  set('factLabelDuration',  DA(d.ui_label_duration,  d.ui_label_duration_en,  'Varighed',        'Duration'));
+  set('factLabelGuests',    DA(d.ui_label_guests,    d.ui_label_guests_en,    'Maks. deltagere', 'Max participants'));
+  set('factLabelLevel',     isEN ? 'Level'    : 'Niveau');
+  set('factLabelLanguages', isEN ? 'Language' : 'Sprog');
+  set('factLabelLocation',  isEN ? 'Location' : 'Sted');
+  set('factLanguages', DA(d.languages, d.languages_en));
+  set('factLevel',     DA(d.level, d.level_en));
+  set('factLocation',  DA(d.location, d.location_en));
+  if (d.max_guests) set('factMaxGuests', isEN ? d.max_guests + ' participants' : d.max_guests + ' personer');
+
+  // ── PILL ──
+  set('pillLocation',  DA(d.location, d.location_en));
+  set('pillLanguages', DA(d.languages, d.languages_en));
+
+  // ── SECTION LABELS ──
+  set('labelAbout',       DA(d.ui_label_about,       d.ui_label_about_en,       'Om retreatet',         'About the Retreat'));
+  set('labelProgram',     DA(d.ui_label_program,     d.ui_label_program_en,     'Program',              'Program'));
+  set('labelIncluded',    DA(d.ui_label_included,    d.ui_label_included_en,    'Hvad er inkluderet',   "What's included"));
+  set('labelRooms',       DA(d.ui_label_rooms,       d.ui_label_rooms_en,       'Indkvartering & Priser','Accommodation & Prices'));
+  set('labelFood',        DA(d.ui_label_food,        d.ui_label_food_en,        'Mad & Drikke',         'Food & Drinks'));
+  set('labelFacilitator', DA(d.ui_label_facilitator, d.ui_label_facilitator_en, 'Facilitator',          'Facilitator'));
+  set('labelHighlights',  DA(d.ui_label_highlights,  d.ui_label_highlights_en,  'Retreat Highlights',   'Retreat Highlights'));
+  set('labelReviews',     DA(d.ui_label_reviews,     d.ui_label_reviews_en,     'Gæsternes oplevelser', 'Guest experiences'));
+  set('labelFaq',         DA(d.ui_label_faq,         d.ui_label_faq_en,         'Ofte stillede spørgsmål','Frequently asked questions'));
+  set('labelBooking',     DA(d.ui_label_booking,     d.ui_label_booking_en,     'Book dit retreat',     'Book your retreat'));
+
+  // ── OM RETREATET ──
+  set('aboutHeading', DA(d.about_heading, d.about_heading_en));
+  const aboutText  = DA(d.about_text,  d.about_text_en,  '', '');
+  const aboutQuote = DA(d.about_quote, d.about_quote_en, '', '');
+  const aboutEl = document.getElementById('aboutTextContainer');
+  if (aboutEl) {
+    let html = '';
+    if (aboutText)  html += aboutText.split('\n').filter(Boolean).map(p => '<p>' + p + '</p>').join('');
+    if (aboutQuote) html += '<blockquote>"' + aboutQuote + '"</blockquote>';
+    aboutEl.innerHTML = html || '<p>Information opdateres snart.</p>';
   }
-  console.log('DEBUG food:', d.ui_food_text ? d.ui_food_text.substring(0,50) : 'NULL', '| EN:', d.ui_food_text_en ? d.ui_food_text_en.substring(0,50) : 'NULL');
-  console.log('DEBUG bio:', d.teacher_bio ? d.teacher_bio.substring(0,50) : 'NULL', '| EN:', d.teacher_bio_en ? d.teacher_bio_en.substring(0,50) : 'NULL');
+
+  // ── H2 OVERSKRIFTER ──
+  set('programHeading',   DA(d.ui_program_heading,          d.ui_program_heading_en,          'En uge for dig selv',  'A week for yourself'));
+  set('includedHeading',  DA(d.ui_included_section_heading, d.ui_included_section_heading_en, 'Alt hvad du behøver',  'Everything you need'));
+  set('includedSubheading', '✓ ' + DA(d.ui_included_heading, d.ui_included_heading_en, 'Inkluderet i prisen', 'Included in the price'));
+  set('excludedSubheading', '✗ ' + DA(d.ui_excluded_heading, d.ui_excluded_heading_en, 'Ikke inkluderet',     'Not included'));
+  set('roomsHeading',     DA(d.ui_rooms_heading,     d.ui_rooms_heading_en,     'Vælg dit værelse',             'Choose your room'));
+  set('highlightsHeading',DA(d.ui_highlights_heading,d.ui_highlights_heading_en,'Hvad gør dette retreat særligt?','What makes this retreat special?'));
+  set('faqHeading',       DA(d.ui_faq_heading,       d.ui_faq_heading_en,       'FAQ',                          'FAQ'));
+  set('bookHeading',      DA(d.ui_book_heading,       d.ui_book_heading_en,      'Tag det første skridt',        'Take the First Step'));
+  const reviewsH = document.getElementById('reviewsSectionHeading');
+  if (reviewsH) reviewsH.innerHTML = isEN ? 'What our <em>guests</em> say' : 'Hvad siger vores <em>gæster</em>';
+
+  // ── PROGRAM ──
+  const progDays = (isEN && d.program_days_en && d.program_days_en.length) ? d.program_days_en : (d.program_days || []);
+  const progEl = document.getElementById('programDaysContainer');
+  if (progEl && progDays.length) {
+    progEl.innerHTML = progDays.map((day, i) =>
+      '<div class="program-day' + (i===0?' open':'') + '">' +
+      '<div class="program-day-header" onclick="toggleDay(this)">' +
+      '<span class="program-day-num">' + (day.num||'') + '</span>' +
+      '<span class="program-day-title">' + (day.title||'') + '</span>' +
+      '<span class="program-day-toggle">↓</span></div>' +
+      '<div class="program-day-body"><div class="program-day-content"><p>' + (day.text||'') + '</p></div></div></div>'
+    ).join('');
+  }
+
+  // ── INKLUDERET ──
+  const inclItems = (isEN && d.included_en) ? d.included_en.split('\n').filter(Boolean) : (d.included_items || []);
+  const inclEl = document.getElementById('includedListContainer');
+  if (inclEl) inclEl.innerHTML = inclItems.map(i => '<div class="included-item">' + i + '</div>').join('');
+  const exclItems = (isEN && d.excluded_en) ? d.excluded_en.split('\n').filter(Boolean) : (d.excluded_items || []);
+  const exclEl = document.getElementById('excludedListContainer');
+  if (exclEl) exclEl.innerHTML = exclItems.map(i => '<div class="included-item">' + i + '</div>').join('');
+
+  // ── MAD ──
+  const foodEl = document.getElementById('foodHeading');
+  if (foodEl) foodEl.textContent = DA(d.ui_food_heading, d.ui_food_heading_en, 'Nærende andalusisk køkken', 'Nourishing Andalusian Cuisine');
   const foodTC = document.getElementById('foodTextContainer');
-  if(foodTC) {
-    const defaultFoodDA = 'Mad er en central del af retreatoplevelsen. Alle måltider tilberedes med friske, lokale og sæsonbestemte råvarer fra regionen. Vi spiser enkelt, nærende og med respekt for kroppen.\nMorgenmaden er let og energigivende — frugt, yoghurt, æg og brød. Frokosten er større og ofte et fælles bord med salater, grøntsager og proteiner. Aftensmaden er dagens sociale samlingspunkt — tre retter med lokale vine.\nSærlige kostbehov imødekommes fuldt ud — vegetar, vegansk, glutenfri mv. Oplys ved tilmelding.';
-    const defaultFoodEN = 'Food is a central part of the retreat experience. All meals are prepared with fresh, local and seasonal ingredients from the region. We eat simply, nutritiously and with respect for the body.\nBreakfast is light and energising — fruit, yoghurt, eggs and bread. Lunch is more substantial, often a shared table with salads, vegetables and proteins. Dinner is the social highlight of the day — three courses with local wines.\nSpecial dietary requirements are fully accommodated — vegetarian, vegan, gluten-free etc. Please inform us at registration.';
-    const foodTxt = isEN ? (d.ui_food_text_en || defaultFoodEN) : (d.ui_food_text || defaultFoodDA);
+  if (foodTC) {
+    const defDA = 'Mad er en central del af retreatoplevelsen. Alle måltider tilberedes med friske, lokale og sæsonbestemte råvarer fra regionen. Vi spiser enkelt, nærende og med respekt for kroppen.\nMorgenmaden er let og energigivende — frugt, yoghurt, æg og brød. Frokosten er større og ofte et fælles bord med salater, grøntsager og proteiner. Aftensmaden er dagens sociale samlingspunkt — tre retter med lokale vine.\nSærlige kostbehov imødekommes fuldt ud — vegetar, vegansk, glutenfri mv. Oplys ved tilmelding.';
+    const defEN = 'Food is a central part of the retreat experience. All meals are prepared with fresh, local and seasonal ingredients from the region. We eat simply, nutritiously and with respect for the body.\nBreakfast is light and energising — fruit, yoghurt, eggs and bread. Lunch is more substantial, often a shared table with salads, vegetables and proteins. Dinner is the social highlight of the day — three courses with local wines.\nSpecial dietary requirements are fully accommodated — vegetarian, vegan, gluten-free etc. Please inform us at registration.';
+    const foodTxt = DA(d.ui_food_text, d.ui_food_text_en, defDA, defEN);
     foodTC.innerHTML = foodTxt.split('\n').filter(Boolean).map(p => '<p>' + p + '</p>').join('');
   }
 
-  // Facilitator
-  const facRole = document.getElementById('facilitatorRole');
-  if(facRole) facRole.textContent = isEN ? (d.ui_facilitator_role_en||d.ui_facilitator_role||'Wellness Facilitator · Breathwork Practitioner · Somatic Therapist') : (d.ui_facilitator_role||'Wellness Facilitator · Breathwork Practitioner · Somatic Therapist');
-  const bioTC = document.getElementById('teacherBioContainer');
-  if(bioTC) {
-    const defaultBioDA = 'Retreatet ledes af en erfaren wellness-facilitator med speciale i nervesystemsregulering, breathwork og somatic therapy. Med mange års erfaring fra retreats i Skandinavien og Sydeuropa skabes et trygt og professionelt rum for transformation.\nFacilitatoren kombinerer videnskabelig forankring med en dyb menneskelig tilgang — og møder hver deltager præcis der, hvor de er.\nFacilitatorinfo opdateres løbende. Kontakt os for mere information om den specifikke facilitator for en given dato.';
-    const defaultBioEN = 'The retreat is led by an experienced wellness facilitator specialising in nervous system regulation, breathwork and somatic therapy. With many years of experience from retreats in Scandinavia and Southern Europe, a safe and professional space for transformation is created.\nThe facilitator combines scientific grounding with a deeply human approach — meeting each participant exactly where they are.\nFacilitator information is updated continuously. Contact us for more information about the specific facilitator for a given date.';
-    const bio = isEN ? (d.teacher_bio_en || defaultBioEN) : (d.teacher_bio || defaultBioDA);
-    bioTC.innerHTML = bio.split('\n').filter(Boolean).map(p => '<p>' + p + '</p>').join('');
+  // ── FACILITATOR ──
+  set('facilitatorRole', DA(d.ui_facilitator_role, d.ui_facilitator_role_en, 'Wellness Facilitator · Breathwork Practitioner · Somatic Therapist', 'Wellness Facilitator · Breathwork Practitioner · Somatic Therapist'));
+  const teacherH = document.getElementById('teacherHeading');
+  if (teacherH) teacherH.textContent = DA(d.ui_teacher_heading, d.ui_teacher_heading_en, 'Din guide på rejsen', 'Your Guide on the Journey');
+  const bioEl = document.getElementById('teacherBioContainer');
+  if (bioEl) {
+    const defBioDA = 'Retreatet ledes af en erfaren wellness-facilitator med speciale i nervesystemsregulering, breathwork og somatic therapy. Med mange års erfaring fra retreats i Skandinavien og Sydeuropa skabes et trygt og professionelt rum for transformation.\nFacilitatoren kombinerer videnskabelig forankring med en dyb menneskelig tilgang — og møder hver deltager præcis der, hvor de er.\nFacilitatorinfo opdateres løbende. Kontakt os for mere information om den specifikke facilitator for en given dato.';
+    const defBioEN = 'The retreat is led by an experienced wellness facilitator specialising in nervous system regulation, breathwork and somatic therapy. With many years of experience from retreats in Scandinavia and Southern Europe, a safe and professional space for transformation is created.\nThe facilitator combines scientific grounding with a deeply human approach — meeting each participant exactly where they are.\nFacilitator information is updated continuously. Contact us for more information about the specific facilitator for a given date.';
+    const bio = DA(d.teacher_bio, d.teacher_bio_en, defBioDA, defBioEN);
+    bioEl.innerHTML = bio.split('\n').filter(Boolean).map(p => '<p>' + p + '</p>').join('');
   }
 
-  // Rum — genbyg med korrekt sprog
-  if(d) renderRooms(d, lang);
+  // ── HIGHLIGHTS ──
+  set('highlightsHeading', DA(d.ui_highlights_heading, d.ui_highlights_heading_en, 'Hvad gør dette retreat særligt?', 'What makes this retreat special?'));
+  for (let i=1; i<=6; i++) {
+    const titleEl = document.getElementById('hl' + i + 'Title');
+    if (titleEl) {
+      titleEl.textContent = DA(d['ui_highlight'+i+'_title'], d['ui_highlight'+i+'_title_en'], '', '');
+      const pEls = titleEl.parentElement?.querySelectorAll('p');
+      if (pEls && pEls.length) pEls[0].textContent = DA(d['ui_highlight'+i+'_text'], d['ui_highlight'+i+'_text_en'], '', '');
+    }
+  }
 
-  // HTML lang attribut
+  // ── RUM ──
+  renderRooms(d, lang);
+  const roomsIntroEl = document.getElementById('roomsIntro');
+  if (roomsIntroEl) roomsIntroEl.textContent = DA(d.ui_rooms_intro, d.ui_rooms_intro_en, 'Alle værelser har eget badeværelse og er fuldt inkluderet i retreatprisen', 'All rooms have en-suite bathrooms and are fully included in the retreat price');
+
+  // ── BOOKING ──
+  set('bookIntro', DA(d.ui_book_intro, d.ui_book_intro_en, '', ''));
+  set('bookLabelRetreat', DA(d.ui_book_label_retreat, d.ui_book_label_retreat_en, 'Retreat', 'Retreat'));
+  set('bookLabelCountry', DA(d.ui_book_label_country, d.ui_book_label_country_en, 'Land', 'Country'));
+  set('bookLabelDate',    DA(d.ui_book_label_date,    d.ui_book_label_date_en,    'Vælg dato', 'Choose date'));
+  set('bookLabelRoom',    DA(d.ui_book_label_room,    d.ui_book_label_room_en,    'Værelses-præference', 'Room preference'));
+  set('bookLabelWishes',  DA(d.ui_book_label_wishes,  d.ui_book_label_wishes_en,  'Særlige ønsker', 'Special requests'));
+  set('paymentHeading',   DA(d.ui_payment_heading,    d.ui_payment_heading_en,    'Vælg betalingsform', 'Choose payment option'));
+
+  // ── FAQ ──
+  const faqItems = (isEN && d.faq_items_en && d.faq_items_en.length) ? d.faq_items_en : (d.faq_items || []);
+  const faqEl = document.getElementById('faqList');
+  if (faqEl && faqItems.length) {
+    faqEl.innerHTML = faqItems.map(f =>
+      '<div class="faq-item"><div class="faq-q" onclick="this.parentElement.classList.toggle(\'open\')">' +
+      '<span>' + (f.q||'') + '</span><i>↓</i></div>' +
+      '<div class="faq-a"><p>' + (f.a||'') + '</p></div></div>'
+    ).join('');
+  }
+
+  // ── HTML LANG ──
   document.documentElement.lang = lang;
+  document.getElementById('btn-da').style.background = lang==='da' ? 'var(--wine)' : 'transparent';
+  document.getElementById('btn-da').style.color      = lang==='da' ? '#fff' : 'var(--text-mid)';
+  document.getElementById('btn-en').style.background = lang==='en' ? 'var(--wine)' : 'transparent';
+  document.getElementById('btn-en').style.color      = lang==='en' ? '#fff' : 'var(--text-mid)';
 }
+
 
 async function loadRetreatData() {
   const slug = getSlugFromUrl();
