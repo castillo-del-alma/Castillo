@@ -884,7 +884,7 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:3rem
             <input type="text" id="retreatNameField" value="" readonly style="background:#fff;color:#7a1f35;cursor:default;border-color:#d4c4a0;font-size:.68rem;font-weight:500;letter-spacing:.08em;text-transform:uppercase;">
           </div>
           <div class="form-row">
-            <div class="form-field"><label>Fornavn *</label><input id="f-fornavn" type="text" placeholder="Dit fornavn" required></div>
+            <div class="form-field"><label>Fornavn *</label><input id="f-fornavn" type="text" placeholder="Dit fornavn" id="f-fornavn-placeholder" required></div>
             <div class="form-field"><label>Efternavn *</label><input id="f-efternavn" type="text" placeholder="Dit efternavn" required></div>
           </div>
           <div class="form-row">
@@ -1012,8 +1012,8 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:3rem
           </div>
           <div id="form-error" style="display:none;font-size:.78rem;color:#c05c30;margin-top:.2rem;"></div>
           <div class="form-btns">
-            <button type="button" class="form-submit form-submit-secondary" onclick="sendForespørgsel()">Reserver din plads</button>
-            <button type="button" class="form-submit" id="btn-depositum" onclick="visBetalingsvalg()">Book og betal</button>
+            <button type="button" class="form-submit form-submit-secondary" id="btn-reserver-form" onclick="sendForespørgsel()">Reserver din plads</button>
+            <button type="button" class="form-submit" id="btn-book-form" onclick="visBetalingsvalg()">Book og betal</button>
           </div>
         </div>
       </div>
@@ -1311,7 +1311,9 @@ function applyLang(data, lang) {
   if (roomsIntroEl) roomsIntroEl.textContent = DA(d.ui_rooms_intro, d.ui_rooms_intro_en, 'Alle værelser har eget badeværelse og er fuldt inkluderet i retreatprisen', 'All rooms have en-suite bathrooms and are fully included in the retreat price');
 
   // ── BOOKING ──
-  set('bookIntro', DA(d.ui_book_intro, d.ui_book_intro_en, '', ''));
+  set('bookIntro', DA(d.ui_book_intro, d.ui_book_intro_en,
+    'Udfyld formularen og vi vender tilbage inden for 24 timer med bekræftelse og information om næste trin.',
+    'Fill in the form and we will get back to you within 24 hours with a confirmation and information about next steps.'));
   set('bookLabelRetreat', DA(d.ui_book_label_retreat, d.ui_book_label_retreat_en, 'Retreat', 'Retreat'));
   set('bookLabelCountry', DA(d.ui_book_label_country, d.ui_book_label_country_en, 'Land', 'Country'));
   set('bookLabelDate',    DA(d.ui_book_label_date,    d.ui_book_label_date_en,    'Vælg dato', 'Choose date'));
@@ -1319,11 +1321,42 @@ function applyLang(data, lang) {
   set('bookLabelWishes',  DA(d.ui_book_label_wishes,  d.ui_book_label_wishes_en,  'Særlige ønsker', 'Special requests'));
   set('paymentHeading',   DA(d.ui_payment_heading,    d.ui_payment_heading_en,    'Vælg betalingsform', 'Choose payment option'));
 
+  // Booking form placeholders og labels
+  const fFornavn = document.getElementById('f-fornavn');
+  if(fFornavn) fFornavn.placeholder = isEN ? 'Your first name' : 'Dit fornavn';
+  const fEfternavn = document.getElementById('f-efternavn');
+  if(fEfternavn) fEfternavn.placeholder = isEN ? 'Your last name' : 'Dit efternavn';
+  const fEmail = document.getElementById('f-email');
+  if(fEmail) fEmail.placeholder = isEN ? 'your@email.com' : 'din@email.com';
+  const fTlf = document.getElementById('f-telefon');
+  if(fTlf) fTlf.placeholder = isEN ? '+44 xx xx xx xx' : '+45 xx xx xx xx';
+  const fKommentar = document.getElementById('f-kommentar');
+  if(fKommentar) fKommentar.placeholder = isEN ? 'Write your special requests or needs' : 'Skriv dine særlige ønsker eller behov';
+
+  // Tilvalg label
+  const addonsHeading = document.querySelector('.addons-heading');
+  if(addonsHeading) addonsHeading.textContent = isEN ? 'Add-ons' : 'Tilvalg';
+  const addonsIntro = document.querySelector('.addons-note');
+  if(addonsIntro) addonsIntro.textContent = isEN ? 'Add-ons can be ordered here. Payment is made on departure.' : 'Tilvalg kan bestilles her. Afregning foretages ved afrejse.';
+
+  // Reserver og Book knapper i formularen
+  const reserveBtn = document.getElementById('btn-reserver-form');
+  if(reserveBtn) reserveBtn.textContent = DA(d.ui_form_reserve_btn, d.ui_form_reserve_btn_en, 'Reserver din plads', 'Reserve your place');
+  const bookBtn = document.getElementById('btn-book-form');
+  if(bookBtn) bookBtn.textContent = DA(d.ui_form_book_btn, d.ui_form_book_btn_en, 'Book og betal', 'Book and pay');
+
   // ── FAQ ──
-  // Normaliser FAQ til array (Supabase kan returnere object i stedet for array)
-  const normArr = v => Array.isArray(v) ? v : (v && typeof v === 'object' ? Object.values(v) : []);
-  const faqDA = normArr(d.faq_items);
-  const faqEN = normArr(d.faq_items_en);
+  // Normaliser FAQ til array
+  const normFaq = v => {
+    if (!v) return [];
+    if (Array.isArray(v)) return v;
+    if (typeof v === 'string') { try { const p = JSON.parse(v); return Array.isArray(p) ? p : Object.values(p); } catch(e) { return []; } }
+    if (typeof v === 'object') return Object.values(v);
+    return [];
+  };
+  const faqDA = normFaq(d.faq_items);
+  const faqEN = normFaq(d.faq_items_en);
+  console.log('FAQ normaliseret DA:', faqDA.length, 'EN:', faqEN.length, faqEN[0]);
   const faqItems = (isEN && faqEN.length) ? faqEN : faqDA;
   const faqEl = document.getElementById('faqList');
   if (faqEl && faqItems.length) {
@@ -1810,7 +1843,7 @@ async function betalDepositum(overrideAmount = null, paymentType = 'deposit') {
   if (!fornavn || !email || !telefon) { showFormError('Udfyld fornavn, e-mail og telefon.'); return; }
   showFormError('');
 
-  const btn = document.getElementById('btn-depositum');
+  const btn = document.getElementById('btn-book-form');
   btn.disabled = true;
   btn.innerHTML = '<span style="display:inline-block;width:12px;height:12px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .6s linear infinite;vertical-align:middle;margin-right:.4rem;"></span>Opretter booking…';
 
@@ -1921,7 +1954,7 @@ function removeGuest(id) {
 function updatePriceDisplay() {
   const antalGaester = 1 + document.querySelectorAll('.guest-row').length;
   const depositum = Math.round(RETREAT_PRICE * DEPOSIT_PCT * antalGaester);
-  const btn = document.getElementById('btn-depositum');
+  const btn = document.getElementById('btn-book-form');
   if (btn && !btn.disabled) {
     btn.textContent = 'Book nu og betal';
   }
