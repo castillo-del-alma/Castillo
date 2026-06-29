@@ -1664,9 +1664,12 @@ class SectionRings {
 
 const sectionAnimators = [];
 document.querySelectorAll('.section-canvas').forEach(canvas=>{
-  const key = canvas.dataset.palette||'warm';
-  const anim = new SectionRings(canvas, PALETTES[key]);
-  sectionAnimators.push({canvas, anim, started:false});
+  try {
+    const key = canvas.dataset.palette||'warm';
+    const palette = PALETTES[key] || PALETTES['warm'] || [[184,138,30],[192,92,48]];
+    const anim = new SectionRings(canvas, palette);
+    sectionAnimators.push({canvas, anim, started:false});
+  } catch(e) { console.warn('SectionRings init fejl:', e.message); }
 });
 
 window.addEventListener('resize',()=>{
