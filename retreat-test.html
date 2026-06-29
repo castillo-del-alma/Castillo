@@ -1136,6 +1136,7 @@ let retreatData = null;
 
 function setLang(lang) {
   currentLang = lang;
+  console.log('setLang kaldt:', lang, 'retreatData:', retreatData ? 'OK' : 'NULL');
   document.getElementById('btn-da').style.background = lang === 'da' ? 'var(--wine)' : 'transparent';
   document.getElementById('btn-da').style.color = lang === 'da' ? '#fff' : 'var(--text-mid)';
   document.getElementById('btn-en').style.background = lang === 'en' ? 'var(--wine)' : 'transparent';
