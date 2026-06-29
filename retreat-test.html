@@ -1462,10 +1462,6 @@ function renderAddonsInForm(addons) {
       <span class="addon-price">€${a.price}</span>
     </label>
   `).join('');
-  } catch(e) {
-    document.getElementById('retreatTitle').textContent = 'Fejl: ' + e.message;
-    console.error(e);
-  }
 }
 
 document.addEventListener('DOMContentLoaded', loadRetreatData);
