@@ -581,13 +581,13 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:3rem
     <img src="img/logo-castillo-hvid_transperant.png" alt="Castillo del Alma">
   </a>
   <ul class="nav-links">
-    <li><a href="#overview">Om retreatet</a></li>
-    <li><a href="#highlights">Highlights</a></li>
+    <li><a href="#overview" id="navAbout">Om retreatet</a></li>
+    <li><a href="#highlights" id="navHighlights">Highlights</a></li>
     <li><a href="#program" id="navProgram">Program</a></li>
     <li><a href="#included" id="navIncluded">Inkluderet</a></li>
     <li><a href="#rooms" id="navRooms">Værelser</a></li>
-    <li><a href="#reviews">Anmeldelser</a></li>
-    <li><a href="#booking">Book</a></li>
+    <li><a href="#reviews" id="navReviews">Anmeldelser</a></li>
+    <li><a href="#booking" id="navBook">Book</a></li>
   </ul>
   <div style="display:flex;align-items:center;gap:.8rem;">
     <span style="font-size:.58rem;letter-spacing:.12em;text-transform:uppercase;background:var(--terracotta);color:#fff;padding:.2rem .6rem;">TEST</span>
@@ -1234,10 +1234,13 @@ function applyLang(data, lang) {
   set('btnBook',     DA(d.ui_bar_book,    d.ui_bar_book_en,    'Book nu',  'Book now'));
 
   // ── NAV LINKS ──
-  set('navAbout',    DA(d.ui_nav_about,     d.ui_nav_about_en,     'Om retreatet',     'About the Retreat'));
-  set('navProgram',  DA(d.ui_nav_program,   d.ui_nav_program_en,   'Program',          'Program'));
-  set('navIncluded', DA(d.ui_nav_included,  d.ui_nav_included_en,  'Inkluderet',       "What's Included"));
-  set('navRooms',    DA(d.ui_nav_rooms,     d.ui_nav_rooms_en,     'Værelser',         'Rooms'));
+  set('navAbout',      DA(d.ui_nav_about,      d.ui_nav_about_en,      'Om retreatet',  'About the Retreat'));
+  set('navHighlights', DA(d.ui_nav_highlights, d.ui_nav_highlights_en, 'Highlights',    'Highlights'));
+  set('navProgram',    DA(d.ui_nav_program,    d.ui_nav_program_en,    'Program',       'Program'));
+  set('navIncluded',   DA(d.ui_nav_included,   d.ui_nav_included_en,   'Inkluderet',    "What's Included"));
+  set('navRooms',      DA(d.ui_nav_rooms,      d.ui_nav_rooms_en,      'Værelser',      'Rooms'));
+  set('navReviews',    DA(d.ui_nav_reviews,    d.ui_nav_reviews_en,    'Anmeldelser',   'Reviews'));
+  set('navBook',       DA(d.ui_nav_book,       d.ui_nav_book_en,       'Book',          'Book'));
 
   // ── RETREAT INFO BOX ──
   set('retreatInfoHeading', DA(d.ui_retreat_info_heading, d.ui_retreat_info_heading_en, 'Retreat info', 'Retreat Info'));
