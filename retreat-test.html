@@ -1320,9 +1320,11 @@ function applyLang(data, lang) {
   set('paymentHeading',   DA(d.ui_payment_heading,    d.ui_payment_heading_en,    'Vælg betalingsform', 'Choose payment option'));
 
   // ── FAQ ──
-  console.log('FAQ DA:', d.faq_items ? d.faq_items.length + ' spørgsmål' : 'NULL');
-  console.log('FAQ EN:', d.faq_items_en ? d.faq_items_en.length + ' spørgsmål' : 'NULL', typeof d.faq_items_en);
-  const faqItems = (isEN && d.faq_items_en && d.faq_items_en.length) ? d.faq_items_en : (d.faq_items || []);
+  // Normaliser FAQ til array (Supabase kan returnere object i stedet for array)
+  const normArr = v => Array.isArray(v) ? v : (v && typeof v === 'object' ? Object.values(v) : []);
+  const faqDA = normArr(d.faq_items);
+  const faqEN = normArr(d.faq_items_en);
+  const faqItems = (isEN && faqEN.length) ? faqEN : faqDA;
   const faqEl = document.getElementById('faqList');
   if (faqEl && faqItems.length) {
     faqEl.innerHTML = faqItems.map(f =>
