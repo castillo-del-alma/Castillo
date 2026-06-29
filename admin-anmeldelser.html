@@ -892,135 +892,43 @@ Travel insurance..." style="background:#e8f4f3;border:1px solid #7fb3af;width:10
         <span style="font-size:.65rem;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);font-weight:600;">Highlights</span>
         <button type="button" onclick="gemRetreat()" style="background:rgba(184,138,30,.15);border:1px solid rgba(184,138,30,.4);color:#7a5000;padding:.35rem 1rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;margin-left:auto;">💾 Gem</button>
       </div>
+      <input type="hidden" id="ui_highlight1_title">
+      <input type="hidden" id="ui_highlight1_title_en">
+      <input type="hidden" id="ui_highlight1_text">
+      <input type="hidden" id="ui_highlight1_text_en">
+      <input type="hidden" id="ui_highlight2_title">
+      <input type="hidden" id="ui_highlight2_title_en">
+      <input type="hidden" id="ui_highlight2_text">
+      <input type="hidden" id="ui_highlight2_text_en">
+      <input type="hidden" id="ui_highlight3_title">
+      <input type="hidden" id="ui_highlight3_title_en">
+      <input type="hidden" id="ui_highlight3_text">
+      <input type="hidden" id="ui_highlight3_text_en">
+      <input type="hidden" id="ui_highlight4_title">
+      <input type="hidden" id="ui_highlight4_title_en">
+      <input type="hidden" id="ui_highlight4_text">
+      <input type="hidden" id="ui_highlight4_text_en">
+      <input type="hidden" id="ui_highlight5_title">
+      <input type="hidden" id="ui_highlight5_title_en">
+      <input type="hidden" id="ui_highlight5_text">
+      <input type="hidden" id="ui_highlight5_text_en">
+      <input type="hidden" id="ui_highlight6_title">
+      <input type="hidden" id="ui_highlight6_title_en">
+      <input type="hidden" id="ui_highlight6_text">
+      <input type="hidden" id="ui_highlight6_text_en">
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;margin-bottom:1rem;">
         <div>
-          <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(44,35,24,.6);display:block;margin-bottom:.4rem;">Highlights overskrift <span style="font-size:.58rem;background:#b88a1e;color:#fff;padding:.1rem .4rem;letter-spacing:.08em;border-radius:2px;margin-left:.4rem;vertical-align:middle;">🇩🇰 DA</span></label>
+          <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(44,35,24,.6);display:block;margin-bottom:.4rem;">Highlights overskrift 🇩🇰</label>
           <input type="text" id="ui_highlights_heading" placeholder="Hvad gør dette retreat særligt?" style="background:#fffef8;border:1px solid rgba(184,138,30,.3);width:100%;padding:.6rem .8rem;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;">
         </div>
         <div>
-          <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:#2a7a74;display:block;margin-bottom:.4rem;">Highlights heading <span style="font-size:.58rem;background:#2a7a74;color:#fff;padding:.1rem .4rem;letter-spacing:.08em;border-radius:2px;margin-left:.4rem;vertical-align:middle;">🇬🇧 EN</span></label>
+          <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:#2a7a74;display:block;margin-bottom:.4rem;">Highlights heading 🇬🇧</label>
           <input type="text" id="ui_highlights_heading_en" placeholder="What makes this retreat special?" style="background:#e8f4f3;border:1px solid #7fb3af;width:100%;padding:.6rem .8rem;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;">
         </div>
       </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;margin-bottom:1rem;">
-        <div>
-          <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(44,35,24,.6);display:block;margin-bottom:.4rem;">Highlight 1 – titel <span style="font-size:.58rem;background:#b88a1e;color:#fff;padding:.1rem .4rem;letter-spacing:.08em;border-radius:2px;margin-left:.4rem;vertical-align:middle;">🇩🇰 DA</span></label>
-          <input type="text" id="ui_highlight1_title" placeholder="Nervous System Reset" style="background:#fffef8;border:1px solid rgba(184,138,30,.3);width:100%;padding:.6rem .8rem;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;">
-        </div>
-        <div>
-          <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:#2a7a74;display:block;margin-bottom:.4rem;">Highlight 1 – title <span style="font-size:.58rem;background:#2a7a74;color:#fff;padding:.1rem .4rem;letter-spacing:.08em;border-radius:2px;margin-left:.4rem;vertical-align:middle;">🇬🇧 EN</span></label>
-          <input type="text" id="ui_highlight1_title_en" placeholder="Nervous System Reset" style="background:#e8f4f3;border:1px solid #7fb3af;width:100%;padding:.6rem .8rem;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;">
-        </div>
-      </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;margin-bottom:1rem;">
-        <div>
-          <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(44,35,24,.6);display:block;margin-bottom:.4rem;">Highlight 1 – tekst <span style="font-size:.58rem;background:#b88a1e;color:#fff;padding:.1rem .4rem;letter-spacing:.08em;border-radius:2px;margin-left:.4rem;vertical-align:middle;">🇩🇰 DA</span></label>
-          <textarea id="ui_highlight1_text" placeholder="Et samlet forløb designet til..." style="background:#fffef8;border:1px solid rgba(184,138,30,.3);width:100%;min-height:60px;padding:.6rem .8rem;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;resize:vertical;"></textarea>
-        </div>
-        <div>
-          <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:#2a7a74;display:block;margin-bottom:.4rem;">Highlight 1 – text <span style="font-size:.58rem;background:#2a7a74;color:#fff;padding:.1rem .4rem;letter-spacing:.08em;border-radius:2px;margin-left:.4rem;vertical-align:middle;">🇬🇧 EN</span></label>
-          <textarea id="ui_highlight1_text_en" placeholder="A complete programme designed to..." style="background:#e8f4f3;border:1px solid #7fb3af;width:100%;min-height:60px;padding:.6rem .8rem;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;resize:vertical;"></textarea>
-        </div>
-      </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;margin-bottom:1rem;">
-        <div>
-          <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(44,35,24,.6);display:block;margin-bottom:.4rem;">Highlight 2 – titel <span style="font-size:.58rem;background:#b88a1e;color:#fff;padding:.1rem .4rem;letter-spacing:.08em;border-radius:2px;margin-left:.4rem;vertical-align:middle;">🇩🇰 DA</span></label>
-          <input type="text" id="ui_highlight2_title" placeholder="Intimt & eksklusivt" style="background:#fffef8;border:1px solid rgba(184,138,30,.3);width:100%;padding:.6rem .8rem;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;">
-        </div>
-        <div>
-          <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:#2a7a74;display:block;margin-bottom:.4rem;">Highlight 2 – title <span style="font-size:.58rem;background:#2a7a74;color:#fff;padding:.1rem .4rem;letter-spacing:.08em;border-radius:2px;margin-left:.4rem;vertical-align:middle;">🇬🇧 EN</span></label>
-          <input type="text" id="ui_highlight2_title_en" placeholder="Intimate & Exclusive" style="background:#e8f4f3;border:1px solid #7fb3af;width:100%;padding:.6rem .8rem;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;">
-        </div>
-      </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;margin-bottom:1rem;">
-        <div>
-          <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(44,35,24,.6);display:block;margin-bottom:.4rem;">Highlight 2 – tekst <span style="font-size:.58rem;background:#b88a1e;color:#fff;padding:.1rem .4rem;letter-spacing:.08em;border-radius:2px;margin-left:.4rem;vertical-align:middle;">🇩🇰 DA</span></label>
-          <textarea id="ui_highlight2_text" placeholder="Max 10 deltagere sikrer..." style="background:#fffef8;border:1px solid rgba(184,138,30,.3);width:100%;min-height:60px;padding:.6rem .8rem;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;resize:vertical;"></textarea>
-        </div>
-        <div>
-          <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:#2a7a74;display:block;margin-bottom:.4rem;">Highlight 2 – text <span style="font-size:.58rem;background:#2a7a74;color:#fff;padding:.1rem .4rem;letter-spacing:.08em;border-radius:2px;margin-left:.4rem;vertical-align:middle;">🇬🇧 EN</span></label>
-          <textarea id="ui_highlight2_text_en" placeholder="Max 10 participants ensures..." style="background:#e8f4f3;border:1px solid #7fb3af;width:100%;min-height:60px;padding:.6rem .8rem;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;resize:vertical;"></textarea>
-        </div>
-      </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;margin-bottom:1rem;">
-        <div>
-          <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(44,35,24,.6);display:block;margin-bottom:.4rem;">Highlight 3 – titel <span style="font-size:.58rem;background:#b88a1e;color:#fff;padding:.1rem .4rem;letter-spacing:.08em;border-radius:2px;margin-left:.4rem;vertical-align:middle;">🇩🇰 DA</span></label>
-          <input type="text" id="ui_highlight3_title" placeholder="Eksklusiv ejendom" style="background:#fffef8;border:1px solid rgba(184,138,30,.3);width:100%;padding:.6rem .8rem;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;">
-        </div>
-        <div>
-          <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:#2a7a74;display:block;margin-bottom:.4rem;">Highlight 3 – title <span style="font-size:.58rem;background:#2a7a74;color:#fff;padding:.1rem .4rem;letter-spacing:.08em;border-radius:2px;margin-left:.4rem;vertical-align:middle;">🇬🇧 EN</span></label>
-          <input type="text" id="ui_highlight3_title_en" placeholder="Exclusive Property" style="background:#e8f4f3;border:1px solid #7fb3af;width:100%;padding:.6rem .8rem;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;">
-        </div>
-      </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;margin-bottom:1rem;">
-        <div>
-          <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(44,35,24,.6);display:block;margin-bottom:.4rem;">Highlight 3 – tekst <span style="font-size:.58rem;background:#b88a1e;color:#fff;padding:.1rem .4rem;letter-spacing:.08em;border-radius:2px;margin-left:.4rem;vertical-align:middle;">🇩🇰 DA</span></label>
-          <textarea id="ui_highlight3_text" placeholder="Hele Castillo del Alma er kun til jer..." style="background:#fffef8;border:1px solid rgba(184,138,30,.3);width:100%;min-height:60px;padding:.6rem .8rem;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;resize:vertical;"></textarea>
-        </div>
-        <div>
-          <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:#2a7a74;display:block;margin-bottom:.4rem;">Highlight 3 – text <span style="font-size:.58rem;background:#2a7a74;color:#fff;padding:.1rem .4rem;letter-spacing:.08em;border-radius:2px;margin-left:.4rem;vertical-align:middle;">🇬🇧 EN</span></label>
-          <textarea id="ui_highlight3_text_en" placeholder="The entire Castillo del Alma is exclusively yours..." style="background:#e8f4f3;border:1px solid #7fb3af;width:100%;min-height:60px;padding:.6rem .8rem;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;resize:vertical;"></textarea>
-        </div>
-      </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;margin-bottom:1rem;">
-        <div>
-          <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(44,35,24,.6);display:block;margin-bottom:.4rem;">Highlight 4 – titel <span style="font-size:.58rem;background:#b88a1e;color:#fff;padding:.1rem .4rem;letter-spacing:.08em;border-radius:2px;margin-left:.4rem;vertical-align:middle;">🇩🇰 DA</span></label>
-          <input type="text" id="ui_highlight4_title" placeholder="Guidede breathwork-sessioner" style="background:#fffef8;border:1px solid rgba(184,138,30,.3);width:100%;padding:.6rem .8rem;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;">
-        </div>
-        <div>
-          <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:#2a7a74;display:block;margin-bottom:.4rem;">Highlight 4 – title <span style="font-size:.58rem;background:#2a7a74;color:#fff;padding:.1rem .4rem;letter-spacing:.08em;border-radius:2px;margin-left:.4rem;vertical-align:middle;">🇬🇧 EN</span></label>
-          <input type="text" id="ui_highlight4_title_en" placeholder="Guided Breathwork Sessions" style="background:#e8f4f3;border:1px solid #7fb3af;width:100%;padding:.6rem .8rem;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;">
-        </div>
-      </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;margin-bottom:1rem;">
-        <div>
-          <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(44,35,24,.6);display:block;margin-bottom:.4rem;">Highlight 4 – tekst <span style="font-size:.58rem;background:#b88a1e;color:#fff;padding:.1rem .4rem;letter-spacing:.08em;border-radius:2px;margin-left:.4rem;vertical-align:middle;">🇩🇰 DA</span></label>
-          <textarea id="ui_highlight4_text" placeholder="Daglige breathwork-sessioner..." style="background:#fffef8;border:1px solid rgba(184,138,30,.3);width:100%;min-height:60px;padding:.6rem .8rem;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;resize:vertical;"></textarea>
-        </div>
-        <div>
-          <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:#2a7a74;display:block;margin-bottom:.4rem;">Highlight 4 – text <span style="font-size:.58rem;background:#2a7a74;color:#fff;padding:.1rem .4rem;letter-spacing:.08em;border-radius:2px;margin-left:.4rem;vertical-align:middle;">🇬🇧 EN</span></label>
-          <textarea id="ui_highlight4_text_en" placeholder="Daily breathwork sessions..." style="background:#e8f4f3;border:1px solid #7fb3af;width:100%;min-height:60px;padding:.6rem .8rem;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;resize:vertical;"></textarea>
-        </div>
-      </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;margin-bottom:1rem;">
-        <div>
-          <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(44,35,24,.6);display:block;margin-bottom:.4rem;">Highlight 5 – titel <span style="font-size:.58rem;background:#b88a1e;color:#fff;padding:.1rem .4rem;letter-spacing:.08em;border-radius:2px;margin-left:.4rem;vertical-align:middle;">🇩🇰 DA</span></label>
-          <input type="text" id="ui_highlight5_title" placeholder="Nærende andalusisk mad" style="background:#fffef8;border:1px solid rgba(184,138,30,.3);width:100%;padding:.6rem .8rem;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;">
-        </div>
-        <div>
-          <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:#2a7a74;display:block;margin-bottom:.4rem;">Highlight 5 – title <span style="font-size:.58rem;background:#2a7a74;color:#fff;padding:.1rem .4rem;letter-spacing:.08em;border-radius:2px;margin-left:.4rem;vertical-align:middle;">🇬🇧 EN</span></label>
-          <input type="text" id="ui_highlight5_title_en" placeholder="Nourishing Andalusian Food" style="background:#e8f4f3;border:1px solid #7fb3af;width:100%;padding:.6rem .8rem;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;">
-        </div>
-      </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;margin-bottom:1rem;">
-        <div>
-          <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(44,35,24,.6);display:block;margin-bottom:.4rem;">Highlight 5 – tekst <span style="font-size:.58rem;background:#b88a1e;color:#fff;padding:.1rem .4rem;letter-spacing:.08em;border-radius:2px;margin-left:.4rem;vertical-align:middle;">🇩🇰 DA</span></label>
-          <textarea id="ui_highlight5_text" placeholder="Alle måltider er tilberedt med friske..." style="background:#fffef8;border:1px solid rgba(184,138,30,.3);width:100%;min-height:60px;padding:.6rem .8rem;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;resize:vertical;"></textarea>
-        </div>
-        <div>
-          <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:#2a7a74;display:block;margin-bottom:.4rem;">Highlight 5 – text <span style="font-size:.58rem;background:#2a7a74;color:#fff;padding:.1rem .4rem;letter-spacing:.08em;border-radius:2px;margin-left:.4rem;vertical-align:middle;">🇬🇧 EN</span></label>
-          <textarea id="ui_highlight5_text_en" placeholder="All meals are prepared with fresh..." style="background:#e8f4f3;border:1px solid #7fb3af;width:100%;min-height:60px;padding:.6rem .8rem;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;resize:vertical;"></textarea>
-        </div>
-      </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;margin-bottom:1rem;">
-        <div>
-          <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(44,35,24,.6);display:block;margin-bottom:.4rem;">Highlight 6 – titel <span style="font-size:.58rem;background:#b88a1e;color:#fff;padding:.1rem .4rem;letter-spacing:.08em;border-radius:2px;margin-left:.4rem;vertical-align:middle;">🇩🇰 DA</span></label>
-          <input type="text" id="ui_highlight6_title" placeholder="Stilhed & stjernekiggeri" style="background:#fffef8;border:1px solid rgba(184,138,30,.3);width:100%;padding:.6rem .8rem;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;">
-        </div>
-        <div>
-          <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:#2a7a74;display:block;margin-bottom:.4rem;">Highlight 6 – title <span style="font-size:.58rem;background:#2a7a74;color:#fff;padding:.1rem .4rem;letter-spacing:.08em;border-radius:2px;margin-left:.4rem;vertical-align:middle;">🇬🇧 EN</span></label>
-          <input type="text" id="ui_highlight6_title_en" placeholder="Silence & Stargazing" style="background:#e8f4f3;border:1px solid #7fb3af;width:100%;padding:.6rem .8rem;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;">
-        </div>
-      </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;margin-bottom:1rem;">
-        <div>
-          <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(44,35,24,.6);display:block;margin-bottom:.4rem;">Highlight 6 – tekst <span style="font-size:.58rem;background:#b88a1e;color:#fff;padding:.1rem .4rem;letter-spacing:.08em;border-radius:2px;margin-left:.4rem;vertical-align:middle;">🇩🇰 DA</span></label>
-          <textarea id="ui_highlight6_text" placeholder="Nætter under Andalusiens klare himmel..." style="background:#fffef8;border:1px solid rgba(184,138,30,.3);width:100%;min-height:60px;padding:.6rem .8rem;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;resize:vertical;"></textarea>
-        </div>
-        <div>
-          <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:#2a7a74;display:block;margin-bottom:.4rem;">Highlight 6 – text <span style="font-size:.58rem;background:#2a7a74;color:#fff;padding:.1rem .4rem;letter-spacing:.08em;border-radius:2px;margin-left:.4rem;vertical-align:middle;">🇬🇧 EN</span></label>
-          <textarea id="ui_highlight6_text_en" placeholder="Nights under the clear Andalusian sky..." style="background:#e8f4f3;border:1px solid #7fb3af;width:100%;min-height:60px;padding:.6rem .8rem;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;resize:vertical;"></textarea>
-        </div>
+      <div style="margin-bottom:1rem;">
+        <button type="button" onclick="openHighlightsEditor()" style="background:rgba(184,138,30,.1);border:1px solid rgba(184,138,30,.3);color:var(--gold);padding:.7rem 1.5rem;font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;width:100%;">✏️ Redigér highlights visuelt (DA + EN)</button>
+        <div id="highlightsPreview" style="margin-top:.6rem;font-size:.72rem;color:rgba(44,35,24,.5);font-style:italic;"></div>
       </div>
 
       <div style="grid-column:1/-1;border-top:2px solid rgba(184,138,30,.2);padding-top:1rem;margin-top:1.2rem;margin-bottom:.5rem;display:flex;align-items:center;gap:1rem;">
@@ -1112,13 +1020,11 @@ Travel insurance..." style="background:#e8f4f3;border:1px solid #7fb3af;width:10
           <input type="text" id="ui_faq_heading_en" placeholder="Frequently Asked Questions" style="background:#e8f4f3;border:1px solid #7fb3af;width:100%;padding:.6rem .8rem;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;">
         </div>
       </div>
+      <input type="hidden" id="faq_items">
+      <input type="hidden" id="faq_items_en">
       <div style="margin-bottom:1rem;">
-        <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(44,35,24,.6);display:block;margin-bottom:.4rem;">FAQ spørgsmål/svar (JSON) 🇩🇰</label>
-        <textarea id="faq_items" placeholder='[{"q":"Skal man have erfaring?","a":"Nej, ingen erfaring kræves..."}]' style="width:100%;min-height:120px;padding:.6rem .8rem;border:1px solid rgba(184,138,30,.3);background:#fffef8;font-family:monospace;font-size:.7rem;outline:none;resize:vertical;"></textarea>
-      </div>
-      <div style="margin-bottom:1rem;">
-        <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:#2a7a74;display:block;margin-bottom:.4rem;">FAQ questions/answers (JSON) 🇬🇧 EN</label>
-        <textarea id="faq_items_en" placeholder='[{"q":"Do I need experience?","a":"No experience needed..."}]' style="width:100%;min-height:120px;padding:.6rem .8rem;border:1px solid #7fb3af;background:#e8f4f3;font-family:monospace;font-size:.7rem;outline:none;resize:vertical;"></textarea>
+        <button type="button" onclick="openFaqEditor()" style="background:rgba(184,138,30,.1);border:1px solid rgba(184,138,30,.3);color:var(--gold);padding:.7rem 1.5rem;font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;width:100%;">✏️ Redigér FAQ visuelt (DA + EN)</button>
+        <div id="faqPreview" style="margin-top:.6rem;font-size:.72rem;color:rgba(44,35,24,.5);font-style:italic;"></div>
       </div>
 
       <div style="grid-column:1/-1;border-top:2px solid rgba(184,138,30,.2);padding-top:1rem;margin-top:1.2rem;margin-bottom:.5rem;">
@@ -1770,6 +1676,44 @@ Travel insurance..." style="background:#e8f4f3;border:1px solid #7fb3af;width:10
     <div class="modal-actions">
       <button class="btn-secondary" onclick="closeModal('modalProgramEditor')">Luk uden at gemme</button>
       <button class="btn-primary" onclick="gemProgramEditor()">Gem og luk</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: FAQ EDITOR -->
+<div class="modal-overlay" id="modalFaqEditor">
+  <div class="modal" style="max-width:1100px;width:95vw;max-height:90vh;overflow-y:auto;">
+    <button class="modal-close" onclick="closeModal('modalFaqEditor')" title="Luk uden at gemme">✕</button>
+    <h3 style="margin-bottom:.4rem;">Redigér FAQ</h3>
+    <p style="font-size:.7rem;color:rgba(44,35,24,.5);margin-bottom:1.5rem;">🇩🇰 Dansk til venstre &nbsp;·&nbsp; 🇬🇧 Engelsk til højre</p>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:.8rem;margin-bottom:.6rem;padding:0 .2rem;">
+      <div style="font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;color:#b88a1e;font-weight:600;">🇩🇰 SPØRGSMÅL / SVAR</div>
+      <div style="font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;color:#2a7a74;font-weight:600;">🇬🇧 QUESTION / ANSWER</div>
+    </div>
+    <div id="faqListe" style="display:flex;flex-direction:column;gap:1rem;"></div>
+    <button type="button" onclick="tilfoejFaq()" style="margin-top:1rem;width:100%;background:rgba(184,138,30,.1);border:1px solid rgba(184,138,30,.3);color:var(--gold);padding:.7rem;font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;">+ Tilføj spørgsmål</button>
+    <div class="modal-actions">
+      <button class="btn-secondary" onclick="closeModal('modalFaqEditor')">Luk uden at gemme</button>
+      <button class="btn-primary" onclick="gemFaqEditor()">Gem og luk</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: HIGHLIGHTS EDITOR -->
+<div class="modal-overlay" id="modalHighlightsEditor">
+  <div class="modal" style="max-width:1100px;width:95vw;max-height:90vh;overflow-y:auto;">
+    <button class="modal-close" onclick="closeModal('modalHighlightsEditor')" title="Luk uden at gemme">✕</button>
+    <h3 style="margin-bottom:.4rem;">Redigér Retreat Highlights</h3>
+    <p style="font-size:.7rem;color:rgba(44,35,24,.5);margin-bottom:1.5rem;">🇩🇰 Dansk til venstre &nbsp;·&nbsp; 🇬🇧 Engelsk til højre — op til 6 highlights</p>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:.8rem;margin-bottom:.6rem;padding:0 .2rem;">
+      <div style="font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;color:#b88a1e;font-weight:600;">🇩🇰 TITEL / TEKST</div>
+      <div style="font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;color:#2a7a74;font-weight:600;">🇬🇧 TITLE / TEXT</div>
+    </div>
+    <div id="highlightsListe" style="display:flex;flex-direction:column;gap:1rem;"></div>
+    <button type="button" onclick="tilfoejHighlight()" id="tilfoejHighlightBtn" style="margin-top:1rem;width:100%;background:rgba(184,138,30,.1);border:1px solid rgba(184,138,30,.3);color:var(--gold);padding:.7rem;font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;">+ Tilføj highlight</button>
+    <div class="modal-actions">
+      <button class="btn-secondary" onclick="closeModal('modalHighlightsEditor')">Luk uden at gemme</button>
+      <button class="btn-primary" onclick="gemHighlightsEditor()">Gem og luk</button>
     </div>
   </div>
 </div>
@@ -3377,7 +3321,7 @@ function redigerRetreat(id) {
   document.getElementById('ui_book_heading_en').value = r.ui_book_heading_en || '';
   document.getElementById('ui_book_intro_en').value = r.ui_book_intro_en || '';
   document.getElementById('ui_faq_heading_en').value = r.ui_faq_heading_en || '';
-  document.getElementById('faq_items_en').value = r.faq_items_en ? JSON.stringify(r.faq_items_en, null, 2) : '';
+  // faq_items_en loades ovenfor
   document.getElementById('ui_nav_about').value = r.ui_nav_about || '';
   document.getElementById('ui_nav_highlights').value = r.ui_nav_highlights || '';
   document.getElementById('ui_nav_program').value = r.ui_nav_program || '';
@@ -3455,7 +3399,13 @@ function redigerRetreat(id) {
   document.getElementById('ui_book_label_room_en').value = r.ui_book_label_room_en || '';
   document.getElementById('ui_book_label_wishes_en').value = r.ui_book_label_wishes_en || '';
   document.getElementById('ui_faq_heading').value = r.ui_faq_heading || '';
-  document.getElementById('faq_items').value = r.faq_items ? JSON.stringify(r.faq_items, null, 2) : '';
+  document.getElementById('faq_items').value = r.faq_items ? JSON.stringify(r.faq_items) : '';
+  document.getElementById('faq_items_en').value = r.faq_items_en ? JSON.stringify(r.faq_items_en) : '';
+  const faqPrev = document.getElementById('faqPreview');
+  if (faqPrev && r.faq_items) faqPrev.textContent = `${r.faq_items.length} spørgsmål gemt (DA + EN)`;
+  const hlPrev = document.getElementById('highlightsPreview');
+  const hlCount = [1,2,3,4,5,6].filter(i => r[`ui_highlight${i}_title`]).length;
+  if (hlPrev && hlCount) hlPrev.textContent = `${hlCount} highlights gemt (DA + EN)`;
   document.getElementById('ui_bar_reserve').value = r.ui_bar_reserve || '';
   document.getElementById('ui_bar_reserve_en').value = r.ui_bar_reserve_en || '';
   document.getElementById('ui_bar_book').value = r.ui_bar_book || '';
@@ -3965,6 +3915,159 @@ function gemProgramEditor() {
   showToast('Programdage opdateret (DA + EN) ✓');
 }
 
+
+// ── FAQ EDITOR ──
+let faqState = [];
+let faqStateEN = [];
+
+function openFaqEditor() {
+  try { faqState = JSON.parse(document.getElementById('faq_items').value || '[]'); } catch(e) { faqState = []; }
+  try { faqStateEN = JSON.parse(document.getElementById('faq_items_en').value || '[]'); } catch(e) { faqStateEN = []; }
+  while (faqStateEN.length < faqState.length) faqStateEN.push({ q: '', a: '' });
+  renderFaqListe();
+  document.getElementById('modalFaqEditor').classList.add('open');
+}
+
+function renderFaqListe() {
+  const container = document.getElementById('faqListe');
+  if (!faqState.length) {
+    container.innerHTML = '<div style="color:rgba(44,35,24,.72);font-style:italic;text-align:center;padding:1rem;">Ingen spørgsmål endnu — klik "+ Tilføj spørgsmål"</div>';
+    return;
+  }
+  const DA = 'background:#fffef8;border:1px solid rgba(184,138,30,.3);color:#2c2318;padding:.5rem .7rem;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;width:100%;';
+  const EN = 'background:#e8f4f3;border:1px solid #7fb3af;color:#2c2318;padding:.5rem .7rem;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;width:100%;';
+  container.innerHTML = faqState.map((f, i) => {
+    const en = faqStateEN[i] || { q: '', a: '' };
+    return `
+    <div style="border:1px solid rgba(184,138,30,.15);overflow:hidden;">
+      <div style="display:flex;justify-content:space-between;align-items:center;background:rgba(44,35,24,.04);padding:.5rem 1rem;border-bottom:1px solid rgba(184,138,30,.1);">
+        <span style="font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;color:rgba(44,35,24,.5);">Spørgsmål ${i + 1}</span>
+        <button type="button" onclick="fjernFaq(${i})" style="background:none;border:none;color:rgba(192,92,48,.6);cursor:pointer;font-size:.85rem;">✕ Fjern</button>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1px;background:rgba(184,138,30,.1);">
+        <div style="background:#fff;padding:.8rem;display:flex;flex-direction:column;gap:.5rem;">
+          <input type="text" placeholder="Spørgsmål 🇩🇰" value="${f.q || ''}" oninput="faqState[${i}].q=this.value" style="${DA}">
+          <textarea placeholder="Svar 🇩🇰..." oninput="faqState[${i}].a=this.value" style="${DA}min-height:80px;resize:vertical;">${f.a || ''}</textarea>
+        </div>
+        <div style="background:#f5fcfb;padding:.8rem;display:flex;flex-direction:column;gap:.5rem;">
+          <input type="text" placeholder="Question 🇬🇧" value="${en.q || ''}" oninput="faqStateEN[${i}].q=this.value" style="${EN}">
+          <textarea placeholder="Answer 🇬🇧..." oninput="faqStateEN[${i}].a=this.value" style="${EN}min-height:80px;resize:vertical;">${en.a || ''}</textarea>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function tilfoejFaq() {
+  faqState.push({ q: '', a: '' });
+  faqStateEN.push({ q: '', a: '' });
+  renderFaqListe();
+}
+
+function fjernFaq(i) {
+  faqState.splice(i, 1);
+  faqStateEN.splice(i, 1);
+  renderFaqListe();
+}
+
+function gemFaqEditor() {
+  document.getElementById('faq_items').value = JSON.stringify(faqState);
+  document.getElementById('faq_items_en').value = JSON.stringify(faqStateEN);
+  // Opdater preview
+  const preview = document.getElementById('faqPreview');
+  if (preview) preview.textContent = faqState.length ? `${faqState.length} spørgsmål gemt (DA + EN)` : '';
+  closeModal('modalFaqEditor');
+  showToast('FAQ opdateret (DA + EN) ✓');
+}
+
+// ── HIGHLIGHTS EDITOR ──
+let highlightsState = [];
+let highlightsStateEN = [];
+const MAX_HIGHLIGHTS = 6;
+
+function openHighlightsEditor() {
+  // Load fra hidden felter
+  highlightsState = [];
+  highlightsStateEN = [];
+  for (let i = 1; i <= MAX_HIGHLIGHTS; i++) {
+    const t = document.getElementById(`ui_highlight${i}_title`)?.value || '';
+    const tx = document.getElementById(`ui_highlight${i}_text`)?.value || '';
+    const tEN = document.getElementById(`ui_highlight${i}_title_en`)?.value || '';
+    const txEN = document.getElementById(`ui_highlight${i}_text_en`)?.value || '';
+    if (t || tx || tEN || txEN) {
+      highlightsState.push({ title: t, text: tx });
+      highlightsStateEN.push({ title: tEN, text: txEN });
+    }
+  }
+  renderHighlightsListe();
+  document.getElementById('modalHighlightsEditor').classList.add('open');
+}
+
+function renderHighlightsListe() {
+  const container = document.getElementById('highlightsListe');
+  const btn = document.getElementById('tilfoejHighlightBtn');
+  if (btn) btn.style.display = highlightsState.length >= MAX_HIGHLIGHTS ? 'none' : 'block';
+  if (!highlightsState.length) {
+    container.innerHTML = '<div style="color:rgba(44,35,24,.72);font-style:italic;text-align:center;padding:1rem;">Ingen highlights endnu — klik "+ Tilføj highlight"</div>';
+    return;
+  }
+  const DA = 'background:#fffef8;border:1px solid rgba(184,138,30,.3);color:#2c2318;padding:.5rem .7rem;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;width:100%;';
+  const EN = 'background:#e8f4f3;border:1px solid #7fb3af;color:#2c2318;padding:.5rem .7rem;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;width:100%;';
+  container.innerHTML = highlightsState.map((h, i) => {
+    const en = highlightsStateEN[i] || { title: '', text: '' };
+    return `
+    <div style="border:1px solid rgba(184,138,30,.15);overflow:hidden;">
+      <div style="display:flex;justify-content:space-between;align-items:center;background:rgba(44,35,24,.04);padding:.5rem 1rem;border-bottom:1px solid rgba(184,138,30,.1);">
+        <span style="font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;color:rgba(44,35,24,.5);">Highlight ${i + 1}</span>
+        <button type="button" onclick="fjernHighlight(${i})" style="background:none;border:none;color:rgba(192,92,48,.6);cursor:pointer;font-size:.85rem;">✕ Fjern</button>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1px;background:rgba(184,138,30,.1);">
+        <div style="background:#fff;padding:.8rem;display:flex;flex-direction:column;gap:.5rem;">
+          <input type="text" placeholder="Titel 🇩🇰" value="${h.title || ''}" oninput="highlightsState[${i}].title=this.value" style="${DA}">
+          <textarea placeholder="Tekst 🇩🇰..." oninput="highlightsState[${i}].text=this.value" style="${DA}min-height:70px;resize:vertical;">${h.text || ''}</textarea>
+        </div>
+        <div style="background:#f5fcfb;padding:.8rem;display:flex;flex-direction:column;gap:.5rem;">
+          <input type="text" placeholder="Title 🇬🇧" value="${en.title || ''}" oninput="highlightsStateEN[${i}].title=this.value" style="${EN}">
+          <textarea placeholder="Text 🇬🇧..." oninput="highlightsStateEN[${i}].text=this.value" style="${EN}min-height:70px;resize:vertical;">${en.text || ''}</textarea>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function tilfoejHighlight() {
+  if (highlightsState.length >= MAX_HIGHLIGHTS) return;
+  highlightsState.push({ title: '', text: '' });
+  highlightsStateEN.push({ title: '', text: '' });
+  renderHighlightsListe();
+}
+
+function fjernHighlight(i) {
+  highlightsState.splice(i, 1);
+  highlightsStateEN.splice(i, 1);
+  renderHighlightsListe();
+}
+
+function gemHighlightsEditor() {
+  // Gem tilbage i hidden felter
+  for (let i = 1; i <= MAX_HIGHLIGHTS; i++) {
+    const h = highlightsState[i-1] || { title: '', text: '' };
+    const en = highlightsStateEN[i-1] || { title: '', text: '' };
+    const tEl = document.getElementById(`ui_highlight${i}_title`);
+    const txEl = document.getElementById(`ui_highlight${i}_text`);
+    const tEnEl = document.getElementById(`ui_highlight${i}_title_en`);
+    const txEnEl = document.getElementById(`ui_highlight${i}_text_en`);
+    if (tEl) tEl.value = h.title || '';
+    if (txEl) txEl.value = h.text || '';
+    if (tEnEl) tEnEl.value = en.title || '';
+    if (txEnEl) txEnEl.value = en.text || '';
+  }
+  const preview = document.getElementById('highlightsPreview');
+  if (preview) preview.textContent = highlightsState.length ? `${highlightsState.length} highlights gemt (DA + EN)` : '';
+  closeModal('modalHighlightsEditor');
+  showToast('Highlights opdateret (DA + EN) ✓');
+}
+
 // ── SLET KUNDE ──
 async function sletKunde(kundeId, navn) {
   await visBekraeft(
@@ -4140,7 +4243,7 @@ function startAdminRealtime(bookingId) {
 // ── MODAL HELPERS ──
 function closeModal(id) { document.getElementById(id).classList.remove('open'); }
 // Modaler der IKKE må lukkes ved klik udenfor
-const noClickOutside = ['modalProgramEditor', 'modalRetreat'];
+const noClickOutside = ['modalProgramEditor', 'modalRetreat', 'modalFaqEditor', 'modalHighlightsEditor'];
 
 document.querySelectorAll('.modal-overlay').forEach(m => {
   m.addEventListener('click', e => {
