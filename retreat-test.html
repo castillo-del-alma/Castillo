@@ -620,22 +620,22 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:3rem
   <div class="booking-bar-inner">
     <div class="booking-bar-info">
       <div class="booking-bar-stat">
-        <span>Varighed</span>
+        <span id="barLabelDuration">Varighed</span>
         <span id="barDuration">—</span>
       </div>
       <div class="booking-bar-stat">
-        <span>Ankomst</span>
+        <span id="barLabelArrival">Ankomst</span>
         <span id="barArrival">—</span>
       </div>
       <div class="booking-bar-stat">
-        <span>Afrejse</span>
+        <span id="barLabelDeparture">Afrejse</span>
         <span id="barDeparture">—</span>
       </div>
     </div>
     <div class="booking-bar-price">
-      <span class="from">Fra</span>
+      <span class="from" id="priceFrom">Fra</span>
       <span class="amount" id="barPrice">—</span>
-      <span class="per">pr. person · delt værelse</span>
+      <span class="per" id="priceSub">pr. person · delt værelse</span>
     </div>
     <div class="booking-bar-actions">
       <div class="date-select-wrap">
@@ -1127,7 +1127,8 @@ function getSlugFromUrl() {
 
 function fmtDateDK(d) {
   if (!d) return '—';
-  return new Date(d).toLocaleDateString('da-DK', { day: 'numeric', month: 'long', year: 'numeric' });
+  const locale = currentLang === 'en' ? 'en-GB' : 'da-DK';
+  return new Date(d).toLocaleDateString(locale, { day: 'numeric', month: 'long', year: 'numeric' });
 }
 
 // ── SPROG ──
@@ -1343,6 +1344,24 @@ function applyLang(data, lang) {
   // Teacher heading
   const th = document.getElementById('teacherHeading');
   if(th) th.textContent = isEN ? (d.ui_teacher_heading_en||'Your Guide on the Journey') : (d.ui_teacher_heading||'Din guide på rejsen');
+
+  // Opdater dato-labels og værdier
+  const bl2 = {
+    barLabelDuration:  isEN ? (d.ui_label_duration_en||'Duration') : (d.ui_label_duration||'Varighed'),
+    barLabelArrival:   isEN ? (d.ui_label_arrival_en||'Arrival')   : (d.ui_label_arrival||'Ankomst'),
+    barLabelDeparture: isEN ? (d.ui_label_departure_en||'Departure'): (d.ui_label_departure||'Afrejse'),
+    priceFrom:         isEN ? (d.ui_price_from_en||'From')          : (d.ui_price_from||'Fra'),
+    priceSub:          isEN ? (d.ui_price_per_person_en||'per person · shared room') : (d.ui_price_per_person||'pr. person · delt værelse'),
+  };
+  Object.entries(bl2).forEach(([id, txt]) => { const el = document.getElementById(id); if(el) el.textContent = txt; });
+
+  // Opdater dato-værdier med korrekt locale
+  if(d.arrival_date) {
+    const locale = isEN ? 'en-GB' : 'da-DK';
+    const fmt = (dt) => dt ? new Date(dt).toLocaleDateString(locale, {day:'numeric',month:'long',year:'numeric'}) : '—';
+    const arr = document.getElementById('barArrival'); if(arr) arr.textContent = fmt(d.arrival_date);
+    const dep = document.getElementById('barDeparture'); if(dep) dep.textContent = fmt(d.departure_date);
+  }
 
   // HTML lang attribut
   document.documentElement.lang = lang;
