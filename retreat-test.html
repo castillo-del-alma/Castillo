@@ -1103,6 +1103,8 @@ function visReviewDetalje(rEncoded) {
   const avgLabel = isEN ? 'average' : 'gennemsnit';
   const bestLabel = isEN ? 'Best part:' : 'Det bedste:';
   const changeLabel = isEN ? 'Change:' : 'Forandring:';
+  const bedste = isEN ? (r.bedste_en || r.bedste || '') : (r.bedste || '');
+  const forandring = isEN ? (r.forandring_en || r.forandring || '') : (r.forandring || '');
   const ratingLabels = isEN
     ? [['Reception',r.r1_modtagelse],['Room',r.r2_vaerelse],['Food',r.r3_mad],['Surroundings',r.r4_omgivelser],['Programme',r.r5_program],['Facilitators',r.r6_terapeuter],['Community',r.r7_faellesskab],['Personal',r.r8_personlig],['Calm',r.r9_ro],['Overall',r.r10_samlet],['Recommend',r.r11_anbefaling]]
     : [['Modtagelse',r.r1_modtagelse],['Værelse',r.r2_vaerelse],['Mad',r.r3_mad],['Omgivelser',r.r4_omgivelser],['Program',r.r5_program],['Terapeuter',r.r6_terapeuter],['Fællesskab',r.r7_faellesskab],['Personlig',r.r8_personlig],['Ro',r.r9_ro],['Samlet',r.r10_samlet],['Anbefaling',r.r11_anbefaling]];
@@ -1114,8 +1116,8 @@ function visReviewDetalje(rEncoded) {
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:.4rem .8rem;margin-bottom:1.2rem;">
       ${ratingLabels.filter(([,v])=>v).map(([l,v])=>`<div style="font-size:.75rem;color:rgba(44,35,24,.85);">${l}: ${'★'.repeat(v)}${'☆'.repeat(5-v)}</div>`).join('')}
     </div>
-    ${r.bedste?`<p style="font-size:.85rem;line-height:1.7;color:rgba(44,35,24,.85);margin:0 0 .8rem;"><strong>${bestLabel}</strong> ${r.bedste}</p>`:''}
-    ${r.forandring?`<p style="font-size:.85rem;line-height:1.7;color:rgba(44,35,24,.85);margin:0;"><strong>${changeLabel}</strong> ${r.forandring}</p>`:''}
+    ${bedste?`<p style="font-size:.85rem;line-height:1.7;color:rgba(44,35,24,.85);margin:0 0 .8rem;"><strong>${bestLabel}</strong> ${bedste}</p>`:''}
+    ${forandring?`<p style="font-size:.85rem;line-height:1.7;color:rgba(44,35,24,.85);margin:0;"><strong>${changeLabel}</strong> ${forandring}</p>`:''}
   `;
   const modal = document.getElementById('reviewModal');
   modal.style.display = 'flex';
