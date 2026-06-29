@@ -3269,6 +3269,14 @@ function openNytRetreat() {
   document.getElementById('modalRetreat').classList.add('open');
 }
 
+function redigerRetreat(id) {
+  const r = allRetreats.find(x => x.id === id);
+  if (!r) return;
+  document.getElementById('retreatModalTitel').textContent = 'Redigér retreat';
+  document.getElementById('retreatSaveBtn').textContent = 'Gem ændringer';
+  udfyldRetreatForm(r);
+}
+
 function udfyldRetreatForm(r) {
   document.getElementById('retreat_id').value = r.id;
   document.getElementById('retreat_title').value = r.title || '';
