@@ -1095,19 +1095,27 @@ function renderReviews(lang) {
 
 function visReviewDetalje(rEncoded) {
   const r = JSON.parse(decodeURIComponent(rEncoded));
+  const isEN = currentLang === 'en';
   const vals = [r.r1_modtagelse,r.r2_vaerelse,r.r3_mad,r.r4_omgivelser,r.r5_program,r.r6_terapeuter,r.r7_faellesskab,r.r8_personlig,r.r9_ro,r.r10_samlet].filter(Boolean);
   const avg = vals.length ? Math.round(vals.reduce((a,b)=>a+b,0)/vals.length*10)/10 : 0;
-  const navn = r.fornavn ? (r.fornavn + (r.efternavn ? ' ' + r.efternavn[0] + '.' : '')) : 'Anonym';
+  const navn = r.reviewer_name_display || (r.fornavn ? (r.fornavn + (r.efternavn ? ' ' + r.efternavn[0] + '.' : '')) : 'Anonym');
+  const quote = isEN ? (r.comment_en || r.markedsfoering || '') : (r.comment_da || r.markedsfoering || '');
+  const avgLabel = isEN ? 'average' : 'gennemsnit';
+  const bestLabel = isEN ? 'Best part:' : 'Det bedste:';
+  const changeLabel = isEN ? 'Change:' : 'Forandring:';
+  const ratingLabels = isEN
+    ? [['Reception',r.r1_modtagelse],['Room',r.r2_vaerelse],['Food',r.r3_mad],['Surroundings',r.r4_omgivelser],['Programme',r.r5_program],['Facilitators',r.r6_terapeuter],['Community',r.r7_faellesskab],['Personal',r.r8_personlig],['Calm',r.r9_ro],['Overall',r.r10_samlet],['Recommend',r.r11_anbefaling]]
+    : [['Modtagelse',r.r1_modtagelse],['Værelse',r.r2_vaerelse],['Mad',r.r3_mad],['Omgivelser',r.r4_omgivelser],['Program',r.r5_program],['Terapeuter',r.r6_terapeuter],['Fællesskab',r.r7_faellesskab],['Personlig',r.r8_personlig],['Ro',r.r9_ro],['Samlet',r.r10_samlet],['Anbefaling',r.r11_anbefaling]];
   document.getElementById('reviewModalContent').innerHTML = `
     <p style="font-size:.6rem;letter-spacing:.3em;text-transform:uppercase;color:#7a5c14;margin:0 0 .5rem;">${r.retreat_navn||'Castillo del Alma'}</p>
     <h3 style="font-family:'Cinzel',serif;font-weight:300;font-size:1.2rem;color:#2c2318;margin:0 0 .3rem;">${navn}</h3>
-    <div style="color:#b88a1e;margin-bottom:1.2rem;">${'★'.repeat(Math.round(avg))}${'☆'.repeat(5-Math.round(avg))} <span style="font-size:.8rem;color:rgba(44,35,24,.5);">${avg}/5 gennemsnit</span></div>
-    ${r.markedsfoering?`<p style="font-family:'Cormorant Garamond',serif;font-size:1.15rem;font-style:italic;line-height:1.8;color:#2c2318;margin:0 0 1.5rem;">&#8220;${r.markedsfoering}&#8221;</p>`:''}
+    <div style="color:#b88a1e;margin-bottom:1.2rem;">${'★'.repeat(Math.round(avg))}${'☆'.repeat(5-Math.round(avg))} <span style="font-size:.8rem;color:rgba(44,35,24,.5);">${avg}/5 ${avgLabel}</span></div>
+    ${quote?`<p style="font-family:'Cormorant Garamond',serif;font-size:1.15rem;font-style:italic;line-height:1.8;color:#2c2318;margin:0 0 1.5rem;">&#8220;${quote}&#8221;</p>`:''}
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:.4rem .8rem;margin-bottom:1.2rem;">
-      ${[['Modtagelse',r.r1_modtagelse],['Værelse',r.r2_vaerelse],['Mad',r.r3_mad],['Omgivelser',r.r4_omgivelser],['Program',r.r5_program],['Terapeuter',r.r6_terapeuter],['Fællesskab',r.r7_faellesskab],['Personlig',r.r8_personlig],['Ro',r.r9_ro],['Samlet',r.r10_samlet],['Anbefaling',r.r11_anbefaling]].filter(([,v])=>v).map(([l,v])=>`<div style="font-size:.75rem;color:rgba(44,35,24,.85);">${l}: ${'★'.repeat(v)}${'☆'.repeat(5-v)}</div>`).join('')}
+      ${ratingLabels.filter(([,v])=>v).map(([l,v])=>`<div style="font-size:.75rem;color:rgba(44,35,24,.85);">${l}: ${'★'.repeat(v)}${'☆'.repeat(5-v)}</div>`).join('')}
     </div>
-    ${r.bedste?`<p style="font-size:.85rem;line-height:1.7;color:rgba(44,35,24,.85);margin:0 0 .8rem;"><strong>Det bedste:</strong> ${r.bedste}</p>`:''}
-    ${r.forandring?`<p style="font-size:.85rem;line-height:1.7;color:rgba(44,35,24,.85);margin:0;"><strong>Forandring:</strong> ${r.forandring}</p>`:''}
+    ${r.bedste?`<p style="font-size:.85rem;line-height:1.7;color:rgba(44,35,24,.85);margin:0 0 .8rem;"><strong>${bestLabel}</strong> ${r.bedste}</p>`:''}
+    ${r.forandring?`<p style="font-size:.85rem;line-height:1.7;color:rgba(44,35,24,.85);margin:0;"><strong>${changeLabel}</strong> ${r.forandring}</p>`:''}
   `;
   const modal = document.getElementById('reviewModal');
   modal.style.display = 'flex';
