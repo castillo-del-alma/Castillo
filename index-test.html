@@ -1119,23 +1119,23 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:5rem
   </a>
   <ul class="nav-links">
     <li class="nav-has-dd">
-      <a href="#estate" class="nav-dd-trigger">The Estate <span class="nav-dd-arrow">›</span></a>
+      <a href="#estate" class="nav-dd-trigger" id="navMainEstate">The Estate <span class="nav-dd-arrow">›</span></a>
       <ul class="nav-dd">
-        <li><a href="ejendommen.html#intro">Ejendommen</a></li>
-        <li><a href="ejendommen.html#towers">Tårnene</a></li>
-        <li><a href="ejendommen.html#rooms">Indkvartering</a></li>
-        <li><a href="ejendommen.html#facilities">Faciliteter</a></li>
-        <li><a href="ejendommen.html#sustainability">Bæredygtighed</a></li>
-        <li><a href="ejendommen.html#vineyard">Vingården</a></li>
-        <li><a href="ejendommen.html#location">Beliggenhed</a></li>
+        <li><a href="ejendommen.html#intro" id="navDdIntro">Ejendommen</a></li>
+        <li><a href="ejendommen.html#towers" id="navDdTowers">Tårnene</a></li>
+        <li><a href="ejendommen.html#rooms" id="navDdRooms">Indkvartering</a></li>
+        <li><a href="ejendommen.html#facilities" id="navDdFacilities">Faciliteter</a></li>
+        <li><a href="ejendommen.html#sustainability" id="navDdSustainability">Bæredygtighed</a></li>
+        <li><a href="ejendommen.html#vineyard" id="navDdVineyard">Vingården</a></li>
+        <li><a href="ejendommen.html#location" id="navDdLocation">Beliggenhed</a></li>
       </ul>
     </li>
-    <li><a href="#retreats" style="font-weight:700;color:var(--wine);">Retreats</a></li>
-    <li><a href="#vineyard">Vingården</a></li>
-    <li><a href="#experiences">Oplevelser</a></li>
-    <li><a href="#gallery">Galleri</a></li><li><a href="#wellness">Wellness</a></li>
-    <li><a href="#om-os">Om os</a></li>
-    <li><a href="#retreats" class="nav-book">Book Retreat</a></li>
+    <li><a href="#retreats" style="font-weight:700;color:var(--wine);" id="navMainRetreats">Retreats</a></li>
+    <li><a href="#vineyard" id="navMainVineyard">Vingården</a></li>
+    <li><a href="#experiences" id="navMainExperiences">Oplevelser</a></li>
+    <li><a href="#gallery" id="navMainGallery">Galleri</a></li><li><a href="#wellness" id="navMainWellness">Wellness</a></li>
+    <li><a href="#om-os" id="navMainOmOs">Om os</a></li>
+    <li><a href="#retreats" class="nav-book" id="navMainBook">Book Retreat</a></li>
     <li style="display:flex;align-items:center;gap:.6rem;margin-left:.6rem;">
       <span style="font-size:.55rem;letter-spacing:.12em;text-transform:uppercase;background:var(--terracotta);color:#fff;padding:.2rem .5rem;">TEST</span>
       <div style="display:flex;border:1px solid rgba(255,255,255,.3);overflow:hidden;">
@@ -2393,6 +2393,30 @@ function applySiteLang() {
   const heroBtns = document.querySelectorAll('.hero-btns a');
   if (heroBtns[0]) heroBtns[0].textContent = SC('hero_btn1', heroBtns[0].textContent);
   if (heroBtns[1]) heroBtns[1].textContent = SC('hero_btn2', heroBtns[1].textContent);
+
+  // TOP NAVIGATION
+  const navTextOnly = (id, key, fallback) => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    const arrow = el.querySelector('.nav-dd-arrow');
+    el.textContent = SC(key, fallback !== undefined ? fallback : el.textContent);
+    if (arrow) el.appendChild(arrow);
+  };
+  navTextOnly('navMainEstate', 'nav_estate', 'The Estate');
+  navTextOnly('navMainRetreats', 'nav_retreats', 'Retreats');
+  navTextOnly('navMainVineyard', 'nav_vineyard', 'Vingården');
+  navTextOnly('navMainExperiences', 'nav_experiences', 'Oplevelser');
+  navTextOnly('navMainGallery', 'nav_gallery', 'Galleri');
+  navTextOnly('navMainWellness', 'nav_wellness', 'Wellness');
+  navTextOnly('navMainOmOs', 'nav_om_os', 'Om os');
+  navTextOnly('navMainBook', 'nav_book', 'Book Retreat');
+  navTextOnly('navDdIntro', 'nav_dd_intro', 'Ejendommen');
+  navTextOnly('navDdTowers', 'nav_dd_towers', 'Tårnene');
+  navTextOnly('navDdRooms', 'nav_dd_rooms', 'Indkvartering');
+  navTextOnly('navDdFacilities', 'nav_dd_facilities', 'Faciliteter');
+  navTextOnly('navDdSustainability', 'nav_dd_sustainability', 'Bæredygtighed');
+  navTextOnly('navDdVineyard', 'nav_dd_vineyard', 'Vingården');
+  navTextOnly('navDdLocation', 'nav_dd_location', 'Beliggenhed');
 
   // FILOSOFI
   const filosofiLabel = document.querySelector('#about .section-label');
