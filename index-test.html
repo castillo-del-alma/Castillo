@@ -2342,6 +2342,14 @@ async function loadSiteContent() {
   } catch(e) {
     console.warn('site_content load fejl:', e.message);
   }
+  // Globale settings (rating-labels m.m.) deler samme key/value-struktur — flettes ind i samme objekt
+  try {
+    const { data: settingsData, error: settingsErr } = await sbContent.from('settings').select('key,value');
+    if (settingsErr) throw settingsErr;
+    (settingsData || []).forEach(r => { siteContentData[r.key] = r.value; });
+  } catch(e) {
+    console.warn('settings load fejl:', e.message);
+  }
 }
 
 async function determineStartLang() {
@@ -2436,11 +2444,14 @@ function applySiteLang() {
   }
   set('retreatsBtn', 'retreats_knap');
 
-  // ANMELDELSER (sektions-label og overskrift)
+  // ANMELDELSER (sektions-label og overskrift — hentes fra globale Indstillinger)
   const reviewsLabel = document.getElementById('reviewsLabel');
-  if (reviewsLabel) reviewsLabel.textContent = currentSiteLang === 'en' ? "Guest Experiences" : "Gæsternes oplevelser";
+  if (reviewsLabel) reviewsLabel.textContent = SC('forside_reviews_label', reviewsLabel.textContent);
   const reviewsHeading = document.getElementById('reviewsHeading');
-  if (reviewsHeading) reviewsHeading.innerHTML = currentSiteLang === 'en' ? 'What our <em>guests</em> say' : 'Hvad siger vores <em>gæster</em>';
+  if (reviewsHeading) {
+    const t = SC('forside_reviews_heading', null);
+    if (t) reviewsHeading.innerHTML = t.replace(/(\S+)$/, '<em>$1</em>');
+  }
 
   // ESTATE
   const estateLabel = document.querySelector('#estate .section-label');
