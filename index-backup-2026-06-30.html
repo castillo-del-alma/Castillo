@@ -90,10 +90,6 @@ nav.scrolled .nav-links a:hover{color:var(--wine);}
 }
 nav.scrolled .nav-book{color:#fff!important;}
 .nav-book:hover{background:var(--wine-light)!important;}
-.lang-switcher{border-color:var(--wine);border-radius:0;}
-.lang-btn{border-radius:0;}
-.lang-btn.lang-btn-active{background:var(--wine);color:#fff!important;}
-.lang-btn.lang-btn-inactive{background:transparent;color:var(--wine)!important;}
 
 /* ══════════════════════════════
    HERO — stock video embed
@@ -385,8 +381,6 @@ section{position:relative;z-index:1;}
   font-size:1.2rem;font-weight:300;color:var(--text-light);
 }
 .retreats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px 10px;}
-.retreats-img-item:hover{transform:scale(1.05);}
-@media (max-width:780px){#retreatsImageRow{grid-template-columns:repeat(2,1fr) !important;}}
 .retreat-card{position:relative;aspect-ratio:3/4;overflow:hidden;cursor:pointer;}
 .retreat-card-bg{position:absolute;inset:0;transition:transform .8s cubic-bezier(.23,1,.32,1);}
 .retreat-card:hover .retreat-card-bg{transform:scale(1.07);}
@@ -432,14 +426,14 @@ section{position:relative;z-index:1;}
 .card-7 .retreat-card-accent{background:linear-gradient(90deg,var(--terracotta),var(--wine));}
 .card-8 .retreat-card-accent{background:linear-gradient(90deg,var(--olive-light),var(--teal));}
 .retreat-card-content{position:absolute;bottom:0;left:0;right:0;padding:2rem 1.8rem;z-index:4;}
-.retreat-card-num{font-size:.74rem;letter-spacing:.25em;color:var(--gold-pale);margin-bottom:.6rem;display:block;}
-.retreat-card h3{font-family:'Cinzel',serif;font-weight:300;font-size:1.05rem;letter-spacing:.06em;color:var(--gold-pale);margin-bottom:.5rem;line-height:1.3;min-height:2.73em;display:flex;align-items:flex-start;}
+.retreat-card-num{font-size:.58rem;letter-spacing:.3em;color:var(--gold-pale);margin-bottom:.6rem;display:block;}
+.retreat-card h3{font-family:'Cinzel',serif;font-weight:300;font-size:1.05rem;letter-spacing:.06em;color:#fff;margin-bottom:.5rem;line-height:1.3;}
 .retreat-card p{
   font-family:'Cormorant Garamond',serif;font-style:italic;
-  font-size:1.05rem;color:#fff;line-height:1.6;
+  font-size:.88rem;color:rgba(255,255,255,.6);line-height:1.6;
   max-height:0;overflow:hidden;transition:max-height .5s ease,opacity .4s;opacity:0;
 }
-.retreat-card:hover p{max-height:100px;opacity:1;}
+.retreat-card:hover p{max-height:80px;opacity:1;}
 .retreat-card-arrow{
   display:inline-block;margin-top:1rem;font-size:.62rem;
   letter-spacing:.2em;text-transform:uppercase;color:var(--gold-pale);
@@ -705,7 +699,7 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:5rem
 
 .exp-modal-img {
   width:100%;
-  height:380px;
+  height:200px;
   flex-shrink:0;
   background-size:cover;
   background-position:center;
@@ -1123,29 +1117,23 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:5rem
   </a>
   <ul class="nav-links">
     <li class="nav-has-dd">
-      <a href="#estate" class="nav-dd-trigger" id="navMainEstate">The Estate <span class="nav-dd-arrow">›</span></a>
+      <a href="#estate" class="nav-dd-trigger">The Estate <span class="nav-dd-arrow">›</span></a>
       <ul class="nav-dd">
-        <li><a href="ejendommen.html#intro" id="navDdIntro">Ejendommen</a></li>
-        <li><a href="ejendommen.html#towers" id="navDdTowers">Tårnene</a></li>
-        <li><a href="ejendommen.html#rooms" id="navDdRooms">Indkvartering</a></li>
-        <li><a href="ejendommen.html#facilities" id="navDdFacilities">Faciliteter</a></li>
-        <li><a href="ejendommen.html#sustainability" id="navDdSustainability">Bæredygtighed</a></li>
-        <li><a href="ejendommen.html#vineyard" id="navDdVineyard">Vingården</a></li>
-        <li><a href="ejendommen.html#location" id="navDdLocation">Beliggenhed</a></li>
+        <li><a href="ejendommen.html#intro">Ejendommen</a></li>
+        <li><a href="ejendommen.html#towers">Tårnene</a></li>
+        <li><a href="ejendommen.html#rooms">Indkvartering</a></li>
+        <li><a href="ejendommen.html#facilities">Faciliteter</a></li>
+        <li><a href="ejendommen.html#sustainability">Bæredygtighed</a></li>
+        <li><a href="ejendommen.html#vineyard">Vingården</a></li>
+        <li><a href="ejendommen.html#location">Beliggenhed</a></li>
       </ul>
     </li>
-    <li><a href="#retreats" style="font-weight:700;color:var(--wine);" id="navMainRetreats">Retreats</a></li>
-    <li><a href="#vineyard" id="navMainVineyard">Vingården</a></li>
-    <li><a href="#experiences" id="navMainExperiences">Oplevelser</a></li>
-    <li><a href="#gallery" id="navMainGallery">Galleri</a></li><li><a href="#wellness" id="navMainWellness">Wellness</a></li>
-    <li><a href="#om-os" id="navMainOmOs">Om os</a></li>
-    <li><a href="#retreats" class="nav-book" id="navMainBook">Book Retreat</a></li>
-    <li class="lang-switcher-item" style="display:flex;align-items:center;gap:.6rem;margin-left:.6rem;">
-      <div class="lang-switcher" style="display:flex;border:1.5px solid;overflow:hidden;">
-        <button id="btn-da" class="lang-btn lang-btn-active" onclick="setSiteLang('da')" style="font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;padding:.3rem .6rem;border:none;cursor:pointer;font-family:'Manrope',sans-serif;">DA</button>
-        <button id="btn-en" class="lang-btn lang-btn-inactive" onclick="setSiteLang('en')" style="font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;padding:.3rem .6rem;border:none;cursor:pointer;font-family:'Manrope',sans-serif;">EN</button>
-      </div>
-    </li>
+    <li><a href="#retreats" style="font-weight:700;color:var(--wine);">Retreats</a></li>
+    <li><a href="#vineyard">Vingården</a></li>
+    <li><a href="#experiences">Oplevelser</a></li>
+    <li><a href="#gallery">Galleri</a></li><li><a href="#wellness">Wellness</a></li>
+    <li><a href="#om-os">Om os</a></li>
+    <li><a href="#retreats" class="nav-book">Book Retreat</a></li>
   </ul>
 </nav>
 
@@ -1153,7 +1141,7 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:5rem
 <section class="hero">
   <div class="hero-video-wrap">
     <video autoplay muted loop playsinline preload="auto">
-      <source src="img/intro-film_high_13MB.mp4" type="video/mp4" id="heroVideoSource">
+      <source src="img/intro-film_high_13MB.mp4" type="video/mp4">
     </video>
   </div>
   <div class="hero-video-fallback" style="display:none"></div>
@@ -1187,7 +1175,7 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:5rem
       <div class="reveal-left">
         <div class="intro-img-wrap">
           <div class="intro-img">
-            <img src="img/IMG_0603.JPG" alt="Castillo del Alma — pool og have" class="intro-photo" id="imgFilosofi">
+            <img src="img/IMG_0603.JPG" alt="Castillo del Alma — pool og have" class="intro-photo">
             <div class="intro-img-overlay"></div>
           </div>
           <div class="intro-img-label">Slow Living · Andalusia</div>
@@ -1212,23 +1200,16 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:5rem
   <div class="section-inner">
     <div class="retreats-header reveal">
       <span class="section-label">Retreats</span>
-      <h2 id="retreatsHeading1">Eksklusive Retreats</h2>
-      <p id="retreatsText">Uanset om du søger ro, personlig udvikling, fællesskab eller autentiske oplevelser, finder du et retreat, der passer til din rejse.<br>På Castillo del Alma har vi samlet nøje udvalgte retreats, der skaber plads til fordybelse, livsglæde og nye perspektiver i hjertet af Andalusien.</p>
+      <h2>Eksklusive Retreats</h2>
+      <p>Uanset om du søger ro, personlig udvikling, fællesskab eller autentiske oplevelser, finder du et retreat, der passer til din rejse.<br>På Castillo del Alma har vi samlet nøje udvalgte retreats, der skaber plads til fordybelse, livsglæde og nye perspektiver i hjertet af Andalusien.</p>
     </div>
     <div class="retreats-grid reveal d1" id="retreatsGrid">
       <div class="loading-retreats" style="grid-column:1/-1;text-align:center;padding:3rem;color:rgba(255,255,255,.4);">Henter retreats...</div>
     </div>
     <div class="reveal d2" style="text-align:center;margin-top:5rem;">
-      <h2 id="retreatsHeading2" style="font-family:'Cinzel',serif;font-weight:300;font-size:clamp(2rem,4vw,3.2rem);letter-spacing:.1em;color:var(--charcoal);margin-bottom:1.2rem;">Lej hele huset</h2>
-      <p id="retreatsText2" style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.35rem;font-weight:300;color:var(--text-light);max-width:680px;margin:0 auto 2rem;">Du kan også leje faciliteterne til dine egne gæster, retreats eller workshops,<br>og virksomheder finder de perfekte rammer til seminarer, teambuilding og strategidage.</p>
-      <a href="/udlejning.html" class="btn-wine" id="retreatsBtn">Lej Castillo del Alma</a>
-    </div>
-    <div class="reveal d2" id="retreatsImageRow" style="display:none;margin-top:3.5rem;display:grid;grid-template-columns:repeat(5,1fr);gap:.6rem;">
-      <div class="retreats-img-item" id="retreatsImg1" style="aspect-ratio:1/1;background-size:cover;background-position:center;overflow:hidden;cursor:pointer;transition:transform .4s;"></div>
-      <div class="retreats-img-item" id="retreatsImg2" style="aspect-ratio:1/1;background-size:cover;background-position:center;overflow:hidden;cursor:pointer;transition:transform .4s;"></div>
-      <div class="retreats-img-item" id="retreatsImg3" style="aspect-ratio:1/1;background-size:cover;background-position:center;overflow:hidden;cursor:pointer;transition:transform .4s;"></div>
-      <div class="retreats-img-item" id="retreatsImg4" style="aspect-ratio:1/1;background-size:cover;background-position:center;overflow:hidden;cursor:pointer;transition:transform .4s;"></div>
-      <div class="retreats-img-item" id="retreatsImg5" style="aspect-ratio:1/1;background-size:cover;background-position:center;overflow:hidden;cursor:pointer;transition:transform .4s;"></div>
+      <h2 style="font-family:'Cinzel',serif;font-weight:300;font-size:clamp(2rem,4vw,3.2rem);letter-spacing:.1em;color:var(--charcoal);margin-bottom:1.2rem;">Lej hele huset</h2>
+      <p style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.35rem;font-weight:300;color:var(--text-light);max-width:680px;margin:0 auto 2rem;">Du kan også leje faciliteterne til dine egne gæster, retreats eller workshops,<br>og virksomheder finder de perfekte rammer til seminarer, teambuilding og strategidage.</p>
+      <a href="/udlejning.html" class="btn-wine">Lej Castillo del Alma</a>
     </div>
   </div>
 </section>
@@ -1238,8 +1219,8 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:5rem
   <canvas class="section-canvas" data-palette="green"></canvas>
   <div class="section-inner">
     <div class="reveal">
-      <span class="section-label" id="reviewsLabel">Gæsternes oplevelser</span>
-      <h2 class="split-h" id="reviewsHeading">Hvad siger vores <em>gæster</em></h2>
+      <span class="section-label">Gæsternes oplevelser</span>
+      <h2 class="split-h">Hvad siger vores <em>gæster</em></h2>
     </div>
     <div class="reviews-grid reveal d1" id="reviewsGrid">
       <div style="grid-column:1/-1;text-align:center;padding:2rem;color:rgba(44,35,24,.4);font-size:.85rem;">Henter anmeldelser…</div>
@@ -1267,9 +1248,9 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:5rem
         <a href="ejendommen.html" class="cta-link">Udforsk ejendommen</a>
       </div>
       <div class="estate-visual reveal-right d2">
-        <div class="estate-img"><div class="estate-img-inner"><div class="estate-img-ph ph1" style="background:none;"><img src="img/estate-aerial.jpg" style="width:100%;height:100%;object-fit:cover;object-position:center;display:block;" id="imgEstate1"></div></div></div>
-        <div class="estate-img"><div class="estate-img-inner"><div class="estate-img-ph ph2" style="background:none;"><img src="img/estate-pool.jpg" style="width:100%;height:100%;object-fit:cover;object-position:center;display:block;" id="imgEstate2"></div></div></div>
-        <div class="estate-img"><div class="estate-img-inner"><div class="estate-img-ph ph3" style="background:none;"><img src="img/logo-castillo-ny-43.png" style="width:100%;height:100%;object-fit:cover;display:block;" id="imgEstate3"></div></div></div>
+        <div class="estate-img"><div class="estate-img-inner"><div class="estate-img-ph ph1" style="background:none;"><img src="img/estate-aerial.jpg" style="width:100%;height:100%;object-fit:cover;object-position:center;display:block;"></div></div></div>
+        <div class="estate-img"><div class="estate-img-inner"><div class="estate-img-ph ph2" style="background:none;"><img src="img/estate-pool.jpg" style="width:100%;height:100%;object-fit:cover;object-position:center;display:block;"></div></div></div>
+        <div class="estate-img"><div class="estate-img-inner"><div class="estate-img-ph ph3" style="background:none;"><img src="img/logo-castillo-ny-43.png" style="width:100%;height:100%;object-fit:cover;display:block;"></div></div></div>
       </div>
     </div>
   </div>
@@ -1289,7 +1270,7 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:5rem
         <p class="vineyard-intro" style="margin-top:1.4rem;">Området omkring Mollina er særligt kendt for sine mange solskinstimer, varme dage og køligere nætter, som skaber optimale betingelser for dyrkning af kvalitetsdruer. Jordbunden i området er rig på kalk og mineraler, hvilket giver vinene karakter, dybde og en flot balance mellem frugt, fylde og elegance. Kombinationen af klimaet, højden og den andalusiske jord giver druerne mulighed for at modne langsomt og udvikle en intens og kompleks smag.</p>
       </div>
       <div class="vineyard-photo">
-        <img src="img/vinmark1.jpg" alt="Castillo del Alma vingård · Mollina" id="imgVingaard">
+        <img src="img/vinmark1.jpg" alt="Castillo del Alma vingård · Mollina">
       </div>
     </div>
     <div class="vineyard-stats reveal d2">
@@ -1386,8 +1367,73 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:5rem
 
     <!-- Masonry grid -->
     <div class="gallery-grid reveal d1">
+
+      <!-- Row 1 -->
+      <div class="gallery-item photo tall" data-type="photo" style="background-image:url('img/estate-aerial.jpg')">
+        <div class="gallery-item-overlay"></div>
+        <div class="gallery-item-icon"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg></div>
+      </div>
+
+      <div class="gallery-item photo" data-type="photo" style="background-image:url('img/IMG_0603.JPG')">
+        <div class="gallery-item-overlay"></div>
+        <div class="gallery-item-icon"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg></div>
+      </div>
+
+      <div class="gallery-item photo" data-type="photo" style="background-image:url('img/estate-pool.jpg')">
+        <div class="gallery-item-overlay"></div>
+        <div class="gallery-item-icon"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg></div>
+      </div>
+
+      <!-- Video item -->
+      <div class="gallery-item video wide" data-type="video" data-src="video/5044846_Rural_Orchard_1280x720.mp4" style="background-image:url('img/vinmark1.jpg')">
+        <div class="gallery-item-overlay"></div>
+        <div class="gallery-item-play">
+          <svg viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg>
+        </div>
+        <span class="gallery-video-label">Video</span>
+      </div>
+
+      <!-- Row 2 -->
+      <div class="gallery-item photo" data-type="photo" style="background-image:url('img/estate-dining.jpg')">
+        <div class="gallery-item-overlay"></div>
+        <div class="gallery-item-icon"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg></div>
+      </div>
+
+      <div class="gallery-item photo tall" data-type="photo" style="background-image:url('img/vinmark1.jpg')">
+        <div class="gallery-item-overlay"></div>
+        <div class="gallery-item-icon"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg></div>
+      </div>
+
+      <div class="gallery-item photo" data-type="photo" style="background-image:url('img/vin.jpg')">
+        <div class="gallery-item-overlay"></div>
+        <div class="gallery-item-icon"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg></div>
+      </div>
+
+      <div class="gallery-item photo" data-type="photo" style="background-image:url('img/filmcrew.jpeg')">
+        <div class="gallery-item-overlay"></div>
+        <div class="gallery-item-icon"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg></div>
+      </div>
+
+      <!-- Video 2 -->
+      <div class="gallery-item video" data-type="video" data-src="drone1.mp4" style="background-image:url('img/estate-aerial.jpg')">
+        <div class="gallery-item-overlay"></div>
+        <div class="gallery-item-play">
+          <svg viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg>
+        </div>
+        <span class="gallery-video-label">Drone video</span>
+      </div>
+
+      <div class="gallery-item photo" data-type="photo" style="background-image:url('img/magnific_cpuple-are-looking-at-sta_1sBaCibr4r.jpg')">
+        <div class="gallery-item-overlay"></div>
+        <div class="gallery-item-icon"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg></div>
+      </div>
+
+      <div class="gallery-item photo wide" data-type="photo" style="background-image:url('img/caminito-del-rey-tour-from-granada-4-1.jpg')">
+        <div class="gallery-item-overlay"></div>
+        <div class="gallery-item-icon"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg></div>
+      </div>
+
     </div><!-- end gallery-grid -->
-    <p id="galleryEmptyMsg" style="display:none;text-align:center;color:rgba(44,35,24,.4);font-size:.85rem;padding:2rem;">Ingen billeder uploadet endnu.</p>
   </div>
 </section>
 
@@ -1419,7 +1465,7 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:5rem
         <p>Vores wellness- og healingoplevelser er skabt til at støtte dyb restitution, indre ro og en nænsom genforbindelse mellem krop og sind.</p>
       </div>
       <div class="wellness-intro-visual reveal-right d2">
-        <div class="wellness-img" id="imgWellness" style="background-image:url('img/wellness-yoga-castillo.png');background-size:cover;background-position:center top;"></div>
+        <div class="wellness-img" style="background-image:url('img/wellness-yoga-castillo.png');background-size:cover;background-position:center top;"></div>
         <div class="wellness-badge">
           <span class="wellness-badge-num">14</span>
           <span class="wellness-badge-txt">Gæster max · Eksklusivt &amp; intimt</span>
@@ -1506,7 +1552,7 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:5rem
       <div class="reveal-right d2">
         <div class="om-os-img-wrap">
           <div class="om-os-img">
-            <img src="img/erik-michael-castillo-del-alma.webp" alt="Michael og Erik — ejere af Castillo del Alma" id="imgOmOs">
+            <img src="img/erik-michael-castillo-del-alma.webp" alt="Michael og Erik — ejere af Castillo del Alma">
           </div>
           <div class="om-os-img-label">Michael &amp; Erik · Værter</div>
         </div>
@@ -1532,30 +1578,30 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:5rem
   <div class="section-inner">
     <div class="nl-grid">
       <div class="reveal-left">
-        <span class="section-label" id="nlLabel">Stay Connected</span>
-        <h2 class="split-h" id="nlHeading">Vær den første<br>til at høre <em>nyt</em></h2>
-        <p id="nlIntro">Modtag informationer om nye retreats, sæsonoplevelser og historier fra Castillo del Alma.</p>
+        <span class="section-label">Stay Connected</span>
+        <h2 class="split-h">Vær den første<br>til at høre <em>nyt</em></h2>
+        <p>Modtag informationer om nye retreats, sæsonoplevelser og historier fra Castillo del Alma.</p>
       </div>
       <div class="reveal-right d2">
         <div class="nl-form">
           <div class="form-row">
-            <div class="form-field"><label id="nlLabelNavn">Navn</label><input type="text" id="nl-navn" placeholder="Dit navn"></div>
-            <div class="form-field"><label id="nlLabelEmail">E-mail</label><input type="email" id="nl-email" placeholder="din@email.com"></div>
+            <div class="form-field"><label>Navn</label><input type="text" id="nl-navn" placeholder="Dit navn"></div>
+            <div class="form-field"><label>E-mail</label><input type="email" id="nl-email" placeholder="din@email.com"></div>
           </div>
           <div class="form-field">
-            <label id="nlLabelLand">Land</label>
-            <select id="nl-land"><option value="" id="nlOptVaelgLand">Vælg land</option><option>Danmark</option><option>Sverige</option><option>Norge</option><option>Tyskland</option><option>Spanien</option><option id="nlOptAndet">Andet</option></select>
+            <label>Land</label>
+            <select id="nl-land"><option value="">Vælg land</option><option>Danmark</option><option>Sverige</option><option>Norge</option><option>Tyskland</option><option>Spanien</option><option>Andet</option></select>
           </div>
           <div class="form-field">
-            <label id="nlLabelInteresser">Interesser</label>
+            <label>Interesser</label>
             <div class="cb-group">
-              <label class="cb-item"><input type="checkbox"><span class="cb-box"></span><span id="nlCbRetreats">Retreats</span></label>
-              <label class="cb-item"><input type="checkbox"><span class="cb-box"></span><span id="nlCbWine">Wine &amp; Gourmet</span></label>
-              <label class="cb-item"><input type="checkbox"><span class="cb-box"></span><span id="nlCbWellness">Wellness</span></label>
-              <label class="cb-item"><input type="checkbox"><span class="cb-box"></span><span id="nlCbGay"><span style="color:#FF0000">G</span><span style="color:#FF7700">A</span><span style="color:#FFDD00">Y</span><span style="color:#00AA00"> </span><span style="color:#0000FF">R</span><span style="color:#8B00FF">E</span><span style="color:#FF0000">T</span><span style="color:#FF7700">R</span><span style="color:#FFDD00">E</span><span style="color:#00AA00">A</span><span style="color:#0000FF">T</span><span style="color:#FF0000">S</span></span></label>
+              <label class="cb-item"><input type="checkbox"><span class="cb-box"></span>Retreats</label>
+              <label class="cb-item"><input type="checkbox"><span class="cb-box"></span>Wine &amp; Gourmet</label>
+              <label class="cb-item"><input type="checkbox"><span class="cb-box"></span>Wellness</label>
+              <label class="cb-item"><input type="checkbox"><span class="cb-box"></span><span style="color:#FF0000">G</span><span style="color:#FF7700">A</span><span style="color:#FFDD00">Y</span><span style="color:#00AA00"> </span><span style="color:#0000FF">R</span><span style="color:#8B00FF">E</span><span style="color:#FF0000">T</span><span style="color:#FF7700">R</span><span style="color:#FFDD00">E</span><span style="color:#00AA00">A</span><span style="color:#0000FF">T</span><span style="color:#FF0000">S</span></label>
             </div>
           </div>
-          <button class="nl-submit" id="nlSubmitBtn" onclick="tilmeldNyhedsbrev(this)">Tilmeld nyhedsbrev</button>
+          <button class="nl-submit" onclick="tilmeldNyhedsbrev(this)">Tilmeld nyhedsbrev</button>
           <p id="nl-msg" style="font-size:.78rem;margin-top:.8rem;min-height:1rem;"></p>
         </div>
       </div>
@@ -1569,35 +1615,15 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:5rem
   <div class="footer-grid">
     <div>
       <img src="img/logo-castillo-ny-keylay.jpg" alt="Castillo del Alma" class="footer-logo-img">
-      <div class="footer-address" id="footerAddress">Mollina · Antequera · Málaga, Andalusia<br><br>info@castillodelalma.com</div>
+      <div class="footer-address">Mollina · Antequera · Málaga, Andalusia<br><br>info@castillodelalma.com</div>
     </div>
-    <div class="footer-col"><h4 id="footerCol1Heading">Stedet</h4><ul>
-      <li><a href="ejendommen.html#intro" id="footerCol1Link1">The Estate</a></li>
-      <li><a href="#vineyard" id="footerCol1Link2">Vingården</a></li>
-      <li><a href="ejendommen.html#facilities" id="footerCol1Link3">Faciliteter</a></li>
-      <li><a href="ejendommen.html#sustainability" id="footerCol1Link4">Bæredygtighed</a></li>
-    </ul></div>
-    <div class="footer-col"><h4 id="footerCol2Heading">Retreats</h4><ul>
-      <li><a href="#experiences" id="footerCol2Link1">Kultur &amp; Udflugter</a></li>
-      <li><a href="retreat.html?slug=kunsten-at-saenke-tempoet" id="footerCol2Link2">Sænk tempoet</a></li>
-      <li><a href="#retreats" id="footerCol2Link3">Rejsen indad</a></li>
-      <li><a href="retreat.html?slug=gay-retreat-og-faellesskab" id="footerCol2Link4">Gay Retreat</a></li>
-      <li><a href="udlejning.html" id="footerCol2Link5">Lej Castillo</a></li>
-    </ul></div>
-    <div class="footer-col"><h4 id="footerCol3Heading">Information</h4><ul>
-      <li><a href="#experiences" id="footerCol3Link1">Oplevelser</a></li>
-      <li><a href="#wellness" id="footerCol3Link2">Wellness</a></li>
-      <li><a href="#" id="footerCol3Link3">Journal</a></li>
-      <li><a href="#" id="footerCol3Link4">Presse</a></li>
-      <li><a href="#contact" id="footerCol3Link5">Kontakt</a></li>
-    </ul></div>
+    <div class="footer-col"><h4>Stedet</h4><ul><li><a href="#">The Estate</a></li><li><a href="#">Vingården</a></li><li><a href="#">Faciliteter</a></li><li><a href="#">Bæredygtighed</a></li></ul></div>
+    <div class="footer-col"><h4>Retreats</h4><ul><li><a href="#">Kultur &amp; Udflugter</a></li><li><a href="#">Sænk tempoet</a></li><li><a href="#">Rejsen indad</a></li><li><a href="#">Gay Retreat</a></li><li><a href="#">Lej Castillo</a></li></ul></div>
+    <div class="footer-col"><h4>Information</h4><ul><li><a href="#">Oplevelser</a></li><li><a href="#">Wellness</a></li><li><a href="#">Journal</a></li><li><a href="#">Presse</a></li><li><a href="#">Kontakt</a></li></ul></div>
   </div>
   <div class="footer-bottom">
-    <p id="footerCopyright">© 2026 Castillo del Alma · Mollina, Málaga · All rights reserved</p>
-    <div class="footer-social">
-      <a href="#" id="footerSocial1">Instagram</a>
-      <a href="#" id="footerSocial2">Facebook</a>
-    </div>
+    <p>© 2026 Castillo del Alma · Mollina, Málaga · All rights reserved</p>
+    <div class="footer-social"><a href="#">Instagram</a><a href="#">Facebook</a></div>
   </div>
 </footer>
 
@@ -1919,7 +1945,7 @@ document.addEventListener('keydown', e=>{ if(e.key==='Escape') closeModal(); });
 // ═══════════════════════════════════════════
 //  GALLERY — filter + lightbox
 // ═══════════════════════════════════════════
-let galleryItems = Array.from(document.querySelectorAll('.gallery-item'));
+const galleryItems = Array.from(document.querySelectorAll('.gallery-item'));
 const lightbox     = document.getElementById('lightbox');
 const lbInner      = document.getElementById('lightboxInner');
 const lbClose      = document.getElementById('lightboxClose');
@@ -1979,18 +2005,13 @@ function closeLightbox() {
   document.body.style.overflow = '';
 }
 
-function initGalleryClicks() {
-  galleryItems = Array.from(document.querySelectorAll('.gallery-item'));
-  visibleItems = galleryItems;
-  galleryItems.forEach((item, i) => {
-    item.addEventListener('click', () => {
-      visibleItems = galleryItems.filter(it => !it.classList.contains('hidden'));
-      const vIdx = visibleItems.indexOf(item);
-      openLightbox(vIdx);
-    });
+galleryItems.forEach((item, i) => {
+  item.addEventListener('click', () => {
+    visibleItems = galleryItems.filter(it => !it.classList.contains('hidden'));
+    const vIdx = visibleItems.indexOf(item);
+    openLightbox(vIdx);
   });
-}
-initGalleryClicks();
+});
 
 lbClose.addEventListener('click', closeLightbox);
 lightbox.addEventListener('click', e => { if (e.target === lightbox) closeLightbox(); });
@@ -2024,7 +2045,7 @@ document.addEventListener('keydown', e => {
       <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
     </svg>
   </button>
-  <div class="w-modal-img" id="wModalImg" style="display:none;width:100%;aspect-ratio:520/209;background-size:cover;background-position:center;"></div>
+  <div class="w-modal-img" id="wModalImg" style="display:none;width:100%;height:220px;background-size:cover;background-position:center;"></div>
   <div class="w-modal-body">
     <div class="w-modal-icon" id="wModalIcon"></div>
     <h2 class="w-modal-title" id="wModalTitle"></h2>
@@ -2097,81 +2118,52 @@ const SUPABASE_URL_RETREATS = 'https://niniwgiytyqvdqejigxg.supabase.co';
 const SUPABASE_ANON_KEY_RETREATS = 'sb_publishable_GwrNUpIuWzdg1oswOY5HzA_mKWqhd6y';
 const sbRetreats = supabase.createClient(SUPABASE_URL_RETREATS, SUPABASE_ANON_KEY_RETREATS);
 
-let allReviewsDataIndex = [];
-
 async function loadReviews() {
   const grid = document.getElementById('reviewsGrid');
   if (!grid) return;
   try {
     const SUPABASE_URL = 'https://niniwgiytyqvdqejigxg.supabase.co';
     const SUPABASE_ANON_KEY = 'sb_publishable_GwrNUpIuWzdg1oswOY5HzA_mKWqhd6y';
-    const res = await fetch(`${SUPABASE_URL}/rest/v1/reviews?approved=eq.true&order=sort_order.asc&order=created_at.desc&limit=3&select=*,comment_da,comment_en,reviewer_name_display`, {
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/reviews?approved=eq.true&order=sort_order.asc&order=created_at.desc&limit=3`, {
       headers: { 'apikey': SUPABASE_ANON_KEY, 'Authorization': `Bearer ${SUPABASE_ANON_KEY}` }
     });
     const reviews = await res.json();
     if (!reviews || !reviews.length) { grid.innerHTML = ''; return; }
-    allReviewsDataIndex = reviews;
-    renderReviewsIndex(currentSiteLang);
+    grid.innerHTML = reviews.map(r => {
+      const vals = [r.r1_modtagelse,r.r2_vaerelse,r.r3_mad,r.r4_omgivelser,r.r5_program,r.r6_terapeuter,r.r7_faellesskab,r.r8_personlig,r.r9_ro,r.r10_samlet].filter(Boolean);
+      const avg = vals.length ? Math.round(vals.reduce((a,b)=>a+b,0)/vals.length*10)/10 : 0;
+      const stars = '★'.repeat(Math.round(avg)) + '☆'.repeat(5-Math.round(avg));
+      const navn = r.fornavn ? (r.fornavn + (r.efternavn ? ' ' + r.efternavn[0] + '.' : '')) : 'Anonym';
+      const fullQuote = r.markedsfoering || r.bedste || '';
+      const words = fullQuote.split(' ');
+      const truncated = words.length > 30 ? words.slice(0,30).join(' ') + '…' : fullQuote;
+      const needsMore = words.length > 30;
+      const rData = encodeURIComponent(JSON.stringify(r));
+      return `<div class="review-card" onclick="visReviewDetalje('${rData}')">
+        <div class="review-stars">${stars} <span style="font-size:.75rem;color:rgba(44,35,24,.5);">${avg}/5</span></div>
+        <div class="review-quote">“${truncated}”</div>
+
+        <div class="review-author"><strong>${navn}</strong>${r.retreat_navn ? '<br><span style="display:block;margin-top:.3rem;"><strong>' + r.retreat_navn + '</strong></span>' : ''}</div>
+      </div>`;
+    }).join('');
   } catch(e) { console.log('Reviews fejl:', e); }
-}
-
-function renderReviewsIndex(lang) {
-  const grid = document.getElementById('reviewsGrid');
-  if (!grid || !allReviewsDataIndex.length) return;
-  const isEN = lang === 'en';
-  grid.innerHTML = allReviewsDataIndex.map(r => {
-    const vals = [r.r1_modtagelse,r.r2_vaerelse,r.r3_mad,r.r4_omgivelser,r.r5_program,r.r6_terapeuter,r.r7_faellesskab,r.r8_personlig,r.r9_ro,r.r10_samlet].filter(Boolean);
-    const avg = vals.length ? Math.round(vals.reduce((a,b)=>a+b,0)/vals.length*10)/10 : 0;
-    const stars = '★'.repeat(Math.round(avg)) + '☆'.repeat(5-Math.round(avg));
-    const navn = r.reviewer_name_display || (r.fornavn ? (r.fornavn + (r.efternavn ? ' ' + r.efternavn[0] + '.' : '')) : 'Anonym');
-    const fullQuote = isEN ? (r.comment_en || r.markedsfoering || r.bedste || '') : (r.comment_da || r.markedsfoering || r.bedste || '');
-    const words = fullQuote.split(' ');
-    const truncated = words.length > 30 ? words.slice(0,30).join(' ') + '…' : fullQuote;
-    const rData = encodeURIComponent(JSON.stringify(r));
-    return `<div class="review-card" onclick="visReviewDetalje('${rData}')">
-      <div class="review-stars">${stars} <span style="font-size:.75rem;color:rgba(44,35,24,.5);">${avg}/5</span></div>
-      <div class="review-quote">"${truncated}"</div>
-
-      <div class="review-author"><strong>${navn}</strong>${r.retreat_navn ? '<br><span style="display:block;margin-top:.3rem;"><strong>' + r.retreat_navn + '</strong></span>' : ''}</div>
-    </div>`;
-  }).join('');
 }
 
 function visReviewDetalje(rEncoded) {
   const r = JSON.parse(decodeURIComponent(rEncoded));
-  const isEN = currentSiteLang === 'en';
   const vals = [r.r1_modtagelse,r.r2_vaerelse,r.r3_mad,r.r4_omgivelser,r.r5_program,r.r6_terapeuter,r.r7_faellesskab,r.r8_personlig,r.r9_ro,r.r10_samlet].filter(Boolean);
   const avg = vals.length ? Math.round(vals.reduce((a,b)=>a+b,0)/vals.length*10)/10 : 0;
-  const navn = r.reviewer_name_display || (r.fornavn ? (r.fornavn + (r.efternavn ? ' ' + r.efternavn[0] + '.' : '')) : 'Anonym');
-  const quote = isEN ? (r.comment_en || r.markedsfoering || '') : (r.comment_da || r.markedsfoering || '');
-  const avgLabel = SC('label_gennemsnit', isEN ? 'average' : 'gennemsnit');
-  const bestLabel = SC('label_det_bedste', isEN ? 'Best part:' : 'Det bedste:');
-  const changeLabel = SC('label_forandring', isEN ? 'Change:' : 'Forandring:');
-  const bedste = isEN ? (r.bedste_en || r.bedste || '') : (r.bedste || '');
-  const forandring = isEN ? (r.forandring_en || r.forandring || '') : (r.forandring || '');
-  const ratingLabels = [
-    [SC('label_modtagelse', isEN ? 'Reception' : 'Modtagelse'), r.r1_modtagelse],
-    [SC('label_vaerelse', isEN ? 'Room' : 'Værelse'), r.r2_vaerelse],
-    [SC('label_mad', isEN ? 'Food' : 'Mad'), r.r3_mad],
-    [SC('label_omgivelser', isEN ? 'Surroundings' : 'Omgivelser'), r.r4_omgivelser],
-    [SC('label_program', isEN ? 'Programme' : 'Program'), r.r5_program],
-    [SC('label_terapeuter', isEN ? 'Facilitators' : 'Terapeuter'), r.r6_terapeuter],
-    [SC('label_faellesskab', isEN ? 'Community' : 'Fællesskab'), r.r7_faellesskab],
-    [SC('label_personlig', isEN ? 'Personal' : 'Personlig'), r.r8_personlig],
-    [SC('label_ro', isEN ? 'Calm' : 'Ro'), r.r9_ro],
-    [SC('label_samlet', isEN ? 'Overall' : 'Samlet'), r.r10_samlet],
-    [SC('label_anbefaling', isEN ? 'Recommendation' : 'Anbefaling'), r.r11_anbefaling],
-  ];
+  const navn = r.fornavn ? (r.fornavn + (r.efternavn ? ' ' + r.efternavn[0] + '.' : '')) : 'Anonym';
   document.getElementById('reviewModalContent').innerHTML = `
     <p style="font-size:.6rem;letter-spacing:.3em;text-transform:uppercase;color:#7a5c14;margin:0 0 .5rem;">${r.retreat_navn||'Castillo del Alma'}</p>
     <h3 style="font-family:'Cinzel',serif;font-weight:300;font-size:1.2rem;color:#2c2318;margin:0 0 .3rem;">${navn}</h3>
-    <div style="color:#b88a1e;margin-bottom:1.2rem;">${'★'.repeat(Math.round(avg))}${'☆'.repeat(5-Math.round(avg))} <span style="font-size:.8rem;color:rgba(44,35,24,.5);">${avg}/5 ${avgLabel}</span></div>
-    ${quote?`<p style="font-family:'Cormorant Garamond',serif;font-size:1.15rem;font-style:italic;line-height:1.8;color:#2c2318;margin:0 0 1.5rem;">&#8220;${quote}&#8221;</p>`:''}
+    <div style="color:#b88a1e;margin-bottom:1.2rem;">${'★'.repeat(Math.round(avg))}${'☆'.repeat(5-Math.round(avg))} <span style="font-size:.8rem;color:rgba(44,35,24,.5);">${avg}/5 gennemsnit</span></div>
+    ${r.markedsfoering?`<p style="font-family:'Cormorant Garamond',serif;font-size:1.15rem;font-style:italic;line-height:1.8;color:#2c2318;margin:0 0 1.5rem;">&#8220;${r.markedsfoering}&#8221;</p>`:''}
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:.4rem .8rem;margin-bottom:1.2rem;">
-      ${ratingLabels.filter(([,v])=>v).map(([l,v])=>`<div style="font-size:.75rem;color:rgba(44,35,24,.85);">${l}: ${'★'.repeat(v)}${'☆'.repeat(5-v)}</div>`).join('')}
+      ${[['Modtagelse',r.r1_modtagelse],['Værelse',r.r2_vaerelse],['Mad',r.r3_mad],['Omgivelser',r.r4_omgivelser],['Program',r.r5_program],['Terapeuter',r.r6_terapeuter],['Fællesskab',r.r7_faellesskab],['Personlig',r.r8_personlig],['Ro',r.r9_ro],['Samlet',r.r10_samlet],['Anbefaling',r.r11_anbefaling]].filter(([,v])=>v).map(([l,v])=>`<div style="font-size:.75rem;color:rgba(44,35,24,.85);">${l}: ${'★'.repeat(v)}${'☆'.repeat(5-v)}</div>`).join('')}
     </div>
-    ${bedste?`<p style="font-size:.85rem;line-height:1.7;color:rgba(44,35,24,.85);margin:0 0 .8rem;"><strong>${bestLabel}</strong> ${bedste}</p>`:''}
-    ${forandring?`<p style="font-size:.85rem;line-height:1.7;color:rgba(44,35,24,.85);margin:0;"><strong>${changeLabel}</strong> ${forandring}</p>`:''}
+    ${r.bedste?`<p style="font-size:.85rem;line-height:1.7;color:rgba(44,35,24,.85);margin:0 0 .8rem;"><strong>Det bedste:</strong> ${r.bedste}</p>`:''}
+    ${r.forandring?`<p style="font-size:.85rem;line-height:1.7;color:rgba(44,35,24,.85);margin:0;"><strong>Forandring:</strong> ${r.forandring}</p>`:''}
   `;
   const modal = document.getElementById('reviewModal');
   modal.style.display = 'flex';
@@ -2196,11 +2188,6 @@ async function loadRetreatsGrid() {
   grid.innerHTML = data.map((r, i) => {
     const num = String(i + 1).padStart(2, '0');
     const isPride = r.slug === 'gay-retreat-og-faellesskab';
-    const isEN = currentSiteLang === 'en';
-    const title = isEN ? (r.title_en || r.title || '') : (r.title || '');
-    const subtitle = isEN ? (r.subtitle_en || r.subtitle || '') : (r.subtitle || '');
-    const description = isEN ? (r.description_en || r.description || '') : (r.description || '');
-    const seMere = isEN ? 'View retreat →' : 'Se retreat →';
     const clickAttr = `onclick="window.location='retreat.html?slug=${r.slug}'" style="cursor:pointer;"`;
     const accentPalette = [
       'linear-gradient(90deg,var(--terracotta),var(--gold))',
@@ -2229,9 +2216,10 @@ async function loadRetreatsGrid() {
         ${isPride ? '<div class="pride-overlay"></div>' : ''}
         <div class="retreat-card-accent"${accentStyle}></div>
         <div class="retreat-card-content">
-          <h3>${title.replace(' & ', '<br>&amp; ').replace(' og ', '<br>').replace(' and ', '<br>and ')}</h3>
-          <p>${description}</p>
-          <span class="retreat-card-arrow">${seMere}</span>
+          <span class="retreat-card-num">${num} — ${r.subtitle || ''}</span>
+          <h3>${(r.title || '').replace(' & ', '<br>&amp; ').replace(' og ', '<br>')}</h3>
+          <p>${r.description || ''}</p>
+          <span class="retreat-card-arrow">Se retreat →</span>
         </div>
       </div>`;
   }).join('');
@@ -2244,16 +2232,9 @@ async function tilmeldNyhedsbrev(btn) {
   const interesser = Array.from(document.querySelectorAll('.nl-form .cb-item input:checked')).map(cb => cb.closest('.cb-item').textContent.trim()).join(', ');
   const msg = document.getElementById('nl-msg');
 
-  const errMsg = SC('nl_fejl_udfyld', 'Udfyld venligst navn og e-mail.');
-  const sendingMsg = SC('nl_sender', 'Tilmelder…');
-  const successMsg = SC('nl_success', '✓ Du er nu tilmeldt — tak!');
-  const successBtnMsg = SC('nl_success_btn', 'Tilmeldt ✓');
-  const errorMsg = SC('nl_fejl_generel', 'Noget gik galt — prøv igen.');
-  const defaultBtnMsg = SC('nl_btn', 'Tilmeld nyhedsbrev');
+  if (!navn || !email) { msg.style.color='#7a1f35'; msg.textContent='Udfyld venligst navn og e-mail.'; return; }
 
-  if (!navn || !email) { msg.style.color='#7a1f35'; msg.textContent=errMsg; return; }
-
-  btn.disabled = true; btn.textContent = sendingMsg;
+  btn.disabled = true; btn.textContent = 'Tilmelder…';
   const SUPABASE_URL = 'https://niniwgiytyqvdqejigxg.supabase.co';
   const SUPABASE_ANON_KEY = 'sb_publishable_GwrNUpIuWzdg1oswOY5HzA_mKWqhd6y';
 
@@ -2264,8 +2245,8 @@ async function tilmeldNyhedsbrev(btn) {
       body: JSON.stringify({ navn, email, land: land||null, interesser: interesser||null })
     });
     if (res.ok) {
-      msg.style.color = '#4a5028'; msg.textContent = successMsg;
-      btn.textContent = successBtnMsg;
+      msg.style.color = '#4a5028'; msg.textContent = '✓ Du er nu tilmeldt — tak!';
+      btn.textContent = 'Tilmeldt ✓';
       document.getElementById('nl-navn').value = '';
       document.getElementById('nl-email').value = '';
       document.getElementById('nl-land').value = '';
@@ -2274,505 +2255,12 @@ async function tilmeldNyhedsbrev(btn) {
       throw new Error('Tilmelding fejlede');
     }
   } catch(e) {
-    msg.style.color = '#7a1f35'; msg.textContent = errorMsg;
-    btn.disabled = false; btn.textContent = defaultBtnMsg;
+    msg.style.color = '#7a1f35'; msg.textContent = 'Noget gik galt — prøv igen.';
+    btn.disabled = false; btn.textContent = 'Tilmeld nyhedsbrev';
   }
 }
 
 document.addEventListener('DOMContentLoaded', () => { loadRetreatsGrid(); loadReviews(); });
-</script>
-
-<!-- ══════ SPROG & FORSIDE-INDHOLD (TEST) ══════ -->
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script>
-const SC_SUPABASE_URL = 'https://niniwgiytyqvdqejigxg.supabase.co';
-const SC_SUPABASE_ANON_KEY = 'sb_publishable_GwrNUpIuWzdg1oswOY5HzA_mKWqhd6y';
-const sbContent = supabase.createClient(SC_SUPABASE_URL, SC_SUPABASE_ANON_KEY);
-
-let siteContentData = {};
-let currentSiteLang = 'da';
-
-// DA(key) henter dansk/engelsk værdi efter aktuelt sprog, med fallback til HTML's egen tekst
-function SC(key, fallback) {
-  const isEN = currentSiteLang === 'en';
-  const val = siteContentData[key + (isEN ? '_en' : '_da')];
-  return (val !== undefined && val !== '') ? val : (fallback !== undefined ? fallback : '');
-}
-
-function scSet(id, key, fallback) {
-  const el = document.getElementById(id);
-  if (el) el.textContent = SC(key, fallback !== undefined ? fallback : el.textContent);
-}
-
-function scSetHTML(id, key, fallback) {
-  const el = document.getElementById(id);
-  if (!el) return;
-  let txt = SC(key, fallback !== undefined ? fallback : el.innerHTML);
-  // Understøt *fremhævning* -> <em>fremhævning</em>
-  txt = txt.replace(/\*(.+?)\*/g, '<em>$1</em>');
-  el.innerHTML = txt;
-}
-
-function scSetVal(id, key, fallback) {
-  const el = document.getElementById(id);
-  if (el) el.value = SC(key, fallback !== undefined ? fallback : el.value);
-}
-
-async function loadSiteContent() {
-  try {
-    const { data, error } = await sbContent.from('site_content').select('key,value');
-    if (error) throw error;
-    siteContentData = {};
-    (data || []).forEach(r => { siteContentData[r.key] = r.value; });
-  } catch(e) {
-    console.warn('site_content load fejl:', e.message);
-  }
-  // Globale settings (rating-labels m.m.) deler samme key/value-struktur — flettes ind i samme objekt
-  try {
-    const { data: settingsData, error: settingsErr } = await sbContent.from('settings').select('key,value');
-    if (settingsErr) throw settingsErr;
-    (settingsData || []).forEach(r => { siteContentData[r.key] = r.value; });
-  } catch(e) {
-    console.warn('settings load fejl:', e.message);
-  }
-}
-
-async function determineStartLang() {
-  // Dansk hvis Danmark, ellers engelsk — baseret på IP-geolokation
-  try {
-    const res = await fetch('https://ipapi.co/json/');
-    const geo = await res.json();
-    return (geo.country_code === 'DK') ? 'da' : 'en';
-  } catch(e) {
-    return 'da'; // fallback hvis geolokation fejler
-  }
-}
-
-function setSiteLang(lang) {
-  currentSiteLang = lang;
-  const btnDa = document.getElementById('btn-da');
-  const btnEn = document.getElementById('btn-en');
-  btnDa.classList.toggle('lang-btn-active', lang === 'da');
-  btnDa.classList.toggle('lang-btn-inactive', lang !== 'da');
-  btnEn.classList.toggle('lang-btn-active', lang === 'en');
-  btnEn.classList.toggle('lang-btn-inactive', lang !== 'en');
-  document.documentElement.lang = lang;
-  applySiteLang();
-}
-
-function applySectionToggles() {
-  const sections = {
-    section_hero_active: '.hero',
-    section_filosofi_active: '#about',
-    section_retreats_active: '#retreats',
-    section_anmeldelser_active: '#reviews',
-    section_estate_active: '#estate',
-    section_vingaard_active: '#vineyard',
-    section_oplevelser_active: '#experiences',
-    section_galleri_active: '#gallery',
-    section_wellness_active: '#wellness',
-    section_om_os_active: '#om-os',
-    section_nyhedsbrev_active: '#contact',
-  };
-  Object.entries(sections).forEach(([key, selector]) => {
-    const el = document.querySelector(selector);
-    if (!el) return;
-    const active = siteContentData[key];
-    // checkbox gemmes som 'true'/'false' streng — default vises hvis ikke sat
-    if (active === 'false') el.style.display = 'none';
-    else el.style.display = '';
-  });
-}
-
-function applySiteLang() {
-  const set = (id, key) => { const el = document.getElementById(id); if (el) el.textContent = SC(key, el.textContent); };
-
-  // HERO
-  scSet('hero-eyebrow-test', 'hero_eyebrow', undefined);
-  const eyebrow = document.querySelector('.hero-eyebrow');
-  if (eyebrow) eyebrow.textContent = SC('hero_eyebrow', eyebrow.textContent);
-  const heroL1 = document.querySelector('.hero h1 .l1');
-  if (heroL1) heroL1.textContent = SC('hero_titel1', heroL1.textContent);
-  const heroL2 = document.querySelector('.hero h1 .l2');
-  if (heroL2) heroL2.textContent = SC('hero_titel2', heroL2.textContent);
-  const heroSub = document.querySelector('.hero-sub');
-  if (heroSub) heroSub.textContent = SC('hero_sub', heroSub.textContent);
-  const heroBtns = document.querySelectorAll('.hero-btns a');
-  if (heroBtns[0]) heroBtns[0].textContent = SC('hero_btn1', heroBtns[0].textContent);
-  if (heroBtns[1]) heroBtns[1].textContent = SC('hero_btn2', heroBtns[1].textContent);
-
-  // TOP NAVIGATION
-  const navTextOnly = (id, key, fallback) => {
-    const el = document.getElementById(id);
-    if (!el) return;
-    const arrow = el.querySelector('.nav-dd-arrow');
-    el.textContent = SC(key, fallback !== undefined ? fallback : el.textContent);
-    if (arrow) el.appendChild(arrow);
-  };
-  navTextOnly('navMainEstate', 'nav_estate', 'The Estate');
-  navTextOnly('navMainRetreats', 'nav_retreats', 'Retreats');
-  navTextOnly('navMainVineyard', 'nav_vineyard', 'Vingården');
-  navTextOnly('navMainExperiences', 'nav_experiences', 'Oplevelser');
-  navTextOnly('navMainGallery', 'nav_gallery', 'Galleri');
-  navTextOnly('navMainWellness', 'nav_wellness', 'Wellness');
-  navTextOnly('navMainOmOs', 'nav_om_os', 'Om os');
-  navTextOnly('navMainBook', 'nav_book', 'Book Retreat');
-  navTextOnly('navDdIntro', 'nav_dd_intro', 'Ejendommen');
-  navTextOnly('navDdTowers', 'nav_dd_towers', 'Tårnene');
-  navTextOnly('navDdRooms', 'nav_dd_rooms', 'Indkvartering');
-  navTextOnly('navDdFacilities', 'nav_dd_facilities', 'Faciliteter');
-  navTextOnly('navDdSustainability', 'nav_dd_sustainability', 'Bæredygtighed');
-  navTextOnly('navDdVineyard', 'nav_dd_vineyard', 'Vingården');
-  navTextOnly('navDdLocation', 'nav_dd_location', 'Beliggenhed');
-
-  // FILOSOFI
-  const filosofiLabel = document.querySelector('#about .section-label');
-  if (filosofiLabel) filosofiLabel.textContent = SC('filosofi_label', filosofiLabel.textContent);
-  const filosofiHeading = document.querySelector('#about h2');
-  if (filosofiHeading) {
-    let txt = SC('filosofi_heading', null);
-    if (txt) filosofiHeading.innerHTML = txt.replace(/\*(.+?)\*/g, '<em>$1</em>');
-  }
-  const filosofiPs = document.querySelectorAll('#about .reveal.d2 p');
-  if (filosofiPs[0]) filosofiPs[0].textContent = SC('filosofi_p1', filosofiPs[0].textContent);
-  if (filosofiPs[1]) filosofiPs[1].textContent = SC('filosofi_p2', filosofiPs[1].textContent);
-  if (filosofiPs[2]) filosofiPs[2].textContent = SC('filosofi_p3', filosofiPs[2].textContent);
-  const filosofiImgLabel = document.querySelector('.intro-img-label');
-  if (filosofiImgLabel) filosofiImgLabel.textContent = SC('filosofi_billedlabel', filosofiImgLabel.textContent);
-
-  // RETREATS
-  const retreatsLabel = document.querySelector('#retreats .section-label');
-  if (retreatsLabel) retreatsLabel.textContent = SC('retreats_label', retreatsLabel.textContent);
-  set('retreatsHeading1', 'retreats_heading');
-  const retreatsTextEl = document.getElementById('retreatsText');
-  if (retreatsTextEl) {
-    let t = SC('retreats_text', null);
-    if (t) retreatsTextEl.innerHTML = t.split('\n').join('<br>');
-  }
-  set('retreatsHeading2', 'retreats_heading2');
-  const retreatsText2El = document.getElementById('retreatsText2');
-  if (retreatsText2El) {
-    let t2 = SC('retreats_text2', null);
-    if (t2) retreatsText2El.innerHTML = t2.split('\n').join('<br>');
-  }
-  set('retreatsBtn', 'retreats_knap');
-
-  // ANMELDELSER (sektions-label og overskrift — hentes fra globale Indstillinger)
-  const reviewsLabel = document.getElementById('reviewsLabel');
-  if (reviewsLabel) reviewsLabel.textContent = SC('forside_reviews_label', reviewsLabel.textContent);
-  const reviewsHeading = document.getElementById('reviewsHeading');
-  if (reviewsHeading) {
-    const t = SC('forside_reviews_heading', null);
-    if (t) reviewsHeading.innerHTML = t.replace(/(\S+)$/, '<em>$1</em>');
-  }
-  renderReviewsIndex(currentSiteLang);
-  if (typeof loadRetreatsGrid === 'function') loadRetreatsGrid();
-
-  // ESTATE
-  const estateLabel = document.querySelector('#estate .section-label');
-  if (estateLabel) estateLabel.textContent = SC('estate_label', estateLabel.textContent);
-  const estateHeading = document.querySelector('#estate h2');
-  if (estateHeading) {
-    let t = SC('estate_heading', null);
-    if (t) estateHeading.innerHTML = t.replace(/\*(.+?)\*/g, '<em>$1</em>');
-  }
-  const estatePs = document.querySelectorAll('#estate p');
-  if (estatePs[0]) estatePs[0].textContent = SC('estate_p1', estatePs[0].textContent);
-  if (estatePs[1]) estatePs[1].textContent = SC('estate_p2', estatePs[1].textContent);
-  if (estatePs[2]) estatePs[2].textContent = SC('estate_p3', estatePs[2].textContent);
-  const estateLink = document.querySelector('#estate .cta-link');
-  if (estateLink) estateLink.textContent = SC('estate_link', estateLink.textContent);
-
-  // VINGÅRDEN
-  const vinLabel = document.querySelector('#vineyard .section-label');
-  if (vinLabel) vinLabel.textContent = SC('vingaard_label', vinLabel.textContent);
-  const vinHeading = document.querySelector('#vineyard h2');
-  if (vinHeading) {
-    let t = SC('vingaard_heading', null);
-    if (t) vinHeading.innerHTML = t.replace(/\*(.+?)\*/g, '<em>$1</em>');
-  }
-  const vinIntros = document.querySelectorAll('.vineyard-intro');
-  if (vinIntros[0]) vinIntros[0].textContent = SC('vingaard_p1', vinIntros[0].textContent);
-  if (vinIntros[1]) vinIntros[1].textContent = SC('vingaard_p2', vinIntros[1].textContent);
-  const vStats = document.querySelectorAll('.v-stat');
-  for (let i = 1; i <= 4 && i <= vStats.length; i++) {
-    const h3 = vStats[i-1].querySelector('h3');
-    const p = vStats[i-1].querySelector('p');
-    if (h3) h3.textContent = SC('vingaard_stat' + i + '_tal', h3.textContent);
-    if (p) p.textContent = SC('vingaard_stat' + i + '_label', p.textContent);
-  }
-
-  // OPLEVELSER
-  const oplLabel = document.querySelector('#experiences .section-label');
-  if (oplLabel) oplLabel.textContent = SC('oplevelser_label', oplLabel.textContent);
-  const oplHeading = document.querySelector('#experiences h2');
-  if (oplHeading) {
-    let t = SC('oplevelser_heading', null);
-    if (t) oplHeading.innerHTML = t.replace(/\*(.+?)\*/g, '<em>$1</em>');
-  }
-  const oplIntro = document.querySelector('.exp-header p');
-  if (oplIntro) oplIntro.textContent = SC('oplevelser_intro', oplIntro.textContent);
-
-  const oplKeys = ['vin','olie','vandre','mad','ride','caminito','malaga','cordoba','antequera','stjerner','flamingo','eltorcal','camorra','ardales','dolmener','pena','alhambra','sevilla','picasso'];
-  const oplCards = document.querySelectorAll('.exp-item.exp-has-modal');
-  oplKeys.forEach((key, i) => {
-    const card = oplCards[i];
-    if (!card) return;
-    const h4 = card.querySelector('h4');
-    const p = card.querySelector('p');
-    const titel = SC('opl_' + key + '_titel', null);
-    const kort = SC('opl_' + key + '_kort', null);
-    const lang = SC('opl_' + key + '_lang', null);
-    if (h4 && titel) h4.textContent = titel;
-    if (p && kort) p.textContent = kort;
-    if (lang) card.setAttribute('data-body', lang);
-    if (titel) card.setAttribute('data-title', titel);
-    const uploadedImg = siteContentData['media_opl_' + key + '_img'];
-    if (uploadedImg) card.setAttribute('data-image', uploadedImg);
-  });
-
-  // GALLERI
-  const gallLabel = document.querySelector('#gallery .section-label');
-  if (gallLabel) gallLabel.textContent = SC('galleri_label', gallLabel.textContent);
-  const gallHeading = document.querySelector('#gallery h2');
-  if (gallHeading) {
-    let t = SC('galleri_heading', null);
-    if (t) gallHeading.innerHTML = t.replace(/\*(.+?)\*/g, '<em>$1</em>');
-  }
-  const gallIntro = document.querySelector('.gallery-intro');
-  if (gallIntro) gallIntro.textContent = SC('galleri_intro', gallIntro.textContent);
-
-  // WELLNESS & HEALING
-  const wellLabel = document.querySelector('#wellness .section-label');
-  if (wellLabel) wellLabel.textContent = SC('wellness_label', wellLabel.textContent);
-  const wellHeading = document.querySelector('#wellness .wellness-intro-text h2');
-  if (wellHeading) {
-    let t = SC('wellness_heading', null);
-    if (t) wellHeading.innerHTML = t.replace(/\*(.+?)\*/g, '<em>$1</em>');
-  }
-  const wellLead = document.querySelector('.wellness-lead');
-  if (wellLead) wellLead.textContent = SC('wellness_lead', wellLead.textContent);
-  const wellIntroPs = document.querySelectorAll('.wellness-intro-text p:not(.wellness-lead)');
-  if (wellIntroPs[0]) wellIntroPs[0].textContent = SC('wellness_p1', wellIntroPs[0].textContent);
-  if (wellIntroPs[1]) wellIntroPs[1].textContent = SC('wellness_p2', wellIntroPs[1].textContent);
-  const wellBadgeNum = document.querySelector('.wellness-badge-num');
-  if (wellBadgeNum) wellBadgeNum.textContent = SC('wellness_badge_tal', wellBadgeNum.textContent);
-  const wellBadgeTxt = document.querySelector('.wellness-badge-txt');
-  if (wellBadgeTxt) wellBadgeTxt.textContent = SC('wellness_badge_tekst', wellBadgeTxt.textContent);
-
-  const wellKeys = ['breathwork','meditation','somatic','healing','massage','pool'];
-  const wellCards = document.querySelectorAll('.wellness-service.wellness-has-modal');
-  wellKeys.forEach((key, i) => {
-    const card = wellCards[i];
-    if (!card) return;
-    const h3 = card.querySelector('h3');
-    const p = card.querySelector('p');
-    const titel = SC('well_' + key + '_titel', null);
-    const kort = SC('well_' + key + '_kort', null);
-    const lang = SC('well_' + key + '_lang', null);
-    if (h3 && titel) h3.textContent = titel;
-    if (p && kort) p.textContent = kort;
-    if (lang) card.setAttribute('data-body', lang);
-    if (titel) card.setAttribute('data-title', titel);
-    const uploadedImg = siteContentData['media_well_' + key + '_img'];
-    if (uploadedImg) card.setAttribute('data-image', uploadedImg);
-  });
-
-  const wellQuote = document.querySelector('.wellness-big-quote');
-  if (wellQuote) {
-    let t = SC('wellness_citat', null);
-    if (t) wellQuote.innerHTML = t.split('\n').join('<br>');
-  }
-
-  // "Læs mere" — global tekst, bruges på alle wellness-kort + opdaterer global variabel til exp-kort
-  const laesMereTxt = SC('global_laes_mere', currentSiteLang === 'en' ? 'Read more →' : 'Læs mere →');
-  document.querySelectorAll('.wellness-read-more').forEach(el => { el.textContent = laesMereTxt; });
-  document.querySelectorAll('.exp-item-arrow').forEach(el => { el.textContent = laesMereTxt; });
-
-  // OM OS
-  const omOsLabel = document.querySelector('#om-os .section-label');
-  if (omOsLabel) omOsLabel.textContent = SC('om_os_label', omOsLabel.textContent);
-  const omOsHeading = document.querySelector('#om-os h2');
-  if (omOsHeading) {
-    let t = SC('om_os_heading', null);
-    if (t) omOsHeading.innerHTML = t.replace(/\*(.+?)\*/g, '<em>$1</em>');
-  }
-  const omOsPs = document.querySelectorAll('.om-os-text p');
-  for (let i = 1; i <= 4 && i <= omOsPs.length; i++) {
-    omOsPs[i-1].textContent = SC('om_os_p' + i, omOsPs[i-1].textContent);
-  }
-  const omOsSig = document.querySelector('.om-os-signature');
-  if (omOsSig) omOsSig.textContent = SC('om_os_signatur', omOsSig.textContent);
-  const omOsImgLabel = document.querySelector('.om-os-img-label');
-  if (omOsImgLabel) omOsImgLabel.textContent = SC('om_os_billedlabel', omOsImgLabel.textContent);
-
-  // TESTIMONIAL
-  const testQuote = document.querySelector('.testimonial blockquote');
-  if (testQuote) {
-    let t = SC('testimonial_citat', null);
-    if (t) testQuote.textContent = '"' + t + '"';
-  }
-  const testCite = document.querySelector('.testimonial cite');
-  if (testCite) testCite.textContent = SC('testimonial_kilde', testCite.textContent);
-
-  // NYHEDSBREV
-  set('nlLabel', 'nl_label');
-  const nlHeading = document.getElementById('nlHeading');
-  if (nlHeading) {
-    let t = SC('nl_heading', null);
-    if (t) nlHeading.innerHTML = t.replace(/\*(.+?)\*/g, '<em>$1</em>');
-  }
-  set('nlIntro', 'nl_intro');
-  set('nlLabelNavn', 'nl_label_navn');
-  set('nlLabelEmail', 'nl_label_email');
-  set('nlLabelLand', 'nl_label_land');
-  set('nlLabelInteresser', 'nl_label_interesser');
-  set('nlOptVaelgLand', 'nl_opt_vaelg_land');
-  set('nlOptAndet', 'nl_opt_andet');
-  set('nlCbRetreats', 'nl_cb_retreats');
-  set('nlCbWine', 'nl_cb_wine');
-  set('nlCbWellness', 'nl_cb_wellness');
-  // GAY RETREATS-tagget bevarer regnbuefarverne — kun selve teksten oversættes
-  const nlCbGay = document.getElementById('nlCbGay');
-  if (nlCbGay) {
-    const t = SC('nl_cb_gay', null);
-    if (t) {
-      const colors = ['#FF0000','#FF7700','#FFDD00','#00AA00','#0000FF','#8B00FF','#FF0000','#FF7700','#FFDD00','#00AA00','#0000FF','#FF0000'];
-      nlCbGay.innerHTML = t.split('').map((ch, i) => `<span style="color:${colors[i % colors.length]}">${ch === ' ' ? '&nbsp;' : ch}</span>`).join('');
-    }
-  }
-  const nlPlaceholderNavn = document.getElementById('nl-navn');
-  if (nlPlaceholderNavn) nlPlaceholderNavn.placeholder = SC('nl_placeholder_navn', nlPlaceholderNavn.placeholder);
-  const nlPlaceholderEmail = document.getElementById('nl-email');
-  if (nlPlaceholderEmail) nlPlaceholderEmail.placeholder = SC('nl_placeholder_email', nlPlaceholderEmail.placeholder);
-  set('nlSubmitBtn', 'nl_btn');
-
-  // FOOTER
-  const footerAddrEl = document.getElementById('footerAddress');
-  if (footerAddrEl) footerAddrEl.innerHTML = SC('footer_adresse', footerAddrEl.innerHTML);
-  set('footerCol1Heading', 'footer_kol1_titel');
-  set('footerCol2Heading', 'footer_kol2_titel');
-  set('footerCol3Heading', 'footer_kol3_titel');
-  for (let i = 1; i <= 4; i++) set('footerCol1Link' + i, 'footer_kol1_link' + i + '_tekst');
-  for (let i = 1; i <= 5; i++) set('footerCol2Link' + i, 'footer_kol2_link' + i + '_tekst');
-  for (let i = 1; i <= 5; i++) set('footerCol3Link' + i, 'footer_kol3_link' + i + '_tekst');
-  // Links (href) opdateres uafhængigt af sprog — de samme destinationer gælder for begge sprog
-  const setHref = (id, key) => {
-    const el = document.getElementById(id);
-    if (!el) return;
-    const url = siteContentData[key];
-    if (url) el.href = url;
-  };
-  for (let i = 1; i <= 4; i++) setHref('footerCol1Link' + i, 'footer_kol1_link' + i + '_url');
-  for (let i = 1; i <= 5; i++) setHref('footerCol2Link' + i, 'footer_kol2_link' + i + '_url');
-  for (let i = 1; i <= 5; i++) setHref('footerCol3Link' + i, 'footer_kol3_link' + i + '_url');
-  set('footerCopyright', 'footer_copyright');
-  set('footerSocial1', 'footer_social1_tekst');
-  set('footerSocial2', 'footer_social2_tekst');
-  setHref('footerSocial1', 'footer_social1_url');
-  setHref('footerSocial2', 'footer_social2_url');
-
-  applySectionToggles();
-}
-
-// ── DYNAMISK GALLERI FRA SUPABASE STORAGE ──
-async function loadUploadedGalleryItems() {
-  const grid = document.querySelector('.gallery-grid');
-  const emptyMsg = document.getElementById('galleryEmptyMsg');
-  if (!grid) return;
-  try {
-    const { data, error } = await sbContent.storage.from('retreat-images').list('galleri', { sortBy: { column: 'created_at', order: 'desc' } });
-    if (error) throw error;
-    let files = (data || []).filter(f => f.name && !f.name.startsWith('.'));
-    if (!files.length) {
-      if (emptyMsg) emptyMsg.style.display = 'block';
-      return;
-    }
-    // Sortér efter den rækkefølge der er sat i admin (op/ned-pile), nye filer havner sidst
-    const savedOrder = siteContentData['galleri_raekkefolge'];
-    if (savedOrder) {
-      try {
-        const orderArr = JSON.parse(savedOrder);
-        const fileNames = files.map(f => f.name);
-        const orderedNames = [...orderArr.filter(n => fileNames.includes(n)), ...fileNames.filter(n => !orderArr.includes(n))];
-        files.sort((a, b) => orderedNames.indexOf(a.name) - orderedNames.indexOf(b.name));
-      } catch(e) { console.warn('Galleri rækkefølge parse fejl:', e.message); }
-    }
-    if (emptyMsg) emptyMsg.style.display = 'none';
-    files.forEach(f => {
-      const { data: urlData } = sbContent.storage.from('retreat-images').getPublicUrl('galleri/' + f.name);
-      const isVideo = /\.(mp4|mov|webm)$/i.test(f.name);
-      const item = document.createElement('div');
-      item.className = 'gallery-item ' + (isVideo ? 'video' : 'photo');
-      item.dataset.type = isVideo ? 'video' : 'photo';
-      if (isVideo) {
-        item.dataset.src = urlData.publicUrl;
-        item.style.background = '#2c2318';
-        // Generer thumbnail fra videoens første frame
-        const thumbVideo = document.createElement('video');
-        thumbVideo.src = urlData.publicUrl + '#t=0.5';
-        thumbVideo.preload = 'metadata';
-        thumbVideo.muted = true;
-        thumbVideo.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;object-fit:cover;';
-        item.appendChild(thumbVideo);
-      } else {
-        item.style.backgroundImage = `url('${urlData.publicUrl}')`;
-      }
-      item.innerHTML += '<div class="gallery-item-overlay"></div>' + (isVideo
-        ? '<div class="gallery-item-play"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></div>'
-        : '<div class="gallery-item-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div>');
-      grid.appendChild(item);
-    });
-  } catch(e) {
-    console.warn('Galleri (uploadede filer) load fejl:', e.message);
-    if (emptyMsg) emptyMsg.style.display = 'block';
-  }
-}
-
-document.addEventListener('DOMContentLoaded', async () => {
-  await loadSiteContent();
-  currentSiteLang = await determineStartLang();
-  setSiteLang(currentSiteLang);
-  await loadUploadedGalleryItems();
-  initGalleryClicks();
-  applyUploadedMedia();
-});
-
-// ── ERSTAT BILLEDER/VIDEO MED UPLOADEDE FILER ──
-function applyUploadedMedia() {
-  const mediaMap = [
-    { key: 'media_hero_video', id: 'heroVideoSource', type: 'video' },
-    { key: 'media_filosofi_img', id: 'imgFilosofi', type: 'img' },
-    { key: 'media_estate_img1', id: 'imgEstate1', type: 'img' },
-    { key: 'media_estate_img2', id: 'imgEstate2', type: 'img' },
-    { key: 'media_estate_img3', id: 'imgEstate3', type: 'img' },
-    { key: 'media_vingaard_img', id: 'imgVingaard', type: 'img' },
-    { key: 'media_wellness_img', id: 'imgWellness', type: 'bg' },
-    { key: 'media_om_os_img', id: 'imgOmOs', type: 'img' },
-    { key: 'media_retreats_img1', id: 'retreatsImg1', type: 'bg' },
-    { key: 'media_retreats_img2', id: 'retreatsImg2', type: 'bg' },
-    { key: 'media_retreats_img3', id: 'retreatsImg3', type: 'bg' },
-    { key: 'media_retreats_img4', id: 'retreatsImg4', type: 'bg' },
-    { key: 'media_retreats_img5', id: 'retreatsImg5', type: 'bg' },
-  ];
-  let anyRetreatsImg = false;
-  mediaMap.forEach(({ key, id, type }) => {
-    const url = siteContentData[key];
-    if (!url) return;
-    const el = document.getElementById(id);
-    if (!el) return;
-    if (type === 'img') el.src = url;
-    else if (type === 'bg') el.style.backgroundImage = `url('${url}')`;
-    else if (type === 'video') {
-      el.src = url;
-      const video = el.closest('video');
-      if (video) video.load();
-    }
-    if (id.startsWith('retreatsImg')) anyRetreatsImg = true;
-  });
-  const retreatsRow = document.getElementById('retreatsImageRow');
-  if (retreatsRow) retreatsRow.style.display = anyRetreatsImg ? 'grid' : 'none';
-}
 </script>
 </body>
 </html>
