@@ -90,6 +90,9 @@ nav.scrolled .nav-links a:hover{color:var(--wine);}
 }
 nav.scrolled .nav-book{color:#fff!important;}
 .nav-book:hover{background:var(--wine-light)!important;}
+.lang-switcher{border-color:var(--wine);}
+.lang-btn.lang-btn-active{background:var(--wine);color:#fff!important;}
+.lang-btn.lang-btn-inactive{background:transparent;color:var(--wine)!important;}
 
 /* ══════════════════════════════
    HERO — stock video embed
@@ -1136,11 +1139,11 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:5rem
     <li><a href="#gallery" id="navMainGallery">Galleri</a></li><li><a href="#wellness" id="navMainWellness">Wellness</a></li>
     <li><a href="#om-os" id="navMainOmOs">Om os</a></li>
     <li><a href="#retreats" class="nav-book" id="navMainBook">Book Retreat</a></li>
-    <li style="display:flex;align-items:center;gap:.6rem;margin-left:.6rem;">
-      <span style="font-size:.55rem;letter-spacing:.12em;text-transform:uppercase;background:var(--terracotta);color:#fff;padding:.2rem .5rem;">TEST</span>
-      <div style="display:flex;border:1px solid rgba(255,255,255,.3);overflow:hidden;">
-        <button id="btn-da" onclick="setSiteLang('da')" style="font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;padding:.3rem .6rem;border:none;cursor:pointer;background:var(--wine);color:#fff;font-family:'Manrope',sans-serif;">DA</button>
-        <button id="btn-en" onclick="setSiteLang('en')" style="font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;padding:.3rem .6rem;border:none;cursor:pointer;background:transparent;color:#fff;font-family:'Manrope',sans-serif;">EN</button>
+    <li class="lang-switcher-item" style="display:flex;align-items:center;gap:.6rem;margin-left:.6rem;">
+      <span class="test-badge" style="font-size:.55rem;letter-spacing:.12em;text-transform:uppercase;background:var(--terracotta);color:#fff;padding:.2rem .5rem;">TEST</span>
+      <div class="lang-switcher" style="display:flex;border:1.5px solid;overflow:hidden;">
+        <button id="btn-da" class="lang-btn lang-btn-active" onclick="setSiteLang('da')" style="font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;padding:.3rem .6rem;border:none;cursor:pointer;font-family:'Manrope',sans-serif;">DA</button>
+        <button id="btn-en" class="lang-btn lang-btn-inactive" onclick="setSiteLang('en')" style="font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;padding:.3rem .6rem;border:none;cursor:pointer;font-family:'Manrope',sans-serif;">EN</button>
       </div>
     </li>
   </ul>
@@ -2347,8 +2350,12 @@ async function determineStartLang() {
 
 function setSiteLang(lang) {
   currentSiteLang = lang;
-  document.getElementById('btn-da').style.background = lang === 'da' ? 'var(--wine)' : 'transparent';
-  document.getElementById('btn-en').style.background = lang === 'en' ? 'var(--wine)' : 'transparent';
+  const btnDa = document.getElementById('btn-da');
+  const btnEn = document.getElementById('btn-en');
+  btnDa.classList.toggle('lang-btn-active', lang === 'da');
+  btnDa.classList.toggle('lang-btn-inactive', lang !== 'da');
+  btnEn.classList.toggle('lang-btn-active', lang === 'en');
+  btnEn.classList.toggle('lang-btn-inactive', lang !== 'en');
   document.documentElement.lang = lang;
   applySiteLang();
 }
