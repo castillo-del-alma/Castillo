@@ -1907,7 +1907,7 @@ document.addEventListener('keydown', e=>{ if(e.key==='Escape') closeModal(); });
 // ═══════════════════════════════════════════
 //  GALLERY — filter + lightbox
 // ═══════════════════════════════════════════
-const galleryItems = Array.from(document.querySelectorAll('.gallery-item'));
+let galleryItems = Array.from(document.querySelectorAll('.gallery-item'));
 const lightbox     = document.getElementById('lightbox');
 const lbInner      = document.getElementById('lightboxInner');
 const lbClose      = document.getElementById('lightboxClose');
@@ -1967,13 +1967,18 @@ function closeLightbox() {
   document.body.style.overflow = '';
 }
 
-galleryItems.forEach((item, i) => {
-  item.addEventListener('click', () => {
-    visibleItems = galleryItems.filter(it => !it.classList.contains('hidden'));
-    const vIdx = visibleItems.indexOf(item);
-    openLightbox(vIdx);
+function initGalleryClicks() {
+  galleryItems = Array.from(document.querySelectorAll('.gallery-item'));
+  visibleItems = galleryItems;
+  galleryItems.forEach((item, i) => {
+    item.addEventListener('click', () => {
+      visibleItems = galleryItems.filter(it => !it.classList.contains('hidden'));
+      const vIdx = visibleItems.indexOf(item);
+      openLightbox(vIdx);
+    });
   });
-});
+}
+initGalleryClicks();
 
 lbClose.addEventListener('click', closeLightbox);
 lightbox.addEventListener('click', e => { if (e.target === lightbox) closeLightbox(); });
@@ -2647,11 +2652,18 @@ async function loadUploadedGalleryItems() {
       item.dataset.type = isVideo ? 'video' : 'photo';
       if (isVideo) {
         item.dataset.src = urlData.publicUrl;
-        item.style.backgroundImage = '';
+        item.style.background = '#2c2318';
+        // Generer thumbnail fra videoens første frame
+        const thumbVideo = document.createElement('video');
+        thumbVideo.src = urlData.publicUrl + '#t=0.5';
+        thumbVideo.preload = 'metadata';
+        thumbVideo.muted = true;
+        thumbVideo.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;object-fit:cover;';
+        item.appendChild(thumbVideo);
       } else {
         item.style.backgroundImage = `url('${urlData.publicUrl}')`;
       }
-      item.innerHTML = '<div class="gallery-item-overlay"></div>' + (isVideo
+      item.innerHTML += '<div class="gallery-item-overlay"></div>' + (isVideo
         ? '<div class="gallery-item-play"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></div>'
         : '<div class="gallery-item-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div>');
       grid.appendChild(item);
@@ -2666,7 +2678,8 @@ document.addEventListener('DOMContentLoaded', async () => {
   await loadSiteContent();
   currentSiteLang = await determineStartLang();
   setSiteLang(currentSiteLang);
-  loadUploadedGalleryItems();
+  await loadUploadedGalleryItems();
+  initGalleryClicks();
   applyUploadedMedia();
 });
 
