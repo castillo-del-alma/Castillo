@@ -1148,7 +1148,7 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:5rem
 <section class="hero">
   <div class="hero-video-wrap">
     <video autoplay muted loop playsinline preload="auto">
-      <source src="img/intro-film_high_13MB.mp4" type="video/mp4">
+      <source src="img/intro-film_high_13MB.mp4" type="video/mp4" id="heroVideoSource">
     </video>
   </div>
   <div class="hero-video-fallback" style="display:none"></div>
@@ -1182,7 +1182,7 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:5rem
       <div class="reveal-left">
         <div class="intro-img-wrap">
           <div class="intro-img">
-            <img src="img/IMG_0603.JPG" alt="Castillo del Alma — pool og have" class="intro-photo">
+            <img src="img/IMG_0603.JPG" alt="Castillo del Alma — pool og have" class="intro-photo" id="imgFilosofi">
             <div class="intro-img-overlay"></div>
           </div>
           <div class="intro-img-label">Slow Living · Andalusia</div>
@@ -1255,9 +1255,9 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:5rem
         <a href="ejendommen.html" class="cta-link">Udforsk ejendommen</a>
       </div>
       <div class="estate-visual reveal-right d2">
-        <div class="estate-img"><div class="estate-img-inner"><div class="estate-img-ph ph1" style="background:none;"><img src="img/estate-aerial.jpg" style="width:100%;height:100%;object-fit:cover;object-position:center;display:block;"></div></div></div>
-        <div class="estate-img"><div class="estate-img-inner"><div class="estate-img-ph ph2" style="background:none;"><img src="img/estate-pool.jpg" style="width:100%;height:100%;object-fit:cover;object-position:center;display:block;"></div></div></div>
-        <div class="estate-img"><div class="estate-img-inner"><div class="estate-img-ph ph3" style="background:none;"><img src="img/logo-castillo-ny-43.png" style="width:100%;height:100%;object-fit:cover;display:block;"></div></div></div>
+        <div class="estate-img"><div class="estate-img-inner"><div class="estate-img-ph ph1" style="background:none;"><img src="img/estate-aerial.jpg" style="width:100%;height:100%;object-fit:cover;object-position:center;display:block;" id="imgEstate1"></div></div></div>
+        <div class="estate-img"><div class="estate-img-inner"><div class="estate-img-ph ph2" style="background:none;"><img src="img/estate-pool.jpg" style="width:100%;height:100%;object-fit:cover;object-position:center;display:block;" id="imgEstate2"></div></div></div>
+        <div class="estate-img"><div class="estate-img-inner"><div class="estate-img-ph ph3" style="background:none;"><img src="img/logo-castillo-ny-43.png" style="width:100%;height:100%;object-fit:cover;display:block;" id="imgEstate3"></div></div></div>
       </div>
     </div>
   </div>
@@ -1277,7 +1277,7 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:5rem
         <p class="vineyard-intro" style="margin-top:1.4rem;">Området omkring Mollina er særligt kendt for sine mange solskinstimer, varme dage og køligere nætter, som skaber optimale betingelser for dyrkning af kvalitetsdruer. Jordbunden i området er rig på kalk og mineraler, hvilket giver vinene karakter, dybde og en flot balance mellem frugt, fylde og elegance. Kombinationen af klimaet, højden og den andalusiske jord giver druerne mulighed for at modne langsomt og udvikle en intens og kompleks smag.</p>
       </div>
       <div class="vineyard-photo">
-        <img src="img/vinmark1.jpg" alt="Castillo del Alma vingård · Mollina">
+        <img src="img/vinmark1.jpg" alt="Castillo del Alma vingård · Mollina" id="imgVingaard">
       </div>
     </div>
     <div class="vineyard-stats reveal d2">
@@ -1472,7 +1472,7 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:5rem
         <p>Vores wellness- og healingoplevelser er skabt til at støtte dyb restitution, indre ro og en nænsom genforbindelse mellem krop og sind.</p>
       </div>
       <div class="wellness-intro-visual reveal-right d2">
-        <div class="wellness-img" style="background-image:url('img/wellness-yoga-castillo.png');background-size:cover;background-position:center top;"></div>
+        <div class="wellness-img" id="imgWellness" style="background-image:url('img/wellness-yoga-castillo.png');background-size:cover;background-position:center top;"></div>
         <div class="wellness-badge">
           <span class="wellness-badge-num">14</span>
           <span class="wellness-badge-txt">Gæster max · Eksklusivt &amp; intimt</span>
@@ -1559,7 +1559,7 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:5rem
       <div class="reveal-right d2">
         <div class="om-os-img-wrap">
           <div class="om-os-img">
-            <img src="img/erik-michael-castillo-del-alma.webp" alt="Michael og Erik — ejere af Castillo del Alma">
+            <img src="img/erik-michael-castillo-del-alma.webp" alt="Michael og Erik — ejere af Castillo del Alma" id="imgOmOs">
           </div>
           <div class="om-os-img-label">Michael &amp; Erik · Værter</div>
         </div>
@@ -2670,7 +2670,35 @@ document.addEventListener('DOMContentLoaded', async () => {
   currentSiteLang = await determineStartLang();
   setSiteLang(currentSiteLang);
   loadUploadedGalleryItems();
+  applyUploadedMedia();
 });
+
+// ── ERSTAT BILLEDER/VIDEO MED UPLOADEDE FILER ──
+function applyUploadedMedia() {
+  const mediaMap = [
+    { key: 'media_hero_video', id: 'heroVideoSource', type: 'video' },
+    { key: 'media_filosofi_img', id: 'imgFilosofi', type: 'img' },
+    { key: 'media_estate_img1', id: 'imgEstate1', type: 'img' },
+    { key: 'media_estate_img2', id: 'imgEstate2', type: 'img' },
+    { key: 'media_estate_img3', id: 'imgEstate3', type: 'img' },
+    { key: 'media_vingaard_img', id: 'imgVingaard', type: 'img' },
+    { key: 'media_wellness_img', id: 'imgWellness', type: 'bg' },
+    { key: 'media_om_os_img', id: 'imgOmOs', type: 'img' },
+  ];
+  mediaMap.forEach(({ key, id, type }) => {
+    const url = siteContentData[key];
+    if (!url) return;
+    const el = document.getElementById(id);
+    if (!el) return;
+    if (type === 'img') el.src = url;
+    else if (type === 'bg') el.style.backgroundImage = `url('${url}')`;
+    else if (type === 'video') {
+      el.src = url;
+      const video = el.closest('video');
+      if (video) video.load();
+    }
+  });
+}
 </script>
 </body>
 </html>

@@ -385,6 +385,8 @@ body{font-family:'Manrope',sans-serif;background:#f0e8d5;color:#2c2318;min-heigh
         <div style="margin-bottom:1.2rem;padding:.9rem;background:rgba(42,122,116,.06);border:1px solid rgba(42,122,116,.2);">
           <label class="fc-label" style="color:#2a7a74;">📁 Hero-video (nuværende: intro-film_high_13MB.mp4)</label>
           <input type="file" id="upload_hero_video" accept="video/mp4" style="font-size:.78rem;">
+            <button onclick="uploadSectionMedia('upload_hero_video','media_hero_video')" style="margin-left:.6rem;background:#2a7a74;color:#fff;border:none;padding:.4rem 1rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;">⬆ Upload</button>
+            <span id="upload_hero_video_status" style="font-size:.68rem;color:#2a7a74;margin-left:.5rem;"></span>
         </div>
         <div class="fc-row">
           <div><label class="fc-label fc-label-da">Eyebrow-tekst</label><input type="text" id="hero_eyebrow_da" class="fc-input-da" value="Mollina · Málaga · Andalusia"></div>
@@ -426,6 +428,8 @@ body{font-family:'Manrope',sans-serif;background:#f0e8d5;color:#2c2318;min-heigh
         <div style="margin-bottom:1.2rem;padding:.9rem;background:rgba(42,122,116,.06);border:1px solid rgba(42,122,116,.2);">
           <label class="fc-label" style="color:#2a7a74;">📁 Filosofi-billede</label>
           <input type="file" id="upload_filosofi_img" accept="image/*" style="font-size:.78rem;">
+            <button onclick="uploadSectionMedia('upload_filosofi_img','media_filosofi_img')" style="margin-left:.6rem;background:#2a7a74;color:#fff;border:none;padding:.4rem 1rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;">⬆ Upload</button>
+            <span id="upload_filosofi_img_status" style="font-size:.68rem;color:#2a7a74;margin-left:.5rem;"></span>
         </div>
         <div class="fc-row">
           <div><label class="fc-label fc-label-da">Billedlabel</label><input type="text" id="filosofi_billedlabel_da" class="fc-input-da" value="Slow Living · Andalusia"></div>
@@ -510,8 +514,14 @@ and companies will find the perfect setting for seminars, team building and stra
           <label class="fc-label" style="color:#2a7a74;">📁 Billeder (3 stk)</label>
           <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:1rem;margin-top:.4rem;">
             <input type="file" id="upload_estate_img1" accept="image/*" style="font-size:.78rem;">
+            <button onclick="uploadSectionMedia('upload_estate_img1','media_estate_img1')" style="margin-left:.6rem;background:#2a7a74;color:#fff;border:none;padding:.4rem 1rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;">⬆ Upload</button>
+            <span id="upload_estate_img1_status" style="font-size:.68rem;color:#2a7a74;margin-left:.5rem;"></span>
             <input type="file" id="upload_estate_img2" accept="image/*" style="font-size:.78rem;">
+            <button onclick="uploadSectionMedia('upload_estate_img2','media_estate_img2')" style="margin-left:.6rem;background:#2a7a74;color:#fff;border:none;padding:.4rem 1rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;">⬆ Upload</button>
+            <span id="upload_estate_img2_status" style="font-size:.68rem;color:#2a7a74;margin-left:.5rem;"></span>
             <input type="file" id="upload_estate_img3" accept="image/*" style="font-size:.78rem;">
+            <button onclick="uploadSectionMedia('upload_estate_img3','media_estate_img3')" style="margin-left:.6rem;background:#2a7a74;color:#fff;border:none;padding:.4rem 1rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;">⬆ Upload</button>
+            <span id="upload_estate_img3_status" style="font-size:.68rem;color:#2a7a74;margin-left:.5rem;"></span>
           </div>
         </div>
         <div class="fc-row">
@@ -554,6 +564,8 @@ and companies will find the perfect setting for seminars, team building and stra
         <div style="margin-bottom:1.2rem;padding:.9rem;background:rgba(42,122,116,.06);border:1px solid rgba(42,122,116,.2);">
           <label class="fc-label" style="color:#2a7a74;">📁 Vingård-billede</label>
           <input type="file" id="upload_vingaard_img" accept="image/*" style="font-size:.78rem;">
+            <button onclick="uploadSectionMedia('upload_vingaard_img','media_vingaard_img')" style="margin-left:.6rem;background:#2a7a74;color:#fff;border:none;padding:.4rem 1rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;">⬆ Upload</button>
+            <span id="upload_vingaard_img_status" style="font-size:.68rem;color:#2a7a74;margin-left:.5rem;"></span>
         </div>
         <div class="fc-row">
           <div><label class="fc-label fc-label-da">Section-label</label><input type="text" id="vingaard_label_da" class="fc-input-da" value="Vingården"></div>
@@ -898,6 +910,8 @@ A visit to Córdoba is just an hour's drive from Castillo del Alma.</textarea></
         <div style="margin-bottom:1.2rem;padding:.9rem;background:rgba(42,122,116,.06);border:1px solid rgba(42,122,116,.2);">
           <label class="fc-label" style="color:#2a7a74;">📁 Wellness-billede</label>
           <input type="file" id="upload_wellness_img" accept="image/*" style="font-size:.78rem;">
+            <button onclick="uploadSectionMedia('upload_wellness_img','media_wellness_img')" style="margin-left:.6rem;background:#2a7a74;color:#fff;border:none;padding:.4rem 1rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;">⬆ Upload</button>
+            <span id="upload_wellness_img_status" style="font-size:.68rem;color:#2a7a74;margin-left:.5rem;"></span>
         </div>
         <div class="fc-row">
           <div><label class="fc-label fc-label-da">Section-label</label><input type="text" id="wellness_label_da" class="fc-input-da" value="Wellness &amp; Healing"></div>
@@ -1094,6 +1108,8 @@ feeling more calm – and coming home to yourself again."</textarea></div>
         <div style="margin-bottom:1.2rem;padding:.9rem;background:rgba(42,122,116,.06);border:1px solid rgba(42,122,116,.2);">
           <label class="fc-label" style="color:#2a7a74;">📁 Om os-billede</label>
           <input type="file" id="upload_om_os_img" accept="image/*" style="font-size:.78rem;">
+            <button onclick="uploadSectionMedia('upload_om_os_img','media_om_os_img')" style="margin-left:.6rem;background:#2a7a74;color:#fff;border:none;padding:.4rem 1rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;">⬆ Upload</button>
+            <span id="upload_om_os_img_status" style="font-size:.68rem;color:#2a7a74;margin-left:.5rem;"></span>
         </div>
         <div class="fc-row">
           <div><label class="fc-label fc-label-da">Section-label</label><input type="text" id="om_os_label_da" class="fc-input-da" value="Om os"></div>
@@ -5572,10 +5588,37 @@ async function sletGalleriFil(filename) {
   }
 }
 
+// ── SEKTIONS-MEDIE UPLOAD (Hero-video, Filosofi/Estate/Vingård/Wellness/Om os billeder) ──
+const MEDIA_BUCKET = 'retreat-images';
+const MEDIA_PREFIX = 'forside-medier/';
+
+async function uploadSectionMedia(inputId, contentKey) {
+  const input = document.getElementById(inputId);
+  const status = document.getElementById(inputId + '_status');
+  if (!input.files.length) { if (status) status.textContent = 'Vælg en fil først.'; return; }
+  const file = input.files[0];
+  if (status) status.textContent = 'Uploader...';
+  try {
+    const safeName = Date.now() + '_' + file.name.replace(/[^a-zA-Z0-9.\-_]/g, '_');
+    const { error } = await sb.storage.from(MEDIA_BUCKET).upload(MEDIA_PREFIX + safeName, file);
+    if (error) throw error;
+    const { data: urlData } = sb.storage.from(MEDIA_BUCKET).getPublicUrl(MEDIA_PREFIX + safeName);
+    const { error: saveError } = await sb.from('site_content').upsert({ key: contentKey, value: urlData.publicUrl }, { onConflict: 'key' });
+    if (saveError) throw saveError;
+    if (status) status.textContent = '✓ Uploadet og gemt';
+    showToast('Billede/video uploadet ✓');
+    input.value = '';
+  } catch(e) {
+    if (status) status.textContent = '';
+    showToast('Fejl ved upload: ' + e.message, true);
+  }
+}
+
 async function gemForside() {
   const upserts = [];
   document.querySelectorAll('#tab-forside [id]').forEach(el => {
     if (!el.id || el.tagName === 'BUTTON') return;
+    if (el.id.endsWith('_status')) return; // upload-statustekst, ikke et redigerbart felt
     let val;
     if (el.type === 'checkbox') val = el.checked ? 'true' : 'false';
     else if (el.type === 'file') return; // håndteres separat ved upload-integration
