@@ -366,33 +366,6 @@ body{font-family:'Manrope',sans-serif;background:#f0e8d5;color:#2c2318;min-heigh
     <div id="anmeldelserFaneIndhold" style="padding:2rem 3rem;"></div>
   </div>
 
-  <!-- FANE: KUNDER -->
-  <div class="tab-content active" id="tab-kunder">
-    <div class="stats-bar">
-      <div class="stat"><span class="stat-num" id="statKunder">—</span><span class="stat-label">Kunder</span></div>
-      <div class="stat"><span class="stat-num" id="statBookinger">—</span><span class="stat-label">Bookinger</span></div>
-      <div class="stat"><span class="stat-num" id="statUbetalt">—</span><span class="stat-label">Udestående (€)</span></div>
-      <div class="stat"><span class="stat-num" id="statIndtjent">—</span><span class="stat-label">Modtaget (€)</span></div>
-    </div>
-    <div class="kunde-toolbar">
-      <button class="btn-primary" onclick="openNyKunde()">+ Ny kunde</button>
-      <button class="btn-secondary" onclick="loadKunder()">↺ Opdater</button>
-      <button class="btn-secondary" onclick="visAnmeldelser()" style="background:rgba(184,138,30,.12);border-color:rgba(184,138,30,.3);color:#7a5c14;">★ Anmeldelser</button>
-      <input type="text" id="kundeSearch" placeholder="Søg navn eller email..." oninput="renderKunder()">
-    </div>
-    <div style="display:flex;gap:.4rem;flex-wrap:nowrap;overflow-x:auto;padding-left:3rem;margin-bottom:1rem;align-items:center;">
-      <span style="font-size:.65rem;letter-spacing:.12em;text-transform:uppercase;color:rgba(44,35,24,.8);align-self:center;margin-right:.3rem;">Sortér:</span>
-      <button id="sort-navn" class="sort-btn" onclick="setSort('navn')">Navn</button>
-      <button id="sort-retreat" class="sort-btn" onclick="setSort('retreat')">Retreat</button>
-      <button id="sort-ankomst" class="sort-btn" onclick="setSort('ankomst')">Ankomst</button>
-      <button id="sort-status" class="sort-btn" onclick="setSort('status')">Status</button>
-      <button id="sort-ryd" class="sort-btn" onclick="clearSort()" style="color:rgba(44,35,24,.75);border-style:dashed;">× Ryd</button>
-    </div>
-    <div class="kunder-grid" id="kunderGrid">
-      <div class="loading">Henter kunder...</div>
-    </div>
-  </div>
-
   <!-- FANE: FORSIDE -->
   <div class="subtab-content active" id="tab-forside" style="padding:2rem 3rem;max-width:1100px;">
     <h2 style="font-family:Cinzel,serif;font-weight:300;font-size:1.4rem;letter-spacing:.08em;color:#2c2318;margin-bottom:.4rem;">Forside (index.html)</h2>
@@ -938,6 +911,33 @@ A visit to Córdoba is just an hour's drive from Castillo del Alma.</textarea></
   </div>
 
   </div><!-- /tab-sprog -->
+
+  <!-- FANE: KUNDER -->
+  <div class="tab-content active" id="tab-kunder">
+    <div class="stats-bar">
+      <div class="stat"><span class="stat-num" id="statKunder">—</span><span class="stat-label">Kunder</span></div>
+      <div class="stat"><span class="stat-num" id="statBookinger">—</span><span class="stat-label">Bookinger</span></div>
+      <div class="stat"><span class="stat-num" id="statUbetalt">—</span><span class="stat-label">Udestående (€)</span></div>
+      <div class="stat"><span class="stat-num" id="statIndtjent">—</span><span class="stat-label">Modtaget (€)</span></div>
+    </div>
+    <div class="kunde-toolbar">
+      <button class="btn-primary" onclick="openNyKunde()">+ Ny kunde</button>
+      <button class="btn-secondary" onclick="loadKunder()">↺ Opdater</button>
+      <button class="btn-secondary" onclick="visAnmeldelser()" style="background:rgba(184,138,30,.12);border-color:rgba(184,138,30,.3);color:#7a5c14;">★ Anmeldelser</button>
+      <input type="text" id="kundeSearch" placeholder="Søg navn eller email..." oninput="renderKunder()">
+    </div>
+    <div style="display:flex;gap:.4rem;flex-wrap:nowrap;overflow-x:auto;padding-left:3rem;margin-bottom:1rem;align-items:center;">
+      <span style="font-size:.65rem;letter-spacing:.12em;text-transform:uppercase;color:rgba(44,35,24,.8);align-self:center;margin-right:.3rem;">Sortér:</span>
+      <button id="sort-navn" class="sort-btn" onclick="setSort('navn')">Navn</button>
+      <button id="sort-retreat" class="sort-btn" onclick="setSort('retreat')">Retreat</button>
+      <button id="sort-ankomst" class="sort-btn" onclick="setSort('ankomst')">Ankomst</button>
+      <button id="sort-status" class="sort-btn" onclick="setSort('status')">Status</button>
+      <button id="sort-ryd" class="sort-btn" onclick="clearSort()" style="color:rgba(44,35,24,.75);border-style:dashed;">× Ryd</button>
+    </div>
+    <div class="kunder-grid" id="kunderGrid">
+      <div class="loading">Henter kunder...</div>
+    </div>
+  </div>
 
   <div class="tab-content" id="tab-retreats">
     <div style="display:flex;justify-content:flex-end;margin-bottom:1.5rem;">
