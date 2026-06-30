@@ -44,6 +44,12 @@ body{font-family:'Manrope',sans-serif;background:#f0e8d5;color:#2c2318;min-heigh
 .tab-btn.active{color:var(--gold);border-bottom-color:var(--gold);}
 .tab-content{display:none;}
 .tab-content.active{display:block;}
+.subtabs{display:flex;gap:0;border-bottom:1px solid rgba(42,122,116,.25);background:rgba(42,122,116,.04);padding:0 3rem;}
+.subtab-btn{font-family:'Manrope',sans-serif;font-weight:500;font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;padding:.8rem 1.4rem;background:none;border:none;color:rgba(44,35,24,.6);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;transition:all .3s;}
+.subtab-btn:hover{color:rgba(44,35,24,.9);}
+.subtab-btn.active{color:#2a7a74;border-bottom-color:#2a7a74;}
+.subtab-content{display:none;}
+.subtab-content.active{display:block;}
 
 /* ── STATS BAR ── */
 .stats-bar{padding:2rem 3rem;display:flex;gap:2rem;flex-wrap:wrap;border-bottom:1px solid rgba(184,138,30,.1);}
@@ -251,11 +257,9 @@ body{font-family:'Manrope',sans-serif;background:#f0e8d5;color:#2c2318;min-heigh
     <button class="tab-btn active" onclick="switchTab('kunder',this)">Kunder & Bookinger</button>
 
     <button class="tab-btn" onclick="switchTab('retreats',this)">Retreats</button>
-    <button class="tab-btn" onclick="switchTab('forside',this)">Forside</button>
-    <button class="tab-btn" onclick="switchTab('anmeldelser',this)">Se anmeldelser</button>
+    <button class="tab-btn" onclick="switchTab('sprog',this)">Sprog &amp; Indhold</button>
     <button class="tab-btn" onclick="switchTab('newsletter',this)">Nyhedsbrev</button>
     <button class="tab-btn" onclick="switchTab('faktura-historik',this)">Faktura historik</button>
-    <button class="tab-btn" onclick="switchTab('indstillinger',this)">Indstillinger</button>
   </div>
 
   <!-- FANE: FAKTURA HISTORIK -->
@@ -342,8 +346,18 @@ body{font-family:'Manrope',sans-serif;background:#f0e8d5;color:#2c2318;min-heigh
     </table>
   </div>
 
+  <!-- FANE: SPROG & INDHOLD (wrapper) -->
+  <div class="tab-content" id="tab-sprog">
+    <div class="subtabs">
+      <button class="subtab-btn active" onclick="switchSubTab('forside',this)">Forside</button>
+      <button class="subtab-btn" onclick="switchSubTab('ejendommen',this)">Ejendommen</button>
+      <button class="subtab-btn" onclick="switchSubTab('udlejning',this)">Udlejning</button>
+      <button class="subtab-btn" onclick="switchSubTab('anmeldelser',this)">Se anmeldelser</button>
+      <button class="subtab-btn" onclick="switchSubTab('indstillinger',this)">Indstillinger</button>
+    </div>
+
   <!-- FANE: ANMELDELSER -->
-  <div class="tab-content" id="tab-anmeldelser">
+  <div class="subtab-content" id="tab-anmeldelser">
     <div id="anmeldelserFaneIndhold" style="padding:2rem 3rem;"></div>
   </div>
 
@@ -375,7 +389,7 @@ body{font-family:'Manrope',sans-serif;background:#f0e8d5;color:#2c2318;min-heigh
   </div>
 
   <!-- FANE: FORSIDE -->
-  <div class="tab-content" id="tab-forside" style="padding:2rem 3rem;max-width:1100px;">
+  <div class="subtab-content active" id="tab-forside" style="padding:2rem 3rem;max-width:1100px;">
     <h2 style="font-family:Cinzel,serif;font-weight:300;font-size:1.4rem;letter-spacing:.08em;color:#2c2318;margin-bottom:.4rem;">Forside (index.html)</h2>
     <p style="font-size:.75rem;color:rgba(44,35,24,.5);margin-bottom:2rem;">Alle tekster nedenfor findes i 🇩🇰 dansk (venstre) og 🇬🇧 engelsk (højre). Hver sektion kan slås fra på hjemmesiden uden at miste teksten.</p>
     <div id="forsideSavedMsg" style="display:none;position:sticky;top:0;z-index:10;background:#2a7a74;color:#fff;padding:.8rem 1.5rem;margin-bottom:1.5rem;align-items:center;gap:1rem;font-size:.8rem;">
@@ -537,7 +551,20 @@ and companies will find the perfect setting for seminars, team building and stra
   </div>
 
   <!-- FANE: RETREATS -->
-  <div class="tab-content" id="tab-indstillinger" style="padding:2rem 3rem;">
+  <!-- FANE: EJENDOMMEN -->
+  <div class="subtab-content" id="tab-ejendommen" style="padding:2rem 3rem;max-width:1100px;">
+    <h2 style="font-family:Cinzel,serif;font-weight:300;font-size:1.4rem;letter-spacing:.08em;color:#2c2318;margin-bottom:.4rem;">Ejendommen (ejendommen.html)</h2>
+    <p style="font-size:.75rem;color:rgba(44,35,24,.5);margin-bottom:2rem;">Indhold for denne side tilføjes næste skridt.</p>
+  </div>
+
+  <!-- FANE: UDLEJNING -->
+  <div class="subtab-content" id="tab-udlejning" style="padding:2rem 3rem;max-width:1100px;">
+    <h2 style="font-family:Cinzel,serif;font-weight:300;font-size:1.4rem;letter-spacing:.08em;color:#2c2318;margin-bottom:.4rem;">Udlejning (udlejning.html)</h2>
+    <p style="font-size:.75rem;color:rgba(44,35,24,.5);margin-bottom:2rem;">Indhold for denne side tilføjes næste skridt.</p>
+  </div>
+
+  <!-- FANE: INDSTILLINGER -->
+  <div class="subtab-content" id="tab-indstillinger" style="padding:2rem 3rem;">
     <h2 style="font-family:Cinzel,serif;font-weight:300;font-size:1.4rem;letter-spacing:.08em;color:#2c2318;margin-bottom:2rem;">Globale indstillinger</h2>
     <div style="background:rgba(184,138,30,.06);border:1px solid rgba(184,138,30,.2);padding:1.5rem;margin-bottom:2rem;">
       <h3 style="font-family:Cinzel,serif;font-weight:300;font-size:1rem;letter-spacing:.08em;color:#2c2318;margin-bottom:1rem;">Rating-kategorier (anmeldelser popup)</h3>
@@ -551,6 +578,8 @@ and companies will find the perfect setting for seminars, team building and stra
       <span id="settingsSavedMsg" style="display:none;margin-left:1rem;font-size:.75rem;color:#2a7a74;">✓ Gemt!</span>
     </div>
   </div>
+
+  </div><!-- /tab-sprog -->
 
   <div class="tab-content" id="tab-retreats">
     <div style="display:flex;justify-content:flex-end;margin-bottom:1.5rem;">
@@ -1994,11 +2023,29 @@ function switchTab(tab, btn) {
   btn.classList.add('active');
   document.getElementById('tab-' + tab).classList.add('active');
   if (tab === 'newsletter') loadNewsletter();
-  if (tab === 'anmeldelser') loadAnmeldelserFane();
-  if (tab === 'indstillinger') loadSettings();
-  if (tab === 'forside') loadForside();
   if (tab === 'faktura-historik') loadFakturaHistorik();
   if (tab === 'faktura') { if (!document.querySelector('#mf-linjer [id^="mf-linje-"]')) mfTilfoejLinje(); }
+  if (tab === 'sprog') {
+    // Load den aktive under-fane (default: forside)
+    const activeSub = document.querySelector('.subtab-btn.active');
+    const subTab = activeSub ? activeSub.getAttribute('onclick').match(/'([^']+)'/)[1] : 'forside';
+    loadSubTab(subTab);
+  }
+}
+
+function switchSubTab(sub, btn) {
+  document.querySelectorAll('.subtab-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.subtab-content').forEach(c => c.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('tab-' + sub).classList.add('active');
+  loadSubTab(sub);
+}
+
+function loadSubTab(sub) {
+  if (sub === 'anmeldelser') loadAnmeldelserFane();
+  if (sub === 'indstillinger') loadSettings();
+  if (sub === 'forside') loadForside();
+  // 'ejendommen' og 'udlejning' tilføjes når deres indhold bygges
 }
 
 // ── ANMELDELSER ──
