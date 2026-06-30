@@ -1374,73 +1374,8 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:5rem
 
     <!-- Masonry grid -->
     <div class="gallery-grid reveal d1">
-
-      <!-- Row 1 -->
-      <div class="gallery-item photo tall" data-type="photo" style="background-image:url('img/estate-aerial.jpg')">
-        <div class="gallery-item-overlay"></div>
-        <div class="gallery-item-icon"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg></div>
-      </div>
-
-      <div class="gallery-item photo" data-type="photo" style="background-image:url('img/IMG_0603.JPG')">
-        <div class="gallery-item-overlay"></div>
-        <div class="gallery-item-icon"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg></div>
-      </div>
-
-      <div class="gallery-item photo" data-type="photo" style="background-image:url('img/estate-pool.jpg')">
-        <div class="gallery-item-overlay"></div>
-        <div class="gallery-item-icon"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg></div>
-      </div>
-
-      <!-- Video item -->
-      <div class="gallery-item video wide" data-type="video" data-src="video/5044846_Rural_Orchard_1280x720.mp4" style="background-image:url('img/vinmark1.jpg')">
-        <div class="gallery-item-overlay"></div>
-        <div class="gallery-item-play">
-          <svg viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg>
-        </div>
-        <span class="gallery-video-label">Video</span>
-      </div>
-
-      <!-- Row 2 -->
-      <div class="gallery-item photo" data-type="photo" style="background-image:url('img/estate-dining.jpg')">
-        <div class="gallery-item-overlay"></div>
-        <div class="gallery-item-icon"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg></div>
-      </div>
-
-      <div class="gallery-item photo tall" data-type="photo" style="background-image:url('img/vinmark1.jpg')">
-        <div class="gallery-item-overlay"></div>
-        <div class="gallery-item-icon"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg></div>
-      </div>
-
-      <div class="gallery-item photo" data-type="photo" style="background-image:url('img/vin.jpg')">
-        <div class="gallery-item-overlay"></div>
-        <div class="gallery-item-icon"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg></div>
-      </div>
-
-      <div class="gallery-item photo" data-type="photo" style="background-image:url('img/filmcrew.jpeg')">
-        <div class="gallery-item-overlay"></div>
-        <div class="gallery-item-icon"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg></div>
-      </div>
-
-      <!-- Video 2 -->
-      <div class="gallery-item video" data-type="video" data-src="drone1.mp4" style="background-image:url('img/estate-aerial.jpg')">
-        <div class="gallery-item-overlay"></div>
-        <div class="gallery-item-play">
-          <svg viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg>
-        </div>
-        <span class="gallery-video-label">Drone video</span>
-      </div>
-
-      <div class="gallery-item photo" data-type="photo" style="background-image:url('img/magnific_cpuple-are-looking-at-sta_1sBaCibr4r.jpg')">
-        <div class="gallery-item-overlay"></div>
-        <div class="gallery-item-icon"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg></div>
-      </div>
-
-      <div class="gallery-item photo wide" data-type="photo" style="background-image:url('img/caminito-del-rey-tour-from-granada-4-1.jpg')">
-        <div class="gallery-item-overlay"></div>
-        <div class="gallery-item-icon"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg></div>
-      </div>
-
     </div><!-- end gallery-grid -->
+    <p id="galleryEmptyMsg" style="display:none;text-align:center;color:rgba(44,35,24,.4);font-size:.85rem;padding:2rem;">Ingen billeder uploadet endnu.</p>
   </div>
 </section>
 
@@ -2693,11 +2628,17 @@ function applySiteLang() {
 // ── DYNAMISK GALLERI FRA SUPABASE STORAGE ──
 async function loadUploadedGalleryItems() {
   const grid = document.querySelector('.gallery-grid');
+  const emptyMsg = document.getElementById('galleryEmptyMsg');
   if (!grid) return;
   try {
     const { data, error } = await sbContent.storage.from('retreat-images').list('galleri', { sortBy: { column: 'created_at', order: 'desc' } });
     if (error) throw error;
     const files = (data || []).filter(f => f.name && !f.name.startsWith('.'));
+    if (!files.length) {
+      if (emptyMsg) emptyMsg.style.display = 'block';
+      return;
+    }
+    if (emptyMsg) emptyMsg.style.display = 'none';
     files.forEach(f => {
       const { data: urlData } = sbContent.storage.from('retreat-images').getPublicUrl('galleri/' + f.name);
       const isVideo = /\.(mp4|mov|webm)$/i.test(f.name);
@@ -2717,6 +2658,7 @@ async function loadUploadedGalleryItems() {
     });
   } catch(e) {
     console.warn('Galleri (uploadede filer) load fejl:', e.message);
+    if (emptyMsg) emptyMsg.style.display = 'block';
   }
 }
 
