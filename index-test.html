@@ -2542,6 +2542,8 @@ function applySiteLang() {
     if (p && kort) p.textContent = kort;
     if (lang) card.setAttribute('data-body', lang);
     if (titel) card.setAttribute('data-title', titel);
+    const uploadedImg = siteContentData['media_opl_' + key + '_img'];
+    if (uploadedImg) card.setAttribute('data-image', uploadedImg);
   });
 
   // GALLERI
@@ -2587,6 +2589,8 @@ function applySiteLang() {
     if (p && kort) p.textContent = kort;
     if (lang) card.setAttribute('data-body', lang);
     if (titel) card.setAttribute('data-title', titel);
+    const uploadedImg = siteContentData['media_well_' + key + '_img'];
+    if (uploadedImg) card.setAttribute('data-image', uploadedImg);
   });
 
   const wellQuote = document.querySelector('.wellness-big-quote');
