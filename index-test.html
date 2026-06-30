@@ -2312,10 +2312,6 @@ async function loadSiteContent() {
     if (error) throw error;
     siteContentData = {};
     (data || []).forEach(r => { siteContentData[r.key] = r.value; });
-    console.log('site_content rækker hentet:', (data || []).length);
-    console.log('om_os_p1_en:', siteContentData['om_os_p1_en']);
-    console.log('testimonial_citat_en:', siteContentData['testimonial_citat_en']);
-    console.log('om_os_heading_en:', siteContentData['om_os_heading_en']);
   } catch(e) {
     console.warn('site_content load fejl:', e.message);
   }
