@@ -671,6 +671,15 @@ and companies will find the perfect setting for seminars, team building and stra
           <div><label class="fc-label fc-label-da">Titel</label><input type="text" id="opl_vin_titel_da" class="fc-input-da" value="Vinsmagning"></div>
           <div><label class="fc-label fc-label-en">Title</label><input type="text" id="opl_vin_titel_en" class="fc-input-en" value="Wine Tasting"></div>
         </div>
+        <div style="margin-bottom:1.2rem;padding:.9rem;background:rgba(42,122,116,.06);border:1px solid rgba(42,122,116,.2);">
+          <label class="fc-label" style="color:#2a7a74;">📁 Billede</label>
+          <div style="display:flex;align-items:center;gap:.8rem;flex-wrap:wrap;margin-top:.5rem;">
+            <img id="thumb_opl_vin_img" src="" alt="" style="display:none;width:56px;height:56px;object-fit:cover;border-radius:3px;border:1px solid rgba(184,138,30,.3);flex-shrink:0;">
+            <input type="file" id="upload_opl_vin_img" accept="image/*" style="font-size:.76rem;flex:1;min-width:160px;">
+            <button onclick="uploadSectionMedia('upload_opl_vin_img','media_opl_vin_img')" style="background:#2a7a74;color:#fff;border:none;padding:.45rem 1.1rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;white-space:nowrap;">⬆ Upload</button>
+            <span id="upload_opl_vin_img_status" style="font-size:.68rem;color:#2a7a74;"></span>
+          </div>
+        </div>
         <div class="fc-row">
           <div><label class="fc-label fc-label-da">Kort tekst (vises på kortet)</label><input type="text" id="opl_vin_kort_da" class="fc-input-da" value="Lokale vine fra Andalusiens solmodnede druer"></div>
           <div><label class="fc-label fc-label-en">Short text (shown on card)</label><input type="text" id="opl_vin_kort_en" class="fc-input-en" value="Local wines from Andalusia's sun-ripened grapes"></div>
@@ -695,6 +704,15 @@ and companies will find the perfect setting for seminars, team building and stra
           <div><label class="fc-label fc-label-da">Titel</label><input type="text" id="opl_olie_titel_da" class="fc-input-da" value="Olivenolie Smagning"></div>
           <div><label class="fc-label fc-label-en">Title</label><input type="text" id="opl_olie_titel_en" class="fc-input-en" value="Olive Oil Tasting"></div>
         </div>
+        <div style="margin-bottom:1.2rem;padding:.9rem;background:rgba(42,122,116,.06);border:1px solid rgba(42,122,116,.2);">
+          <label class="fc-label" style="color:#2a7a74;">📁 Billede</label>
+          <div style="display:flex;align-items:center;gap:.8rem;flex-wrap:wrap;margin-top:.5rem;">
+            <img id="thumb_opl_olie_img" src="" alt="" style="display:none;width:56px;height:56px;object-fit:cover;border-radius:3px;border:1px solid rgba(184,138,30,.3);flex-shrink:0;">
+            <input type="file" id="upload_opl_olie_img" accept="image/*" style="font-size:.76rem;flex:1;min-width:160px;">
+            <button onclick="uploadSectionMedia('upload_opl_olie_img','media_opl_olie_img')" style="background:#2a7a74;color:#fff;border:none;padding:.45rem 1.1rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;white-space:nowrap;">⬆ Upload</button>
+            <span id="upload_opl_olie_img_status" style="font-size:.68rem;color:#2a7a74;"></span>
+          </div>
+        </div>
         <div class="fc-row">
           <div><label class="fc-label fc-label-da">Kort tekst (vises på kortet)</label><input type="text" id="opl_olie_kort_da" class="fc-input-da" value="Ekstra jomfruolivenolie fra lokale produktioner"></div>
           <div><label class="fc-label fc-label-en">Short text (shown on card)</label><input type="text" id="opl_olie_kort_en" class="fc-input-en" value="Extra virgin olive oil from local producers"></div>
@@ -715,6 +733,15 @@ and companies will find the perfect setting for seminars, team building and stra
         <div class="fc-row">
           <div><label class="fc-label fc-label-da">Titel</label><input type="text" id="opl_vandre_titel_da" class="fc-input-da" value="Vandreture i naturen"></div>
           <div><label class="fc-label fc-label-en">Title</label><input type="text" id="opl_vandre_titel_en" class="fc-input-en" value="Hiking in Nature"></div>
+        </div>
+        <div style="margin-bottom:1.2rem;padding:.9rem;background:rgba(42,122,116,.06);border:1px solid rgba(42,122,116,.2);">
+          <label class="fc-label" style="color:#2a7a74;">📁 Billede</label>
+          <div style="display:flex;align-items:center;gap:.8rem;flex-wrap:wrap;margin-top:.5rem;">
+            <img id="thumb_opl_vandre_img" src="" alt="" style="display:none;width:56px;height:56px;object-fit:cover;border-radius:3px;border:1px solid rgba(184,138,30,.3);flex-shrink:0;">
+            <input type="file" id="upload_opl_vandre_img" accept="image/*" style="font-size:.76rem;flex:1;min-width:160px;">
+            <button onclick="uploadSectionMedia('upload_opl_vandre_img','media_opl_vandre_img')" style="background:#2a7a74;color:#fff;border:none;padding:.45rem 1.1rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;white-space:nowrap;">⬆ Upload</button>
+            <span id="upload_opl_vandre_img_status" style="font-size:.68rem;color:#2a7a74;"></span>
+          </div>
         </div>
         <div class="fc-row">
           <div><label class="fc-label fc-label-da">Kort tekst (vises på kortet)</label><input type="text" id="opl_vandre_kort_da" class="fc-input-da" value="Naturparker og dramatiske bjerglandskaber"></div>
@@ -737,6 +764,15 @@ and companies will find the perfect setting for seminars, team building and stra
           <div><label class="fc-label fc-label-da">Titel</label><input type="text" id="opl_mad_titel_da" class="fc-input-da" value="Madlavningskurser"></div>
           <div><label class="fc-label fc-label-en">Title</label><input type="text" id="opl_mad_titel_en" class="fc-input-en" value="Cooking Classes"></div>
         </div>
+        <div style="margin-bottom:1.2rem;padding:.9rem;background:rgba(42,122,116,.06);border:1px solid rgba(42,122,116,.2);">
+          <label class="fc-label" style="color:#2a7a74;">📁 Billede</label>
+          <div style="display:flex;align-items:center;gap:.8rem;flex-wrap:wrap;margin-top:.5rem;">
+            <img id="thumb_opl_mad_img" src="" alt="" style="display:none;width:56px;height:56px;object-fit:cover;border-radius:3px;border:1px solid rgba(184,138,30,.3);flex-shrink:0;">
+            <input type="file" id="upload_opl_mad_img" accept="image/*" style="font-size:.76rem;flex:1;min-width:160px;">
+            <button onclick="uploadSectionMedia('upload_opl_mad_img','media_opl_mad_img')" style="background:#2a7a74;color:#fff;border:none;padding:.45rem 1.1rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;white-space:nowrap;">⬆ Upload</button>
+            <span id="upload_opl_mad_img_status" style="font-size:.68rem;color:#2a7a74;"></span>
+          </div>
+        </div>
         <div class="fc-row">
           <div><label class="fc-label fc-label-da">Kort tekst (vises på kortet)</label><input type="text" id="opl_mad_kort_da" class="fc-input-da" value="Det spanske køkken — autentisk og sanseligt"></div>
           <div><label class="fc-label fc-label-en">Short text (shown on card)</label><input type="text" id="opl_mad_kort_en" class="fc-input-en" value="Spanish cuisine — authentic and sensual"></div>
@@ -757,6 +793,15 @@ and companies will find the perfect setting for seminars, team building and stra
         <div class="fc-row">
           <div><label class="fc-label fc-label-da">Titel</label><input type="text" id="opl_ride_titel_da" class="fc-input-da" value="Rideture i Andalusien"></div>
           <div><label class="fc-label fc-label-en">Title</label><input type="text" id="opl_ride_titel_en" class="fc-input-en" value="Horseback Riding"></div>
+        </div>
+        <div style="margin-bottom:1.2rem;padding:.9rem;background:rgba(42,122,116,.06);border:1px solid rgba(42,122,116,.2);">
+          <label class="fc-label" style="color:#2a7a74;">📁 Billede</label>
+          <div style="display:flex;align-items:center;gap:.8rem;flex-wrap:wrap;margin-top:.5rem;">
+            <img id="thumb_opl_ride_img" src="" alt="" style="display:none;width:56px;height:56px;object-fit:cover;border-radius:3px;border:1px solid rgba(184,138,30,.3);flex-shrink:0;">
+            <input type="file" id="upload_opl_ride_img" accept="image/*" style="font-size:.76rem;flex:1;min-width:160px;">
+            <button onclick="uploadSectionMedia('upload_opl_ride_img','media_opl_ride_img')" style="background:#2a7a74;color:#fff;border:none;padding:.45rem 1.1rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;white-space:nowrap;">⬆ Upload</button>
+            <span id="upload_opl_ride_img_status" style="font-size:.68rem;color:#2a7a74;"></span>
+          </div>
         </div>
         <div class="fc-row">
           <div><label class="fc-label fc-label-da">Kort tekst (vises på kortet)</label><input type="text" id="opl_ride_kort_da" class="fc-input-da" value="Andalusisk landskab fra hesteryg"></div>
@@ -779,6 +824,15 @@ and companies will find the perfect setting for seminars, team building and stra
           <div><label class="fc-label fc-label-da">Titel</label><input type="text" id="opl_caminito_titel_da" class="fc-input-da" value="Caminito del Rey"></div>
           <div><label class="fc-label fc-label-en">Title</label><input type="text" id="opl_caminito_titel_en" class="fc-input-en" value="Caminito del Rey"></div>
         </div>
+        <div style="margin-bottom:1.2rem;padding:.9rem;background:rgba(42,122,116,.06);border:1px solid rgba(42,122,116,.2);">
+          <label class="fc-label" style="color:#2a7a74;">📁 Billede</label>
+          <div style="display:flex;align-items:center;gap:.8rem;flex-wrap:wrap;margin-top:.5rem;">
+            <img id="thumb_opl_caminito_img" src="" alt="" style="display:none;width:56px;height:56px;object-fit:cover;border-radius:3px;border:1px solid rgba(184,138,30,.3);flex-shrink:0;">
+            <input type="file" id="upload_opl_caminito_img" accept="image/*" style="font-size:.76rem;flex:1;min-width:160px;">
+            <button onclick="uploadSectionMedia('upload_opl_caminito_img','media_opl_caminito_img')" style="background:#2a7a74;color:#fff;border:none;padding:.45rem 1.1rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;white-space:nowrap;">⬆ Upload</button>
+            <span id="upload_opl_caminito_img_status" style="font-size:.68rem;color:#2a7a74;"></span>
+          </div>
+        </div>
         <div class="fc-row">
           <div><label class="fc-label fc-label-da">Kort tekst (vises på kortet)</label><input type="text" id="opl_caminito_kort_da" class="fc-input-da" value="Spektakulær kløftsti langs klippen"></div>
           <div><label class="fc-label fc-label-en">Short text (shown on card)</label><input type="text" id="opl_caminito_kort_en" class="fc-input-en" value="Spectacular gorge path along the cliff"></div>
@@ -800,6 +854,15 @@ and companies will find the perfect setting for seminars, team building and stra
           <div><label class="fc-label fc-label-da">Titel</label><input type="text" id="opl_malaga_titel_da" class="fc-input-da" value="Málaga — Kultur & Gastronomi"></div>
           <div><label class="fc-label fc-label-en">Title</label><input type="text" id="opl_malaga_titel_en" class="fc-input-en" value="Málaga — Culture & Gastronomy"></div>
         </div>
+        <div style="margin-bottom:1.2rem;padding:.9rem;background:rgba(42,122,116,.06);border:1px solid rgba(42,122,116,.2);">
+          <label class="fc-label" style="color:#2a7a74;">📁 Billede</label>
+          <div style="display:flex;align-items:center;gap:.8rem;flex-wrap:wrap;margin-top:.5rem;">
+            <img id="thumb_opl_malaga_img" src="" alt="" style="display:none;width:56px;height:56px;object-fit:cover;border-radius:3px;border:1px solid rgba(184,138,30,.3);flex-shrink:0;">
+            <input type="file" id="upload_opl_malaga_img" accept="image/*" style="font-size:.76rem;flex:1;min-width:160px;">
+            <button onclick="uploadSectionMedia('upload_opl_malaga_img','media_opl_malaga_img')" style="background:#2a7a74;color:#fff;border:none;padding:.45rem 1.1rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;white-space:nowrap;">⬆ Upload</button>
+            <span id="upload_opl_malaga_img_status" style="font-size:.68rem;color:#2a7a74;"></span>
+          </div>
+        </div>
         <div class="fc-row">
           <div><label class="fc-label fc-label-da">Kort tekst (vises på kortet)</label><input type="text" id="opl_malaga_kort_da" class="fc-input-da" value="Kunst, kultur og gastronomisk scene"></div>
           <div><label class="fc-label fc-label-en">Short text (shown on card)</label><input type="text" id="opl_malaga_kort_en" class="fc-input-en" value="Art, culture and the gastronomic scene"></div>
@@ -820,6 +883,15 @@ and companies will find the perfect setting for seminars, team building and stra
         <div class="fc-row">
           <div><label class="fc-label fc-label-da">Titel</label><input type="text" id="opl_cordoba_titel_da" class="fc-input-da" value="Córdoba"></div>
           <div><label class="fc-label fc-label-en">Title</label><input type="text" id="opl_cordoba_titel_en" class="fc-input-en" value="Córdoba"></div>
+        </div>
+        <div style="margin-bottom:1.2rem;padding:.9rem;background:rgba(42,122,116,.06);border:1px solid rgba(42,122,116,.2);">
+          <label class="fc-label" style="color:#2a7a74;">📁 Billede</label>
+          <div style="display:flex;align-items:center;gap:.8rem;flex-wrap:wrap;margin-top:.5rem;">
+            <img id="thumb_opl_cordoba_img" src="" alt="" style="display:none;width:56px;height:56px;object-fit:cover;border-radius:3px;border:1px solid rgba(184,138,30,.3);flex-shrink:0;">
+            <input type="file" id="upload_opl_cordoba_img" accept="image/*" style="font-size:.76rem;flex:1;min-width:160px;">
+            <button onclick="uploadSectionMedia('upload_opl_cordoba_img','media_opl_cordoba_img')" style="background:#2a7a74;color:#fff;border:none;padding:.45rem 1.1rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;white-space:nowrap;">⬆ Upload</button>
+            <span id="upload_opl_cordoba_img_status" style="font-size:.68rem;color:#2a7a74;"></span>
+          </div>
         </div>
         <div class="fc-row">
           <div><label class="fc-label fc-label-da">Kort tekst (vises på kortet)</label><input type="text" id="opl_cordoba_kort_da" class="fc-input-da" value="Historie, patioer og stemning fra det gamle Spanien"></div>
@@ -846,6 +918,15 @@ A visit to Córdoba is just an hour's drive from Castillo del Alma.</textarea></
           <div><label class="fc-label fc-label-da">Titel</label><input type="text" id="opl_antequera_titel_da" class="fc-input-da" value="Antequera"></div>
           <div><label class="fc-label fc-label-en">Title</label><input type="text" id="opl_antequera_titel_en" class="fc-input-en" value="Antequera"></div>
         </div>
+        <div style="margin-bottom:1.2rem;padding:.9rem;background:rgba(42,122,116,.06);border:1px solid rgba(42,122,116,.2);">
+          <label class="fc-label" style="color:#2a7a74;">📁 Billede</label>
+          <div style="display:flex;align-items:center;gap:.8rem;flex-wrap:wrap;margin-top:.5rem;">
+            <img id="thumb_opl_antequera_img" src="" alt="" style="display:none;width:56px;height:56px;object-fit:cover;border-radius:3px;border:1px solid rgba(184,138,30,.3);flex-shrink:0;">
+            <input type="file" id="upload_opl_antequera_img" accept="image/*" style="font-size:.76rem;flex:1;min-width:160px;">
+            <button onclick="uploadSectionMedia('upload_opl_antequera_img','media_opl_antequera_img')" style="background:#2a7a74;color:#fff;border:none;padding:.45rem 1.1rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;white-space:nowrap;">⬆ Upload</button>
+            <span id="upload_opl_antequera_img_status" style="font-size:.68rem;color:#2a7a74;"></span>
+          </div>
+        </div>
         <div class="fc-row">
           <div><label class="fc-label fc-label-da">Kort tekst (vises på kortet)</label><input type="text" id="opl_antequera_kort_da" class="fc-input-da" value="Hjertet af Andalusien — 15 min. væk"></div>
           <div><label class="fc-label fc-label-en">Short text (shown on card)</label><input type="text" id="opl_antequera_kort_en" class="fc-input-en" value="The heart of Andalusia — 15 min. away"></div>
@@ -866,6 +947,15 @@ A visit to Córdoba is just an hour's drive from Castillo del Alma.</textarea></
         <div class="fc-row">
           <div><label class="fc-label fc-label-da">Titel</label><input type="text" id="opl_stjerner_titel_da" class="fc-input-da" value="Stjernekiggeri"></div>
           <div><label class="fc-label fc-label-en">Title</label><input type="text" id="opl_stjerner_titel_en" class="fc-input-en" value="Stargazing"></div>
+        </div>
+        <div style="margin-bottom:1.2rem;padding:.9rem;background:rgba(42,122,116,.06);border:1px solid rgba(42,122,116,.2);">
+          <label class="fc-label" style="color:#2a7a74;">📁 Billede</label>
+          <div style="display:flex;align-items:center;gap:.8rem;flex-wrap:wrap;margin-top:.5rem;">
+            <img id="thumb_opl_stjerner_img" src="" alt="" style="display:none;width:56px;height:56px;object-fit:cover;border-radius:3px;border:1px solid rgba(184,138,30,.3);flex-shrink:0;">
+            <input type="file" id="upload_opl_stjerner_img" accept="image/*" style="font-size:.76rem;flex:1;min-width:160px;">
+            <button onclick="uploadSectionMedia('upload_opl_stjerner_img','media_opl_stjerner_img')" style="background:#2a7a74;color:#fff;border:none;padding:.45rem 1.1rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;white-space:nowrap;">⬆ Upload</button>
+            <span id="upload_opl_stjerner_img_status" style="font-size:.68rem;color:#2a7a74;"></span>
+          </div>
         </div>
         <div class="fc-row">
           <div><label class="fc-label fc-label-da">Kort tekst (vises på kortet)</label><input type="text" id="opl_stjerner_kort_da" class="fc-input-da" value="Nattehimmelen langt fra byernes støj"></div>
@@ -888,6 +978,15 @@ A visit to Córdoba is just an hour's drive from Castillo del Alma.</textarea></
           <div><label class="fc-label fc-label-da">Titel</label><input type="text" id="opl_flamingo_titel_da" class="fc-input-da" value="Flamingosøen — Fuente de Piedra"></div>
           <div><label class="fc-label fc-label-en">Title</label><input type="text" id="opl_flamingo_titel_en" class="fc-input-en" value="Flamingo Lake — Fuente de Piedra"></div>
         </div>
+        <div style="margin-bottom:1.2rem;padding:.9rem;background:rgba(42,122,116,.06);border:1px solid rgba(42,122,116,.2);">
+          <label class="fc-label" style="color:#2a7a74;">📁 Billede</label>
+          <div style="display:flex;align-items:center;gap:.8rem;flex-wrap:wrap;margin-top:.5rem;">
+            <img id="thumb_opl_flamingo_img" src="" alt="" style="display:none;width:56px;height:56px;object-fit:cover;border-radius:3px;border:1px solid rgba(184,138,30,.3);flex-shrink:0;">
+            <input type="file" id="upload_opl_flamingo_img" accept="image/*" style="font-size:.76rem;flex:1;min-width:160px;">
+            <button onclick="uploadSectionMedia('upload_opl_flamingo_img','media_opl_flamingo_img')" style="background:#2a7a74;color:#fff;border:none;padding:.45rem 1.1rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;white-space:nowrap;">⬆ Upload</button>
+            <span id="upload_opl_flamingo_img_status" style="font-size:.68rem;color:#2a7a74;"></span>
+          </div>
+        </div>
         <div class="fc-row">
           <div><label class="fc-label fc-label-da">Kort tekst (vises på kortet)</label><input type="text" id="opl_flamingo_kort_da" class="fc-input-da" value="Lyserøde flamingos · 10 min. væk"></div>
           <div><label class="fc-label fc-label-en">Short text (shown on card)</label><input type="text" id="opl_flamingo_kort_en" class="fc-input-en" value="Pink flamingos · 10 min. away"></div>
@@ -908,6 +1007,15 @@ A visit to Córdoba is just an hour's drive from Castillo del Alma.</textarea></
         <div class="fc-row">
           <div><label class="fc-label fc-label-da">Titel</label><input type="text" id="opl_eltorcal_titel_da" class="fc-input-da" value="El Torcal de Antequera"></div>
           <div><label class="fc-label fc-label-en">Title</label><input type="text" id="opl_eltorcal_titel_en" class="fc-input-en" value="El Torcal de Antequera"></div>
+        </div>
+        <div style="margin-bottom:1.2rem;padding:.9rem;background:rgba(42,122,116,.06);border:1px solid rgba(42,122,116,.2);">
+          <label class="fc-label" style="color:#2a7a74;">📁 Billede</label>
+          <div style="display:flex;align-items:center;gap:.8rem;flex-wrap:wrap;margin-top:.5rem;">
+            <img id="thumb_opl_eltorcal_img" src="" alt="" style="display:none;width:56px;height:56px;object-fit:cover;border-radius:3px;border:1px solid rgba(184,138,30,.3);flex-shrink:0;">
+            <input type="file" id="upload_opl_eltorcal_img" accept="image/*" style="font-size:.76rem;flex:1;min-width:160px;">
+            <button onclick="uploadSectionMedia('upload_opl_eltorcal_img','media_opl_eltorcal_img')" style="background:#2a7a74;color:#fff;border:none;padding:.45rem 1.1rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;white-space:nowrap;">⬆ Upload</button>
+            <span id="upload_opl_eltorcal_img_status" style="font-size:.68rem;color:#2a7a74;"></span>
+          </div>
         </div>
         <div class="fc-row">
           <div><label class="fc-label fc-label-da">Kort tekst (vises på kortet)</label><input type="text" id="opl_eltorcal_kort_da" class="fc-input-da" value="Spektakulært månelandskab · 20 min."></div>
@@ -930,6 +1038,15 @@ A visit to Córdoba is just an hour's drive from Castillo del Alma.</textarea></
           <div><label class="fc-label fc-label-da">Titel</label><input type="text" id="opl_camorra_titel_da" class="fc-input-da" value="Sierra de la Camorra"></div>
           <div><label class="fc-label fc-label-en">Title</label><input type="text" id="opl_camorra_titel_en" class="fc-input-en" value="Sierra de la Camorra"></div>
         </div>
+        <div style="margin-bottom:1.2rem;padding:.9rem;background:rgba(42,122,116,.06);border:1px solid rgba(42,122,116,.2);">
+          <label class="fc-label" style="color:#2a7a74;">📁 Billede</label>
+          <div style="display:flex;align-items:center;gap:.8rem;flex-wrap:wrap;margin-top:.5rem;">
+            <img id="thumb_opl_camorra_img" src="" alt="" style="display:none;width:56px;height:56px;object-fit:cover;border-radius:3px;border:1px solid rgba(184,138,30,.3);flex-shrink:0;">
+            <input type="file" id="upload_opl_camorra_img" accept="image/*" style="font-size:.76rem;flex:1;min-width:160px;">
+            <button onclick="uploadSectionMedia('upload_opl_camorra_img','media_opl_camorra_img')" style="background:#2a7a74;color:#fff;border:none;padding:.45rem 1.1rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;white-space:nowrap;">⬆ Upload</button>
+            <span id="upload_opl_camorra_img_status" style="font-size:.68rem;color:#2a7a74;"></span>
+          </div>
+        </div>
         <div class="fc-row">
           <div><label class="fc-label fc-label-da">Kort tekst (vises på kortet)</label><input type="text" id="opl_camorra_kort_da" class="fc-input-da" value="Bjerge og grotter ved Mollina"></div>
           <div><label class="fc-label fc-label-en">Short text (shown on card)</label><input type="text" id="opl_camorra_kort_en" class="fc-input-en" value="Mountains and caves near Mollina"></div>
@@ -950,6 +1067,15 @@ A visit to Córdoba is just an hour's drive from Castillo del Alma.</textarea></
         <div class="fc-row">
           <div><label class="fc-label fc-label-da">Titel</label><input type="text" id="opl_ardales_titel_da" class="fc-input-da" value="Cueva de Ardales"></div>
           <div><label class="fc-label fc-label-en">Title</label><input type="text" id="opl_ardales_titel_en" class="fc-input-en" value="Cueva de Ardales"></div>
+        </div>
+        <div style="margin-bottom:1.2rem;padding:.9rem;background:rgba(42,122,116,.06);border:1px solid rgba(42,122,116,.2);">
+          <label class="fc-label" style="color:#2a7a74;">📁 Billede</label>
+          <div style="display:flex;align-items:center;gap:.8rem;flex-wrap:wrap;margin-top:.5rem;">
+            <img id="thumb_opl_ardales_img" src="" alt="" style="display:none;width:56px;height:56px;object-fit:cover;border-radius:3px;border:1px solid rgba(184,138,30,.3);flex-shrink:0;">
+            <input type="file" id="upload_opl_ardales_img" accept="image/*" style="font-size:.76rem;flex:1;min-width:160px;">
+            <button onclick="uploadSectionMedia('upload_opl_ardales_img','media_opl_ardales_img')" style="background:#2a7a74;color:#fff;border:none;padding:.45rem 1.1rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;white-space:nowrap;">⬆ Upload</button>
+            <span id="upload_opl_ardales_img_status" style="font-size:.68rem;color:#2a7a74;"></span>
+          </div>
         </div>
         <div class="fc-row">
           <div><label class="fc-label fc-label-da">Kort tekst (vises på kortet)</label><input type="text" id="opl_ardales_kort_da" class="fc-input-da" value="65.000 år gamle hulemalerier · 45 min."></div>
@@ -972,6 +1098,15 @@ A visit to Córdoba is just an hour's drive from Castillo del Alma.</textarea></
           <div><label class="fc-label fc-label-da">Titel</label><input type="text" id="opl_dolmener_titel_da" class="fc-input-da" value="Dolmenerne i Antequera"></div>
           <div><label class="fc-label fc-label-en">Title</label><input type="text" id="opl_dolmener_titel_en" class="fc-input-en" value="The Dolmens of Antequera"></div>
         </div>
+        <div style="margin-bottom:1.2rem;padding:.9rem;background:rgba(42,122,116,.06);border:1px solid rgba(42,122,116,.2);">
+          <label class="fc-label" style="color:#2a7a74;">📁 Billede</label>
+          <div style="display:flex;align-items:center;gap:.8rem;flex-wrap:wrap;margin-top:.5rem;">
+            <img id="thumb_opl_dolmener_img" src="" alt="" style="display:none;width:56px;height:56px;object-fit:cover;border-radius:3px;border:1px solid rgba(184,138,30,.3);flex-shrink:0;">
+            <input type="file" id="upload_opl_dolmener_img" accept="image/*" style="font-size:.76rem;flex:1;min-width:160px;">
+            <button onclick="uploadSectionMedia('upload_opl_dolmener_img','media_opl_dolmener_img')" style="background:#2a7a74;color:#fff;border:none;padding:.45rem 1.1rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;white-space:nowrap;">⬆ Upload</button>
+            <span id="upload_opl_dolmener_img_status" style="font-size:.68rem;color:#2a7a74;"></span>
+          </div>
+        </div>
         <div class="fc-row">
           <div><label class="fc-label fc-label-da">Kort tekst (vises på kortet)</label><input type="text" id="opl_dolmener_kort_da" class="fc-input-da" value="UNESCO Verdensarv · 15 min."></div>
           <div><label class="fc-label fc-label-en">Short text (shown on card)</label><input type="text" id="opl_dolmener_kort_en" class="fc-input-en" value="UNESCO World Heritage · 15 min."></div>
@@ -992,6 +1127,15 @@ A visit to Córdoba is just an hour's drive from Castillo del Alma.</textarea></
         <div class="fc-row">
           <div><label class="fc-label fc-label-da">Titel</label><input type="text" id="opl_pena_titel_da" class="fc-input-da" value="Peña de los Enamorados"></div>
           <div><label class="fc-label fc-label-en">Title</label><input type="text" id="opl_pena_titel_en" class="fc-input-en" value="Peña de los Enamorados (Lovers' Rock)"></div>
+        </div>
+        <div style="margin-bottom:1.2rem;padding:.9rem;background:rgba(42,122,116,.06);border:1px solid rgba(42,122,116,.2);">
+          <label class="fc-label" style="color:#2a7a74;">📁 Billede</label>
+          <div style="display:flex;align-items:center;gap:.8rem;flex-wrap:wrap;margin-top:.5rem;">
+            <img id="thumb_opl_pena_img" src="" alt="" style="display:none;width:56px;height:56px;object-fit:cover;border-radius:3px;border:1px solid rgba(184,138,30,.3);flex-shrink:0;">
+            <input type="file" id="upload_opl_pena_img" accept="image/*" style="font-size:.76rem;flex:1;min-width:160px;">
+            <button onclick="uploadSectionMedia('upload_opl_pena_img','media_opl_pena_img')" style="background:#2a7a74;color:#fff;border:none;padding:.45rem 1.1rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;white-space:nowrap;">⬆ Upload</button>
+            <span id="upload_opl_pena_img_status" style="font-size:.68rem;color:#2a7a74;"></span>
+          </div>
         </div>
         <div class="fc-row">
           <div><label class="fc-label fc-label-da">Kort tekst (vises på kortet)</label><input type="text" id="opl_pena_kort_da" class="fc-input-da" value="Klippetop med andalusisk legende"></div>
@@ -1014,6 +1158,15 @@ A visit to Córdoba is just an hour's drive from Castillo del Alma.</textarea></
           <div><label class="fc-label fc-label-da">Titel</label><input type="text" id="opl_alhambra_titel_da" class="fc-input-da" value="Alhambra · Granada"></div>
           <div><label class="fc-label fc-label-en">Title</label><input type="text" id="opl_alhambra_titel_en" class="fc-input-en" value="Alhambra · Granada"></div>
         </div>
+        <div style="margin-bottom:1.2rem;padding:.9rem;background:rgba(42,122,116,.06);border:1px solid rgba(42,122,116,.2);">
+          <label class="fc-label" style="color:#2a7a74;">📁 Billede</label>
+          <div style="display:flex;align-items:center;gap:.8rem;flex-wrap:wrap;margin-top:.5rem;">
+            <img id="thumb_opl_alhambra_img" src="" alt="" style="display:none;width:56px;height:56px;object-fit:cover;border-radius:3px;border:1px solid rgba(184,138,30,.3);flex-shrink:0;">
+            <input type="file" id="upload_opl_alhambra_img" accept="image/*" style="font-size:.76rem;flex:1;min-width:160px;">
+            <button onclick="uploadSectionMedia('upload_opl_alhambra_img','media_opl_alhambra_img')" style="background:#2a7a74;color:#fff;border:none;padding:.45rem 1.1rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;white-space:nowrap;">⬆ Upload</button>
+            <span id="upload_opl_alhambra_img_status" style="font-size:.68rem;color:#2a7a74;"></span>
+          </div>
+        </div>
         <div class="fc-row">
           <div><label class="fc-label fc-label-da">Kort tekst (vises på kortet)</label><input type="text" id="opl_alhambra_kort_da" class="fc-input-da" value="UNESCO verdensarv · 90 min."></div>
           <div><label class="fc-label fc-label-en">Short text (shown on card)</label><input type="text" id="opl_alhambra_kort_en" class="fc-input-en" value="UNESCO World Heritage · 90 min."></div>
@@ -1035,6 +1188,15 @@ A visit to Córdoba is just an hour's drive from Castillo del Alma.</textarea></
           <div><label class="fc-label fc-label-da">Titel</label><input type="text" id="opl_sevilla_titel_da" class="fc-input-da" value="Sevilla"></div>
           <div><label class="fc-label fc-label-en">Title</label><input type="text" id="opl_sevilla_titel_en" class="fc-input-en" value="Seville"></div>
         </div>
+        <div style="margin-bottom:1.2rem;padding:.9rem;background:rgba(42,122,116,.06);border:1px solid rgba(42,122,116,.2);">
+          <label class="fc-label" style="color:#2a7a74;">📁 Billede</label>
+          <div style="display:flex;align-items:center;gap:.8rem;flex-wrap:wrap;margin-top:.5rem;">
+            <img id="thumb_opl_sevilla_img" src="" alt="" style="display:none;width:56px;height:56px;object-fit:cover;border-radius:3px;border:1px solid rgba(184,138,30,.3);flex-shrink:0;">
+            <input type="file" id="upload_opl_sevilla_img" accept="image/*" style="font-size:.76rem;flex:1;min-width:160px;">
+            <button onclick="uploadSectionMedia('upload_opl_sevilla_img','media_opl_sevilla_img')" style="background:#2a7a74;color:#fff;border:none;padding:.45rem 1.1rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;white-space:nowrap;">⬆ Upload</button>
+            <span id="upload_opl_sevilla_img_status" style="font-size:.68rem;color:#2a7a74;"></span>
+          </div>
+        </div>
         <div class="fc-row">
           <div><label class="fc-label fc-label-da">Kort tekst (vises på kortet)</label><input type="text" id="opl_sevilla_kort_da" class="fc-input-da" value="Andalusiens strålende hovedstad · 1,5 t."></div>
           <div><label class="fc-label fc-label-en">Short text (shown on card)</label><input type="text" id="opl_sevilla_kort_en" class="fc-input-en" value="Andalusia's radiant capital · 1.5 hrs"></div>
@@ -1055,6 +1217,15 @@ A visit to Córdoba is just an hour's drive from Castillo del Alma.</textarea></
         <div class="fc-row">
           <div><label class="fc-label fc-label-da">Titel</label><input type="text" id="opl_picasso_titel_da" class="fc-input-da" value="Picasso-museet · Málaga"></div>
           <div><label class="fc-label fc-label-en">Title</label><input type="text" id="opl_picasso_titel_en" class="fc-input-en" value="The Picasso Museum · Málaga"></div>
+        </div>
+        <div style="margin-bottom:1.2rem;padding:.9rem;background:rgba(42,122,116,.06);border:1px solid rgba(42,122,116,.2);">
+          <label class="fc-label" style="color:#2a7a74;">📁 Billede</label>
+          <div style="display:flex;align-items:center;gap:.8rem;flex-wrap:wrap;margin-top:.5rem;">
+            <img id="thumb_opl_picasso_img" src="" alt="" style="display:none;width:56px;height:56px;object-fit:cover;border-radius:3px;border:1px solid rgba(184,138,30,.3);flex-shrink:0;">
+            <input type="file" id="upload_opl_picasso_img" accept="image/*" style="font-size:.76rem;flex:1;min-width:160px;">
+            <button onclick="uploadSectionMedia('upload_opl_picasso_img','media_opl_picasso_img')" style="background:#2a7a74;color:#fff;border:none;padding:.45rem 1.1rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;white-space:nowrap;">⬆ Upload</button>
+            <span id="upload_opl_picasso_img_status" style="font-size:.68rem;color:#2a7a74;"></span>
+          </div>
         </div>
         <div class="fc-row">
           <div><label class="fc-label fc-label-da">Kort tekst (vises på kortet)</label><input type="text" id="opl_picasso_kort_da" class="fc-input-da" value="Málaga · Picassos fødeby · 55 min."></div>
@@ -1164,6 +1335,15 @@ A visit to Córdoba is just an hour's drive from Castillo del Alma.</textarea></
           <div><label class="fc-label fc-label-da">Titel</label><input type="text" id="well_breathwork_titel_da" class="fc-input-da" value="Breathwork"></div>
           <div><label class="fc-label fc-label-en">Title</label><input type="text" id="well_breathwork_titel_en" class="fc-input-en" value="Breathwork"></div>
         </div>
+        <div style="margin-bottom:1.2rem;padding:.9rem;background:rgba(42,122,116,.06);border:1px solid rgba(42,122,116,.2);">
+          <label class="fc-label" style="color:#2a7a74;">📁 Billede</label>
+          <div style="display:flex;align-items:center;gap:.8rem;flex-wrap:wrap;margin-top:.5rem;">
+            <img id="thumb_well_breathwork_img" src="" alt="" style="display:none;width:56px;height:56px;object-fit:cover;border-radius:3px;border:1px solid rgba(184,138,30,.3);flex-shrink:0;">
+            <input type="file" id="upload_well_breathwork_img" accept="image/*" style="font-size:.76rem;flex:1;min-width:160px;">
+            <button onclick="uploadSectionMedia('upload_well_breathwork_img','media_well_breathwork_img')" style="background:#2a7a74;color:#fff;border:none;padding:.45rem 1.1rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;white-space:nowrap;">⬆ Upload</button>
+            <span id="upload_well_breathwork_img_status" style="font-size:.68rem;color:#2a7a74;"></span>
+          </div>
+        </div>
         <div class="fc-row">
           <div><label class="fc-label fc-label-da">Kort tekst (vises på kortet)</label><input type="text" id="well_breathwork_kort_da" class="fc-input-da" value="Gennem guidede breathwork-sessioner arbejder vi med åndedrættet som et kraftfuldt redskab til at berolige nervesystemet, frigøre spændinger og skabe en dybere forbindelse til kroppen."></div>
           <div><label class="fc-label fc-label-en">Short text (shown on card)</label><input type="text" id="well_breathwork_kort_en" class="fc-input-en" value="Through guided breathwork sessions we work with the breath as a powerful tool to calm the nervous system, release tension and create a deeper connection to the body."></div>
@@ -1190,6 +1370,15 @@ The breath is the body's most direct access to the nervous system. When we work 
           <div><label class="fc-label fc-label-da">Titel</label><input type="text" id="well_meditation_titel_da" class="fc-input-da" value="Meditation & Stilhed"></div>
           <div><label class="fc-label fc-label-en">Title</label><input type="text" id="well_meditation_titel_en" class="fc-input-en" value="Meditation & Stillness"></div>
         </div>
+        <div style="margin-bottom:1.2rem;padding:.9rem;background:rgba(42,122,116,.06);border:1px solid rgba(42,122,116,.2);">
+          <label class="fc-label" style="color:#2a7a74;">📁 Billede</label>
+          <div style="display:flex;align-items:center;gap:.8rem;flex-wrap:wrap;margin-top:.5rem;">
+            <img id="thumb_well_meditation_img" src="" alt="" style="display:none;width:56px;height:56px;object-fit:cover;border-radius:3px;border:1px solid rgba(184,138,30,.3);flex-shrink:0;">
+            <input type="file" id="upload_well_meditation_img" accept="image/*" style="font-size:.76rem;flex:1;min-width:160px;">
+            <button onclick="uploadSectionMedia('upload_well_meditation_img','media_well_meditation_img')" style="background:#2a7a74;color:#fff;border:none;padding:.45rem 1.1rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;white-space:nowrap;">⬆ Upload</button>
+            <span id="upload_well_meditation_img_status" style="font-size:.68rem;color:#2a7a74;"></span>
+          </div>
+        </div>
         <div class="fc-row">
           <div><label class="fc-label fc-label-da">Kort tekst (vises på kortet)</label><input type="text" id="well_meditation_kort_da" class="fc-input-da" value="Meditation og stilhed giver mulighed for at trække sig væk fra støj, krav og konstant aktivitet. I stilheden opstår ofte en naturlig følelse af klarhed, nærvær og indre fred."></div>
           <div><label class="fc-label fc-label-en">Short text (shown on card)</label><input type="text" id="well_meditation_kort_en" class="fc-input-en" value="Meditation and stillness offer the chance to step away from noise, demands and constant activity. In stillness, a natural sense of clarity, presence and inner peace often arises."></div>
@@ -1212,6 +1401,15 @@ We offer guided meditations suited to all levels — from beginner to experience
         <div class="fc-row">
           <div><label class="fc-label fc-label-da">Titel</label><input type="text" id="well_somatic_titel_da" class="fc-input-da" value="Somatic Therapy"></div>
           <div><label class="fc-label fc-label-en">Title</label><input type="text" id="well_somatic_titel_en" class="fc-input-en" value="Somatic Therapy"></div>
+        </div>
+        <div style="margin-bottom:1.2rem;padding:.9rem;background:rgba(42,122,116,.06);border:1px solid rgba(42,122,116,.2);">
+          <label class="fc-label" style="color:#2a7a74;">📁 Billede</label>
+          <div style="display:flex;align-items:center;gap:.8rem;flex-wrap:wrap;margin-top:.5rem;">
+            <img id="thumb_well_somatic_img" src="" alt="" style="display:none;width:56px;height:56px;object-fit:cover;border-radius:3px;border:1px solid rgba(184,138,30,.3);flex-shrink:0;">
+            <input type="file" id="upload_well_somatic_img" accept="image/*" style="font-size:.76rem;flex:1;min-width:160px;">
+            <button onclick="uploadSectionMedia('upload_well_somatic_img','media_well_somatic_img')" style="background:#2a7a74;color:#fff;border:none;padding:.45rem 1.1rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;white-space:nowrap;">⬆ Upload</button>
+            <span id="upload_well_somatic_img_status" style="font-size:.68rem;color:#2a7a74;"></span>
+          </div>
         </div>
         <div class="fc-row">
           <div><label class="fc-label fc-label-da">Kort tekst (vises på kortet)</label><input type="text" id="well_somatic_kort_da" class="fc-input-da" value="Somatic therapy arbejder med forbindelsen mellem kroppen, følelserne og nervesystemet. Stress og følelsesmæssige belastninger sætter sig ofte fysisk i kroppen."></div>
@@ -1236,6 +1434,15 @@ Through body awareness, grounding and gentle therapeutic techniques, space is cr
           <div><label class="fc-label fc-label-da">Titel</label><input type="text" id="well_healing_titel_da" class="fc-input-da" value="Healing"></div>
           <div><label class="fc-label fc-label-en">Title</label><input type="text" id="well_healing_titel_en" class="fc-input-en" value="Healing"></div>
         </div>
+        <div style="margin-bottom:1.2rem;padding:.9rem;background:rgba(42,122,116,.06);border:1px solid rgba(42,122,116,.2);">
+          <label class="fc-label" style="color:#2a7a74;">📁 Billede</label>
+          <div style="display:flex;align-items:center;gap:.8rem;flex-wrap:wrap;margin-top:.5rem;">
+            <img id="thumb_well_healing_img" src="" alt="" style="display:none;width:56px;height:56px;object-fit:cover;border-radius:3px;border:1px solid rgba(184,138,30,.3);flex-shrink:0;">
+            <input type="file" id="upload_well_healing_img" accept="image/*" style="font-size:.76rem;flex:1;min-width:160px;">
+            <button onclick="uploadSectionMedia('upload_well_healing_img','media_well_healing_img')" style="background:#2a7a74;color:#fff;border:none;padding:.45rem 1.1rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;white-space:nowrap;">⬆ Upload</button>
+            <span id="upload_well_healing_img_status" style="font-size:.68rem;color:#2a7a74;"></span>
+          </div>
+        </div>
         <div class="fc-row">
           <div><label class="fc-label fc-label-da">Kort tekst (vises på kortet)</label><input type="text" id="well_healing_kort_da" class="fc-input-da" value="Healing hos Castillo del Alma handler ikke om perfektion, men om at skabe de rette rammer for at kroppen og sindet kan finde tilbage til sig selv."></div>
           <div><label class="fc-label fc-label-en">Short text (shown on card)</label><input type="text" id="well_healing_kort_en" class="fc-input-en" value="Healing at Castillo del Alma is not about perfection, but about creating the right conditions for the body and mind to find their way back to themselves."></div>
@@ -1259,6 +1466,15 @@ Through presence, care, energy and human contact, many experience a deeper sense
           <div><label class="fc-label fc-label-da">Titel</label><input type="text" id="well_massage_titel_da" class="fc-input-da" value="Massage & Bodywork"></div>
           <div><label class="fc-label fc-label-en">Title</label><input type="text" id="well_massage_titel_en" class="fc-input-en" value="Massage & Bodywork"></div>
         </div>
+        <div style="margin-bottom:1.2rem;padding:.9rem;background:rgba(42,122,116,.06);border:1px solid rgba(42,122,116,.2);">
+          <label class="fc-label" style="color:#2a7a74;">📁 Billede</label>
+          <div style="display:flex;align-items:center;gap:.8rem;flex-wrap:wrap;margin-top:.5rem;">
+            <img id="thumb_well_massage_img" src="" alt="" style="display:none;width:56px;height:56px;object-fit:cover;border-radius:3px;border:1px solid rgba(184,138,30,.3);flex-shrink:0;">
+            <input type="file" id="upload_well_massage_img" accept="image/*" style="font-size:.76rem;flex:1;min-width:160px;">
+            <button onclick="uploadSectionMedia('upload_well_massage_img','media_well_massage_img')" style="background:#2a7a74;color:#fff;border:none;padding:.45rem 1.1rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;white-space:nowrap;">⬆ Upload</button>
+            <span id="upload_well_massage_img_status" style="font-size:.68rem;color:#2a7a74;"></span>
+          </div>
+        </div>
         <div class="fc-row">
           <div><label class="fc-label fc-label-da">Kort tekst (vises på kortet)</label><input type="text" id="well_massage_kort_da" class="fc-input-da" value="Massage er en effektiv måde at afspænde kroppen og regulere nervesystemet på. Vores behandlinger er designet til at løsne spændinger, stimulere kroppens naturlige restitution og skabe en følelse af dyb afslapning og velvære."></div>
           <div><label class="fc-label fc-label-en">Short text (shown on card)</label><input type="text" id="well_massage_kort_en" class="fc-input-en" value="Massage is an effective way to relax the body and regulate the nervous system. Our treatments are designed to release tension, stimulate the body's natural recovery and create a sense of deep relaxation and wellbeing."></div>
@@ -1281,6 +1497,15 @@ We offer various forms of massage and bodywork — tailored to each guest's need
         <div class="fc-row">
           <div><label class="fc-label fc-label-da">Titel</label><input type="text" id="well_pool_titel_da" class="fc-input-da" value="Pool & Afslapning"></div>
           <div><label class="fc-label fc-label-en">Title</label><input type="text" id="well_pool_titel_en" class="fc-input-en" value="Pool & Relaxation"></div>
+        </div>
+        <div style="margin-bottom:1.2rem;padding:.9rem;background:rgba(42,122,116,.06);border:1px solid rgba(42,122,116,.2);">
+          <label class="fc-label" style="color:#2a7a74;">📁 Billede</label>
+          <div style="display:flex;align-items:center;gap:.8rem;flex-wrap:wrap;margin-top:.5rem;">
+            <img id="thumb_well_pool_img" src="" alt="" style="display:none;width:56px;height:56px;object-fit:cover;border-radius:3px;border:1px solid rgba(184,138,30,.3);flex-shrink:0;">
+            <input type="file" id="upload_well_pool_img" accept="image/*" style="font-size:.76rem;flex:1;min-width:160px;">
+            <button onclick="uploadSectionMedia('upload_well_pool_img','media_well_pool_img')" style="background:#2a7a74;color:#fff;border:none;padding:.45rem 1.1rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;white-space:nowrap;">⬆ Upload</button>
+            <span id="upload_well_pool_img_status" style="font-size:.68rem;color:#2a7a74;"></span>
+          </div>
         </div>
         <div class="fc-row">
           <div><label class="fc-label fc-label-da">Kort tekst (vises på kortet)</label><input type="text" id="well_pool_kort_da" class="fc-input-da" value="Poolområdet er skabt som et fredfyldt frirum til ro og restitution. Vandet, solen og de rolige omgivelser inviterer til at give slip, sænke skuldrene og finde tilbage til en mere naturlig rytme."></div>
