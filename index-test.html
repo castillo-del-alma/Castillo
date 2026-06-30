@@ -381,6 +381,8 @@ section{position:relative;z-index:1;}
   font-size:1.2rem;font-weight:300;color:var(--text-light);
 }
 .retreats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px 10px;}
+.retreats-img-item:hover{transform:scale(1.05);}
+@media (max-width:780px){#retreatsImageRow{grid-template-columns:repeat(2,1fr) !important;}}
 .retreat-card{position:relative;aspect-ratio:3/4;overflow:hidden;cursor:pointer;}
 .retreat-card-bg{position:absolute;inset:0;transition:transform .8s cubic-bezier(.23,1,.32,1);}
 .retreat-card:hover .retreat-card-bg{transform:scale(1.07);}
@@ -1217,6 +1219,13 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:5rem
       <h2 id="retreatsHeading2" style="font-family:'Cinzel',serif;font-weight:300;font-size:clamp(2rem,4vw,3.2rem);letter-spacing:.1em;color:var(--charcoal);margin-bottom:1.2rem;">Lej hele huset</h2>
       <p id="retreatsText2" style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.35rem;font-weight:300;color:var(--text-light);max-width:680px;margin:0 auto 2rem;">Du kan også leje faciliteterne til dine egne gæster, retreats eller workshops,<br>og virksomheder finder de perfekte rammer til seminarer, teambuilding og strategidage.</p>
       <a href="/udlejning.html" class="btn-wine" id="retreatsBtn">Lej Castillo del Alma</a>
+    </div>
+    <div class="reveal d2" id="retreatsImageRow" style="display:none;margin-top:3.5rem;display:grid;grid-template-columns:repeat(5,1fr);gap:.6rem;">
+      <div class="retreats-img-item" id="retreatsImg1" style="aspect-ratio:1/1;background-size:cover;background-position:center;overflow:hidden;cursor:pointer;transition:transform .4s;"></div>
+      <div class="retreats-img-item" id="retreatsImg2" style="aspect-ratio:1/1;background-size:cover;background-position:center;overflow:hidden;cursor:pointer;transition:transform .4s;"></div>
+      <div class="retreats-img-item" id="retreatsImg3" style="aspect-ratio:1/1;background-size:cover;background-position:center;overflow:hidden;cursor:pointer;transition:transform .4s;"></div>
+      <div class="retreats-img-item" id="retreatsImg4" style="aspect-ratio:1/1;background-size:cover;background-position:center;overflow:hidden;cursor:pointer;transition:transform .4s;"></div>
+      <div class="retreats-img-item" id="retreatsImg5" style="aspect-ratio:1/1;background-size:cover;background-position:center;overflow:hidden;cursor:pointer;transition:transform .4s;"></div>
     </div>
   </div>
 </section>
@@ -2704,7 +2713,13 @@ function applyUploadedMedia() {
     { key: 'media_vingaard_img', id: 'imgVingaard', type: 'img' },
     { key: 'media_wellness_img', id: 'imgWellness', type: 'bg' },
     { key: 'media_om_os_img', id: 'imgOmOs', type: 'img' },
+    { key: 'media_retreats_img1', id: 'retreatsImg1', type: 'bg' },
+    { key: 'media_retreats_img2', id: 'retreatsImg2', type: 'bg' },
+    { key: 'media_retreats_img3', id: 'retreatsImg3', type: 'bg' },
+    { key: 'media_retreats_img4', id: 'retreatsImg4', type: 'bg' },
+    { key: 'media_retreats_img5', id: 'retreatsImg5', type: 'bg' },
   ];
+  let anyRetreatsImg = false;
   mediaMap.forEach(({ key, id, type }) => {
     const url = siteContentData[key];
     if (!url) return;
@@ -2717,7 +2732,10 @@ function applyUploadedMedia() {
       const video = el.closest('video');
       if (video) video.load();
     }
+    if (id.startsWith('retreatsImg')) anyRetreatsImg = true;
   });
+  const retreatsRow = document.getElementById('retreatsImageRow');
+  if (retreatsRow) retreatsRow.style.display = anyRetreatsImg ? 'grid' : 'none';
 }
 </script>
 </body>
