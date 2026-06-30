@@ -2481,6 +2481,72 @@ function applySiteLang() {
   const gallIntro = document.querySelector('.gallery-intro');
   if (gallIntro) gallIntro.textContent = SC('galleri_intro', gallIntro.textContent);
 
+  // WELLNESS & HEALING
+  const wellLabel = document.querySelector('#wellness .section-label');
+  if (wellLabel) wellLabel.textContent = SC('wellness_label', wellLabel.textContent);
+  const wellHeading = document.querySelector('#wellness .wellness-intro-text h2');
+  if (wellHeading) {
+    let t = SC('wellness_heading', null);
+    if (t) wellHeading.innerHTML = t.replace(/\*(.+?)\*/g, '<em>$1</em>');
+  }
+  const wellLead = document.querySelector('.wellness-lead');
+  if (wellLead) wellLead.textContent = SC('wellness_lead', wellLead.textContent);
+  const wellIntroPs = document.querySelectorAll('.wellness-intro-text p:not(.wellness-lead)');
+  if (wellIntroPs[0]) wellIntroPs[0].textContent = SC('wellness_p1', wellIntroPs[0].textContent);
+  if (wellIntroPs[1]) wellIntroPs[1].textContent = SC('wellness_p2', wellIntroPs[1].textContent);
+  const wellBadgeNum = document.querySelector('.wellness-badge-num');
+  if (wellBadgeNum) wellBadgeNum.textContent = SC('wellness_badge_tal', wellBadgeNum.textContent);
+  const wellBadgeTxt = document.querySelector('.wellness-badge-txt');
+  if (wellBadgeTxt) wellBadgeTxt.textContent = SC('wellness_badge_tekst', wellBadgeTxt.textContent);
+
+  const wellKeys = ['breathwork','meditation','somatic','healing','massage','pool'];
+  const wellCards = document.querySelectorAll('.wellness-service.wellness-has-modal');
+  wellKeys.forEach((key, i) => {
+    const card = wellCards[i];
+    if (!card) return;
+    const h3 = card.querySelector('h3');
+    const p = card.querySelector('p');
+    const titel = SC('well_' + key + '_titel', null);
+    const kort = SC('well_' + key + '_kort', null);
+    const lang = SC('well_' + key + '_lang', null);
+    if (h3 && titel) h3.textContent = titel;
+    if (p && kort) p.textContent = kort;
+    if (lang) card.setAttribute('data-body', lang);
+    if (titel) card.setAttribute('data-title', titel);
+  });
+
+  const wellQuote = document.querySelector('.wellness-big-quote');
+  if (wellQuote) {
+    let t = SC('wellness_citat', null);
+    if (t) wellQuote.innerHTML = t.split('\n').join('<br>');
+  }
+
+  // OM OS
+  const omOsLabel = document.querySelector('#om-os .section-label');
+  if (omOsLabel) omOsLabel.textContent = SC('om_os_label', omOsLabel.textContent);
+  const omOsHeading = document.querySelector('#om-os h2');
+  if (omOsHeading) {
+    let t = SC('om_os_heading', null);
+    if (t) omOsHeading.innerHTML = t.replace(/\*(.+?)\*/g, '<em>$1</em>');
+  }
+  const omOsPs = document.querySelectorAll('.om-os-text p');
+  for (let i = 1; i <= 4 && i <= omOsPs.length; i++) {
+    omOsPs[i-1].textContent = SC('om_os_p' + i, omOsPs[i-1].textContent);
+  }
+  const omOsSig = document.querySelector('.om-os-signature');
+  if (omOsSig) omOsSig.textContent = SC('om_os_signatur', omOsSig.textContent);
+  const omOsImgLabel = document.querySelector('.om-os-img-label');
+  if (omOsImgLabel) omOsImgLabel.textContent = SC('om_os_billedlabel', omOsImgLabel.textContent);
+
+  // TESTIMONIAL
+  const testQuote = document.querySelector('.testimonial blockquote');
+  if (testQuote) {
+    let t = SC('testimonial_citat', null);
+    if (t) testQuote.textContent = '"' + t + '"';
+  }
+  const testCite = document.querySelector('.testimonial cite');
+  if (testCite) testCite.textContent = SC('testimonial_kilde', testCite.textContent);
+
   applySectionToggles();
 }
 
