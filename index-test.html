@@ -2685,11 +2685,8 @@ function applyUploadedMedia() {
     { key: 'media_wellness_img', id: 'imgWellness', type: 'bg' },
     { key: 'media_om_os_img', id: 'imgOmOs', type: 'img' },
   ];
-  console.log('DEBUG applyUploadedMedia — siteContentData media_ nøgler:',
-    Object.keys(siteContentData).filter(k => k.startsWith('media_')));
   mediaMap.forEach(({ key, id, type }) => {
     const url = siteContentData[key];
-    console.log('DEBUG', key, '=', url, '| element fundet:', !!document.getElementById(id));
     if (!url) return;
     const el = document.getElementById(id);
     if (!el) return;
