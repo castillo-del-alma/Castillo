@@ -373,10 +373,28 @@ body{font-family:'Manrope',sans-serif;background:#f0e8d5;color:#2c2318;min-heigh
     <div id="forsideSavedMsg" style="display:none;position:sticky;top:0;z-index:10;background:#2a7a74;color:#fff;padding:.8rem 1.5rem;margin-bottom:1.5rem;align-items:center;gap:1rem;font-size:.8rem;">
       <span>✓ Forside gemt!</span>
     </div>
-    <button onclick="gemForside()" style="background:var(--wine);color:#fff;border:none;padding:.7rem 2rem;font-family:Manrope,sans-serif;font-size:.68rem;font-weight:500;letter-spacing:.18em;text-transform:uppercase;cursor:pointer;margin-bottom:2rem;">💾 Gem hele forsiden</button>
+    <button onclick="gemForside()" style="background:var(--wine);color:#fff;border:none;padding:.7rem 2rem;font-family:Manrope,sans-serif;font-size:.68rem;font-weight:500;letter-spacing:.18em;text-transform:uppercase;cursor:pointer;margin-bottom:1.5rem;">💾 Gem hele forsiden</button>
+
+    <div style="background:rgba(184,138,30,.06);border:1px solid rgba(184,138,30,.2);padding:1rem 1.2rem;margin-bottom:2rem;">
+      <span style="font-size:.62rem;letter-spacing:.15em;text-transform:uppercase;color:rgba(44,35,24,.5);display:block;margin-bottom:.6rem;">Hop til sektion</span>
+      <div style="display:flex;flex-wrap:wrap;gap:.5rem;">
+        <a href="#anchor_hero" style="font-size:.72rem;color:#7a5c14;background:#fffef8;border:1px solid rgba(184,138,30,.3);padding:.35rem .8rem;text-decoration:none;">1 · Hero</a>
+        <a href="#anchor_filosofi" style="font-size:.72rem;color:#7a5c14;background:#fffef8;border:1px solid rgba(184,138,30,.3);padding:.35rem .8rem;text-decoration:none;">2 · Filosofi</a>
+        <a href="#anchor_retreats" style="font-size:.72rem;color:#7a5c14;background:#fffef8;border:1px solid rgba(184,138,30,.3);padding:.35rem .8rem;text-decoration:none;">3 · Retreats</a>
+        <a href="#anchor_estate" style="font-size:.72rem;color:#7a5c14;background:#fffef8;border:1px solid rgba(184,138,30,.3);padding:.35rem .8rem;text-decoration:none;">4 · The Estate</a>
+        <a href="#anchor_vingaard" style="font-size:.72rem;color:#7a5c14;background:#fffef8;border:1px solid rgba(184,138,30,.3);padding:.35rem .8rem;text-decoration:none;">5 · Vingården</a>
+        <a href="#anchor_oplevelser" style="font-size:.72rem;color:#7a5c14;background:#fffef8;border:1px solid rgba(184,138,30,.3);padding:.35rem .8rem;text-decoration:none;">6 · Oplevelser (19 kort)</a>
+        <a href="#anchor_galleri" style="font-size:.72rem;color:#7a5c14;background:#fffef8;border:1px solid rgba(184,138,30,.3);padding:.35rem .8rem;text-decoration:none;">7 · Galleri</a>
+        <a href="#anchor_wellness" style="font-size:.72rem;color:#7a5c14;background:#fffef8;border:1px solid rgba(184,138,30,.3);padding:.35rem .8rem;text-decoration:none;">8 · Wellness (6 kort)</a>
+        <a href="#anchor_om_os" style="font-size:.72rem;color:#7a5c14;background:#fffef8;border:1px solid rgba(184,138,30,.3);padding:.35rem .8rem;text-decoration:none;">9 · Om os</a>
+        <a href="#anchor_testimonial" style="font-size:.72rem;color:#7a5c14;background:#fffef8;border:1px solid rgba(184,138,30,.3);padding:.35rem .8rem;text-decoration:none;">10 · Testimonial</a>
+        <a href="#anchor_nyhedsbrev" style="font-size:.72rem;color:#7a5c14;background:#fffef8;border:1px solid rgba(184,138,30,.3);padding:.35rem .8rem;text-decoration:none;">11 · Nyhedsbrev</a>
+        <a href="#anchor_footer" style="font-size:.72rem;color:#7a5c14;background:#fffef8;border:1px solid rgba(184,138,30,.3);padding:.35rem .8rem;text-decoration:none;">12 · Footer</a>
+      </div>
+    </div>
 
     <!-- HERO -->
-    <div class="fc-block" data-section="hero">
+    <div class="fc-block" data-section="hero" id="anchor_hero">
       <div class="fc-block-header">
         <span class="fc-block-title">1 · Hero</span>
         <label class="fc-toggle"><input type="checkbox" id="active_hero" checked><span>Vis på hjemmesiden</span></label>
@@ -422,7 +440,7 @@ body{font-family:'Manrope',sans-serif;background:#f0e8d5;color:#2c2318;min-heigh
     </div>
 
     <!-- FILOSOFI -->
-    <div class="fc-block" data-section="filosofi">
+    <div class="fc-block" data-section="filosofi" id="anchor_filosofi">
       <div class="fc-block-header">
         <span class="fc-block-title">2 · Filosofi</span>
         <label class="fc-toggle"><input type="checkbox" id="active_filosofi" checked><span>Vis på hjemmesiden</span></label>
@@ -468,7 +486,7 @@ body{font-family:'Manrope',sans-serif;background:#f0e8d5;color:#2c2318;min-heigh
     </div>
 
     <!-- RETREATS TEKST -->
-    <div class="fc-block" data-section="retreats">
+    <div class="fc-block" data-section="retreats" id="anchor_retreats">
       <div class="fc-block-header">
         <span class="fc-block-title">3 · Retreats (sektion-tekst)</span>
         <label class="fc-toggle"><input type="checkbox" id="active_retreats" checked><span>Vis på hjemmesiden</span></label>
@@ -510,7 +528,7 @@ and companies will find the perfect setting for seminars, team building and stra
     </div>
 
     <!-- THE ESTATE -->
-    <div class="fc-block" data-section="estate">
+    <div class="fc-block" data-section="estate" id="anchor_estate">
       <div class="fc-block-header">
         <span class="fc-block-title">4 · The Estate</span>
         <label class="fc-toggle"><input type="checkbox" id="active_estate" checked><span>Vis på hjemmesiden</span></label>
@@ -570,7 +588,7 @@ and companies will find the perfect setting for seminars, team building and stra
     </div>
 
     <!-- VINGÅRDEN -->
-    <div class="fc-block" data-section="vingaard">
+    <div class="fc-block" data-section="vingaard" id="anchor_vingaard">
       <div class="fc-block-header">
         <span class="fc-block-title">5 · Vingården</span>
         <label class="fc-toggle"><input type="checkbox" id="active_vingaard" checked><span>Vis på hjemmesiden</span></label>
@@ -641,7 +659,7 @@ and companies will find the perfect setting for seminars, team building and stra
     </div>
 
     <!-- OPLEVELSER & LIVSNYDELSE -->
-    <div class="fc-block" data-section="oplevelser">
+    <div class="fc-block" data-section="oplevelser" id="anchor_oplevelser">
       <div class="fc-block-header">
         <span class="fc-block-title">7 · Oplevelser &amp; Livsnydelse</span>
         <label class="fc-toggle"><input type="checkbox" id="active_oplevelser" checked><span>Vis på hjemmesiden</span></label>
@@ -1242,7 +1260,7 @@ A visit to Córdoba is just an hour's drive from Castillo del Alma.</textarea></
     </div>
 
     <!-- GALLERI -->
-    <div class="fc-block" data-section="galleri">
+    <div class="fc-block" data-section="galleri" id="anchor_galleri">
       <div class="fc-block-header">
         <span class="fc-block-title">8 · Galleri</span>
         <label class="fc-toggle"><input type="checkbox" id="active_galleri" checked><span>Vis på hjemmesiden</span></label>
@@ -1279,7 +1297,7 @@ A visit to Córdoba is just an hour's drive from Castillo del Alma.</textarea></
     </div>
 
     <!-- WELLNESS & HEALING -->
-    <div class="fc-block" data-section="wellness">
+    <div class="fc-block" data-section="wellness" id="anchor_wellness">
       <div class="fc-block-header">
         <span class="fc-block-title">9 · Wellness &amp; Healing</span>
         <label class="fc-toggle"><input type="checkbox" id="active_wellness" checked><span>Vis på hjemmesiden</span></label>
@@ -1534,7 +1552,7 @@ feeling more calm – and coming home to yourself again."</textarea></div>
     </div>
 
     <!-- OM OS -->
-    <div class="fc-block" data-section="om_os">
+    <div class="fc-block" data-section="om_os" id="anchor_om_os">
       <div class="fc-block-header">
         <span class="fc-block-title">10 · Om os</span>
         <label class="fc-toggle"><input type="checkbox" id="active_om_os" checked><span>Vis på hjemmesiden</span></label>
@@ -1588,7 +1606,7 @@ feeling more calm – and coming home to yourself again."</textarea></div>
     </div>
 
     <!-- TESTIMONIAL -->
-    <div class="fc-block" data-section="testimonial">
+    <div class="fc-block" data-section="testimonial" id="anchor_testimonial">
       <div class="fc-block-header">
         <span class="fc-block-title">11 · Testimonial (citat-bånd)</span>
         <label class="fc-toggle"><input type="checkbox" id="active_testimonial" checked><span>Vis på hjemmesiden</span></label>
@@ -1609,7 +1627,7 @@ feeling more calm – and coming home to yourself again."</textarea></div>
     </div>
 
     <!-- NYHEDSBREV -->
-    <div class="fc-block" data-section="nyhedsbrev">
+    <div class="fc-block" data-section="nyhedsbrev" id="anchor_nyhedsbrev">
       <div class="fc-block-header">
         <span class="fc-block-title">12 · Nyhedsbrev (Stay Connected)</span>
         <label class="fc-toggle"><input type="checkbox" id="active_nyhedsbrev" checked><span>Vis på hjemmesiden</span></label>
@@ -1712,7 +1730,7 @@ feeling more calm – and coming home to yourself again."</textarea></div>
     </div>
 
     <!-- FOOTER -->
-    <div class="fc-block" data-section="footer">
+    <div class="fc-block" data-section="footer" id="anchor_footer">
       <div class="fc-block-header">
         <span class="fc-block-title">13 · Footer</span>
         <label class="fc-toggle"><input type="checkbox" id="active_footer" checked><span>Vis på hjemmesiden</span></label>
