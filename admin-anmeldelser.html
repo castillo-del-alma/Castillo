@@ -50,6 +50,11 @@ body{font-family:'Manrope',sans-serif;background:#f0e8d5;color:#2c2318;min-heigh
 .subtab-btn.active{color:#2a7a74;border-bottom-color:#2a7a74;}
 .subtab-content{display:none;}
 .subtab-content.active{display:block;}
+.fc-sub{margin-left:1.5rem;margin-bottom:.8rem;}
+.fc-sub .fc-block-header{background:rgba(184,138,30,.05);padding:.6rem 1rem;}
+.fc-sub .fc-block-title{font-size:.75rem;font-weight:400;}
+.fc-collapsed .fc-collapsible{display:none;}
+.fc-collapsible{display:block;}
 
 /* ── STATS BAR ── */
 .stats-bar{padding:2rem 3rem;display:flex;gap:2rem;flex-wrap:wrap;border-bottom:1px solid rgba(184,138,30,.1);}
@@ -638,6 +643,244 @@ and companies will find the perfect setting for seminars, team building and stra
           <div><label class="fc-label fc-label-da">Statistik 4 — label</label><input type="text" id="vingaard_stat4_label_da" class="fc-input-da" value="Cab. Sauvignon &amp; Merlot"></div>
           <div><label class="fc-label fc-label-en">Stat 4 — label</label><input type="text" id="vingaard_stat4_label_en" class="fc-input-en" value="Cab. Sauvignon &amp; Merlot"></div>
         </div>
+      </div>
+    </div>
+
+    <!-- OPLEVELSER & LIVSNYDELSE -->
+    <div class="fc-block" data-section="oplevelser">
+      <div class="fc-block-header">
+        <span class="fc-block-title">7 · Oplevelser &amp; Livsnydelse</span>
+        <label class="fc-toggle"><input type="checkbox" id="active_oplevelser" checked><span>Vis på hjemmesiden</span></label>
+      </div>
+      <div class="fc-block-body">
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Section-label</label><input type="text" id="oplevelser_label_da" class="fc-input-da" value="Oplevelser &amp; Livsnydelse"></div>
+          <div><label class="fc-label fc-label-en">Section label</label><input type="text" id="oplevelser_label_en" class="fc-input-en" value="Experiences &amp; Living Well"></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Overskrift (brug *ord* for fremhævning)</label><input type="text" id="oplevelser_heading_da" class="fc-input-da" value="Livet leves *langsommere* her"></div>
+          <div><label class="fc-label fc-label-en">Heading (use *word* for emphasis)</label><input type="text" id="oplevelser_heading_en" class="fc-input-en" value="Life is lived *slower* here"></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Brødtekst</label><textarea id="oplevelser_intro_da" class="fc-input-da fc-textarea">Oplevelser skabt for nærvær, nydelse og forbindelsen til det autentiske Andalusien.</textarea></div>
+          <div><label class="fc-label fc-label-en">Body text</label><textarea id="oplevelser_intro_en" class="fc-input-en fc-textarea">Experiences created for presence, enjoyment and connection to authentic Andalusia.</textarea></div>
+        </div>
+        <p style="font-size:.7rem;color:rgba(44,35,24,.4);margin:1.2rem 0 .6rem;">11 oplevelses-kort — klik hver kort-titel for at folde ud:</p>
+
+    <div class="fc-block fc-sub" data-section="opl_vin">
+      <div class="fc-block-header" style="cursor:pointer;" onclick="this.parentElement.classList.toggle('fc-collapsed')">
+        <span class="fc-block-title">7.1 · Vinsmagning</span>
+        <span style="font-size:.65rem;color:rgba(44,35,24,.4);">klik for at folde ud/sammen ▾</span>
+      </div>
+      <div class="fc-block-body fc-collapsible">
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Titel</label><input type="text" id="opl_vin_titel_da" class="fc-input-da" value="Vinsmagning"></div>
+          <div><label class="fc-label fc-label-en">Title</label><input type="text" id="opl_vin_titel_en" class="fc-input-en" value="Wine Tasting"></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Kort tekst (vises på kortet)</label><input type="text" id="opl_vin_kort_da" class="fc-input-da" value="Lokale vine fra Andalusiens solmodnede druer"></div>
+          <div><label class="fc-label fc-label-en">Short text (shown on card)</label><input type="text" id="opl_vin_kort_en" class="fc-input-en" value="Local wines from Andalusia's sun-ripened grapes"></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Lang tekst (popup ved klik)</label><textarea id="opl_vin_lang_da" class="fc-input-da fc-textarea">Andalusien har en stolt vintradition, og omkring Castillo del Alma findes nogle af Sydspaniens smukkeste vinområder. Gennem eksklusive vinsmagninger får gæster mulighed for at opleve lokale vine, dybe smagsnuancer og passionen bag den spanske vinkultur.</textarea></div>
+          <div><label class="fc-label fc-label-en">Long text (popup on click)</label><textarea id="opl_vin_lang_en" class="fc-input-en fc-textarea">Andalusia has a proud wine tradition, and around Castillo del Alma are some of southern Spain's most beautiful wine regions. Through exclusive wine tastings, guests can experience local wines, deep flavour nuances and the passion behind Spanish wine culture.</textarea></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="fc-block fc-sub" data-section="opl_olie">
+      <div class="fc-block-header" style="cursor:pointer;" onclick="this.parentElement.classList.toggle('fc-collapsed')">
+        <span class="fc-block-title">7.2 · Olivenolie Smagning</span>
+        <span style="font-size:.65rem;color:rgba(44,35,24,.4);">klik for at folde ud/sammen ▾</span>
+      </div>
+      <div class="fc-block-body fc-collapsible">
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Titel</label><input type="text" id="opl_olie_titel_da" class="fc-input-da" value="Olivenolie Smagning"></div>
+          <div><label class="fc-label fc-label-en">Title</label><input type="text" id="opl_olie_titel_en" class="fc-input-en" value="Olive Oil Tasting"></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Kort tekst (vises på kortet)</label><input type="text" id="opl_olie_kort_da" class="fc-input-da" value="Ekstra jomfruolivenolie fra lokale produktioner"></div>
+          <div><label class="fc-label fc-label-en">Short text (shown on card)</label><input type="text" id="opl_olie_kort_en" class="fc-input-en" value="Extra virgin olive oil from local producers"></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Lang tekst (popup ved klik)</label><textarea id="opl_olie_lang_da" class="fc-input-da fc-textarea">Oliventræerne i Andalusien er tusindvis af år gamle, og olien de producerer er noget af det fineste i verden. Vores olivenolie-smagninger tager dig gennem smagsnuancerne i friske, ufiltrerede ekstra jomfruolier fra lokale producenter.</textarea></div>
+          <div><label class="fc-label fc-label-en">Long text (popup on click)</label><textarea id="opl_olie_lang_en" class="fc-input-en fc-textarea">The olive trees in Andalusia are thousands of years old, and the oil they produce is among the finest in the world. Our olive oil tastings take you through the flavour nuances of fresh, unfiltered extra virgin oils from local producers.</textarea></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="fc-block fc-sub" data-section="opl_vandre">
+      <div class="fc-block-header" style="cursor:pointer;" onclick="this.parentElement.classList.toggle('fc-collapsed')">
+        <span class="fc-block-title">7.3 · Vandreture i naturen</span>
+        <span style="font-size:.65rem;color:rgba(44,35,24,.4);">klik for at folde ud/sammen ▾</span>
+      </div>
+      <div class="fc-block-body fc-collapsible">
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Titel</label><input type="text" id="opl_vandre_titel_da" class="fc-input-da" value="Vandreture i naturen"></div>
+          <div><label class="fc-label fc-label-en">Title</label><input type="text" id="opl_vandre_titel_en" class="fc-input-en" value="Hiking in Nature"></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Kort tekst (vises på kortet)</label><input type="text" id="opl_vandre_kort_da" class="fc-input-da" value="Naturparker og dramatiske bjerglandskaber"></div>
+          <div><label class="fc-label fc-label-en">Short text (shown on card)</label><input type="text" id="opl_vandre_kort_en" class="fc-input-en" value="Nature parks and dramatic mountain landscapes"></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Lang tekst (popup ved klik)</label><textarea id="opl_vandre_lang_da" class="fc-input-da fc-textarea">Området omkring Mollina byder på spektakulære vandreruter gennem naturparker, kalkstenskløfter og olivenlunde. Med bjergene som kulisse og fuglekvidder som lydspor er disse ture en sand gave til kroppen og sindet.</textarea></div>
+          <div><label class="fc-label fc-label-en">Long text (popup on click)</label><textarea id="opl_vandre_lang_en" class="fc-input-en fc-textarea">The area around Mollina offers spectacular hiking trails through nature parks, limestone gorges and olive groves. With the mountains as a backdrop and birdsong as the soundtrack, these walks are a true gift for body and mind.</textarea></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="fc-block fc-sub" data-section="opl_mad">
+      <div class="fc-block-header" style="cursor:pointer;" onclick="this.parentElement.classList.toggle('fc-collapsed')">
+        <span class="fc-block-title">7.4 · Madlavningskurser</span>
+        <span style="font-size:.65rem;color:rgba(44,35,24,.4);">klik for at folde ud/sammen ▾</span>
+      </div>
+      <div class="fc-block-body fc-collapsible">
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Titel</label><input type="text" id="opl_mad_titel_da" class="fc-input-da" value="Madlavningskurser"></div>
+          <div><label class="fc-label fc-label-en">Title</label><input type="text" id="opl_mad_titel_en" class="fc-input-en" value="Cooking Classes"></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Kort tekst (vises på kortet)</label><input type="text" id="opl_mad_kort_da" class="fc-input-da" value="Det spanske køkken — autentisk og sanseligt"></div>
+          <div><label class="fc-label fc-label-en">Short text (shown on card)</label><input type="text" id="opl_mad_kort_en" class="fc-input-en" value="Spanish cuisine — authentic and sensual"></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Lang tekst (popup ved klik)</label><textarea id="opl_mad_lang_da" class="fc-input-da fc-textarea">Det spanske køkken er autentisk, farverigt og sanseligt. I vores madlavningskurser lærer du at tilberede traditionelle andalusiske retter med friske, lokale råvarer — under vejledning af lokale kokke med dyb respekt for traditionen.</textarea></div>
+          <div><label class="fc-label fc-label-en">Long text (popup on click)</label><textarea id="opl_mad_lang_en" class="fc-input-en fc-textarea">Spanish cuisine is authentic, colourful and sensual. In our cooking classes you will learn to prepare traditional Andalusian dishes with fresh, local ingredients — guided by local chefs with deep respect for tradition.</textarea></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="fc-block fc-sub" data-section="opl_ride">
+      <div class="fc-block-header" style="cursor:pointer;" onclick="this.parentElement.classList.toggle('fc-collapsed')">
+        <span class="fc-block-title">7.5 · Rideture i Andalusien</span>
+        <span style="font-size:.65rem;color:rgba(44,35,24,.4);">klik for at folde ud/sammen ▾</span>
+      </div>
+      <div class="fc-block-body fc-collapsible">
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Titel</label><input type="text" id="opl_ride_titel_da" class="fc-input-da" value="Rideture i Andalusien"></div>
+          <div><label class="fc-label fc-label-en">Title</label><input type="text" id="opl_ride_titel_en" class="fc-input-en" value="Horseback Riding"></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Kort tekst (vises på kortet)</label><input type="text" id="opl_ride_kort_da" class="fc-input-da" value="Andalusisk landskab fra hesteryg"></div>
+          <div><label class="fc-label fc-label-en">Short text (shown on card)</label><input type="text" id="opl_ride_kort_en" class="fc-input-en" value="Andalusian landscape from horseback"></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Lang tekst (popup ved klik)</label><textarea id="opl_ride_lang_da" class="fc-input-da fc-textarea">Det andalusiske landskab set fra hesteryg er en oplevelse for livet. Vi tilbyder guidede rideture gennem vinmarker og olivenlunde, hvor det berømte andalusiske klima og de smukke omgivelser skaber en uforglemmelig oplevelse.</textarea></div>
+          <div><label class="fc-label fc-label-en">Long text (popup on click)</label><textarea id="opl_ride_lang_en" class="fc-input-en fc-textarea">The Andalusian landscape seen from horseback is an experience for life. We offer guided rides through vineyards and olive groves, where the famous Andalusian climate and beautiful surroundings create an unforgettable experience.</textarea></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="fc-block fc-sub" data-section="opl_caminito">
+      <div class="fc-block-header" style="cursor:pointer;" onclick="this.parentElement.classList.toggle('fc-collapsed')">
+        <span class="fc-block-title">7.6 · Caminito del Rey</span>
+        <span style="font-size:.65rem;color:rgba(44,35,24,.4);">klik for at folde ud/sammen ▾</span>
+      </div>
+      <div class="fc-block-body fc-collapsible">
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Titel</label><input type="text" id="opl_caminito_titel_da" class="fc-input-da" value="Caminito del Rey"></div>
+          <div><label class="fc-label fc-label-en">Title</label><input type="text" id="opl_caminito_titel_en" class="fc-input-en" value="Caminito del Rey"></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Kort tekst (vises på kortet)</label><input type="text" id="opl_caminito_kort_da" class="fc-input-da" value="Spektakulær kløftsti langs klippen"></div>
+          <div><label class="fc-label fc-label-en">Short text (shown on card)</label><input type="text" id="opl_caminito_kort_en" class="fc-input-en" value="Spectacular gorge path along the cliff"></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Lang tekst (popup ved klik)</label><textarea id="opl_caminito_lang_da" class="fc-input-da fc-textarea">En af Spaniens mest spektakulære vandrestier — en smal sti langs de lodrette klippevægge over Guadalhorce-floden. En adrenalinfyldt og smuk oplevelse der er tilgængelig for de fleste gæster med god gangdistance.</textarea></div>
+          <div><label class="fc-label fc-label-en">Long text (popup on click)</label><textarea id="opl_caminito_lang_en" class="fc-input-en fc-textarea">One of Spain's most spectacular hiking trails — a narrow path along the vertical cliff faces above the Guadalhorce river. An adrenaline-filled and beautiful experience accessible to most guests with good walking stamina.</textarea></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="fc-block fc-sub" data-section="opl_malaga">
+      <div class="fc-block-header" style="cursor:pointer;" onclick="this.parentElement.classList.toggle('fc-collapsed')">
+        <span class="fc-block-title">7.7 · Málaga — Kultur & Gastronomi</span>
+        <span style="font-size:.65rem;color:rgba(44,35,24,.4);">klik for at folde ud/sammen ▾</span>
+      </div>
+      <div class="fc-block-body fc-collapsible">
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Titel</label><input type="text" id="opl_malaga_titel_da" class="fc-input-da" value="Málaga — Kultur & Gastronomi"></div>
+          <div><label class="fc-label fc-label-en">Title</label><input type="text" id="opl_malaga_titel_en" class="fc-input-en" value="Málaga — Culture & Gastronomy"></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Kort tekst (vises på kortet)</label><input type="text" id="opl_malaga_kort_da" class="fc-input-da" value="Kunst, kultur og gastronomisk scene"></div>
+          <div><label class="fc-label fc-label-en">Short text (shown on card)</label><input type="text" id="opl_malaga_kort_en" class="fc-input-en" value="Art, culture and the gastronomic scene"></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Lang tekst (popup ved klik)</label><textarea id="opl_malaga_lang_da" class="fc-input-da fc-textarea">Málaga er en af Spaniens mest levende byer — med verdsklasse-gastronomi, Picassos fødeby, smukke strande og en pulserende kultur. Kun en times kørsel fra Castillo del Alma er den den perfekte dagstur.</textarea></div>
+          <div><label class="fc-label fc-label-en">Long text (popup on click)</label><textarea id="opl_malaga_lang_en" class="fc-input-en fc-textarea">Málaga is one of Spain's most vibrant cities — with world-class gastronomy, Picasso's birthplace, beautiful beaches and a pulsating culture. Just an hour's drive from Castillo del Alma, it makes the perfect day trip.</textarea></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="fc-block fc-sub" data-section="opl_cordoba">
+      <div class="fc-block-header" style="cursor:pointer;" onclick="this.parentElement.classList.toggle('fc-collapsed')">
+        <span class="fc-block-title">7.8 · Córdoba</span>
+        <span style="font-size:.65rem;color:rgba(44,35,24,.4);">klik for at folde ud/sammen ▾</span>
+      </div>
+      <div class="fc-block-body fc-collapsible">
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Titel</label><input type="text" id="opl_cordoba_titel_da" class="fc-input-da" value="Córdoba"></div>
+          <div><label class="fc-label fc-label-en">Title</label><input type="text" id="opl_cordoba_titel_en" class="fc-input-en" value="Córdoba"></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Kort tekst (vises på kortet)</label><input type="text" id="opl_cordoba_kort_da" class="fc-input-da" value="Historie, patioer og stemning fra det gamle Spanien"></div>
+          <div><label class="fc-label fc-label-en">Short text (shown on card)</label><input type="text" id="opl_cordoba_kort_en" class="fc-input-en" value="History, patios and the atmosphere of old Spain"></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Lang tekst (popup ved klik)</label><textarea id="opl_cordoba_lang_da" class="fc-input-da fc-textarea">Den historiske by Córdoba er en af Andalusiens mest fascinerende kulturelle oplevelser. Byen emmer af historie, smalle brostensgader, blomsterfyldte patioer og en helt særlig stemning fra det gamle Spanien.
+I hjertet af Córdoba ligger den verdenskendte Mezquita-Catedral de Córdoba — den tidligere moské, som senere blev ombygget med en kristen katedral midt inde i den oprindelige islamiske arkitektur.
+Et besøg i Córdoba er kun en times kørsel væk fra Castillo del Alma.</textarea></div>
+          <div><label class="fc-label fc-label-en">Long text (popup on click)</label><textarea id="opl_cordoba_lang_en" class="fc-input-en fc-textarea">The historic city of Córdoba is one of Andalusia's most fascinating cultural experiences. The city is steeped in history, with narrow cobbled streets, flower-filled patios and a very special atmosphere from old Spain.
+At the heart of Córdoba lies the world-famous Mezquita-Catedral de Córdoba — the former mosque, later rebuilt with a Christian cathedral within the original Islamic architecture.
+A visit to Córdoba is just an hour's drive from Castillo del Alma.</textarea></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="fc-block fc-sub" data-section="opl_antequera">
+      <div class="fc-block-header" style="cursor:pointer;" onclick="this.parentElement.classList.toggle('fc-collapsed')">
+        <span class="fc-block-title">7.9 · Antequera</span>
+        <span style="font-size:.65rem;color:rgba(44,35,24,.4);">klik for at folde ud/sammen ▾</span>
+      </div>
+      <div class="fc-block-body fc-collapsible">
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Titel</label><input type="text" id="opl_antequera_titel_da" class="fc-input-da" value="Antequera"></div>
+          <div><label class="fc-label fc-label-en">Title</label><input type="text" id="opl_antequera_titel_en" class="fc-input-en" value="Antequera"></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Kort tekst (vises på kortet)</label><input type="text" id="opl_antequera_kort_da" class="fc-input-da" value="Hjertet af Andalusien — 15 min. væk"></div>
+          <div><label class="fc-label fc-label-en">Short text (shown on card)</label><input type="text" id="opl_antequera_kort_en" class="fc-input-en" value="The heart of Andalusia — 15 min. away"></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Lang tekst (popup ved klik)</label><textarea id="opl_antequera_lang_da" class="fc-input-da fc-textarea">Antequera beskrives ofte som hjertet af Andalusien — og med god grund. Med sine imponerende dolmener (UNESCO-verdensarv), majestætiske borg og charmerende gader er det en af regionens mest fascinerende byer. Kun 15 minutter fra Castillo del Alma.</textarea></div>
+          <div><label class="fc-label fc-label-en">Long text (popup on click)</label><textarea id="opl_antequera_lang_en" class="fc-input-en fc-textarea">Antequera is often described as the heart of Andalusia — and for good reason. With its impressive dolmens (UNESCO World Heritage), majestic castle and charming streets, it is one of the region's most fascinating towns. Just 15 minutes from Castillo del Alma.</textarea></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="fc-block fc-sub" data-section="opl_stjerner">
+      <div class="fc-block-header" style="cursor:pointer;" onclick="this.parentElement.classList.toggle('fc-collapsed')">
+        <span class="fc-block-title">7.10 · Stjernekiggeri</span>
+        <span style="font-size:.65rem;color:rgba(44,35,24,.4);">klik for at folde ud/sammen ▾</span>
+      </div>
+      <div class="fc-block-body fc-collapsible">
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Titel</label><input type="text" id="opl_stjerner_titel_da" class="fc-input-da" value="Stjernekiggeri"></div>
+          <div><label class="fc-label fc-label-en">Title</label><input type="text" id="opl_stjerner_titel_en" class="fc-input-en" value="Stargazing"></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Kort tekst (vises på kortet)</label><input type="text" id="opl_stjerner_kort_da" class="fc-input-da" value="Nattehimmelen langt fra byernes støj"></div>
+          <div><label class="fc-label fc-label-en">Short text (shown on card)</label><input type="text" id="opl_stjerner_kort_en" class="fc-input-en" value="The night sky far from city noise"></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Lang tekst (popup ved klik)</label><textarea id="opl_stjerner_lang_da" class="fc-input-da fc-textarea">Langt fra byernes lysstøj åbner nattehimmelen sig over Mollina i al sin pragt. Med det klare andalusiske klima og minimal lysforurening er forholdene ideelle for stjernekiggeri — en stille og meditativ oplevelse der sjældent glemmes.</textarea></div>
+          <div><label class="fc-label fc-label-en">Long text (popup on click)</label><textarea id="opl_stjerner_lang_en" class="fc-input-en fc-textarea">Far from city light pollution, the night sky over Mollina opens up in all its splendour. With the clear Andalusian climate and minimal light pollution, conditions are ideal for stargazing — a quiet and meditative experience rarely forgotten.</textarea></div>
+        </div>
+      </div>
+    </div>
+
       </div>
     </div>
 
