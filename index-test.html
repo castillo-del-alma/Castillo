@@ -2638,10 +2638,20 @@ async function loadUploadedGalleryItems() {
   try {
     const { data, error } = await sbContent.storage.from('retreat-images').list('galleri', { sortBy: { column: 'created_at', order: 'desc' } });
     if (error) throw error;
-    const files = (data || []).filter(f => f.name && !f.name.startsWith('.'));
+    let files = (data || []).filter(f => f.name && !f.name.startsWith('.'));
     if (!files.length) {
       if (emptyMsg) emptyMsg.style.display = 'block';
       return;
+    }
+    // Sortér efter den rækkefølge der er sat i admin (op/ned-pile), nye filer havner sidst
+    const savedOrder = siteContentData['galleri_raekkefolge'];
+    if (savedOrder) {
+      try {
+        const orderArr = JSON.parse(savedOrder);
+        const fileNames = files.map(f => f.name);
+        const orderedNames = [...orderArr.filter(n => fileNames.includes(n)), ...fileNames.filter(n => !orderArr.includes(n))];
+        files.sort((a, b) => orderedNames.indexOf(a.name) - orderedNames.indexOf(b.name));
+      } catch(e) { console.warn('Galleri rækkefølge parse fejl:', e.message); }
     }
     if (emptyMsg) emptyMsg.style.display = 'none';
     files.forEach(f => {
