@@ -1622,15 +1622,35 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:5rem
   <div class="footer-grid">
     <div>
       <img src="img/logo-castillo-ny-keylay.jpg" alt="Castillo del Alma" class="footer-logo-img">
-      <div class="footer-address">Mollina · Antequera · Málaga, Andalusia<br><br>info@castillodelalma.com</div>
+      <div class="footer-address" id="footerAddress">Mollina · Antequera · Málaga, Andalusia<br><br>info@castillodelalma.com</div>
     </div>
-    <div class="footer-col"><h4>Stedet</h4><ul><li><a href="#">The Estate</a></li><li><a href="#">Vingården</a></li><li><a href="#">Faciliteter</a></li><li><a href="#">Bæredygtighed</a></li></ul></div>
-    <div class="footer-col"><h4>Retreats</h4><ul><li><a href="#">Kultur &amp; Udflugter</a></li><li><a href="#">Sænk tempoet</a></li><li><a href="#">Rejsen indad</a></li><li><a href="#">Gay Retreat</a></li><li><a href="#">Lej Castillo</a></li></ul></div>
-    <div class="footer-col"><h4>Information</h4><ul><li><a href="#">Oplevelser</a></li><li><a href="#">Wellness</a></li><li><a href="#">Journal</a></li><li><a href="#">Presse</a></li><li><a href="#">Kontakt</a></li></ul></div>
+    <div class="footer-col"><h4 id="footerCol1Heading">Stedet</h4><ul>
+      <li><a href="ejendommen.html#intro" id="footerCol1Link1">The Estate</a></li>
+      <li><a href="#vineyard" id="footerCol1Link2">Vingården</a></li>
+      <li><a href="ejendommen.html#facilities" id="footerCol1Link3">Faciliteter</a></li>
+      <li><a href="ejendommen.html#sustainability" id="footerCol1Link4">Bæredygtighed</a></li>
+    </ul></div>
+    <div class="footer-col"><h4 id="footerCol2Heading">Retreats</h4><ul>
+      <li><a href="#experiences" id="footerCol2Link1">Kultur &amp; Udflugter</a></li>
+      <li><a href="retreat.html?slug=kunsten-at-saenke-tempoet" id="footerCol2Link2">Sænk tempoet</a></li>
+      <li><a href="#retreats" id="footerCol2Link3">Rejsen indad</a></li>
+      <li><a href="retreat.html?slug=gay-retreat-og-faellesskab" id="footerCol2Link4">Gay Retreat</a></li>
+      <li><a href="udlejning.html" id="footerCol2Link5">Lej Castillo</a></li>
+    </ul></div>
+    <div class="footer-col"><h4 id="footerCol3Heading">Information</h4><ul>
+      <li><a href="#experiences" id="footerCol3Link1">Oplevelser</a></li>
+      <li><a href="#wellness" id="footerCol3Link2">Wellness</a></li>
+      <li><a href="#" id="footerCol3Link3">Journal</a></li>
+      <li><a href="#" id="footerCol3Link4">Presse</a></li>
+      <li><a href="#contact" id="footerCol3Link5">Kontakt</a></li>
+    </ul></div>
   </div>
   <div class="footer-bottom">
-    <p>© 2026 Castillo del Alma · Mollina, Málaga · All rights reserved</p>
-    <div class="footer-social"><a href="#">Instagram</a><a href="#">Facebook</a></div>
+    <p id="footerCopyright">© 2026 Castillo del Alma · Mollina, Málaga · All rights reserved</p>
+    <div class="footer-social">
+      <a href="#" id="footerSocial1">Instagram</a>
+      <a href="#" id="footerSocial2">Facebook</a>
+    </div>
   </div>
 </footer>
 
@@ -2586,6 +2606,30 @@ function applySiteLang() {
   const nlPlaceholderEmail = document.getElementById('nl-email');
   if (nlPlaceholderEmail) nlPlaceholderEmail.placeholder = SC('nl_placeholder_email', nlPlaceholderEmail.placeholder);
   set('nlSubmitBtn', 'nl_btn');
+
+  // FOOTER
+  set('footerAddress', 'footer_adresse');
+  set('footerCol1Heading', 'footer_kol1_titel');
+  set('footerCol2Heading', 'footer_kol2_titel');
+  set('footerCol3Heading', 'footer_kol3_titel');
+  for (let i = 1; i <= 4; i++) set('footerCol1Link' + i, 'footer_kol1_link' + i + '_tekst');
+  for (let i = 1; i <= 5; i++) set('footerCol2Link' + i, 'footer_kol2_link' + i + '_tekst');
+  for (let i = 1; i <= 5; i++) set('footerCol3Link' + i, 'footer_kol3_link' + i + '_tekst');
+  // Links (href) opdateres uafhængigt af sprog — de samme destinationer gælder for begge sprog
+  const setHref = (id, key) => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    const url = siteContentData[key];
+    if (url) el.href = url;
+  };
+  for (let i = 1; i <= 4; i++) setHref('footerCol1Link' + i, 'footer_kol1_link' + i + '_url');
+  for (let i = 1; i <= 5; i++) setHref('footerCol2Link' + i, 'footer_kol2_link' + i + '_url');
+  for (let i = 1; i <= 5; i++) setHref('footerCol3Link' + i, 'footer_kol3_link' + i + '_url');
+  set('footerCopyright', 'footer_copyright');
+  set('footerSocial1', 'footer_social1_tekst');
+  set('footerSocial2', 'footer_social2_tekst');
+  setHref('footerSocial1', 'footer_social1_url');
+  setHref('footerSocial2', 'footer_social2_url');
 
   applySectionToggles();
 }
