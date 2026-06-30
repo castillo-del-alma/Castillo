@@ -2145,52 +2145,81 @@ const SUPABASE_URL_RETREATS = 'https://niniwgiytyqvdqejigxg.supabase.co';
 const SUPABASE_ANON_KEY_RETREATS = 'sb_publishable_GwrNUpIuWzdg1oswOY5HzA_mKWqhd6y';
 const sbRetreats = supabase.createClient(SUPABASE_URL_RETREATS, SUPABASE_ANON_KEY_RETREATS);
 
+let allReviewsDataIndex = [];
+
 async function loadReviews() {
   const grid = document.getElementById('reviewsGrid');
   if (!grid) return;
   try {
     const SUPABASE_URL = 'https://niniwgiytyqvdqejigxg.supabase.co';
     const SUPABASE_ANON_KEY = 'sb_publishable_GwrNUpIuWzdg1oswOY5HzA_mKWqhd6y';
-    const res = await fetch(`${SUPABASE_URL}/rest/v1/reviews?approved=eq.true&order=sort_order.asc&order=created_at.desc&limit=3`, {
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/reviews?approved=eq.true&order=sort_order.asc&order=created_at.desc&limit=3&select=*,comment_da,comment_en,reviewer_name_display`, {
       headers: { 'apikey': SUPABASE_ANON_KEY, 'Authorization': `Bearer ${SUPABASE_ANON_KEY}` }
     });
     const reviews = await res.json();
     if (!reviews || !reviews.length) { grid.innerHTML = ''; return; }
-    grid.innerHTML = reviews.map(r => {
-      const vals = [r.r1_modtagelse,r.r2_vaerelse,r.r3_mad,r.r4_omgivelser,r.r5_program,r.r6_terapeuter,r.r7_faellesskab,r.r8_personlig,r.r9_ro,r.r10_samlet].filter(Boolean);
-      const avg = vals.length ? Math.round(vals.reduce((a,b)=>a+b,0)/vals.length*10)/10 : 0;
-      const stars = '★'.repeat(Math.round(avg)) + '☆'.repeat(5-Math.round(avg));
-      const navn = r.fornavn ? (r.fornavn + (r.efternavn ? ' ' + r.efternavn[0] + '.' : '')) : 'Anonym';
-      const fullQuote = r.markedsfoering || r.bedste || '';
-      const words = fullQuote.split(' ');
-      const truncated = words.length > 30 ? words.slice(0,30).join(' ') + '…' : fullQuote;
-      const needsMore = words.length > 30;
-      const rData = encodeURIComponent(JSON.stringify(r));
-      return `<div class="review-card" onclick="visReviewDetalje('${rData}')">
-        <div class="review-stars">${stars} <span style="font-size:.75rem;color:rgba(44,35,24,.5);">${avg}/5</span></div>
-        <div class="review-quote">“${truncated}”</div>
-
-        <div class="review-author"><strong>${navn}</strong>${r.retreat_navn ? '<br><span style="display:block;margin-top:.3rem;"><strong>' + r.retreat_navn + '</strong></span>' : ''}</div>
-      </div>`;
-    }).join('');
+    allReviewsDataIndex = reviews;
+    renderReviewsIndex(currentSiteLang);
   } catch(e) { console.log('Reviews fejl:', e); }
+}
+
+function renderReviewsIndex(lang) {
+  const grid = document.getElementById('reviewsGrid');
+  if (!grid || !allReviewsDataIndex.length) return;
+  const isEN = lang === 'en';
+  grid.innerHTML = allReviewsDataIndex.map(r => {
+    const vals = [r.r1_modtagelse,r.r2_vaerelse,r.r3_mad,r.r4_omgivelser,r.r5_program,r.r6_terapeuter,r.r7_faellesskab,r.r8_personlig,r.r9_ro,r.r10_samlet].filter(Boolean);
+    const avg = vals.length ? Math.round(vals.reduce((a,b)=>a+b,0)/vals.length*10)/10 : 0;
+    const stars = '★'.repeat(Math.round(avg)) + '☆'.repeat(5-Math.round(avg));
+    const navn = r.reviewer_name_display || (r.fornavn ? (r.fornavn + (r.efternavn ? ' ' + r.efternavn[0] + '.' : '')) : 'Anonym');
+    const fullQuote = isEN ? (r.comment_en || r.markedsfoering || r.bedste || '') : (r.comment_da || r.markedsfoering || r.bedste || '');
+    const words = fullQuote.split(' ');
+    const truncated = words.length > 30 ? words.slice(0,30).join(' ') + '…' : fullQuote;
+    const rData = encodeURIComponent(JSON.stringify(r));
+    return `<div class="review-card" onclick="visReviewDetalje('${rData}')">
+      <div class="review-stars">${stars} <span style="font-size:.75rem;color:rgba(44,35,24,.5);">${avg}/5</span></div>
+      <div class="review-quote">"${truncated}"</div>
+
+      <div class="review-author"><strong>${navn}</strong>${r.retreat_navn ? '<br><span style="display:block;margin-top:.3rem;"><strong>' + r.retreat_navn + '</strong></span>' : ''}</div>
+    </div>`;
+  }).join('');
 }
 
 function visReviewDetalje(rEncoded) {
   const r = JSON.parse(decodeURIComponent(rEncoded));
+  const isEN = currentSiteLang === 'en';
   const vals = [r.r1_modtagelse,r.r2_vaerelse,r.r3_mad,r.r4_omgivelser,r.r5_program,r.r6_terapeuter,r.r7_faellesskab,r.r8_personlig,r.r9_ro,r.r10_samlet].filter(Boolean);
   const avg = vals.length ? Math.round(vals.reduce((a,b)=>a+b,0)/vals.length*10)/10 : 0;
-  const navn = r.fornavn ? (r.fornavn + (r.efternavn ? ' ' + r.efternavn[0] + '.' : '')) : 'Anonym';
+  const navn = r.reviewer_name_display || (r.fornavn ? (r.fornavn + (r.efternavn ? ' ' + r.efternavn[0] + '.' : '')) : 'Anonym');
+  const quote = isEN ? (r.comment_en || r.markedsfoering || '') : (r.comment_da || r.markedsfoering || '');
+  const avgLabel = SC('label_gennemsnit', isEN ? 'average' : 'gennemsnit');
+  const bestLabel = SC('label_det_bedste', isEN ? 'Best part:' : 'Det bedste:');
+  const changeLabel = SC('label_forandring', isEN ? 'Change:' : 'Forandring:');
+  const bedste = isEN ? (r.bedste_en || r.bedste || '') : (r.bedste || '');
+  const forandring = isEN ? (r.forandring_en || r.forandring || '') : (r.forandring || '');
+  const ratingLabels = [
+    [SC('label_modtagelse', isEN ? 'Reception' : 'Modtagelse'), r.r1_modtagelse],
+    [SC('label_vaerelse', isEN ? 'Room' : 'Værelse'), r.r2_vaerelse],
+    [SC('label_mad', isEN ? 'Food' : 'Mad'), r.r3_mad],
+    [SC('label_omgivelser', isEN ? 'Surroundings' : 'Omgivelser'), r.r4_omgivelser],
+    [SC('label_program', isEN ? 'Programme' : 'Program'), r.r5_program],
+    [SC('label_terapeuter', isEN ? 'Facilitators' : 'Terapeuter'), r.r6_terapeuter],
+    [SC('label_faellesskab', isEN ? 'Community' : 'Fællesskab'), r.r7_faellesskab],
+    [SC('label_personlig', isEN ? 'Personal' : 'Personlig'), r.r8_personlig],
+    [SC('label_ro', isEN ? 'Calm' : 'Ro'), r.r9_ro],
+    [SC('label_samlet', isEN ? 'Overall' : 'Samlet'), r.r10_samlet],
+    [SC('label_anbefaling', isEN ? 'Recommendation' : 'Anbefaling'), r.r11_anbefaling],
+  ];
   document.getElementById('reviewModalContent').innerHTML = `
     <p style="font-size:.6rem;letter-spacing:.3em;text-transform:uppercase;color:#7a5c14;margin:0 0 .5rem;">${r.retreat_navn||'Castillo del Alma'}</p>
     <h3 style="font-family:'Cinzel',serif;font-weight:300;font-size:1.2rem;color:#2c2318;margin:0 0 .3rem;">${navn}</h3>
-    <div style="color:#b88a1e;margin-bottom:1.2rem;">${'★'.repeat(Math.round(avg))}${'☆'.repeat(5-Math.round(avg))} <span style="font-size:.8rem;color:rgba(44,35,24,.5);">${avg}/5 gennemsnit</span></div>
-    ${r.markedsfoering?`<p style="font-family:'Cormorant Garamond',serif;font-size:1.15rem;font-style:italic;line-height:1.8;color:#2c2318;margin:0 0 1.5rem;">&#8220;${r.markedsfoering}&#8221;</p>`:''}
+    <div style="color:#b88a1e;margin-bottom:1.2rem;">${'★'.repeat(Math.round(avg))}${'☆'.repeat(5-Math.round(avg))} <span style="font-size:.8rem;color:rgba(44,35,24,.5);">${avg}/5 ${avgLabel}</span></div>
+    ${quote?`<p style="font-family:'Cormorant Garamond',serif;font-size:1.15rem;font-style:italic;line-height:1.8;color:#2c2318;margin:0 0 1.5rem;">&#8220;${quote}&#8221;</p>`:''}
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:.4rem .8rem;margin-bottom:1.2rem;">
-      ${[['Modtagelse',r.r1_modtagelse],['Værelse',r.r2_vaerelse],['Mad',r.r3_mad],['Omgivelser',r.r4_omgivelser],['Program',r.r5_program],['Terapeuter',r.r6_terapeuter],['Fællesskab',r.r7_faellesskab],['Personlig',r.r8_personlig],['Ro',r.r9_ro],['Samlet',r.r10_samlet],['Anbefaling',r.r11_anbefaling]].filter(([,v])=>v).map(([l,v])=>`<div style="font-size:.75rem;color:rgba(44,35,24,.85);">${l}: ${'★'.repeat(v)}${'☆'.repeat(5-v)}</div>`).join('')}
+      ${ratingLabels.filter(([,v])=>v).map(([l,v])=>`<div style="font-size:.75rem;color:rgba(44,35,24,.85);">${l}: ${'★'.repeat(v)}${'☆'.repeat(5-v)}</div>`).join('')}
     </div>
-    ${r.bedste?`<p style="font-size:.85rem;line-height:1.7;color:rgba(44,35,24,.85);margin:0 0 .8rem;"><strong>Det bedste:</strong> ${r.bedste}</p>`:''}
-    ${r.forandring?`<p style="font-size:.85rem;line-height:1.7;color:rgba(44,35,24,.85);margin:0;"><strong>Forandring:</strong> ${r.forandring}</p>`:''}
+    ${bedste?`<p style="font-size:.85rem;line-height:1.7;color:rgba(44,35,24,.85);margin:0 0 .8rem;"><strong>${bestLabel}</strong> ${bedste}</p>`:''}
+    ${forandring?`<p style="font-size:.85rem;line-height:1.7;color:rgba(44,35,24,.85);margin:0;"><strong>${changeLabel}</strong> ${forandring}</p>`:''}
   `;
   const modal = document.getElementById('reviewModal');
   modal.style.display = 'flex';
@@ -2452,6 +2481,7 @@ function applySiteLang() {
     const t = SC('forside_reviews_heading', null);
     if (t) reviewsHeading.innerHTML = t.replace(/(\S+)$/, '<em>$1</em>');
   }
+  renderReviewsIndex(currentSiteLang);
 
   // ESTATE
   const estateLabel = document.querySelector('#estate .section-label');
