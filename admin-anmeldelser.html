@@ -204,6 +204,22 @@ body{font-family:'Manrope',sans-serif;background:#f0e8d5;color:#2c2318;min-heigh
 .toast{position:fixed;bottom:2rem;right:2rem;background:rgba(106,114,64,.9);color:#fff;padding:.8rem 1.5rem;font-size:.72rem;letter-spacing:.1em;opacity:0;transform:translateY(10px);transition:all .3s;pointer-events:none;z-index:2000;}
 .toast.show{opacity:1;transform:translateY(0);}
 .toast.error{background:rgba(192,92,48,.9);}
+
+/* ── FORSIDE FANE ── */
+.fc-block{border:1px solid rgba(184,138,30,.25);margin-bottom:1.6rem;background:#fff;}
+.fc-block-header{display:flex;align-items:center;justify-content:space-between;background:rgba(184,138,30,.1);border-bottom:1px solid rgba(184,138,30,.25);padding:.8rem 1.2rem;}
+.fc-block-title{font-family:'Cinzel',serif;font-weight:500;font-size:.85rem;letter-spacing:.06em;color:#2c2318;}
+.fc-toggle{display:flex;align-items:center;gap:.5rem;font-size:.68rem;letter-spacing:.06em;text-transform:uppercase;color:rgba(44,35,24,.6);cursor:pointer;}
+.fc-toggle input{cursor:pointer;}
+.fc-block-body{padding:1.4rem 1.2rem;}
+.fc-row{display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;margin-bottom:1rem;}
+.fc-label{font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;display:block;margin-bottom:.3rem;}
+.fc-label-da{color:#b88a1e;}
+.fc-label-en{color:#2a7a74;}
+.fc-input-da, .fc-input-en{width:100%;padding:.55rem .7rem;font-family:'Manrope',sans-serif;font-size:.8rem;outline:none;border:1px solid;}
+.fc-input-da{background:#fffef8;border-color:rgba(184,138,30,.3);}
+.fc-input-en{background:#e8f4f3;border-color:#7fb3af;}
+.fc-textarea{min-height:80px;resize:vertical;font-family:'Manrope',sans-serif;}
 </style>
 </head>
 <body>
@@ -235,6 +251,7 @@ body{font-family:'Manrope',sans-serif;background:#f0e8d5;color:#2c2318;min-heigh
     <button class="tab-btn active" onclick="switchTab('kunder',this)">Kunder & Bookinger</button>
 
     <button class="tab-btn" onclick="switchTab('retreats',this)">Retreats</button>
+    <button class="tab-btn" onclick="switchTab('forside',this)">Forside</button>
     <button class="tab-btn" onclick="switchTab('anmeldelser',this)">Se anmeldelser</button>
     <button class="tab-btn" onclick="switchTab('newsletter',this)">Nyhedsbrev</button>
     <button class="tab-btn" onclick="switchTab('faktura-historik',this)">Faktura historik</button>
@@ -355,6 +372,168 @@ body{font-family:'Manrope',sans-serif;background:#f0e8d5;color:#2c2318;min-heigh
     <div class="kunder-grid" id="kunderGrid">
       <div class="loading">Henter kunder...</div>
     </div>
+  </div>
+
+  <!-- FANE: FORSIDE -->
+  <div class="tab-content" id="tab-forside" style="padding:2rem 3rem;max-width:1100px;">
+    <h2 style="font-family:Cinzel,serif;font-weight:300;font-size:1.4rem;letter-spacing:.08em;color:#2c2318;margin-bottom:.4rem;">Forside (index.html)</h2>
+    <p style="font-size:.75rem;color:rgba(44,35,24,.5);margin-bottom:2rem;">Alle tekster nedenfor findes i 🇩🇰 dansk (venstre) og 🇬🇧 engelsk (højre). Hver sektion kan slås fra på hjemmesiden uden at miste teksten.</p>
+    <div id="forsideSavedMsg" style="display:none;position:sticky;top:0;z-index:10;background:#2a7a74;color:#fff;padding:.8rem 1.5rem;margin-bottom:1.5rem;align-items:center;gap:1rem;font-size:.8rem;">
+      <span>✓ Forside gemt!</span>
+    </div>
+    <button onclick="gemForside()" style="background:var(--wine);color:#fff;border:none;padding:.7rem 2rem;font-family:Manrope,sans-serif;font-size:.68rem;font-weight:500;letter-spacing:.18em;text-transform:uppercase;cursor:pointer;margin-bottom:2rem;">💾 Gem hele forsiden</button>
+
+    <!-- UPLOAD -->
+    <div class="fc-block" data-section="upload">
+      <div class="fc-block-header" style="background:rgba(42,122,116,.1);border-color:#2a7a74;">
+        <span class="fc-block-title" style="color:#2a7a74;">📁 Billeder & video</span>
+      </div>
+      <div class="fc-block-body">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;">
+          <div>
+            <label class="fc-label">Hero-video (nuværende: intro-film_high_13MB.mp4)</label>
+            <input type="file" id="upload_hero_video" accept="video/mp4" style="font-size:.78rem;">
+          </div>
+          <div>
+            <label class="fc-label">Filosofi-billede</label>
+            <input type="file" id="upload_filosofi_img" accept="image/*" style="font-size:.78rem;">
+          </div>
+          <div>
+            <label class="fc-label">Estate billede 1</label>
+            <input type="file" id="upload_estate_img1" accept="image/*" style="font-size:.78rem;">
+          </div>
+          <div>
+            <label class="fc-label">Estate billede 2</label>
+            <input type="file" id="upload_estate_img2" accept="image/*" style="font-size:.78rem;">
+          </div>
+          <div>
+            <label class="fc-label">Estate billede 3</label>
+            <input type="file" id="upload_estate_img3" accept="image/*" style="font-size:.78rem;">
+          </div>
+          <div>
+            <label class="fc-label">Vingård billede</label>
+            <input type="file" id="upload_vingaard_img" accept="image/*" style="font-size:.78rem;">
+          </div>
+          <div>
+            <label class="fc-label">Wellness billede</label>
+            <input type="file" id="upload_wellness_img" accept="image/*" style="font-size:.78rem;">
+          </div>
+          <div>
+            <label class="fc-label">Om os billede</label>
+            <input type="file" id="upload_om_os_img" accept="image/*" style="font-size:.78rem;">
+          </div>
+        </div>
+        <p style="font-size:.7rem;color:rgba(44,35,24,.4);margin-top:1rem;">Upload-funktion kobles til Supabase Storage i næste skridt — felterne er klar til brug.</p>
+      </div>
+    </div>
+
+    <!-- HERO -->
+    <div class="fc-block" data-section="hero">
+      <div class="fc-block-header">
+        <span class="fc-block-title">1 · Hero</span>
+        <label class="fc-toggle"><input type="checkbox" id="active_hero" checked><span>Vis på hjemmesiden</span></label>
+      </div>
+      <div class="fc-block-body">
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Eyebrow-tekst</label><input type="text" id="hero_eyebrow_da" class="fc-input-da" value="Mollina · Málaga · Andalusia"></div>
+          <div><label class="fc-label fc-label-en">Eyebrow text</label><input type="text" id="hero_eyebrow_en" class="fc-input-en" value="Mollina · Málaga · Andalusia"></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Titel linje 1</label><input type="text" id="hero_titel1_da" class="fc-input-da" value="Castillo"></div>
+          <div><label class="fc-label fc-label-en">Title line 1</label><input type="text" id="hero_titel1_en" class="fc-input-en" value="Castillo"></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Titel linje 2</label><input type="text" id="hero_titel2_da" class="fc-input-da" value="del Alma"></div>
+          <div><label class="fc-label fc-label-en">Title line 2</label><input type="text" id="hero_titel2_en" class="fc-input-en" value="del Alma"></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Undertekst</label><input type="text" id="hero_sub_da" class="fc-input-da" value="Wellness & Wine Estate"></div>
+          <div><label class="fc-label fc-label-en">Subtext</label><input type="text" id="hero_sub_en" class="fc-input-en" value="Wellness & Wine Estate"></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Knap 1 tekst</label><input type="text" id="hero_btn1_da" class="fc-input-da" value="Lej Castillo del Alma"></div>
+          <div><label class="fc-label fc-label-en">Button 1 text</label><input type="text" id="hero_btn1_en" class="fc-input-en" value="Rent Castillo del Alma"></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Knap 2 tekst</label><input type="text" id="hero_btn2_da" class="fc-input-da" value="View Retreats"></div>
+          <div><label class="fc-label fc-label-en">Button 2 text</label><input type="text" id="hero_btn2_en" class="fc-input-en" value="View Retreats"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- FILOSOFI -->
+    <div class="fc-block" data-section="filosofi">
+      <div class="fc-block-header">
+        <span class="fc-block-title">2 · Filosofi</span>
+        <label class="fc-toggle"><input type="checkbox" id="active_filosofi" checked><span>Vis på hjemmesiden</span></label>
+      </div>
+      <div class="fc-block-body">
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Billedlabel</label><input type="text" id="filosofi_billedlabel_da" class="fc-input-da" value="Slow Living · Andalusia"></div>
+          <div><label class="fc-label fc-label-en">Image label</label><input type="text" id="filosofi_billedlabel_en" class="fc-input-en" value="Slow Living · Andalusia"></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Section-label</label><input type="text" id="filosofi_label_da" class="fc-input-da" value="Filosofi"></div>
+          <div><label class="fc-label fc-label-en">Section label</label><input type="text" id="filosofi_label_en" class="fc-input-en" value="Philosophy"></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Overskrift (brug *ord* for fremhævning)</label><input type="text" id="filosofi_heading_da" class="fc-input-da" value="Stille *luksus* midt i vinlandet"></div>
+          <div><label class="fc-label fc-label-en">Heading (use *word* for emphasis)</label><input type="text" id="filosofi_heading_en" class="fc-input-en" value="Quiet *luxury* amid the vineyards"></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Brødtekst afsnit 1</label><textarea id="filosofi_p1_da" class="fc-input-da fc-textarea">Castillo del Alma er et eksklusivt wellness- og wine estate beliggende i det andalusiske landskab omgivet af vinmarker, natur og stilhed. Her mødes slow living, velvære og autentisk sydspansk livsstil i rolige omgivelser skabt til nærvær, fordybelse og balance.</textarea></div>
+          <div><label class="fc-label fc-label-en">Body text paragraph 1</label><textarea id="filosofi_p1_en" class="fc-input-en fc-textarea">Castillo del Alma is an exclusive wellness and wine estate located in the Andalusian landscape, surrounded by vineyards, nature and stillness. Here, slow living, wellbeing and authentic southern Spanish lifestyle meet in calm surroundings created for presence, depth and balance.</textarea></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Brødtekst afsnit 2</label><textarea id="filosofi_p2_da" class="fc-input-da fc-textarea">Vinmarkerne og områdets stolte vinkultur er en naturlig del af oplevelsen. Livet omkring druerne, høsten og produktionen af husets egen vin skaber en tæt forbindelse til naturen, traditionerne og det autentiske Andalusien.</textarea></div>
+          <div><label class="fc-label fc-label-en">Body text paragraph 2</label><textarea id="filosofi_p2_en" class="fc-input-en fc-textarea">The vineyards and the region's proud wine culture are a natural part of the experience. Life around the grapes, the harvest and the production of the estate's own wine creates a close connection to nature, tradition and authentic Andalusia.</textarea></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Brødtekst afsnit 3</label><textarea id="filosofi_p3_da" class="fc-input-da fc-textarea">Castillo del Alma er et sted for transformation — gennem wellness, retreats, stilhed og refleksion.</textarea></div>
+          <div><label class="fc-label fc-label-en">Body text paragraph 3</label><textarea id="filosofi_p3_en" class="fc-input-en fc-textarea">Castillo del Alma is a place for transformation — through wellness, retreats, stillness and reflection.</textarea></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RETREATS TEKST -->
+    <div class="fc-block" data-section="retreats">
+      <div class="fc-block-header">
+        <span class="fc-block-title">3 · Retreats (sektion-tekst)</span>
+        <label class="fc-toggle"><input type="checkbox" id="active_retreats" checked><span>Vis på hjemmesiden</span></label>
+      </div>
+      <div class="fc-block-body">
+        <p style="font-size:.7rem;color:rgba(44,35,24,.4);margin-bottom:1rem;">Selve retreat-kortene redigeres under fanen "Retreats". Her redigeres kun sektionens omsluttende tekst.</p>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Section-label</label><input type="text" id="retreats_label_da" class="fc-input-da" value="Retreats"></div>
+          <div><label class="fc-label fc-label-en">Section label</label><input type="text" id="retreats_label_en" class="fc-input-en" value="Retreats"></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Overskrift</label><input type="text" id="retreats_heading_da" class="fc-input-da" value="Eksklusive Retreats"></div>
+          <div><label class="fc-label fc-label-en">Heading</label><input type="text" id="retreats_heading_en" class="fc-input-en" value="Exclusive Retreats"></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Brødtekst</label><textarea id="retreats_text_da" class="fc-input-da fc-textarea">Uanset om du søger ro, personlig udvikling, fællesskab eller autentiske oplevelser, finder du et retreat, der passer til din rejse.
+På Castillo del Alma har vi samlet nøje udvalgte retreats, der skaber plads til fordybelse, livsglæde og nye perspektiver i hjertet af Andalusien.</textarea></div>
+          <div><label class="fc-label fc-label-en">Body text</label><textarea id="retreats_text_en" class="fc-input-en fc-textarea">Whether you seek calm, personal growth, community or authentic experiences, you will find a retreat suited to your journey.
+At Castillo del Alma we have curated a selection of retreats that create space for depth, joy and new perspectives in the heart of Andalusia.</textarea></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Overskrift 2 (Lej hele huset)</label><input type="text" id="retreats_heading2_da" class="fc-input-da" value="Lej hele huset"></div>
+          <div><label class="fc-label fc-label-en">Heading 2 (Rent the whole house)</label><input type="text" id="retreats_heading2_en" class="fc-input-en" value="Rent the whole house"></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Brødtekst 2</label><textarea id="retreats_text2_da" class="fc-input-da fc-textarea">Du kan også leje faciliteterne til dine egne gæster, retreats eller workshops,
+og virksomheder finder de perfekte rammer til seminarer, teambuilding og strategidage.</textarea></div>
+          <div><label class="fc-label fc-label-en">Body text 2</label><textarea id="retreats_text2_en" class="fc-input-en fc-textarea">You can also rent the facilities for your own guests, retreats or workshops,
+and companies will find the perfect setting for seminars, team building and strategy days.</textarea></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Knap-tekst</label><input type="text" id="retreats_knap_da" class="fc-input-da" value="Lej Castillo del Alma"></div>
+          <div><label class="fc-label fc-label-en">Button text</label><input type="text" id="retreats_knap_en" class="fc-input-en" value="Rent Castillo del Alma"></div>
+        </div>
+      </div>
+    </div>
+
   </div>
 
   <!-- FANE: RETREATS -->
@@ -1817,6 +1996,7 @@ function switchTab(tab, btn) {
   if (tab === 'newsletter') loadNewsletter();
   if (tab === 'anmeldelser') loadAnmeldelserFane();
   if (tab === 'indstillinger') loadSettings();
+  if (tab === 'forside') loadForside();
   if (tab === 'faktura-historik') loadFakturaHistorik();
   if (tab === 'faktura') { if (!document.querySelector('#mf-linjer [id^="mf-linje-"]')) mfTilfoejLinje(); }
 }
@@ -4370,6 +4550,48 @@ const SETTINGS_KEYS = [
   ['label_det_bedste', 'Det bedste:', 'Best part:'],
   ['label_forandring', 'Forandring:', 'Change:'],
 ];
+
+// ── FORSIDE (index.html) ──
+async function loadForside() {
+  try {
+    if (!sb) return;
+    const { data, error } = await sb.from('site_content').select('key,value');
+    if (error) throw error;
+    const map = {};
+    (data || []).forEach(r => { map[r.key] = r.value; });
+    // Udfyld alle fc-input felter hvis værdi findes i Supabase, ellers behold HTML default
+    document.querySelectorAll('#tab-forside [id]').forEach(el => {
+      if (!el.id) return;
+      if (map[el.id] !== undefined) {
+        if (el.type === 'checkbox') el.checked = map[el.id] === 'true';
+        else el.value = map[el.id];
+      }
+    });
+  } catch(e) {
+    console.warn('Forside load:', e.message);
+  }
+}
+
+async function gemForside() {
+  const upserts = [];
+  document.querySelectorAll('#tab-forside [id]').forEach(el => {
+    if (!el.id || el.tagName === 'BUTTON') return;
+    let val;
+    if (el.type === 'checkbox') val = el.checked ? 'true' : 'false';
+    else if (el.type === 'file') return; // håndteres separat ved upload-integration
+    else val = el.value;
+    upserts.push({ key: el.id, value: val });
+  });
+  try {
+    const { error } = await sb.from('site_content').upsert(upserts, { onConflict: 'key' });
+    if (error) throw error;
+    const msg = document.getElementById('forsideSavedMsg');
+    if (msg) { msg.style.display = 'flex'; setTimeout(() => msg.style.display = 'none', 4000); }
+    showToast('Forside gemt ✓');
+  } catch(e) {
+    showToast('Fejl: ' + e.message, true);
+  }
+}
 
 async function loadSettings() {
   // Vis defaults straks
