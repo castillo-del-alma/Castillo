@@ -2193,6 +2193,11 @@ async function loadRetreatsGrid() {
   grid.innerHTML = data.map((r, i) => {
     const num = String(i + 1).padStart(2, '0');
     const isPride = r.slug === 'gay-retreat-og-faellesskab';
+    const isEN = currentSiteLang === 'en';
+    const title = isEN ? (r.title_en || r.title || '') : (r.title || '');
+    const subtitle = isEN ? (r.subtitle_en || r.subtitle || '') : (r.subtitle || '');
+    const description = isEN ? (r.description_en || r.description || '') : (r.description || '');
+    const seMere = isEN ? 'View retreat →' : 'Se retreat →';
     const clickAttr = `onclick="window.location='retreat.html?slug=${r.slug}'" style="cursor:pointer;"`;
     const accentPalette = [
       'linear-gradient(90deg,var(--terracotta),var(--gold))',
@@ -2221,10 +2226,10 @@ async function loadRetreatsGrid() {
         ${isPride ? '<div class="pride-overlay"></div>' : ''}
         <div class="retreat-card-accent"${accentStyle}></div>
         <div class="retreat-card-content">
-          <span class="retreat-card-num">${num} — ${r.subtitle || ''}</span>
-          <h3>${(r.title || '').replace(' & ', '<br>&amp; ').replace(' og ', '<br>')}</h3>
-          <p>${r.description || ''}</p>
-          <span class="retreat-card-arrow">Se retreat →</span>
+          <span class="retreat-card-num">${num} — ${subtitle}</span>
+          <h3>${title.replace(' & ', '<br>&amp; ').replace(' og ', '<br>').replace(' and ', '<br>and ')}</h3>
+          <p>${description}</p>
+          <span class="retreat-card-arrow">${seMere}</span>
         </div>
       </div>`;
   }).join('');
@@ -2431,6 +2436,7 @@ function applySiteLang() {
     if (t) reviewsHeading.innerHTML = t.replace(/(\S+)$/, '<em>$1</em>');
   }
   renderReviewsIndex(currentSiteLang);
+  if (typeof loadRetreatsGrid === 'function') loadRetreatsGrid();
 
   // ESTATE
   const estateLabel = document.querySelector('#estate .section-label');
