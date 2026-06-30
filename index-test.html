@@ -2608,7 +2608,8 @@ function applySiteLang() {
   set('nlSubmitBtn', 'nl_btn');
 
   // FOOTER
-  set('footerAddress', 'footer_adresse');
+  const footerAddrEl = document.getElementById('footerAddress');
+  if (footerAddrEl) footerAddrEl.innerHTML = SC('footer_adresse', footerAddrEl.innerHTML);
   set('footerCol1Heading', 'footer_kol1_titel');
   set('footerCol2Heading', 'footer_kol2_titel');
   set('footerCol3Heading', 'footer_kol3_titel');
