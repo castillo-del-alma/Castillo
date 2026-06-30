@@ -6009,22 +6009,40 @@ async function loadForside() {
 const GALLERI_BUCKET = 'retreat-images';
 const GALLERI_PREFIX = 'galleri/';
 
+let galleriRaekkefolge = [];
+
 async function loadGalleriFilListe() {
   const container = document.getElementById('galleriFilListe');
   if (!container || !sb) return;
   try {
     const { data, error } = await sb.storage.from(GALLERI_BUCKET).list('galleri', { sortBy: { column: 'created_at', order: 'desc' } });
     if (error) throw error;
-    const files = (data || []).filter(f => f.name && !f.name.startsWith('.'));
+    let files = (data || []).filter(f => f.name && !f.name.startsWith('.'));
     if (!files.length) {
       container.innerHTML = '<p style="font-size:.75rem;color:rgba(44,35,24,.4);font-style:italic;">Ingen filer uploadet endnu.</p>';
       return;
     }
-    container.innerHTML = files.map(f => {
+    // Hent gemt rækkefølge fra site_content
+    const { data: orderData } = await sb.from('site_content').select('value').eq('key', 'galleri_raekkefolge').maybeSingle();
+    let savedOrder = [];
+    if (orderData && orderData.value) {
+      try { savedOrder = JSON.parse(orderData.value); } catch(e) { savedOrder = []; }
+    }
+    // Sortér efter gemt rækkefølge, nye filer (ikke i savedOrder) tilføjes til sidst
+    const fileNames = files.map(f => f.name);
+    const orderedNames = [...savedOrder.filter(n => fileNames.includes(n)), ...fileNames.filter(n => !savedOrder.includes(n))];
+    files.sort((a, b) => orderedNames.indexOf(a.name) - orderedNames.indexOf(b.name));
+    galleriRaekkefolge = files.map(f => f.name);
+
+    container.innerHTML = files.map((f, i) => {
       const { data: urlData } = sb.storage.from(GALLERI_BUCKET).getPublicUrl(GALLERI_PREFIX + f.name);
       const isVideo = /\.(mp4|mov|webm)$/i.test(f.name);
       const sizeKb = f.metadata?.size ? Math.round(f.metadata.size / 1024) + ' KB' : '';
       return `<div style="display:flex;align-items:center;gap:.8rem;padding:.5rem .7rem;background:rgba(44,35,24,.03);border:1px solid rgba(184,138,30,.15);">
+        <div style="display:flex;flex-direction:column;gap:.15rem;">
+          <button onclick="flytGalleriFil(${i},-1)" ${i===0?'disabled':''} style="background:none;border:1px solid rgba(184,138,30,.3);color:#7a5c14;width:22px;height:18px;font-size:.6rem;cursor:pointer;line-height:1;padding:0;${i===0?'opacity:.3;cursor:default;':''}">▲</button>
+          <button onclick="flytGalleriFil(${i},1)" ${i===files.length-1?'disabled':''} style="background:none;border:1px solid rgba(184,138,30,.3);color:#7a5c14;width:22px;height:18px;font-size:.6rem;cursor:pointer;line-height:1;padding:0;${i===files.length-1?'opacity:.3;cursor:default;':''}">▼</button>
+        </div>
         <span style="font-size:.9rem;">${isVideo ? '🎬' : '🖼️'}</span>
         <a href="${urlData.publicUrl}" target="_blank" style="font-size:.78rem;color:#2c2318;text-decoration:underline;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${f.name}</a>
         <span style="font-size:.68rem;color:rgba(44,35,24,.4);">${sizeKb}</span>
@@ -6033,6 +6051,24 @@ async function loadGalleriFilListe() {
     }).join('');
   } catch(e) {
     container.innerHTML = '<p style="font-size:.75rem;color:#c05c30;">Kunne ikke hente filliste: ' + e.message + '</p>';
+  }
+}
+
+async function flytGalleriFil(index, retning) {
+  const nyIndex = index + retning;
+  if (nyIndex < 0 || nyIndex >= galleriRaekkefolge.length) return;
+  const arr = [...galleriRaekkefolge];
+  [arr[index], arr[nyIndex]] = [arr[nyIndex], arr[index]];
+  galleriRaekkefolge = arr;
+  try {
+    const { error } = await sb.from('site_content').upsert(
+      { key: 'galleri_raekkefolge', value: JSON.stringify(galleriRaekkefolge) },
+      { onConflict: 'key' }
+    );
+    if (error) throw error;
+    loadGalleriFilListe();
+  } catch(e) {
+    showToast('Fejl ved gemning af rækkefølge: ' + e.message, true);
   }
 }
 
