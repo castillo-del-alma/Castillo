@@ -1443,6 +1443,27 @@ feeling more calm – and coming home to yourself again."</textarea></div>
   <!-- FANE: INDSTILLINGER -->
   <div class="subtab-content" id="tab-indstillinger" style="padding:2rem 3rem;">
     <h2 style="font-family:Cinzel,serif;font-weight:300;font-size:1.4rem;letter-spacing:.08em;color:#2c2318;margin-bottom:2rem;">Globale indstillinger</h2>
+
+    <div class="fc-block" data-section="forside_anmeldelser">
+      <div class="fc-block-header">
+        <span class="fc-block-title">Forside · Anmeldelser-sektion</span>
+      </div>
+      <div class="fc-block-body">
+        <p style="font-size:.72rem;color:rgba(44,35,24,.5);margin-bottom:1.2rem;">Section-label og overskrift for Anmeldelser-sektionen på forsiden (index.html).</p>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Section-label</label><input type="text" id="forside_reviews_label_da" class="fc-input-da" value="Gæsternes oplevelser"></div>
+          <div><label class="fc-label fc-label-en">Section label</label><input type="text" id="forside_reviews_label_en" class="fc-input-en" value="Guest Experiences"></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Overskrift</label><input type="text" id="forside_reviews_heading_da" class="fc-input-da" value="Hvad siger vores gæster"></div>
+          <div><label class="fc-label fc-label-en">Heading</label><input type="text" id="forside_reviews_heading_en" class="fc-input-en" value="What our guests say"></div>
+        </div>
+        <div style="text-align:right;margin-top:.8rem;">
+          <button onclick="gemSettings()" style="background:#2a7a74;color:#fff;border:none;padding:.55rem 1.6rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;">💾 Gem indstillinger</button>
+        </div>
+      </div>
+    </div>
+
     <div style="background:rgba(184,138,30,.06);border:1px solid rgba(184,138,30,.2);padding:1.5rem;margin-bottom:2rem;">
       <h3 style="font-family:Cinzel,serif;font-weight:300;font-size:1rem;letter-spacing:.08em;color:#2c2318;margin-bottom:1rem;">Rating-kategorier (anmeldelser popup)</h3>
       <p style="font-size:.72rem;color:rgba(44,35,24,.5);margin-bottom:1.5rem;">Disse labels vises i popup-vinduet når en gæst klikker på en anmeldelse.</p>
@@ -5500,8 +5521,6 @@ const SETTINGS_KEYS = [
   ['label_gennemsnit', 'gennemsnit', 'average'],
   ['label_det_bedste', 'Det bedste:', 'Best part:'],
   ['label_forandring', 'Forandring:', 'Change:'],
-  ['forside_reviews_label', 'Gæsternes oplevelser', 'Guest Experiences'],
-  ['forside_reviews_heading', 'Hvad siger vores gæster', 'What our guests say'],
 ];
 
 // ── FORSIDE (index.html) ──
@@ -5638,6 +5657,9 @@ async function gemForside() {
   }
 }
 
+// Ekstra individuelle settings-felter (ikke en del af det generiske rating-grid)
+const EXTRA_SETTINGS_KEYS = ['forside_reviews_label', 'forside_reviews_heading'];
+
 async function loadSettings() {
   // Vis defaults straks
   renderSettingsGrid();
@@ -5649,6 +5671,13 @@ async function loadSettings() {
     globalSettings = {};
     (data || []).forEach(r => { globalSettings[r.key] = r.value; });
     renderSettingsGrid(); // Opdater med rigtige værdier
+    // Udfyld de individuelle forside-felter hvis data findes
+    EXTRA_SETTINGS_KEYS.forEach(key => {
+      const daEl = document.getElementById(key + '_da');
+      const enEl = document.getElementById(key + '_en');
+      if (daEl && globalSettings[key + '_da']) daEl.value = globalSettings[key + '_da'];
+      if (enEl && globalSettings[key + '_en']) enEl.value = globalSettings[key + '_en'];
+    });
   } catch(e) {
     console.warn('Settings:', e.message);
   }
@@ -5680,6 +5709,13 @@ async function gemSettings() {
     upserts.push({ key: key + '_en', value: en });
     globalSettings[key + '_da'] = da;
     globalSettings[key + '_en'] = en;
+  });
+  // Ekstra individuelle felter (forside_reviews_label, forside_reviews_heading)
+  EXTRA_SETTINGS_KEYS.forEach(key => {
+    const daEl = document.getElementById(key + '_da');
+    const enEl = document.getElementById(key + '_en');
+    if (daEl) { upserts.push({ key: key + '_da', value: daEl.value }); globalSettings[key + '_da'] = daEl.value; }
+    if (enEl) { upserts.push({ key: key + '_en', value: enEl.value }); globalSettings[key + '_en'] = enEl.value; }
   });
   const client = typeof sbService !== 'undefined' ? sbService : sb;
   const { error } = await client.from('settings').upsert(upserts, { onConflict: 'key' });
