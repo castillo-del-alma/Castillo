@@ -2528,7 +2528,7 @@ function applySiteLang() {
   const oplIntro = document.querySelector('.exp-header p');
   if (oplIntro) oplIntro.textContent = SC('oplevelser_intro', oplIntro.textContent);
 
-  const oplKeys = ['vin','olie','vandre','mad','ride','caminito','malaga','cordoba','antequera','stjerner'];
+  const oplKeys = ['vin','olie','vandre','mad','ride','caminito','malaga','cordoba','antequera','stjerner','flamingo','eltorcal','camorra','ardales','dolmener','pena','alhambra','sevilla','picasso'];
   const oplCards = document.querySelectorAll('.exp-item.exp-has-modal');
   oplKeys.forEach((key, i) => {
     const card = oplCards[i];
@@ -2594,6 +2594,11 @@ function applySiteLang() {
     let t = SC('wellness_citat', null);
     if (t) wellQuote.innerHTML = t.split('\n').join('<br>');
   }
+
+  // "Læs mere" — global tekst, bruges på alle wellness-kort + opdaterer global variabel til exp-kort
+  const laesMereTxt = SC('global_laes_mere', currentSiteLang === 'en' ? 'Read more →' : 'Læs mere →');
+  document.querySelectorAll('.wellness-read-more').forEach(el => { el.textContent = laesMereTxt; });
+  document.querySelectorAll('.exp-item-arrow').forEach(el => { el.textContent = laesMereTxt; });
 
   // OM OS
   const omOsLabel = document.querySelector('#om-os .section-label');
