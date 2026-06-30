@@ -369,55 +369,11 @@ body{font-family:'Manrope',sans-serif;background:#f0e8d5;color:#2c2318;min-heigh
   <!-- FANE: FORSIDE -->
   <div class="subtab-content active" id="tab-forside" style="padding:2rem 3rem;max-width:1100px;">
     <h2 style="font-family:Cinzel,serif;font-weight:300;font-size:1.4rem;letter-spacing:.08em;color:#2c2318;margin-bottom:.4rem;">Forside (index.html)</h2>
-    <p style="font-size:.75rem;color:rgba(44,35,24,.5);margin-bottom:2rem;">Alle tekster nedenfor findes i 🇩🇰 dansk (venstre) og 🇬🇧 engelsk (højre). Hver sektion kan slås fra på hjemmesiden uden at miste teksten.</p>
+    <p style="font-size:.75rem;color:rgba(44,35,24,.5);margin-bottom:2rem;">Alle tekster nedenfor findes i 🇩🇰 dansk (venstre) og 🇬🇧 engelsk (højre). Hver sektion kan slås fra på hjemmesiden uden at miste teksten. Billed-/video-upload findes nu inde i hver sektion.</p>
     <div id="forsideSavedMsg" style="display:none;position:sticky;top:0;z-index:10;background:#2a7a74;color:#fff;padding:.8rem 1.5rem;margin-bottom:1.5rem;align-items:center;gap:1rem;font-size:.8rem;">
       <span>✓ Forside gemt!</span>
     </div>
     <button onclick="gemForside()" style="background:var(--wine);color:#fff;border:none;padding:.7rem 2rem;font-family:Manrope,sans-serif;font-size:.68rem;font-weight:500;letter-spacing:.18em;text-transform:uppercase;cursor:pointer;margin-bottom:2rem;">💾 Gem hele forsiden</button>
-
-    <!-- UPLOAD -->
-    <div class="fc-block" data-section="upload">
-      <div class="fc-block-header" style="background:rgba(42,122,116,.1);border-color:#2a7a74;">
-        <span class="fc-block-title" style="color:#2a7a74;">📁 Billeder & video</span>
-      </div>
-      <div class="fc-block-body">
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;">
-          <div>
-            <label class="fc-label">Hero-video (nuværende: intro-film_high_13MB.mp4)</label>
-            <input type="file" id="upload_hero_video" accept="video/mp4" style="font-size:.78rem;">
-          </div>
-          <div>
-            <label class="fc-label">Filosofi-billede</label>
-            <input type="file" id="upload_filosofi_img" accept="image/*" style="font-size:.78rem;">
-          </div>
-          <div>
-            <label class="fc-label">Estate billede 1</label>
-            <input type="file" id="upload_estate_img1" accept="image/*" style="font-size:.78rem;">
-          </div>
-          <div>
-            <label class="fc-label">Estate billede 2</label>
-            <input type="file" id="upload_estate_img2" accept="image/*" style="font-size:.78rem;">
-          </div>
-          <div>
-            <label class="fc-label">Estate billede 3</label>
-            <input type="file" id="upload_estate_img3" accept="image/*" style="font-size:.78rem;">
-          </div>
-          <div>
-            <label class="fc-label">Vingård billede</label>
-            <input type="file" id="upload_vingaard_img" accept="image/*" style="font-size:.78rem;">
-          </div>
-          <div>
-            <label class="fc-label">Wellness billede</label>
-            <input type="file" id="upload_wellness_img" accept="image/*" style="font-size:.78rem;">
-          </div>
-          <div>
-            <label class="fc-label">Om os billede</label>
-            <input type="file" id="upload_om_os_img" accept="image/*" style="font-size:.78rem;">
-          </div>
-        </div>
-        <p style="font-size:.7rem;color:rgba(44,35,24,.4);margin-top:1rem;">Upload-funktion kobles til Supabase Storage i næste skridt — felterne er klar til brug.</p>
-      </div>
-    </div>
 
     <!-- HERO -->
     <div class="fc-block" data-section="hero">
@@ -426,6 +382,10 @@ body{font-family:'Manrope',sans-serif;background:#f0e8d5;color:#2c2318;min-heigh
         <label class="fc-toggle"><input type="checkbox" id="active_hero" checked><span>Vis på hjemmesiden</span></label>
       </div>
       <div class="fc-block-body">
+        <div style="margin-bottom:1.2rem;padding:.9rem;background:rgba(42,122,116,.06);border:1px solid rgba(42,122,116,.2);">
+          <label class="fc-label" style="color:#2a7a74;">📁 Hero-video (nuværende: intro-film_high_13MB.mp4)</label>
+          <input type="file" id="upload_hero_video" accept="video/mp4" style="font-size:.78rem;">
+        </div>
         <div class="fc-row">
           <div><label class="fc-label fc-label-da">Eyebrow-tekst</label><input type="text" id="hero_eyebrow_da" class="fc-input-da" value="Mollina · Málaga · Andalusia"></div>
           <div><label class="fc-label fc-label-en">Eyebrow text</label><input type="text" id="hero_eyebrow_en" class="fc-input-en" value="Mollina · Málaga · Andalusia"></div>
@@ -463,6 +423,10 @@ body{font-family:'Manrope',sans-serif;background:#f0e8d5;color:#2c2318;min-heigh
         <label class="fc-toggle"><input type="checkbox" id="active_filosofi" checked><span>Vis på hjemmesiden</span></label>
       </div>
       <div class="fc-block-body">
+        <div style="margin-bottom:1.2rem;padding:.9rem;background:rgba(42,122,116,.06);border:1px solid rgba(42,122,116,.2);">
+          <label class="fc-label" style="color:#2a7a74;">📁 Filosofi-billede</label>
+          <input type="file" id="upload_filosofi_img" accept="image/*" style="font-size:.78rem;">
+        </div>
         <div class="fc-row">
           <div><label class="fc-label fc-label-da">Billedlabel</label><input type="text" id="filosofi_billedlabel_da" class="fc-input-da" value="Slow Living · Andalusia"></div>
           <div><label class="fc-label fc-label-en">Image label</label><input type="text" id="filosofi_billedlabel_en" class="fc-input-en" value="Slow Living · Andalusia"></div>
@@ -542,6 +506,14 @@ and companies will find the perfect setting for seminars, team building and stra
         <label class="fc-toggle"><input type="checkbox" id="active_estate" checked><span>Vis på hjemmesiden</span></label>
       </div>
       <div class="fc-block-body">
+        <div style="margin-bottom:1.2rem;padding:.9rem;background:rgba(42,122,116,.06);border:1px solid rgba(42,122,116,.2);">
+          <label class="fc-label" style="color:#2a7a74;">📁 Billeder (3 stk)</label>
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:1rem;margin-top:.4rem;">
+            <input type="file" id="upload_estate_img1" accept="image/*" style="font-size:.78rem;">
+            <input type="file" id="upload_estate_img2" accept="image/*" style="font-size:.78rem;">
+            <input type="file" id="upload_estate_img3" accept="image/*" style="font-size:.78rem;">
+          </div>
+        </div>
         <div class="fc-row">
           <div><label class="fc-label fc-label-da">Section-label</label><input type="text" id="estate_label_da" class="fc-input-da" value="The Estate"></div>
           <div><label class="fc-label fc-label-en">Section label</label><input type="text" id="estate_label_en" class="fc-input-en" value="The Estate"></div>
@@ -579,6 +551,10 @@ and companies will find the perfect setting for seminars, team building and stra
         <label class="fc-toggle"><input type="checkbox" id="active_vingaard" checked><span>Vis på hjemmesiden</span></label>
       </div>
       <div class="fc-block-body">
+        <div style="margin-bottom:1.2rem;padding:.9rem;background:rgba(42,122,116,.06);border:1px solid rgba(42,122,116,.2);">
+          <label class="fc-label" style="color:#2a7a74;">📁 Vingård-billede</label>
+          <input type="file" id="upload_vingaard_img" accept="image/*" style="font-size:.78rem;">
+        </div>
         <div class="fc-row">
           <div><label class="fc-label fc-label-da">Section-label</label><input type="text" id="vingaard_label_da" class="fc-input-da" value="Vingården"></div>
           <div><label class="fc-label fc-label-en">Section label</label><input type="text" id="vingaard_label_en" class="fc-input-en" value="The Vineyard"></div>
@@ -919,6 +895,10 @@ A visit to Córdoba is just an hour's drive from Castillo del Alma.</textarea></
         <label class="fc-toggle"><input type="checkbox" id="active_wellness" checked><span>Vis på hjemmesiden</span></label>
       </div>
       <div class="fc-block-body">
+        <div style="margin-bottom:1.2rem;padding:.9rem;background:rgba(42,122,116,.06);border:1px solid rgba(42,122,116,.2);">
+          <label class="fc-label" style="color:#2a7a74;">📁 Wellness-billede</label>
+          <input type="file" id="upload_wellness_img" accept="image/*" style="font-size:.78rem;">
+        </div>
         <div class="fc-row">
           <div><label class="fc-label fc-label-da">Section-label</label><input type="text" id="wellness_label_da" class="fc-input-da" value="Wellness &amp; Healing"></div>
           <div><label class="fc-label fc-label-en">Section label</label><input type="text" id="wellness_label_en" class="fc-input-en" value="Wellness &amp; Healing"></div>
@@ -1111,6 +1091,10 @@ feeling more calm – and coming home to yourself again."</textarea></div>
         <label class="fc-toggle"><input type="checkbox" id="active_om_os" checked><span>Vis på hjemmesiden</span></label>
       </div>
       <div class="fc-block-body">
+        <div style="margin-bottom:1.2rem;padding:.9rem;background:rgba(42,122,116,.06);border:1px solid rgba(42,122,116,.2);">
+          <label class="fc-label" style="color:#2a7a74;">📁 Om os-billede</label>
+          <input type="file" id="upload_om_os_img" accept="image/*" style="font-size:.78rem;">
+        </div>
         <div class="fc-row">
           <div><label class="fc-label fc-label-da">Section-label</label><input type="text" id="om_os_label_da" class="fc-input-da" value="Om os"></div>
           <div><label class="fc-label fc-label-en">Section label</label><input type="text" id="om_os_label_en" class="fc-input-en" value="About us"></div>
