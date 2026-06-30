@@ -1207,16 +1207,16 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:5rem
   <div class="section-inner">
     <div class="retreats-header reveal">
       <span class="section-label">Retreats</span>
-      <h2>Eksklusive Retreats</h2>
-      <p>Uanset om du søger ro, personlig udvikling, fællesskab eller autentiske oplevelser, finder du et retreat, der passer til din rejse.<br>På Castillo del Alma har vi samlet nøje udvalgte retreats, der skaber plads til fordybelse, livsglæde og nye perspektiver i hjertet af Andalusien.</p>
+      <h2 id="retreatsHeading1">Eksklusive Retreats</h2>
+      <p id="retreatsText">Uanset om du søger ro, personlig udvikling, fællesskab eller autentiske oplevelser, finder du et retreat, der passer til din rejse.<br>På Castillo del Alma har vi samlet nøje udvalgte retreats, der skaber plads til fordybelse, livsglæde og nye perspektiver i hjertet af Andalusien.</p>
     </div>
     <div class="retreats-grid reveal d1" id="retreatsGrid">
       <div class="loading-retreats" style="grid-column:1/-1;text-align:center;padding:3rem;color:rgba(255,255,255,.4);">Henter retreats...</div>
     </div>
     <div class="reveal d2" style="text-align:center;margin-top:5rem;">
-      <h2 style="font-family:'Cinzel',serif;font-weight:300;font-size:clamp(2rem,4vw,3.2rem);letter-spacing:.1em;color:var(--charcoal);margin-bottom:1.2rem;">Lej hele huset</h2>
-      <p style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.35rem;font-weight:300;color:var(--text-light);max-width:680px;margin:0 auto 2rem;">Du kan også leje faciliteterne til dine egne gæster, retreats eller workshops,<br>og virksomheder finder de perfekte rammer til seminarer, teambuilding og strategidage.</p>
-      <a href="/udlejning.html" class="btn-wine">Lej Castillo del Alma</a>
+      <h2 id="retreatsHeading2" style="font-family:'Cinzel',serif;font-weight:300;font-size:clamp(2rem,4vw,3.2rem);letter-spacing:.1em;color:var(--charcoal);margin-bottom:1.2rem;">Lej hele huset</h2>
+      <p id="retreatsText2" style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.35rem;font-weight:300;color:var(--text-light);max-width:680px;margin:0 auto 2rem;">Du kan også leje faciliteterne til dine egne gæster, retreats eller workshops,<br>og virksomheder finder de perfekte rammer til seminarer, teambuilding og strategidage.</p>
+      <a href="/udlejning.html" class="btn-wine" id="retreatsBtn">Lej Castillo del Alma</a>
     </div>
   </div>
 </section>
@@ -2388,6 +2388,8 @@ function applySectionToggles() {
 }
 
 function applySiteLang() {
+  const set = (id, key) => { const el = document.getElementById(id); if (el) el.textContent = SC(key, el.textContent); };
+
   // HERO
   scSet('hero-eyebrow-test', 'hero_eyebrow', undefined);
   const eyebrow = document.querySelector('.hero-eyebrow');
@@ -2420,21 +2422,19 @@ function applySiteLang() {
   // RETREATS
   const retreatsLabel = document.querySelector('#retreats .section-label');
   if (retreatsLabel) retreatsLabel.textContent = SC('retreats_label', retreatsLabel.textContent);
-  const retreatsHeadings = document.querySelectorAll('#retreats h2');
-  if (retreatsHeadings[0]) retreatsHeadings[0].textContent = SC('retreats_heading', retreatsHeadings[0].textContent);
-  const retreatsTextEl = document.querySelector('.retreats-header p');
+  set('retreatsHeading1', 'retreats_heading');
+  const retreatsTextEl = document.getElementById('retreatsText');
   if (retreatsTextEl) {
     let t = SC('retreats_text', null);
     if (t) retreatsTextEl.innerHTML = t.split('\n').join('<br>');
   }
-  if (retreatsHeadings[1]) retreatsHeadings[1].textContent = SC('retreats_heading2', retreatsHeadings[1].textContent);
-  const retreatsText2El = document.querySelectorAll('#retreats p')[1];
+  set('retreatsHeading2', 'retreats_heading2');
+  const retreatsText2El = document.getElementById('retreatsText2');
   if (retreatsText2El) {
     let t2 = SC('retreats_text2', null);
     if (t2) retreatsText2El.innerHTML = t2.split('\n').join('<br>');
   }
-  const retreatsBtn = document.querySelector('#retreats .btn-wine');
-  if (retreatsBtn) retreatsBtn.textContent = SC('retreats_knap', retreatsBtn.textContent);
+  set('retreatsBtn', 'retreats_knap');
 
   // ESTATE
   const estateLabel = document.querySelector('#estate .section-label');
@@ -2575,7 +2575,6 @@ function applySiteLang() {
   if (testCite) testCite.textContent = SC('testimonial_kilde', testCite.textContent);
 
   // NYHEDSBREV
-  const set = (id, key) => { const el = document.getElementById(id); if (el) el.textContent = SC(key, el.textContent); };
   set('nlLabel', 'nl_label');
   const nlHeading = document.getElementById('nlHeading');
   if (nlHeading) {
