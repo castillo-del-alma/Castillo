@@ -1226,8 +1226,8 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:5rem
   <canvas class="section-canvas" data-palette="green"></canvas>
   <div class="section-inner">
     <div class="reveal">
-      <span class="section-label">Gæsternes oplevelser</span>
-      <h2 class="split-h">Hvad siger vores <em>gæster</em></h2>
+      <span class="section-label" id="reviewsLabel">Gæsternes oplevelser</span>
+      <h2 class="split-h" id="reviewsHeading">Hvad siger vores <em>gæster</em></h2>
     </div>
     <div class="reviews-grid reveal d1" id="reviewsGrid">
       <div style="grid-column:1/-1;text-align:center;padding:2rem;color:rgba(44,35,24,.4);font-size:.85rem;">Henter anmeldelser…</div>
@@ -2435,6 +2435,12 @@ function applySiteLang() {
     if (t2) retreatsText2El.innerHTML = t2.split('\n').join('<br>');
   }
   set('retreatsBtn', 'retreats_knap');
+
+  // ANMELDELSER (sektions-label og overskrift)
+  const reviewsLabel = document.getElementById('reviewsLabel');
+  if (reviewsLabel) reviewsLabel.textContent = currentSiteLang === 'en' ? "Guest Experiences" : "Gæsternes oplevelser";
+  const reviewsHeading = document.getElementById('reviewsHeading');
+  if (reviewsHeading) reviewsHeading.innerHTML = currentSiteLang === 'en' ? 'What our <em>guests</em> say' : 'Hvad siger vores <em>gæster</em>';
 
   // ESTATE
   const estateLabel = document.querySelector('#estate .section-label');
