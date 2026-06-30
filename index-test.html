@@ -1585,30 +1585,30 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:5rem
   <div class="section-inner">
     <div class="nl-grid">
       <div class="reveal-left">
-        <span class="section-label">Stay Connected</span>
-        <h2 class="split-h">Vær den første<br>til at høre <em>nyt</em></h2>
-        <p>Modtag informationer om nye retreats, sæsonoplevelser og historier fra Castillo del Alma.</p>
+        <span class="section-label" id="nlLabel">Stay Connected</span>
+        <h2 class="split-h" id="nlHeading">Vær den første<br>til at høre <em>nyt</em></h2>
+        <p id="nlIntro">Modtag informationer om nye retreats, sæsonoplevelser og historier fra Castillo del Alma.</p>
       </div>
       <div class="reveal-right d2">
         <div class="nl-form">
           <div class="form-row">
-            <div class="form-field"><label>Navn</label><input type="text" id="nl-navn" placeholder="Dit navn"></div>
-            <div class="form-field"><label>E-mail</label><input type="email" id="nl-email" placeholder="din@email.com"></div>
+            <div class="form-field"><label id="nlLabelNavn">Navn</label><input type="text" id="nl-navn" placeholder="Dit navn"></div>
+            <div class="form-field"><label id="nlLabelEmail">E-mail</label><input type="email" id="nl-email" placeholder="din@email.com"></div>
           </div>
           <div class="form-field">
-            <label>Land</label>
-            <select id="nl-land"><option value="">Vælg land</option><option>Danmark</option><option>Sverige</option><option>Norge</option><option>Tyskland</option><option>Spanien</option><option>Andet</option></select>
+            <label id="nlLabelLand">Land</label>
+            <select id="nl-land"><option value="" id="nlOptVaelgLand">Vælg land</option><option>Danmark</option><option>Sverige</option><option>Norge</option><option>Tyskland</option><option>Spanien</option><option id="nlOptAndet">Andet</option></select>
           </div>
           <div class="form-field">
-            <label>Interesser</label>
+            <label id="nlLabelInteresser">Interesser</label>
             <div class="cb-group">
-              <label class="cb-item"><input type="checkbox"><span class="cb-box"></span>Retreats</label>
-              <label class="cb-item"><input type="checkbox"><span class="cb-box"></span>Wine &amp; Gourmet</label>
-              <label class="cb-item"><input type="checkbox"><span class="cb-box"></span>Wellness</label>
-              <label class="cb-item"><input type="checkbox"><span class="cb-box"></span><span style="color:#FF0000">G</span><span style="color:#FF7700">A</span><span style="color:#FFDD00">Y</span><span style="color:#00AA00"> </span><span style="color:#0000FF">R</span><span style="color:#8B00FF">E</span><span style="color:#FF0000">T</span><span style="color:#FF7700">R</span><span style="color:#FFDD00">E</span><span style="color:#00AA00">A</span><span style="color:#0000FF">T</span><span style="color:#FF0000">S</span></label>
+              <label class="cb-item"><input type="checkbox"><span class="cb-box"></span><span id="nlCbRetreats">Retreats</span></label>
+              <label class="cb-item"><input type="checkbox"><span class="cb-box"></span><span id="nlCbWine">Wine &amp; Gourmet</span></label>
+              <label class="cb-item"><input type="checkbox"><span class="cb-box"></span><span id="nlCbWellness">Wellness</span></label>
+              <label class="cb-item"><input type="checkbox"><span class="cb-box"></span><span id="nlCbGay"><span style="color:#FF0000">G</span><span style="color:#FF7700">A</span><span style="color:#FFDD00">Y</span><span style="color:#00AA00"> </span><span style="color:#0000FF">R</span><span style="color:#8B00FF">E</span><span style="color:#FF0000">T</span><span style="color:#FF7700">R</span><span style="color:#FFDD00">E</span><span style="color:#00AA00">A</span><span style="color:#0000FF">T</span><span style="color:#FF0000">S</span></span></label>
             </div>
           </div>
-          <button class="nl-submit" onclick="tilmeldNyhedsbrev(this)">Tilmeld nyhedsbrev</button>
+          <button class="nl-submit" id="nlSubmitBtn" onclick="tilmeldNyhedsbrev(this)">Tilmeld nyhedsbrev</button>
           <p id="nl-msg" style="font-size:.78rem;margin-top:.8rem;min-height:1rem;"></p>
         </div>
       </div>
@@ -2239,9 +2239,16 @@ async function tilmeldNyhedsbrev(btn) {
   const interesser = Array.from(document.querySelectorAll('.nl-form .cb-item input:checked')).map(cb => cb.closest('.cb-item').textContent.trim()).join(', ');
   const msg = document.getElementById('nl-msg');
 
-  if (!navn || !email) { msg.style.color='#7a1f35'; msg.textContent='Udfyld venligst navn og e-mail.'; return; }
+  const errMsg = SC('nl_fejl_udfyld', 'Udfyld venligst navn og e-mail.');
+  const sendingMsg = SC('nl_sender', 'Tilmelder…');
+  const successMsg = SC('nl_success', '✓ Du er nu tilmeldt — tak!');
+  const successBtnMsg = SC('nl_success_btn', 'Tilmeldt ✓');
+  const errorMsg = SC('nl_fejl_generel', 'Noget gik galt — prøv igen.');
+  const defaultBtnMsg = SC('nl_btn', 'Tilmeld nyhedsbrev');
 
-  btn.disabled = true; btn.textContent = 'Tilmelder…';
+  if (!navn || !email) { msg.style.color='#7a1f35'; msg.textContent=errMsg; return; }
+
+  btn.disabled = true; btn.textContent = sendingMsg;
   const SUPABASE_URL = 'https://niniwgiytyqvdqejigxg.supabase.co';
   const SUPABASE_ANON_KEY = 'sb_publishable_GwrNUpIuWzdg1oswOY5HzA_mKWqhd6y';
 
@@ -2252,8 +2259,8 @@ async function tilmeldNyhedsbrev(btn) {
       body: JSON.stringify({ navn, email, land: land||null, interesser: interesser||null })
     });
     if (res.ok) {
-      msg.style.color = '#4a5028'; msg.textContent = '✓ Du er nu tilmeldt — tak!';
-      btn.textContent = 'Tilmeldt ✓';
+      msg.style.color = '#4a5028'; msg.textContent = successMsg;
+      btn.textContent = successBtnMsg;
       document.getElementById('nl-navn').value = '';
       document.getElementById('nl-email').value = '';
       document.getElementById('nl-land').value = '';
@@ -2262,8 +2269,8 @@ async function tilmeldNyhedsbrev(btn) {
       throw new Error('Tilmelding fejlede');
     }
   } catch(e) {
-    msg.style.color = '#7a1f35'; msg.textContent = 'Noget gik galt — prøv igen.';
-    btn.disabled = false; btn.textContent = 'Tilmeld nyhedsbrev';
+    msg.style.color = '#7a1f35'; msg.textContent = errorMsg;
+    btn.disabled = false; btn.textContent = defaultBtnMsg;
   }
 }
 
@@ -2546,6 +2553,39 @@ function applySiteLang() {
   }
   const testCite = document.querySelector('.testimonial cite');
   if (testCite) testCite.textContent = SC('testimonial_kilde', testCite.textContent);
+
+  // NYHEDSBREV
+  const set = (id, key) => { const el = document.getElementById(id); if (el) el.textContent = SC(key, el.textContent); };
+  set('nlLabel', 'nl_label');
+  const nlHeading = document.getElementById('nlHeading');
+  if (nlHeading) {
+    let t = SC('nl_heading', null);
+    if (t) nlHeading.innerHTML = t.replace(/\*(.+?)\*/g, '<em>$1</em>');
+  }
+  set('nlIntro', 'nl_intro');
+  set('nlLabelNavn', 'nl_label_navn');
+  set('nlLabelEmail', 'nl_label_email');
+  set('nlLabelLand', 'nl_label_land');
+  set('nlLabelInteresser', 'nl_label_interesser');
+  set('nlOptVaelgLand', 'nl_opt_vaelg_land');
+  set('nlOptAndet', 'nl_opt_andet');
+  set('nlCbRetreats', 'nl_cb_retreats');
+  set('nlCbWine', 'nl_cb_wine');
+  set('nlCbWellness', 'nl_cb_wellness');
+  // GAY RETREATS-tagget bevarer regnbuefarverne — kun selve teksten oversættes
+  const nlCbGay = document.getElementById('nlCbGay');
+  if (nlCbGay) {
+    const t = SC('nl_cb_gay', null);
+    if (t) {
+      const colors = ['#FF0000','#FF7700','#FFDD00','#00AA00','#0000FF','#8B00FF','#FF0000','#FF7700','#FFDD00','#00AA00','#0000FF','#FF0000'];
+      nlCbGay.innerHTML = t.split('').map((ch, i) => `<span style="color:${colors[i % colors.length]}">${ch === ' ' ? '&nbsp;' : ch}</span>`).join('');
+    }
+  }
+  const nlPlaceholderNavn = document.getElementById('nl-navn');
+  if (nlPlaceholderNavn) nlPlaceholderNavn.placeholder = SC('nl_placeholder_navn', nlPlaceholderNavn.placeholder);
+  const nlPlaceholderEmail = document.getElementById('nl-email');
+  if (nlPlaceholderEmail) nlPlaceholderEmail.placeholder = SC('nl_placeholder_email', nlPlaceholderEmail.placeholder);
+  set('nlSubmitBtn', 'nl_btn');
 
   applySectionToggles();
 }
