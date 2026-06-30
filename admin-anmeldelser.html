@@ -384,9 +384,12 @@ body{font-family:'Manrope',sans-serif;background:#f0e8d5;color:#2c2318;min-heigh
       <div class="fc-block-body">
         <div style="margin-bottom:1.2rem;padding:.9rem;background:rgba(42,122,116,.06);border:1px solid rgba(42,122,116,.2);">
           <label class="fc-label" style="color:#2a7a74;">📁 Hero-video (nuværende: intro-film_high_13MB.mp4)</label>
-          <span id="thumb_hero_video" style="display:none;font-size:1.6rem;vertical-align:middle;margin-right:.6rem;" title="Video uploadet">🎬</span><input type="file" id="upload_hero_video" accept="video/mp4" style="font-size:.78rem;">
-            <button onclick="uploadSectionMedia('upload_hero_video','media_hero_video')" style="margin-left:.6rem;background:#2a7a74;color:#fff;border:none;padding:.4rem 1rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;">⬆ Upload</button>
-            <span id="upload_hero_video_status" style="font-size:.68rem;color:#2a7a74;margin-left:.5rem;"></span>
+          <div style="display:flex;align-items:center;gap:.8rem;flex-wrap:wrap;margin-top:.5rem;">
+            <span id="thumb_hero_video" style="display:none;font-size:1.6rem;width:56px;height:56px;align-items:center;justify-content:center;background:rgba(42,122,116,.1);border:1px solid rgba(42,122,116,.3);border-radius:3px;flex-shrink:0;" title="Video uploadet">🎬</span>
+            <input type="file" id="upload_hero_video" accept="video/mp4" style="font-size:.76rem;flex:1;min-width:160px;">
+            <button onclick="uploadSectionMedia('upload_hero_video','media_hero_video')" style="background:#2a7a74;color:#fff;border:none;padding:.45rem 1.1rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;white-space:nowrap;">⬆ Upload</button>
+            <span id="upload_hero_video_status" style="font-size:.68rem;color:#2a7a74;"></span>
+          </div>
         </div>
         <div class="fc-row">
           <div><label class="fc-label fc-label-da">Eyebrow-tekst</label><input type="text" id="hero_eyebrow_da" class="fc-input-da" value="Mollina · Málaga · Andalusia"></div>
@@ -427,9 +430,12 @@ body{font-family:'Manrope',sans-serif;background:#f0e8d5;color:#2c2318;min-heigh
       <div class="fc-block-body">
         <div style="margin-bottom:1.2rem;padding:.9rem;background:rgba(42,122,116,.06);border:1px solid rgba(42,122,116,.2);">
           <label class="fc-label" style="color:#2a7a74;">📁 Filosofi-billede</label>
-          <img id="thumb_filosofi_img" src="" alt="" style="display:none;width:60px;height:60px;object-fit:cover;border:1px solid rgba(184,138,30,.3);vertical-align:middle;margin-right:.6rem;"><input type="file" id="upload_filosofi_img" accept="image/*" style="font-size:.78rem;">
-            <button onclick="uploadSectionMedia('upload_filosofi_img','media_filosofi_img')" style="margin-left:.6rem;background:#2a7a74;color:#fff;border:none;padding:.4rem 1rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;">⬆ Upload</button>
-            <span id="upload_filosofi_img_status" style="font-size:.68rem;color:#2a7a74;margin-left:.5rem;"></span>
+          <div style="display:flex;align-items:center;gap:.8rem;flex-wrap:wrap;margin-top:.5rem;">
+            <img id="thumb_filosofi_img" src="" alt="" style="display:none;width:56px;height:56px;object-fit:cover;border-radius:3px;border:1px solid rgba(184,138,30,.3);flex-shrink:0;">
+            <input type="file" id="upload_filosofi_img" accept="image/*" style="font-size:.76rem;flex:1;min-width:160px;">
+            <button onclick="uploadSectionMedia('upload_filosofi_img','media_filosofi_img')" style="background:#2a7a74;color:#fff;border:none;padding:.45rem 1.1rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;white-space:nowrap;">⬆ Upload</button>
+            <span id="upload_filosofi_img_status" style="font-size:.68rem;color:#2a7a74;"></span>
+          </div>
         </div>
         <div class="fc-row">
           <div><label class="fc-label fc-label-da">Billedlabel</label><input type="text" id="filosofi_billedlabel_da" class="fc-input-da" value="Slow Living · Andalusia"></div>
@@ -512,16 +518,25 @@ and companies will find the perfect setting for seminars, team building and stra
       <div class="fc-block-body">
         <div style="margin-bottom:1.2rem;padding:.9rem;background:rgba(42,122,116,.06);border:1px solid rgba(42,122,116,.2);">
           <label class="fc-label" style="color:#2a7a74;">📁 Billeder (3 stk)</label>
-          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:1rem;margin-top:.4rem;">
-            <img id="thumb_estate_img1" src="" alt="" style="display:none;width:60px;height:60px;object-fit:cover;border:1px solid rgba(184,138,30,.3);vertical-align:middle;margin-right:.6rem;"><input type="file" id="upload_estate_img1" accept="image/*" style="font-size:.78rem;">
-            <button onclick="uploadSectionMedia('upload_estate_img1','media_estate_img1')" style="margin-left:.6rem;background:#2a7a74;color:#fff;border:none;padding:.4rem 1rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;">⬆ Upload</button>
-            <span id="upload_estate_img1_status" style="font-size:.68rem;color:#2a7a74;margin-left:.5rem;"></span>
-            <img id="thumb_estate_img2" src="" alt="" style="display:none;width:60px;height:60px;object-fit:cover;border:1px solid rgba(184,138,30,.3);vertical-align:middle;margin-right:.6rem;"><input type="file" id="upload_estate_img2" accept="image/*" style="font-size:.78rem;">
-            <button onclick="uploadSectionMedia('upload_estate_img2','media_estate_img2')" style="margin-left:.6rem;background:#2a7a74;color:#fff;border:none;padding:.4rem 1rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;">⬆ Upload</button>
-            <span id="upload_estate_img2_status" style="font-size:.68rem;color:#2a7a74;margin-left:.5rem;"></span>
-            <img id="thumb_estate_img3" src="" alt="" style="display:none;width:60px;height:60px;object-fit:cover;border:1px solid rgba(184,138,30,.3);vertical-align:middle;margin-right:.6rem;"><input type="file" id="upload_estate_img3" accept="image/*" style="font-size:.78rem;">
-            <button onclick="uploadSectionMedia('upload_estate_img3','media_estate_img3')" style="margin-left:.6rem;background:#2a7a74;color:#fff;border:none;padding:.4rem 1rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;">⬆ Upload</button>
-            <span id="upload_estate_img3_status" style="font-size:.68rem;color:#2a7a74;margin-left:.5rem;"></span>
+          <div style="display:flex;flex-direction:column;gap:.7rem;margin-top:.6rem;">
+            <div style="display:flex;align-items:center;gap:.8rem;flex-wrap:wrap;">
+              <img id="thumb_estate_img1" src="" alt="" style="display:none;width:56px;height:56px;object-fit:cover;border-radius:3px;border:1px solid rgba(184,138,30,.3);flex-shrink:0;">
+              <input type="file" id="upload_estate_img1" accept="image/*" style="font-size:.76rem;flex:1;min-width:160px;">
+              <button onclick="uploadSectionMedia('upload_estate_img1','media_estate_img1')" style="background:#2a7a74;color:#fff;border:none;padding:.45rem 1.1rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;white-space:nowrap;">⬆ Upload</button>
+              <span id="upload_estate_img1_status" style="font-size:.68rem;color:#2a7a74;"></span>
+            </div>
+            <div style="display:flex;align-items:center;gap:.8rem;flex-wrap:wrap;">
+              <img id="thumb_estate_img2" src="" alt="" style="display:none;width:56px;height:56px;object-fit:cover;border-radius:3px;border:1px solid rgba(184,138,30,.3);flex-shrink:0;">
+              <input type="file" id="upload_estate_img2" accept="image/*" style="font-size:.76rem;flex:1;min-width:160px;">
+              <button onclick="uploadSectionMedia('upload_estate_img2','media_estate_img2')" style="background:#2a7a74;color:#fff;border:none;padding:.45rem 1.1rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;white-space:nowrap;">⬆ Upload</button>
+              <span id="upload_estate_img2_status" style="font-size:.68rem;color:#2a7a74;"></span>
+            </div>
+            <div style="display:flex;align-items:center;gap:.8rem;flex-wrap:wrap;">
+              <img id="thumb_estate_img3" src="" alt="" style="display:none;width:56px;height:56px;object-fit:cover;border-radius:3px;border:1px solid rgba(184,138,30,.3);flex-shrink:0;">
+              <input type="file" id="upload_estate_img3" accept="image/*" style="font-size:.76rem;flex:1;min-width:160px;">
+              <button onclick="uploadSectionMedia('upload_estate_img3','media_estate_img3')" style="background:#2a7a74;color:#fff;border:none;padding:.45rem 1.1rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;white-space:nowrap;">⬆ Upload</button>
+              <span id="upload_estate_img3_status" style="font-size:.68rem;color:#2a7a74;"></span>
+            </div>
           </div>
         </div>
         <div class="fc-row">
@@ -563,9 +578,12 @@ and companies will find the perfect setting for seminars, team building and stra
       <div class="fc-block-body">
         <div style="margin-bottom:1.2rem;padding:.9rem;background:rgba(42,122,116,.06);border:1px solid rgba(42,122,116,.2);">
           <label class="fc-label" style="color:#2a7a74;">📁 Vingård-billede</label>
-          <img id="thumb_vingaard_img" src="" alt="" style="display:none;width:60px;height:60px;object-fit:cover;border:1px solid rgba(184,138,30,.3);vertical-align:middle;margin-right:.6rem;"><input type="file" id="upload_vingaard_img" accept="image/*" style="font-size:.78rem;">
-            <button onclick="uploadSectionMedia('upload_vingaard_img','media_vingaard_img')" style="margin-left:.6rem;background:#2a7a74;color:#fff;border:none;padding:.4rem 1rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;">⬆ Upload</button>
-            <span id="upload_vingaard_img_status" style="font-size:.68rem;color:#2a7a74;margin-left:.5rem;"></span>
+          <div style="display:flex;align-items:center;gap:.8rem;flex-wrap:wrap;margin-top:.5rem;">
+            <img id="thumb_vingaard_img" src="" alt="" style="display:none;width:56px;height:56px;object-fit:cover;border-radius:3px;border:1px solid rgba(184,138,30,.3);flex-shrink:0;">
+            <input type="file" id="upload_vingaard_img" accept="image/*" style="font-size:.76rem;flex:1;min-width:160px;">
+            <button onclick="uploadSectionMedia('upload_vingaard_img','media_vingaard_img')" style="background:#2a7a74;color:#fff;border:none;padding:.45rem 1.1rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;white-space:nowrap;">⬆ Upload</button>
+            <span id="upload_vingaard_img_status" style="font-size:.68rem;color:#2a7a74;"></span>
+          </div>
         </div>
         <div class="fc-row">
           <div><label class="fc-label fc-label-da">Section-label</label><input type="text" id="vingaard_label_da" class="fc-input-da" value="Vingården"></div>
@@ -909,9 +927,12 @@ A visit to Córdoba is just an hour's drive from Castillo del Alma.</textarea></
       <div class="fc-block-body">
         <div style="margin-bottom:1.2rem;padding:.9rem;background:rgba(42,122,116,.06);border:1px solid rgba(42,122,116,.2);">
           <label class="fc-label" style="color:#2a7a74;">📁 Wellness-billede</label>
-          <img id="thumb_wellness_img" src="" alt="" style="display:none;width:60px;height:60px;object-fit:cover;border:1px solid rgba(184,138,30,.3);vertical-align:middle;margin-right:.6rem;"><input type="file" id="upload_wellness_img" accept="image/*" style="font-size:.78rem;">
-            <button onclick="uploadSectionMedia('upload_wellness_img','media_wellness_img')" style="margin-left:.6rem;background:#2a7a74;color:#fff;border:none;padding:.4rem 1rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;">⬆ Upload</button>
-            <span id="upload_wellness_img_status" style="font-size:.68rem;color:#2a7a74;margin-left:.5rem;"></span>
+          <div style="display:flex;align-items:center;gap:.8rem;flex-wrap:wrap;margin-top:.5rem;">
+            <img id="thumb_wellness_img" src="" alt="" style="display:none;width:56px;height:56px;object-fit:cover;border-radius:3px;border:1px solid rgba(184,138,30,.3);flex-shrink:0;">
+            <input type="file" id="upload_wellness_img" accept="image/*" style="font-size:.76rem;flex:1;min-width:160px;">
+            <button onclick="uploadSectionMedia('upload_wellness_img','media_wellness_img')" style="background:#2a7a74;color:#fff;border:none;padding:.45rem 1.1rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;white-space:nowrap;">⬆ Upload</button>
+            <span id="upload_wellness_img_status" style="font-size:.68rem;color:#2a7a74;"></span>
+          </div>
         </div>
         <div class="fc-row">
           <div><label class="fc-label fc-label-da">Section-label</label><input type="text" id="wellness_label_da" class="fc-input-da" value="Wellness &amp; Healing"></div>
@@ -1107,9 +1128,12 @@ feeling more calm – and coming home to yourself again."</textarea></div>
       <div class="fc-block-body">
         <div style="margin-bottom:1.2rem;padding:.9rem;background:rgba(42,122,116,.06);border:1px solid rgba(42,122,116,.2);">
           <label class="fc-label" style="color:#2a7a74;">📁 Om os-billede</label>
-          <img id="thumb_om_os_img" src="" alt="" style="display:none;width:60px;height:60px;object-fit:cover;border:1px solid rgba(184,138,30,.3);vertical-align:middle;margin-right:.6rem;"><input type="file" id="upload_om_os_img" accept="image/*" style="font-size:.78rem;">
-            <button onclick="uploadSectionMedia('upload_om_os_img','media_om_os_img')" style="margin-left:.6rem;background:#2a7a74;color:#fff;border:none;padding:.4rem 1rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;">⬆ Upload</button>
-            <span id="upload_om_os_img_status" style="font-size:.68rem;color:#2a7a74;margin-left:.5rem;"></span>
+          <div style="display:flex;align-items:center;gap:.8rem;flex-wrap:wrap;margin-top:.5rem;">
+            <img id="thumb_om_os_img" src="" alt="" style="display:none;width:56px;height:56px;object-fit:cover;border-radius:3px;border:1px solid rgba(184,138,30,.3);flex-shrink:0;">
+            <input type="file" id="upload_om_os_img" accept="image/*" style="font-size:.76rem;flex:1;min-width:160px;">
+            <button onclick="uploadSectionMedia('upload_om_os_img','media_om_os_img')" style="background:#2a7a74;color:#fff;border:none;padding:.45rem 1.1rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;white-space:nowrap;">⬆ Upload</button>
+            <span id="upload_om_os_img_status" style="font-size:.68rem;color:#2a7a74;"></span>
+          </div>
         </div>
         <div class="fc-row">
           <div><label class="fc-label fc-label-da">Section-label</label><input type="text" id="om_os_label_da" class="fc-input-da" value="Om os"></div>
