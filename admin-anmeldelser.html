@@ -378,6 +378,7 @@ body{font-family:'Manrope',sans-serif;background:#f0e8d5;color:#2c2318;min-heigh
     <div style="background:rgba(184,138,30,.06);border:1px solid rgba(184,138,30,.2);padding:1rem 1.2rem;margin-bottom:2rem;">
       <span style="font-size:.62rem;letter-spacing:.15em;text-transform:uppercase;color:rgba(44,35,24,.5);display:block;margin-bottom:.6rem;">Hop til sektion</span>
       <div style="display:flex;flex-wrap:wrap;gap:.5rem;">
+        <a href="#anchor_navigation" style="font-size:.72rem;color:#7a5c14;background:#fffef8;border:1px solid rgba(184,138,30,.3);padding:.35rem .8rem;text-decoration:none;">0 · Navigation</a>
         <a href="#anchor_hero" style="font-size:.72rem;color:#7a5c14;background:#fffef8;border:1px solid rgba(184,138,30,.3);padding:.35rem .8rem;text-decoration:none;">1 · Hero</a>
         <a href="#anchor_filosofi" style="font-size:.72rem;color:#7a5c14;background:#fffef8;border:1px solid rgba(184,138,30,.3);padding:.35rem .8rem;text-decoration:none;">2 · Filosofi</a>
         <a href="#anchor_retreats" style="font-size:.72rem;color:#7a5c14;background:#fffef8;border:1px solid rgba(184,138,30,.3);padding:.35rem .8rem;text-decoration:none;">3 · Retreats</a>
@@ -390,6 +391,82 @@ body{font-family:'Manrope',sans-serif;background:#f0e8d5;color:#2c2318;min-heigh
         <a href="#anchor_testimonial" style="font-size:.72rem;color:#7a5c14;background:#fffef8;border:1px solid rgba(184,138,30,.3);padding:.35rem .8rem;text-decoration:none;">10 · Testimonial</a>
         <a href="#anchor_nyhedsbrev" style="font-size:.72rem;color:#7a5c14;background:#fffef8;border:1px solid rgba(184,138,30,.3);padding:.35rem .8rem;text-decoration:none;">11 · Nyhedsbrev</a>
         <a href="#anchor_footer" style="font-size:.72rem;color:#7a5c14;background:#fffef8;border:1px solid rgba(184,138,30,.3);padding:.35rem .8rem;text-decoration:none;">12 · Footer</a>
+      </div>
+    </div>
+
+    <!-- TOP NAVIGATION -->
+    <div class="fc-block" data-section="navigation" id="anchor_navigation">
+      <div class="fc-block-header">
+        <span class="fc-block-title">0 · Top navigation (menu)</span>
+      </div>
+      <div class="fc-block-body">
+        <p style="font-size:.7rem;color:rgba(44,35,24,.4);margin-bottom:1rem;">Menupunkterne øverst på siden (inkl. dropdown under "The Estate").</p>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">The Estate</label><input type="text" id="nav_estate_da" class="fc-input-da" value="The Estate"></div>
+          <div><label class="fc-label fc-label-en">The Estate</label><input type="text" id="nav_estate_en" class="fc-input-en" value="The Estate"></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Retreats</label><input type="text" id="nav_retreats_da" class="fc-input-da" value="Retreats"></div>
+          <div><label class="fc-label fc-label-en">Retreats</label><input type="text" id="nav_retreats_en" class="fc-input-en" value="Retreats"></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Vingården</label><input type="text" id="nav_vineyard_da" class="fc-input-da" value="Vingården"></div>
+          <div><label class="fc-label fc-label-en">The Vineyard</label><input type="text" id="nav_vineyard_en" class="fc-input-en" value="The Vineyard"></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Oplevelser</label><input type="text" id="nav_experiences_da" class="fc-input-da" value="Oplevelser"></div>
+          <div><label class="fc-label fc-label-en">Experiences</label><input type="text" id="nav_experiences_en" class="fc-input-en" value="Experiences"></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Galleri</label><input type="text" id="nav_gallery_da" class="fc-input-da" value="Galleri"></div>
+          <div><label class="fc-label fc-label-en">Gallery</label><input type="text" id="nav_gallery_en" class="fc-input-en" value="Gallery"></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Wellness</label><input type="text" id="nav_wellness_da" class="fc-input-da" value="Wellness"></div>
+          <div><label class="fc-label fc-label-en">Wellness</label><input type="text" id="nav_wellness_en" class="fc-input-en" value="Wellness"></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Om os</label><input type="text" id="nav_om_os_da" class="fc-input-da" value="Om os"></div>
+          <div><label class="fc-label fc-label-en">About us</label><input type="text" id="nav_om_os_en" class="fc-input-en" value="About us"></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Book Retreat (knap)</label><input type="text" id="nav_book_da" class="fc-input-da" value="Book Retreat"></div>
+          <div><label class="fc-label fc-label-en">Book Retreat (button)</label><input type="text" id="nav_book_en" class="fc-input-en" value="Book Retreat"></div>
+        </div>
+
+        <p style="font-size:.68rem;color:rgba(44,35,24,.4);margin:1.2rem 0 .6rem;">Dropdown under "The Estate":</p>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Ejendommen</label><input type="text" id="nav_dd_intro_da" class="fc-input-da" value="Ejendommen"></div>
+          <div><label class="fc-label fc-label-en">The property</label><input type="text" id="nav_dd_intro_en" class="fc-input-en" value="The property"></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Tårnene</label><input type="text" id="nav_dd_towers_da" class="fc-input-da" value="Tårnene"></div>
+          <div><label class="fc-label fc-label-en">The towers</label><input type="text" id="nav_dd_towers_en" class="fc-input-en" value="The towers"></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Indkvartering</label><input type="text" id="nav_dd_rooms_da" class="fc-input-da" value="Indkvartering"></div>
+          <div><label class="fc-label fc-label-en">Accommodation</label><input type="text" id="nav_dd_rooms_en" class="fc-input-en" value="Accommodation"></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Faciliteter</label><input type="text" id="nav_dd_facilities_da" class="fc-input-da" value="Faciliteter"></div>
+          <div><label class="fc-label fc-label-en">Facilities</label><input type="text" id="nav_dd_facilities_en" class="fc-input-en" value="Facilities"></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Bæredygtighed</label><input type="text" id="nav_dd_sustainability_da" class="fc-input-da" value="Bæredygtighed"></div>
+          <div><label class="fc-label fc-label-en">Sustainability</label><input type="text" id="nav_dd_sustainability_en" class="fc-input-en" value="Sustainability"></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Vingården</label><input type="text" id="nav_dd_vineyard_da" class="fc-input-da" value="Vingården"></div>
+          <div><label class="fc-label fc-label-en">The Vineyard</label><input type="text" id="nav_dd_vineyard_en" class="fc-input-en" value="The Vineyard"></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Beliggenhed</label><input type="text" id="nav_dd_location_da" class="fc-input-da" value="Beliggenhed"></div>
+          <div><label class="fc-label fc-label-en">Location</label><input type="text" id="nav_dd_location_en" class="fc-input-en" value="Location"></div>
+        </div>
+
+        <div style="margin-top:1.4rem;padding-top:1.2rem;border-top:1px solid rgba(184,138,30,.15);text-align:right;">
+          <button onclick="gemForside()" style="background:#2a7a74;color:#fff;border:none;padding:.55rem 1.6rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;">💾 Gem hele forsiden</button>
+        </div>
       </div>
     </div>
 
