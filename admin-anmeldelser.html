@@ -860,7 +860,7 @@ A visit to Córdoba is just an hour's drive from Castillo del Alma.</textarea></
     <!-- GALLERI -->
     <div class="fc-block" data-section="galleri">
       <div class="fc-block-header">
-        <span class="fc-block-title">8 · Galleri (kun tekst — billeder uploades i sektionen øverst)</span>
+        <span class="fc-block-title">8 · Galleri</span>
         <label class="fc-toggle"><input type="checkbox" id="active_galleri" checked><span>Vis på hjemmesiden</span></label>
       </div>
       <div class="fc-block-body">
@@ -875,6 +875,18 @@ A visit to Córdoba is just an hour's drive from Castillo del Alma.</textarea></
         <div class="fc-row">
           <div><label class="fc-label fc-label-da">Intro-tekst</label><textarea id="galleri_intro_da" class="fc-input-da fc-textarea">Et glimt af livet på Castillo del Alma — vinmarker, rum, natur og stemninger</textarea></div>
           <div><label class="fc-label fc-label-en">Intro text</label><textarea id="galleri_intro_en" class="fc-input-en fc-textarea">A glimpse of life at Castillo del Alma — vineyards, rooms, nature and atmosphere</textarea></div>
+        </div>
+
+        <div style="margin-top:1.4rem;padding-top:1.2rem;border-top:1px solid rgba(184,138,30,.15);">
+          <label class="fc-label" style="color:#7a5c14;">Upload billeder/videoer til galleriet (kan vælge flere ad gangen)</label>
+          <input type="file" id="galleri_upload_input" accept="image/*,video/*" multiple style="font-size:.78rem;margin-bottom:1rem;">
+          <button onclick="uploadGalleriFiler()" style="background:#2a7a74;color:#fff;border:none;padding:.55rem 1.4rem;font-family:Manrope,sans-serif;font-size:.65rem;font-weight:500;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;margin-bottom:1.2rem;">⬆ Upload valgte filer</button>
+          <p id="galleriUploadStatus" style="font-size:.72rem;color:#2a7a74;margin-bottom:1rem;"></p>
+
+          <label class="fc-label" style="color:rgba(44,35,24,.6);">Filer i galleriet</label>
+          <div id="galleriFilListe" style="display:flex;flex-direction:column;gap:.4rem;margin-top:.6rem;">
+            <p style="font-size:.75rem;color:rgba(44,35,24,.4);font-style:italic;">Henter filliste…</p>
+          </div>
         </div>
       </div>
     </div>
@@ -4966,7 +4978,7 @@ async function loadForside() {
     (data || []).forEach(r => { map[r.key] = r.value; });
     // Udfyld alle fc-input felter hvis værdi findes i Supabase, ellers behold HTML default
     document.querySelectorAll('#tab-forside [id]').forEach(el => {
-      if (!el.id) return;
+      if (!el.id || el.type === 'file') return;
       if (map[el.id] !== undefined) {
         if (el.type === 'checkbox') el.checked = map[el.id] === 'true';
         else el.value = map[el.id];
@@ -4974,6 +4986,71 @@ async function loadForside() {
     });
   } catch(e) {
     console.warn('Forside load:', e.message);
+  }
+  loadGalleriFilListe();
+}
+
+// ── GALLERI FIL-UPLOAD ──
+const GALLERI_BUCKET = 'retreat-images';
+const GALLERI_PREFIX = 'galleri/';
+
+async function loadGalleriFilListe() {
+  const container = document.getElementById('galleriFilListe');
+  if (!container || !sb) return;
+  try {
+    const { data, error } = await sb.storage.from(GALLERI_BUCKET).list('galleri', { sortBy: { column: 'created_at', order: 'desc' } });
+    if (error) throw error;
+    const files = (data || []).filter(f => f.name && !f.name.startsWith('.'));
+    if (!files.length) {
+      container.innerHTML = '<p style="font-size:.75rem;color:rgba(44,35,24,.4);font-style:italic;">Ingen filer uploadet endnu.</p>';
+      return;
+    }
+    container.innerHTML = files.map(f => {
+      const { data: urlData } = sb.storage.from(GALLERI_BUCKET).getPublicUrl(GALLERI_PREFIX + f.name);
+      const isVideo = /\.(mp4|mov|webm)$/i.test(f.name);
+      const sizeKb = f.metadata?.size ? Math.round(f.metadata.size / 1024) + ' KB' : '';
+      return `<div style="display:flex;align-items:center;gap:.8rem;padding:.5rem .7rem;background:rgba(44,35,24,.03);border:1px solid rgba(184,138,30,.15);">
+        <span style="font-size:.9rem;">${isVideo ? '🎬' : '🖼️'}</span>
+        <a href="${urlData.publicUrl}" target="_blank" style="font-size:.78rem;color:#2c2318;text-decoration:underline;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${f.name}</a>
+        <span style="font-size:.68rem;color:rgba(44,35,24,.4);">${sizeKb}</span>
+        <button onclick="sletGalleriFil('${f.name}')" style="background:rgba(192,92,48,.1);border:1px solid rgba(192,92,48,.3);color:#c05c30;padding:.3rem .6rem;font-size:.65rem;cursor:pointer;">✕ Slet</button>
+      </div>`;
+    }).join('');
+  } catch(e) {
+    container.innerHTML = '<p style="font-size:.75rem;color:#c05c30;">Kunne ikke hente filliste: ' + e.message + '</p>';
+  }
+}
+
+async function uploadGalleriFiler() {
+  const input = document.getElementById('galleri_upload_input');
+  const status = document.getElementById('galleriUploadStatus');
+  if (!input.files.length) { status.textContent = 'Vælg mindst én fil først.'; return; }
+  status.textContent = `Uploader ${input.files.length} fil(er)...`;
+  let okCount = 0;
+  for (const file of input.files) {
+    const safeName = Date.now() + '_' + file.name.replace(/[^a-zA-Z0-9.\-_]/g, '_');
+    try {
+      const { error } = await sb.storage.from(GALLERI_BUCKET).upload(GALLERI_PREFIX + safeName, file);
+      if (error) throw error;
+      okCount++;
+    } catch(e) {
+      console.error('Upload fejl for', file.name, e.message);
+    }
+  }
+  status.textContent = `${okCount} af ${input.files.length} fil(er) uploadet ✓`;
+  input.value = '';
+  loadGalleriFilListe();
+}
+
+async function sletGalleriFil(filename) {
+  if (!confirm('Slet "' + filename + '" fra galleriet?')) return;
+  try {
+    const { error } = await sb.storage.from(GALLERI_BUCKET).remove([GALLERI_PREFIX + filename]);
+    if (error) throw error;
+    showToast('Fil slettet ✓');
+    loadGalleriFilListe();
+  } catch(e) {
+    showToast('Fejl ved sletning: ' + e.message, true);
   }
 }
 
