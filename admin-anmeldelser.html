@@ -5155,7 +5155,7 @@ function udfyldRetreatForm(r) {
     const el = document.getElementById(`ui_highlight${n}_icon`);
     if (el && r[`ui_highlight${n}_icon`]) el.value = r[`ui_highlight${n}_icon`];
   });
-  renderHighlightsListe();
+  loadHighlightsIntoSection(r);
   renderExtraDatesListe();
   document.getElementById('retreat_max_guests').value = r.max_guests || '';
   document.getElementById('retreat_languages').value = r.languages || '';
