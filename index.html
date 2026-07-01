@@ -2302,6 +2302,33 @@ async function loadRetreatsGrid() {
         </div>
       </div>`;
   }).join('');
+
+  // Hover: vis retreat-specifikke billeder i billed-rækken
+  const imgRow = document.getElementById('retreatsImageRow');
+  const imgEls = [1,2,3,4,5].map(n => document.getElementById(`retreatsImg${n}`));
+  // Gem de generelle billeder
+  const generalImgs = imgEls.map(el => el ? el.style.backgroundImage : '');
+
+  document.querySelectorAll('.retreat-card').forEach((card, i) => {
+    const r = data[i];
+    const retreatImgs = (r && r.retreat_images5 && r.retreat_images5.length) ? r.retreat_images5 : null;
+    card.addEventListener('mouseenter', () => {
+      if (!imgRow || !retreatImgs) return;
+      retreatImgs.forEach((url, j) => {
+        if (imgEls[j]) imgEls[j].style.backgroundImage = `url('${url}')`;
+      });
+      // Skjul evt. overskydende billeder
+      for (let j = retreatImgs.length; j < 5; j++) {
+        if (imgEls[j]) imgEls[j].style.backgroundImage = '';
+      }
+    });
+    card.addEventListener('mouseleave', () => {
+      if (!imgRow) return;
+      generalImgs.forEach((bg, j) => {
+        if (imgEls[j]) imgEls[j].style.backgroundImage = bg;
+      });
+    });
+  });
 }
 
 async function tilmeldNyhedsbrev(btn) {
