@@ -2607,10 +2607,10 @@ feeling more calm – and coming home to yourself again."</textarea></div>
           <div><label class="fc-label fc-label-da">Rum-intro tekst (DA)</label><textarea id="ui_rooms_intro" class="fc-input-da fc-textarea" rows="2" placeholder="Alle værelser har eget badeværelse og er fuldt inkluderet i retreatprisen."></textarea></div>
           <div><label class="fc-label fc-label-en">Rooms intro text (EN)</label><textarea id="ui_rooms_intro_en" class="fc-input-en fc-textarea" rows="2" placeholder="All rooms have en-suite bathrooms and are fully included in the retreat price."></textarea></div>
         </div>
-        <div style="margin-top:1rem;">
-          <label class="fc-label fc-label-da">Værelsespriser (JSON)</label>
-          <textarea id="room_pricing" class="fc-input-da fc-textarea" rows="4" placeholder='[{"room":"Enkeltværelse","price":1200},{"room":"Dobbeltværelse","price":900}]' style="font-family:monospace;font-size:.72rem;"></textarea>
-        </div>
+        <p style="font-size:.7rem;color:rgba(44,35,24,.4);margin:1rem 0 .5rem;">Værelsetyper og priser — tilføj op til 6 typer:</p>
+        <div id="roomPricingListe" style="display:flex;flex-direction:column;gap:.5rem;"></div>
+        <button type="button" onclick="tilfoejVaerelse()" style="margin-top:.6rem;background:rgba(42,122,116,.08);border:1px solid rgba(42,122,116,.2);color:#2a7a74;padding:.5rem 1rem;font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;width:100%;">+ Tilføj værelses-type</button>
+        <textarea id="room_pricing" style="display:none;"></textarea>
       </div>
     </div>
 
@@ -4880,12 +4880,44 @@ function openNytRetreat() {
   teacherImgsState = [{url:'',name:''},{url:'',name:''},{url:'',name:''}];
   loadTeacherImgs({});
   renderHighlightsListe();
+  // Værelse-editor — standard to typer
+  roomPricingState = [
+    { room_da: 'Delt dobbeltværelse', room_en: 'Shared twin room', price: 1295 },
+    { room_da: 'Enkeltværelse', room_en: 'Single room', price: 1995 },
+  ];
+  renderRoomPricingListe();
   renderExtraDatesListe();
   document.getElementById('retreat_max_guests').value = '';
   document.getElementById('retreat_languages').value = '';
   document.getElementById('retreat_level').value = '';
   heroFileData = null;
   cardFileData = null;
+  // Booking-sektion manglende felter
+  document.getElementById('ui_form_policy_note').value = 'Ved tilmelding accepterer du vores betalings- og afbestillingsbetingelser. Depositum på 30% forfalder ved tilmelding. Restbeløbet forfalder 60 dage før retreatstart.';
+  document.getElementById('ui_form_policy_note_en').value = 'By registering you accept our payment and cancellation terms. A deposit of 30% is due upon registration. The remaining balance is due 60 days before the retreat.';
+  document.getElementById('ui_form_submit_btn').value = 'Send min forespørgsel';
+  document.getElementById('ui_form_submit_btn_en').value = 'Send my enquiry';
+  document.getElementById('ui_addon_heading').value = 'Tilvalg';
+  document.getElementById('ui_addon_heading_en').value = 'Add-ons';
+  document.getElementById('ui_payment_method').value = 'Betalingsmetode';
+  document.getElementById('ui_payment_method_en').value = 'Payment method';
+  // Labels
+  document.getElementById('ui_label_nights').value = 'nætter';
+  document.getElementById('ui_label_nights_en').value = 'nights';
+  document.getElementById('ui_label_days').value = 'dage';
+  document.getElementById('ui_label_days_en').value = 'days';
+  // Underviser
+  document.getElementById('retreat_teacher_name').value = '';
+  document.getElementById('retreat_teacher_photo').value = '';
+  document.getElementById('teacher_img1_name').value = '';
+  document.getElementById('teacher_img2_name').value = '';
+  document.getElementById('teacher_img3_name').value = '';
+  // Billeder/datoer
+  document.getElementById('retreat_hero_image').value = '';
+  document.getElementById('retreat_card_image').value = '';
+  document.getElementById('retreat_booking_deadline').value = '';
+  document.getElementById('retreat_teacher_bio').value = 'En erfaren wellness-facilitator med speciale i nervesystemsregulering, breathwork og somatic therapy. Med mange års erfaring fra retreats i Skandinavien og Sydeuropa skabes et trygt og professionelt rum for transformation.';
+  document.getElementById('retreat_teacher_bio_en').value = 'An experienced wellness facilitator specialising in nervous system regulation, breathwork and somatic therapy. With many years of experience from retreats across Scandinavia and Southern Europe.';
   document.getElementById('retreatSaveBtn').textContent = 'Opret retreat';
   document.getElementById('modalRetreat').classList.add('open');
   } catch(e) {
@@ -5119,6 +5151,7 @@ function udfyldRetreatForm(r) {
   retreatBilleder5State = r.retreat_images5 ? r.retreat_images5.map(url => ({ url })) : [];
   renderRetreatBilleder5();
   loadTeacherImgs(r);
+  loadRoomPricing(r);
   // Sæt ikon-felter fra DB inden highlights renderes
   [1,2,3,4,5,6].forEach(n => {
     const el = document.getElementById(`ui_highlight${n}_icon`);
@@ -5494,6 +5527,73 @@ function tilfoejExtraDate() {
 function fjernExtraDate(i) {
   extraDatesState.splice(i, 1);
   renderExtraDatesListe();
+}
+
+// ── VÆRELSE PRISER EDITOR ──
+let roomPricingState = [];
+
+function renderRoomPricingListe() {
+  const container = document.getElementById('roomPricingListe');
+  if (!container) return;
+  if (!roomPricingState.length) {
+    container.innerHTML = '<p style="font-size:.75rem;color:rgba(44,35,24,.4);font-style:italic;">Ingen værelsetyper endnu — klik + Tilføj</p>';
+    syncRoomPricingJSON();
+    return;
+  }
+  container.innerHTML = roomPricingState.map((r, i) => `
+    <div style="display:grid;grid-template-columns:1fr 1fr 120px auto;gap:.6rem;align-items:center;padding:.5rem .7rem;background:rgba(44,35,24,.03);border:1px solid rgba(184,138,30,.15);">
+      <input type="text" value="${(r.room_da||'').replace(/"/g,'&quot;')}" placeholder="Fx. Delt dobbeltværelse" oninput="roomPricingState[${i}].room_da=this.value;syncRoomPricingJSON()" style="background:#faf6ee;border:1px solid rgba(184,138,30,.2);color:#2c2318;padding:.45rem .7rem;font-family:'Manrope',sans-serif;font-size:.78rem;outline:none;">
+      <input type="text" value="${(r.room_en||'').replace(/"/g,'&quot;')}" placeholder="E.g. Shared twin room" oninput="roomPricingState[${i}].room_en=this.value;syncRoomPricingJSON()" style="background:rgba(42,122,116,.04);border:1px solid rgba(42,122,116,.2);color:#2c2318;padding:.45rem .7rem;font-family:'Manrope',sans-serif;font-size:.78rem;outline:none;">
+      <input type="number" value="${r.price||''}" placeholder="€ pris" min="0" oninput="roomPricingState[${i}].price=parseFloat(this.value)||0;syncRoomPricingJSON()" style="background:#faf6ee;border:1px solid rgba(184,138,30,.2);color:#2c2318;padding:.45rem .7rem;font-family:'Manrope',sans-serif;font-size:.78rem;outline:none;text-align:right;">
+      <button onclick="fjernVaerelse(${i})" style="background:rgba(192,92,48,.1);border:1px solid rgba(192,92,48,.3);color:#c05c30;padding:.3rem .6rem;font-size:.65rem;cursor:pointer;">✕</button>
+    </div>`).join('');
+  syncRoomPricingJSON();
+}
+
+function syncRoomPricingJSON() {
+  const el = document.getElementById('room_pricing');
+  if (el) el.value = JSON.stringify(roomPricingState.map(r => ({
+    room: r.room_da || '',
+    room_en: r.room_en || '',
+    price: r.price || 0
+  })));
+}
+
+function tilfoejVaerelse() {
+  if (roomPricingState.length >= 6) { showToast('Max 6 værelsetyper', true); return; }
+  roomPricingState.push({ room_da: '', room_en: '', price: 0 });
+  renderRoomPricingListe();
+}
+
+function fjernVaerelse(i) {
+  roomPricingState.splice(i, 1);
+  renderRoomPricingListe();
+}
+
+function loadRoomPricing(data) {
+  let raw = data.room_pricing;
+  if (typeof raw === 'string') { try { raw = JSON.parse(raw); } catch(e) { raw = []; } }
+  if (!Array.isArray(raw)) raw = [];
+  // Baglæns kompatibilitet: gamle poster har kun 'room' ikke 'room_da'/'room_en'
+  roomPricingState = raw.map(r => ({
+    room_da: r.room_da || r.room || '',
+    room_en: r.room_en || '',
+    price: r.price || 0
+  }));
+  // Hvis ingen fra room_pricing, brug de eksisterende separate felter
+  if (!roomPricingState.length && (data.room_double_price || data.room_single_price)) {
+    if (data.room_double_price) roomPricingState.push({
+      room_da: data.ui_room_double_heading || 'Delt dobbeltværelse',
+      room_en: data.ui_room_double_heading_en || 'Shared twin room',
+      price: parseFloat(data.room_double_price) || 0
+    });
+    if (data.room_single_price) roomPricingState.push({
+      room_da: data.ui_room_single_heading || 'Enkeltværelse',
+      room_en: data.ui_room_single_heading_en || 'Single room',
+      price: parseFloat(data.room_single_price) || 0
+    });
+  }
+  renderRoomPricingListe();
 }
 
 // ── UNDERVISER BILLEDER ──
