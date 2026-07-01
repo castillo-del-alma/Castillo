@@ -4367,9 +4367,19 @@ let alleKunderTilFaktura = [];
 async function loadKunderTilFaktura() {
   if (!sb || alleKunderTilFaktura.length) return;
   try {
-    const { data, error } = await sb.from('customers').select('id,fornavn,efternavn,email,adresse,postnr,by,land,vat').order('efternavn');
+    // Hent unikke kunder fra invoices (manuel faktura gemmer ikke til customers)
+    const { data, error } = await sb.from('invoices')
+      .select('customer_name,customer_email,customer_address,customer_vat')
+      .order('created_at', { ascending: false });
     if (error) throw error;
-    alleKunderTilFaktura = data || [];
+    // Dedupliker på email
+    const seen = new Set();
+    alleKunderTilFaktura = (data || []).filter(k => {
+      const key = (k.customer_email || k.customer_name || '').toLowerCase();
+      if (seen.has(key)) return false;
+      seen.add(key);
+      return true;
+    });
   } catch(e) {
     console.warn('Kunne ikke hente kunder til faktura:', e.message);
   }
@@ -4380,33 +4390,37 @@ function søgKundeTilFaktura(query) {
   if (!query || query.length < 2) { container.style.display = 'none'; return; }
   const q = query.toLowerCase();
   const matches = alleKunderTilFaktura.filter(k =>
-    `${k.fornavn} ${k.efternavn}`.toLowerCase().includes(q) ||
-    (k.email || '').toLowerCase().includes(q)
+    (k.customer_name || '').toLowerCase().includes(q) ||
+    (k.customer_email || '').toLowerCase().includes(q)
   ).slice(0, 8);
   if (!matches.length) { container.style.display = 'none'; return; }
   container.style.display = 'block';
-  container.innerHTML = matches.map(k => `
-    <div onclick="vælgKundeTilFaktura(${k.id})"
+  container.innerHTML = matches.map((k, i) => `
+    <div onclick="vælgKundeTilFaktura(${i})"
       style="padding:.6rem .9rem;font-size:.8rem;cursor:pointer;border-bottom:1px solid rgba(184,138,30,.1);color:#2c2318;"
       onmouseover="this.style.background='rgba(184,138,30,.08)'" onmouseout="this.style.background=''">
-      <strong>${k.fornavn} ${k.efternavn}</strong>
-      <span style="color:rgba(44,35,24,.5);margin-left:.5rem;">${k.email || ''}</span>
-      <span style="display:block;font-size:.7rem;color:rgba(44,35,24,.4);">${[k.adresse, k.postnr, k.by, k.land].filter(Boolean).join(', ')}</span>
+      <strong>${k.customer_name || ''}</strong>
+      <span style="color:rgba(44,35,24,.5);margin-left:.5rem;">${k.customer_email || ''}</span>
+      <span style="display:block;font-size:.7rem;color:rgba(44,35,24,.4);">${k.customer_address || ''}</span>
     </div>`).join('');
+  // Gem matches til vælg-funktionen
+  container._matches = matches;
 }
 
-function vælgKundeTilFaktura(id) {
-  const k = alleKunderTilFaktura.find(x => x.id === id);
+function vælgKundeTilFaktura(i) {
+  const container = document.getElementById('mf-kunde-resultater');
+  const k = (container._matches || alleKunderTilFaktura)[i];
   if (!k) return;
-  document.getElementById('mf-navn').value = `${k.fornavn} ${k.efternavn}`;
-  document.getElementById('mf-email').value = k.email || '';
-  document.getElementById('mf-adresse').value = k.adresse || '';
-  document.getElementById('mf-postnr').value = k.postnr || '';
-  document.getElementById('mf-by').value = k.by || '';
-  document.getElementById('mf-land').value = k.land || '';
-  document.getElementById('mf-vat').value = k.vat || '';
-  document.getElementById('mf-kunde-søg').value = `${k.fornavn} ${k.efternavn}`;
-  document.getElementById('mf-kunde-resultater').style.display = 'none';
+  // Parse adresse (gemt som samlet streng: "Vejnavn 1, 1234 By, Land")
+  document.getElementById('mf-navn').value = k.customer_name || '';
+  document.getElementById('mf-email').value = k.customer_email || '';
+  document.getElementById('mf-adresse').value = k.customer_address || '';
+  document.getElementById('mf-postnr').value = '';
+  document.getElementById('mf-by').value = '';
+  document.getElementById('mf-land').value = '';
+  document.getElementById('mf-vat').value = k.customer_vat || '';
+  document.getElementById('mf-kunde-søg').value = k.customer_name || '';
+  container.style.display = 'none';
 }
 
 // Luk dropdown ved klik udenfor
