@@ -160,6 +160,7 @@ exports.handler = async (event) => {
           total_amount: totalIncVat, is_manual: true,
           customer_name: customer.name, customer_email: customer.email,
           customer_address: customer.address||null, customer_vat: customer.vat||null,
+          customer_postnr: customer.postnr||null, customer_by: customer.by||null, customer_land: customer.land||null,
           lines: lines, notes: notes||null,
           status: isDraft ? 'kladde' : 'sendt',
           sent_at: (!isDraft && sendEmail) ? new Date().toISOString() : null
@@ -173,6 +174,7 @@ exports.handler = async (event) => {
         total_amount: totalIncVat, is_manual: true,
         customer_name: customer.name, customer_email: customer.email,
         customer_address: customer.address||null, customer_vat: customer.vat||null,
+        customer_postnr: customer.postnr||null, customer_by: customer.by||null, customer_land: customer.land||null,
         lines: lines, notes: notes||null,
         status: isDraft ? 'kladde' : 'sendt'
       })

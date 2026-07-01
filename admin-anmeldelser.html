@@ -4284,8 +4284,19 @@ async function redigerFaktura(id) {
   // Udfyld formularen
   document.getElementById('mf-navn').value = inv.customer_name || '';
   document.getElementById('mf-email').value = inv.customer_email || '';
-  const addrParts = (inv.customer_address || '').split(',');
-  document.getElementById('mf-adresse').value = addrParts[0]?.trim() || '';
+  // Brug separate felter hvis de findes, ellers forsøg at parse den gamle adresse-streng
+  if (inv.customer_postnr || inv.customer_by || inv.customer_land) {
+    document.getElementById('mf-adresse').value = inv.customer_address || '';
+    document.getElementById('mf-postnr').value = inv.customer_postnr || '';
+    document.getElementById('mf-by').value = inv.customer_by || '';
+    document.getElementById('mf-land').value = inv.customer_land || '';
+  } else {
+    const addrParts = (inv.customer_address || '').split(',');
+    document.getElementById('mf-adresse').value = addrParts[0]?.trim() || '';
+    document.getElementById('mf-postnr').value = '';
+    document.getElementById('mf-by').value = '';
+    document.getElementById('mf-land').value = addrParts[addrParts.length - 1]?.trim() || '';
+  }
   document.getElementById('mf-vat').value = inv.customer_vat || '';
   document.getElementById('mf-noter').value = inv.notes || '';
   // Ryd og genopbyg varelinjer
@@ -4369,7 +4380,7 @@ async function loadKunderTilFaktura() {
   try {
     // Hent unikke kunder fra invoices (manuel faktura gemmer ikke til customers)
     const { data, error } = await sb.from('invoices')
-      .select('customer_name,customer_email,customer_address,customer_vat')
+      .select('customer_name,customer_email,customer_address,customer_postnr,customer_by,customer_land,customer_vat')
       .order('created_at', { ascending: false });
     if (error) throw error;
     // Dedupliker på email
@@ -4415,9 +4426,9 @@ function vælgKundeTilFaktura(i) {
   document.getElementById('mf-navn').value = k.customer_name || '';
   document.getElementById('mf-email').value = k.customer_email || '';
   document.getElementById('mf-adresse').value = k.customer_address || '';
-  document.getElementById('mf-postnr').value = '';
-  document.getElementById('mf-by').value = '';
-  document.getElementById('mf-land').value = '';
+  document.getElementById('mf-postnr').value = k.customer_postnr || '';
+  document.getElementById('mf-by').value = k.customer_by || '';
+  document.getElementById('mf-land').value = k.customer_land || '';
   document.getElementById('mf-vat').value = k.customer_vat || '';
   document.getElementById('mf-kunde-søg').value = k.customer_name || '';
   container.style.display = 'none';
@@ -4447,7 +4458,15 @@ function mfGetData(sendEmail) {
   return {
     existingNumber: window._editingInvoiceNumber || null,
     existingId: window._editingInvoiceId || null,
-    customer: { name: document.getElementById('mf-navn').value, email: document.getElementById('mf-email').value, address: (document.getElementById('mf-adresse').value + (document.getElementById('mf-postnr').value ? ', ' + document.getElementById('mf-postnr').value : '') + (document.getElementById('mf-by').value ? ' ' + document.getElementById('mf-by').value : '') + (document.getElementById('mf-land')?.value ? ', ' + document.getElementById('mf-land').value : '')).trim(), vat: document.getElementById('mf-vat').value },
+    customer: {
+      name: document.getElementById('mf-navn').value,
+      email: document.getElementById('mf-email').value,
+      address: (document.getElementById('mf-adresse').value + (document.getElementById('mf-postnr').value ? ', ' + document.getElementById('mf-postnr').value : '') + (document.getElementById('mf-by').value ? ' ' + document.getElementById('mf-by').value : '') + (document.getElementById('mf-land')?.value ? ', ' + document.getElementById('mf-land').value : '')).trim(),
+      postnr: document.getElementById('mf-postnr').value,
+      by: document.getElementById('mf-by').value,
+      land: document.getElementById('mf-land').value,
+      vat: document.getElementById('mf-vat').value
+    },
     lines: mfGetLinjer(),
     notes: document.getElementById('mf-noter').value,
     invoiceDate: document.getElementById('mf-dato').value,
