@@ -5476,6 +5476,7 @@ async function gemRetreat() {
     document.getElementById('retreatModalTitel').textContent = 'Redigér retreat';
     document.getElementById('retreatSaveBtn').textContent = 'Gem ændringer';
   } catch(e) {
+    console.error('gemRetreat fejl:', e);
     showToast('Fejl: ' + e.message, true);
   } finally {
     btn.disabled = false;
