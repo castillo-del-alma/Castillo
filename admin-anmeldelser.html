@@ -6012,11 +6012,12 @@ function loadHighlightsIntoSection() {
   highlightsState = [];
   highlightsStateEN = [];
   highlightsStateIcons = [];
-  for (let i = 1; i <= MAX_HIGHLIGHTS; i++) {
-    const t = document.getElementById(`ui_highlight${i}_title`)?.value || defaultTitles[i-1];
-    const tx = document.getElementById(`ui_highlight${i}_text`)?.value || defaultTexts[i-1];
-    const tEN = document.getElementById(`ui_highlight${i}_title_en`)?.value || defaultTitlesEN[i-1];
-    const txEN = document.getElementById(`ui_highlight${i}_text_en`)?.value || defaultTextsEN[i-1];
+  // Altid 6 kort — brug DB-data hvis det findes, ellers defaults
+  for (let i = 1; i <= 6; i++) {
+    const t = document.getElementById(`ui_highlight${i}_title`)?.value.trim() || defaultTitles[i-1];
+    const tx = document.getElementById(`ui_highlight${i}_text`)?.value.trim() || defaultTexts[i-1];
+    const tEN = document.getElementById(`ui_highlight${i}_title_en`)?.value.trim() || defaultTitlesEN[i-1];
+    const txEN = document.getElementById(`ui_highlight${i}_text_en`)?.value.trim() || defaultTextsEN[i-1];
     const icon = document.getElementById(`ui_highlight${i}_icon`)?.value || defaultIcons[i-1];
     highlightsState.push({ title: t, text: tx });
     highlightsStateEN.push({ title: tEN, text: txEN });
@@ -6027,12 +6028,7 @@ function loadHighlightsIntoSection() {
 
 function renderHighlightsListe() {
   const container = document.getElementById('highlightsListe');
-  const btn = document.getElementById('tilfoejHighlightBtn');
-  if (btn) btn.style.display = highlightsState.length >= MAX_HIGHLIGHTS ? 'none' : 'block';
-  if (!highlightsState.length) {
-    container.innerHTML = '<div style="color:rgba(44,35,24,.72);font-style:italic;text-align:center;padding:1rem;">Ingen highlights endnu — klik "+ Tilføj highlight"</div>';
-    return;
-  }
+  if (!container) return;
   const DA = 'background:#fffef8;border:1px solid rgba(184,138,30,.3);color:#2c2318;padding:.5rem .7rem;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;width:100%;';
   const EN = 'background:#e8f4f3;border:1px solid #7fb3af;color:#2c2318;padding:.5rem .7rem;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;width:100%;';
 
