@@ -4877,7 +4877,7 @@ function openNytRetreat() {
   renderRetreatBilleder5();
   teacherImgsState = [{url:'',name:''},{url:'',name:''},{url:'',name:''}];
   loadTeacherImgs({});
-  renderHighlightsListe();
+  loadHighlightsIntoSection();
   // Værelse-editor — standard to typer
   roomPricingState = [
     { room_da: 'Delt dobbeltværelse', room_en: 'Shared twin room', price: 1295 },
@@ -5215,6 +5215,7 @@ function updateAddonPreview() {
 }
 
 async function gemRetreat() {
+  syncHighlightsToFields(); // Synkroniser highlights state til felter inden gem
   const id = document.getElementById('retreat_id').value;
   const title = document.getElementById('retreat_title').value.trim();
   const slug = document.getElementById('retreat_slug').value.trim();
@@ -5972,25 +5973,56 @@ let highlightsStateEN = [];
 let highlightsStateIcons = [];
 const MAX_HIGHLIGHTS = 6;
 
-function openHighlightsEditor() {
-  const defaultIcons = ["globe", "shield", "home", "drop", "fork", "star"];
+function syncHighlightsToFields() {
+  highlightsState.forEach((h, i) => {
+    const n = i + 1;
+    const titleEl = document.getElementById(`ui_highlight${n}_title`);
+    const textEl = document.getElementById(`ui_highlight${n}_text`);
+    const titleEnEl = document.getElementById(`ui_highlight${n}_title_en`);
+    const textEnEl = document.getElementById(`ui_highlight${n}_text_en`);
+    const iconEl = document.getElementById(`ui_highlight${n}_icon`);
+    if (titleEl) titleEl.value = h.title || '';
+    if (textEl) textEl.value = h.text || '';
+    if (titleEnEl) titleEnEl.value = (highlightsStateEN[i] || {}).title || '';
+    if (textEnEl) textEnEl.value = (highlightsStateEN[i] || {}).text || '';
+    if (iconEl) iconEl.value = highlightsStateIcons[i] || 'globe';
+  });
+}
+
+function loadHighlightsIntoSection() {
+  const defaultIcons = ['globe', 'shield', 'home', 'drop', 'fork', 'star'];
+  const defaultTitles = ['Nervous System Reset', 'Intimt & eksklusivt', 'Eksklusiv ejendom', 'Guidede breathwork-sessioner', 'Nærende andalusisk mad', 'Stilhed & stjernekiggeri'];
+  const defaultTitlesEN = ['Nervous System Reset', 'Intimate & Exclusive', 'Exclusive Property', 'Guided Breathwork Sessions', 'Nourishing Andalusian Food', 'Silence & Stargazing'];
+  const defaultTexts = [
+    'Et samlet forløb designet til at bringe dit nervesystem tilbage i balance.',
+    'Max 10 deltagere sikrer tæt opmærksomhed og et trygt rum.',
+    'Hele Castillo del Alma er kun til jer — vinmarker, pool og andalusisk landskab.',
+    'Daglige sessioner med erfaren facilitator.',
+    'Alle måltider er tilberedt med friske, lokale råvarer.',
+    'Nætter under Andalusiens klare himmel — langt fra byernes lys.'
+  ];
+  const defaultTextsEN = [
+    'A complete programme designed to bring your nervous system back into balance.',
+    'Max 10 participants ensures close attention and a safe space.',
+    'The entire Castillo del Alma is exclusively yours.',
+    'Daily sessions with an experienced facilitator.',
+    'All meals are prepared with fresh, local ingredients.',
+    'Nights under the clear Andalusian sky — far from city lights.'
+  ];
   highlightsState = [];
   highlightsStateEN = [];
   highlightsStateIcons = [];
   for (let i = 1; i <= MAX_HIGHLIGHTS; i++) {
-    const t = document.getElementById(`ui_highlight${i}_title`)?.value || '';
-    const tx = document.getElementById(`ui_highlight${i}_text`)?.value || '';
-    const tEN = document.getElementById(`ui_highlight${i}_title_en`)?.value || '';
-    const txEN = document.getElementById(`ui_highlight${i}_text_en`)?.value || '';
-    const icon = document.getElementById(`ui_highlight${i}_icon`)?.value || defaultIcons[i-1] || 'globe';
-    if (t || tx || tEN || txEN) {
-      highlightsState.push({ title: t, text: tx });
-      highlightsStateEN.push({ title: tEN, text: txEN });
-      highlightsStateIcons.push(icon);
-    }
+    const t = document.getElementById(`ui_highlight${i}_title`)?.value || defaultTitles[i-1];
+    const tx = document.getElementById(`ui_highlight${i}_text`)?.value || defaultTexts[i-1];
+    const tEN = document.getElementById(`ui_highlight${i}_title_en`)?.value || defaultTitlesEN[i-1];
+    const txEN = document.getElementById(`ui_highlight${i}_text_en`)?.value || defaultTextsEN[i-1];
+    const icon = document.getElementById(`ui_highlight${i}_icon`)?.value || defaultIcons[i-1];
+    highlightsState.push({ title: t, text: tx });
+    highlightsStateEN.push({ title: tEN, text: txEN });
+    highlightsStateIcons.push(icon);
   }
   renderHighlightsListe();
-  document.getElementById('modalHighlightsEditor').classList.add('open');
 }
 
 function renderHighlightsListe() {
