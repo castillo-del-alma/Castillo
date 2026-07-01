@@ -1141,13 +1141,6 @@ const R_ICON_SVG = {
 };
 
 function buildTeacherSection(data) {
-  console.log('buildTeacherSection data:', JSON.stringify({
-    teacher_img1: data.teacher_img1,
-    teacher_img1_name: data.teacher_img1_name,
-    teacher_img2: data.teacher_img2,
-    teacher_bio: data.teacher_bio ? data.teacher_bio.slice(0,30) : null,
-    ui_teacher_heading: data.ui_teacher_heading,
-  }));
   const lang = document.documentElement.lang || 'da';
   const label = document.getElementById('facilitatorLabel');
   const heading = document.getElementById('facilitatorHeading');
@@ -1350,13 +1343,17 @@ async function loadRetreatData() {
   // 5 retreat-specifikke billeder
   const imgs5Section = document.getElementById('retreatImages5Section');
   const imgs5Grid = document.getElementById('retreatImages5Grid');
-  if (imgs5Section && imgs5Grid && data.retreat_images5 && data.retreat_images5.length) {
-    imgs5Grid.innerHTML = data.retreat_images5.map(url =>
-      `<div class="retreat-img5-item" style="background-image:url('${url}');"></div>`
-    ).join('');
-    imgs5Section.style.display = 'block';
-  } else if (imgs5Section) {
-    imgs5Section.style.display = 'none';
+  if (imgs5Section && imgs5Grid) {
+    let imgs5 = data.retreat_images5;
+    if (typeof imgs5 === 'string') { try { imgs5 = JSON.parse(imgs5); } catch(e) { imgs5 = []; } }
+    if (Array.isArray(imgs5) && imgs5.length) {
+      imgs5Grid.innerHTML = imgs5.map(url =>
+        `<div class="retreat-img5-item" style="background-image:url('${url}');"></div>`
+      ).join('');
+      imgs5Section.style.display = 'block';
+    } else {
+      imgs5Section.style.display = 'none';
+    }
   }
 
   // Dato-dropdown
