@@ -2154,10 +2154,134 @@ feeling more calm – and coming home to yourself again."</textarea></div>
         <h3 id="retreatModalTitel" style="font-family:'Cinzel',serif;font-weight:300;font-size:1.4rem;color:#2c2318;margin:0 0 .2rem;">Nyt retreat</h3>
         <p style="font-size:.7rem;color:rgba(44,35,24,.5);margin:0;">🇩🇰 Dansk i venstre kolonne &nbsp;·&nbsp; 🇬🇧 Engelsk i højre kolonne</p>
       </div>
-      <button type="button" onclick="gemRetreat()" style="background:var(--wine);color:#fff;border:none;padding:.7rem 2rem;font-family:Manrope,sans-serif;font-size:.68rem;font-weight:500;letter-spacing:.18em;text-transform:uppercase;cursor:pointer;">💾 Gem retreat</button>
+      <button type="button" id="retreatSaveBtn" onclick="gemRetreat()" style="background:var(--wine);color:#fff;border:none;padding:.7rem 2rem;font-family:Manrope,sans-serif;font-size:.68rem;font-weight:500;letter-spacing:.18em;text-transform:uppercase;cursor:pointer;">💾 Gem retreat</button>
     </div>
 
     <input type="hidden" id="retreat_id">
+
+      <!-- Skjulte felter som gemRetreat() forventer -->
+      <input type="hidden" id="retreat_hero_image">
+      <input type="hidden" id="retreat_card_image">
+      <input type="hidden" id="retreat_teacher_photo">
+      <input type="text" id="ui_label_nights" style="display:none">
+      <input type="text" id="ui_label_nights_en" style="display:none">
+      <input type="text" id="ui_label_days" style="display:none">
+      <input type="text" id="ui_label_days_en" style="display:none">
+      <input type="text" id="ui_label_guests" style="display:none">
+      <input type="text" id="ui_label_guests_en" style="display:none">
+      <input type="text" id="ui_retreat_info_heading" style="display:none">
+      <input type="text" id="ui_retreat_info_heading_en" style="display:none">
+      <input type="text" id="ui_price_from" style="display:none">
+      <input type="text" id="ui_price_from_en" style="display:none">
+      <input type="text" id="ui_price_per_person" style="display:none">
+      <input type="text" id="ui_price_per_person_en" style="display:none">
+      <input type="text" id="ui_excluded_heading" style="display:none">
+      <input type="text" id="ui_excluded_heading_en" style="display:none">
+      <input type="text" id="ui_rooms_heading" style="display:none">
+      <input type="text" id="ui_rooms_heading_en" style="display:none">
+      <input type="text" id="ui_room_double_heading" style="display:none">
+      <input type="text" id="ui_room_double_heading_en" style="display:none">
+      <input type="text" id="ui_room_single_heading" style="display:none">
+      <input type="text" id="ui_room_single_heading_en" style="display:none">
+      <input type="text" id="ui_teacher_heading" style="display:none">
+      <input type="text" id="ui_teacher_heading_en" style="display:none">
+      <input type="text" id="ui_book_label_retreat" style="display:none">
+      <input type="text" id="ui_book_label_retreat_en" style="display:none">
+      <input type="text" id="ui_book_label_country" style="display:none">
+      <input type="text" id="ui_book_label_country_en" style="display:none">
+      <input type="text" id="ui_book_label_date" style="display:none">
+      <input type="text" id="ui_book_label_date_en" style="display:none">
+      <input type="text" id="ui_book_label_room" style="display:none">
+      <input type="text" id="ui_book_label_room_en" style="display:none">
+      <input type="text" id="ui_book_label_wishes" style="display:none">
+      <input type="text" id="ui_book_label_wishes_en" style="display:none">
+      <input type="text" id="ui_bar_reserve" style="display:none">
+      <input type="text" id="ui_bar_reserve_en" style="display:none">
+      <input type="text" id="ui_bar_book" style="display:none">
+      <input type="text" id="ui_bar_book_en" style="display:none">
+      <input type="text" id="ui_form_firstname" style="display:none">
+      <input type="text" id="ui_form_firstname_en" style="display:none">
+      <input type="text" id="ui_form_lastname" style="display:none">
+      <input type="text" id="ui_form_lastname_en" style="display:none">
+      <input type="text" id="ui_form_email" style="display:none">
+      <input type="text" id="ui_form_email_en" style="display:none">
+      <input type="text" id="ui_form_phone" style="display:none">
+      <input type="text" id="ui_form_phone_en" style="display:none">
+      <input type="text" id="ui_form_policy_note" style="display:none">
+      <input type="text" id="ui_form_policy_note_en" style="display:none">
+      <input type="text" id="ui_form_submit_btn" style="display:none">
+      <input type="text" id="ui_form_submit_btn_en" style="display:none">
+      <input type="text" id="ui_payment_method" style="display:none">
+      <input type="text" id="ui_payment_method_en" style="display:none">
+      <input type="text" id="ui_addon_heading" style="display:none">
+      <input type="text" id="ui_addon_heading_en" style="display:none">
+      <input type="text" id="ui_all_retreats_link" style="display:none">
+      <input type="text" id="ui_all_retreats_link_en" style="display:none">
+      <input type="text" id="ui_label_nights" style="display:none">
+      <input type="text" id="retreat_booking_deadline" style="display:none">
+      <input type="number" id="retreat_max_guests" style="display:none">
+      <textarea id="retreat_extra_dates" style="display:none"></textarea>
+      <textarea id="room_pricing" style="display:none"></textarea>
+      <textarea id="ui_rooms_intro" style="display:none"></textarea>
+      <textarea id="ui_rooms_intro_en" style="display:none"></textarea>
+      <textarea id="addon_items" style="display:none"></textarea>
+      <div id="addonListe" style="display:none"></div>
+      <div id="highlightsListe" style="display:none"></div>
+      <div id="highlightsPreview" style="display:none"></div>
+      <div id="programDagListe" style="display:none"></div>
+      <div id="extraDatesListe" style="display:none"></div>
+      <div id="faqListe" style="display:none"></div>
+      <div id="faqPreview" style="display:none"></div>
+      <input type="text" id="retreat_teacher_name" style="display:none">
+      <input type="text" id="ui_label_about" style="display:none">
+      <input type="text" id="ui_label_about_en" style="display:none">
+      <input type="text" id="ui_label_food" style="display:none">
+      <input type="text" id="ui_label_food_en" style="display:none">
+      <input type="text" id="ui_label_reviews" style="display:none">
+      <input type="text" id="ui_label_reviews_en" style="display:none">
+      <input type="text" id="ui_label_rooms" style="display:none">
+      <input type="text" id="ui_label_rooms_en" style="display:none">
+      <input type="text" id="ui_label_included" style="display:none">
+      <input type="text" id="ui_label_included_en" style="display:none">
+      <input type="text" id="ui_label_program" style="display:none">
+      <input type="text" id="ui_label_program_en" style="display:none">
+      <input type="text" id="ui_label_facilitator" style="display:none">
+      <input type="text" id="ui_label_facilitator_en" style="display:none">
+      <input type="text" id="ui_nav_reviews" style="display:none">
+      <input type="text" id="ui_nav_reviews_en" style="display:none">
+      <input type="text" id="ui_nav_book" style="display:none">
+      <input type="text" id="ui_nav_book_en" style="display:none">
+      <input type="text" id="ui_label_duration" style="display:none">
+      <input type="text" id="ui_label_duration_en" style="display:none">
+      <input type="text" id="ui_label_arrival" style="display:none">
+      <input type="text" id="ui_label_arrival_en" style="display:none">
+      <input type="text" id="ui_label_departure" style="display:none">
+      <input type="text" id="ui_label_departure_en" style="display:none">
+      <input type="text" id="ui_highlight1_title" style="display:none">
+      <input type="text" id="ui_highlight1_title_en" style="display:none">
+      <input type="text" id="ui_highlight1_text" style="display:none">
+      <input type="text" id="ui_highlight1_text_en" style="display:none">
+      <input type="text" id="ui_highlight2_title" style="display:none">
+      <input type="text" id="ui_highlight2_title_en" style="display:none">
+      <input type="text" id="ui_highlight2_text" style="display:none">
+      <input type="text" id="ui_highlight2_text_en" style="display:none">
+      <input type="text" id="ui_highlight3_title" style="display:none">
+      <input type="text" id="ui_highlight3_title_en" style="display:none">
+      <input type="text" id="ui_highlight3_text" style="display:none">
+      <input type="text" id="ui_highlight3_text_en" style="display:none">
+      <input type="text" id="ui_highlight4_title" style="display:none">
+      <input type="text" id="ui_highlight4_title_en" style="display:none">
+      <input type="text" id="ui_highlight4_text" style="display:none">
+      <input type="text" id="ui_highlight4_text_en" style="display:none">
+      <input type="text" id="ui_highlight5_title" style="display:none">
+      <input type="text" id="ui_highlight5_title_en" style="display:none">
+      <input type="text" id="ui_highlight5_text" style="display:none">
+      <input type="text" id="ui_highlight5_text_en" style="display:none">
+      <input type="text" id="ui_highlight6_title" style="display:none">
+      <input type="text" id="ui_highlight6_title_en" style="display:none">
+      <input type="text" id="ui_highlight6_text" style="display:none">
+      <input type="text" id="ui_highlight6_text_en" style="display:none">
+
     <div id="retreatSavedMsg" style="display:none;background:#2a7a74;color:#fff;padding:.8rem 1.5rem;margin-bottom:1.5rem;font-size:.8rem;">✓ Retreat gemt!</div>
 
     <!-- HOP TIL SEKTION -->
@@ -2219,7 +2343,7 @@ feeling more calm – and coming home to yourself again."</textarea></div>
           <div>
             <label class="fc-label" style="color:rgba(44,35,24,.6);">Synlig på hjemmesiden</label>
             <label style="display:flex;align-items:center;gap:.5rem;font-size:.8rem;margin-top:.4rem;cursor:pointer;">
-              <input type="checkbox" id="retreat_published"> Vis retreat offentligt
+              <input type="checkbox" id="retreat_active"> Vis retreat offentligt
             </label>
           </div>
           <div>
@@ -2235,15 +2359,15 @@ feeling more calm – and coming home to yourself again."</textarea></div>
       <div class="fc-block-header"><span class="fc-block-title">2 · Datoer, deltagere & pris</span></div>
       <div class="fc-block-body">
         <div class="fc-row">
-          <div><label class="fc-label">Ankomstdato</label><input type="date" id="retreat_start_date" class="fc-input-da"></div>
-          <div><label class="fc-label">Afrejsedato</label><input type="date" id="retreat_end_date" class="fc-input-da"></div>
+          <div><label class="fc-label">Ankomstdato</label><input type="date" id="retreat_arrival" class="fc-input-da"></div>
+          <div><label class="fc-label">Afrejsedato</label><input type="date" id="retreat_departure" class="fc-input-da"></div>
         </div>
         <div class="fc-row">
           <div><label class="fc-label">Max. deltagere</label><input type="number" id="retreat_max_guests" class="fc-input-da" placeholder="12" min="1"></div>
-          <div><label class="fc-label">Pris per person (€)</label><input type="number" id="retreat_price_per_person" class="fc-input-da" placeholder="0" min="0"></div>
+          <div><label class="fc-label">Pris per person (€)</label><input type="number" id="retreat_price" class="fc-input-da" placeholder="0" min="0"></div>
         </div>
         <div class="fc-row">
-          <div><label class="fc-label">Depositum (€)</label><input type="number" id="retreat_deposit" class="fc-input-da" placeholder="0" min="0"></div>
+          <div><label class="fc-label">Depositum (€)</label><input type="number" id="retreat_deposit_pct" class="fc-input-da" placeholder="0" min="0"></div>
           <div><label class="fc-label">Booking deadline</label><input type="date" id="retreat_booking_deadline" class="fc-input-da"></div>
         </div>
       </div>
@@ -2259,8 +2383,8 @@ feeling more calm – and coming home to yourself again."</textarea></div>
             <input type="text" id="retreat_hero_image" class="fc-input-da" placeholder="https://...">
             <label class="fc-label" style="color:#2a7a74;margin-top:.6rem;">📁 Upload nyt hero-billede</label>
             <div style="display:flex;align-items:center;gap:.6rem;margin-top:.3rem;">
-              <img id="retreat_hero_thumb" src="" style="display:none;width:56px;height:56px;object-fit:cover;border-radius:3px;border:1px solid rgba(184,138,30,.3);">
-              <input type="file" id="retreat_hero_upload" accept="image/*" style="font-size:.76rem;flex:1;">
+              <img id="retreat_hero_preview" src="" style="display:none;width:56px;height:56px;object-fit:cover;border-radius:3px;border:1px solid rgba(184,138,30,.3);">
+              <input type="file" id="retreat_hero_file" accept="image/*" style="font-size:.76rem;flex:1;">
               <button type="button" onclick="uploadRetreatBillede('retreat_hero_upload','retreat_hero_image','retreat_hero_thumb')" style="background:#2a7a74;color:#fff;border:none;padding:.45rem 1.1rem;font-family:Manrope,sans-serif;font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;white-space:nowrap;">⬆ Upload</button>
             </div>
           </div>
@@ -2269,8 +2393,8 @@ feeling more calm – and coming home to yourself again."</textarea></div>
             <input type="text" id="retreat_card_image" class="fc-input-da" placeholder="https://...">
             <label class="fc-label" style="color:#2a7a74;margin-top:.6rem;">📁 Upload nyt kort-billede</label>
             <div style="display:flex;align-items:center;gap:.6rem;margin-top:.3rem;">
-              <img id="retreat_card_thumb" src="" style="display:none;width:56px;height:56px;object-fit:cover;border-radius:3px;border:1px solid rgba(184,138,30,.3);">
-              <input type="file" id="retreat_card_upload" accept="image/*" style="font-size:.76rem;flex:1;">
+              <img id="retreat_card_preview" src="" style="display:none;width:56px;height:56px;object-fit:cover;border-radius:3px;border:1px solid rgba(184,138,30,.3);">
+              <input type="file" id="retreat_card_file" accept="image/*" style="font-size:.76rem;flex:1;">
               <button type="button" onclick="uploadRetreatBillede('retreat_card_upload','retreat_card_image','retreat_card_thumb')" style="background:#2a7a74;color:#fff;border:none;padding:.45rem 1.1rem;font-family:Manrope,sans-serif;font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;white-space:nowrap;">⬆ Upload</button>
             </div>
           </div>
@@ -2283,16 +2407,16 @@ feeling more calm – and coming home to yourself again."</textarea></div>
       <div class="fc-block-header"><span class="fc-block-title">4 · Om retreatet</span></div>
       <div class="fc-block-body">
         <div class="fc-row">
-          <div><label class="fc-label fc-label-da">Overskrift (DA)</label><input type="text" id="about_heading" class="fc-input-da" placeholder="Om dette retreat"></div>
-          <div><label class="fc-label fc-label-en">Heading (EN)</label><input type="text" id="about_heading_en" class="fc-input-en" placeholder="About this retreat"></div>
+          <div><label class="fc-label fc-label-da">Overskrift (DA)</label><input type="text" id="retreat_about_heading" class="fc-input-da" placeholder="Om dette retreat"></div>
+          <div><label class="fc-label fc-label-en">Heading (EN)</label><input type="text" id="retreat_about_heading_en" class="fc-input-en" placeholder="About this retreat"></div>
         </div>
         <div class="fc-row">
-          <div><label class="fc-label fc-label-da">Beskrivelse (DA)</label><textarea id="about_content" class="fc-input-da fc-textarea" rows="5" placeholder="Fortæl om retreatet..."></textarea></div>
-          <div><label class="fc-label fc-label-en">Description (EN)</label><textarea id="about_content_en" class="fc-input-en fc-textarea" rows="5" placeholder="Tell about the retreat..."></textarea></div>
+          <div><label class="fc-label fc-label-da">Beskrivelse (DA)</label><textarea id="retreat_about_text" class="fc-input-da fc-textarea" rows="5" placeholder="Fortæl om retreatet..."></textarea></div>
+          <div><label class="fc-label fc-label-en">Description (EN)</label><textarea id="retreat_about_text_en" class="fc-input-en fc-textarea" rows="5" placeholder="Tell about the retreat..."></textarea></div>
         </div>
         <div class="fc-row">
-          <div><label class="fc-label fc-label-da">Citat (DA)</label><textarea id="about_quote" class="fc-input-da fc-textarea" rows="2" placeholder="Et inspirerende citat..."></textarea></div>
-          <div><label class="fc-label fc-label-en">Quote (EN)</label><textarea id="about_quote_en" class="fc-input-en fc-textarea" rows="2" placeholder="An inspiring quote..."></textarea></div>
+          <div><label class="fc-label fc-label-da">Citat (DA)</label><textarea id="retreat_about_quote" class="fc-input-da fc-textarea" rows="2" placeholder="Et inspirerende citat..."></textarea></div>
+          <div><label class="fc-label fc-label-en">Quote (EN)</label><textarea id="retreat_about_quote_en" class="fc-input-en fc-textarea" rows="2" placeholder="An inspiring quote..."></textarea></div>
         </div>
       </div>
     </div>
@@ -2339,24 +2463,24 @@ feeling more calm – and coming home to yourself again."</textarea></div>
       <div class="fc-block-body">
         <p style="font-size:.7rem;color:rgba(44,35,24,.4);margin-bottom:1rem;">Labels i den farvet info-bar øverst på retreat-siden.</p>
         <div class="fc-row">
-          <div><label class="fc-label fc-label-da">Varighed-label (DA)</label><input type="text" id="ui_bar_duration" class="fc-input-da" placeholder="Varighed"></div>
-          <div><label class="fc-label fc-label-en">Duration label (EN)</label><input type="text" id="ui_bar_duration_en" class="fc-input-en" placeholder="Duration"></div>
+          <div><label class="fc-label fc-label-da">Varighed-label (DA)</label><input type="text" id="ui_label_duration" class="fc-input-da" placeholder="Varighed"></div>
+          <div><label class="fc-label fc-label-en">Duration label (EN)</label><input type="text" id="ui_label_duration_en" class="fc-input-en" placeholder="Duration"></div>
         </div>
         <div class="fc-row">
-          <div><label class="fc-label fc-label-da">Ankomst-label (DA)</label><input type="text" id="ui_bar_arrival" class="fc-input-da" placeholder="Ankomst"></div>
-          <div><label class="fc-label fc-label-en">Arrival label (EN)</label><input type="text" id="ui_bar_arrival_en" class="fc-input-en" placeholder="Arrival"></div>
+          <div><label class="fc-label fc-label-da">Ankomst-label (DA)</label><input type="text" id="ui_label_arrival" class="fc-input-da" placeholder="Ankomst"></div>
+          <div><label class="fc-label fc-label-en">Arrival label (EN)</label><input type="text" id="ui_label_arrival_en" class="fc-input-en" placeholder="Arrival"></div>
         </div>
         <div class="fc-row">
-          <div><label class="fc-label fc-label-da">Afrejse-label (DA)</label><input type="text" id="ui_bar_departure" class="fc-input-da" placeholder="Afrejse"></div>
-          <div><label class="fc-label fc-label-en">Departure label (EN)</label><input type="text" id="ui_bar_departure_en" class="fc-input-en" placeholder="Departure"></div>
+          <div><label class="fc-label fc-label-da">Afrejse-label (DA)</label><input type="text" id="ui_label_departure" class="fc-input-da" placeholder="Afrejse"></div>
+          <div><label class="fc-label fc-label-en">Departure label (EN)</label><input type="text" id="ui_label_departure_en" class="fc-input-en" placeholder="Departure"></div>
         </div>
         <div class="fc-row">
-          <div><label class="fc-label fc-label-da">Nætter-label (DA)</label><input type="text" id="ui_bar_nights" class="fc-input-da" placeholder="nætter"></div>
-          <div><label class="fc-label fc-label-en">Nights label (EN)</label><input type="text" id="ui_bar_nights_en" class="fc-input-en" placeholder="nights"></div>
+          <div><label class="fc-label fc-label-da">Nætter-label (DA)</label><input type="text" id="ui_label_nights" class="fc-input-da" placeholder="nætter"></div>
+          <div><label class="fc-label fc-label-en">Nights label (EN)</label><input type="text" id="ui_label_nights_en" class="fc-input-en" placeholder="nights"></div>
         </div>
         <div class="fc-row">
-          <div><label class="fc-label fc-label-da">Dage-label (DA)</label><input type="text" id="ui_bar_days" class="fc-input-da" placeholder="dage"></div>
-          <div><label class="fc-label fc-label-en">Days label (EN)</label><input type="text" id="ui_bar_days_en" class="fc-input-en" placeholder="days"></div>
+          <div><label class="fc-label fc-label-da">Dage-label (DA)</label><input type="text" id="ui_label_days" class="fc-input-da" placeholder="dage"></div>
+          <div><label class="fc-label fc-label-en">Days label (EN)</label><input type="text" id="ui_label_days_en" class="fc-input-en" placeholder="days"></div>
         </div>
       </div>
     </div>
@@ -2371,12 +2495,12 @@ feeling more calm – and coming home to yourself again."</textarea></div>
         </div>
         <div style="margin-top:1rem;">
           <label class="fc-label fc-label-da">Programdage (DA)</label>
-          <textarea id="program_days" class="fc-input-da fc-textarea" rows="4" placeholder='[{"day":"Dag 1","title":"Ankomst","description":"..."}]'style="font-family:monospace;font-size:.72rem;"></textarea>
+          <textarea id="retreat_program_days" class="fc-input-da fc-textarea" rows="4" placeholder='[{"day":"Dag 1","title":"Ankomst","description":"..."}]'style="font-family:monospace;font-size:.72rem;"></textarea>
           <button type="button" onclick="openProgramEditor()" style="margin-top:.6rem;background:rgba(184,138,30,.1);border:1px solid rgba(184,138,30,.3);color:#7a5c14;padding:.6rem 1.2rem;font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;width:100%;">✏️ Redigér programdage visuelt (DA)</button>
         </div>
         <div style="margin-top:1rem;">
           <label class="fc-label fc-label-en">Programme days (EN)</label>
-          <textarea id="program_days_en" class="fc-input-en fc-textarea" rows="4" placeholder='[{"day":"Day 1","title":"Arrival","description":"..."}]' style="font-family:monospace;font-size:.72rem;"></textarea>
+          <textarea id="retreat_program_days_en" class="fc-input-en fc-textarea" rows="4" placeholder='[{"day":"Day 1","title":"Arrival","description":"..."}]' style="font-family:monospace;font-size:.72rem;"></textarea>
           <button type="button" onclick="openProgramEditorEN()" style="margin-top:.6rem;background:rgba(42,122,116,.1);border:1px solid #7fb3af;color:#2a7a74;padding:.6rem 1.2rem;font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;width:100%;">✏️ Edit programme days visually (EN)</button>
         </div>
       </div>
@@ -2387,16 +2511,16 @@ feeling more calm – and coming home to yourself again."</textarea></div>
       <div class="fc-block-header"><span class="fc-block-title">8 · Inkluderet / Ikke inkluderet</span></div>
       <div class="fc-block-body">
         <div class="fc-row">
-          <div><label class="fc-label fc-label-da">Inkluderet-overskrift (DA)</label><input type="text" id="ui_included_section_heading" class="fc-input-da" placeholder="Inkluderet"></div>
-          <div><label class="fc-label fc-label-en">Included heading (EN)</label><input type="text" id="ui_included_section_heading_en" class="fc-input-en" placeholder="Included"></div>
+          <div><label class="fc-label fc-label-da">Inkluderet-overskrift (DA)</label><input type="text" id="ui_included_heading" class="fc-input-da" placeholder="Inkluderet"></div>
+          <div><label class="fc-label fc-label-en">Included heading (EN)</label><input type="text" id="ui_included_heading_en" class="fc-input-en" placeholder="Included"></div>
         </div>
         <div class="fc-row">
-          <div><label class="fc-label fc-label-da">Inkluderet (DA) — ét punkt per linje</label><textarea id="included_items" class="fc-input-da fc-textarea" rows="5" placeholder="Overnatning&#10;Alle måltider&#10;Yoga morgen og aften"></textarea></div>
-          <div><label class="fc-label fc-label-en">Included (EN) — one item per line</label><textarea id="included_items_en" class="fc-input-en fc-textarea" rows="5" placeholder="Accommodation&#10;All meals&#10;Morning and evening yoga"></textarea></div>
+          <div><label class="fc-label fc-label-da">Inkluderet (DA) — ét punkt per linje</label><textarea id="retreat_included" class="fc-input-da fc-textarea" rows="5" placeholder="Overnatning&#10;Alle måltider&#10;Yoga morgen og aften"></textarea></div>
+          <div><label class="fc-label fc-label-en">Included (EN) — one item per line</label><textarea id="retreat_included_en" class="fc-input-en fc-textarea" rows="5" placeholder="Accommodation&#10;All meals&#10;Morning and evening yoga"></textarea></div>
         </div>
         <div class="fc-row">
-          <div><label class="fc-label fc-label-da">Ikke inkluderet (DA) — ét punkt per linje</label><textarea id="excluded_items" class="fc-input-da fc-textarea" rows="4" placeholder="Fly&#10;Transport"></textarea></div>
-          <div><label class="fc-label fc-label-en">Not included (EN) — one item per line</label><textarea id="excluded_items_en" class="fc-input-en fc-textarea" rows="4" placeholder="Flights&#10;Transport"></textarea></div>
+          <div><label class="fc-label fc-label-da">Ikke inkluderet (DA) — ét punkt per linje</label><textarea id="retreat_excluded" class="fc-input-da fc-textarea" rows="4" placeholder="Fly&#10;Transport"></textarea></div>
+          <div><label class="fc-label fc-label-en">Not included (EN) — one item per line</label><textarea id="retreat_excluded_en" class="fc-input-en fc-textarea" rows="4" placeholder="Flights&#10;Transport"></textarea></div>
         </div>
       </div>
     </div>
@@ -2421,12 +2545,12 @@ feeling more calm – and coming home to yourself again."</textarea></div>
       <div class="fc-block-header"><span class="fc-block-title">10 · Mad & køkken</span></div>
       <div class="fc-block-body">
         <div class="fc-row">
-          <div><label class="fc-label fc-label-da">Mad-overskrift (DA)</label><input type="text" id="food_heading" class="fc-input-da" placeholder="Mad & køkken"></div>
-          <div><label class="fc-label fc-label-en">Food heading (EN)</label><input type="text" id="food_heading_en" class="fc-input-en" placeholder="Food & kitchen"></div>
+          <div><label class="fc-label fc-label-da">Mad-overskrift (DA)</label><input type="text" id="ui_food_heading" class="fc-input-da" placeholder="Mad & køkken"></div>
+          <div><label class="fc-label fc-label-en">Food heading (EN)</label><input type="text" id="ui_food_heading_en" class="fc-input-en" placeholder="Food & kitchen"></div>
         </div>
         <div class="fc-row">
-          <div><label class="fc-label fc-label-da">Mad-beskrivelse (DA)</label><textarea id="food_description" class="fc-input-da fc-textarea" rows="4" placeholder="Vi tilbyder..."></textarea></div>
-          <div><label class="fc-label fc-label-en">Food description (EN)</label><textarea id="food_description_en" class="fc-input-en fc-textarea" rows="4" placeholder="We offer..."></textarea></div>
+          <div><label class="fc-label fc-label-da">Mad-beskrivelse (DA)</label><textarea id="ui_food_text" class="fc-input-da fc-textarea" rows="4" placeholder="Vi tilbyder..."></textarea></div>
+          <div><label class="fc-label fc-label-en">Food description (EN)</label><textarea id="ui_food_text_en" class="fc-input-en fc-textarea" rows="4" placeholder="We offer..."></textarea></div>
         </div>
       </div>
     </div>
@@ -2436,15 +2560,15 @@ feeling more calm – and coming home to yourself again."</textarea></div>
       <div class="fc-block-header"><span class="fc-block-title">11 · Underviser / Facilitator</span></div>
       <div class="fc-block-body">
         <div class="fc-row">
-          <div><label class="fc-label">Navn</label><input type="text" id="teacher_name" class="fc-input-da" placeholder="Navn"></div>
+          <div><label class="fc-label">Navn</label><input type="text" id="retreat_teacher_name" class="fc-input-da" placeholder="Navn"></div>
           <div>
             <label class="fc-label" style="color:#2a7a74;">📁 Foto</label>
             <div style="display:flex;align-items:center;gap:.6rem;margin-top:.3rem;">
-              <img id="teacher_photo_thumb" src="" style="display:none;width:56px;height:56px;object-fit:cover;border-radius:3px;border:1px solid rgba(184,138,30,.3);">
-              <input type="file" id="teacher_photo_upload" accept="image/*" style="font-size:.76rem;flex:1;">
+              <img id="retreat_photo_preview" src="" style="display:none;width:56px;height:56px;object-fit:cover;border-radius:3px;border:1px solid rgba(184,138,30,.3);">
+              <input type="file" id="retreat_photo_file" accept="image/*" style="font-size:.76rem;flex:1;">
               <button type="button" onclick="uploadRetreatBillede('teacher_photo_upload','teacher_photo','teacher_photo_thumb')" style="background:#2a7a74;color:#fff;border:none;padding:.45rem 1.1rem;font-family:Manrope,sans-serif;font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;white-space:nowrap;">⬆ Upload</button>
             </div>
-            <input type="text" id="teacher_photo" class="fc-input-da" placeholder="URL til foto" style="margin-top:.5rem;">
+            <input type="text" id="retreat_teacher_photo" class="fc-input-da" placeholder="URL til foto" style="margin-top:.5rem;">
           </div>
         </div>
         <div class="fc-row">
@@ -2452,8 +2576,8 @@ feeling more calm – and coming home to yourself again."</textarea></div>
           <div><label class="fc-label fc-label-en">Title/role (EN)</label><input type="text" id="ui_facilitator_role_en" class="fc-input-en" placeholder="Facilitator"></div>
         </div>
         <div class="fc-row">
-          <div><label class="fc-label fc-label-da">Bio (DA)</label><textarea id="teacher_bio" class="fc-input-da fc-textarea" rows="4" placeholder="Underviserens biografi..."></textarea></div>
-          <div><label class="fc-label fc-label-en">Bio (EN)</label><textarea id="teacher_bio_en" class="fc-input-en fc-textarea" rows="4" placeholder="Facilitator biography..."></textarea></div>
+          <div><label class="fc-label fc-label-da">Bio (DA)</label><textarea id="retreat_teacher_bio" class="fc-input-da fc-textarea" rows="4" placeholder="Underviserens biografi..."></textarea></div>
+          <div><label class="fc-label fc-label-en">Bio (EN)</label><textarea id="retreat_teacher_bio_en" class="fc-input-en fc-textarea" rows="4" placeholder="Facilitator biography..."></textarea></div>
         </div>
       </div>
     </div>
@@ -2463,8 +2587,8 @@ feeling more calm – and coming home to yourself again."</textarea></div>
       <div class="fc-block-header"><span class="fc-block-title">12 · Highlights</span></div>
       <div class="fc-block-body">
         <div class="fc-row">
-          <div><label class="fc-label fc-label-da">Highlights-overskrift (DA)</label><input type="text" id="highlights_heading" class="fc-input-da" placeholder="Highlights"></div>
-          <div><label class="fc-label fc-label-en">Highlights heading (EN)</label><input type="text" id="highlights_heading_en" class="fc-input-en" placeholder="Highlights"></div>
+          <div><label class="fc-label fc-label-da">Highlights-overskrift (DA)</label><input type="text" id="ui_highlights_heading" class="fc-input-da" placeholder="Highlights"></div>
+          <div><label class="fc-label fc-label-en">Highlights heading (EN)</label><input type="text" id="ui_highlights_heading_en" class="fc-input-en" placeholder="Highlights"></div>
         </div>
         <button type="button" onclick="openHighlightsEditor()" style="margin-top:.6rem;background:rgba(184,138,30,.1);border:1px solid rgba(184,138,30,.3);color:#7a5c14;padding:.7rem 1.5rem;font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;width:100%;">✏️ Redigér alle highlights visuelt (DA + EN)</button>
         <div style="margin-top:.8rem;display:grid;grid-template-columns:1fr 1fr;gap:.6rem;">
@@ -2479,24 +2603,24 @@ feeling more calm – and coming home to yourself again."</textarea></div>
       <div class="fc-block-header"><span class="fc-block-title">13 · Booking-sektion</span></div>
       <div class="fc-block-body">
         <div class="fc-row">
-          <div><label class="fc-label fc-label-da">Overskrift (DA)</label><input type="text" id="ui_form_heading" class="fc-input-da" placeholder="Book dit retreat"></div>
-          <div><label class="fc-label fc-label-en">Heading (EN)</label><input type="text" id="ui_form_heading_en" class="fc-input-en" placeholder="Book your retreat"></div>
+          <div><label class="fc-label fc-label-da">Overskrift (DA)</label><input type="text" id="ui_book_heading" class="fc-input-da" placeholder="Book dit retreat"></div>
+          <div><label class="fc-label fc-label-en">Heading (EN)</label><input type="text" id="ui_book_heading_en" class="fc-input-en" placeholder="Book your retreat"></div>
         </div>
         <div class="fc-row">
-          <div><label class="fc-label fc-label-da">Intro-tekst (DA)</label><textarea id="ui_form_intro" class="fc-input-da fc-textarea" rows="3" placeholder="Intro til booking..."></textarea></div>
-          <div><label class="fc-label fc-label-en">Intro text (EN)</label><textarea id="ui_form_intro_en" class="fc-input-en fc-textarea" rows="3" placeholder="Booking intro..."></textarea></div>
+          <div><label class="fc-label fc-label-da">Intro-tekst (DA)</label><textarea id="ui_book_intro" class="fc-input-da fc-textarea" rows="3" placeholder="Intro til booking..."></textarea></div>
+          <div><label class="fc-label fc-label-en">Intro text (EN)</label><textarea id="ui_book_intro_en" class="fc-input-en fc-textarea" rows="3" placeholder="Booking intro..."></textarea></div>
         </div>
         <div class="fc-row">
-          <div><label class="fc-label fc-label-da">Politik-note (DA)</label><textarea id="ui_form_policy" class="fc-input-da fc-textarea" rows="3" placeholder="Afbudsregler..."></textarea></div>
-          <div><label class="fc-label fc-label-en">Policy note (EN)</label><textarea id="ui_form_policy_en" class="fc-input-en fc-textarea" rows="3" placeholder="Cancellation policy..."></textarea></div>
+          <div><label class="fc-label fc-label-da">Politik-note (DA)</label><textarea id="ui_form_policy_note" class="fc-input-da fc-textarea" rows="3" placeholder="Afbudsregler..."></textarea></div>
+          <div><label class="fc-label fc-label-en">Policy note (EN)</label><textarea id="ui_form_policy_note_en" class="fc-input-en fc-textarea" rows="3" placeholder="Cancellation policy..."></textarea></div>
         </div>
         <div class="fc-row">
           <div><label class="fc-label fc-label-da">Tilvalg-overskrift (DA)</label><input type="text" id="ui_addon_heading" class="fc-input-da" placeholder="Tilvalg"></div>
           <div><label class="fc-label fc-label-en">Add-ons heading (EN)</label><input type="text" id="ui_addon_heading_en" class="fc-input-en" placeholder="Add-ons"></div>
         </div>
         <div class="fc-row">
-          <div><label class="fc-label fc-label-da">Send-knap tekst (DA)</label><input type="text" id="ui_form_submit" class="fc-input-da" placeholder="Send booking"></div>
-          <div><label class="fc-label fc-label-en">Submit button (EN)</label><input type="text" id="ui_form_submit_en" class="fc-input-en" placeholder="Send booking"></div>
+          <div><label class="fc-label fc-label-da">Send-knap tekst (DA)</label><input type="text" id="ui_form_submit_btn" class="fc-input-da" placeholder="Send booking"></div>
+          <div><label class="fc-label fc-label-en">Submit button (EN)</label><input type="text" id="ui_form_submit_btn_en" class="fc-input-en" placeholder="Send booking"></div>
         </div>
         <div class="fc-row">
           <div><label class="fc-label fc-label-da">Betalingsmetode-label (DA)</label><input type="text" id="ui_payment_method" class="fc-input-da" placeholder="Betalingsmetode"></div>
@@ -4918,6 +5042,11 @@ async function uploadRetreatBillede(inputId, urlFieldId, thumbId) {
   } catch(e) {
     showToast('Upload fejl: ' + e.message, true);
   }
+}
+
+// Alias med samme signatur men anderledes navn (bruges af ny modal)
+async function uploadRetreatBilledeByFile(inputId, urlFieldId, thumbId) {
+  return uploadRetreatBillede(inputId, urlFieldId, thumbId);
 }
 
 // Alias til engelsk program-editor
