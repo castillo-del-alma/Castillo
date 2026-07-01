@@ -4877,7 +4877,7 @@ function openNytRetreat() {
   renderRetreatBilleder5();
   teacherImgsState = [{url:'',name:''},{url:'',name:''},{url:'',name:''}];
   loadTeacherImgs({});
-  loadHighlightsIntoSection();
+  loadHighlightsIntoSection({});
   // Værelse-editor — standard to typer
   roomPricingState = [
     { room_da: 'Delt dobbeltværelse', room_en: 'Shared twin room', price: 1295 },
@@ -5989,7 +5989,7 @@ function syncHighlightsToFields() {
   });
 }
 
-function loadHighlightsIntoSection() {
+function loadHighlightsIntoSection(r) {
   const defaultIcons = ['globe', 'shield', 'home', 'drop', 'fork', 'star'];
   const defaultTitles = ['Nervous System Reset', 'Intimt & eksklusivt', 'Eksklusiv ejendom', 'Guidede breathwork-sessioner', 'Nærende andalusisk mad', 'Stilhed & stjernekiggeri'];
   const defaultTitlesEN = ['Nervous System Reset', 'Intimate & Exclusive', 'Exclusive Property', 'Guided Breathwork Sessions', 'Nourishing Andalusian Food', 'Silence & Stargazing'];
@@ -6012,16 +6012,11 @@ function loadHighlightsIntoSection() {
   highlightsState = [];
   highlightsStateEN = [];
   highlightsStateIcons = [];
-  // Altid 6 kort — brug DB-data hvis det findes, ellers defaults
   for (let i = 1; i <= 6; i++) {
-    const t = document.getElementById(`ui_highlight${i}_title`)?.value.trim() || defaultTitles[i-1];
-    const tx = document.getElementById(`ui_highlight${i}_text`)?.value.trim() || defaultTexts[i-1];
-    const tEN = document.getElementById(`ui_highlight${i}_title_en`)?.value.trim() || defaultTitlesEN[i-1];
-    const txEN = document.getElementById(`ui_highlight${i}_text_en`)?.value.trim() || defaultTextsEN[i-1];
-    const icon = document.getElementById(`ui_highlight${i}_icon`)?.value || defaultIcons[i-1];
-    highlightsState.push({ title: t, text: tx });
-    highlightsStateEN.push({ title: tEN, text: txEN });
-    highlightsStateIcons.push(icon);
+    const key = n => r && r[`ui_highlight${i}_${n}`];
+    highlightsState.push({ title: key('title') || defaultTitles[i-1], text: key('text') || defaultTexts[i-1] });
+    highlightsStateEN.push({ title: key('title_en') || defaultTitlesEN[i-1], text: key('text_en') || defaultTextsEN[i-1] });
+    highlightsStateIcons.push(key('icon') || defaultIcons[i-1]);
   }
   renderHighlightsListe();
 }
