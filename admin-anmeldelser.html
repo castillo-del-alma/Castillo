@@ -294,6 +294,17 @@ body{font-family:'Manrope',sans-serif;background:#f0e8d5;color:#2c2318;min-heigh
   <!-- FANE: MANUEL FAKTURA -->
   <div class="tab-content" id="tab-faktura" style="padding:2rem 3rem;max-width:900px;">
     <h3 style="font-family:'Cinzel',serif;font-weight:300;font-size:1.2rem;color:#2c2318;margin:0 0 1.5rem;">Manuel faktura</h3>
+
+    <!-- KUNDESØGNING -->
+    <div style="background:rgba(184,138,30,.06);border:1px solid rgba(184,138,30,.2);padding:1rem 1.2rem;margin-bottom:1.5rem;position:relative;">
+      <p style="font-size:.6rem;letter-spacing:.15em;text-transform:uppercase;color:#7a5c14;margin-bottom:.6rem;">Hent eksisterende kunde</p>
+      <input type="text" id="mf-kunde-søg" placeholder="Søg navn eller email på eksisterende kunde…"
+        oninput="søgKundeTilFaktura(this.value)"
+        style="width:100%;border:1px solid rgba(184,138,30,.3);background:#faf6ee;color:#2c2318;padding:.6rem .9rem;font-family:'Manrope',sans-serif;font-size:.82rem;outline:none;">
+      <div id="mf-kunde-resultater" style="display:none;position:absolute;left:1.2rem;right:1.2rem;background:#fff;border:1px solid rgba(184,138,30,.3);border-top:none;z-index:100;max-height:200px;overflow-y:auto;"></div>
+      <p style="font-size:.68rem;color:rgba(44,35,24,.4);margin-top:.5rem;">— eller udfyld felterne nedenfor manuelt for en ny kunde</p>
+    </div>
+
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-bottom:1.5rem;">
       <div>
         <p style="font-size:.6rem;letter-spacing:.15em;text-transform:uppercase;color:#7a5c14;margin-bottom:.8rem;">Kundeoplysninger</p>
@@ -3535,7 +3546,7 @@ function switchTab(tab, btn) {
   document.getElementById('tab-' + tab).classList.add('active');
   if (tab === 'newsletter') loadNewsletter();
   if (tab === 'faktura-historik') loadFakturaHistorik();
-  if (tab === 'faktura') { if (!document.querySelector('#mf-linjer [id^="mf-linje-"]')) mfTilfoejLinje(); }
+  if (tab === 'faktura') { if (!document.querySelector('#mf-linjer [id^="mf-linje-"]')) mfTilfoejLinje(); loadKunderTilFaktura(); }
   if (tab === 'sprog') {
     // Load den aktive under-fane (default: forside)
     const activeSub = document.querySelector('.subtab-btn.active');
@@ -4349,6 +4360,62 @@ function mfGetLinjer() {
     return { description: inputs[0].value, qty: parseFloat(inputs[1].value)||1, price: parseFloat(inputs[2].value)||0, vat: parseFloat(inputs[3].value)||0 };
   }).filter(l => l.description || l.price);
 }
+
+// ── KUNDESØGNING TIL FAKTURA ──
+let alleKunderTilFaktura = [];
+
+async function loadKunderTilFaktura() {
+  if (!sb || alleKunderTilFaktura.length) return;
+  try {
+    const { data, error } = await sb.from('customers').select('id,fornavn,efternavn,email,adresse,postnr,by,land,vat').order('efternavn');
+    if (error) throw error;
+    alleKunderTilFaktura = data || [];
+  } catch(e) {
+    console.warn('Kunne ikke hente kunder til faktura:', e.message);
+  }
+}
+
+function søgKundeTilFaktura(query) {
+  const container = document.getElementById('mf-kunde-resultater');
+  if (!query || query.length < 2) { container.style.display = 'none'; return; }
+  const q = query.toLowerCase();
+  const matches = alleKunderTilFaktura.filter(k =>
+    `${k.fornavn} ${k.efternavn}`.toLowerCase().includes(q) ||
+    (k.email || '').toLowerCase().includes(q)
+  ).slice(0, 8);
+  if (!matches.length) { container.style.display = 'none'; return; }
+  container.style.display = 'block';
+  container.innerHTML = matches.map(k => `
+    <div onclick="vælgKundeTilFaktura(${k.id})"
+      style="padding:.6rem .9rem;font-size:.8rem;cursor:pointer;border-bottom:1px solid rgba(184,138,30,.1);color:#2c2318;"
+      onmouseover="this.style.background='rgba(184,138,30,.08)'" onmouseout="this.style.background=''">
+      <strong>${k.fornavn} ${k.efternavn}</strong>
+      <span style="color:rgba(44,35,24,.5);margin-left:.5rem;">${k.email || ''}</span>
+      <span style="display:block;font-size:.7rem;color:rgba(44,35,24,.4);">${[k.adresse, k.postnr, k.by, k.land].filter(Boolean).join(', ')}</span>
+    </div>`).join('');
+}
+
+function vælgKundeTilFaktura(id) {
+  const k = alleKunderTilFaktura.find(x => x.id === id);
+  if (!k) return;
+  document.getElementById('mf-navn').value = `${k.fornavn} ${k.efternavn}`;
+  document.getElementById('mf-email').value = k.email || '';
+  document.getElementById('mf-adresse').value = k.adresse || '';
+  document.getElementById('mf-postnr').value = k.postnr || '';
+  document.getElementById('mf-by').value = k.by || '';
+  document.getElementById('mf-land').value = k.land || '';
+  document.getElementById('mf-vat').value = k.vat || '';
+  document.getElementById('mf-kunde-søg').value = `${k.fornavn} ${k.efternavn}`;
+  document.getElementById('mf-kunde-resultater').style.display = 'none';
+}
+
+// Luk dropdown ved klik udenfor
+document.addEventListener('click', e => {
+  if (!e.target.closest('#mf-kunde-søg') && !e.target.closest('#mf-kunde-resultater')) {
+    const r = document.getElementById('mf-kunde-resultater');
+    if (r) r.style.display = 'none';
+  }
+});
 
 function mfBeregnTotal() {
   let ex = 0, vat = 0;
