@@ -1141,6 +1141,13 @@ const R_ICON_SVG = {
 };
 
 function buildTeacherSection(data) {
+  console.log('buildTeacherSection data:', JSON.stringify({
+    teacher_img1: data.teacher_img1,
+    teacher_img1_name: data.teacher_img1_name,
+    teacher_img2: data.teacher_img2,
+    teacher_bio: data.teacher_bio ? data.teacher_bio.slice(0,30) : null,
+    ui_teacher_heading: data.ui_teacher_heading,
+  }));
   const lang = document.documentElement.lang || 'da';
   const label = document.getElementById('facilitatorLabel');
   const heading = document.getElementById('facilitatorHeading');
