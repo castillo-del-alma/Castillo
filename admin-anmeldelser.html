@@ -2338,6 +2338,14 @@ feeling more calm – and coming home to yourself again."</textarea></div>
 
     <div id="retreatSavedMsg" style="display:none;background:#2a7a74;color:#fff;padding:.8rem 1.5rem;margin-bottom:1.5rem;font-size:.8rem;">✓ Retreat gemt!</div>
 
+    <!-- Permanente skjulte icon-felter — altid i DOM, opdateres af renderHighlightsListe/vælgHighlightIkon -->
+    <input type="hidden" id="ui_highlight1_icon" value="globe">
+    <input type="hidden" id="ui_highlight2_icon" value="shield">
+    <input type="hidden" id="ui_highlight3_icon" value="home">
+    <input type="hidden" id="ui_highlight4_icon" value="drop">
+    <input type="hidden" id="ui_highlight5_icon" value="fork">
+    <input type="hidden" id="ui_highlight6_icon" value="star">
+
     <!-- HOP TIL SEKTION -->
     <div style="background:rgba(184,138,30,.06);border:1px solid rgba(184,138,30,.2);padding:1rem 1.2rem;margin-bottom:2rem;">
       <span style="font-size:.62rem;letter-spacing:.15em;text-transform:uppercase;color:rgba(44,35,24,.5);display:block;margin-bottom:.6rem;">Hop til sektion</span>
@@ -5111,6 +5119,11 @@ function udfyldRetreatForm(r) {
   retreatBilleder5State = r.retreat_images5 ? r.retreat_images5.map(url => ({ url })) : [];
   renderRetreatBilleder5();
   loadTeacherImgs(r);
+  // Sæt ikon-felter fra DB inden highlights renderes
+  [1,2,3,4,5,6].forEach(n => {
+    const el = document.getElementById(`ui_highlight${n}_icon`);
+    if (el && r[`ui_highlight${n}_icon`]) el.value = r[`ui_highlight${n}_icon`];
+  });
   renderHighlightsListe();
   renderExtraDatesListe();
   document.getElementById('retreat_max_guests').value = r.max_guests || '';
@@ -5589,16 +5602,17 @@ function renderHighlightsListe() {
         <div style="margin-bottom:.8rem;">
           <label class="fc-label" style="color:rgba(44,35,24,.6);">Ikon (vælg et af 20)</label>
           <div style="display:flex;flex-wrap:wrap;gap:.3rem;margin-top:.4rem;">
-            ${ICON_NAMES.map(name => `
-              <button type="button" onclick="vælgHighlightIkon(${n},'${name}',this)"
+            ${ICON_NAMES.map(name => {
+              const isSelected = iconVal === name;
+              return `<button type="button" onclick="vælgHighlightIkon(${n},'${name}',this)"
                 title="${name}"
-                style="width:36px;height:36px;border:2px solid ${iconVal===name?'var(--wine)':'rgba(184,138,30,.2)'};background:${iconVal===name?'rgba(122,31,53,.1)':'transparent'};cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;">
-                <svg viewBox="0 0 24 24" fill="none" stroke="${iconVal===name?'var(--wine)':'rgba(44,35,24,.6)'}" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" width="18" height="18">
+                style="width:36px;height:36px;border:2px solid ${isSelected?'var(--wine)':'rgba(184,138,30,.2)'};background:${isSelected?'rgba(122,31,53,.1)':'transparent'};cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;">
+                <svg viewBox="0 0 24 24" fill="none" stroke="${isSelected?'var(--wine)':'rgba(44,35,24,.6)'}" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" width="18" height="18">
                   ${ICON_SVG[name]}
                 </svg>
-              </button>`).join('')}
+              </button>`;
+            }).join('')}
           </div>
-          <input type="hidden" id="ui_highlight${n}_icon" value="${iconVal}">
         </div>
         <div class="fc-row">
           <div><label class="fc-label fc-label-da">Lille overskrift (DA)</label><input type="text" id="ui_highlight${n}_title" class="fc-input-da" value="${document.getElementById(`ui_highlight${n}_title`)?.value || def.title}" placeholder="${def.title}"></div>
