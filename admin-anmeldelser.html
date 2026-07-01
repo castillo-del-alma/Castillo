@@ -5453,6 +5453,8 @@ async function gemRetreat() {
 
     // Hent billeder — enten fra fil-upload eller fra URL-feltet (sat af uploadRetreatBillede)
     const heroFile = document.getElementById('retreat_hero_file').files[0];
+    console.log('Hero file:', heroFile ? heroFile.name : 'ingen');
+    console.log('Hero URL felt:', document.getElementById('retreat_hero_image').value);
     if (heroFile) {
       payload.hero_image = await uploadRetreatImage(heroFile);
     } else {
@@ -5461,6 +5463,8 @@ async function gemRetreat() {
     }
 
     const cardFile = document.getElementById('retreat_card_file').files[0];
+    console.log('Card file:', cardFile ? cardFile.name : 'ingen');
+    console.log('Card URL felt:', document.getElementById('retreat_card_image').value);
     if (cardFile) {
       payload.card_image = await uploadRetreatImage(cardFile);
     } else {
