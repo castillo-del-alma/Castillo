@@ -2346,6 +2346,7 @@ feeling more calm – and coming home to yourself again."</textarea></div>
         <a href="#ra_datoer" style="font-size:.72rem;color:#7a5c14;background:#fffef8;border:1px solid rgba(184,138,30,.3);padding:.35rem .8rem;text-decoration:none;">2 · Datoer & pris</a>
         <a href="#ra_billeder" style="font-size:.72rem;color:#7a5c14;background:#fffef8;border:1px solid rgba(184,138,30,.3);padding:.35rem .8rem;text-decoration:none;">3 · Billeder</a>
         <a href="#ra_om" style="font-size:.72rem;color:#7a5c14;background:#fffef8;border:1px solid rgba(184,138,30,.3);padding:.35rem .8rem;text-decoration:none;">4 · Om retreatet</a>
+        <a href="#ra_billeder5" style="font-size:.72rem;color:#7a5c14;background:#fffef8;border:1px solid rgba(184,138,30,.3);padding:.35rem .8rem;text-decoration:none;">4.5 · 5 billeder</a>
         <a href="#ra_navigation" style="font-size:.72rem;color:#7a5c14;background:#fffef8;border:1px solid rgba(184,138,30,.3);padding:.35rem .8rem;text-decoration:none;">5 · Navigation</a>
         <a href="#ra_hurtiginfo" style="font-size:.72rem;color:#7a5c14;background:#fffef8;border:1px solid rgba(184,138,30,.3);padding:.35rem .8rem;text-decoration:none;">6 · Hurtig-info</a>
         <a href="#ra_program" style="font-size:.72rem;color:#7a5c14;background:#fffef8;border:1px solid rgba(184,138,30,.3);padding:.35rem .8rem;text-decoration:none;">7 · Program</a>
@@ -2473,6 +2474,16 @@ feeling more calm – and coming home to yourself again."</textarea></div>
           <div><label class="fc-label fc-label-da">Citat (DA)</label><textarea id="retreat_about_quote" class="fc-input-da fc-textarea" rows="2" placeholder="Et inspirerende citat..."></textarea></div>
           <div><label class="fc-label fc-label-en">Quote (EN)</label><textarea id="retreat_about_quote_en" class="fc-input-en fc-textarea" rows="2" placeholder="An inspiring quote..."></textarea></div>
         </div>
+      </div>
+    </div>
+
+    <!-- 4.5 · 5 RETREAT-BILLEDER -->
+    <div class="fc-block" id="ra_billeder5" style="margin-bottom:1.5rem;">
+      <div class="fc-block-header"><span class="fc-block-title">4.5 · 5 billeder (vises under "Lej hele huset" — unikke per retreat)</span></div>
+      <div class="fc-block-body">
+        <p style="font-size:.7rem;color:rgba(44,35,24,.4);margin-bottom:1rem;">Upload op til 5 billeder med mouseover-effekt. Brug pilene til at ændre rækkefølgen.</p>
+        <div id="retreatBilleder5Liste" style="display:flex;flex-direction:column;gap:.7rem;"></div>
+        <button type="button" onclick="tilfoejRetreatBillede5()" style="margin-top:.8rem;background:rgba(42,122,116,.08);border:1px solid rgba(42,122,116,.2);color:#2a7a74;padding:.6rem 1.2rem;font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;width:100%;">+ Tilføj billede (max 5)</button>
       </div>
     </div>
 
@@ -2615,41 +2626,70 @@ feeling more calm – and coming home to yourself again."</textarea></div>
       <div class="fc-block-header"><span class="fc-block-title">11 · Underviser / Facilitator</span></div>
       <div class="fc-block-body">
         <div class="fc-row">
-          <div><label class="fc-label">Navn</label><input type="text" id="retreat_teacher_name" class="fc-input-da" placeholder="Navn"></div>
-          <div>
-            <label class="fc-label" style="color:#2a7a74;">📁 Foto</label>
-            <div style="display:flex;align-items:center;gap:.6rem;margin-top:.3rem;">
-              <img id="retreat_photo_preview" src="" style="display:none;width:56px;height:56px;object-fit:cover;border-radius:3px;border:1px solid rgba(184,138,30,.3);">
-              <input type="file" id="retreat_photo_file" accept="image/*" style="font-size:.76rem;flex:1;">
-              <button type="button" onclick="uploadRetreatBillede('teacher_photo_upload','teacher_photo','teacher_photo_thumb')" style="background:#2a7a74;color:#fff;border:none;padding:.45rem 1.1rem;font-family:Manrope,sans-serif;font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;white-space:nowrap;">⬆ Upload</button>
-            </div>
-            <input type="text" id="retreat_teacher_photo" class="fc-input-da" placeholder="URL til foto" style="margin-top:.5rem;">
-          </div>
-        </div>
-        <div class="fc-row">
-          <div><label class="fc-label fc-label-da">Titel/rolle (DA)</label><input type="text" id="ui_facilitator_role" class="fc-input-da" placeholder="Underviser"></div>
-          <div><label class="fc-label fc-label-en">Title/role (EN)</label><input type="text" id="ui_facilitator_role_en" class="fc-input-en" placeholder="Facilitator"></div>
+          <div><label class="fc-label fc-label-da">Titel/rolle (DA)</label><input type="text" id="ui_facilitator_role" class="fc-input-da" placeholder="Wellness Facilitator · Breathwork Practitioner"></div>
+          <div><label class="fc-label fc-label-en">Title/role (EN)</label><input type="text" id="ui_facilitator_role_en" class="fc-input-en" placeholder="Wellness Facilitator · Breathwork Practitioner"></div>
         </div>
         <div class="fc-row">
           <div><label class="fc-label fc-label-da">Bio (DA)</label><textarea id="retreat_teacher_bio" class="fc-input-da fc-textarea" rows="4" placeholder="Underviserens biografi..."></textarea></div>
           <div><label class="fc-label fc-label-en">Bio (EN)</label><textarea id="retreat_teacher_bio_en" class="fc-input-en fc-textarea" rows="4" placeholder="Facilitator biography..."></textarea></div>
+        </div>
+
+        <p style="font-size:.7rem;color:rgba(44,35,24,.4);margin:1.2rem 0 .8rem;">Billeder af underviser(e) — 1 stor + op til 2 mindre (rund form på hjemmesiden). Titel/navn vises under hvert billede.</p>
+
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:1.2rem;">
+
+          <!-- STOR -->
+          <div style="background:rgba(42,122,116,.04);border:1px solid rgba(42,122,116,.2);padding:1rem;text-align:center;">
+            <p style="font-size:.62rem;letter-spacing:.12em;text-transform:uppercase;color:#2a7a74;margin-bottom:.8rem;">Stor (primær)</p>
+            <div style="width:90px;height:90px;border-radius:50%;overflow:hidden;margin:0 auto .6rem;border:2px solid rgba(184,138,30,.3);background:rgba(44,35,24,.06);display:flex;align-items:center;justify-content:center;">
+              <img id="teacher_img1_preview" src="" style="display:none;width:100%;height:100%;object-fit:cover;border-radius:50%;">
+              <span id="teacher_img1_placeholder" style="font-size:1.8rem;">👤</span>
+            </div>
+            <input type="hidden" id="retreat_teacher_photo">
+            <input type="file" id="teacher_img1_file" accept="image/*" style="font-size:.72rem;width:100%;margin-bottom:.5rem;" onchange="uploadTeacherImg(0)">
+            <span id="teacher_img1_status" style="font-size:.65rem;color:#2a7a74;display:block;margin-bottom:.5rem;"></span>
+            <input type="text" id="teacher_img1_name" class="fc-input-da" placeholder="Navn" style="text-align:center;font-size:.78rem;">
+          </div>
+
+          <!-- LILLE 1 -->
+          <div style="background:rgba(42,122,116,.04);border:1px solid rgba(42,122,116,.15);padding:1rem;text-align:center;">
+            <p style="font-size:.62rem;letter-spacing:.12em;text-transform:uppercase;color:#2a7a74;margin-bottom:.8rem;">Lille (sekundær)</p>
+            <div style="width:70px;height:70px;border-radius:50%;overflow:hidden;margin:0 auto .6rem;border:2px solid rgba(184,138,30,.2);background:rgba(44,35,24,.06);display:flex;align-items:center;justify-content:center;">
+              <img id="teacher_img2_preview" src="" style="display:none;width:100%;height:100%;object-fit:cover;border-radius:50%;">
+              <span id="teacher_img2_placeholder" style="font-size:1.4rem;">👤</span>
+            </div>
+            <input type="file" id="teacher_img2_file" accept="image/*" style="font-size:.72rem;width:100%;margin-bottom:.5rem;" onchange="uploadTeacherImg(1)">
+            <span id="teacher_img2_status" style="font-size:.65rem;color:#2a7a74;display:block;margin-bottom:.5rem;"></span>
+            <input type="text" id="teacher_img2_name" class="fc-input-da" placeholder="Navn" style="text-align:center;font-size:.78rem;">
+          </div>
+
+          <!-- LILLE 2 -->
+          <div style="background:rgba(42,122,116,.04);border:1px solid rgba(42,122,116,.15);padding:1rem;text-align:center;">
+            <p style="font-size:.62rem;letter-spacing:.12em;text-transform:uppercase;color:#2a7a74;margin-bottom:.8rem;">Lille (tertiær)</p>
+            <div style="width:70px;height:70px;border-radius:50%;overflow:hidden;margin:0 auto .6rem;border:2px solid rgba(184,138,30,.2);background:rgba(44,35,24,.06);display:flex;align-items:center;justify-content:center;">
+              <img id="teacher_img3_preview" src="" style="display:none;width:100%;height:100%;object-fit:cover;border-radius:50%;">
+              <span id="teacher_img3_placeholder" style="font-size:1.4rem;">👤</span>
+            </div>
+            <input type="file" id="teacher_img3_file" accept="image/*" style="font-size:.72rem;width:100%;margin-bottom:.5rem;" onchange="uploadTeacherImg(2)">
+            <span id="teacher_img3_status" style="font-size:.65rem;color:#2a7a74;display:block;margin-bottom:.5rem;"></span>
+            <input type="text" id="teacher_img3_name" class="fc-input-da" placeholder="Navn" style="text-align:center;font-size:.78rem;">
+          </div>
+
         </div>
       </div>
     </div>
 
     <!-- 12 · HIGHLIGHTS -->
     <div class="fc-block" id="ra_highlights" style="margin-bottom:1.5rem;">
-      <div class="fc-block-header"><span class="fc-block-title">12 · Highlights</span></div>
+      <div class="fc-block-header"><span class="fc-block-title">12 · Highlights (6 kort med ikon + tekst)</span></div>
       <div class="fc-block-body">
         <div class="fc-row">
-          <div><label class="fc-label fc-label-da">Highlights-overskrift (DA)</label><input type="text" id="ui_highlights_heading" class="fc-input-da" placeholder="Highlights"></div>
-          <div><label class="fc-label fc-label-en">Highlights heading (EN)</label><input type="text" id="ui_highlights_heading_en" class="fc-input-en" placeholder="Highlights"></div>
+          <div><label class="fc-label fc-label-da">Highlights-overskrift (DA)</label><input type="text" id="ui_highlights_heading" class="fc-input-da" value="Hvad gør dette retreat særligt?"></div>
+          <div><label class="fc-label fc-label-en">Highlights heading (EN)</label><input type="text" id="ui_highlights_heading_en" class="fc-input-en" value="What makes this retreat special?"></div>
         </div>
-        <button type="button" onclick="openHighlightsEditor()" style="margin-top:.6rem;background:rgba(184,138,30,.1);border:1px solid rgba(184,138,30,.3);color:#7a5c14;padding:.7rem 1.5rem;font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;width:100%;">✏️ Redigér alle highlights visuelt (DA + EN)</button>
-        <div style="margin-top:.8rem;display:grid;grid-template-columns:1fr 1fr;gap:.6rem;">
-          <input type="hidden" id="ui_highlight1_icon"><input type="hidden" id="ui_highlight2_icon"><input type="hidden" id="ui_highlight3_icon">
-          <input type="hidden" id="ui_highlight4_icon"><input type="hidden" id="ui_highlight5_icon"><input type="hidden" id="ui_highlight6_icon">
-        </div>
+        <p style="font-size:.7rem;color:rgba(44,35,24,.4);margin:1rem 0 .6rem;">Vælg ikon og udfyld titel + tekst for hvert highlight på DA og EN:</p>
+
+        <div id="highlightsListe"></div>
       </div>
     </div>
 
@@ -4827,6 +4867,11 @@ function openNytRetreat() {
   addonState = [];
   renderAddonListe();
   extraDatesState = [];
+  retreatBilleder5State = [];
+  renderRetreatBilleder5();
+  teacherImgsState = [{url:'',name:''},{url:'',name:''},{url:'',name:''}];
+  loadTeacherImgs({});
+  renderHighlightsListe();
   renderExtraDatesListe();
   document.getElementById('retreat_max_guests').value = '';
   document.getElementById('retreat_languages').value = '';
@@ -5063,6 +5108,10 @@ function udfyldRetreatForm(r) {
   addonState = r.addon_items ? JSON.parse(JSON.stringify(r.addon_items)) : [];
   renderAddonListe();
   extraDatesState = r.extra_dates ? JSON.parse(JSON.stringify(r.extra_dates)) : [];
+  retreatBilleder5State = r.retreat_images5 ? r.retreat_images5.map(url => ({ url })) : [];
+  renderRetreatBilleder5();
+  loadTeacherImgs(r);
+  renderHighlightsListe();
   renderExtraDatesListe();
   document.getElementById('retreat_max_guests').value = r.max_guests || '';
   document.getElementById('retreat_languages').value = r.languages || '';
@@ -5349,6 +5398,8 @@ async function gemRetreat() {
       addon_items: addonState.filter(a => a.text && a.text.trim() && a.price !== '' && !isNaN(parseFloat(a.price))).map(a => ({ text: a.text.trim(), price: parseFloat(a.price) })),
       max_guests: parseInt(document.getElementById('retreat_max_guests').value) || null,
       extra_dates: extraDatesState.filter(d => d.arrival && d.departure),
+      retreat_images5: retreatBilleder5State.filter(b => b.url).map(b => b.url),
+      ...getTeacherImgsPayload(),
       languages: document.getElementById('retreat_languages').value.trim() || null,
       languages_en: document.getElementById('retreat_languages_en').value.trim() || null,
       level: document.getElementById('retreat_level').value.trim() || null,
@@ -5430,6 +5481,206 @@ function tilfoejExtraDate() {
 function fjernExtraDate(i) {
   extraDatesState.splice(i, 1);
   renderExtraDatesListe();
+}
+
+// ── UNDERVISER BILLEDER ──
+let teacherImgsState = [{url:'',name:''},{url:'',name:''},{url:'',name:''}];
+
+async function uploadTeacherImg(idx) {
+  const input = document.getElementById(`teacher_img${idx+1}_file`);
+  const status = document.getElementById(`teacher_img${idx+1}_status`);
+  const preview = document.getElementById(`teacher_img${idx+1}_preview`);
+  const placeholder = document.getElementById(`teacher_img${idx+1}_placeholder`);
+  if (!input || !input.files.length) return;
+  if (status) status.textContent = 'Uploader...';
+  try {
+    const url = await uploadRetreatImage(input.files[0]);
+    teacherImgsState[idx].url = url;
+    if (preview) { preview.src = url; preview.style.display = 'block'; }
+    if (placeholder) placeholder.style.display = 'none';
+    if (status) status.textContent = '✓ Uploadet';
+    // Gem URL til retreat_teacher_photo for primær
+    if (idx === 0) {
+      const tp = document.getElementById('retreat_teacher_photo');
+      if (tp) tp.value = url;
+    }
+    input.value = '';
+  } catch(e) {
+    if (status) status.textContent = 'Fejl';
+    showToast('Upload fejl: ' + e.message, true);
+  }
+}
+
+function loadTeacherImgs(r) {
+  teacherImgsState = [
+    { url: r.teacher_img1 || r.retreat_teacher_photo || '', name: r.teacher_img1_name || r.retreat_teacher_name || '' },
+    { url: r.teacher_img2 || '', name: r.teacher_img2_name || '' },
+    { url: r.teacher_img3 || '', name: r.teacher_img3_name || '' },
+  ];
+  teacherImgsState.forEach((t, i) => {
+    const preview = document.getElementById(`teacher_img${i+1}_preview`);
+    const placeholder = document.getElementById(`teacher_img${i+1}_placeholder`);
+    const nameEl = document.getElementById(`teacher_img${i+1}_name`);
+    if (preview) { preview.src = t.url; preview.style.display = t.url ? 'block' : 'none'; }
+    if (placeholder) placeholder.style.display = t.url ? 'none' : 'block';
+    if (nameEl) nameEl.value = t.name;
+  });
+}
+
+function getTeacherImgsPayload() {
+  return {
+    teacher_img1: teacherImgsState[0].url || null,
+    teacher_img1_name: document.getElementById('teacher_img1_name')?.value || null,
+    teacher_img2: teacherImgsState[1].url || null,
+    teacher_img2_name: document.getElementById('teacher_img2_name')?.value || null,
+    teacher_img3: teacherImgsState[2].url || null,
+    teacher_img3_name: document.getElementById('teacher_img3_name')?.value || null,
+  };
+}
+
+// ── HIGHLIGHTS RENDER (sektion 12) ──
+const ICON_NAMES = ['globe','shield','home','drop','fork','star','sun','moon','heart','leaf',
+  'fire','wind','wave','eye','hand','brain','peace','flower','tree','diamond'];
+
+const ICON_SVG = {
+  globe: '<circle cx="12" cy="12" r="9"/><path d="M12 3C9 6 9 18 12 21M12 3c3 3 3 15 0 18M3 12h18"/>',
+  shield: '<path d="M12 3L4 7v5c0 5.5 3.5 10.7 8 12 4.5-1.3 8-6.5 8-12V7L12 3z"/>',
+  home: '<path d="M3 12L12 3l9 9M5 10v9h4v-4h6v4h4v-9"/>',
+  drop: '<path d="M12 2C12 2 5 10 5 15a7 7 0 0014 0C19 10 12 2 12 2z"/>',
+  fork: '<path d="M8 3v4M8 7C6 7 5 8 5 10s1 3 3 3v8M16 3v8M16 11c2 0 3 1 3 3s-1 3-3 3v4"/>',
+  star: '<polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/>',
+  sun: '<circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>',
+  moon: '<path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/>',
+  heart: '<path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/>',
+  leaf: '<path d="M17 8C8 10 5.9 16.17 3.82 22L6 21c2-7 9-12 18-13-1 1-3 4-3 4s-6-2-12 6"/>',
+  fire: '<path d="M12 2c0 0-5 6-5 12a5 5 0 0010 0C17 8 12 2 12 2z"/><path d="M12 14c0 0-2 2-2 4a2 2 0 004 0c0-2-2-4-2-4z"/>',
+  wind: '<path d="M9.59 4.59A2 2 0 1111 8H2m10.59 11.41A2 2 0 1014 16H2m15.73-8.27A2.5 2.5 0 1119.5 12H2"/>',
+  wave: '<path d="M2 12c2-4 4-4 6 0s4 4 6 0 4-4 6 0"/>',
+  eye: '<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>',
+  hand: '<path d="M18 11V6a2 2 0 00-4 0v5M14 11V4a2 2 0 00-4 0v7M10 11V5a2 2 0 00-4 0v9M6 14c0 4 4 8 6 8s6-4 6-8v-3H6v3z"/>',
+  brain: '<path d="M9.5 2A2.5 2.5 0 007 4.5v0A2.5 2.5 0 004.5 7a2.5 2.5 0 000 5A2.5 2.5 0 007 14.5v0A2.5 2.5 0 009.5 17h5a2.5 2.5 0 002.5-2.5v0A2.5 2.5 0 0019.5 12a2.5 2.5 0 000-5A2.5 2.5 0 0017 4.5v0A2.5 2.5 0 0014.5 2h-5z"/>',
+  peace: '<circle cx="12" cy="12" r="9"/><line x1="12" y1="3" x2="12" y2="21"/><line x1="12" y1="12" x2="4.2" y2="16.5"/><line x1="12" y1="12" x2="19.8" y2="16.5"/>',
+  flower: '<circle cx="12" cy="12" r="3"/><path d="M12 3a3 3 0 000 6M12 15a3 3 0 000 6M3 12a3 3 0 006 0M15 12a3 3 0 006 0M5.6 5.6a3 3 0 004.2 4.2M14.1 14.1a3 3 0 004.2 4.2M5.6 18.4a3 3 0 004.2-4.2M14.1 9.9a3 3 0 004.2-4.2"/>',
+  tree: '<path d="M12 22V12M12 12L7 7h10L12 12zM12 7L8 2h8L12 7z"/>',
+  diamond: '<polygon points="12,2 22,12 12,22 2,12"/>',
+};
+
+const HIGHLIGHT_DEFAULTS = [
+  { icon:'globe', title:'Nervous System Reset', title_en:'Nervous System Reset', text:'Et samlet forløb designet til at bringe dit nervesystem tilbage i balance.', text_en:'A complete programme designed to bring your nervous system back into balance.' },
+  { icon:'shield', title:'Intimt & eksklusivt', title_en:'Intimate & Exclusive', text:'Max 10 deltagere sikrer tæt opmærksomhed og et trygt rum.', text_en:'Max 10 participants ensures close attention and a safe space.' },
+  { icon:'home', title:'Eksklusiv ejendom', title_en:'Exclusive Property', text:'Hele Castillo del Alma er kun til jer — vinmarker, pool og andalusisk landskab.', text_en:'The entire Castillo del Alma is exclusively yours.' },
+  { icon:'drop', title:'Guidede breathwork-sessioner', title_en:'Guided Breathwork Sessions', text:'Daglige sessioner med erfaren facilitator.', text_en:'Daily sessions with an experienced facilitator.' },
+  { icon:'fork', title:'Nærende andalusisk mad', title_en:'Nourishing Andalusian Food', text:'Alle måltider tilberedt med friske, lokale råvarer.', text_en:'All meals prepared with fresh, local ingredients.' },
+  { icon:'star', title:'Stilhed & stjernekiggeri', title_en:'Silence & Stargazing', text:'Nætter under Andalusiens klare himmel — langt fra byernes lys.', text_en:'Nights under the clear Andalusian sky — far from city lights.' },
+];
+
+function renderHighlightsListe() {
+  const container = document.getElementById('highlightsListe');
+  if (!container) return;
+  container.innerHTML = [1,2,3,4,5,6].map(n => {
+    const def = HIGHLIGHT_DEFAULTS[n-1];
+    const iconVal = document.getElementById(`ui_highlight${n}_icon`)?.value || def.icon;
+    return `<div class="fc-block fc-sub" style="margin-bottom:.8rem;">
+      <div class="fc-block-header" style="cursor:pointer;background:rgba(184,138,30,.05);" onclick="this.parentElement.classList.toggle('fc-collapsed')">
+        <span class="fc-block-title" style="font-size:.75rem;">Highlight ${n}</span>
+        <span style="font-size:.65rem;color:rgba(44,35,24,.4);">▾</span>
+      </div>
+      <div class="fc-block-body fc-collapsible">
+        <div style="margin-bottom:.8rem;">
+          <label class="fc-label" style="color:rgba(44,35,24,.6);">Ikon (vælg et af 20)</label>
+          <div style="display:flex;flex-wrap:wrap;gap:.3rem;margin-top:.4rem;">
+            ${ICON_NAMES.map(name => `
+              <button type="button" onclick="vælgHighlightIkon(${n},'${name}',this)"
+                title="${name}"
+                style="width:36px;height:36px;border:2px solid ${iconVal===name?'var(--wine)':'rgba(184,138,30,.2)'};background:${iconVal===name?'rgba(122,31,53,.1)':'transparent'};cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;">
+                <svg viewBox="0 0 24 24" fill="none" stroke="${iconVal===name?'var(--wine)':'rgba(44,35,24,.6)'}" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" width="18" height="18">
+                  ${ICON_SVG[name]}
+                </svg>
+              </button>`).join('')}
+          </div>
+          <input type="hidden" id="ui_highlight${n}_icon" value="${iconVal}">
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Lille overskrift (DA)</label><input type="text" id="ui_highlight${n}_title" class="fc-input-da" value="${document.getElementById(`ui_highlight${n}_title`)?.value || def.title}" placeholder="${def.title}"></div>
+          <div><label class="fc-label fc-label-en">Small heading (EN)</label><input type="text" id="ui_highlight${n}_title_en" class="fc-input-en" value="${document.getElementById(`ui_highlight${n}_title_en`)?.value || def.title_en}" placeholder="${def.title_en}"></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Tekst (DA)</label><textarea id="ui_highlight${n}_text" class="fc-input-da fc-textarea" placeholder="${def.text}">${document.getElementById(`ui_highlight${n}_text`)?.value || def.text}</textarea></div>
+          <div><label class="fc-label fc-label-en">Text (EN)</label><textarea id="ui_highlight${n}_text_en" class="fc-input-en fc-textarea" placeholder="${def.text_en}">${document.getElementById(`ui_highlight${n}_text_en`)?.value || def.text_en}</textarea></div>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function vælgHighlightIkon(n, name, btn) {
+  document.getElementById(`ui_highlight${n}_icon`).value = name;
+  // Opdater visuel markering
+  btn.closest('.fc-block-body').querySelectorAll('button[onclick^="vælgHighlightIkon"]').forEach(b => {
+    b.style.borderColor = 'rgba(184,138,30,.2)';
+    b.style.background = 'transparent';
+    b.querySelector('svg').setAttribute('stroke', 'rgba(44,35,24,.6)');
+  });
+  btn.style.borderColor = 'var(--wine)';
+  btn.style.background = 'rgba(122,31,53,.1)';
+  btn.querySelector('svg').setAttribute('stroke', 'var(--wine)');
+}
+
+// ── RETREAT 5-BILLEDER (sektion 4.5) ──
+let retreatBilleder5State = [];
+
+function renderRetreatBilleder5() {
+  const container = document.getElementById('retreatBilleder5Liste');
+  if (!container) return;
+  if (!retreatBilleder5State.length) {
+    container.innerHTML = '<p style="font-size:.75rem;color:rgba(44,35,24,.4);font-style:italic;">Ingen billeder endnu — klik + Tilføj billede</p>';
+    return;
+  }
+  container.innerHTML = retreatBilleder5State.map((b, i) => `
+    <div style="display:flex;align-items:center;gap:.8rem;padding:.6rem .8rem;background:rgba(44,35,24,.03);border:1px solid rgba(184,138,30,.15);">
+      <div style="display:flex;flex-direction:column;gap:.15rem;">
+        <button onclick="flytRetreatBillede5(${i},-1)" ${i===0?'disabled':''} style="background:none;border:1px solid rgba(184,138,30,.3);color:#7a5c14;width:22px;height:18px;font-size:.6rem;cursor:pointer;padding:0;${i===0?'opacity:.3;':''}"">▲</button>
+        <button onclick="flytRetreatBillede5(${i},1)" ${i===retreatBilleder5State.length-1?'disabled':''} style="background:none;border:1px solid rgba(184,138,30,.3);color:#7a5c14;width:22px;height:18px;font-size:.6rem;cursor:pointer;padding:0;${i===retreatBilleder5State.length-1?'opacity:.3;':''}"">▼</button>
+      </div>
+      ${b.url ? `<img src="${b.url}" style="width:56px;height:56px;object-fit:cover;border-radius:3px;border:1px solid rgba(184,138,30,.3);flex-shrink:0;">` : '<div style="width:56px;height:56px;background:rgba(44,35,24,.06);border:1px dashed rgba(184,138,30,.3);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:1.2rem;">🖼️</div>'}
+      <input type="file" id="rb5_file_${i}" accept="image/*" onchange="uploadRetreatBillede5(${i})" style="font-size:.76rem;flex:1;">
+      <span id="rb5_status_${i}" style="font-size:.68rem;color:#2a7a74;"></span>
+      <button onclick="fjernRetreatBillede5(${i})" style="background:rgba(192,92,48,.1);border:1px solid rgba(192,92,48,.3);color:#c05c30;padding:.3rem .6rem;font-size:.65rem;cursor:pointer;">✕</button>
+    </div>`).join('');
+}
+
+function tilfoejRetreatBillede5() {
+  if (retreatBilleder5State.length >= 5) { showToast('Max 5 billeder', true); return; }
+  retreatBilleder5State.push({ url: '' });
+  renderRetreatBilleder5();
+}
+
+function fjernRetreatBillede5(i) {
+  retreatBilleder5State.splice(i, 1);
+  renderRetreatBilleder5();
+}
+
+function flytRetreatBillede5(i, dir) {
+  const j = i + dir;
+  if (j < 0 || j >= retreatBilleder5State.length) return;
+  [retreatBilleder5State[i], retreatBilleder5State[j]] = [retreatBilleder5State[j], retreatBilleder5State[i]];
+  renderRetreatBilleder5();
+}
+
+async function uploadRetreatBillede5(i) {
+  const input = document.getElementById(`rb5_file_${i}`);
+  const status = document.getElementById(`rb5_status_${i}`);
+  if (!input || !input.files.length) return;
+  if (status) status.textContent = 'Uploader...';
+  try {
+    const url = await uploadRetreatImage(input.files[0]);
+    retreatBilleder5State[i].url = url;
+    if (status) status.textContent = '✓';
+    renderRetreatBilleder5();
+  } catch(e) {
+    if (status) status.textContent = 'Fejl';
+    showToast('Upload fejl: ' + e.message, true);
+  }
 }
 
 // ── ADDON EDITOR ──
