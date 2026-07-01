@@ -374,7 +374,27 @@ body{font-family:'Manrope',sans-serif;background:#f0e8d5;color:#2c2318;min-heigh
 
   <!-- FANE: ANMELDELSER -->
   <div class="subtab-content" id="tab-anmeldelser">
-    <div id="anmeldelserFaneIndhold" style="padding:2rem 3rem;"></div>
+    <div id="anmeldelserFaneIndhold" style="padding:2rem 3rem;">
+      <div style="display:flex;gap:2rem;margin-bottom:1.5rem;flex-wrap:wrap;">
+        <div style="background:#fff;border:1px solid rgba(184,138,30,.2);padding:1rem 1.5rem;text-align:center;">
+          <div id="statTotal" style="font-size:2rem;font-weight:600;color:var(--wine);">—</div>
+          <div style="font-size:.7rem;color:rgba(44,35,24,.5);margin-top:.2rem;">Anmeldelser</div>
+        </div>
+        <div style="background:#fff;border:1px solid rgba(184,138,30,.2);padding:1rem 1.5rem;text-align:center;">
+          <div id="statAvg" style="font-size:2rem;font-weight:600;color:var(--gold);">—</div>
+          <div style="font-size:.7rem;color:rgba(44,35,24,.5);margin-top:.2rem;">Gns. oplevelse</div>
+        </div>
+        <div style="background:#fff;border:1px solid rgba(184,138,30,.2);padding:1rem 1.5rem;text-align:center;">
+          <div id="statRecommend" style="font-size:2rem;font-weight:600;color:#2a7a74;">—</div>
+          <div style="font-size:.7rem;color:rgba(44,35,24,.5);margin-top:.2rem;">Gns. anbefaling</div>
+        </div>
+        <div style="background:#fff;border:1px solid rgba(184,138,30,.2);padding:1rem 1.5rem;text-align:center;">
+          <div id="statConsent" style="font-size:2rem;font-weight:600;color:#2c2318;">—</div>
+          <div style="font-size:.7rem;color:rgba(44,35,24,.5);margin-top:.2rem;">Samtykke givet</div>
+        </div>
+      </div>
+      <div id="reviewsGrid"></div>
+    </div>
   </div>
 
   <!-- FANE: FORSIDE -->
