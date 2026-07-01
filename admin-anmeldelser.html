@@ -5453,11 +5453,22 @@ async function gemRetreat() {
       location_en: document.getElementById('retreat_location_en').value.trim() || null
     };
 
+    // Hent billeder — enten fra fil-upload eller fra URL-feltet (sat af uploadRetreatBillede)
     const heroFile = document.getElementById('retreat_hero_file').files[0];
-    if (heroFile) payload.hero_image = await uploadRetreatImage(heroFile);
+    if (heroFile) {
+      payload.hero_image = await uploadRetreatImage(heroFile);
+    } else {
+      const heroUrl = document.getElementById('retreat_hero_image').value.trim();
+      if (heroUrl) payload.hero_image = heroUrl;
+    }
 
     const cardFile = document.getElementById('retreat_card_file').files[0];
-    if (cardFile) payload.card_image = await uploadRetreatImage(cardFile);
+    if (cardFile) {
+      payload.card_image = await uploadRetreatImage(cardFile);
+    } else {
+      const cardUrl = document.getElementById('retreat_card_image').value.trim();
+      if (cardUrl) payload.card_image = cardUrl;
+    }
 
     if (id) {
       const { error } = await sb.from('retreats').update(payload).eq('id', id);
