@@ -2148,1090 +2148,432 @@ feeling more calm – and coming home to yourself again."</textarea></div>
 <div class="modal-overlay" id="modalRetreat">
   <div class="modal" style="max-width:1200px;width:95vw;max-height:94vh;overflow-y:auto;padding:2.5rem;">
     <button class="modal-close" onclick="closeModal('modalRetreat')">✕</button>
-    <h3 id="retreatModalTitel" style="margin-bottom:.5rem;">Nyt retreat</h3>
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:2rem;">
-      <p style="font-size:.7rem;color:rgba(44,35,24,.5);margin:0;">🇩🇰 Dansk i venstre kolonne &nbsp;·&nbsp; 🇬🇧 Engelsk i højre kolonne</p>
-      <button type="button" onclick="gemRetreat()" style="background:var(--wine);color:#fff;border:none;padding:.7rem 2rem;font-family:Manrope,sans-serif;font-size:.68rem;font-weight:500;letter-spacing:.18em;text-transform:uppercase;cursor:pointer;transition:background .3s;">💾 Gem retreat</button>
+
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;flex-wrap:wrap;gap:.8rem;">
+      <div>
+        <h3 id="retreatModalTitel" style="font-family:'Cinzel',serif;font-weight:300;font-size:1.4rem;color:#2c2318;margin:0 0 .2rem;">Nyt retreat</h3>
+        <p style="font-size:.7rem;color:rgba(44,35,24,.5);margin:0;">🇩🇰 Dansk i venstre kolonne &nbsp;·&nbsp; 🇬🇧 Engelsk i højre kolonne</p>
+      </div>
+      <button type="button" onclick="gemRetreat()" style="background:var(--wine);color:#fff;border:none;padding:.7rem 2rem;font-family:Manrope,sans-serif;font-size:.68rem;font-weight:500;letter-spacing:.18em;text-transform:uppercase;cursor:pointer;">💾 Gem retreat</button>
     </div>
+
     <input type="hidden" id="retreat_id">
-      <div id="retreatSavedMsg" style="display:none;position:sticky;top:0;z-index:10;background:#2a7a74;color:#fff;padding:.8rem 1.5rem;margin-bottom:1.5rem;align-items:center;gap:1rem;font-size:.8rem;letter-spacing:.05em;">
-        <span>✓ Retreat gemt!</span>
-        <span style="opacity:.7;font-size:.72rem;">Alle ændringer er gemt i databasen</span>
-      </div>
+    <div id="retreatSavedMsg" style="display:none;background:#2a7a74;color:#fff;padding:.8rem 1.5rem;margin-bottom:1.5rem;font-size:.8rem;">✓ Retreat gemt!</div>
 
-      <div style="grid-column:1/-1;border-top:2px solid rgba(184,138,30,.2);padding-top:1rem;margin-top:1.2rem;margin-bottom:.5rem;">
-        <span style="font-size:.65rem;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);font-weight:600;">Grundoplysninger</span>
+    <!-- HOP TIL SEKTION -->
+    <div style="background:rgba(184,138,30,.06);border:1px solid rgba(184,138,30,.2);padding:1rem 1.2rem;margin-bottom:2rem;">
+      <span style="font-size:.62rem;letter-spacing:.15em;text-transform:uppercase;color:rgba(44,35,24,.5);display:block;margin-bottom:.6rem;">Hop til sektion</span>
+      <div style="display:flex;flex-wrap:wrap;gap:.5rem;">
+        <a href="#ra_grundoplysninger" style="font-size:.72rem;color:#7a5c14;background:#fffef8;border:1px solid rgba(184,138,30,.3);padding:.35rem .8rem;text-decoration:none;">1 · Grundoplysninger</a>
+        <a href="#ra_datoer" style="font-size:.72rem;color:#7a5c14;background:#fffef8;border:1px solid rgba(184,138,30,.3);padding:.35rem .8rem;text-decoration:none;">2 · Datoer & pris</a>
+        <a href="#ra_billeder" style="font-size:.72rem;color:#7a5c14;background:#fffef8;border:1px solid rgba(184,138,30,.3);padding:.35rem .8rem;text-decoration:none;">3 · Billeder</a>
+        <a href="#ra_om" style="font-size:.72rem;color:#7a5c14;background:#fffef8;border:1px solid rgba(184,138,30,.3);padding:.35rem .8rem;text-decoration:none;">4 · Om retreatet</a>
+        <a href="#ra_navigation" style="font-size:.72rem;color:#7a5c14;background:#fffef8;border:1px solid rgba(184,138,30,.3);padding:.35rem .8rem;text-decoration:none;">5 · Navigation</a>
+        <a href="#ra_hurtiginfo" style="font-size:.72rem;color:#7a5c14;background:#fffef8;border:1px solid rgba(184,138,30,.3);padding:.35rem .8rem;text-decoration:none;">6 · Hurtig-info</a>
+        <a href="#ra_program" style="font-size:.72rem;color:#7a5c14;background:#fffef8;border:1px solid rgba(184,138,30,.3);padding:.35rem .8rem;text-decoration:none;">7 · Program</a>
+        <a href="#ra_inkluderet" style="font-size:.72rem;color:#7a5c14;background:#fffef8;border:1px solid rgba(184,138,30,.3);padding:.35rem .8rem;text-decoration:none;">8 · Inkluderet</a>
+        <a href="#ra_vaerelser" style="font-size:.72rem;color:#7a5c14;background:#fffef8;border:1px solid rgba(184,138,30,.3);padding:.35rem .8rem;text-decoration:none;">9 · Værelser</a>
+        <a href="#ra_mad" style="font-size:.72rem;color:#7a5c14;background:#fffef8;border:1px solid rgba(184,138,30,.3);padding:.35rem .8rem;text-decoration:none;">10 · Mad</a>
+        <a href="#ra_underviser" style="font-size:.72rem;color:#7a5c14;background:#fffef8;border:1px solid rgba(184,138,30,.3);padding:.35rem .8rem;text-decoration:none;">11 · Underviser</a>
+        <a href="#ra_highlights" style="font-size:.72rem;color:#7a5c14;background:#fffef8;border:1px solid rgba(184,138,30,.3);padding:.35rem .8rem;text-decoration:none;">12 · Highlights</a>
+        <a href="#ra_booking" style="font-size:.72rem;color:#7a5c14;background:#fffef8;border:1px solid rgba(184,138,30,.3);padding:.35rem .8rem;text-decoration:none;">13 · Booking</a>
+        <a href="#ra_faq" style="font-size:.72rem;color:#7a5c14;background:#fffef8;border:1px solid rgba(184,138,30,.3);padding:.35rem .8rem;text-decoration:none;">14 · FAQ</a>
+        <a href="#ra_tilvalg" style="font-size:.72rem;color:#7a5c14;background:#fffef8;border:1px solid rgba(184,138,30,.3);padding:.35rem .8rem;text-decoration:none;">15 · Tilvalg</a>
+        <a href="#ra_labels" style="font-size:.72rem;color:#7a5c14;background:#fffef8;border:1px solid rgba(184,138,30,.3);padding:.35rem .8rem;text-decoration:none;">16 · Labels</a>
       </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;margin-bottom:1rem;">
-        <div>
-          <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(44,35,24,.6);display:block;margin-bottom:.4rem;">Titel * <span style="font-size:.58rem;background:#b88a1e;color:#fff;padding:.1rem .4rem;letter-spacing:.08em;border-radius:2px;margin-left:.4rem;vertical-align:middle;">🇩🇰 DA</span></label>
-          <input type="text" id="retreat_title" placeholder="Kunsten at sænke tempoet" style="background:#fffef8;border:1px solid rgba(184,138,30,.3);width:100%;padding:.6rem .8rem;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;">
-        </div>
-        <div>
-          <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:#2a7a74;display:block;margin-bottom:.4rem;">Title * <span style="font-size:.58rem;background:#2a7a74;color:#fff;padding:.1rem .4rem;letter-spacing:.08em;border-radius:2px;margin-left:.4rem;vertical-align:middle;">🇬🇧 EN</span></label>
-          <input type="text" id="retreat_title_en" placeholder="The Art of Slowing Down" style="background:#e8f4f3;border:1px solid #7fb3af;width:100%;padding:.6rem .8rem;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;">
-        </div>
-      </div>
-      <div style="margin-bottom:1rem;">
-        <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(44,35,24,.6);display:block;margin-bottom:.4rem;">Slug (URL) *</label>
-        <input type="text" id="retreat_slug" placeholder="kunsten-at-saenke-tempoet" style="width:100%;padding:.6rem .8rem;border:1px solid rgba(184,138,30,.3);background:rgba(44,35,24,.03);font-family:Manrope,sans-serif;font-size:.8rem;outline:none;">
-      </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;margin-bottom:1rem;">
-        <div>
-          <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(44,35,24,.6);display:block;margin-bottom:.4rem;">Undertitel <span style="font-size:.58rem;background:#b88a1e;color:#fff;padding:.1rem .4rem;letter-spacing:.08em;border-radius:2px;margin-left:.4rem;vertical-align:middle;">🇩🇰 DA</span></label>
-          <input type="text" id="retreat_subtitle" placeholder="Wellness Retreat" style="background:#fffef8;border:1px solid rgba(184,138,30,.3);width:100%;padding:.6rem .8rem;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;">
-        </div>
-        <div>
-          <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:#2a7a74;display:block;margin-bottom:.4rem;">Subtitle <span style="font-size:.58rem;background:#2a7a74;color:#fff;padding:.1rem .4rem;letter-spacing:.08em;border-radius:2px;margin-left:.4rem;vertical-align:middle;">🇬🇧 EN</span></label>
-          <input type="text" id="retreat_subtitle_en" placeholder="Wellness Retreat" style="background:#e8f4f3;border:1px solid #7fb3af;width:100%;padding:.6rem .8rem;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;">
-        </div>
-      </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;margin-bottom:1rem;">
-        <div>
-          <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(44,35,24,.6);display:block;margin-bottom:.4rem;">Beskrivelse (kort tekst) <span style="font-size:.58rem;background:#b88a1e;color:#fff;padding:.1rem .4rem;letter-spacing:.08em;border-radius:2px;margin-left:.4rem;vertical-align:middle;">🇩🇰 DA</span></label>
-          <textarea id="retreat_description" placeholder="Kort beskrivelse af retreatet..." style="background:#fffef8;border:1px solid rgba(184,138,30,.3);width:100%;min-height:80px;padding:.6rem .8rem;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;resize:vertical;"></textarea>
-        </div>
-        <div>
-          <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:#2a7a74;display:block;margin-bottom:.4rem;">Description (short text) <span style="font-size:.58rem;background:#2a7a74;color:#fff;padding:.1rem .4rem;letter-spacing:.08em;border-radius:2px;margin-left:.4rem;vertical-align:middle;">🇬🇧 EN</span></label>
-          <textarea id="retreat_description_en" placeholder="Short description of the retreat..." style="background:#e8f4f3;border:1px solid #7fb3af;width:100%;min-height:80px;padding:.6rem .8rem;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;resize:vertical;"></textarea>
-        </div>
-      </div>
-
-      <div style="grid-column:1/-1;border-top:2px solid rgba(184,138,30,.2);padding-top:1rem;margin-top:1.2rem;margin-bottom:.5rem;">
-        <span style="font-size:.65rem;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);font-weight:600;">Datoer, deltagere & pris</span>
-      </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:1.2rem;margin-bottom:1rem;">
-        <div>
-          <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(44,35,24,.6);display:block;margin-bottom:.4rem;">Ankomst</label>
-          <input type="date" id="retreat_arrival" style="width:100%;padding:.6rem .8rem;border:1px solid rgba(184,138,30,.3);background:rgba(44,35,24,.03);font-family:Manrope,sans-serif;font-size:.8rem;outline:none;">
-        </div>
-        <div>
-          <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(44,35,24,.6);display:block;margin-bottom:.4rem;">Afrejse</label>
-          <input type="date" id="retreat_departure" style="width:100%;padding:.6rem .8rem;border:1px solid rgba(184,138,30,.3);background:rgba(44,35,24,.03);font-family:Manrope,sans-serif;font-size:.8rem;outline:none;">
-        </div>
-        <div>
-          <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(44,35,24,.6);display:block;margin-bottom:.4rem;">Maks. deltagere</label>
-          <input type="text" inputmode="numeric" id="retreat_max_guests" placeholder="10" style="width:100%;padding:.6rem .8rem;border:1px solid rgba(184,138,30,.3);background:rgba(44,35,24,.03);font-family:Manrope,sans-serif;font-size:.8rem;outline:none;">
-        </div>
-        <div>
-          <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(44,35,24,.6);display:block;margin-bottom:.4rem;">Pris pr. gæst (€)</label>
-          <input type="text" inputmode="numeric" id="retreat_price" placeholder="0" style="width:100%;padding:.6rem .8rem;border:1px solid rgba(184,138,30,.3);background:rgba(44,35,24,.03);font-family:Manrope,sans-serif;font-size:.8rem;outline:none;">
-        </div>
-      </div>
-      <div style="margin-bottom:1rem;">
-        <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(44,35,24,.6);display:block;margin-bottom:.4rem;">Depositum (%)</label>
-        <input type="text" inputmode="numeric" id="retreat_deposit_pct" placeholder="30" style="width:200px;padding:.6rem .8rem;border:1px solid rgba(184,138,30,.3);background:rgba(44,35,24,.03);font-family:Manrope,sans-serif;font-size:.8rem;outline:none;">
-      </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;margin-bottom:1rem;">
-        <div>
-          <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(44,35,24,.6);display:block;margin-bottom:.4rem;">Sprog <span style="font-size:.58rem;background:#b88a1e;color:#fff;padding:.1rem .4rem;letter-spacing:.08em;border-radius:2px;margin-left:.4rem;vertical-align:middle;">🇩🇰 DA</span></label>
-          <input type="text" id="retreat_languages" placeholder="Dansk / Engelsk" style="background:#fffef8;border:1px solid rgba(184,138,30,.3);width:100%;padding:.6rem .8rem;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;">
-        </div>
-        <div>
-          <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:#2a7a74;display:block;margin-bottom:.4rem;">Language <span style="font-size:.58rem;background:#2a7a74;color:#fff;padding:.1rem .4rem;letter-spacing:.08em;border-radius:2px;margin-left:.4rem;vertical-align:middle;">🇬🇧 EN</span></label>
-          <input type="text" id="retreat_languages_en" placeholder="Danish / English" style="background:#e8f4f3;border:1px solid #7fb3af;width:100%;padding:.6rem .8rem;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;">
-        </div>
-      </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;margin-bottom:1rem;">
-        <div>
-          <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(44,35,24,.6);display:block;margin-bottom:.4rem;">Niveau <span style="font-size:.58rem;background:#b88a1e;color:#fff;padding:.1rem .4rem;letter-spacing:.08em;border-radius:2px;margin-left:.4rem;vertical-align:middle;">🇩🇰 DA</span></label>
-          <input type="text" id="retreat_level" placeholder="Alle niveauer" style="background:#fffef8;border:1px solid rgba(184,138,30,.3);width:100%;padding:.6rem .8rem;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;">
-        </div>
-        <div>
-          <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:#2a7a74;display:block;margin-bottom:.4rem;">Level <span style="font-size:.58rem;background:#2a7a74;color:#fff;padding:.1rem .4rem;letter-spacing:.08em;border-radius:2px;margin-left:.4rem;vertical-align:middle;">🇬🇧 EN</span></label>
-          <input type="text" id="retreat_level_en" placeholder="All levels" style="background:#e8f4f3;border:1px solid #7fb3af;width:100%;padding:.6rem .8rem;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;">
-        </div>
-      </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;margin-bottom:1rem;">
-        <div>
-          <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(44,35,24,.6);display:block;margin-bottom:.4rem;">Sted <span style="font-size:.58rem;background:#b88a1e;color:#fff;padding:.1rem .4rem;letter-spacing:.08em;border-radius:2px;margin-left:.4rem;vertical-align:middle;">🇩🇰 DA</span></label>
-          <input type="text" id="retreat_location" placeholder="Castillo del Alma, Mollina" style="background:#fffef8;border:1px solid rgba(184,138,30,.3);width:100%;padding:.6rem .8rem;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;">
-        </div>
-        <div>
-          <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:#2a7a74;display:block;margin-bottom:.4rem;">Location <span style="font-size:.58rem;background:#2a7a74;color:#fff;padding:.1rem .4rem;letter-spacing:.08em;border-radius:2px;margin-left:.4rem;vertical-align:middle;">🇬🇧 EN</span></label>
-          <input type="text" id="retreat_location_en" placeholder="Castillo del Alma, Mollina" style="background:#e8f4f3;border:1px solid #7fb3af;width:100%;padding:.6rem .8rem;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;">
-        </div>
-      </div>
-      <div style="margin-bottom:1rem;">
-        <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(44,35,24,.6);display:block;margin-bottom:.4rem;">Ekstra datoer (dropdown)</label>
-        <div id="extraDatesListe" style="display:flex;flex-direction:column;gap:.6rem;"></div>
-        <button type="button" onclick="tilfoejExtraDate()" style="margin-top:.8rem;background:rgba(184,138,30,.1);border:1px solid rgba(184,138,30,.3);color:var(--gold);padding:.6rem 1rem;font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;">+ Tilføj dato</button>
-      </div>
-
-      <div style="grid-column:1/-1;border-top:2px solid rgba(184,138,30,.2);padding-top:1rem;margin-top:1.2rem;margin-bottom:.5rem;">
-        <span style="font-size:.65rem;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);font-weight:600;">Billeder</span>
-      </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;margin-bottom:1rem;">
-        <div>
-          <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(44,35,24,.6);display:block;margin-bottom:.4rem;">Hero-billede</label>
-          <input type="file" id="retreat_hero_file" accept="image/*" style="width:100%;background:rgba(44,35,24,.06);border:1px solid rgba(184,138,30,.2);color:#2c2318;padding:.6rem;font-family:Manrope,sans-serif;font-size:.78rem;">
-          <div id="retreat_hero_preview" style="margin-top:.5rem;"></div>
-        </div>
-        <div>
-          <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(44,35,24,.6);display:block;margin-bottom:.4rem;">Kort-billede (forsiden)</label>
-          <input type="file" id="retreat_card_file" accept="image/*" style="width:100%;background:rgba(44,35,24,.06);border:1px solid rgba(184,138,30,.2);color:#2c2318;padding:.6rem;font-family:Manrope,sans-serif;font-size:.78rem;">
-          <div id="retreat_card_preview" style="margin-top:.5rem;"></div>
-        </div>
-      </div>
-
-      <div style="grid-column:1/-1;border-top:2px solid rgba(184,138,30,.2);padding-top:1rem;margin-top:1.2rem;margin-bottom:.5rem;display:flex;align-items:center;gap:1rem;">
-        <span style="font-size:.65rem;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);font-weight:600;">Om retreatet</span>
-        <button type="button" onclick="gemRetreat()" style="background:rgba(184,138,30,.15);border:1px solid rgba(184,138,30,.4);color:#7a5000;padding:.35rem 1rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;margin-left:auto;">💾 Gem</button>
-      </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;margin-bottom:1rem;">
-        <div>
-          <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(44,35,24,.6);display:block;margin-bottom:.4rem;">Overskrift <span style="font-size:.58rem;background:#b88a1e;color:#fff;padding:.1rem .4rem;letter-spacing:.08em;border-radius:2px;margin-left:.4rem;vertical-align:middle;">🇩🇰 DA</span></label>
-          <input type="text" id="retreat_about_heading" placeholder="Et frirum fra hverdagens tempo" style="background:#fffef8;border:1px solid rgba(184,138,30,.3);width:100%;padding:.6rem .8rem;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;">
-        </div>
-        <div>
-          <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:#2a7a74;display:block;margin-bottom:.4rem;">Heading <span style="font-size:.58rem;background:#2a7a74;color:#fff;padding:.1rem .4rem;letter-spacing:.08em;border-radius:2px;margin-left:.4rem;vertical-align:middle;">🇬🇧 EN</span></label>
-          <input type="text" id="retreat_about_heading_en" placeholder="A haven from everyday life" style="background:#e8f4f3;border:1px solid #7fb3af;width:100%;padding:.6rem .8rem;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;">
-        </div>
-      </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;margin-bottom:1rem;">
-        <div>
-          <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(44,35,24,.6);display:block;margin-bottom:.4rem;">Brødtekst (ét afsnit pr. linje) <span style="font-size:.58rem;background:#b88a1e;color:#fff;padding:.1rem .4rem;letter-spacing:.08em;border-radius:2px;margin-left:.4rem;vertical-align:middle;">🇩🇰 DA</span></label>
-          <textarea id="retreat_about_text" placeholder="Skriv hvert afsnit på sin egen linje..." style="background:#fffef8;border:1px solid rgba(184,138,30,.3);width:100%;min-height:120px;padding:.6rem .8rem;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;resize:vertical;"></textarea>
-        </div>
-        <div>
-          <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:#2a7a74;display:block;margin-bottom:.4rem;">Body text (one paragraph per line) <span style="font-size:.58rem;background:#2a7a74;color:#fff;padding:.1rem .4rem;letter-spacing:.08em;border-radius:2px;margin-left:.4rem;vertical-align:middle;">🇬🇧 EN</span></label>
-          <textarea id="retreat_about_text_en" placeholder="Write each paragraph on its own line..." style="background:#e8f4f3;border:1px solid #7fb3af;width:100%;min-height:120px;padding:.6rem .8rem;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;resize:vertical;"></textarea>
-        </div>
-      </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;margin-bottom:1rem;">
-        <div>
-          <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(44,35,24,.6);display:block;margin-bottom:.4rem;">Citat <span style="font-size:.58rem;background:#b88a1e;color:#fff;padding:.1rem .4rem;letter-spacing:.08em;border-radius:2px;margin-left:.4rem;vertical-align:middle;">🇩🇰 DA</span></label>
-          <textarea id="retreat_about_quote" placeholder="Et inspirerende citat..." style="background:#fffef8;border:1px solid rgba(184,138,30,.3);width:100%;min-height:60px;padding:.6rem .8rem;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;resize:vertical;"></textarea>
-        </div>
-        <div>
-          <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:#2a7a74;display:block;margin-bottom:.4rem;">Quote <span style="font-size:.58rem;background:#2a7a74;color:#fff;padding:.1rem .4rem;letter-spacing:.08em;border-radius:2px;margin-left:.4rem;vertical-align:middle;">🇬🇧 EN</span></label>
-          <textarea id="retreat_about_quote_en" placeholder="An inspiring quote..." style="background:#e8f4f3;border:1px solid #7fb3af;width:100%;min-height:60px;padding:.6rem .8rem;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;resize:vertical;"></textarea>
-        </div>
-      </div>
-
-      <div style="grid-column:1/-1;border-top:2px solid rgba(184,138,30,.2);padding-top:1rem;margin-top:1.2rem;margin-bottom:.5rem;">
-        <span style="font-size:.65rem;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);font-weight:600;">Navigation (menupunkter på retreat-siden)</span>
-      </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;margin-bottom:1rem;">
-        <div>
-          <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(44,35,24,.6);display:block;margin-bottom:.4rem;">Om retreatet <span style="font-size:.58rem;background:#b88a1e;color:#fff;padding:.1rem .4rem;letter-spacing:.08em;border-radius:2px;margin-left:.4rem;vertical-align:middle;">🇩🇰 DA</span></label>
-          <input type="text" id="ui_nav_about" placeholder="Om retreatet" style="background:#fffef8;border:1px solid rgba(184,138,30,.3);width:100%;padding:.6rem .8rem;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;">
-        </div>
-        <div>
-          <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:#2a7a74;display:block;margin-bottom:.4rem;">About the retreat <span style="font-size:.58rem;background:#2a7a74;color:#fff;padding:.1rem .4rem;letter-spacing:.08em;border-radius:2px;margin-left:.4rem;vertical-align:middle;">🇬🇧 EN</span></label>
-          <input type="text" id="ui_nav_about_en" placeholder="About the Retreat" style="background:#e8f4f3;border:1px solid #7fb3af;width:100%;padding:.6rem .8rem;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;">
-        </div>
-      </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;margin-bottom:1rem;">
-        <div>
-          <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(44,35,24,.6);display:block;margin-bottom:.4rem;">Highlights <span style="font-size:.58rem;background:#b88a1e;color:#fff;padding:.1rem .4rem;letter-spacing:.08em;border-radius:2px;margin-left:.4rem;vertical-align:middle;">🇩🇰 DA</span></label>
-          <input type="text" id="ui_nav_highlights" placeholder="Highlights" style="background:#fffef8;border:1px solid rgba(184,138,30,.3);width:100%;padding:.6rem .8rem;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;">
-        </div>
-        <div>
-          <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:#2a7a74;display:block;margin-bottom:.4rem;">Highlights <span style="font-size:.58rem;background:#2a7a74;color:#fff;padding:.1rem .4rem;letter-spacing:.08em;border-radius:2px;margin-left:.4rem;vertical-align:middle;">🇬🇧 EN</span></label>
-          <input type="text" id="ui_nav_highlights_en" placeholder="Highlights" style="background:#e8f4f3;border:1px solid #7fb3af;width:100%;padding:.6rem .8rem;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;">
-        </div>
-      </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;margin-bottom:1rem;">
-        <div>
-          <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(44,35,24,.6);display:block;margin-bottom:.4rem;">Program <span style="font-size:.58rem;background:#b88a1e;color:#fff;padding:.1rem .4rem;letter-spacing:.08em;border-radius:2px;margin-left:.4rem;vertical-align:middle;">🇩🇰 DA</span></label>
-          <input type="text" id="ui_nav_program" placeholder="Program" style="background:#fffef8;border:1px solid rgba(184,138,30,.3);width:100%;padding:.6rem .8rem;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;">
-        </div>
-        <div>
-          <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:#2a7a74;display:block;margin-bottom:.4rem;">Program <span style="font-size:.58rem;background:#2a7a74;color:#fff;padding:.1rem .4rem;letter-spacing:.08em;border-radius:2px;margin-left:.4rem;vertical-align:middle;">🇬🇧 EN</span></label>
-          <input type="text" id="ui_nav_program_en" placeholder="Program" style="background:#e8f4f3;border:1px solid #7fb3af;width:100%;padding:.6rem .8rem;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;">
-        </div>
-      </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;margin-bottom:1rem;">
-        <div>
-          <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(44,35,24,.6);display:block;margin-bottom:.4rem;">Inkluderet <span style="font-size:.58rem;background:#b88a1e;color:#fff;padding:.1rem .4rem;letter-spacing:.08em;border-radius:2px;margin-left:.4rem;vertical-align:middle;">🇩🇰 DA</span></label>
-          <input type="text" id="ui_nav_included" placeholder="Inkluderet" style="background:#fffef8;border:1px solid rgba(184,138,30,.3);width:100%;padding:.6rem .8rem;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;">
-        </div>
-        <div>
-          <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:#2a7a74;display:block;margin-bottom:.4rem;">Included <span style="font-size:.58rem;background:#2a7a74;color:#fff;padding:.1rem .4rem;letter-spacing:.08em;border-radius:2px;margin-left:.4rem;vertical-align:middle;">🇬🇧 EN</span></label>
-          <input type="text" id="ui_nav_included_en" placeholder="What's Included" style="background:#e8f4f3;border:1px solid #7fb3af;width:100%;padding:.6rem .8rem;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;">
-        </div>
-      </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;margin-bottom:1rem;">
-        <div>
-          <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(44,35,24,.6);display:block;margin-bottom:.4rem;">Værelser <span style="font-size:.58rem;background:#b88a1e;color:#fff;padding:.1rem .4rem;letter-spacing:.08em;border-radius:2px;margin-left:.4rem;vertical-align:middle;">🇩🇰 DA</span></label>
-          <input type="text" id="ui_nav_rooms" placeholder="Værelser" style="background:#fffef8;border:1px solid rgba(184,138,30,.3);width:100%;padding:.6rem .8rem;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;">
-        </div>
-        <div>
-          <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:#2a7a74;display:block;margin-bottom:.4rem;">Rooms <span style="font-size:.58rem;background:#2a7a74;color:#fff;padding:.1rem .4rem;letter-spacing:.08em;border-radius:2px;margin-left:.4rem;vertical-align:middle;">🇬🇧 EN</span></label>
-          <input type="text" id="ui_nav_rooms_en" placeholder="Rooms" style="background:#e8f4f3;border:1px solid #7fb3af;width:100%;padding:.6rem .8rem;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;">
-        </div>
-      </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;margin-bottom:1rem;">
-        <div>
-          <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(44,35,24,.6);display:block;margin-bottom:.4rem;">Anmeldelser <span style="font-size:.58rem;background:#b88a1e;color:#fff;padding:.1rem .4rem;letter-spacing:.08em;border-radius:2px;margin-left:.4rem;vertical-align:middle;">🇩🇰 DA</span></label>
-          <input type="text" id="ui_nav_reviews" placeholder="Anmeldelser" style="background:#fffef8;border:1px solid rgba(184,138,30,.3);width:100%;padding:.6rem .8rem;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;">
-        </div>
-        <div>
-          <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:#2a7a74;display:block;margin-bottom:.4rem;">Reviews <span style="font-size:.58rem;background:#2a7a74;color:#fff;padding:.1rem .4rem;letter-spacing:.08em;border-radius:2px;margin-left:.4rem;vertical-align:middle;">🇬🇧 EN</span></label>
-          <input type="text" id="ui_nav_reviews_en" placeholder="Reviews" style="background:#e8f4f3;border:1px solid #7fb3af;width:100%;padding:.6rem .8rem;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;">
-        </div>
-      </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;margin-bottom:1rem;">
-        <div>
-          <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(44,35,24,.6);display:block;margin-bottom:.4rem;">Book <span style="font-size:.58rem;background:#b88a1e;color:#fff;padding:.1rem .4rem;letter-spacing:.08em;border-radius:2px;margin-left:.4rem;vertical-align:middle;">🇩🇰 DA</span></label>
-          <input type="text" id="ui_nav_book" placeholder="Book" style="background:#fffef8;border:1px solid rgba(184,138,30,.3);width:100%;padding:.6rem .8rem;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;">
-        </div>
-        <div>
-          <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:#2a7a74;display:block;margin-bottom:.4rem;">Book <span style="font-size:.58rem;background:#2a7a74;color:#fff;padding:.1rem .4rem;letter-spacing:.08em;border-radius:2px;margin-left:.4rem;vertical-align:middle;">🇬🇧 EN</span></label>
-          <input type="text" id="ui_nav_book_en" placeholder="Book" style="background:#e8f4f3;border:1px solid #7fb3af;width:100%;padding:.6rem .8rem;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;">
-        </div>
-      </div>
-
-      <div style="grid-column:1/-1;border-top:2px solid rgba(184,138,30,.2);padding-top:1rem;margin-top:1.2rem;margin-bottom:.5rem;">
-        <span style="font-size:.65rem;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);font-weight:600;">Hurtig-info (Varighed / Ankomst / Afrejse labels)</span>
-      </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;margin-bottom:1rem;">
-        <div>
-          <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(44,35,24,.6);display:block;margin-bottom:.4rem;">Varighed label <span style="font-size:.58rem;background:#b88a1e;color:#fff;padding:.1rem .4rem;letter-spacing:.08em;border-radius:2px;margin-left:.4rem;vertical-align:middle;">🇩🇰 DA</span></label>
-          <input type="text" id="ui_label_duration" placeholder="Varighed" style="background:#fffef8;border:1px solid rgba(184,138,30,.3);width:100%;padding:.6rem .8rem;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;">
-        </div>
-        <div>
-          <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:#2a7a74;display:block;margin-bottom:.4rem;">Duration label <span style="font-size:.58rem;background:#2a7a74;color:#fff;padding:.1rem .4rem;letter-spacing:.08em;border-radius:2px;margin-left:.4rem;vertical-align:middle;">🇬🇧 EN</span></label>
-          <input type="text" id="ui_label_duration_en" placeholder="Duration" style="background:#e8f4f3;border:1px solid #7fb3af;width:100%;padding:.6rem .8rem;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;">
-        </div>
-      </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;margin-bottom:1rem;">
-        <div>
-          <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(44,35,24,.6);display:block;margin-bottom:.4rem;">Ankomst label <span style="font-size:.58rem;background:#b88a1e;color:#fff;padding:.1rem .4rem;letter-spacing:.08em;border-radius:2px;margin-left:.4rem;vertical-align:middle;">🇩🇰 DA</span></label>
-          <input type="text" id="ui_label_arrival" placeholder="Ankomst" style="background:#fffef8;border:1px solid rgba(184,138,30,.3);width:100%;padding:.6rem .8rem;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;">
-        </div>
-        <div>
-          <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:#2a7a74;display:block;margin-bottom:.4rem;">Arrival label <span style="font-size:.58rem;background:#2a7a74;color:#fff;padding:.1rem .4rem;letter-spacing:.08em;border-radius:2px;margin-left:.4rem;vertical-align:middle;">🇬🇧 EN</span></label>
-          <input type="text" id="ui_label_arrival_en" placeholder="Arrival" style="background:#e8f4f3;border:1px solid #7fb3af;width:100%;padding:.6rem .8rem;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;">
-        </div>
-      </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;margin-bottom:1rem;">
-        <div>
-          <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(44,35,24,.6);display:block;margin-bottom:.4rem;">Afrejse label <span style="font-size:.58rem;background:#b88a1e;color:#fff;padding:.1rem .4rem;letter-spacing:.08em;border-radius:2px;margin-left:.4rem;vertical-align:middle;">🇩🇰 DA</span></label>
-          <input type="text" id="ui_label_departure" placeholder="Afrejse" style="background:#fffef8;border:1px solid rgba(184,138,30,.3);width:100%;padding:.6rem .8rem;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;">
-        </div>
-        <div>
-          <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:#2a7a74;display:block;margin-bottom:.4rem;">Departure label <span style="font-size:.58rem;background:#2a7a74;color:#fff;padding:.1rem .4rem;letter-spacing:.08em;border-radius:2px;margin-left:.4rem;vertical-align:middle;">🇬🇧 EN</span></label>
-          <input type="text" id="ui_label_departure_en" placeholder="Departure" style="background:#e8f4f3;border:1px solid #7fb3af;width:100%;padding:.6rem .8rem;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;">
-        </div>
-      </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;margin-bottom:1rem;">
-        <div>
-          <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(44,35,24,.6);display:block;margin-bottom:.4rem;">Antal deltagere label <span style="font-size:.58rem;background:#b88a1e;color:#fff;padding:.1rem .4rem;letter-spacing:.08em;border-radius:2px;margin-left:.4rem;vertical-align:middle;">🇩🇰 DA</span></label>
-          <input type="text" id="ui_label_guests" placeholder="Deltagere" style="background:#fffef8;border:1px solid rgba(184,138,30,.3);width:100%;padding:.6rem .8rem;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;">
-        </div>
-        <div>
-          <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:#2a7a74;display:block;margin-bottom:.4rem;">Guests label <span style="font-size:.58rem;background:#2a7a74;color:#fff;padding:.1rem .4rem;letter-spacing:.08em;border-radius:2px;margin-left:.4rem;vertical-align:middle;">🇬🇧 EN</span></label>
-          <input type="text" id="ui_label_guests_en" placeholder="Participants" style="background:#e8f4f3;border:1px solid #7fb3af;width:100%;padding:.6rem .8rem;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;">
-        </div>
-      </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;margin-bottom:1rem;">
-        <div>
-          <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(44,35,24,.6);display:block;margin-bottom:.4rem;">Retreat info overskrift <span style="font-size:.58rem;background:#b88a1e;color:#fff;padding:.1rem .4rem;letter-spacing:.08em;border-radius:2px;margin-left:.4rem;vertical-align:middle;">🇩🇰 DA</span></label>
-          <input type="text" id="ui_retreat_info_heading" placeholder="Retreat info" style="background:#fffef8;border:1px solid rgba(184,138,30,.3);width:100%;padding:.6rem .8rem;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;">
-        </div>
-        <div>
-          <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:#2a7a74;display:block;margin-bottom:.4rem;">Retreat info heading <span style="font-size:.58rem;background:#2a7a74;color:#fff;padding:.1rem .4rem;letter-spacing:.08em;border-radius:2px;margin-left:.4rem;vertical-align:middle;">🇬🇧 EN</span></label>
-          <input type="text" id="ui_retreat_info_heading_en" placeholder="Retreat Info" style="background:#e8f4f3;border:1px solid #7fb3af;width:100%;padding:.6rem .8rem;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;">
-        </div>
-      </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;margin-bottom:1rem;">
-        <div>
-          <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(44,35,24,.6);display:block;margin-bottom:.4rem;">Fra (over prisen) <span style="font-size:.58rem;background:#b88a1e;color:#fff;padding:.1rem .4rem;letter-spacing:.08em;border-radius:2px;margin-left:.4rem;vertical-align:middle;">🇩🇰 DA</span></label>
-          <input type="text" id="ui_price_from" placeholder="Fra" style="background:#fffef8;border:1px solid rgba(184,138,30,.3);width:100%;padding:.6rem .8rem;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;">
-        </div>
-        <div>
-          <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:#2a7a74;display:block;margin-bottom:.4rem;">From (above price) <span style="font-size:.58rem;background:#2a7a74;color:#fff;padding:.1rem .4rem;letter-spacing:.08em;border-radius:2px;margin-left:.4rem;vertical-align:middle;">🇬🇧 EN</span></label>
-          <input type="text" id="ui_price_from_en" placeholder="From" style="background:#e8f4f3;border:1px solid #7fb3af;width:100%;padding:.6rem .8rem;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;">
-        </div>
-      </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;margin-bottom:1rem;">
-        <div>
-          <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(44,35,24,.6);display:block;margin-bottom:.4rem;">Pris-undertekst <span style="font-size:.58rem;background:#b88a1e;color:#fff;padding:.1rem .4rem;letter-spacing:.08em;border-radius:2px;margin-left:.4rem;vertical-align:middle;">🇩🇰 DA</span></label>
-          <input type="text" id="ui_price_per_person" placeholder="pr. person · delt værelse" style="background:#fffef8;border:1px solid rgba(184,138,30,.3);width:100%;padding:.6rem .8rem;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;">
-        </div>
-        <div>
-          <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:#2a7a74;display:block;margin-bottom:.4rem;">Price subtext <span style="font-size:.58rem;background:#2a7a74;color:#fff;padding:.1rem .4rem;letter-spacing:.08em;border-radius:2px;margin-left:.4rem;vertical-align:middle;">🇬🇧 EN</span></label>
-          <input type="text" id="ui_price_per_person_en" placeholder="per person · shared room" style="background:#e8f4f3;border:1px solid #7fb3af;width:100%;padding:.6rem .8rem;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;">
-        </div>
-      </div>
-
-      <div style="grid-column:1/-1;border-top:2px solid rgba(184,138,30,.2);padding-top:1rem;margin-top:1.2rem;margin-bottom:.5rem;display:flex;align-items:center;gap:1rem;">
-        <span style="font-size:.65rem;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);font-weight:600;">Program</span>
-        <button type="button" onclick="gemRetreat()" style="background:rgba(184,138,30,.15);border:1px solid rgba(184,138,30,.4);color:#7a5000;padding:.35rem 1rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;margin-left:auto;">💾 Gem</button>
-      </div>
-      <div style="margin-bottom:1rem;">
-        <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(44,35,24,.6);display:block;margin-bottom:.4rem;">Programdage (JSON) 🇩🇰</label>
-        <textarea id="retreat_program_days" placeholder='[{"num":"Dag 1","title":"Ankomst","text":"Beskrivelse..."}]' style="width:100%;min-height:140px;padding:.6rem .8rem;border:1px solid rgba(184,138,30,.3);background:#fffef8;font-family:monospace;font-size:.7rem;outline:none;resize:vertical;"></textarea>
-        <button type="button" onclick="openProgramEditor()" style="margin-top:.6rem;background:rgba(184,138,30,.1);border:1px solid rgba(184,138,30,.3);color:var(--gold);padding:.6rem 1rem;font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;">Redigér dage visuelt</button>
-      </div>
-      <div style="margin-bottom:1rem;">
-        <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:#2a7a74;display:block;margin-bottom:.4rem;">Program days (JSON) 🇬🇧 EN</label>
-        <textarea id="retreat_program_days_en" placeholder='[{"num":"Day 1","title":"Arrival","text":"Description..."}]' style="width:100%;min-height:140px;padding:.6rem .8rem;border:1px solid #7fb3af;background:#e8f4f3;font-family:monospace;font-size:.7rem;outline:none;resize:vertical;"></textarea>
-      </div>
-
-      <div style="grid-column:1/-1;border-top:2px solid rgba(184,138,30,.2);padding-top:1rem;margin-top:1.2rem;margin-bottom:.5rem;display:flex;align-items:center;gap:1rem;">
-        <span style="font-size:.65rem;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);font-weight:600;">Inkluderet / Ikke inkluderet</span>
-        <button type="button" onclick="gemRetreat()" style="background:rgba(184,138,30,.15);border:1px solid rgba(184,138,30,.4);color:#7a5000;padding:.35rem 1rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;margin-left:auto;">💾 Gem</button>
-      </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;margin-bottom:1rem;">
-        <div>
-          <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(44,35,24,.6);display:block;margin-bottom:.4rem;">Inkluderet i prisen (ét punkt pr. linje) <span style="font-size:.58rem;background:#b88a1e;color:#fff;padding:.1rem .4rem;letter-spacing:.08em;border-radius:2px;margin-left:.4rem;vertical-align:middle;">🇩🇰 DA</span></label>
-          <textarea id="retreat_included" placeholder="7 nætters indkvartering
-Alle måltider..." style="background:#fffef8;border:1px solid rgba(184,138,30,.3);width:100%;min-height:100px;padding:.6rem .8rem;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;resize:vertical;"></textarea>
-        </div>
-        <div>
-          <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:#2a7a74;display:block;margin-bottom:.4rem;">Included in price (one item per line) <span style="font-size:.58rem;background:#2a7a74;color:#fff;padding:.1rem .4rem;letter-spacing:.08em;border-radius:2px;margin-left:.4rem;vertical-align:middle;">🇬🇧 EN</span></label>
-          <textarea id="retreat_included_en" placeholder="7 nights accommodation
-All meals..." style="background:#e8f4f3;border:1px solid #7fb3af;width:100%;min-height:100px;padding:.6rem .8rem;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;resize:vertical;"></textarea>
-        </div>
-      </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;margin-bottom:1rem;">
-        <div>
-          <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(44,35,24,.6);display:block;margin-bottom:.4rem;">Ikke inkluderet (ét punkt pr. linje) <span style="font-size:.58rem;background:#b88a1e;color:#fff;padding:.1rem .4rem;letter-spacing:.08em;border-radius:2px;margin-left:.4rem;vertical-align:middle;">🇩🇰 DA</span></label>
-          <textarea id="retreat_excluded" placeholder="Flybilletter
-Rejseforsikring..." style="background:#fffef8;border:1px solid rgba(184,138,30,.3);width:100%;min-height:80px;padding:.6rem .8rem;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;resize:vertical;"></textarea>
-        </div>
-        <div>
-          <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:#2a7a74;display:block;margin-bottom:.4rem;">Not included (one item per line) <span style="font-size:.58rem;background:#2a7a74;color:#fff;padding:.1rem .4rem;letter-spacing:.08em;border-radius:2px;margin-left:.4rem;vertical-align:middle;">🇬🇧 EN</span></label>
-          <textarea id="retreat_excluded_en" placeholder="Flights
-Travel insurance..." style="background:#e8f4f3;border:1px solid #7fb3af;width:100%;min-height:80px;padding:.6rem .8rem;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;resize:vertical;"></textarea>
-        </div>
-      </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;margin-bottom:1rem;">
-        <div>
-          <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(44,35,24,.6);display:block;margin-bottom:.4rem;">Inkluderet overskrift <span style="font-size:.58rem;background:#b88a1e;color:#fff;padding:.1rem .4rem;letter-spacing:.08em;border-radius:2px;margin-left:.4rem;vertical-align:middle;">🇩🇰 DA</span></label>
-          <input type="text" id="ui_included_heading" placeholder="✓ Inkluderet i prisen" style="background:#fffef8;border:1px solid rgba(184,138,30,.3);width:100%;padding:.6rem .8rem;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;">
-        </div>
-        <div>
-          <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:#2a7a74;display:block;margin-bottom:.4rem;">Included heading <span style="font-size:.58rem;background:#2a7a74;color:#fff;padding:.1rem .4rem;letter-spacing:.08em;border-radius:2px;margin-left:.4rem;vertical-align:middle;">🇬🇧 EN</span></label>
-          <input type="text" id="ui_included_heading_en" placeholder="✓ Included in the price" style="background:#e8f4f3;border:1px solid #7fb3af;width:100%;padding:.6rem .8rem;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;">
-        </div>
-      </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;margin-bottom:1rem;">
-        <div>
-          <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(44,35,24,.6);display:block;margin-bottom:.4rem;">Ikke inkluderet overskrift <span style="font-size:.58rem;background:#b88a1e;color:#fff;padding:.1rem .4rem;letter-spacing:.08em;border-radius:2px;margin-left:.4rem;vertical-align:middle;">🇩🇰 DA</span></label>
-          <input type="text" id="ui_excluded_heading" placeholder="✗ Ikke inkluderet" style="background:#fffef8;border:1px solid rgba(184,138,30,.3);width:100%;padding:.6rem .8rem;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;">
-        </div>
-        <div>
-          <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:#2a7a74;display:block;margin-bottom:.4rem;">Not included heading <span style="font-size:.58rem;background:#2a7a74;color:#fff;padding:.1rem .4rem;letter-spacing:.08em;border-radius:2px;margin-left:.4rem;vertical-align:middle;">🇬🇧 EN</span></label>
-          <input type="text" id="ui_excluded_heading_en" placeholder="✗ Not included" style="background:#e8f4f3;border:1px solid #7fb3af;width:100%;padding:.6rem .8rem;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;">
-        </div>
-      </div>
-
-      <div style="grid-column:1/-1;border-top:2px solid rgba(184,138,30,.2);padding-top:1rem;margin-top:1.2rem;margin-bottom:.5rem;display:flex;align-items:center;gap:1rem;">
-        <span style="font-size:.65rem;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);font-weight:600;">Værelser</span>
-        <button type="button" onclick="gemRetreat()" style="background:rgba(184,138,30,.15);border:1px solid rgba(184,138,30,.4);color:#7a5000;padding:.35rem 1rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;margin-left:auto;">💾 Gem</button>
-      </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;margin-bottom:1rem;">
-        <div>
-          <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(44,35,24,.6);display:block;margin-bottom:.4rem;">Dobbeltværelse – pris (€)</label>
-          <input type="text" inputmode="numeric" id="retreat_room_double_price" placeholder="0" style="width:100%;padding:.6rem .8rem;border:1px solid rgba(184,138,30,.3);background:rgba(44,35,24,.03);font-family:Manrope,sans-serif;font-size:.8rem;outline:none;">
-        </div>
-        <div>
-          <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(44,35,24,.6);display:block;margin-bottom:.4rem;">Enkeltværelse – pris (€)</label>
-          <input type="text" inputmode="numeric" id="retreat_room_single_price" placeholder="0" style="width:100%;padding:.6rem .8rem;border:1px solid rgba(184,138,30,.3);background:rgba(44,35,24,.03);font-family:Manrope,sans-serif;font-size:.8rem;outline:none;">
-        </div>
-      </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;margin-bottom:1rem;">
-        <div>
-          <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(44,35,24,.6);display:block;margin-bottom:.4rem;">Dobbeltværelse – overskrift <span style="font-size:.58rem;background:#b88a1e;color:#fff;padding:.1rem .4rem;letter-spacing:.08em;border-radius:2px;margin-left:.4rem;vertical-align:middle;">🇩🇰 DA</span></label>
-          <input type="text" id="ui_room_double_heading" placeholder="Delt dobbeltværelse" style="background:#fffef8;border:1px solid rgba(184,138,30,.3);width:100%;padding:.6rem .8rem;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;">
-        </div>
-        <div>
-          <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:#2a7a74;display:block;margin-bottom:.4rem;">Double room – heading <span style="font-size:.58rem;background:#2a7a74;color:#fff;padding:.1rem .4rem;letter-spacing:.08em;border-radius:2px;margin-left:.4rem;vertical-align:middle;">🇬🇧 EN</span></label>
-          <input type="text" id="ui_room_double_heading_en" placeholder="Shared Double Room" style="background:#e8f4f3;border:1px solid #7fb3af;width:100%;padding:.6rem .8rem;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;">
-        </div>
-      </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;margin-bottom:1rem;">
-        <div>
-          <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(44,35,24,.6);display:block;margin-bottom:.4rem;">Dobbeltværelse – beskrivelse <span style="font-size:.58rem;background:#b88a1e;color:#fff;padding:.1rem .4rem;letter-spacing:.08em;border-radius:2px;margin-left:.4rem;vertical-align:middle;">🇩🇰 DA</span></label>
-          <textarea id="retreat_room_double_text" placeholder="Deles med en anden deltager..." style="background:#fffef8;border:1px solid rgba(184,138,30,.3);width:100%;min-height:70px;padding:.6rem .8rem;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;resize:vertical;"></textarea>
-        </div>
-        <div>
-          <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:#2a7a74;display:block;margin-bottom:.4rem;">Double room – description <span style="font-size:.58rem;background:#2a7a74;color:#fff;padding:.1rem .4rem;letter-spacing:.08em;border-radius:2px;margin-left:.4rem;vertical-align:middle;">🇬🇧 EN</span></label>
-          <textarea id="retreat_room_double_text_en" placeholder="Shared with another participant..." style="background:#e8f4f3;border:1px solid #7fb3af;width:100%;min-height:70px;padding:.6rem .8rem;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;resize:vertical;"></textarea>
-        </div>
-      </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;margin-bottom:1rem;">
-        <div>
-          <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(44,35,24,.6);display:block;margin-bottom:.4rem;">Enkeltværelse – overskrift <span style="font-size:.58rem;background:#b88a1e;color:#fff;padding:.1rem .4rem;letter-spacing:.08em;border-radius:2px;margin-left:.4rem;vertical-align:middle;">🇩🇰 DA</span></label>
-          <input type="text" id="ui_room_single_heading" placeholder="Enkeltværelse" style="background:#fffef8;border:1px solid rgba(184,138,30,.3);width:100%;padding:.6rem .8rem;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;">
-        </div>
-        <div>
-          <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:#2a7a74;display:block;margin-bottom:.4rem;">Single room – heading <span style="font-size:.58rem;background:#2a7a74;color:#fff;padding:.1rem .4rem;letter-spacing:.08em;border-radius:2px;margin-left:.4rem;vertical-align:middle;">🇬🇧 EN</span></label>
-          <input type="text" id="ui_room_single_heading_en" placeholder="Single Room" style="background:#e8f4f3;border:1px solid #7fb3af;width:100%;padding:.6rem .8rem;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;">
-        </div>
-      </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;margin-bottom:1rem;">
-        <div>
-          <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(44,35,24,.6);display:block;margin-bottom:.4rem;">Enkeltværelse – beskrivelse <span style="font-size:.58rem;background:#b88a1e;color:#fff;padding:.1rem .4rem;letter-spacing:.08em;border-radius:2px;margin-left:.4rem;vertical-align:middle;">🇩🇰 DA</span></label>
-          <textarea id="retreat_room_single_text" placeholder="Dit eget private rum..." style="background:#fffef8;border:1px solid rgba(184,138,30,.3);width:100%;min-height:70px;padding:.6rem .8rem;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;resize:vertical;"></textarea>
-        </div>
-        <div>
-          <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:#2a7a74;display:block;margin-bottom:.4rem;">Single room – description <span style="font-size:.58rem;background:#2a7a74;color:#fff;padding:.1rem .4rem;letter-spacing:.08em;border-radius:2px;margin-left:.4rem;vertical-align:middle;">🇬🇧 EN</span></label>
-          <textarea id="retreat_room_single_text_en" placeholder="Your own private room..." style="background:#e8f4f3;border:1px solid #7fb3af;width:100%;min-height:70px;padding:.6rem .8rem;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;resize:vertical;"></textarea>
-        </div>
-      </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;margin-bottom:1rem;">
-        <div>
-          <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(44,35,24,.6);display:block;margin-bottom:.4rem;">Vælg dit værelse – overskrift <span style="font-size:.58rem;background:#b88a1e;color:#fff;padding:.1rem .4rem;letter-spacing:.08em;border-radius:2px;margin-left:.4rem;vertical-align:middle;">🇩🇰 DA</span></label>
-          <input type="text" id="ui_rooms_heading" placeholder="Vælg dit værelse" style="background:#fffef8;border:1px solid rgba(184,138,30,.3);width:100%;padding:.6rem .8rem;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;">
-        </div>
-        <div>
-          <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:#2a7a74;display:block;margin-bottom:.4rem;">Choose your room – heading <span style="font-size:.58rem;background:#2a7a74;color:#fff;padding:.1rem .4rem;letter-spacing:.08em;border-radius:2px;margin-left:.4rem;vertical-align:middle;">🇬🇧 EN</span></label>
-          <input type="text" id="ui_rooms_heading_en" placeholder="Choose Your Room" style="background:#e8f4f3;border:1px solid #7fb3af;width:100%;padding:.6rem .8rem;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;">
-        </div>
-      </div>
-
-      <div style="grid-column:1/-1;border-top:2px solid rgba(184,138,30,.2);padding-top:1rem;margin-top:1.2rem;margin-bottom:.5rem;display:flex;align-items:center;gap:1rem;">
-        <span style="font-size:.65rem;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);font-weight:600;">Mad & køkken</span>
-        <button type="button" onclick="gemRetreat()" style="background:rgba(184,138,30,.15);border:1px solid rgba(184,138,30,.4);color:#7a5000;padding:.35rem 1rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;margin-left:auto;">💾 Gem</button>
-      </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;margin-bottom:1rem;">
-        <div>
-          <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(44,35,24,.6);display:block;margin-bottom:.4rem;">Overskrift <span style="font-size:.58rem;background:#b88a1e;color:#fff;padding:.1rem .4rem;letter-spacing:.08em;border-radius:2px;margin-left:.4rem;vertical-align:middle;">🇩🇰 DA</span></label>
-          <input type="text" id="ui_food_heading" placeholder="Nærende andalusisk køkken" style="background:#fffef8;border:1px solid rgba(184,138,30,.3);width:100%;padding:.6rem .8rem;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;">
-        </div>
-        <div>
-          <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:#2a7a74;display:block;margin-bottom:.4rem;">Heading <span style="font-size:.58rem;background:#2a7a74;color:#fff;padding:.1rem .4rem;letter-spacing:.08em;border-radius:2px;margin-left:.4rem;vertical-align:middle;">🇬🇧 EN</span></label>
-          <input type="text" id="ui_food_heading_en" placeholder="Nourishing Andalusian Cuisine" style="background:#e8f4f3;border:1px solid #7fb3af;width:100%;padding:.6rem .8rem;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;">
-        </div>
-      </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;margin-bottom:1rem;">
-        <div>
-          <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(44,35,24,.6);display:block;margin-bottom:.4rem;">Brødtekst <span style="font-size:.58rem;background:#b88a1e;color:#fff;padding:.1rem .4rem;letter-spacing:.08em;border-radius:2px;margin-left:.4rem;vertical-align:middle;">🇩🇰 DA</span></label>
-          <textarea id="ui_food_text" placeholder="Mad er en central del af retreatoplevelsen..." style="background:#fffef8;border:1px solid rgba(184,138,30,.3);width:100%;min-height:100px;padding:.6rem .8rem;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;resize:vertical;"></textarea>
-        </div>
-        <div>
-          <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:#2a7a74;display:block;margin-bottom:.4rem;">Body text <span style="font-size:.58rem;background:#2a7a74;color:#fff;padding:.1rem .4rem;letter-spacing:.08em;border-radius:2px;margin-left:.4rem;vertical-align:middle;">🇬🇧 EN</span></label>
-          <textarea id="ui_food_text_en" placeholder="Food is a central part of the retreat experience..." style="background:#e8f4f3;border:1px solid #7fb3af;width:100%;min-height:100px;padding:.6rem .8rem;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;resize:vertical;"></textarea>
-        </div>
-      </div>
-
-      <div style="grid-column:1/-1;border-top:2px solid rgba(184,138,30,.2);padding-top:1rem;margin-top:1.2rem;margin-bottom:.5rem;">
-        <span style="font-size:.65rem;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);font-weight:600;">Underviser</span>
-      </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;margin-bottom:1rem;">
-        <div>
-          <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(44,35,24,.6);display:block;margin-bottom:.4rem;">Overskrift <span style="font-size:.58rem;background:#b88a1e;color:#fff;padding:.1rem .4rem;letter-spacing:.08em;border-radius:2px;margin-left:.4rem;vertical-align:middle;">🇩🇰 DA</span></label>
-          <input type="text" id="ui_teacher_heading" placeholder="Din guide på rejsen" style="background:#fffef8;border:1px solid rgba(184,138,30,.3);width:100%;padding:.6rem .8rem;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;">
-        </div>
-        <div>
-          <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:#2a7a74;display:block;margin-bottom:.4rem;">Heading <span style="font-size:.58rem;background:#2a7a74;color:#fff;padding:.1rem .4rem;letter-spacing:.08em;border-radius:2px;margin-left:.4rem;vertical-align:middle;">🇬🇧 EN</span></label>
-          <input type="text" id="ui_teacher_heading_en" placeholder="Your Guide on the Journey" style="background:#e8f4f3;border:1px solid #7fb3af;width:100%;padding:.6rem .8rem;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;">
-        </div>
-      </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;margin-bottom:1rem;">
-        <div>
-          <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(44,35,24,.6);display:block;margin-bottom:.4rem;">Bio-tekst <span style="font-size:.58rem;background:#b88a1e;color:#fff;padding:.1rem .4rem;letter-spacing:.08em;border-radius:2px;margin-left:.4rem;vertical-align:middle;">🇩🇰 DA</span></label>
-          <textarea id="retreat_teacher_bio" placeholder="Retreatet ledes af..." style="background:#fffef8;border:1px solid rgba(184,138,30,.3);width:100%;min-height:100px;padding:.6rem .8rem;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;resize:vertical;"></textarea>
-        </div>
-        <div>
-          <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:#2a7a74;display:block;margin-bottom:.4rem;">Bio text <span style="font-size:.58rem;background:#2a7a74;color:#fff;padding:.1rem .4rem;letter-spacing:.08em;border-radius:2px;margin-left:.4rem;vertical-align:middle;">🇬🇧 EN</span></label>
-          <textarea id="retreat_teacher_bio_en" placeholder="The retreat is led by..." style="background:#e8f4f3;border:1px solid #7fb3af;width:100%;min-height:100px;padding:.6rem .8rem;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;resize:vertical;"></textarea>
-        </div>
-      </div>
-
-      <div style="grid-column:1/-1;border-top:2px solid rgba(184,138,30,.2);padding-top:1rem;margin-top:1.2rem;margin-bottom:.5rem;display:flex;align-items:center;gap:1rem;">
-        <span style="font-size:.65rem;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);font-weight:600;">Highlights</span>
-        <button type="button" onclick="gemRetreat()" style="background:rgba(184,138,30,.15);border:1px solid rgba(184,138,30,.4);color:#7a5000;padding:.35rem 1rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;margin-left:auto;">💾 Gem</button>
-      </div>
-      <input type="hidden" id="ui_highlight1_icon">
-      <input type="hidden" id="ui_highlight2_icon">
-      <input type="hidden" id="ui_highlight3_icon">
-      <input type="hidden" id="ui_highlight4_icon">
-      <input type="hidden" id="ui_highlight5_icon">
-      <input type="hidden" id="ui_highlight6_icon">
-      <input type="hidden" id="ui_highlight1_title">
-      <input type="hidden" id="ui_highlight1_title_en">
-      <input type="hidden" id="ui_highlight1_text">
-      <input type="hidden" id="ui_highlight1_text_en">
-      <input type="hidden" id="ui_highlight2_title">
-      <input type="hidden" id="ui_highlight2_title_en">
-      <input type="hidden" id="ui_highlight2_text">
-      <input type="hidden" id="ui_highlight2_text_en">
-      <input type="hidden" id="ui_highlight3_title">
-      <input type="hidden" id="ui_highlight3_title_en">
-      <input type="hidden" id="ui_highlight3_text">
-      <input type="hidden" id="ui_highlight3_text_en">
-      <input type="hidden" id="ui_highlight4_title">
-      <input type="hidden" id="ui_highlight4_title_en">
-      <input type="hidden" id="ui_highlight4_text">
-      <input type="hidden" id="ui_highlight4_text_en">
-      <input type="hidden" id="ui_highlight5_title">
-      <input type="hidden" id="ui_highlight5_title_en">
-      <input type="hidden" id="ui_highlight5_text">
-      <input type="hidden" id="ui_highlight5_text_en">
-      <input type="hidden" id="ui_highlight6_title">
-      <input type="hidden" id="ui_highlight6_title_en">
-      <input type="hidden" id="ui_highlight6_text">
-      <input type="hidden" id="ui_highlight6_text_en">
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;margin-bottom:1rem;">
-        <div>
-          <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(44,35,24,.6);display:block;margin-bottom:.4rem;">Highlights overskrift 🇩🇰</label>
-          <input type="text" id="ui_highlights_heading" placeholder="Hvad gør dette retreat særligt?" style="background:#fffef8;border:1px solid rgba(184,138,30,.3);width:100%;padding:.6rem .8rem;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;">
-        </div>
-        <div>
-          <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:#2a7a74;display:block;margin-bottom:.4rem;">Highlights heading 🇬🇧</label>
-          <input type="text" id="ui_highlights_heading_en" placeholder="What makes this retreat special?" style="background:#e8f4f3;border:1px solid #7fb3af;width:100%;padding:.6rem .8rem;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;">
-        </div>
-      </div>
-      <div style="margin-bottom:1rem;">
-        <button type="button" onclick="openHighlightsEditor()" style="background:rgba(184,138,30,.1);border:1px solid rgba(184,138,30,.3);color:var(--gold);padding:.7rem 1.5rem;font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;width:100%;">✏️ Redigér highlights visuelt (DA + EN)</button>
-        <div id="highlightsPreview" style="margin-top:.6rem;font-size:.72rem;color:rgba(44,35,24,.5);font-style:italic;"></div>
-      </div>
-
-      <div style="grid-column:1/-1;border-top:2px solid rgba(184,138,30,.2);padding-top:1rem;margin-top:1.2rem;margin-bottom:.5rem;display:flex;align-items:center;gap:1rem;">
-        <span style="font-size:.65rem;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);font-weight:600;">Booking-sektion</span>
-        <button type="button" onclick="gemRetreat()" style="background:rgba(184,138,30,.15);border:1px solid rgba(184,138,30,.4);color:#7a5000;padding:.35rem 1rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;margin-left:auto;">💾 Gem</button>
-      </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;margin-bottom:1rem;">
-        <div>
-          <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(44,35,24,.6);display:block;margin-bottom:.4rem;">Overskrift <span style="font-size:.58rem;background:#b88a1e;color:#fff;padding:.1rem .4rem;letter-spacing:.08em;border-radius:2px;margin-left:.4rem;vertical-align:middle;">🇩🇰 DA</span></label>
-          <input type="text" id="ui_book_heading" placeholder="Tag det første skridt" style="background:#fffef8;border:1px solid rgba(184,138,30,.3);width:100%;padding:.6rem .8rem;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;">
-        </div>
-        <div>
-          <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:#2a7a74;display:block;margin-bottom:.4rem;">Heading <span style="font-size:.58rem;background:#2a7a74;color:#fff;padding:.1rem .4rem;letter-spacing:.08em;border-radius:2px;margin-left:.4rem;vertical-align:middle;">🇬🇧 EN</span></label>
-          <input type="text" id="ui_book_heading_en" placeholder="Take the First Step" style="background:#e8f4f3;border:1px solid #7fb3af;width:100%;padding:.6rem .8rem;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;">
-        </div>
-      </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;margin-bottom:1rem;">
-        <div>
-          <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(44,35,24,.6);display:block;margin-bottom:.4rem;">Intro-tekst <span style="font-size:.58rem;background:#b88a1e;color:#fff;padding:.1rem .4rem;letter-spacing:.08em;border-radius:2px;margin-left:.4rem;vertical-align:middle;">🇩🇰 DA</span></label>
-          <textarea id="ui_book_intro" placeholder="Udfyld formularen og vi vender tilbage..." style="background:#fffef8;border:1px solid rgba(184,138,30,.3);width:100%;min-height:70px;padding:.6rem .8rem;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;resize:vertical;"></textarea>
-        </div>
-        <div>
-          <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:#2a7a74;display:block;margin-bottom:.4rem;">Intro text <span style="font-size:.58rem;background:#2a7a74;color:#fff;padding:.1rem .4rem;letter-spacing:.08em;border-radius:2px;margin-left:.4rem;vertical-align:middle;">🇬🇧 EN</span></label>
-          <textarea id="ui_book_intro_en" placeholder="Fill in the form and we will get back to you..." style="background:#e8f4f3;border:1px solid #7fb3af;width:100%;min-height:70px;padding:.6rem .8rem;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;resize:vertical;"></textarea>
-        </div>
-      </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;margin-bottom:1rem;">
-        <div>
-          <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(44,35,24,.6);display:block;margin-bottom:.4rem;">Retreat label (booking form) <span style="font-size:.58rem;background:#b88a1e;color:#fff;padding:.1rem .4rem;letter-spacing:.08em;border-radius:2px;margin-left:.4rem;vertical-align:middle;">🇩🇰 DA</span></label>
-          <input type="text" id="ui_book_label_retreat" placeholder="Retreat" style="background:#fffef8;border:1px solid rgba(184,138,30,.3);width:100%;padding:.6rem .8rem;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;">
-        </div>
-        <div>
-          <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:#2a7a74;display:block;margin-bottom:.4rem;">Retreat label <span style="font-size:.58rem;background:#2a7a74;color:#fff;padding:.1rem .4rem;letter-spacing:.08em;border-radius:2px;margin-left:.4rem;vertical-align:middle;">🇬🇧 EN</span></label>
-          <input type="text" id="ui_book_label_retreat_en" placeholder="Retreat" style="background:#e8f4f3;border:1px solid #7fb3af;width:100%;padding:.6rem .8rem;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;">
-        </div>
-      </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;margin-bottom:1rem;">
-        <div>
-          <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(44,35,24,.6);display:block;margin-bottom:.4rem;">Land label (booking form) <span style="font-size:.58rem;background:#b88a1e;color:#fff;padding:.1rem .4rem;letter-spacing:.08em;border-radius:2px;margin-left:.4rem;vertical-align:middle;">🇩🇰 DA</span></label>
-          <input type="text" id="ui_book_label_country" placeholder="Land" style="background:#fffef8;border:1px solid rgba(184,138,30,.3);width:100%;padding:.6rem .8rem;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;">
-        </div>
-        <div>
-          <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:#2a7a74;display:block;margin-bottom:.4rem;">Country label <span style="font-size:.58rem;background:#2a7a74;color:#fff;padding:.1rem .4rem;letter-spacing:.08em;border-radius:2px;margin-left:.4rem;vertical-align:middle;">🇬🇧 EN</span></label>
-          <input type="text" id="ui_book_label_country_en" placeholder="Country" style="background:#e8f4f3;border:1px solid #7fb3af;width:100%;padding:.6rem .8rem;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;">
-        </div>
-      </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;margin-bottom:1rem;">
-        <div>
-          <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(44,35,24,.6);display:block;margin-bottom:.4rem;">Vælg dato label <span style="font-size:.58rem;background:#b88a1e;color:#fff;padding:.1rem .4rem;letter-spacing:.08em;border-radius:2px;margin-left:.4rem;vertical-align:middle;">🇩🇰 DA</span></label>
-          <input type="text" id="ui_book_label_date" placeholder="Vælg dato" style="background:#fffef8;border:1px solid rgba(184,138,30,.3);width:100%;padding:.6rem .8rem;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;">
-        </div>
-        <div>
-          <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:#2a7a74;display:block;margin-bottom:.4rem;">Choose date label <span style="font-size:.58rem;background:#2a7a74;color:#fff;padding:.1rem .4rem;letter-spacing:.08em;border-radius:2px;margin-left:.4rem;vertical-align:middle;">🇬🇧 EN</span></label>
-          <input type="text" id="ui_book_label_date_en" placeholder="Choose date" style="background:#e8f4f3;border:1px solid #7fb3af;width:100%;padding:.6rem .8rem;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;">
-        </div>
-      </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;margin-bottom:1rem;">
-        <div>
-          <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(44,35,24,.6);display:block;margin-bottom:.4rem;">Værelse-præference label <span style="font-size:.58rem;background:#b88a1e;color:#fff;padding:.1rem .4rem;letter-spacing:.08em;border-radius:2px;margin-left:.4rem;vertical-align:middle;">🇩🇰 DA</span></label>
-          <input type="text" id="ui_book_label_room" placeholder="Værelses-præference" style="background:#fffef8;border:1px solid rgba(184,138,30,.3);width:100%;padding:.6rem .8rem;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;">
-        </div>
-        <div>
-          <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:#2a7a74;display:block;margin-bottom:.4rem;">Room preference label <span style="font-size:.58rem;background:#2a7a74;color:#fff;padding:.1rem .4rem;letter-spacing:.08em;border-radius:2px;margin-left:.4rem;vertical-align:middle;">🇬🇧 EN</span></label>
-          <input type="text" id="ui_book_label_room_en" placeholder="Room preference" style="background:#e8f4f3;border:1px solid #7fb3af;width:100%;padding:.6rem .8rem;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;">
-        </div>
-      </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;margin-bottom:1rem;">
-        <div>
-          <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(44,35,24,.6);display:block;margin-bottom:.4rem;">Særlige ønsker label <span style="font-size:.58rem;background:#b88a1e;color:#fff;padding:.1rem .4rem;letter-spacing:.08em;border-radius:2px;margin-left:.4rem;vertical-align:middle;">🇩🇰 DA</span></label>
-          <input type="text" id="ui_book_label_wishes" placeholder="Særlige ønsker" style="background:#fffef8;border:1px solid rgba(184,138,30,.3);width:100%;padding:.6rem .8rem;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;">
-        </div>
-        <div>
-          <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:#2a7a74;display:block;margin-bottom:.4rem;">Special requests label <span style="font-size:.58rem;background:#2a7a74;color:#fff;padding:.1rem .4rem;letter-spacing:.08em;border-radius:2px;margin-left:.4rem;vertical-align:middle;">🇬🇧 EN</span></label>
-          <input type="text" id="ui_book_label_wishes_en" placeholder="Special requests" style="background:#e8f4f3;border:1px solid #7fb3af;width:100%;padding:.6rem .8rem;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;">
-        </div>
-      </div>
-
-      <div style="grid-column:1/-1;border-top:2px solid rgba(184,138,30,.2);padding-top:1rem;margin-top:1.2rem;margin-bottom:.5rem;display:flex;align-items:center;gap:1rem;">
-        <span style="font-size:.65rem;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);font-weight:600;">FAQ</span>
-        <button type="button" onclick="gemRetreat()" style="background:rgba(184,138,30,.15);border:1px solid rgba(184,138,30,.4);color:#7a5000;padding:.35rem 1rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;margin-left:auto;">💾 Gem</button>
-      </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;margin-bottom:1rem;">
-        <div>
-          <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(44,35,24,.6);display:block;margin-bottom:.4rem;">FAQ overskrift <span style="font-size:.58rem;background:#b88a1e;color:#fff;padding:.1rem .4rem;letter-spacing:.08em;border-radius:2px;margin-left:.4rem;vertical-align:middle;">🇩🇰 DA</span></label>
-          <input type="text" id="ui_faq_heading" placeholder="FAQ" style="background:#fffef8;border:1px solid rgba(184,138,30,.3);width:100%;padding:.6rem .8rem;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;">
-        </div>
-        <div>
-          <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:#2a7a74;display:block;margin-bottom:.4rem;">FAQ heading <span style="font-size:.58rem;background:#2a7a74;color:#fff;padding:.1rem .4rem;letter-spacing:.08em;border-radius:2px;margin-left:.4rem;vertical-align:middle;">🇬🇧 EN</span></label>
-          <input type="text" id="ui_faq_heading_en" placeholder="Frequently Asked Questions" style="background:#e8f4f3;border:1px solid #7fb3af;width:100%;padding:.6rem .8rem;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;">
-        </div>
-      </div>
-      <input type="hidden" id="faq_items">
-      <input type="hidden" id="faq_items_en">
-      <div style="margin-bottom:1rem;">
-        <button type="button" onclick="openFaqEditor()" style="background:rgba(184,138,30,.1);border:1px solid rgba(184,138,30,.3);color:var(--gold);padding:.7rem 1.5rem;font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;width:100%;">✏️ Redigér FAQ visuelt (DA + EN)</button>
-        <div id="faqPreview" style="margin-top:.6rem;font-size:.72rem;color:rgba(44,35,24,.5);font-style:italic;"></div>
-      </div>
-
-      <div style="grid-column:1/-1;border-top:2px solid rgba(184,138,30,.2);padding-top:1rem;margin-top:1.2rem;margin-bottom:.5rem;">
-        <span style="font-size:.65rem;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);font-weight:600;">Tilvalg</span>
-      </div>
-      <div style="margin-bottom:1rem;">
-        <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(44,35,24,.6);display:block;margin-bottom:.4rem;">Tilvalg</label>
-        <div id="addonListe" style="display:flex;flex-direction:column;gap:.6rem;"></div>
-        <button type="button" onclick="tilfoejAddon()" style="margin-top:.8rem;background:rgba(184,138,30,.1);border:1px solid rgba(184,138,30,.3);color:var(--gold);padding:.6rem 1rem;font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;">+ Tilføj tilvalg</button>
-        <input type="hidden" id="retreat_addons">
-      </div>
-
-      <div style="grid-column:1/-1;border-top:2px solid rgba(184,138,30,.2);padding-top:1rem;margin-top:1.2rem;margin-bottom:.5rem;">
-        <span style="font-size:.65rem;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);font-weight:600;">Section-labels (lille tekst over overskrifter)</span>
-      </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;margin-bottom:1rem;">
-        <div>
-          <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(44,35,24,.6);display:block;margin-bottom:.4rem;">Om retreatet label <span style="font-size:.58rem;background:#b88a1e;color:#fff;padding:.1rem .4rem;letter-spacing:.08em;border-radius:2px;margin-left:.4rem;vertical-align:middle;">🇩🇰 DA</span></label>
-          <input type="text" id="ui_label_about" placeholder="Om retreatet" style="background:#fffef8;border:1px solid rgba(184,138,30,.3);width:100%;padding:.6rem .8rem;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;">
-        </div>
-        <div>
-          <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:#2a7a74;display:block;margin-bottom:.4rem;">About label <span style="font-size:.58rem;background:#2a7a74;color:#fff;padding:.1rem .4rem;letter-spacing:.08em;border-radius:2px;margin-left:.4rem;vertical-align:middle;">🇬🇧 EN</span></label>
-          <input type="text" id="ui_label_about_en" placeholder="About the retreat" style="background:#e8f4f3;border:1px solid #7fb3af;width:100%;padding:.6rem .8rem;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;">
-        </div>
-      </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;margin-bottom:1rem;">
-        <div>
-          <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(44,35,24,.6);display:block;margin-bottom:.4rem;">Program label <span style="font-size:.58rem;background:#b88a1e;color:#fff;padding:.1rem .4rem;letter-spacing:.08em;border-radius:2px;margin-left:.4rem;vertical-align:middle;">🇩🇰 DA</span></label>
-          <input type="text" id="ui_label_program" placeholder="Program" style="background:#fffef8;border:1px solid rgba(184,138,30,.3);width:100%;padding:.6rem .8rem;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;">
-        </div>
-        <div>
-          <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:#2a7a74;display:block;margin-bottom:.4rem;">Program label <span style="font-size:.58rem;background:#2a7a74;color:#fff;padding:.1rem .4rem;letter-spacing:.08em;border-radius:2px;margin-left:.4rem;vertical-align:middle;">🇬🇧 EN</span></label>
-          <input type="text" id="ui_label_program_en" placeholder="Program" style="background:#e8f4f3;border:1px solid #7fb3af;width:100%;padding:.6rem .8rem;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;">
-        </div>
-      </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;margin-bottom:1rem;">
-        <div>
-          <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(44,35,24,.6);display:block;margin-bottom:.4rem;">Inkluderet label <span style="font-size:.58rem;background:#b88a1e;color:#fff;padding:.1rem .4rem;letter-spacing:.08em;border-radius:2px;margin-left:.4rem;vertical-align:middle;">🇩🇰 DA</span></label>
-          <input type="text" id="ui_label_included" placeholder="Hvad er inkluderet" style="background:#fffef8;border:1px solid rgba(184,138,30,.3);width:100%;padding:.6rem .8rem;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;">
-        </div>
-        <div>
-          <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:#2a7a74;display:block;margin-bottom:.4rem;">Included label <span style="font-size:.58rem;background:#2a7a74;color:#fff;padding:.1rem .4rem;letter-spacing:.08em;border-radius:2px;margin-left:.4rem;vertical-align:middle;">🇬🇧 EN</span></label>
-          <input type="text" id="ui_label_included_en" placeholder="What's included" style="background:#e8f4f3;border:1px solid #7fb3af;width:100%;padding:.6rem .8rem;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;">
-        </div>
-      </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;margin-bottom:1rem;">
-        <div>
-          <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(44,35,24,.6);display:block;margin-bottom:.4rem;">Indkvartering label <span style="font-size:.58rem;background:#b88a1e;color:#fff;padding:.1rem .4rem;letter-spacing:.08em;border-radius:2px;margin-left:.4rem;vertical-align:middle;">🇩🇰 DA</span></label>
-          <input type="text" id="ui_label_rooms" placeholder="Indkvartering & Priser" style="background:#fffef8;border:1px solid rgba(184,138,30,.3);width:100%;padding:.6rem .8rem;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;">
-        </div>
-        <div>
-          <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:#2a7a74;display:block;margin-bottom:.4rem;">Rooms label <span style="font-size:.58rem;background:#2a7a74;color:#fff;padding:.1rem .4rem;letter-spacing:.08em;border-radius:2px;margin-left:.4rem;vertical-align:middle;">🇬🇧 EN</span></label>
-          <input type="text" id="ui_label_rooms_en" placeholder="Accommodation & Prices" style="background:#e8f4f3;border:1px solid #7fb3af;width:100%;padding:.6rem .8rem;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;">
-        </div>
-      </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;margin-bottom:1rem;">
-        <div>
-          <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(44,35,24,.6);display:block;margin-bottom:.4rem;">Mad label <span style="font-size:.58rem;background:#b88a1e;color:#fff;padding:.1rem .4rem;letter-spacing:.08em;border-radius:2px;margin-left:.4rem;vertical-align:middle;">🇩🇰 DA</span></label>
-          <input type="text" id="ui_label_food" placeholder="Mad & Drikke" style="background:#fffef8;border:1px solid rgba(184,138,30,.3);width:100%;padding:.6rem .8rem;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;">
-        </div>
-        <div>
-          <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:#2a7a74;display:block;margin-bottom:.4rem;">Food label <span style="font-size:.58rem;background:#2a7a74;color:#fff;padding:.1rem .4rem;letter-spacing:.08em;border-radius:2px;margin-left:.4rem;vertical-align:middle;">🇬🇧 EN</span></label>
-          <input type="text" id="ui_label_food_en" placeholder="Food & Drink" style="background:#e8f4f3;border:1px solid #7fb3af;width:100%;padding:.6rem .8rem;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;">
-        </div>
-      </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;margin-bottom:1rem;">
-        <div>
-          <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(44,35,24,.6);display:block;margin-bottom:.4rem;">Facilitator label <span style="font-size:.58rem;background:#b88a1e;color:#fff;padding:.1rem .4rem;letter-spacing:.08em;border-radius:2px;margin-left:.4rem;vertical-align:middle;">🇩🇰 DA</span></label>
-          <input type="text" id="ui_label_facilitator" placeholder="Facilitator" style="background:#fffef8;border:1px solid rgba(184,138,30,.3);width:100%;padding:.6rem .8rem;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;">
-        </div>
-        <div>
-          <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:#2a7a74;display:block;margin-bottom:.4rem;">Facilitator label <span style="font-size:.58rem;background:#2a7a74;color:#fff;padding:.1rem .4rem;letter-spacing:.08em;border-radius:2px;margin-left:.4rem;vertical-align:middle;">🇬🇧 EN</span></label>
-          <input type="text" id="ui_label_facilitator_en" placeholder="Facilitator" style="background:#e8f4f3;border:1px solid #7fb3af;width:100%;padding:.6rem .8rem;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;">
-        </div>
-      </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;margin-bottom:1rem;">
-        <div>
-          <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(44,35,24,.6);display:block;margin-bottom:.4rem;">Highlights label <span style="font-size:.58rem;background:#b88a1e;color:#fff;padding:.1rem .4rem;letter-spacing:.08em;border-radius:2px;margin-left:.4rem;vertical-align:middle;">🇩🇰 DA</span></label>
-          <input type="text" id="ui_label_highlights" placeholder="Retreat Highlights" style="background:#fffef8;border:1px solid rgba(184,138,30,.3);width:100%;padding:.6rem .8rem;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;">
-        </div>
-        <div>
-          <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:#2a7a74;display:block;margin-bottom:.4rem;">Highlights label <span style="font-size:.58rem;background:#2a7a74;color:#fff;padding:.1rem .4rem;letter-spacing:.08em;border-radius:2px;margin-left:.4rem;vertical-align:middle;">🇬🇧 EN</span></label>
-          <input type="text" id="ui_label_highlights_en" placeholder="Retreat Highlights" style="background:#e8f4f3;border:1px solid #7fb3af;width:100%;padding:.6rem .8rem;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;">
-        </div>
-      </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;margin-bottom:1rem;">
-        <div>
-          <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(44,35,24,.6);display:block;margin-bottom:.4rem;">Anmeldelser label <span style="font-size:.58rem;background:#b88a1e;color:#fff;padding:.1rem .4rem;letter-spacing:.08em;border-radius:2px;margin-left:.4rem;vertical-align:middle;">🇩🇰 DA</span></label>
-          <input type="text" id="ui_label_reviews" placeholder="Gæsternes oplevelser" style="background:#fffef8;border:1px solid rgba(184,138,30,.3);width:100%;padding:.6rem .8rem;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;">
-        </div>
-        <div>
-          <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:#2a7a74;display:block;margin-bottom:.4rem;">Reviews label <span style="font-size:.58rem;background:#2a7a74;color:#fff;padding:.1rem .4rem;letter-spacing:.08em;border-radius:2px;margin-left:.4rem;vertical-align:middle;">🇬🇧 EN</span></label>
-          <input type="text" id="ui_label_reviews_en" placeholder="Guest experiences" style="background:#e8f4f3;border:1px solid #7fb3af;width:100%;padding:.6rem .8rem;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;">
-        </div>
-      </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;margin-bottom:1rem;">
-        <div>
-          <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(44,35,24,.6);display:block;margin-bottom:.4rem;">FAQ label <span style="font-size:.58rem;background:#b88a1e;color:#fff;padding:.1rem .4rem;letter-spacing:.08em;border-radius:2px;margin-left:.4rem;vertical-align:middle;">🇩🇰 DA</span></label>
-          <input type="text" id="ui_label_faq" placeholder="Ofte stillede spørgsmål" style="background:#fffef8;border:1px solid rgba(184,138,30,.3);width:100%;padding:.6rem .8rem;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;">
-        </div>
-        <div>
-          <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:#2a7a74;display:block;margin-bottom:.4rem;">FAQ label <span style="font-size:.58rem;background:#2a7a74;color:#fff;padding:.1rem .4rem;letter-spacing:.08em;border-radius:2px;margin-left:.4rem;vertical-align:middle;">🇬🇧 EN</span></label>
-          <input type="text" id="ui_label_faq_en" placeholder="Frequently asked questions" style="background:#e8f4f3;border:1px solid #7fb3af;width:100%;padding:.6rem .8rem;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;">
-        </div>
-      </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;margin-bottom:1rem;">
-        <div>
-          <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(44,35,24,.6);display:block;margin-bottom:.4rem;">Booking label <span style="font-size:.58rem;background:#b88a1e;color:#fff;padding:.1rem .4rem;letter-spacing:.08em;border-radius:2px;margin-left:.4rem;vertical-align:middle;">🇩🇰 DA</span></label>
-          <input type="text" id="ui_label_booking" placeholder="Book dit retreat" style="background:#fffef8;border:1px solid rgba(184,138,30,.3);width:100%;padding:.6rem .8rem;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;">
-        </div>
-        <div>
-          <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:#2a7a74;display:block;margin-bottom:.4rem;">Booking label <span style="font-size:.58rem;background:#2a7a74;color:#fff;padding:.1rem .4rem;letter-spacing:.08em;border-radius:2px;margin-left:.4rem;vertical-align:middle;">🇬🇧 EN</span></label>
-          <input type="text" id="ui_label_booking_en" placeholder="Book your retreat" style="background:#e8f4f3;border:1px solid #7fb3af;width:100%;padding:.6rem .8rem;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;">
-        </div>
-      </div>
-
-      <div style="grid-column:1/-1;border-top:2px solid rgba(184,138,30,.2);padding-top:1rem;margin-top:1.2rem;margin-bottom:.5rem;">
-        <span style="font-size:.65rem;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);font-weight:600;">Program & Inkluderet — sektion-overskrifter</span>
-      </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;margin-bottom:1rem;">
-        <div>
-          <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(44,35,24,.6);display:block;margin-bottom:.4rem;">Program h2 <span style="font-size:.58rem;background:#b88a1e;color:#fff;padding:.1rem .4rem;letter-spacing:.08em;border-radius:2px;margin-left:.4rem;vertical-align:middle;">🇩🇰 DA</span></label>
-          <input type="text" id="ui_program_heading" placeholder="En uge for dig selv" style="background:#fffef8;border:1px solid rgba(184,138,30,.3);width:100%;padding:.6rem .8rem;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;">
-        </div>
-        <div>
-          <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:#2a7a74;display:block;margin-bottom:.4rem;">Program h2 <span style="font-size:.58rem;background:#2a7a74;color:#fff;padding:.1rem .4rem;letter-spacing:.08em;border-radius:2px;margin-left:.4rem;vertical-align:middle;">🇬🇧 EN</span></label>
-          <input type="text" id="ui_program_heading_en" placeholder="A week for yourself" style="background:#e8f4f3;border:1px solid #7fb3af;width:100%;padding:.6rem .8rem;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;">
-        </div>
-      </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;margin-bottom:1rem;">
-        <div>
-          <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(44,35,24,.6);display:block;margin-bottom:.4rem;">Inkluderet h2 <span style="font-size:.58rem;background:#b88a1e;color:#fff;padding:.1rem .4rem;letter-spacing:.08em;border-radius:2px;margin-left:.4rem;vertical-align:middle;">🇩🇰 DA</span></label>
-          <input type="text" id="ui_included_section_heading" placeholder="Alt hvad du behøver" style="background:#fffef8;border:1px solid rgba(184,138,30,.3);width:100%;padding:.6rem .8rem;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;">
-        </div>
-        <div>
-          <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:#2a7a74;display:block;margin-bottom:.4rem;">Included h2 <span style="font-size:.58rem;background:#2a7a74;color:#fff;padding:.1rem .4rem;letter-spacing:.08em;border-radius:2px;margin-left:.4rem;vertical-align:middle;">🇬🇧 EN</span></label>
-          <input type="text" id="ui_included_section_heading_en" placeholder="Everything you need" style="background:#e8f4f3;border:1px solid #7fb3af;width:100%;padding:.6rem .8rem;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;">
-        </div>
-      </div>
-
-      <div style="grid-column:1/-1;border-top:2px solid rgba(184,138,30,.2);padding-top:1rem;margin-top:1.2rem;margin-bottom:.5rem;">
-        <span style="font-size:.65rem;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);font-weight:600;">Anmeldelser</span>
-      </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;margin-bottom:1rem;">
-        <div>
-          <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(44,35,24,.6);display:block;margin-bottom:.4rem;">Anmeldelser overskrift <span style="font-size:.58rem;background:#b88a1e;color:#fff;padding:.1rem .4rem;letter-spacing:.08em;border-radius:2px;margin-left:.4rem;vertical-align:middle;">🇩🇰 DA</span></label>
-          <input type="text" id="ui_reviews_heading" placeholder="Hvad siger vores gæster" style="background:#fffef8;border:1px solid rgba(184,138,30,.3);width:100%;padding:.6rem .8rem;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;">
-        </div>
-        <div>
-          <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:#2a7a74;display:block;margin-bottom:.4rem;">Reviews heading <span style="font-size:.58rem;background:#2a7a74;color:#fff;padding:.1rem .4rem;letter-spacing:.08em;border-radius:2px;margin-left:.4rem;vertical-align:middle;">🇬🇧 EN</span></label>
-          <input type="text" id="ui_reviews_heading_en" placeholder="What our guests say" style="background:#e8f4f3;border:1px solid #7fb3af;width:100%;padding:.6rem .8rem;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;">
-        </div>
-      </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;margin-bottom:1rem;">
-        <div>
-          <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(44,35,24,.6);display:block;margin-bottom:.4rem;">Anmeldelser underoverskrift <span style="font-size:.58rem;background:#b88a1e;color:#fff;padding:.1rem .4rem;letter-spacing:.08em;border-radius:2px;margin-left:.4rem;vertical-align:middle;">🇩🇰 DA</span></label>
-          <input type="text" id="ui_reviews_subheading" placeholder="Gæsternes oplevelser" style="background:#fffef8;border:1px solid rgba(184,138,30,.3);width:100%;padding:.6rem .8rem;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;">
-        </div>
-        <div>
-          <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:#2a7a74;display:block;margin-bottom:.4rem;">Reviews subheading <span style="font-size:.58rem;background:#2a7a74;color:#fff;padding:.1rem .4rem;letter-spacing:.08em;border-radius:2px;margin-left:.4rem;vertical-align:middle;">🇬🇧 EN</span></label>
-          <input type="text" id="ui_reviews_subheading_en" placeholder="Guest experiences" style="background:#e8f4f3;border:1px solid #7fb3af;width:100%;padding:.6rem .8rem;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;">
-        </div>
-      </div>
-
-      <div style="grid-column:1/-1;border-top:2px solid rgba(184,138,30,.2);padding-top:1rem;margin-top:1.2rem;margin-bottom:.5rem;">
-        <span style="font-size:.65rem;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);font-weight:600;">Facilitator</span>
-      </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;margin-bottom:1rem;">
-        <div>
-          <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(44,35,24,.6);display:block;margin-bottom:.4rem;">Facilitator rolle <span style="font-size:.58rem;background:#b88a1e;color:#fff;padding:.1rem .4rem;letter-spacing:.08em;border-radius:2px;margin-left:.4rem;vertical-align:middle;">🇩🇰 DA</span></label>
-          <input type="text" id="ui_facilitator_role" placeholder="Wellness Facilitator · Breathwork Practitioner" style="background:#fffef8;border:1px solid rgba(184,138,30,.3);width:100%;padding:.6rem .8rem;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;">
-        </div>
-        <div>
-          <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:#2a7a74;display:block;margin-bottom:.4rem;">Facilitator role <span style="font-size:.58rem;background:#2a7a74;color:#fff;padding:.1rem .4rem;letter-spacing:.08em;border-radius:2px;margin-left:.4rem;vertical-align:middle;">🇬🇧 EN</span></label>
-          <input type="text" id="ui_facilitator_role_en" placeholder="Wellness Facilitator · Breathwork Practitioner" style="background:#e8f4f3;border:1px solid #7fb3af;width:100%;padding:.6rem .8rem;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;">
-        </div>
-      </div>
-
-      <div style="grid-column:1/-1;border-top:2px solid rgba(184,138,30,.2);padding-top:1rem;margin-top:1.2rem;margin-bottom:.5rem;">
-        <span style="font-size:.65rem;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);font-weight:600;">Rum & Priser</span>
-      </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;margin-bottom:1rem;">
-        <div>
-          <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(44,35,24,.6);display:block;margin-bottom:.4rem;">Rum intro-tekst <span style="font-size:.58rem;background:#b88a1e;color:#fff;padding:.1rem .4rem;letter-spacing:.08em;border-radius:2px;margin-left:.4rem;vertical-align:middle;">🇩🇰 DA</span></label>
-          <textarea id="ui_rooms_intro" placeholder="Alle værelser har eget badeværelse og er fuldt inkluderet i retreatprisen" style="background:#fffef8;border:1px solid rgba(184,138,30,.3);width:100%;min-height:60px;padding:.6rem .8rem;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;resize:vertical;"></textarea>
-        </div>
-        <div>
-          <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:#2a7a74;display:block;margin-bottom:.4rem;">Rooms intro text <span style="font-size:.58rem;background:#2a7a74;color:#fff;padding:.1rem .4rem;letter-spacing:.08em;border-radius:2px;margin-left:.4rem;vertical-align:middle;">🇬🇧 EN</span></label>
-          <textarea id="ui_rooms_intro_en" placeholder="All rooms have en-suite bathrooms and are fully included in the retreat price" style="background:#e8f4f3;border:1px solid #7fb3af;width:100%;min-height:60px;padding:.6rem .8rem;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;resize:vertical;"></textarea>
-        </div>
-      </div>
-
-      <div style="grid-column:1/-1;border-top:2px solid rgba(184,138,30,.2);padding-top:1rem;margin-top:1.2rem;margin-bottom:.5rem;">
-        <span style="font-size:.65rem;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);font-weight:600;">Booking bar (sticky bjælke)</span>
-      </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;margin-bottom:1rem;">
-        <div>
-          <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(44,35,24,.6);display:block;margin-bottom:.4rem;">"Reserver" knap <span style="font-size:.58rem;background:#b88a1e;color:#fff;padding:.1rem .4rem;letter-spacing:.08em;border-radius:2px;margin-left:.4rem;vertical-align:middle;">🇩🇰 DA</span></label>
-          <input type="text" id="ui_bar_reserve" placeholder="Reserver" style="background:#fffef8;border:1px solid rgba(184,138,30,.3);width:100%;padding:.6rem .8rem;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;">
-        </div>
-        <div>
-          <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:#2a7a74;display:block;margin-bottom:.4rem;">"Reserve" button <span style="font-size:.58rem;background:#2a7a74;color:#fff;padding:.1rem .4rem;letter-spacing:.08em;border-radius:2px;margin-left:.4rem;vertical-align:middle;">🇬🇧 EN</span></label>
-          <input type="text" id="ui_bar_reserve_en" placeholder="Reserve" style="background:#e8f4f3;border:1px solid #7fb3af;width:100%;padding:.6rem .8rem;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;">
-        </div>
-      </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;margin-bottom:1rem;">
-        <div>
-          <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(44,35,24,.6);display:block;margin-bottom:.4rem;">"Book nu" knap <span style="font-size:.58rem;background:#b88a1e;color:#fff;padding:.1rem .4rem;letter-spacing:.08em;border-radius:2px;margin-left:.4rem;vertical-align:middle;">🇩🇰 DA</span></label>
-          <input type="text" id="ui_bar_book" placeholder="Book nu" style="background:#fffef8;border:1px solid rgba(184,138,30,.3);width:100%;padding:.6rem .8rem;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;">
-        </div>
-        <div>
-          <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:#2a7a74;display:block;margin-bottom:.4rem;">"Book now" button <span style="font-size:.58rem;background:#2a7a74;color:#fff;padding:.1rem .4rem;letter-spacing:.08em;border-radius:2px;margin-left:.4rem;vertical-align:middle;">🇬🇧 EN</span></label>
-          <input type="text" id="ui_bar_book_en" placeholder="Book now" style="background:#e8f4f3;border:1px solid #7fb3af;width:100%;padding:.6rem .8rem;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;">
-        </div>
-      </div>
-
-      <div style="grid-column:1/-1;border-top:2px solid rgba(184,138,30,.2);padding-top:1rem;margin-top:1.2rem;margin-bottom:.5rem;">
-        <span style="font-size:.65rem;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);font-weight:600;">Booking formular — felt-labels</span>
-      </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;margin-bottom:1rem;">
-        <div>
-          <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(44,35,24,.6);display:block;margin-bottom:.4rem;">Fornavn label <span style="font-size:.58rem;background:#b88a1e;color:#fff;padding:.1rem .4rem;letter-spacing:.08em;border-radius:2px;margin-left:.4rem;vertical-align:middle;">🇩🇰 DA</span></label>
-          <input type="text" id="ui_form_firstname" placeholder="Fornavn *" style="background:#fffef8;border:1px solid rgba(184,138,30,.3);width:100%;padding:.6rem .8rem;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;">
-        </div>
-        <div>
-          <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:#2a7a74;display:block;margin-bottom:.4rem;">First name label <span style="font-size:.58rem;background:#2a7a74;color:#fff;padding:.1rem .4rem;letter-spacing:.08em;border-radius:2px;margin-left:.4rem;vertical-align:middle;">🇬🇧 EN</span></label>
-          <input type="text" id="ui_form_firstname_en" placeholder="First name *" style="background:#e8f4f3;border:1px solid #7fb3af;width:100%;padding:.6rem .8rem;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;">
-        </div>
-      </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;margin-bottom:1rem;">
-        <div>
-          <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(44,35,24,.6);display:block;margin-bottom:.4rem;">Efternavn label <span style="font-size:.58rem;background:#b88a1e;color:#fff;padding:.1rem .4rem;letter-spacing:.08em;border-radius:2px;margin-left:.4rem;vertical-align:middle;">🇩🇰 DA</span></label>
-          <input type="text" id="ui_form_lastname" placeholder="Efternavn *" style="background:#fffef8;border:1px solid rgba(184,138,30,.3);width:100%;padding:.6rem .8rem;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;">
-        </div>
-        <div>
-          <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:#2a7a74;display:block;margin-bottom:.4rem;">Last name label <span style="font-size:.58rem;background:#2a7a74;color:#fff;padding:.1rem .4rem;letter-spacing:.08em;border-radius:2px;margin-left:.4rem;vertical-align:middle;">🇬🇧 EN</span></label>
-          <input type="text" id="ui_form_lastname_en" placeholder="Last name *" style="background:#e8f4f3;border:1px solid #7fb3af;width:100%;padding:.6rem .8rem;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;">
-        </div>
-      </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;margin-bottom:1rem;">
-        <div>
-          <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(44,35,24,.6);display:block;margin-bottom:.4rem;">E-mail label <span style="font-size:.58rem;background:#b88a1e;color:#fff;padding:.1rem .4rem;letter-spacing:.08em;border-radius:2px;margin-left:.4rem;vertical-align:middle;">🇩🇰 DA</span></label>
-          <input type="text" id="ui_form_email" placeholder="E-mail *" style="background:#fffef8;border:1px solid rgba(184,138,30,.3);width:100%;padding:.6rem .8rem;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;">
-        </div>
-        <div>
-          <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:#2a7a74;display:block;margin-bottom:.4rem;">Email label <span style="font-size:.58rem;background:#2a7a74;color:#fff;padding:.1rem .4rem;letter-spacing:.08em;border-radius:2px;margin-left:.4rem;vertical-align:middle;">🇬🇧 EN</span></label>
-          <input type="text" id="ui_form_email_en" placeholder="Email *" style="background:#e8f4f3;border:1px solid #7fb3af;width:100%;padding:.6rem .8rem;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;">
-        </div>
-      </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;margin-bottom:1rem;">
-        <div>
-          <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(44,35,24,.6);display:block;margin-bottom:.4rem;">Telefon label <span style="font-size:.58rem;background:#b88a1e;color:#fff;padding:.1rem .4rem;letter-spacing:.08em;border-radius:2px;margin-left:.4rem;vertical-align:middle;">🇩🇰 DA</span></label>
-          <input type="text" id="ui_form_phone" placeholder="Telefon *" style="background:#fffef8;border:1px solid rgba(184,138,30,.3);width:100%;padding:.6rem .8rem;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;">
-        </div>
-        <div>
-          <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:#2a7a74;display:block;margin-bottom:.4rem;">Phone label <span style="font-size:.58rem;background:#2a7a74;color:#fff;padding:.1rem .4rem;letter-spacing:.08em;border-radius:2px;margin-left:.4rem;vertical-align:middle;">🇬🇧 EN</span></label>
-          <input type="text" id="ui_form_phone_en" placeholder="Phone *" style="background:#e8f4f3;border:1px solid #7fb3af;width:100%;padding:.6rem .8rem;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;">
-        </div>
-      </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;margin-bottom:1rem;">
-        <div>
-          <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(44,35,24,.6);display:block;margin-bottom:.4rem;">"Tilføj gæst" knap <span style="font-size:.58rem;background:#b88a1e;color:#fff;padding:.1rem .4rem;letter-spacing:.08em;border-radius:2px;margin-left:.4rem;vertical-align:middle;">🇩🇰 DA</span></label>
-          <input type="text" id="ui_form_add_guest" placeholder="Tilføj gæst" style="background:#fffef8;border:1px solid rgba(184,138,30,.3);width:100%;padding:.6rem .8rem;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;">
-        </div>
-        <div>
-          <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:#2a7a74;display:block;margin-bottom:.4rem;">"Add guest" button <span style="font-size:.58rem;background:#2a7a74;color:#fff;padding:.1rem .4rem;letter-spacing:.08em;border-radius:2px;margin-left:.4rem;vertical-align:middle;">🇬🇧 EN</span></label>
-          <input type="text" id="ui_form_add_guest_en" placeholder="Add guest" style="background:#e8f4f3;border:1px solid #7fb3af;width:100%;padding:.6rem .8rem;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;">
-        </div>
-      </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;margin-bottom:1rem;">
-        <div>
-          <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(44,35,24,.6);display:block;margin-bottom:.4rem;">"Vælg dit land" tekst <span style="font-size:.58rem;background:#b88a1e;color:#fff;padding:.1rem .4rem;letter-spacing:.08em;border-radius:2px;margin-left:.4rem;vertical-align:middle;">🇩🇰 DA</span></label>
-          <input type="text" id="ui_form_select_country" placeholder="Vælg dit land" style="background:#fffef8;border:1px solid rgba(184,138,30,.3);width:100%;padding:.6rem .8rem;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;">
-        </div>
-        <div>
-          <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:#2a7a74;display:block;margin-bottom:.4rem;">"Select your country" text <span style="font-size:.58rem;background:#2a7a74;color:#fff;padding:.1rem .4rem;letter-spacing:.08em;border-radius:2px;margin-left:.4rem;vertical-align:middle;">🇬🇧 EN</span></label>
-          <input type="text" id="ui_form_select_country_en" placeholder="Select your country" style="background:#e8f4f3;border:1px solid #7fb3af;width:100%;padding:.6rem .8rem;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;">
-        </div>
-      </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;margin-bottom:1rem;">
-        <div>
-          <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(44,35,24,.6);display:block;margin-bottom:.4rem;">"Reserver din plads" knap <span style="font-size:.58rem;background:#b88a1e;color:#fff;padding:.1rem .4rem;letter-spacing:.08em;border-radius:2px;margin-left:.4rem;vertical-align:middle;">🇩🇰 DA</span></label>
-          <input type="text" id="ui_form_reserve_btn" placeholder="Reserver din plads" style="background:#fffef8;border:1px solid rgba(184,138,30,.3);width:100%;padding:.6rem .8rem;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;">
-        </div>
-        <div>
-          <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:#2a7a74;display:block;margin-bottom:.4rem;">"Reserve your place" button <span style="font-size:.58rem;background:#2a7a74;color:#fff;padding:.1rem .4rem;letter-spacing:.08em;border-radius:2px;margin-left:.4rem;vertical-align:middle;">🇬🇧 EN</span></label>
-          <input type="text" id="ui_form_reserve_btn_en" placeholder="Reserve your place" style="background:#e8f4f3;border:1px solid #7fb3af;width:100%;padding:.6rem .8rem;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;">
-        </div>
-      </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;margin-bottom:1rem;">
-        <div>
-          <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(44,35,24,.6);display:block;margin-bottom:.4rem;">"Book og betal" knap <span style="font-size:.58rem;background:#b88a1e;color:#fff;padding:.1rem .4rem;letter-spacing:.08em;border-radius:2px;margin-left:.4rem;vertical-align:middle;">🇩🇰 DA</span></label>
-          <input type="text" id="ui_form_book_btn" placeholder="Book og betal" style="background:#fffef8;border:1px solid rgba(184,138,30,.3);width:100%;padding:.6rem .8rem;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;">
-        </div>
-        <div>
-          <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:#2a7a74;display:block;margin-bottom:.4rem;">"Book and pay" button <span style="font-size:.58rem;background:#2a7a74;color:#fff;padding:.1rem .4rem;letter-spacing:.08em;border-radius:2px;margin-left:.4rem;vertical-align:middle;">🇬🇧 EN</span></label>
-          <input type="text" id="ui_form_book_btn_en" placeholder="Book and pay" style="background:#e8f4f3;border:1px solid #7fb3af;width:100%;padding:.6rem .8rem;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;">
-        </div>
-      </div>
-
-      <div style="grid-column:1/-1;border-top:2px solid rgba(184,138,30,.2);padding-top:1rem;margin-top:1.2rem;margin-bottom:.5rem;">
-        <span style="font-size:.65rem;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);font-weight:600;">Betalingsbetingelser (policy note)</span>
-      </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;margin-bottom:1rem;">
-        <div>
-          <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(44,35,24,.6);display:block;margin-bottom:.4rem;">Policy note tekst <span style="font-size:.58rem;background:#b88a1e;color:#fff;padding:.1rem .4rem;letter-spacing:.08em;border-radius:2px;margin-left:.4rem;vertical-align:middle;">🇩🇰 DA</span></label>
-          <textarea id="ui_policy_note" placeholder="Ved tilmelding accepterer du vores betalings- og afbestillingsbetingelser..." style="background:#fffef8;border:1px solid rgba(184,138,30,.3);width:100%;min-height:80px;padding:.6rem .8rem;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;resize:vertical;"></textarea>
-        </div>
-        <div>
-          <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:#2a7a74;display:block;margin-bottom:.4rem;">Policy note text <span style="font-size:.58rem;background:#2a7a74;color:#fff;padding:.1rem .4rem;letter-spacing:.08em;border-radius:2px;margin-left:.4rem;vertical-align:middle;">🇬🇧 EN</span></label>
-          <textarea id="ui_policy_note_en" placeholder="By registering you accept our payment and cancellation terms..." style="background:#e8f4f3;border:1px solid #7fb3af;width:100%;min-height:80px;padding:.6rem .8rem;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;resize:vertical;"></textarea>
-        </div>
-      </div>
-
-      <div style="grid-column:1/-1;border-top:2px solid rgba(184,138,30,.2);padding-top:1rem;margin-top:1.2rem;margin-bottom:.5rem;">
-        <span style="font-size:.65rem;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);font-weight:600;">Betalingsvalg overlay</span>
-      </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;margin-bottom:1rem;">
-        <div>
-          <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(44,35,24,.6);display:block;margin-bottom:.4rem;">Overskrift <span style="font-size:.58rem;background:#b88a1e;color:#fff;padding:.1rem .4rem;letter-spacing:.08em;border-radius:2px;margin-left:.4rem;vertical-align:middle;">🇩🇰 DA</span></label>
-          <input type="text" id="ui_payment_heading" placeholder="Vælg betalingsform" style="background:#fffef8;border:1px solid rgba(184,138,30,.3);width:100%;padding:.6rem .8rem;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;">
-        </div>
-        <div>
-          <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:#2a7a74;display:block;margin-bottom:.4rem;">Heading <span style="font-size:.58rem;background:#2a7a74;color:#fff;padding:.1rem .4rem;letter-spacing:.08em;border-radius:2px;margin-left:.4rem;vertical-align:middle;">🇬🇧 EN</span></label>
-          <input type="text" id="ui_payment_heading_en" placeholder="Choose payment option" style="background:#e8f4f3;border:1px solid #7fb3af;width:100%;padding:.6rem .8rem;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;">
-        </div>
-      </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;margin-bottom:1rem;">
-        <div>
-          <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(44,35,24,.6);display:block;margin-bottom:.4rem;">Undertekst <span style="font-size:.58rem;background:#b88a1e;color:#fff;padding:.1rem .4rem;letter-spacing:.08em;border-radius:2px;margin-left:.4rem;vertical-align:middle;">🇩🇰 DA</span></label>
-          <input type="text" id="ui_payment_sub" placeholder="Hvor meget ønsker du at betale nu?" style="background:#fffef8;border:1px solid rgba(184,138,30,.3);width:100%;padding:.6rem .8rem;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;">
-        </div>
-        <div>
-          <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:#2a7a74;display:block;margin-bottom:.4rem;">Subtext <span style="font-size:.58rem;background:#2a7a74;color:#fff;padding:.1rem .4rem;letter-spacing:.08em;border-radius:2px;margin-left:.4rem;vertical-align:middle;">🇬🇧 EN</span></label>
-          <input type="text" id="ui_payment_sub_en" placeholder="How much would you like to pay now?" style="background:#e8f4f3;border:1px solid #7fb3af;width:100%;padding:.6rem .8rem;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;">
-        </div>
-      </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;margin-bottom:1rem;">
-        <div>
-          <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(44,35,24,.6);display:block;margin-bottom:.4rem;">Depositum knap <span style="font-size:.58rem;background:#b88a1e;color:#fff;padding:.1rem .4rem;letter-spacing:.08em;border-radius:2px;margin-left:.4rem;vertical-align:middle;">🇩🇰 DA</span></label>
-          <input type="text" id="ui_payment_deposit_btn" placeholder="Depositum (30%)" style="background:#fffef8;border:1px solid rgba(184,138,30,.3);width:100%;padding:.6rem .8rem;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;">
-        </div>
-        <div>
-          <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:#2a7a74;display:block;margin-bottom:.4rem;">Deposit button <span style="font-size:.58rem;background:#2a7a74;color:#fff;padding:.1rem .4rem;letter-spacing:.08em;border-radius:2px;margin-left:.4rem;vertical-align:middle;">🇬🇧 EN</span></label>
-          <input type="text" id="ui_payment_deposit_btn_en" placeholder="Deposit (30%)" style="background:#e8f4f3;border:1px solid #7fb3af;width:100%;padding:.6rem .8rem;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;">
-        </div>
-      </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;margin-bottom:1rem;">
-        <div>
-          <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(44,35,24,.6);display:block;margin-bottom:.4rem;">Fuldt beløb knap <span style="font-size:.58rem;background:#b88a1e;color:#fff;padding:.1rem .4rem;letter-spacing:.08em;border-radius:2px;margin-left:.4rem;vertical-align:middle;">🇩🇰 DA</span></label>
-          <input type="text" id="ui_payment_full_btn" placeholder="Fuldt beløb" style="background:#fffef8;border:1px solid rgba(184,138,30,.3);width:100%;padding:.6rem .8rem;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;">
-        </div>
-        <div>
-          <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:#2a7a74;display:block;margin-bottom:.4rem;">Full amount button <span style="font-size:.58rem;background:#2a7a74;color:#fff;padding:.1rem .4rem;letter-spacing:.08em;border-radius:2px;margin-left:.4rem;vertical-align:middle;">🇬🇧 EN</span></label>
-          <input type="text" id="ui_payment_full_btn_en" placeholder="Full amount" style="background:#e8f4f3;border:1px solid #7fb3af;width:100%;padding:.6rem .8rem;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;">
-        </div>
-      </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;margin-bottom:1rem;">
-        <div>
-          <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(44,35,24,.6);display:block;margin-bottom:.4rem;">Eget beløb label <span style="font-size:.58rem;background:#b88a1e;color:#fff;padding:.1rem .4rem;letter-spacing:.08em;border-radius:2px;margin-left:.4rem;vertical-align:middle;">🇩🇰 DA</span></label>
-          <input type="text" id="ui_payment_custom_label" placeholder="Eller vælg eget beløb" style="background:#fffef8;border:1px solid rgba(184,138,30,.3);width:100%;padding:.6rem .8rem;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;">
-        </div>
-        <div>
-          <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:#2a7a74;display:block;margin-bottom:.4rem;">Custom amount label <span style="font-size:.58rem;background:#2a7a74;color:#fff;padding:.1rem .4rem;letter-spacing:.08em;border-radius:2px;margin-left:.4rem;vertical-align:middle;">🇬🇧 EN</span></label>
-          <input type="text" id="ui_payment_custom_label_en" placeholder="Or choose your own amount" style="background:#e8f4f3;border:1px solid #7fb3af;width:100%;padding:.6rem .8rem;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;">
-        </div>
-      </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;margin-bottom:1rem;">
-        <div>
-          <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(44,35,24,.6);display:block;margin-bottom:.4rem;">Annuller knap <span style="font-size:.58rem;background:#b88a1e;color:#fff;padding:.1rem .4rem;letter-spacing:.08em;border-radius:2px;margin-left:.4rem;vertical-align:middle;">🇩🇰 DA</span></label>
-          <input type="text" id="ui_payment_cancel" placeholder="Annuller" style="background:#fffef8;border:1px solid rgba(184,138,30,.3);width:100%;padding:.6rem .8rem;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;">
-        </div>
-        <div>
-          <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:#2a7a74;display:block;margin-bottom:.4rem;">Cancel button <span style="font-size:.58rem;background:#2a7a74;color:#fff;padding:.1rem .4rem;letter-spacing:.08em;border-radius:2px;margin-left:.4rem;vertical-align:middle;">🇬🇧 EN</span></label>
-          <input type="text" id="ui_payment_cancel_en" placeholder="Cancel" style="background:#e8f4f3;border:1px solid #7fb3af;width:100%;padding:.6rem .8rem;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;">
-        </div>
-      </div>
-
-      <div style="grid-column:1/-1;border-top:2px solid rgba(184,138,30,.2);padding-top:1rem;margin-top:1.2rem;margin-bottom:.5rem;">
-        <span style="font-size:.65rem;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);font-weight:600;">Tilvalg i booking-formular</span>
-      </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;margin-bottom:1rem;">
-        <div>
-          <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(44,35,24,.6);display:block;margin-bottom:.4rem;">Ekstra overnatning FØR <span style="font-size:.58rem;background:#b88a1e;color:#fff;padding:.1rem .4rem;letter-spacing:.08em;border-radius:2px;margin-left:.4rem;vertical-align:middle;">🇩🇰 DA</span></label>
-          <input type="text" id="ui_addon_before" placeholder="Ekstra overnatning før retreat, om muligt" style="background:#fffef8;border:1px solid rgba(184,138,30,.3);width:100%;padding:.6rem .8rem;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;">
-        </div>
-        <div>
-          <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:#2a7a74;display:block;margin-bottom:.4rem;">Extra night BEFORE <span style="font-size:.58rem;background:#2a7a74;color:#fff;padding:.1rem .4rem;letter-spacing:.08em;border-radius:2px;margin-left:.4rem;vertical-align:middle;">🇬🇧 EN</span></label>
-          <input type="text" id="ui_addon_before_en" placeholder="Extra night before retreat, if possible" style="background:#e8f4f3;border:1px solid #7fb3af;width:100%;padding:.6rem .8rem;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;">
-        </div>
-      </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;margin-bottom:1rem;">
-        <div>
-          <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(44,35,24,.6);display:block;margin-bottom:.4rem;">Ekstra overnatning EFTER <span style="font-size:.58rem;background:#b88a1e;color:#fff;padding:.1rem .4rem;letter-spacing:.08em;border-radius:2px;margin-left:.4rem;vertical-align:middle;">🇩🇰 DA</span></label>
-          <input type="text" id="ui_addon_after" placeholder="Ekstra overnatning efter retreat, om muligt" style="background:#fffef8;border:1px solid rgba(184,138,30,.3);width:100%;padding:.6rem .8rem;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;">
-        </div>
-        <div>
-          <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:#2a7a74;display:block;margin-bottom:.4rem;">Extra night AFTER <span style="font-size:.58rem;background:#2a7a74;color:#fff;padding:.1rem .4rem;letter-spacing:.08em;border-radius:2px;margin-left:.4rem;vertical-align:middle;">🇬🇧 EN</span></label>
-          <input type="text" id="ui_addon_after_en" placeholder="Extra night after retreat, if possible" style="background:#e8f4f3;border:1px solid #7fb3af;width:100%;padding:.6rem .8rem;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;">
-        </div>
-      </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;margin-bottom:1rem;">
-        <div>
-          <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(44,35,24,.6);display:block;margin-bottom:.4rem;">Massage tilvalg <span style="font-size:.58rem;background:#b88a1e;color:#fff;padding:.1rem .4rem;letter-spacing:.08em;border-radius:2px;margin-left:.4rem;vertical-align:middle;">🇩🇰 DA</span></label>
-          <input type="text" id="ui_addon_massage" placeholder="Kropsmassage 60 min." style="background:#fffef8;border:1px solid rgba(184,138,30,.3);width:100%;padding:.6rem .8rem;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;">
-        </div>
-        <div>
-          <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:#2a7a74;display:block;margin-bottom:.4rem;">Massage add-on <span style="font-size:.58rem;background:#2a7a74;color:#fff;padding:.1rem .4rem;letter-spacing:.08em;border-radius:2px;margin-left:.4rem;vertical-align:middle;">🇬🇧 EN</span></label>
-          <input type="text" id="ui_addon_massage_en" placeholder="Body massage 60 min." style="background:#e8f4f3;border:1px solid #7fb3af;width:100%;padding:.6rem .8rem;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;">
-        </div>
-      </div>
-
-      <div style="grid-column:1/-1;border-top:2px solid rgba(184,138,30,.2);padding-top:1rem;margin-top:1.2rem;margin-bottom:.5rem;display:flex;align-items:center;gap:1rem;">
-        <span style="font-size:.65rem;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);font-weight:600;">Navigation links</span>
-        <button type="button" onclick="gemRetreat()" style="background:rgba(184,138,30,.15);border:1px solid rgba(184,138,30,.4);color:#7a5000;padding:.35rem 1rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;margin-left:auto;">💾 Gem</button>
-      </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;margin-bottom:1rem;">
-        <div>
-          <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(44,35,24,.6);display:block;margin-bottom:.4rem;">← Alle retreats link <span style="font-size:.58rem;background:#b88a1e;color:#fff;padding:.1rem .4rem;letter-spacing:.08em;border-radius:2px;margin-left:.4rem;vertical-align:middle;">🇩🇰 DA</span></label>
-          <input type="text" id="ui_all_retreats_link" placeholder="← Alle retreats" style="background:#fffef8;border:1px solid rgba(184,138,30,.3);width:100%;padding:.6rem .8rem;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;">
-        </div>
-        <div>
-          <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:#2a7a74;display:block;margin-bottom:.4rem;">← All retreats link <span style="font-size:.58rem;background:#2a7a74;color:#fff;padding:.1rem .4rem;letter-spacing:.08em;border-radius:2px;margin-left:.4rem;vertical-align:middle;">🇬🇧 EN</span></label>
-          <input type="text" id="ui_all_retreats_link_en" placeholder="← All retreats" style="background:#e8f4f3;border:1px solid #7fb3af;width:100%;padding:.6rem .8rem;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;">
-        </div>
-      </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;margin-bottom:1rem;">
-        <div>
-          <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(44,35,24,.6);display:block;margin-bottom:.4rem;">← Tilbage til forsiden <span style="font-size:.58rem;background:#b88a1e;color:#fff;padding:.1rem .4rem;letter-spacing:.08em;border-radius:2px;margin-left:.4rem;vertical-align:middle;">🇩🇰 DA</span></label>
-          <input type="text" id="ui_back_link" placeholder="← Tilbage til forsiden" style="background:#fffef8;border:1px solid rgba(184,138,30,.3);width:100%;padding:.6rem .8rem;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;">
-        </div>
-        <div>
-          <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:#2a7a74;display:block;margin-bottom:.4rem;">← Back to front page <span style="font-size:.58rem;background:#2a7a74;color:#fff;padding:.1rem .4rem;letter-spacing:.08em;border-radius:2px;margin-left:.4rem;vertical-align:middle;">🇬🇧 EN</span></label>
-          <input type="text" id="ui_back_link_en" placeholder="← Back to front page" style="background:#e8f4f3;border:1px solid #7fb3af;width:100%;padding:.6rem .8rem;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;">
-        </div>
-      </div>
-
-
-      <div style="grid-column:1/-1;border-top:2px solid rgba(184,138,30,.2);padding-top:1rem;margin-top:1.2rem;margin-bottom:.5rem;">
-        <span style="font-size:.65rem;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);font-weight:600;">Status</span>
-      </div>
-      <div style="margin-bottom:1rem;">
-        <label style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(44,35,24,.6);display:block;margin-bottom:.4rem;">Aktiv (vis på sitet)</label>
-        <select id="retreat_active" style="width:100%;padding:.6rem .8rem;border:1px solid rgba(184,138,30,.3);background:rgba(44,35,24,.03);font-family:Manrope,sans-serif;font-size:.8rem;outline:none;">
-          <option value="true">Ja — vis på sitet</option>
-          <option value="false">Nej — skjult</option>
-        </select>
-      </div>
-
-    <div class="modal-actions">
-      <button class="btn-secondary" onclick="closeModal('modalRetreat')">Annuller</button>
-      <button class="btn-primary" onclick="gemRetreat()" id="retreatSaveBtn">Opret retreat</button>
     </div>
+
+    <!-- 1 · GRUNDOPLYSNINGER -->
+    <div class="fc-block" id="ra_grundoplysninger" style="margin-bottom:1.5rem;">
+      <div class="fc-block-header"><span class="fc-block-title">1 · Grundoplysninger</span></div>
+      <div class="fc-block-body">
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Titel (DA)</label><input type="text" id="retreat_title" class="fc-input-da" placeholder="Retreatets titel"></div>
+          <div><label class="fc-label fc-label-en">Title (EN)</label><input type="text" id="retreat_title_en" class="fc-input-en" placeholder="Retreat title in English"></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Subtitle / kategori (DA)</label><input type="text" id="retreat_subtitle" class="fc-input-da" placeholder="fx Wellness, Kultur..."></div>
+          <div><label class="fc-label fc-label-en">Subtitle / category (EN)</label><input type="text" id="retreat_subtitle_en" class="fc-input-en" placeholder="e.g. Wellness, Culture..."></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Slug (URL-navn, unikt)</label><input type="text" id="retreat_slug" class="fc-input-da" placeholder="kunsten-at-saenke-tempoet" style="font-family:monospace;"></div>
+          <div><label class="fc-label" style="color:rgba(44,35,24,.4);">Udfyldes automatisk fra titel — ret kun manuelt hvis nødvendigt</label></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Beskrivelse (DA) — vises på retreat-kortet</label><textarea id="retreat_description" class="fc-input-da fc-textarea" placeholder="Kort beskrivelse..."></textarea></div>
+          <div><label class="fc-label fc-label-en">Description (EN) — shown on retreat card</label><textarea id="retreat_description_en" class="fc-input-en fc-textarea" placeholder="Short description..."></textarea></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Lokation</label><input type="text" id="retreat_location" class="fc-input-da" placeholder="Mollina, Málaga"></div>
+          <div><label class="fc-label fc-label-en">Location</label><input type="text" id="retreat_location_en" class="fc-input-en" placeholder="Mollina, Málaga"></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Niveau (DA)</label><input type="text" id="retreat_level" class="fc-input-da" placeholder="Alle niveauer"></div>
+          <div><label class="fc-label fc-label-en">Level (EN)</label><input type="text" id="retreat_level_en" class="fc-input-en" placeholder="All levels"></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Sprog på retreat (DA)</label><input type="text" id="retreat_languages" class="fc-input-da" placeholder="Dansk, Engelsk"></div>
+          <div><label class="fc-label fc-label-en">Languages (EN)</label><input type="text" id="retreat_languages_en" class="fc-input-en" placeholder="Danish, English"></div>
+        </div>
+        <div class="fc-row">
+          <div>
+            <label class="fc-label" style="color:rgba(44,35,24,.6);">Synlig på hjemmesiden</label>
+            <label style="display:flex;align-items:center;gap:.5rem;font-size:.8rem;margin-top:.4rem;cursor:pointer;">
+              <input type="checkbox" id="retreat_published"> Vis retreat offentligt
+            </label>
+          </div>
+          <div>
+            <label class="fc-label" style="color:rgba(44,35,24,.6);">Ekstra datoer (JSON)</label>
+            <textarea id="retreat_extra_dates" class="fc-input-da fc-textarea" placeholder='[{"date":"2025-06-01","label":"Alternativ dato"}]' style="font-family:monospace;font-size:.72rem;"></textarea>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2 · DATOER & PRIS -->
+    <div class="fc-block" id="ra_datoer" style="margin-bottom:1.5rem;">
+      <div class="fc-block-header"><span class="fc-block-title">2 · Datoer, deltagere & pris</span></div>
+      <div class="fc-block-body">
+        <div class="fc-row">
+          <div><label class="fc-label">Ankomstdato</label><input type="date" id="retreat_start_date" class="fc-input-da"></div>
+          <div><label class="fc-label">Afrejsedato</label><input type="date" id="retreat_end_date" class="fc-input-da"></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label">Max. deltagere</label><input type="number" id="retreat_max_guests" class="fc-input-da" placeholder="12" min="1"></div>
+          <div><label class="fc-label">Pris per person (€)</label><input type="number" id="retreat_price_per_person" class="fc-input-da" placeholder="0" min="0"></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label">Depositum (€)</label><input type="number" id="retreat_deposit" class="fc-input-da" placeholder="0" min="0"></div>
+          <div><label class="fc-label">Booking deadline</label><input type="date" id="retreat_booking_deadline" class="fc-input-da"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3 · BILLEDER -->
+    <div class="fc-block" id="ra_billeder" style="margin-bottom:1.5rem;">
+      <div class="fc-block-header"><span class="fc-block-title">3 · Billeder</span></div>
+      <div class="fc-block-body">
+        <div class="fc-row">
+          <div>
+            <label class="fc-label fc-label-da">Hero-billede URL</label>
+            <input type="text" id="retreat_hero_image" class="fc-input-da" placeholder="https://...">
+            <label class="fc-label" style="color:#2a7a74;margin-top:.6rem;">📁 Upload nyt hero-billede</label>
+            <div style="display:flex;align-items:center;gap:.6rem;margin-top:.3rem;">
+              <img id="retreat_hero_thumb" src="" style="display:none;width:56px;height:56px;object-fit:cover;border-radius:3px;border:1px solid rgba(184,138,30,.3);">
+              <input type="file" id="retreat_hero_upload" accept="image/*" style="font-size:.76rem;flex:1;">
+              <button type="button" onclick="uploadRetreatBillede('retreat_hero_upload','retreat_hero_image','retreat_hero_thumb')" style="background:#2a7a74;color:#fff;border:none;padding:.45rem 1.1rem;font-family:Manrope,sans-serif;font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;white-space:nowrap;">⬆ Upload</button>
+            </div>
+          </div>
+          <div>
+            <label class="fc-label fc-label-da">Kort-billede URL (til retreat-grid)</label>
+            <input type="text" id="retreat_card_image" class="fc-input-da" placeholder="https://...">
+            <label class="fc-label" style="color:#2a7a74;margin-top:.6rem;">📁 Upload nyt kort-billede</label>
+            <div style="display:flex;align-items:center;gap:.6rem;margin-top:.3rem;">
+              <img id="retreat_card_thumb" src="" style="display:none;width:56px;height:56px;object-fit:cover;border-radius:3px;border:1px solid rgba(184,138,30,.3);">
+              <input type="file" id="retreat_card_upload" accept="image/*" style="font-size:.76rem;flex:1;">
+              <button type="button" onclick="uploadRetreatBillede('retreat_card_upload','retreat_card_image','retreat_card_thumb')" style="background:#2a7a74;color:#fff;border:none;padding:.45rem 1.1rem;font-family:Manrope,sans-serif;font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;white-space:nowrap;">⬆ Upload</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4 · OM RETREATET -->
+    <div class="fc-block" id="ra_om" style="margin-bottom:1.5rem;">
+      <div class="fc-block-header"><span class="fc-block-title">4 · Om retreatet</span></div>
+      <div class="fc-block-body">
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Overskrift (DA)</label><input type="text" id="about_heading" class="fc-input-da" placeholder="Om dette retreat"></div>
+          <div><label class="fc-label fc-label-en">Heading (EN)</label><input type="text" id="about_heading_en" class="fc-input-en" placeholder="About this retreat"></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Beskrivelse (DA)</label><textarea id="about_content" class="fc-input-da fc-textarea" rows="5" placeholder="Fortæl om retreatet..."></textarea></div>
+          <div><label class="fc-label fc-label-en">Description (EN)</label><textarea id="about_content_en" class="fc-input-en fc-textarea" rows="5" placeholder="Tell about the retreat..."></textarea></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Citat (DA)</label><textarea id="about_quote" class="fc-input-da fc-textarea" rows="2" placeholder="Et inspirerende citat..."></textarea></div>
+          <div><label class="fc-label fc-label-en">Quote (EN)</label><textarea id="about_quote_en" class="fc-input-en fc-textarea" rows="2" placeholder="An inspiring quote..."></textarea></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 5 · NAVIGATION -->
+    <div class="fc-block" id="ra_navigation" style="margin-bottom:1.5rem;">
+      <div class="fc-block-header"><span class="fc-block-title">5 · Navigation (menupunkter på retreat-siden)</span></div>
+      <div class="fc-block-body">
+        <p style="font-size:.7rem;color:rgba(44,35,24,.4);margin-bottom:1rem;">Disse labels vises i topmenuen på selve retreat-siden.</p>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Om (DA)</label><input type="text" id="ui_nav_about" class="fc-input-da" placeholder="Om"></div>
+          <div><label class="fc-label fc-label-en">About (EN)</label><input type="text" id="ui_nav_about_en" class="fc-input-en" placeholder="About"></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Highlights (DA)</label><input type="text" id="ui_nav_highlights" class="fc-input-da" placeholder="Highlights"></div>
+          <div><label class="fc-label fc-label-en">Highlights (EN)</label><input type="text" id="ui_nav_highlights_en" class="fc-input-en" placeholder="Highlights"></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Program (DA)</label><input type="text" id="ui_nav_program" class="fc-input-da" placeholder="Program"></div>
+          <div><label class="fc-label fc-label-en">Programme (EN)</label><input type="text" id="ui_nav_program_en" class="fc-input-en" placeholder="Programme"></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Inkluderet (DA)</label><input type="text" id="ui_nav_included" class="fc-input-da" placeholder="Inkluderet"></div>
+          <div><label class="fc-label fc-label-en">Included (EN)</label><input type="text" id="ui_nav_included_en" class="fc-input-en" placeholder="Included"></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Rum (DA)</label><input type="text" id="ui_nav_rooms" class="fc-input-da" placeholder="Rum"></div>
+          <div><label class="fc-label fc-label-en">Rooms (EN)</label><input type="text" id="ui_nav_rooms_en" class="fc-input-en" placeholder="Rooms"></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Anmeldelser (DA)</label><input type="text" id="ui_nav_reviews" class="fc-input-da" placeholder="Anmeldelser"></div>
+          <div><label class="fc-label fc-label-en">Reviews (EN)</label><input type="text" id="ui_nav_reviews_en" class="fc-input-en" placeholder="Reviews"></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Book (DA)</label><input type="text" id="ui_nav_book" class="fc-input-da" placeholder="Book"></div>
+          <div><label class="fc-label fc-label-en">Book (EN)</label><input type="text" id="ui_nav_book_en" class="fc-input-en" placeholder="Book"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 6 · HURTIG-INFO -->
+    <div class="fc-block" id="ra_hurtiginfo" style="margin-bottom:1.5rem;">
+      <div class="fc-block-header"><span class="fc-block-title">6 · Hurtig-info bar (Varighed / Ankomst / Afrejse)</span></div>
+      <div class="fc-block-body">
+        <p style="font-size:.7rem;color:rgba(44,35,24,.4);margin-bottom:1rem;">Labels i den farvet info-bar øverst på retreat-siden.</p>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Varighed-label (DA)</label><input type="text" id="ui_bar_duration" class="fc-input-da" placeholder="Varighed"></div>
+          <div><label class="fc-label fc-label-en">Duration label (EN)</label><input type="text" id="ui_bar_duration_en" class="fc-input-en" placeholder="Duration"></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Ankomst-label (DA)</label><input type="text" id="ui_bar_arrival" class="fc-input-da" placeholder="Ankomst"></div>
+          <div><label class="fc-label fc-label-en">Arrival label (EN)</label><input type="text" id="ui_bar_arrival_en" class="fc-input-en" placeholder="Arrival"></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Afrejse-label (DA)</label><input type="text" id="ui_bar_departure" class="fc-input-da" placeholder="Afrejse"></div>
+          <div><label class="fc-label fc-label-en">Departure label (EN)</label><input type="text" id="ui_bar_departure_en" class="fc-input-en" placeholder="Departure"></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Nætter-label (DA)</label><input type="text" id="ui_bar_nights" class="fc-input-da" placeholder="nætter"></div>
+          <div><label class="fc-label fc-label-en">Nights label (EN)</label><input type="text" id="ui_bar_nights_en" class="fc-input-en" placeholder="nights"></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Dage-label (DA)</label><input type="text" id="ui_bar_days" class="fc-input-da" placeholder="dage"></div>
+          <div><label class="fc-label fc-label-en">Days label (EN)</label><input type="text" id="ui_bar_days_en" class="fc-input-en" placeholder="days"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 7 · PROGRAM -->
+    <div class="fc-block" id="ra_program" style="margin-bottom:1.5rem;">
+      <div class="fc-block-header"><span class="fc-block-title">7 · Program</span></div>
+      <div class="fc-block-body">
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Program-overskrift (DA)</label><input type="text" id="ui_program_heading" class="fc-input-da" placeholder="Program"></div>
+          <div><label class="fc-label fc-label-en">Program heading (EN)</label><input type="text" id="ui_program_heading_en" class="fc-input-en" placeholder="Programme"></div>
+        </div>
+        <div style="margin-top:1rem;">
+          <label class="fc-label fc-label-da">Programdage (DA)</label>
+          <textarea id="program_days" class="fc-input-da fc-textarea" rows="4" placeholder='[{"day":"Dag 1","title":"Ankomst","description":"..."}]'style="font-family:monospace;font-size:.72rem;"></textarea>
+          <button type="button" onclick="openProgramEditor()" style="margin-top:.6rem;background:rgba(184,138,30,.1);border:1px solid rgba(184,138,30,.3);color:#7a5c14;padding:.6rem 1.2rem;font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;width:100%;">✏️ Redigér programdage visuelt (DA)</button>
+        </div>
+        <div style="margin-top:1rem;">
+          <label class="fc-label fc-label-en">Programme days (EN)</label>
+          <textarea id="program_days_en" class="fc-input-en fc-textarea" rows="4" placeholder='[{"day":"Day 1","title":"Arrival","description":"..."}]' style="font-family:monospace;font-size:.72rem;"></textarea>
+          <button type="button" onclick="openProgramEditorEN()" style="margin-top:.6rem;background:rgba(42,122,116,.1);border:1px solid #7fb3af;color:#2a7a74;padding:.6rem 1.2rem;font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;width:100%;">✏️ Edit programme days visually (EN)</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 8 · INKLUDERET -->
+    <div class="fc-block" id="ra_inkluderet" style="margin-bottom:1.5rem;">
+      <div class="fc-block-header"><span class="fc-block-title">8 · Inkluderet / Ikke inkluderet</span></div>
+      <div class="fc-block-body">
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Inkluderet-overskrift (DA)</label><input type="text" id="ui_included_section_heading" class="fc-input-da" placeholder="Inkluderet"></div>
+          <div><label class="fc-label fc-label-en">Included heading (EN)</label><input type="text" id="ui_included_section_heading_en" class="fc-input-en" placeholder="Included"></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Inkluderet (DA) — ét punkt per linje</label><textarea id="included_items" class="fc-input-da fc-textarea" rows="5" placeholder="Overnatning&#10;Alle måltider&#10;Yoga morgen og aften"></textarea></div>
+          <div><label class="fc-label fc-label-en">Included (EN) — one item per line</label><textarea id="included_items_en" class="fc-input-en fc-textarea" rows="5" placeholder="Accommodation&#10;All meals&#10;Morning and evening yoga"></textarea></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Ikke inkluderet (DA) — ét punkt per linje</label><textarea id="excluded_items" class="fc-input-da fc-textarea" rows="4" placeholder="Fly&#10;Transport"></textarea></div>
+          <div><label class="fc-label fc-label-en">Not included (EN) — one item per line</label><textarea id="excluded_items_en" class="fc-input-en fc-textarea" rows="4" placeholder="Flights&#10;Transport"></textarea></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 9 · VÆRELSER -->
+    <div class="fc-block" id="ra_vaerelser" style="margin-bottom:1.5rem;">
+      <div class="fc-block-header"><span class="fc-block-title">9 · Værelser & priser</span></div>
+      <div class="fc-block-body">
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Rum-intro tekst (DA)</label><textarea id="ui_rooms_intro" class="fc-input-da fc-textarea" rows="2" placeholder="Vælg dit værelse..."></textarea></div>
+          <div><label class="fc-label fc-label-en">Rooms intro text (EN)</label><textarea id="ui_rooms_intro_en" class="fc-input-en fc-textarea" rows="2" placeholder="Choose your room..."></textarea></div>
+        </div>
+        <div style="margin-top:1rem;">
+          <label class="fc-label fc-label-da">Værelsespriser (JSON)</label>
+          <textarea id="room_pricing" class="fc-input-da fc-textarea" rows="4" placeholder='[{"room":"Enkeltværelse","price":1200},{"room":"Dobbeltværelse","price":900}]' style="font-family:monospace;font-size:.72rem;"></textarea>
+        </div>
+      </div>
+    </div>
+
+    <!-- 10 · MAD -->
+    <div class="fc-block" id="ra_mad" style="margin-bottom:1.5rem;">
+      <div class="fc-block-header"><span class="fc-block-title">10 · Mad & køkken</span></div>
+      <div class="fc-block-body">
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Mad-overskrift (DA)</label><input type="text" id="food_heading" class="fc-input-da" placeholder="Mad & køkken"></div>
+          <div><label class="fc-label fc-label-en">Food heading (EN)</label><input type="text" id="food_heading_en" class="fc-input-en" placeholder="Food & kitchen"></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Mad-beskrivelse (DA)</label><textarea id="food_description" class="fc-input-da fc-textarea" rows="4" placeholder="Vi tilbyder..."></textarea></div>
+          <div><label class="fc-label fc-label-en">Food description (EN)</label><textarea id="food_description_en" class="fc-input-en fc-textarea" rows="4" placeholder="We offer..."></textarea></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 11 · UNDERVISER -->
+    <div class="fc-block" id="ra_underviser" style="margin-bottom:1.5rem;">
+      <div class="fc-block-header"><span class="fc-block-title">11 · Underviser / Facilitator</span></div>
+      <div class="fc-block-body">
+        <div class="fc-row">
+          <div><label class="fc-label">Navn</label><input type="text" id="teacher_name" class="fc-input-da" placeholder="Navn"></div>
+          <div>
+            <label class="fc-label" style="color:#2a7a74;">📁 Foto</label>
+            <div style="display:flex;align-items:center;gap:.6rem;margin-top:.3rem;">
+              <img id="teacher_photo_thumb" src="" style="display:none;width:56px;height:56px;object-fit:cover;border-radius:3px;border:1px solid rgba(184,138,30,.3);">
+              <input type="file" id="teacher_photo_upload" accept="image/*" style="font-size:.76rem;flex:1;">
+              <button type="button" onclick="uploadRetreatBillede('teacher_photo_upload','teacher_photo','teacher_photo_thumb')" style="background:#2a7a74;color:#fff;border:none;padding:.45rem 1.1rem;font-family:Manrope,sans-serif;font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;white-space:nowrap;">⬆ Upload</button>
+            </div>
+            <input type="text" id="teacher_photo" class="fc-input-da" placeholder="URL til foto" style="margin-top:.5rem;">
+          </div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Titel/rolle (DA)</label><input type="text" id="ui_facilitator_role" class="fc-input-da" placeholder="Underviser"></div>
+          <div><label class="fc-label fc-label-en">Title/role (EN)</label><input type="text" id="ui_facilitator_role_en" class="fc-input-en" placeholder="Facilitator"></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Bio (DA)</label><textarea id="teacher_bio" class="fc-input-da fc-textarea" rows="4" placeholder="Underviserens biografi..."></textarea></div>
+          <div><label class="fc-label fc-label-en">Bio (EN)</label><textarea id="teacher_bio_en" class="fc-input-en fc-textarea" rows="4" placeholder="Facilitator biography..."></textarea></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 12 · HIGHLIGHTS -->
+    <div class="fc-block" id="ra_highlights" style="margin-bottom:1.5rem;">
+      <div class="fc-block-header"><span class="fc-block-title">12 · Highlights</span></div>
+      <div class="fc-block-body">
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Highlights-overskrift (DA)</label><input type="text" id="highlights_heading" class="fc-input-da" placeholder="Highlights"></div>
+          <div><label class="fc-label fc-label-en">Highlights heading (EN)</label><input type="text" id="highlights_heading_en" class="fc-input-en" placeholder="Highlights"></div>
+        </div>
+        <button type="button" onclick="openHighlightsEditor()" style="margin-top:.6rem;background:rgba(184,138,30,.1);border:1px solid rgba(184,138,30,.3);color:#7a5c14;padding:.7rem 1.5rem;font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;width:100%;">✏️ Redigér alle highlights visuelt (DA + EN)</button>
+        <div style="margin-top:.8rem;display:grid;grid-template-columns:1fr 1fr;gap:.6rem;">
+          <input type="hidden" id="ui_highlight1_icon"><input type="hidden" id="ui_highlight2_icon"><input type="hidden" id="ui_highlight3_icon">
+          <input type="hidden" id="ui_highlight4_icon"><input type="hidden" id="ui_highlight5_icon"><input type="hidden" id="ui_highlight6_icon">
+        </div>
+      </div>
+    </div>
+
+    <!-- 13 · BOOKING-SEKTION -->
+    <div class="fc-block" id="ra_booking" style="margin-bottom:1.5rem;">
+      <div class="fc-block-header"><span class="fc-block-title">13 · Booking-sektion</span></div>
+      <div class="fc-block-body">
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Overskrift (DA)</label><input type="text" id="ui_form_heading" class="fc-input-da" placeholder="Book dit retreat"></div>
+          <div><label class="fc-label fc-label-en">Heading (EN)</label><input type="text" id="ui_form_heading_en" class="fc-input-en" placeholder="Book your retreat"></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Intro-tekst (DA)</label><textarea id="ui_form_intro" class="fc-input-da fc-textarea" rows="3" placeholder="Intro til booking..."></textarea></div>
+          <div><label class="fc-label fc-label-en">Intro text (EN)</label><textarea id="ui_form_intro_en" class="fc-input-en fc-textarea" rows="3" placeholder="Booking intro..."></textarea></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Politik-note (DA)</label><textarea id="ui_form_policy" class="fc-input-da fc-textarea" rows="3" placeholder="Afbudsregler..."></textarea></div>
+          <div><label class="fc-label fc-label-en">Policy note (EN)</label><textarea id="ui_form_policy_en" class="fc-input-en fc-textarea" rows="3" placeholder="Cancellation policy..."></textarea></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Tilvalg-overskrift (DA)</label><input type="text" id="ui_addon_heading" class="fc-input-da" placeholder="Tilvalg"></div>
+          <div><label class="fc-label fc-label-en">Add-ons heading (EN)</label><input type="text" id="ui_addon_heading_en" class="fc-input-en" placeholder="Add-ons"></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Send-knap tekst (DA)</label><input type="text" id="ui_form_submit" class="fc-input-da" placeholder="Send booking"></div>
+          <div><label class="fc-label fc-label-en">Submit button (EN)</label><input type="text" id="ui_form_submit_en" class="fc-input-en" placeholder="Send booking"></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Betalingsmetode-label (DA)</label><input type="text" id="ui_payment_method" class="fc-input-da" placeholder="Betalingsmetode"></div>
+          <div><label class="fc-label fc-label-en">Payment method label (EN)</label><input type="text" id="ui_payment_method_en" class="fc-input-en" placeholder="Payment method"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 14 · FAQ -->
+    <div class="fc-block" id="ra_faq" style="margin-bottom:1.5rem;">
+      <div class="fc-block-header"><span class="fc-block-title">14 · FAQ</span></div>
+      <div class="fc-block-body">
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">FAQ-overskrift (DA)</label><input type="text" id="ui_faq_heading" class="fc-input-da" placeholder="Ofte stillede spørgsmål"></div>
+          <div><label class="fc-label fc-label-en">FAQ heading (EN)</label><input type="text" id="ui_faq_heading_en" class="fc-input-en" placeholder="Frequently asked questions"></div>
+        </div>
+        <button type="button" onclick="openFaqEditor()" style="margin-top:.8rem;background:rgba(184,138,30,.1);border:1px solid rgba(184,138,30,.3);color:#7a5c14;padding:.7rem 1.5rem;font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;width:100%;">✏️ Redigér FAQ visuelt (DA + EN)</button>
+      </div>
+    </div>
+
+    <!-- 15 · TILVALG -->
+    <div class="fc-block" id="ra_tilvalg" style="margin-bottom:1.5rem;">
+      <div class="fc-block-header"><span class="fc-block-title">15 · Tilvalg (add-ons)</span></div>
+      <div class="fc-block-body">
+        <button type="button" onclick="openAddonEditor()" style="background:rgba(184,138,30,.1);border:1px solid rgba(184,138,30,.3);color:#7a5c14;padding:.7rem 1.5rem;font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;width:100%;">✏️ Redigér tilvalg visuelt</button>
+        <div id="addon_preview" style="margin-top:.8rem;font-size:.78rem;color:rgba(44,35,24,.6);"></div>
+      </div>
+    </div>
+
+    <!-- 16 · SECTION-LABELS -->
+    <div class="fc-block" id="ra_labels" style="margin-bottom:1.5rem;">
+      <div class="fc-block-header"><span class="fc-block-title">16 · Section-labels (lille tekst over overskrifter)</span></div>
+      <div class="fc-block-body">
+        <p style="font-size:.7rem;color:rgba(44,35,24,.4);margin-bottom:1rem;">Den lille label-tekst der vises over hver sektions overskrift på retreat-siden.</p>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Om (DA)</label><input type="text" id="ui_label_about" class="fc-input-da" placeholder="Om retreatet"></div>
+          <div><label class="fc-label fc-label-en">About (EN)</label><input type="text" id="ui_label_about_en" class="fc-input-en" placeholder="About the retreat"></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Program (DA)</label><input type="text" id="ui_label_program" class="fc-input-da" placeholder="Program"></div>
+          <div><label class="fc-label fc-label-en">Programme (EN)</label><input type="text" id="ui_label_program_en" class="fc-input-en" placeholder="Programme"></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Inkluderet (DA)</label><input type="text" id="ui_label_included" class="fc-input-da" placeholder="Inkluderet"></div>
+          <div><label class="fc-label fc-label-en">Included (EN)</label><input type="text" id="ui_label_included_en" class="fc-input-en" placeholder="Included"></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Rum (DA)</label><input type="text" id="ui_label_rooms" class="fc-input-da" placeholder="Vælg dit rum"></div>
+          <div><label class="fc-label fc-label-en">Rooms (EN)</label><input type="text" id="ui_label_rooms_en" class="fc-input-en" placeholder="Choose your room"></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Mad (DA)</label><input type="text" id="ui_label_food" class="fc-input-da" placeholder="Mad & køkken"></div>
+          <div><label class="fc-label fc-label-en">Food (EN)</label><input type="text" id="ui_label_food_en" class="fc-input-en" placeholder="Food & kitchen"></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Underviser (DA)</label><input type="text" id="ui_label_facilitator" class="fc-input-da" placeholder="Underviser"></div>
+          <div><label class="fc-label fc-label-en">Facilitator (EN)</label><input type="text" id="ui_label_facilitator_en" class="fc-input-en" placeholder="Facilitator"></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Anmeldelser (DA)</label><input type="text" id="ui_label_reviews" class="fc-input-da" placeholder="Anmeldelser"></div>
+          <div><label class="fc-label fc-label-en">Reviews (EN)</label><input type="text" id="ui_label_reviews_en" class="fc-input-en" placeholder="Reviews"></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Back-link (DA)</label><input type="text" id="ui_back_link" class="fc-input-da" placeholder="← Alle retreats"></div>
+          <div><label class="fc-label fc-label-en">Back link (EN)</label><input type="text" id="ui_back_link_en" class="fc-input-en" placeholder="← All retreats"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- GEM-KNAP I BUNDEN -->
+    <div style="text-align:center;padding:1.5rem 0;border-top:1px solid rgba(184,138,30,.2);margin-top:1rem;">
+      <button type="button" onclick="gemRetreat()" style="background:var(--wine);color:#fff;border:none;padding:.9rem 3rem;font-family:Manrope,sans-serif;font-size:.72rem;font-weight:500;letter-spacing:.2em;text-transform:uppercase;cursor:pointer;">💾 Gem retreat</button>
+    </div>
+
   </div>
 </div>
+
 
 <!-- MODAL: NY KUNDE -->
 <div class="modal-overlay" id="modalNyKunde">
@@ -5559,6 +4901,40 @@ async function uploadRetreatImage(file) {
   if (error) throw error;
   const { data: urlData } = sb.storage.from('retreat-images').getPublicUrl(filename);
   return urlData.publicUrl;
+}
+
+// Wrapper til ny modal upload-knapper
+async function uploadRetreatBillede(inputId, urlFieldId, thumbId) {
+  const input = document.getElementById(inputId);
+  if (!input || !input.files.length) { showToast('Vælg en fil først', true); return; }
+  try {
+    const url = await uploadRetreatImage(input.files[0]);
+    const urlField = document.getElementById(urlFieldId);
+    if (urlField) urlField.value = url;
+    const thumb = document.getElementById(thumbId);
+    if (thumb) { thumb.src = url; thumb.style.display = 'inline-block'; }
+    input.value = '';
+    showToast('Billede uploadet ✓');
+  } catch(e) {
+    showToast('Upload fejl: ' + e.message, true);
+  }
+}
+
+// Alias til engelsk program-editor
+function openProgramEditorEN() {
+  // Genbruger program-editor men i EN-tilstand
+  openProgramEditor('en');
+}
+
+// Opdater addon preview i ny modal
+function updateAddonPreview() {
+  const raw = document.getElementById('addon_items')?.value || '';
+  const preview = document.getElementById('addon_preview');
+  if (!preview) return;
+  try {
+    const items = JSON.parse(raw);
+    preview.innerHTML = items.map(i => `<span style="display:inline-block;background:rgba(184,138,30,.1);border:1px solid rgba(184,138,30,.2);padding:.2rem .6rem;margin:.2rem;font-size:.72rem;">${i.text_da||i.text||'?'}</span>`).join('');
+  } catch(e) { preview.textContent = ''; }
 }
 
 async function gemRetreat() {
