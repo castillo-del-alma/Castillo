@@ -2224,7 +2224,6 @@ feeling more calm – and coming home to yourself again."</textarea></div>
       <textarea id="ui_rooms_intro_en" style="display:none"></textarea>
       <textarea id="addon_items" style="display:none"></textarea>
       <div id="addonListe" style="display:none"></div>
-      <div id="highlightsListe" style="display:none"></div>
       <div id="highlightsPreview" style="display:none"></div>
       <div id="programDagListe" style="display:none"></div>
       <div id="extraDatesListeSkjult" style="display:none"></div>
@@ -3030,7 +3029,6 @@ feeling more calm – and coming home to yourself again."</textarea></div>
       <div style="font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;color:#b88a1e;font-weight:600;">🇩🇰 TITEL / TEKST</div>
       <div style="font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;color:#2a7a74;font-weight:600;">🇬🇧 TITLE / TEXT</div>
     </div>
-    <div id="highlightsListe" style="display:flex;flex-direction:column;gap:1rem;"></div>
     <button type="button" onclick="tilfoejHighlight()" id="tilfoejHighlightBtn" style="margin-top:1rem;width:100%;background:rgba(184,138,30,.1);border:1px solid rgba(184,138,30,.3);color:var(--gold);padding:.7rem;font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;">+ Tilføj highlight</button>
     <div class="modal-actions">
       <button class="btn-secondary" onclick="closeModal('modalHighlightsEditor')">Luk uden at gemme</button>
@@ -5698,45 +5696,6 @@ const HIGHLIGHT_DEFAULTS = [
   { icon:'star', title:'Stilhed & stjernekiggeri', title_en:'Silence & Stargazing', text:'Nætter under Andalusiens klare himmel — langt fra byernes lys.', text_en:'Nights under the clear Andalusian sky — far from city lights.' },
 ];
 
-function renderHighlightsListe() {
-  const container = document.getElementById('highlightsListe');
-  if (!container) return;
-  container.innerHTML = [1,2,3,4,5,6].map(n => {
-    const def = HIGHLIGHT_DEFAULTS[n-1];
-    const iconVal = document.getElementById(`ui_highlight${n}_icon`)?.value || def.icon;
-    return `<div class="fc-block fc-sub" style="margin-bottom:.8rem;">
-      <div class="fc-block-header" style="cursor:pointer;background:rgba(184,138,30,.05);" onclick="this.parentElement.classList.toggle('fc-collapsed')">
-        <span class="fc-block-title" style="font-size:.75rem;">Highlight ${n}</span>
-        <span style="font-size:.65rem;color:rgba(44,35,24,.4);">▾</span>
-      </div>
-      <div class="fc-block-body fc-collapsible">
-        <div style="margin-bottom:.8rem;">
-          <label class="fc-label" style="color:rgba(44,35,24,.6);">Ikon (vælg et af 20)</label>
-          <div style="display:flex;flex-wrap:wrap;gap:.3rem;margin-top:.4rem;">
-            ${ICON_NAMES.map(name => {
-              const isSelected = iconVal === name;
-              return `<button type="button" onclick="vælgHighlightIkon(${n},'${name}',this)"
-                title="${name}"
-                style="width:36px;height:36px;border:2px solid ${isSelected?'var(--wine)':'rgba(184,138,30,.2)'};background:${isSelected?'rgba(122,31,53,.1)':'transparent'};cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;">
-                <svg viewBox="0 0 24 24" fill="none" stroke="${isSelected?'var(--wine)':'rgba(44,35,24,.6)'}" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" width="18" height="18">
-                  ${ICON_SVG[name]}
-                </svg>
-              </button>`;
-            }).join('')}
-          </div>
-        </div>
-        <div class="fc-row">
-          <div><label class="fc-label fc-label-da">Lille overskrift (DA)</label><input type="text" id="ui_highlight${n}_title" class="fc-input-da" value="${document.getElementById(`ui_highlight${n}_title`)?.value || def.title}" placeholder="${def.title}"></div>
-          <div><label class="fc-label fc-label-en">Small heading (EN)</label><input type="text" id="ui_highlight${n}_title_en" class="fc-input-en" value="${document.getElementById(`ui_highlight${n}_title_en`)?.value || def.title_en}" placeholder="${def.title_en}"></div>
-        </div>
-        <div class="fc-row">
-          <div><label class="fc-label fc-label-da">Tekst (DA)</label><textarea id="ui_highlight${n}_text" class="fc-input-da fc-textarea" placeholder="${def.text}">${document.getElementById(`ui_highlight${n}_text`)?.value || def.text}</textarea></div>
-          <div><label class="fc-label fc-label-en">Text (EN)</label><textarea id="ui_highlight${n}_text_en" class="fc-input-en fc-textarea" placeholder="${def.text_en}">${document.getElementById(`ui_highlight${n}_text_en`)?.value || def.text_en}</textarea></div>
-        </div>
-      </div>
-    </div>`;
-  }).join('');
-}
 
 function vælgHighlightIkon(n, name, btn) {
   document.getElementById(`ui_highlight${n}_icon`).value = name;
