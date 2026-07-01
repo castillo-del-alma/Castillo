@@ -5180,7 +5180,9 @@ function udfyldRetreatForm(r) {
   addonState = r.addon_items ? JSON.parse(JSON.stringify(r.addon_items)) : [];
   renderAddonListe();
   extraDatesState = r.extra_dates ? JSON.parse(JSON.stringify(r.extra_dates)) : [];
-  retreatBilleder5State = r.retreat_images5 ? r.retreat_images5.map(url => ({ url })) : [];
+  let imgs5 = r.retreat_images5;
+  if (typeof imgs5 === 'string') { try { imgs5 = JSON.parse(imgs5); } catch(e) { imgs5 = []; } }
+  retreatBilleder5State = Array.isArray(imgs5) ? imgs5.map(url => ({ url })) : [];
   renderRetreatBilleder5();
   loadTeacherImgs(r);
   loadRoomPricing(r);
