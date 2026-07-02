@@ -531,15 +531,21 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:3rem
     <img src="img/logo-castillo-hvid_transperant.png" alt="Castillo del Alma" style="filter:brightness(0);">
   </a>
   <ul class="nav-links">
-    <li><a href="#intro">Ejendommen</a></li>
-    <li><a href="#towers">Tårnene</a></li>
-    <li><a href="#rooms">Indkvartering</a></li>
-    <li><a href="#facilities">Faciliteter</a></li>
-    <li><a href="#sustainability">Bæredygtighed</a></li>
-    <li><a href="#vineyard">Vingården</a></li>
-    <li><a href="#location">Beliggenhed</a></li>
+    <li><a href="#intro" id="ej_nav_intro">Ejendommen</a></li>
+    <li><a href="#towers" id="ej_nav_towers">Tårnene</a></li>
+    <li><a href="#rooms" id="ej_nav_rooms">Indkvartering</a></li>
+    <li><a href="#facilities" id="ej_nav_fac">Faciliteter</a></li>
+    <li><a href="#sustainability" id="ej_nav_sustain">Bæredygtighed</a></li>
+    <li><a href="#vineyard" id="ej_nav_vineyard">Vingården</a></li>
+    <li><a href="#location" id="ej_nav_location">Beliggenhed</a></li>
+    <li style="display:flex;align-items:center;gap:.4rem;margin-left:.8rem;">
+      <div class="lang-switcher" style="display:flex;border:1.5px solid;overflow:hidden;border-color:var(--wine);">
+        <button id="ej-btn-da" class="lang-btn lang-btn-active" onclick="setEjLang('da')" style="font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;padding:.3rem .6rem;border:none;cursor:pointer;font-family:'Manrope',sans-serif;">DA</button>
+        <button id="ej-btn-en" class="lang-btn lang-btn-inactive" onclick="setEjLang('en')" style="font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;padding:.3rem .6rem;border:none;cursor:pointer;font-family:'Manrope',sans-serif;">EN</button>
+      </div>
+    </li>
   </ul>
-  <a href="index.html" class="nav-back">← Tilbage til forsiden</a>
+  <a href="index.html" class="nav-back" id="ej_nav_back">← Tilbage til forsiden</a>
 </nav>
 
 <!-- HERO -->
@@ -547,8 +553,8 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:3rem
   <div class="page-hero-img" id="heroImg"></div>
   <div class="page-hero-overlay"></div>
   <div class="page-hero-content">
-    <span class="page-hero-eyebrow">Mollina · Antequera · Málaga</span>
-    <h1>Castillo<br><em>del Alma</em></h1>
+    <span class="page-hero-eyebrow" id="ej_hero_eyebrow">Mollina · Antequera · Málaga</span>
+    <h1 id="ej_hero_h1">Castillo<br><em id="ej_hero_h1_em">del Alma</em></h1>
   </div>
 </section>
 
@@ -557,27 +563,27 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:3rem
   <div class="section-inner">
     <div class="intro-two-col">
       <div class="reveal-left">
-        <span class="section-label">Ejendommen</span>
-        <h2 class="split-h">En <em>borglignende</em><br>oase i Andalucía</h2>
-        <p>Castillo del Alma ligger smukt og fredfyldt omgivet af bølgende vinmarker og sølvgrønne olivenplantager i den lille andalusiske by Mollina, tæt ved historiske Antequera i Málaga-provinsen.</p>
-        <p>Huset er opført for blot 13 år siden, men bygget med stor respekt for den klassiske andalusiske byggestil — med varme naturmaterialer, smukke linjer og karakterfuld arkitektur. Kalkstens-overflader, håndlavede fliser, røde teglsten og hvide mure skaber en æstetik der er både elegant og autentisk.</p>
-        <p>I hjertet af ejendommen finder man palmer, blomstrende buske og den smukke runde saltvandspool — alt omgivet af velholdte grønne arealer og naturens stilhed.</p>
+        <span class="section-label" id="ej_intro_label">Ejendommen</span>
+        <h2 class="split-h" id="ej_intro_h2">En <em id="ej_intro_h2_em">borglignende</em><br><span id="ej_intro_h2_rest">oase i Andalucía</span></h2>
+        <p id="ej_intro_p1">Castillo del Alma ligger smukt og fredfyldt omgivet af bølgende vinmarker og sølvgrønne olivenplantager i den lille andalusiske by Mollina, tæt ved historiske Antequera i Málaga-provinsen.</p>
+        <p id="ej_intro_p2">Huset er opført for blot 13 år siden, men bygget med stor respekt for den klassiske andalusiske byggestil — med varme naturmaterialer, smukke linjer og karakterfuld arkitektur. Kalkstens-overflader, håndlavede fliser, røde teglsten og hvide mure skaber en æstetik der er både elegant og autentisk.</p>
+        <p id="ej_intro_p3">I hjertet af ejendommen finder man palmer, blomstrende buske og den smukke runde saltvandspool — alt omgivet af velholdte grønne arealer og naturens stilhed.</p>
         <div class="estate-facts">
-          <div class="estate-fact"><h4>40.000 m²</h4><p>Samlet ejendom</p></div>
-          <div class="estate-fact"><h4>4+ ha</h4><p>Egne vinmarker</p></div>
-          <div class="estate-fact"><h4>2 Tårne</h4><p>360° panoramaudsigt</p></div>
-          <div class="estate-fact"><h4>7</h4><p>Eksklusive værelser</p></div>
-          <div class="estate-fact"><h4>2011</h4><p>Opført</p></div>
-          <div class="estate-fact"><h4>D.O.</h4><p>Málaga Denominación</p></div>
+          <div class="estate-fact" id="ej_fact_area"><h4>40.000 m²</h4><p>Samlet ejendom</p></div>
+          <div class="estate-fact" id="ej_fact_vineyard"><h4>4+ ha</h4><p>Egne vinmarker</p></div>
+          <div class="estate-fact" id="ej_fact_towers"><h4>2 Tårne</h4><p>360° panoramaudsigt</p></div>
+          <div class="estate-fact" id="ej_fact_rooms"><h4>7</h4><p>Eksklusive værelser</p></div>
+          <div class="estate-fact" id="ej_fact_year"><h4>2011</h4><p>Opført</p></div>
+          <div class="estate-fact" id="ej_fact_do"><h4>D.O.</h4><p>Málaga Denominación</p></div>
         </div>
       </div>
       <div class="reveal-right d2">
         <div class="intro-img-stack">
           <div class="intro-main-img">
-            <img src="img/estate-aerial.jpg" alt="Castillo del Alma — luftfoto">
+            <img src="img/estate-aerial.jpg" alt="Castillo del Alma — luftfoto" id="ej_intro_img1">
           </div>
           <div class="intro-small-img">
-            <img src="img/IMG_0603.JPG" alt="Castillo del Alma — pool">
+            <img src="img/IMG_0603.JPG" alt="Castillo del Alma — pool" id="ej_intro_img2">
           </div>
         </div>
       </div>
@@ -585,46 +591,21 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:3rem
   </div>
 </section>
 
-<!-- PHOTO STRIP -->
-<div class="photo-strip">
-  <div class="photo-strip-grid">
-    <div class="strip-item">
-      <img src="img/estate-pool.jpg" alt="Pool">
-      <div class="strip-item-overlay"></div>
-    </div>
-    <div class="strip-item">
-      <img src="img/IMG_0603.JPG" alt="Have">
-      <div class="strip-item-overlay"></div>
-    </div>
-    <div class="strip-item">
-      <img src="img/estate-dining.jpg" alt="Spisestue">
-      <div class="strip-item-overlay"></div>
-    </div>
-    <div class="strip-item">
-      <img src="img/vinmark1.jpg" alt="Vingård">
-      <div class="strip-item-overlay"></div>
-    </div>
-    <div class="strip-item">
-      <img src="img/wellness-yoga-castillo.png" alt="Yoga">
-      <div class="strip-item-overlay"></div>
-    </div>
-  </div>
-</div>
 
 <!-- TOWERS -->
 <section class="towers" id="towers">
   <div class="section-inner">
     <div class="towers-grid">
       <div class="tower-img reveal-left">
-        <img src="img/estate-aerial.jpg" alt="Tårnet på Castillo del Alma">
-        <div class="tower-img-caption">Det karakteristiske tårn set fra luften</div>
+        <img src="img/estate-aerial.jpg" alt="Tårnet på Castillo del Alma" id="ej_towers_img">
+        <div class="tower-img-caption" id="ej_towers_caption">Det karakteristiske tårn set fra luften</div>
       </div>
       <div class="reveal-right d2">
-        <span class="section-label">Tårnene</span>
-        <h2 class="split-h">To tårne —<br>ét <em>udsyn</em></h2>
-        <p>Enhver borg har sit tårn — og Castillo del Alma har hele to. Tårnene er ejendommens mest karakteristiske arkitektoniske element og giver bygningen dens unikke og majestætiske silhuet.</p>
-        <p>Fra tårnenes øverste etage åbner sig et betagende 360 graders panorama over de omgivende vinmarker, sølvgrønne olivenlunde og de dramatiske bjerge, der danner rammen om det andalusiske landskab.</p>
-        <p>Specielt ved solopgang og solnedgang er tårnene et magisk sted — lyset forandrer landskabet fra minut til minut, og stilheden er komplet. Mange gæster beskriver disse øjeblikke som nogle af de mest mindeværdige fra opholdet.</p>
+        <span class="section-label" id="ej_towers_label">Tårnene</span>
+        <h2 class="split-h" id="ej_towers_h2">To tårne —<br>ét <em id="ej_towers_h2_em">udsyn</em></h2>
+        <p id="ej_towers_p1">Enhver borg har sit tårn — og Castillo del Alma har hele to. Tårnene er ejendommens mest karakteristiske arkitektoniske element og giver bygningen dens unikke og majestætiske silhuet.</p>
+        <p id="ej_towers_p2">Fra tårnenes øverste etage åbner sig et betagende 360 graders panorama over de omgivende vinmarker, sølvgrønne olivenlunde og de dramatiske bjerge, der danner rammen om det andalusiske landskab.</p>
+        <p id="ej_towers_p3">Specielt ved solopgang og solnedgang er tårnene et magisk sted — lyset forandrer landskabet fra minut til minut, og stilheden er komplet. Mange gæster beskriver disse øjeblikke som nogle af de mest mindeværdige fra opholdet.</p>
       </div>
     </div>
   </div>
@@ -637,9 +618,9 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:3rem
   <canvas class="section-canvas" data-palette="warm"></canvas>
   <div class="section-inner">
     <div class="rooms-header reveal">
-      <span class="section-label">Indkvartering</span>
-      <h2>Værelserne</h2>
-      <p>Syv dobbelte eksklusive værelser, alle med ensuite badeværelse — designet til komfort, ro og nærvær</p>
+      <span class="section-label" id="ej_rooms_label">Indkvartering</span>
+      <h2 id="ej_rooms_h2">Værelserne</h2>
+      <p id="ej_rooms_intro">Syv dobbelte eksklusive værelser, alle med ensuite badeværelse — designet til komfort, ro og nærvær</p>
     </div>
     <div class="rooms-grid reveal d1">
 
@@ -779,77 +760,77 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:3rem
   <div class="section-inner">
     <div class="facilities-grid">
       <div class="reveal-left">
-        <span class="section-label">Faciliteter</span>
-        <h2 class="split-h">Alt hvad du<br>behøver til <em>ro</em></h2>
+        <span class="section-label" id="ej_fac_label">Faciliteter</span>
+        <h2 class="split-h" id="ej_fac_h2">Alt hvad du<br>behøver til <em id="ej_fac_h2_em">ro</em></h2>
 
         <div class="facility-list">
-          <div class="facility-item">
+          <div class="facility-item" id="ej_fac_pool">
             <div class="facility-icon">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><ellipse cx="12" cy="16" rx="9" ry="4"/><path d="M3 16v-4c0-2.2 4-4 9-4s9 1.8 9 4v4"/></svg>
             </div>
             <div class="facility-text"><h4>Saltvandspool</h4><p>Rund pool med saltvandsrensning og solterrasse</p></div>
           </div>
-          <div class="facility-item">
+          <div class="facility-item" id="ej_fac_sauna_finsk">
             <div class="facility-icon">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-4 0v2"/><line x1="12" y1="12" x2="12" y2="16"/></svg>
             </div>
             <div class="facility-text"><h4>Finsk Sauna</h4><p>Traditionel finsk sauna til afspænding og restitution</p></div>
           </div>
-          <div class="facility-item">
+          <div class="facility-item" id="ej_fac_sauna_infra">
             <div class="facility-icon">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M12 2L8 8H4l3 6-2 7 7-3 7 3-2-7 3-6h-4z"/></svg>
             </div>
             <div class="facility-text"><h4>Infrarød Sauna</h4><p>Infrarød sauna for dyb varmebehandling</p></div>
           </div>
-          <div class="facility-item">
+          <div class="facility-item" id="ej_fac_faellesrum">
             <div class="facility-icon">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
             </div>
             <div class="facility-text"><h4>Stort fællesrum</h4><p>Romslig stue med andalusisk interiør og lounge</p></div>
           </div>
-          <div class="facility-item">
+          <div class="facility-item" id="ej_fac_retreat_rum">
             <div class="facility-icon">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M17 8h2a2 2 0 0 1 2 2v6a2 2 0 0 1-2 2h-2v4l-4-4H9a2 2 0 0 1-2-2v-1"/><path d="M5 7H3a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2v4l4-4h4a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2H5V5a2 2 0 0 1 2-2h8"/></svg>
             </div>
             <div class="facility-text"><h4>Retreat-rum</h4><p>Dedikeret rum til yoga, meditation og workshops</p></div>
           </div>
-          <div class="facility-item">
+          <div class="facility-item" id="ej_fac_terasser">
             <div class="facility-icon">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M3 11l19-9-9 19-2-8-8-2z"/></svg>
             </div>
             <div class="facility-text"><h4>Udendørs terasser</h4><p>Flere private og fælles terasser med udsigt</p></div>
           </div>
-          <div class="facility-item">
+          <div class="facility-item" id="ej_fac_koekken">
             <div class="facility-icon">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M6 3v6a3 3 0 0 0 6 0V3"/><line x1="9" y1="9" x2="9" y2="21"/><line x1="5" y1="21" x2="13" y2="21"/><path d="M18 3c0 0 2 1.5 2 4s-2 4-2 4v10"/></svg>
             </div>
             <div class="facility-text"><h4>Professionelt køkken</h4><p>Fuldt udstyret køkken til fælles madlavning</p></div>
           </div>
-          <div class="facility-item">
+          <div class="facility-item" id="ej_fac_spisebord">
             <div class="facility-icon">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
             </div>
             <div class="facility-text"><h4>Stort spisebord</h4><p>Bord til 14 gæster — til fælles måltider og events</p></div>
           </div>
-          <div class="facility-item">
+          <div class="facility-item" id="ej_fac_wifi">
             <div class="facility-icon">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="12" cy="12" r="2"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M16.9 16.9l2.1 2.1M4.9 19.1l2.1-2.1M16.9 7.1l2.1-2.1"/></svg>
             </div>
             <div class="facility-text"><h4>WiFi overalt</h4><p>Hurtig fiber-internetforbindelse i hele ejendommen</p></div>
           </div>
-          <div class="facility-item">
+          <div class="facility-item" id="ej_fac_parkering">
             <div class="facility-icon">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12" y2="18" stroke-width="2"/></svg>
             </div>
             <div class="facility-text"><h4>Parkering</h4><p>Gratis parkering på ejendommen for alle gæster</p></div>
           </div>
-          <div class="facility-item">
+          <div class="facility-item" id="ej_fac_aflaaset">
             <div class="facility-icon">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
             </div>
             <div class="facility-text"><h4>Fuldt aflåst</h4><p>Sikker og privat ejendom med adgangskontrol</p></div>
           </div>
-          <div class="facility-item">
+          <div class="facility-item" id="ej_fac_vindyrkning">
             <div class="facility-icon">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3M3 16v3a2 2 0 0 0 2 2h3m8 0h3a2 2 0 0 0 2-2v-3"/></svg>
             </div>
@@ -860,13 +841,13 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:3rem
 
       <div class="facilities-visual reveal-right d2">
         <div class="fac-img">
-          <img src="img/IMG_0603.JPG" alt="Pool og have">
+          <img src="img/IMG_0603.JPG" alt="Pool og have" id="ej_fac_img1">
         </div>
         <div class="fac-img">
-          <img src="img/estate-pool.jpg" alt="Pool">
+          <img src="img/estate-pool.jpg" alt="Pool" id="ej_fac_img2">
         </div>
         <div class="fac-img">
-          <img src="img/estate-dining.jpg" alt="Spisning">
+          <img src="img/estate-dining.jpg" alt="Spisning" id="ej_fac_img3">
         </div>
       </div>
     </div>
@@ -880,19 +861,19 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:3rem
 
     <!-- Full width heading -->
     <div class="sustain-heading reveal">
-      <span class="section-label">Bæredygtighed</span>
-      <h2 class="split-h">Ansvar for <em>naturen</em> omkring os</h2>
+      <span class="section-label" id="ej_sustain_label">Bæredygtighed</span>
+      <h2 class="split-h" id="ej_sustain_h2">Ansvar for <em id="ej_sustain_h2_em">naturen</em> omkring os</h2>
     </div>
 
     <!-- Text left, image right -->
     <div class="sustain-top reveal d1">
       <div class="sustain-top-text">
-        <p class="sustain-lead">På Castillo del Alma tror vi på, at et ægte retreatsted ikke bare er skabt til menneskelig restitution — men også bærer et ansvar for den natur og de omgivelser, det er en del af.</p>
-        <p class="sustain-body">Castillo del Alma ligger midt i et landskab, hvor natur, vinmarker, stilhed og åbne vidder er en del af stedets sjæl. Derfor ønsker vi at passe på det, vi er blevet en del af. Vi arbejder med respekt for jorden, årstiderne og de ressourcer, der omgiver os. Det handler om at drive stedet med omtanke — ikke kun for dem, der besøger os i dag, men også for dem, der skal kunne opleve stedet i fremtiden.</p>
-        <p class="sustain-body">Vores vinmarker er en vigtig del af denne tilgang. De er ikke blot en smuk ramme omkring ejendommen, men et levende landskab, vi har ansvar for at forvalte nænsomt. Derfor sprøjtes vores vinmarker ikke. Vi ønsker at lade jorden, planterne og det omkringliggende dyreliv indgå i en mere naturlig balance, hvor biodiversitet og respekt for naturens egne processer får plads.</p>
+        <p class="sustain-lead" id="ej_sustain_lead">På Castillo del Alma tror vi på, at et ægte retreatsted ikke bare er skabt til menneskelig restitution — men også bærer et ansvar for den natur og de omgivelser, det er en del af.</p>
+        <p class="sustain-body" id="ej_sustain_p1">Castillo del Alma ligger midt i et landskab, hvor natur, vinmarker, stilhed og åbne vidder er en del af stedets sjæl. Derfor ønsker vi at passe på det, vi er blevet en del af. Vi arbejder med respekt for jorden, årstiderne og de ressourcer, der omgiver os. Det handler om at drive stedet med omtanke — ikke kun for dem, der besøger os i dag, men også for dem, der skal kunne opleve stedet i fremtiden.</p>
+        <p class="sustain-body" id="ej_sustain_p2">Vores vinmarker er en vigtig del af denne tilgang. De er ikke blot en smuk ramme omkring ejendommen, men et levende landskab, vi har ansvar for at forvalte nænsomt. Derfor sprøjtes vores vinmarker ikke. Vi ønsker at lade jorden, planterne og det omkringliggende dyreliv indgå i en mere naturlig balance, hvor biodiversitet og respekt for naturens egne processer får plads.</p>
       </div>
       <div class="sustain-top-img reveal-right d2">
-        <img src="img/close-up-farmer-working.jpg" alt="Bæredygtighed · Castillo del Alma">
+        <img src="img/close-up-farmer-working.jpg" alt="Bæredygtighed · Castillo del Alma" id="ej_sustain_img1">
         <div class="sustain-image-caption">Vingården · Mollina · Andalucía</div>
       </div>
     </div>
@@ -901,19 +882,19 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:3rem
     <!-- Image left, text right -->
     <div class="sustain-imgtext reveal">
       <div class="sustain-imgtext-img">
-        <img src="img/old-hand-water-pump-well-garden-watering-saving-water-rural-environnement.jpg" alt="Bæredygtighed · Castillo del Alma">
+        <img src="img/old-hand-water-pump-well-garden-watering-saving-water-rural-environnement.jpg" alt="Bæredygtighed · Castillo del Alma" id="ej_sustain_img2">
       </div>
       <div class="sustain-imgtext-text">
-        <p class="sustain-body">Bæredygtighed handler for os om balance. Balancen mellem komfort og ansvar. Mellem gæstfrihed og ressourcebevidsthed. Mellem at skabe smukke rammer for fordybelse og samtidig minimere vores aftryk på omgivelserne.</p>
-        <p class="sustain-body">Det betyder, at vi løbende arbejder med at træffe bedre valg i hverdagen — om energi, vandforbrug, lokale råvarer, ansvarlig drift, hensyn til biodiversitet og en nænsom brug af de bygninger, marker og landskaber, vi har fået lov at forvalte.</p>
-        <p class="sustain-body">Vores ambition er ikke at være perfekte. Vores ambition er at være bevidste, ærlige og i konstant bevægelse mod en mere ansvarlig måde at drive et retreatsted på.</p>
+        <p class="sustain-body" id="ej_sustain_p3">Bæredygtighed handler for os om balance. Balancen mellem komfort og ansvar. Mellem gæstfrihed og ressourcebevidsthed. Mellem at skabe smukke rammer for fordybelse og samtidig minimere vores aftryk på omgivelserne.</p>
+        <p class="sustain-body" id="ej_sustain_p4">Det betyder, at vi løbende arbejder med at træffe bedre valg i hverdagen — om energi, vandforbrug, lokale råvarer, ansvarlig drift, hensyn til biodiversitet og en nænsom brug af de bygninger, marker og landskaber, vi har fået lov at forvalte.</p>
+        <p class="sustain-body" id="ej_sustain_p5">Vores ambition er ikke at være perfekte. Vores ambition er at være bevidste, ærlige og i konstant bevægelse mod en mere ansvarlig måde at drive et retreatsted på.</p>
       </div>
     </div>
 
     <!-- 5 icon cards -->
     <div class="sustain-five reveal d2">
 
-      <div class="sustain-eco-item">
+      <div class="sustain-eco-item" id="ej_eco_solvarme">
         <div class="sustain-eco-icon">
           <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
             <circle cx="16" cy="10" r="5"/>
@@ -926,7 +907,7 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:3rem
         <p>Solvarmesystem dækker ejendommens samlede varmtvandsforbrug hele året rundt.</p>
       </div>
 
-      <div class="sustain-eco-item">
+      <div class="sustain-eco-item" id="ej_eco_gulvvarme">
         <div class="sustain-eco-icon">
           <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
             <path d="M4 20 Q16 16 28 20"/>
@@ -938,7 +919,7 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:3rem
         <p>Gulvvarme i hele huset opvarmes udelukkende af ejendommens eget solvarmeanlæg.</p>
       </div>
 
-      <div class="sustain-eco-item">
+      <div class="sustain-eco-item" id="ej_eco_isolering">
         <div class="sustain-eco-icon">
           <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
             <rect x="4" y="12" width="24" height="14" rx="1"/>
@@ -952,7 +933,7 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:3rem
         <p>Ejendommen er bygget med høj isoleringsstandard — minimalt energiforbrug året rundt.</p>
       </div>
 
-      <div class="sustain-eco-item">
+      <div class="sustain-eco-item" id="ej_eco_kloak">
         <div class="sustain-eco-icon">
           <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
             <ellipse cx="16" cy="24" rx="10" ry="4"/>
@@ -964,7 +945,7 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:3rem
         <p>Spildevand renses naturligt via mikroorganismer uden brug af kemikalier — skånsomt for naturen.</p>
       </div>
 
-      <div class="sustain-eco-item">
+      <div class="sustain-eco-item" id="ej_eco_broend">
         <div class="sustain-eco-icon">
           <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
             <line x1="10" y1="2" x2="22" y2="2"/>
@@ -992,8 +973,8 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:3rem
   <div class="section-inner">
     <div class="vineyard-detail-grid">
       <div class="reveal-left">
-        <span class="section-label">Vingården</span>
-        <h2 class="split-h">Husets egne<br>vine — Málaga <em>D.O.</em></h2>
+        <span class="section-label" id="ej_vineyard_label">Vingården</span>
+        <h2 class="split-h" id="ej_vineyard_h2">Husets egne<br>vine — Málaga <em id="ej_vineyard_h2_em">D.O.</em></h2>
         <p>Castillo del Alma råder over mere end 4 hektar jord med egne vinmarker smukt beliggende i det solrige landskab omkring Mollina. Jordbunden er rig på kalk og mineraler — som giver vinene karakter, dybde og en flot balance.</p>
         <p>Vingården dyrkes med 65% Cabernet Sauvignon og 35% Merlot under Málaga Denominación de Origen — en af Andalusiens stolteste vinregioner.</p>
         <p>Området omkring Mollina er særligt kendt for sine mange solskinstimer, varme dage og køligere nætter, som skaber optimale betingelser for dyrkning af kvalitetsdruer. Kombinationen af klimaet, højden og den andalusiske jord giver druerne mulighed for at modne langsomt og udvikle en intens og kompleks smag.</p>
@@ -1011,19 +992,19 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:3rem
   <div class="section-inner">
     <div class="location-grid">
       <div class="reveal-left">
-        <span class="section-label">Beliggenhed</span>
-        <h2 class="split-h">Mollina <span class="phonetic">/moˈʎina/</span><br>hjertet af <em>Andalucía</em></h2>
-        <p>Castillo del Alma ligger i Mollina, en lille andalusisk by i Málaga-provinsen. Omgivet af vinmarker, olivenlunde og et imponerende bjerglandskab er stedet perfekt til at koble fra og finde ro.</p>
-        <p>Placeringen er ideel — central nok til at udforske Andalusiens kulturelle skatte, men tilpas afsides til at give den stilhed og fred som et retreat kræver.</p>
+        <span class="section-label" id="ej_location_label">Beliggenhed</span>
+        <h2 class="split-h" id="ej_location_h2">Mollina <span class="phonetic" id="ej_location_phonetic">/moˈʎina/</span><br>hjertet af <em id="ej_location_h2_em">Andalucía</em></h2>
+        <p id="ej_location_p1">Castillo del Alma ligger i Mollina, en lille andalusisk by i Málaga-provinsen. Omgivet af vinmarker, olivenlunde og et imponerende bjerglandskab er stedet perfekt til at koble fra og finde ro.</p>
+        <p id="ej_location_p2">Placeringen er ideel — central nok til at udforske Andalusiens kulturelle skatte, men tilpas afsides til at give den stilhed og fred som et retreat kræver.</p>
         <div class="location-distances">
-          <div class="location-distance"><span>Antequera</span><span>15 min</span></div>
-          <div class="location-distance"><span>Málaga ciudad</span><span>55 min</span></div>
-          <div class="location-distance"><span>Caminito del Rey</span><span>40 min</span></div>
-          <div class="location-distance"><span>Ronda</span><span>75 min</span></div>
-          <div class="location-distance"><span>Córdoba</span><span>90 min</span></div>
-          <div class="location-distance"><span>Granada</span><span>90 min</span></div>
-          <div class="location-distance"><span>Sevilla</span><span>2,5 timer</span></div>
-          <div class="location-distance"><span>Málaga Lufthavn</span><span>60 min</span></div>
+          <div class="location-distance" id="ej_dist_antequera"><span>Antequera</span><span>15 min</span></div>
+          <div class="location-distance" id="ej_dist_malaga"><span>Málaga ciudad</span><span>55 min</span></div>
+          <div class="location-distance" id="ej_dist_caminito"><span>Caminito del Rey</span><span>40 min</span></div>
+          <div class="location-distance" id="ej_dist_ronda"><span>Ronda</span><span>75 min</span></div>
+          <div class="location-distance" id="ej_dist_cordoba"><span>Córdoba</span><span>90 min</span></div>
+          <div class="location-distance" id="ej_dist_granada"><span>Granada</span><span>90 min</span></div>
+          <div class="location-distance" id="ej_dist_sevilla"><span>Sevilla</span><span>2,5 timer</span></div>
+          <div class="location-distance" id="ej_dist_lufthavn"><span>Málaga Lufthavn</span><span>60 min</span></div>
         </div>
       </div>
       <div class="location-map reveal-right d2">
@@ -1041,11 +1022,11 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:3rem
 <section class="estate-cta">
   <div class="section-inner">
     <div class="reveal">
-      <h2>Klar til at opleve Castillo del Alma?</h2>
-      <p>Book dit retreat, lej ejendommen privat eller kontakt os for en personlig dialog om dine ønsker.</p>
+      <h2 id="ej_cta_h2">Klar til at opleve Castillo del Alma?</h2>
+      <p id="ej_cta_text">Book dit retreat, lej ejendommen privat eller kontakt os for en personlig dialog om dine ønsker.</p>
       <div class="cta-btns">
-        <a href="index.html#retreats" class="btn-wine">Se Retreats</a>
-        <a href="index.html#contact" class="btn-outline-light">Kontakt os</a>
+        <a href="index.html#retreats" class="btn-wine" id="ej_cta_btn1">Se Retreats</a>
+        <a href="index.html#contact" class="btn-outline-light" id="ej_cta_btn2">Kontakt os</a>
       </div>
     </div>
   </div>
@@ -1054,8 +1035,8 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:3rem
 <!-- FOOTER -->
 <footer>
   <div class="footer-bottom">
-    <p>© 2026 Castillo del Alma · Mollina, Málaga · All rights reserved</p>
-    <a href="index.html">← Tilbage til forsiden</a>
+    <p id="ej_footer_copy">© 2026 Castillo del Alma · Mollina, Málaga · All rights reserved</p>
+    <a href="index.html" id="ej_footer_link">← Tilbage til forsiden</a>
   </div>
 </footer>
 
@@ -1089,6 +1070,207 @@ document.querySelectorAll('.split-h').forEach(h=>{
 
 // Hero parallax
 document.getElementById('heroImg').classList.add('loaded');
+</script>
+
+<!-- SUPABASE + INDHOLD -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+const EJ_SUPABASE_URL = 'https://niniwgiytyqvdqejigxg.supabase.co';
+const EJ_SUPABASE_KEY = 'sb_publishable_GwrNUpIuWzdg1oswOY5HzA_mKWqhd6y';
+const ejSb = supabase.createClient(EJ_SUPABASE_URL, EJ_SUPABASE_KEY);
+
+let ejData = {};
+let ejRooms = [];
+let ejLang = 'da';
+
+function ejSC(key, fallback) {
+  const val = ejData[ejLang === 'en' ? key + '_en' : key];
+  return val || ejData[key] || fallback || '';
+}
+
+async function loadEjendommensContent() {
+  try {
+    const [{ data: content }, { data: rooms }] = await Promise.all([
+      ejSb.from('ejendommen_content').select('key,value'),
+      ejSb.from('ejendommen_rooms').select('*').eq('active', true).order('sort_order')
+    ]);
+    (content || []).forEach(r => { ejData[r.key] = r.value; });
+    ejRooms = rooms || [];
+    applyEjContent();
+    renderEjRooms();
+  } catch(e) {
+    console.warn('ejendommen content load fejl:', e.message);
+  }
+}
+
+function setText(id, val) {
+  const el = document.getElementById(id);
+  if (el && val) el.textContent = val;
+}
+
+function setHTML(id, val) {
+  const el = document.getElementById(id);
+  if (el && val) el.innerHTML = val;
+}
+
+function setImg(id, val) {
+  const el = document.getElementById(id);
+  if (el && val) el.src = val;
+}
+
+function setBg(id, val) {
+  const el = document.getElementById(id);
+  if (el && val) el.style.backgroundImage = `url('${val}')`;
+}
+
+function applyEjContent() {
+  const l = ejLang;
+
+  // HERO
+  setText('ej_hero_eyebrow', ejSC('hero_eyebrow'));
+  setText('ej_hero_h1', null); // h1 har em-tag — håndteres separat
+  if (ejSC('hero_h1')) {
+    const h1 = document.getElementById('ej_hero_h1');
+    if (h1) h1.innerHTML = ejSC('hero_h1');
+  }
+  setBg('heroImg', ejSC('hero_img'));
+
+  // INTRO
+  setText('ej_intro_label', ejSC('intro_label'));
+  if (ejSC('intro_h2')) setHTML('ej_intro_h2', ejSC('intro_h2'));
+  setText('ej_intro_p1', ejSC('intro_p1'));
+  setText('ej_intro_p2', ejSC('intro_p2'));
+  setText('ej_intro_p3', ejSC('intro_p3'));
+  setImg('ej_intro_img1', ejSC('intro_img1'));
+  setImg('ej_intro_img2', ejSC('intro_img2'));
+
+  // ESTATE FACTS
+  ['area','vineyard','towers','rooms','year','do'].forEach(k => {
+    const el = document.getElementById(`ej_fact_${k}`);
+    if (el && ejSC(`fact_${k}_h4`)) el.querySelector('h4').textContent = ejSC(`fact_${k}_h4`);
+    if (el && ejSC(`fact_${k}_p`)) el.querySelector('p').textContent = ejSC(`fact_${k}_p`);
+  });
+
+  // TOWERS
+  setText('ej_towers_label', ejSC('towers_label'));
+  if (ejSC('towers_h2')) setHTML('ej_towers_h2', ejSC('towers_h2'));
+  setText('ej_towers_caption', ejSC('towers_caption'));
+  setText('ej_towers_p1', ejSC('towers_p1'));
+  setText('ej_towers_p2', ejSC('towers_p2'));
+  setText('ej_towers_p3', ejSC('towers_p3'));
+  setImg('ej_towers_img', ejSC('towers_img'));
+
+  // ROOMS
+  setText('ej_rooms_label', ejSC('rooms_label'));
+  setText('ej_rooms_h2', ejSC('rooms_h2'));
+  setText('ej_rooms_intro', ejSC('rooms_intro'));
+
+  // FACILITIES
+  setText('ej_fac_label', ejSC('fac_label'));
+  if (ejSC('fac_h2')) setHTML('ej_fac_h2', ejSC('fac_h2'));
+  const facItems = ['pool','sauna_finsk','sauna_infra','faellesrum','retreat_rum','terasser','koekken','spisebord','wifi','parkering','aflaaset','vindyrkning'];
+  facItems.forEach(k => {
+    const el = document.getElementById(`ej_fac_${k}`);
+    if (!el) return;
+    if (ejSC(`fac_${k}_h4`)) el.querySelector('h4').textContent = ejSC(`fac_${k}_h4`);
+    if (ejSC(`fac_${k}_p`)) el.querySelector('p').textContent = ejSC(`fac_${k}_p`);
+  });
+  setImg('ej_fac_img1', ejSC('fac_img1'));
+  setImg('ej_fac_img2', ejSC('fac_img2'));
+  setImg('ej_fac_img3', ejSC('fac_img3'));
+
+  // SUSTAINABILITY
+  setText('ej_sustain_label', ejSC('sustain_label'));
+  if (ejSC('sustain_h2')) setHTML('ej_sustain_h2', ejSC('sustain_h2'));
+  setText('ej_sustain_lead', ejSC('sustain_lead'));
+  for (let i = 1; i <= 5; i++) setText(`ej_sustain_p${i}`, ejSC(`sustain_p${i}`));
+  setImg('ej_sustain_img1', ejSC('sustain_img1'));
+  setImg('ej_sustain_img2', ejSC('sustain_img2'));
+  const ecoItems = ['solvarme','gulvvarme','isolering','kloak','broend'];
+  ecoItems.forEach(k => {
+    const el = document.getElementById(`ej_eco_${k}`);
+    if (!el) return;
+    if (ejSC(`eco_${k}_h4`)) el.querySelector('h4').textContent = ejSC(`eco_${k}_h4`);
+    if (ejSC(`eco_${k}_p`)) el.querySelector('p').textContent = ejSC(`eco_${k}_p`);
+  });
+
+  // VINEYARD
+  setText('ej_vineyard_label', ejSC('vineyard_label'));
+  if (ejSC('vineyard_h2')) setHTML('ej_vineyard_h2', ejSC('vineyard_h2'));
+  for (let i = 1; i <= 4; i++) setText(`ej_vineyard_p${i}`, ejSC(`vineyard_p${i}`));
+  setImg('ej_vineyard_img', ejSC('vineyard_img'));
+
+  // LOCATION
+  setText('ej_location_label', ejSC('location_label'));
+  if (ejSC('location_h2')) setHTML('ej_location_h2', ejSC('location_h2'));
+  setText('ej_location_p1', ejSC('location_p1'));
+  setText('ej_location_p2', ejSC('location_p2'));
+  const distItems = ['antequera','malaga','caminito','ronda','cordoba','granada','sevilla','lufthavn'];
+  distItems.forEach(k => {
+    const el = document.getElementById(`ej_dist_${k}`);
+    if (!el) return;
+    const spans = el.querySelectorAll('span');
+    if (ejSC(`dist_${k}_navn`) && spans[0]) spans[0].textContent = ejSC(`dist_${k}_navn`);
+    if (ejSC(`dist_${k}_tid`) && spans[1]) spans[1].textContent = ejSC(`dist_${k}_tid`);
+  });
+
+  // CTA
+  setText('ej_cta_h2', ejSC('cta_h2'));
+  setText('ej_cta_text', ejSC('cta_text'));
+  setText('ej_cta_btn1', ejSC('cta_btn1'));
+  setText('ej_cta_btn2', ejSC('cta_btn2'));
+
+  // FOOTER
+  setText('ej_footer_copy', ejSC('footer_copy'));
+  setText('ej_footer_link', ejSC('footer_link'));
+}
+
+function renderEjRooms() {
+  const grid = document.querySelector('.rooms-grid');
+  if (!grid || !ejRooms.length) return;
+
+  grid.innerHTML = ejRooms.map((r, i) => {
+    const num = String(i + 1).padStart(2, '0');
+    const name = ejLang === 'en' ? (r.name_en || r.name_da) : r.name_da;
+    const desc = ejLang === 'en' ? (r.description_en || r.description_da) : r.description_da;
+    let features = r.features || [];
+    if (typeof features === 'string') { try { features = JSON.parse(features); } catch(e) { features = []; } }
+
+    const imgHtml = r.hero_image
+      ? `<img class="room-img-default" src="${r.hero_image}" alt="${name}">`
+      : `<div class="room-card-img-ph" style="background:linear-gradient(145deg,#d4c0b0,#b8a090);height:100%;"></div>`;
+
+    const amenitiesHtml = features.map(f => `<span class="room-amenity">${f}</span>`).join('');
+
+    return `<div class="room-card">
+      <div class="room-card-accent"></div>
+      <div class="room-card-img">${imgHtml}</div>
+      <div class="room-card-body">
+        <span class="room-card-num">${num}</span>
+        <h3>${name}</h3>
+        <p>${desc}</p>
+        <div class="room-amenities">${amenitiesHtml}</div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// Sprogvælger
+function setEjLang(lang) {
+  ejLang = lang;
+  const btnDa = document.getElementById('ej-btn-da');
+  const btnEn = document.getElementById('ej-btn-en');
+  if (btnDa) btnDa.classList.toggle('lang-btn-active', lang === 'da');
+  if (btnDa) btnDa.classList.toggle('lang-btn-inactive', lang !== 'da');
+  if (btnEn) btnEn.classList.toggle('lang-btn-active', lang === 'en');
+  if (btnEn) btnEn.classList.toggle('lang-btn-inactive', lang !== 'en');
+  applyEjContent();
+  renderEjRooms();
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  loadEjendommensContent();
+});
 </script>
 
 <script>

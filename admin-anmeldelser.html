@@ -2031,8 +2031,687 @@ feeling more calm – and coming home to yourself again."</textarea></div>
   <!-- FANE: RETREATS -->
   <!-- FANE: EJENDOMMEN -->
   <div class="subtab-content" id="tab-ejendommen" style="padding:2rem 3rem;max-width:1100px;">
-    <h2 style="font-family:Cinzel,serif;font-weight:300;font-size:1.4rem;letter-spacing:.08em;color:#2c2318;margin-bottom:.4rem;">Ejendommen (ejendommen.html)</h2>
-    <p style="font-size:.75rem;color:rgba(44,35,24,.5);margin-bottom:2rem;">Indhold for denne side tilføjes næste skridt.</p>
+
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.5rem;flex-wrap:wrap;gap:.8rem;">
+      <div>
+        <h2 style="font-family:Cinzel,serif;font-weight:300;font-size:1.4rem;letter-spacing:.08em;color:#2c2318;margin:0 0 .2rem;">Ejendommen · ejendommen.html</h2>
+        <p style="font-size:.7rem;color:rgba(44,35,24,.5);margin:0;">🇩🇰 Dansk i venstre kolonne &nbsp;·&nbsp; 🇬🇧 Engelsk i højre kolonne</p>
+      </div>
+      <button onclick="gemEjendommen()" style="background:var(--wine);color:#fff;border:none;padding:.7rem 2rem;font-family:Manrope,sans-serif;font-size:.68rem;font-weight:500;letter-spacing:.18em;text-transform:uppercase;cursor:pointer;">💾 Gem ejendommen</button>
+    </div>
+
+    <!-- HOP TIL SEKTION -->
+    <div style="background:rgba(184,138,30,.06);border:1px solid rgba(184,138,30,.2);padding:1rem 1.2rem;margin-bottom:2rem;">
+      <span style="font-size:.62rem;letter-spacing:.15em;text-transform:uppercase;color:rgba(44,35,24,.5);display:block;margin-bottom:.6rem;">Hop til sektion</span>
+      <div style="display:flex;flex-wrap:wrap;gap:.5rem;">
+        <a href="#ej_adm_nav" style="font-size:.72rem;color:#7a5c14;background:#fffef8;border:1px solid rgba(184,138,30,.3);padding:.35rem .8rem;text-decoration:none;">0 · Navigation</a>
+        <a href="#ej_adm_hero" style="font-size:.72rem;color:#7a5c14;background:#fffef8;border:1px solid rgba(184,138,30,.3);padding:.35rem .8rem;text-decoration:none;">1 · Hero</a>
+        <a href="#ej_adm_intro" style="font-size:.72rem;color:#7a5c14;background:#fffef8;border:1px solid rgba(184,138,30,.3);padding:.35rem .8rem;text-decoration:none;">2 · Intro</a>
+        <a href="#ej_adm_towers" style="font-size:.72rem;color:#7a5c14;background:#fffef8;border:1px solid rgba(184,138,30,.3);padding:.35rem .8rem;text-decoration:none;">3 · Tårnene</a>
+        <a href="#ej_adm_rooms" style="font-size:.72rem;color:#7a5c14;background:#fffef8;border:1px solid rgba(184,138,30,.3);padding:.35rem .8rem;text-decoration:none;">4 · Værelserne</a>
+        <a href="#ej_adm_fac" style="font-size:.72rem;color:#7a5c14;background:#fffef8;border:1px solid rgba(184,138,30,.3);padding:.35rem .8rem;text-decoration:none;">5 · Faciliteter</a>
+        <a href="#ej_adm_sustain" style="font-size:.72rem;color:#7a5c14;background:#fffef8;border:1px solid rgba(184,138,30,.3);padding:.35rem .8rem;text-decoration:none;">6 · Bæredygtighed</a>
+        <a href="#ej_adm_vineyard" style="font-size:.72rem;color:#7a5c14;background:#fffef8;border:1px solid rgba(184,138,30,.3);padding:.35rem .8rem;text-decoration:none;">7 · Vingården</a>
+        <a href="#ej_adm_location" style="font-size:.72rem;color:#7a5c14;background:#fffef8;border:1px solid rgba(184,138,30,.3);padding:.35rem .8rem;text-decoration:none;">8 · Beliggenhed</a>
+        <a href="#ej_adm_cta" style="font-size:.72rem;color:#7a5c14;background:#fffef8;border:1px solid rgba(184,138,30,.3);padding:.35rem .8rem;text-decoration:none;">9 · CTA</a>
+        <a href="#ej_adm_footer" style="font-size:.72rem;color:#7a5c14;background:#fffef8;border:1px solid rgba(184,138,30,.3);padding:.35rem .8rem;text-decoration:none;">10 · Footer</a>
+      </div>
+    </div>
+
+    <!-- 0 · NAVIGATION -->
+    <div class="fc-block" id="ej_adm_nav" style="margin-bottom:1.5rem;">
+      <div class="fc-block-header"><span class="fc-block-title">0 · Navigation (menupunkter)</span></div>
+      <div class="fc-block-body">
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Ejendommen</label><input type="text" id="ej_nav_intro_da" class="fc-input-da" value="Ejendommen"></div>
+          <div><label class="fc-label fc-label-en">The property</label><input type="text" id="ej_nav_intro_en" class="fc-input-en" value="The Property"></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Tårnene</label><input type="text" id="ej_nav_towers_da" class="fc-input-da" value="Tårnene"></div>
+          <div><label class="fc-label fc-label-en">The Towers</label><input type="text" id="ej_nav_towers_en" class="fc-input-en" value="The Towers"></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Indkvartering</label><input type="text" id="ej_nav_rooms_da" class="fc-input-da" value="Indkvartering"></div>
+          <div><label class="fc-label fc-label-en">Accommodation</label><input type="text" id="ej_nav_rooms_en" class="fc-input-en" value="Accommodation"></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Faciliteter</label><input type="text" id="ej_nav_fac_da" class="fc-input-da" value="Faciliteter"></div>
+          <div><label class="fc-label fc-label-en">Facilities</label><input type="text" id="ej_nav_fac_en" class="fc-input-en" value="Facilities"></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Bæredygtighed</label><input type="text" id="ej_nav_sustain_da" class="fc-input-da" value="Bæredygtighed"></div>
+          <div><label class="fc-label fc-label-en">Sustainability</label><input type="text" id="ej_nav_sustain_en" class="fc-input-en" value="Sustainability"></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Vingården</label><input type="text" id="ej_nav_vineyard_da" class="fc-input-da" value="Vingården"></div>
+          <div><label class="fc-label fc-label-en">The Vineyard</label><input type="text" id="ej_nav_vineyard_en" class="fc-input-en" value="The Vineyard"></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Beliggenhed</label><input type="text" id="ej_nav_location_da" class="fc-input-da" value="Beliggenhed"></div>
+          <div><label class="fc-label fc-label-en">Location</label><input type="text" id="ej_nav_location_en" class="fc-input-en" value="Location"></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">← Tilbage til forsiden</label><input type="text" id="ej_nav_back_da" class="fc-input-da" value="← Tilbage til forsiden"></div>
+          <div><label class="fc-label fc-label-en">← Back to front page</label><input type="text" id="ej_nav_back_en" class="fc-input-en" value="← Back to front page"></div>
+        </div>
+        <div style="text-align:right;margin-top:.8rem;"><button onclick="gemEjendommen()" style="background:#2a7a74;color:#fff;border:none;padding:.5rem 1.4rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;">💾 Gem</button></div>
+      </div>
+    </div>
+
+    <!-- 1 · HERO -->
+    <div class="fc-block" id="ej_adm_hero" style="margin-bottom:1.5rem;">
+      <div class="fc-block-header"><span class="fc-block-title">1 · Hero</span></div>
+      <div class="fc-block-body">
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Eyebrow tekst (DA)</label><input type="text" id="ej_hero_eyebrow_da" class="fc-input-da" value="Mollina · Antequera · Málaga"></div>
+          <div><label class="fc-label fc-label-en">Eyebrow text (EN)</label><input type="text" id="ej_hero_eyebrow_en" class="fc-input-en" value="Mollina · Antequera · Málaga"></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">H1 (DA) — brug &lt;em&gt; til kursiv</label><input type="text" id="ej_hero_h1_da" class="fc-input-da" value="Castillo&lt;br&gt;&lt;em&gt;del Alma&lt;/em&gt;"></div>
+          <div><label class="fc-label fc-label-en">H1 (EN)</label><input type="text" id="ej_hero_h1_en" class="fc-input-en" value="Castillo&lt;br&gt;&lt;em&gt;del Alma&lt;/em&gt;"></div>
+        </div>
+        <div style="margin-top:1rem;padding:.9rem;background:rgba(42,122,116,.06);border:1px solid rgba(42,122,116,.2);">
+          <label class="fc-label" style="color:#2a7a74;">📁 Hero-billede</label>
+          <div style="display:flex;align-items:center;gap:.8rem;flex-wrap:wrap;margin-top:.5rem;">
+            <img id="ej_hero_img_preview" src="" style="display:none;width:56px;height:56px;object-fit:cover;border-radius:3px;border:1px solid rgba(184,138,30,.3);flex-shrink:0;">
+            <input type="text" id="ej_hero_img_url" class="fc-input-da" placeholder="URL indsættes automatisk ved upload" style="flex:1;">
+            <input type="file" id="ej_hero_img_file" accept="image/*" style="font-size:.76rem;">
+            <button onclick="uploadEjBillede('ej_hero_img_file','ej_hero_img_url','ej_hero_img_preview')" style="background:#2a7a74;color:#fff;border:none;padding:.45rem 1.1rem;font-family:Manrope,sans-serif;font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;white-space:nowrap;">⬆ Upload</button>
+          </div>
+        </div>
+        <div style="text-align:right;margin-top:.8rem;"><button onclick="gemEjendommen()" style="background:#2a7a74;color:#fff;border:none;padding:.5rem 1.4rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;">💾 Gem</button></div>
+      </div>
+    </div>
+
+    <!-- 2 · INTRO -->
+    <div class="fc-block" id="ej_adm_intro" style="margin-bottom:1.5rem;">
+      <div class="fc-block-header"><span class="fc-block-title">2 · Intro-sektion</span></div>
+      <div class="fc-block-body">
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Label (DA)</label><input type="text" id="ej_intro_label_da" class="fc-input-da" value="Ejendommen"></div>
+          <div><label class="fc-label fc-label-en">Label (EN)</label><input type="text" id="ej_intro_label_en" class="fc-input-en" value="The Property"></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Overskrift (DA)</label><input type="text" id="ej_intro_h2_da" class="fc-input-da" value="En *borglignende* oase i Andalucía"></div>
+          <div><label class="fc-label fc-label-en">Heading (EN)</label><input type="text" id="ej_intro_h2_en" class="fc-input-en" value="A *castle-like* oasis in Andalucía"></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Afsnit 1 (DA)</label><textarea id="ej_intro_p1_da" class="fc-input-da fc-textarea">Castillo del Alma ligger smukt og fredfyldt omgivet af bølgende vinmarker og sølvgrønne olivenplantager i den lille andalusiske by Mollina, tæt ved historiske Antequera i Málaga-provinsen.</textarea></div>
+          <div><label class="fc-label fc-label-en">Paragraph 1 (EN)</label><textarea id="ej_intro_p1_en" class="fc-input-en fc-textarea">Castillo del Alma is beautifully and peacefully surrounded by rolling vineyards and silver-green olive groves in the small Andalusian town of Mollina, close to the historic Antequera in the Málaga province.</textarea></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Afsnit 2 (DA)</label><textarea id="ej_intro_p2_da" class="fc-input-da fc-textarea">Huset er opført for blot 13 år siden, men bygget med stor respekt for den klassiske andalusiske byggestil — med varme naturmaterialer, smukke linjer og karakterfuld arkitektur.</textarea></div>
+          <div><label class="fc-label fc-label-en">Paragraph 2 (EN)</label><textarea id="ej_intro_p2_en" class="fc-input-en fc-textarea">The house was built only 13 years ago, but constructed with great respect for the classic Andalusian architectural style — using warm natural materials, beautiful lines and characterful architecture.</textarea></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Afsnit 3 (DA)</label><textarea id="ej_intro_p3_da" class="fc-input-da fc-textarea">I hjertet af ejendommen finder man palmer, blomstrende buske og den smukke runde saltvandspool — alt omgivet af velholdte grønne arealer og naturens stilhed.</textarea></div>
+          <div><label class="fc-label fc-label-en">Paragraph 3 (EN)</label><textarea id="ej_intro_p3_en" class="fc-input-en fc-textarea">At the heart of the property you find palm trees, flowering shrubs and the beautiful round saltwater pool — all surrounded by well-maintained green areas and the silence of nature.</textarea></div>
+        </div>
+        <p style="font-size:.68rem;color:rgba(44,35,24,.4);margin:.8rem 0 .4rem;">Estate faktabokse (tal og labels):</p>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Areal — tal</label><input type="text" id="ej_fact_area_h4_da" class="fc-input-da" value="40.000 m²"></div>
+          <div><label class="fc-label fc-label-en">Area — number</label><input type="text" id="ej_fact_area_h4_en" class="fc-input-en" value="40,000 m²"></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Areal — label</label><input type="text" id="ej_fact_area_p_da" class="fc-input-da" value="Samlet ejendom"></div>
+          <div><label class="fc-label fc-label-en">Area — label</label><input type="text" id="ej_fact_area_p_en" class="fc-input-en" value="Total property"></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Vinmarker — tal</label><input type="text" id="ej_fact_vineyard_h4_da" class="fc-input-da" value="4+ ha"></div>
+          <div><label class="fc-label fc-label-en">Vineyards — number</label><input type="text" id="ej_fact_vineyard_h4_en" class="fc-input-en" value="4+ ha"></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Vinmarker — label</label><input type="text" id="ej_fact_vineyard_p_da" class="fc-input-da" value="Egne vinmarker"></div>
+          <div><label class="fc-label fc-label-en">Vineyards — label</label><input type="text" id="ej_fact_vineyard_p_en" class="fc-input-en" value="Own vineyards"></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Tårne — tal</label><input type="text" id="ej_fact_towers_h4_da" class="fc-input-da" value="2 Tårne"></div>
+          <div><label class="fc-label fc-label-en">Towers — number</label><input type="text" id="ej_fact_towers_h4_en" class="fc-input-en" value="2 Towers"></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Tårne — label</label><input type="text" id="ej_fact_towers_p_da" class="fc-input-da" value="360° panoramaudsigt"></div>
+          <div><label class="fc-label fc-label-en">Towers — label</label><input type="text" id="ej_fact_towers_p_en" class="fc-input-en" value="360° panoramic views"></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Værelser — tal</label><input type="text" id="ej_fact_rooms_h4_da" class="fc-input-da" value="7"></div>
+          <div><label class="fc-label fc-label-en">Rooms — number</label><input type="text" id="ej_fact_rooms_h4_en" class="fc-input-en" value="7"></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Værelser — label</label><input type="text" id="ej_fact_rooms_p_da" class="fc-input-da" value="Eksklusive værelser"></div>
+          <div><label class="fc-label fc-label-en">Rooms — label</label><input type="text" id="ej_fact_rooms_p_en" class="fc-input-en" value="Exclusive rooms"></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Opført — tal</label><input type="text" id="ej_fact_year_h4_da" class="fc-input-da" value="2011"></div>
+          <div><label class="fc-label fc-label-en">Built — number</label><input type="text" id="ej_fact_year_h4_en" class="fc-input-en" value="2011"></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Opført — label</label><input type="text" id="ej_fact_year_p_da" class="fc-input-da" value="Opført"></div>
+          <div><label class="fc-label fc-label-en">Built — label</label><input type="text" id="ej_fact_year_p_en" class="fc-input-en" value="Built"></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">D.O. — tal</label><input type="text" id="ej_fact_do_h4_da" class="fc-input-da" value="D.O."></div>
+          <div><label class="fc-label fc-label-en">D.O. — number</label><input type="text" id="ej_fact_do_h4_en" class="fc-input-en" value="D.O."></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">D.O. — label</label><input type="text" id="ej_fact_do_p_da" class="fc-input-da" value="Málaga Denominación"></div>
+          <div><label class="fc-label fc-label-en">D.O. — label</label><input type="text" id="ej_fact_do_p_en" class="fc-input-en" value="Málaga Denominación"></div>
+        </div>
+        <p style="font-size:.68rem;color:rgba(44,35,24,.4);margin:.8rem 0 .4rem;">Billeder:</p>
+        <div style="margin-top:.5rem;padding:.9rem;background:rgba(42,122,116,.06);border:1px solid rgba(42,122,116,.2);">
+          <label class="fc-label" style="color:#2a7a74;">📁 Billede 1 (luftfoto)</label>
+          <div style="display:flex;align-items:center;gap:.8rem;flex-wrap:wrap;margin-top:.5rem;">
+            <img id="ej_intro_img1_preview" src="" style="display:none;width:56px;height:56px;object-fit:cover;border-radius:3px;border:1px solid rgba(184,138,30,.3);flex-shrink:0;">
+            <input type="text" id="ej_intro_img1_url" class="fc-input-da" placeholder="URL til billede 1" style="flex:1;">
+            <input type="file" id="ej_intro_img1_file" accept="image/*" style="font-size:.76rem;">
+            <button onclick="uploadEjBillede('ej_intro_img1_file','ej_intro_img1_url','ej_intro_img1_preview')" style="background:#2a7a74;color:#fff;border:none;padding:.45rem 1.1rem;font-family:Manrope,sans-serif;font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;white-space:nowrap;">⬆ Upload</button>
+          </div>
+          <label class="fc-label" style="color:#2a7a74;margin-top:.8rem;display:block;">📁 Billede 2 (pool)</label>
+          <div style="display:flex;align-items:center;gap:.8rem;flex-wrap:wrap;margin-top:.5rem;">
+            <img id="ej_intro_img2_preview" src="" style="display:none;width:56px;height:56px;object-fit:cover;border-radius:3px;border:1px solid rgba(184,138,30,.3);flex-shrink:0;">
+            <input type="text" id="ej_intro_img2_url" class="fc-input-da" placeholder="URL til billede 2" style="flex:1;">
+            <input type="file" id="ej_intro_img2_file" accept="image/*" style="font-size:.76rem;">
+            <button onclick="uploadEjBillede('ej_intro_img2_file','ej_intro_img2_url','ej_intro_img2_preview')" style="background:#2a7a74;color:#fff;border:none;padding:.45rem 1.1rem;font-family:Manrope,sans-serif;font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;white-space:nowrap;">⬆ Upload</button>
+          </div>
+        </div>
+        <div style="text-align:right;margin-top:.8rem;"><button onclick="gemEjendommen()" style="background:#2a7a74;color:#fff;border:none;padding:.5rem 1.4rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;">💾 Gem</button></div>
+      </div>
+    </div>
+
+    <!-- 3 · TÅRNENE -->
+    <div class="fc-block" id="ej_adm_towers" style="margin-bottom:1.5rem;">
+      <div class="fc-block-header"><span class="fc-block-title">3 · Tårnene</span></div>
+      <div class="fc-block-body">
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Label (DA)</label><input type="text" id="ej_towers_label_da" class="fc-input-da" value="Tårnene"></div>
+          <div><label class="fc-label fc-label-en">Label (EN)</label><input type="text" id="ej_towers_label_en" class="fc-input-en" value="The Towers"></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Overskrift (DA)</label><input type="text" id="ej_towers_h2_da" class="fc-input-da" value="To tårne — ét *udsyn*"></div>
+          <div><label class="fc-label fc-label-en">Heading (EN)</label><input type="text" id="ej_towers_h2_en" class="fc-input-en" value="Two towers — one *view*"></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Billedtekst (DA)</label><input type="text" id="ej_towers_caption_da" class="fc-input-da" value="Det karakteristiske tårn set fra luften"></div>
+          <div><label class="fc-label fc-label-en">Image caption (EN)</label><input type="text" id="ej_towers_caption_en" class="fc-input-en" value="The distinctive tower seen from the air"></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Afsnit 1 (DA)</label><textarea id="ej_towers_p1_da" class="fc-input-da fc-textarea">Enhver borg har sit tårn — og Castillo del Alma har hele to. Tårnene er ejendommens mest karakteristiske arkitektoniske element og giver bygningen dens unikke og majestætiske silhuet.</textarea></div>
+          <div><label class="fc-label fc-label-en">Paragraph 1 (EN)</label><textarea id="ej_towers_p1_en" class="fc-input-en fc-textarea">Every castle has its tower — and Castillo del Alma has two. The towers are the property's most distinctive architectural element, giving the building its unique and majestic silhouette.</textarea></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Afsnit 2 (DA)</label><textarea id="ej_towers_p2_da" class="fc-input-da fc-textarea">Fra tårnenes øverste etage åbner sig et betagende 360 graders panorama over de omgivende vinmarker, sølvgrønne olivenlunde og de dramatiske bjerge.</textarea></div>
+          <div><label class="fc-label fc-label-en">Paragraph 2 (EN)</label><textarea id="ej_towers_p2_en" class="fc-input-en fc-textarea">From the top floor of the towers, a breathtaking 360-degree panorama opens up over the surrounding vineyards, silver-green olive groves and the dramatic mountains.</textarea></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Afsnit 3 (DA)</label><textarea id="ej_towers_p3_da" class="fc-input-da fc-textarea">Specielt ved solopgang og solnedgang er tårnene et magisk sted — lyset forandrer landskabet fra minut til minut, og stilheden er komplet.</textarea></div>
+          <div><label class="fc-label fc-label-en">Paragraph 3 (EN)</label><textarea id="ej_towers_p3_en" class="fc-input-en fc-textarea">Especially at sunrise and sunset, the towers are a magical place — the light transforms the landscape from minute to minute, and the silence is complete.</textarea></div>
+        </div>
+        <div style="margin-top:.8rem;padding:.9rem;background:rgba(42,122,116,.06);border:1px solid rgba(42,122,116,.2);">
+          <label class="fc-label" style="color:#2a7a74;">📁 Tårn-billede</label>
+          <div style="display:flex;align-items:center;gap:.8rem;flex-wrap:wrap;margin-top:.5rem;">
+            <img id="ej_towers_img_preview" src="" style="display:none;width:56px;height:56px;object-fit:cover;border-radius:3px;border:1px solid rgba(184,138,30,.3);flex-shrink:0;">
+            <input type="text" id="ej_towers_img_url" class="fc-input-da" placeholder="URL til tårn-billede" style="flex:1;">
+            <input type="file" id="ej_towers_img_file" accept="image/*" style="font-size:.76rem;">
+            <button onclick="uploadEjBillede('ej_towers_img_file','ej_towers_img_url','ej_towers_img_preview')" style="background:#2a7a74;color:#fff;border:none;padding:.45rem 1.1rem;font-family:Manrope,sans-serif;font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;white-space:nowrap;">⬆ Upload</button>
+          </div>
+        </div>
+        <div style="text-align:right;margin-top:.8rem;"><button onclick="gemEjendommen()" style="background:#2a7a74;color:#fff;border:none;padding:.5rem 1.4rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;">💾 Gem</button></div>
+      </div>
+    </div>
+
+    <!-- 4 · VÆRELSERNE -->
+    <div class="fc-block" id="ej_adm_rooms" style="margin-bottom:1.5rem;">
+      <div class="fc-block-header"><span class="fc-block-title">4 · Værelserne (7 rum)</span></div>
+      <div class="fc-block-body">
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Section-label (DA)</label><input type="text" id="ej_rooms_label_da" class="fc-input-da" value="Indkvartering"></div>
+          <div><label class="fc-label fc-label-en">Section label (EN)</label><input type="text" id="ej_rooms_label_en" class="fc-input-en" value="Accommodation"></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Overskrift (DA)</label><input type="text" id="ej_rooms_h2_da" class="fc-input-da" value="Værelserne"></div>
+          <div><label class="fc-label fc-label-en">Heading (EN)</label><input type="text" id="ej_rooms_h2_en" class="fc-input-en" value="The Rooms"></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Intro-tekst (DA)</label><input type="text" id="ej_rooms_intro_da" class="fc-input-da" value="Syv dobbelte eksklusive værelser, alle med ensuite badeværelse — designet til komfort, ro og nærvær"></div>
+          <div><label class="fc-label fc-label-en">Intro text (EN)</label><input type="text" id="ej_rooms_intro_en" class="fc-input-en" value="Seven exclusive double rooms, all with en-suite bathrooms — designed for comfort, calm and presence"></div>
+        </div>
+        <p style="font-size:.68rem;color:rgba(44,35,24,.4);margin:1rem 0 .6rem;">De 7 individuelle rum — redigér hvert rum:</p>
+        <div id="ejRomsListe" style="display:flex;flex-direction:column;gap:.8rem;"></div>
+        <div style="text-align:right;margin-top:.8rem;"><button onclick="gemEjendommen()" style="background:#2a7a74;color:#fff;border:none;padding:.5rem 1.4rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;">💾 Gem</button></div>
+      </div>
+    </div>
+
+    <!-- 5 · FACILITETER -->
+    <div class="fc-block" id="ej_adm_fac" style="margin-bottom:1.5rem;">
+      <div class="fc-block-header"><span class="fc-block-title">5 · Faciliteter</span></div>
+      <div class="fc-block-body">
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Label (DA)</label><input type="text" id="ej_fac_label_da" class="fc-input-da" value="Faciliteter"></div>
+          <div><label class="fc-label fc-label-en">Label (EN)</label><input type="text" id="ej_fac_label_en" class="fc-input-en" value="Facilities"></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Overskrift (DA)</label><input type="text" id="ej_fac_h2_da" class="fc-input-da" value="Alt hvad du behøver til *ro*"></div>
+          <div><label class="fc-label fc-label-en">Heading (EN)</label><input type="text" id="ej_fac_h2_en" class="fc-input-en" value="Everything you need for *calm*"></div>
+        </div>
+        <div style="background:rgba(44,35,24,.02);border:1px solid rgba(184,138,30,.1);padding:.8rem;margin-top:.6rem;">
+          <p style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:#7a5c14;margin-bottom:.5rem;">Saltvandspool</p>
+          <div class="fc-row">
+            <div><label class="fc-label fc-label-da">Titel (DA)</label><input type="text" id="ej_fac_pool_h4_da" class="fc-input-da" value="Saltvandspool"></div>
+            <div><label class="fc-label fc-label-en">Title (EN)</label><input type="text" id="ej_fac_pool_h4_en" class="fc-input-en" value="Saltwater Pool"></div>
+          </div>
+          <div class="fc-row">
+            <div><label class="fc-label fc-label-da">Tekst (DA)</label><input type="text" id="ej_fac_pool_p_da" class="fc-input-da" value="Rund pool med saltvandsrensning og solterrasse"></div>
+            <div><label class="fc-label fc-label-en">Text (EN)</label><input type="text" id="ej_fac_pool_p_en" class="fc-input-en" value="Round pool with saltwater filtration and sun terrace"></div>
+          </div>
+        </div>
+        <div style="background:rgba(44,35,24,.02);border:1px solid rgba(184,138,30,.1);padding:.8rem;margin-top:.6rem;">
+          <p style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:#7a5c14;margin-bottom:.5rem;">Finsk Sauna</p>
+          <div class="fc-row">
+            <div><label class="fc-label fc-label-da">Titel (DA)</label><input type="text" id="ej_fac_sauna_finsk_h4_da" class="fc-input-da" value="Finsk Sauna"></div>
+            <div><label class="fc-label fc-label-en">Title (EN)</label><input type="text" id="ej_fac_sauna_finsk_h4_en" class="fc-input-en" value="Finnish Sauna"></div>
+          </div>
+          <div class="fc-row">
+            <div><label class="fc-label fc-label-da">Tekst (DA)</label><input type="text" id="ej_fac_sauna_finsk_p_da" class="fc-input-da" value="Traditionel finsk sauna til afspænding og restitution"></div>
+            <div><label class="fc-label fc-label-en">Text (EN)</label><input type="text" id="ej_fac_sauna_finsk_p_en" class="fc-input-en" value="Traditional Finnish sauna for relaxation and recovery"></div>
+          </div>
+        </div>
+        <div style="background:rgba(44,35,24,.02);border:1px solid rgba(184,138,30,.1);padding:.8rem;margin-top:.6rem;">
+          <p style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:#7a5c14;margin-bottom:.5rem;">Infrarød Sauna</p>
+          <div class="fc-row">
+            <div><label class="fc-label fc-label-da">Titel (DA)</label><input type="text" id="ej_fac_sauna_infra_h4_da" class="fc-input-da" value="Infrarød Sauna"></div>
+            <div><label class="fc-label fc-label-en">Title (EN)</label><input type="text" id="ej_fac_sauna_infra_h4_en" class="fc-input-en" value="Infrared Sauna"></div>
+          </div>
+          <div class="fc-row">
+            <div><label class="fc-label fc-label-da">Tekst (DA)</label><input type="text" id="ej_fac_sauna_infra_p_da" class="fc-input-da" value="Infrarød sauna for dyb varmebehandling"></div>
+            <div><label class="fc-label fc-label-en">Text (EN)</label><input type="text" id="ej_fac_sauna_infra_p_en" class="fc-input-en" value="Infrared sauna for deep heat therapy"></div>
+          </div>
+        </div>
+        <div style="background:rgba(44,35,24,.02);border:1px solid rgba(184,138,30,.1);padding:.8rem;margin-top:.6rem;">
+          <p style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:#7a5c14;margin-bottom:.5rem;">Stort fællesrum</p>
+          <div class="fc-row">
+            <div><label class="fc-label fc-label-da">Titel (DA)</label><input type="text" id="ej_fac_faellesrum_h4_da" class="fc-input-da" value="Stort fællesrum"></div>
+            <div><label class="fc-label fc-label-en">Title (EN)</label><input type="text" id="ej_fac_faellesrum_h4_en" class="fc-input-en" value="Large Common Room"></div>
+          </div>
+          <div class="fc-row">
+            <div><label class="fc-label fc-label-da">Tekst (DA)</label><input type="text" id="ej_fac_faellesrum_p_da" class="fc-input-da" value="Romslig stue med andalusisk interiør og lounge"></div>
+            <div><label class="fc-label fc-label-en">Text (EN)</label><input type="text" id="ej_fac_faellesrum_p_en" class="fc-input-en" value="Spacious lounge with Andalusian interior and lounge area"></div>
+          </div>
+        </div>
+        <div style="background:rgba(44,35,24,.02);border:1px solid rgba(184,138,30,.1);padding:.8rem;margin-top:.6rem;">
+          <p style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:#7a5c14;margin-bottom:.5rem;">Retreat-rum</p>
+          <div class="fc-row">
+            <div><label class="fc-label fc-label-da">Titel (DA)</label><input type="text" id="ej_fac_retreat_rum_h4_da" class="fc-input-da" value="Retreat-rum"></div>
+            <div><label class="fc-label fc-label-en">Title (EN)</label><input type="text" id="ej_fac_retreat_rum_h4_en" class="fc-input-en" value="Retreat Room"></div>
+          </div>
+          <div class="fc-row">
+            <div><label class="fc-label fc-label-da">Tekst (DA)</label><input type="text" id="ej_fac_retreat_rum_p_da" class="fc-input-da" value="Dedikeret rum til yoga, meditation og workshops"></div>
+            <div><label class="fc-label fc-label-en">Text (EN)</label><input type="text" id="ej_fac_retreat_rum_p_en" class="fc-input-en" value="Dedicated room for yoga, meditation and workshops"></div>
+          </div>
+        </div>
+        <div style="background:rgba(44,35,24,.02);border:1px solid rgba(184,138,30,.1);padding:.8rem;margin-top:.6rem;">
+          <p style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:#7a5c14;margin-bottom:.5rem;">Udendørs terasser</p>
+          <div class="fc-row">
+            <div><label class="fc-label fc-label-da">Titel (DA)</label><input type="text" id="ej_fac_terasser_h4_da" class="fc-input-da" value="Udendørs terasser"></div>
+            <div><label class="fc-label fc-label-en">Title (EN)</label><input type="text" id="ej_fac_terasser_h4_en" class="fc-input-en" value="Outdoor Terraces"></div>
+          </div>
+          <div class="fc-row">
+            <div><label class="fc-label fc-label-da">Tekst (DA)</label><input type="text" id="ej_fac_terasser_p_da" class="fc-input-da" value="Flere private og fælles terasser med udsigt"></div>
+            <div><label class="fc-label fc-label-en">Text (EN)</label><input type="text" id="ej_fac_terasser_p_en" class="fc-input-en" value="Multiple private and shared terraces with views"></div>
+          </div>
+        </div>
+        <div style="background:rgba(44,35,24,.02);border:1px solid rgba(184,138,30,.1);padding:.8rem;margin-top:.6rem;">
+          <p style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:#7a5c14;margin-bottom:.5rem;">Professionelt køkken</p>
+          <div class="fc-row">
+            <div><label class="fc-label fc-label-da">Titel (DA)</label><input type="text" id="ej_fac_koekken_h4_da" class="fc-input-da" value="Professionelt køkken"></div>
+            <div><label class="fc-label fc-label-en">Title (EN)</label><input type="text" id="ej_fac_koekken_h4_en" class="fc-input-en" value="Professional Kitchen"></div>
+          </div>
+          <div class="fc-row">
+            <div><label class="fc-label fc-label-da">Tekst (DA)</label><input type="text" id="ej_fac_koekken_p_da" class="fc-input-da" value="Fuldt udstyret køkken til fælles madlavning"></div>
+            <div><label class="fc-label fc-label-en">Text (EN)</label><input type="text" id="ej_fac_koekken_p_en" class="fc-input-en" value="Fully equipped kitchen for communal cooking"></div>
+          </div>
+        </div>
+        <div style="background:rgba(44,35,24,.02);border:1px solid rgba(184,138,30,.1);padding:.8rem;margin-top:.6rem;">
+          <p style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:#7a5c14;margin-bottom:.5rem;">Stort spisebord</p>
+          <div class="fc-row">
+            <div><label class="fc-label fc-label-da">Titel (DA)</label><input type="text" id="ej_fac_spisebord_h4_da" class="fc-input-da" value="Stort spisebord"></div>
+            <div><label class="fc-label fc-label-en">Title (EN)</label><input type="text" id="ej_fac_spisebord_h4_en" class="fc-input-en" value="Large Dining Table"></div>
+          </div>
+          <div class="fc-row">
+            <div><label class="fc-label fc-label-da">Tekst (DA)</label><input type="text" id="ej_fac_spisebord_p_da" class="fc-input-da" value="Bord til 14 gæster — til fælles måltider og events"></div>
+            <div><label class="fc-label fc-label-en">Text (EN)</label><input type="text" id="ej_fac_spisebord_p_en" class="fc-input-en" value="Table for 14 guests — for shared meals and events"></div>
+          </div>
+        </div>
+        <div style="background:rgba(44,35,24,.02);border:1px solid rgba(184,138,30,.1);padding:.8rem;margin-top:.6rem;">
+          <p style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:#7a5c14;margin-bottom:.5rem;">WiFi overalt</p>
+          <div class="fc-row">
+            <div><label class="fc-label fc-label-da">Titel (DA)</label><input type="text" id="ej_fac_wifi_h4_da" class="fc-input-da" value="WiFi overalt"></div>
+            <div><label class="fc-label fc-label-en">Title (EN)</label><input type="text" id="ej_fac_wifi_h4_en" class="fc-input-en" value="WiFi Everywhere"></div>
+          </div>
+          <div class="fc-row">
+            <div><label class="fc-label fc-label-da">Tekst (DA)</label><input type="text" id="ej_fac_wifi_p_da" class="fc-input-da" value="Hurtig fiber-internetforbindelse i hele ejendommen"></div>
+            <div><label class="fc-label fc-label-en">Text (EN)</label><input type="text" id="ej_fac_wifi_p_en" class="fc-input-en" value="Fast fibre internet connection throughout the property"></div>
+          </div>
+        </div>
+        <div style="background:rgba(44,35,24,.02);border:1px solid rgba(184,138,30,.1);padding:.8rem;margin-top:.6rem;">
+          <p style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:#7a5c14;margin-bottom:.5rem;">Parkering</p>
+          <div class="fc-row">
+            <div><label class="fc-label fc-label-da">Titel (DA)</label><input type="text" id="ej_fac_parkering_h4_da" class="fc-input-da" value="Parkering"></div>
+            <div><label class="fc-label fc-label-en">Title (EN)</label><input type="text" id="ej_fac_parkering_h4_en" class="fc-input-en" value="Parking"></div>
+          </div>
+          <div class="fc-row">
+            <div><label class="fc-label fc-label-da">Tekst (DA)</label><input type="text" id="ej_fac_parkering_p_da" class="fc-input-da" value="Gratis parkering på ejendommen for alle gæster"></div>
+            <div><label class="fc-label fc-label-en">Text (EN)</label><input type="text" id="ej_fac_parkering_p_en" class="fc-input-en" value="Free parking on the property for all guests"></div>
+          </div>
+        </div>
+        <div style="background:rgba(44,35,24,.02);border:1px solid rgba(184,138,30,.1);padding:.8rem;margin-top:.6rem;">
+          <p style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:#7a5c14;margin-bottom:.5rem;">Fuldt aflåst</p>
+          <div class="fc-row">
+            <div><label class="fc-label fc-label-da">Titel (DA)</label><input type="text" id="ej_fac_aflaaset_h4_da" class="fc-input-da" value="Fuldt aflåst"></div>
+            <div><label class="fc-label fc-label-en">Title (EN)</label><input type="text" id="ej_fac_aflaaset_h4_en" class="fc-input-en" value="Fully Secured"></div>
+          </div>
+          <div class="fc-row">
+            <div><label class="fc-label fc-label-da">Tekst (DA)</label><input type="text" id="ej_fac_aflaaset_p_da" class="fc-input-da" value="Sikker og privat ejendom med adgangskontrol"></div>
+            <div><label class="fc-label fc-label-en">Text (EN)</label><input type="text" id="ej_fac_aflaaset_p_en" class="fc-input-en" value="Safe and private property with access control"></div>
+          </div>
+        </div>
+        <div style="background:rgba(44,35,24,.02);border:1px solid rgba(184,138,30,.1);padding:.8rem;margin-top:.6rem;">
+          <p style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:#7a5c14;margin-bottom:.5rem;">Vindyrkning</p>
+          <div class="fc-row">
+            <div><label class="fc-label fc-label-da">Titel (DA)</label><input type="text" id="ej_fac_vindyrkning_h4_da" class="fc-input-da" value="Vindyrkning"></div>
+            <div><label class="fc-label fc-label-en">Title (EN)</label><input type="text" id="ej_fac_vindyrkning_h4_en" class="fc-input-en" value="Wine Production"></div>
+          </div>
+          <div class="fc-row">
+            <div><label class="fc-label fc-label-da">Tekst (DA)</label><input type="text" id="ej_fac_vindyrkning_p_da" class="fc-input-da" value="Egne vinmarker — vin fra husets egen produktion"></div>
+            <div><label class="fc-label fc-label-en">Text (EN)</label><input type="text" id="ej_fac_vindyrkning_p_en" class="fc-input-en" value="Own vineyards — wine from the estate's own production"></div>
+          </div>
+        </div>
+        <p style="font-size:.68rem;color:rgba(44,35,24,.4);margin:1rem 0 .4rem;">Billeder (3 stk):</p>
+        <div style="display:flex;flex-direction:column;gap:.6rem;padding:.9rem;background:rgba(42,122,116,.06);border:1px solid rgba(42,122,116,.2);">
+          <div style="display:flex;align-items:center;gap:.8rem;flex-wrap:wrap;">
+            <img id="ej_fac_img1_preview" src="" style="display:none;width:56px;height:56px;object-fit:cover;border-radius:3px;border:1px solid rgba(184,138,30,.3);flex-shrink:0;">
+            <input type="text" id="ej_fac_img1_url" class="fc-input-da" placeholder="Billede 1 — Pool og have" style="flex:1;">
+            <input type="file" id="ej_fac_img1_file" accept="image/*" style="font-size:.76rem;">
+            <button onclick="uploadEjBillede('ej_fac_img1_file','ej_fac_img1_url','ej_fac_img1_preview')" style="background:#2a7a74;color:#fff;border:none;padding:.45rem 1.1rem;font-family:Manrope,sans-serif;font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;white-space:nowrap;">⬆ Upload</button>
+          </div>
+          <div style="display:flex;align-items:center;gap:.8rem;flex-wrap:wrap;">
+            <img id="ej_fac_img2_preview" src="" style="display:none;width:56px;height:56px;object-fit:cover;border-radius:3px;border:1px solid rgba(184,138,30,.3);flex-shrink:0;">
+            <input type="text" id="ej_fac_img2_url" class="fc-input-da" placeholder="Billede 2 — Pool" style="flex:1;">
+            <input type="file" id="ej_fac_img2_file" accept="image/*" style="font-size:.76rem;">
+            <button onclick="uploadEjBillede('ej_fac_img2_file','ej_fac_img2_url','ej_fac_img2_preview')" style="background:#2a7a74;color:#fff;border:none;padding:.45rem 1.1rem;font-family:Manrope,sans-serif;font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;white-space:nowrap;">⬆ Upload</button>
+          </div>
+          <div style="display:flex;align-items:center;gap:.8rem;flex-wrap:wrap;">
+            <img id="ej_fac_img3_preview" src="" style="display:none;width:56px;height:56px;object-fit:cover;border-radius:3px;border:1px solid rgba(184,138,30,.3);flex-shrink:0;">
+            <input type="text" id="ej_fac_img3_url" class="fc-input-da" placeholder="Billede 3 — Spisning" style="flex:1;">
+            <input type="file" id="ej_fac_img3_file" accept="image/*" style="font-size:.76rem;">
+            <button onclick="uploadEjBillede('ej_fac_img3_file','ej_fac_img3_url','ej_fac_img3_preview')" style="background:#2a7a74;color:#fff;border:none;padding:.45rem 1.1rem;font-family:Manrope,sans-serif;font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;white-space:nowrap;">⬆ Upload</button>
+          </div>        </div>
+        <div style="text-align:right;margin-top:.8rem;"><button onclick="gemEjendommen()" style="background:#2a7a74;color:#fff;border:none;padding:.5rem 1.4rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;">💾 Gem</button></div>
+      </div>
+    </div>
+
+    <!-- 6 · BÆREDYGTIGHED -->
+    <div class="fc-block" id="ej_adm_sustain" style="margin-bottom:1.5rem;">
+      <div class="fc-block-header"><span class="fc-block-title">6 · Bæredygtighed</span></div>
+      <div class="fc-block-body">
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Label (DA)</label><input type="text" id="ej_sustain_label_da" class="fc-input-da" value="Bæredygtighed"></div>
+          <div><label class="fc-label fc-label-en">Label (EN)</label><input type="text" id="ej_sustain_label_en" class="fc-input-en" value="Sustainability"></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Overskrift (DA)</label><input type="text" id="ej_sustain_h2_da" class="fc-input-da" value="Ansvar for *naturen* omkring os"></div>
+          <div><label class="fc-label fc-label-en">Heading (EN)</label><input type="text" id="ej_sustain_h2_en" class="fc-input-en" value="Responsibility for the *nature* around us"></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Intro-afsnit (DA)</label><textarea id="ej_sustain_lead_da" class="fc-input-da fc-textarea">På Castillo del Alma tror vi på, at et ægte retreatsted ikke bare er skabt til menneskelig restitution — men også bærer et ansvar for den natur og de omgivelser, det er en del af.</textarea></div>
+          <div><label class="fc-label fc-label-en">Lead paragraph (EN)</label><textarea id="ej_sustain_lead_en" class="fc-input-en fc-textarea">At Castillo del Alma we believe that a true retreat space is not just created for human restoration — but also carries a responsibility for the nature and surroundings it is part of.</textarea></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Afsnit 1 (DA)</label><textarea id="ej_sustain_p1_da" class="fc-input-da fc-textarea">Castillo del Alma ligger midt i et landskab, hvor natur, vinmarker, stilhed og åbne vidder er en del af stedets sjæl.</textarea></div>
+          <div><label class="fc-label fc-label-en">Paragraph 1 (EN)</label><textarea id="ej_sustain_p1_en" class="fc-input-en fc-textarea">Castillo del Alma is set in a landscape where nature, vineyards, silence and open spaces are part of the soul of the place.</textarea></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Afsnit 2 (DA)</label><textarea id="ej_sustain_p2_da" class="fc-input-da fc-textarea">Vores vinmarker er en vigtig del af denne tilgang. De er ikke blot en smuk ramme omkring ejendommen, men et levende landskab vi har ansvar for at forvalte nænsomt.</textarea></div>
+          <div><label class="fc-label fc-label-en">Paragraph 2 (EN)</label><textarea id="ej_sustain_p2_en" class="fc-input-en fc-textarea">Our vineyards are an important part of this approach. They are not merely a beautiful frame around the property, but a living landscape we have a responsibility to manage with care.</textarea></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Afsnit 3 (DA)</label><textarea id="ej_sustain_p3_da" class="fc-input-da fc-textarea">Bæredygtighed handler for os om balance. Balancen mellem komfort og ansvar. Mellem gæstfrihed og ressourcebevidsthed.</textarea></div>
+          <div><label class="fc-label fc-label-en">Paragraph 3 (EN)</label><textarea id="ej_sustain_p3_en" class="fc-input-en fc-textarea">For us, sustainability is about balance. The balance between comfort and responsibility. Between hospitality and resource awareness.</textarea></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Afsnit 4 (DA)</label><textarea id="ej_sustain_p4_da" class="fc-input-da fc-textarea">Det betyder, at vi løbende arbejder med at træffe bedre valg i hverdagen — om energi, vandforbrug, lokale råvarer, ansvarlig drift og hensyn til biodiversitet.</textarea></div>
+          <div><label class="fc-label fc-label-en">Paragraph 4 (EN)</label><textarea id="ej_sustain_p4_en" class="fc-input-en fc-textarea">This means we continuously work to make better choices in everyday life — about energy, water consumption, local produce, responsible management and respect for biodiversity.</textarea></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Afsnit 5 (DA)</label><textarea id="ej_sustain_p5_da" class="fc-input-da fc-textarea">Vores ambition er ikke at være perfekte. Vores ambition er at være bevidste, ærlige og i konstant bevægelse mod en mere ansvarlig måde at drive et retreatsted på.</textarea></div>
+          <div><label class="fc-label fc-label-en">Paragraph 5 (EN)</label><textarea id="ej_sustain_p5_en" class="fc-input-en fc-textarea">Our ambition is not to be perfect. Our ambition is to be conscious, honest and in constant movement towards a more responsible way of running a retreat space.</textarea></div>
+        </div>
+        <p style="font-size:.68rem;color:rgba(44,35,24,.4);margin:1rem 0 .6rem;">5 bæredygtigheds-kort:</p>
+        <div style="background:rgba(44,35,24,.02);border:1px solid rgba(184,138,30,.1);padding:.8rem;margin-top:.6rem;">
+          <p style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:#7a5c14;margin-bottom:.5rem;">Varmt vand fra solenergi</p>
+          <div class="fc-row">
+            <div><label class="fc-label fc-label-da">Titel (DA)</label><input type="text" id="ej_eco_solvarme_h4_da" class="fc-input-da" value="Varmt vand fra solenergi"></div>
+            <div><label class="fc-label fc-label-en">Title (EN)</label><input type="text" id="ej_eco_solvarme_h4_en" class="fc-input-en" value="Hot water from solar energy"></div>
+          </div>
+          <div class="fc-row">
+            <div><label class="fc-label fc-label-da">Tekst (DA)</label><textarea id="ej_eco_solvarme_p_da" class="fc-input-da fc-textarea">Solvarmesystem dækker ejendommens samlede varmtvandsforbrug hele året rundt.</textarea></div>
+            <div><label class="fc-label fc-label-en">Text (EN)</label><textarea id="ej_eco_solvarme_p_en" class="fc-input-en fc-textarea">Solar heating system covers the property's total hot water consumption all year round.</textarea></div>
+          </div>
+        </div>
+        <div style="background:rgba(44,35,24,.02);border:1px solid rgba(184,138,30,.1);padding:.8rem;margin-top:.6rem;">
+          <p style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:#7a5c14;margin-bottom:.5rem;">Gulvvarme fra solenergi</p>
+          <div class="fc-row">
+            <div><label class="fc-label fc-label-da">Titel (DA)</label><input type="text" id="ej_eco_gulvvarme_h4_da" class="fc-input-da" value="Gulvvarme fra solenergi"></div>
+            <div><label class="fc-label fc-label-en">Title (EN)</label><input type="text" id="ej_eco_gulvvarme_h4_en" class="fc-input-en" value="Underfloor heating from solar energy"></div>
+          </div>
+          <div class="fc-row">
+            <div><label class="fc-label fc-label-da">Tekst (DA)</label><textarea id="ej_eco_gulvvarme_p_da" class="fc-input-da fc-textarea">Gulvvarme i hele huset opvarmes udelukkende af ejendommens eget solvarmeanlæg.</textarea></div>
+            <div><label class="fc-label fc-label-en">Text (EN)</label><textarea id="ej_eco_gulvvarme_p_en" class="fc-input-en fc-textarea">Underfloor heating throughout the house is powered exclusively by the property's own solar heating system.</textarea></div>
+          </div>
+        </div>
+        <div style="background:rgba(44,35,24,.02);border:1px solid rgba(184,138,30,.1);padding:.8rem;margin-top:.6rem;">
+          <p style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:#7a5c14;margin-bottom:.5rem;">Top isoleret bygning</p>
+          <div class="fc-row">
+            <div><label class="fc-label fc-label-da">Titel (DA)</label><input type="text" id="ej_eco_isolering_h4_da" class="fc-input-da" value="Top isoleret bygning"></div>
+            <div><label class="fc-label fc-label-en">Title (EN)</label><input type="text" id="ej_eco_isolering_h4_en" class="fc-input-en" value="Top insulated building"></div>
+          </div>
+          <div class="fc-row">
+            <div><label class="fc-label fc-label-da">Tekst (DA)</label><textarea id="ej_eco_isolering_p_da" class="fc-input-da fc-textarea">Ejendommen er bygget med høj isoleringsstandard — minimalt energiforbrug året rundt.</textarea></div>
+            <div><label class="fc-label fc-label-en">Text (EN)</label><textarea id="ej_eco_isolering_p_en" class="fc-input-en fc-textarea">The property is built to a high insulation standard — minimal energy consumption year round.</textarea></div>
+          </div>
+        </div>
+        <div style="background:rgba(44,35,24,.02);border:1px solid rgba(184,138,30,.1);padding:.8rem;margin-top:.6rem;">
+          <p style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:#7a5c14;margin-bottom:.5rem;">Biologisk ECO-kloaksystem</p>
+          <div class="fc-row">
+            <div><label class="fc-label fc-label-da">Titel (DA)</label><input type="text" id="ej_eco_kloak_h4_da" class="fc-input-da" value="Biologisk ECO-kloaksystem"></div>
+            <div><label class="fc-label fc-label-en">Title (EN)</label><input type="text" id="ej_eco_kloak_h4_en" class="fc-input-en" value="Biological ECO sewage system"></div>
+          </div>
+          <div class="fc-row">
+            <div><label class="fc-label fc-label-da">Tekst (DA)</label><textarea id="ej_eco_kloak_p_da" class="fc-input-da fc-textarea">Spildevand renses naturligt via mikroorganismer uden brug af kemikalier.</textarea></div>
+            <div><label class="fc-label fc-label-en">Text (EN)</label><textarea id="ej_eco_kloak_p_en" class="fc-input-en fc-textarea">Wastewater is purified naturally via microorganisms without the use of chemicals.</textarea></div>
+          </div>
+        </div>
+        <div style="background:rgba(44,35,24,.02);border:1px solid rgba(184,138,30,.1);padding:.8rem;margin-top:.6rem;">
+          <p style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:#7a5c14;margin-bottom:.5rem;">Egen brønd — 105 m dyb</p>
+          <div class="fc-row">
+            <div><label class="fc-label fc-label-da">Titel (DA)</label><input type="text" id="ej_eco_broend_h4_da" class="fc-input-da" value="Egen brønd — 105 m dyb"></div>
+            <div><label class="fc-label fc-label-en">Title (EN)</label><input type="text" id="ej_eco_broend_h4_en" class="fc-input-en" value="Own well — 105 m deep"></div>
+          </div>
+          <div class="fc-row">
+            <div><label class="fc-label fc-label-da">Tekst (DA)</label><textarea id="ej_eco_broend_p_da" class="fc-input-da fc-textarea">Castillo del Alma har sin egen 105 meter dybe artesiske brønd. Rent naturligt grundvand, direkte fra kilden.</textarea></div>
+            <div><label class="fc-label fc-label-en">Text (EN)</label><textarea id="ej_eco_broend_p_en" class="fc-input-en fc-textarea">Castillo del Alma has its own 105-metre deep artesian well. Pure natural groundwater, directly from the source.</textarea></div>
+          </div>
+        </div>
+        <p style="font-size:.68rem;color:rgba(44,35,24,.4);margin:1rem 0 .4rem;">Billeder (2 stk):</p>
+        <div style="display:flex;flex-direction:column;gap:.6rem;padding:.9rem;background:rgba(42,122,116,.06);border:1px solid rgba(42,122,116,.2);">
+          <div style="display:flex;align-items:center;gap:.8rem;flex-wrap:wrap;">
+            <img id="ej_sustain_img1_preview" src="" style="display:none;width:56px;height:56px;object-fit:cover;border-radius:3px;border:1px solid rgba(184,138,30,.3);flex-shrink:0;">
+            <input type="text" id="ej_sustain_img1_url" class="fc-input-da" placeholder="Bæredygtighed 1" style="flex:1;">
+            <input type="file" id="ej_sustain_img1_file" accept="image/*" style="font-size:.76rem;">
+            <button onclick="uploadEjBillede('ej_sustain_img1_file','ej_sustain_img1_url','ej_sustain_img1_preview')" style="background:#2a7a74;color:#fff;border:none;padding:.45rem 1.1rem;font-family:Manrope,sans-serif;font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;white-space:nowrap;">⬆ Upload</button>
+          </div>
+          <div style="display:flex;align-items:center;gap:.8rem;flex-wrap:wrap;">
+            <img id="ej_sustain_img2_preview" src="" style="display:none;width:56px;height:56px;object-fit:cover;border-radius:3px;border:1px solid rgba(184,138,30,.3);flex-shrink:0;">
+            <input type="text" id="ej_sustain_img2_url" class="fc-input-da" placeholder="Bæredygtighed 2" style="flex:1;">
+            <input type="file" id="ej_sustain_img2_file" accept="image/*" style="font-size:.76rem;">
+            <button onclick="uploadEjBillede('ej_sustain_img2_file','ej_sustain_img2_url','ej_sustain_img2_preview')" style="background:#2a7a74;color:#fff;border:none;padding:.45rem 1.1rem;font-family:Manrope,sans-serif;font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;white-space:nowrap;">⬆ Upload</button>
+          </div>        </div>
+        <div style="text-align:right;margin-top:.8rem;"><button onclick="gemEjendommen()" style="background:#2a7a74;color:#fff;border:none;padding:.5rem 1.4rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;">💾 Gem</button></div>
+      </div>
+    </div>
+
+    <!-- 7 · VINGÅRDEN -->
+    <div class="fc-block" id="ej_adm_vineyard" style="margin-bottom:1.5rem;">
+      <div class="fc-block-header"><span class="fc-block-title">7 · Vingården</span></div>
+      <div class="fc-block-body">
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Label (DA)</label><input type="text" id="ej_vineyard_label_da" class="fc-input-da" value="Vingården"></div>
+          <div><label class="fc-label fc-label-en">Label (EN)</label><input type="text" id="ej_vineyard_label_en" class="fc-input-en" value="The Vineyard"></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Overskrift (DA)</label><input type="text" id="ej_vineyard_h2_da" class="fc-input-da" value="Husets egne vine — Málaga *D.O.*"></div>
+          <div><label class="fc-label fc-label-en">Heading (EN)</label><input type="text" id="ej_vineyard_h2_en" class="fc-input-en" value="The estate's own wines — Málaga *D.O.*"></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Afsnit 1 (DA)</label><textarea id="ej_vineyard_p1_da" class="fc-input-da fc-textarea">Castillo del Alma råder over mere end 4 hektar jord med egne vinmarker smukt beliggende i det solrige landskab omkring Mollina.</textarea></div>
+          <div><label class="fc-label fc-label-en">Paragraph 1 (EN)</label><textarea id="ej_vineyard_p1_en" class="fc-input-en fc-textarea">Castillo del Alma has more than 4 hectares of land with its own vineyards beautifully located in the sunny landscape around Mollina.</textarea></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Afsnit 2 (DA)</label><textarea id="ej_vineyard_p2_da" class="fc-input-da fc-textarea">Vingården dyrkes med 65% Cabernet Sauvignon og 35% Merlot under Málaga Denominación de Origen — en af Andalusiens stolteste vinregioner.</textarea></div>
+          <div><label class="fc-label fc-label-en">Paragraph 2 (EN)</label><textarea id="ej_vineyard_p2_en" class="fc-input-en fc-textarea">The vineyard is cultivated with 65% Cabernet Sauvignon and 35% Merlot under the Málaga Denominación de Origen — one of Andalusia's proudest wine regions.</textarea></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Afsnit 3 (DA)</label><textarea id="ej_vineyard_p3_da" class="fc-input-da fc-textarea">Området omkring Mollina er særligt kendt for sine mange solskinstimer, varme dage og køligere nætter, som skaber optimale betingelser for dyrkning af kvalitetsdruer.</textarea></div>
+          <div><label class="fc-label fc-label-en">Paragraph 3 (EN)</label><textarea id="ej_vineyard_p3_en" class="fc-input-en fc-textarea">The area around Mollina is particularly known for its many hours of sunshine, warm days and cooler nights, which create optimal conditions for growing quality grapes.</textarea></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Afsnit 4 (DA)</label><textarea id="ej_vineyard_p4_da" class="fc-input-da fc-textarea">Husets vin serveres ved retreats og private events — og kan købes med hjem som et smukt minde om opholdet.</textarea></div>
+          <div><label class="fc-label fc-label-en">Paragraph 4 (EN)</label><textarea id="ej_vineyard_p4_en" class="fc-input-en fc-textarea">The estate's wine is served at retreats and private events — and can be purchased to take home as a beautiful memento of the stay.</textarea></div>
+        </div>
+        <div style="margin-top:.8rem;padding:.9rem;background:rgba(42,122,116,.06);border:1px solid rgba(42,122,116,.2);">
+          <label class="fc-label" style="color:#2a7a74;">📁 Vingårds-billede</label>
+          <div style="display:flex;align-items:center;gap:.8rem;flex-wrap:wrap;margin-top:.5rem;">
+            <img id="ej_vineyard_img_preview" src="" style="display:none;width:56px;height:56px;object-fit:cover;border-radius:3px;border:1px solid rgba(184,138,30,.3);flex-shrink:0;">
+            <input type="text" id="ej_vineyard_img_url" class="fc-input-da" placeholder="URL til vingårds-billede" style="flex:1;">
+            <input type="file" id="ej_vineyard_img_file" accept="image/*" style="font-size:.76rem;">
+            <button onclick="uploadEjBillede('ej_vineyard_img_file','ej_vineyard_img_url','ej_vineyard_img_preview')" style="background:#2a7a74;color:#fff;border:none;padding:.45rem 1.1rem;font-family:Manrope,sans-serif;font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;white-space:nowrap;">⬆ Upload</button>
+          </div>
+        </div>
+        <div style="text-align:right;margin-top:.8rem;"><button onclick="gemEjendommen()" style="background:#2a7a74;color:#fff;border:none;padding:.5rem 1.4rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;">💾 Gem</button></div>
+      </div>
+    </div>
+
+    <!-- 8 · BELIGGENHED -->
+    <div class="fc-block" id="ej_adm_location" style="margin-bottom:1.5rem;">
+      <div class="fc-block-header"><span class="fc-block-title">8 · Beliggenhed</span></div>
+      <div class="fc-block-body">
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Label (DA)</label><input type="text" id="ej_location_label_da" class="fc-input-da" value="Beliggenhed"></div>
+          <div><label class="fc-label fc-label-en">Label (EN)</label><input type="text" id="ej_location_label_en" class="fc-input-en" value="Location"></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Overskrift (DA)</label><input type="text" id="ej_location_h2_da" class="fc-input-da" value="Mollina — hjertet af *Andalucía*"></div>
+          <div><label class="fc-label fc-label-en">Heading (EN)</label><input type="text" id="ej_location_h2_en" class="fc-input-en" value="Mollina — the heart of *Andalucía*"></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Afsnit 1 (DA)</label><textarea id="ej_location_p1_da" class="fc-input-da fc-textarea">Castillo del Alma ligger i Mollina, en lille andalusisk by i Málaga-provinsen. Omgivet af vinmarker, olivenlunde og et imponerende bjerglandskab er stedet perfekt til at koble fra og finde ro.</textarea></div>
+          <div><label class="fc-label fc-label-en">Paragraph 1 (EN)</label><textarea id="ej_location_p1_en" class="fc-input-en fc-textarea">Castillo del Alma is located in Mollina, a small Andalusian town in the Málaga province. Surrounded by vineyards, olive groves and an impressive mountain landscape, the place is perfect for disconnecting and finding calm.</textarea></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Afsnit 2 (DA)</label><textarea id="ej_location_p2_da" class="fc-input-da fc-textarea">Placeringen er ideel — central nok til at udforske Andalusiens kulturelle skatte, men tilpas afsides til at give den stilhed og fred som et retreat kræver.</textarea></div>
+          <div><label class="fc-label fc-label-en">Paragraph 2 (EN)</label><textarea id="ej_location_p2_en" class="fc-input-en fc-textarea">The location is ideal — central enough to explore Andalusia's cultural treasures, but sufficiently remote to provide the silence and peace that a retreat requires.</textarea></div>
+        </div>
+        <p style="font-size:.68rem;color:rgba(44,35,24,.4);margin:1rem 0 .6rem;">Afstande (by + tid):</p>
+        <div style="display:grid;grid-template-columns:1fr 1fr 100px 100px;gap:.5rem;align-items:center;padding:.4rem 0;border-bottom:1px solid rgba(184,138,30,.08);">
+          <input type="text" id="ej_dist_antequera_navn_da" class="fc-input-da" value="Antequera" style="font-size:.78rem;padding:.35rem .6rem;">
+          <input type="text" id="ej_dist_antequera_navn_en" class="fc-input-en" value="Antequera" style="font-size:.78rem;padding:.35rem .6rem;">
+          <input type="text" id="ej_dist_antequera_tid_da" class="fc-input-da" value="15 min" style="font-size:.78rem;padding:.35rem .6rem;text-align:center;">
+          <input type="text" id="ej_dist_antequera_tid_en" class="fc-input-en" value="15 min" style="font-size:.78rem;padding:.35rem .6rem;text-align:center;">
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 100px 100px;gap:.5rem;align-items:center;padding:.4rem 0;border-bottom:1px solid rgba(184,138,30,.08);">
+          <input type="text" id="ej_dist_malaga_navn_da" class="fc-input-da" value="Málaga ciudad" style="font-size:.78rem;padding:.35rem .6rem;">
+          <input type="text" id="ej_dist_malaga_navn_en" class="fc-input-en" value="Málaga city" style="font-size:.78rem;padding:.35rem .6rem;">
+          <input type="text" id="ej_dist_malaga_tid_da" class="fc-input-da" value="55 min" style="font-size:.78rem;padding:.35rem .6rem;text-align:center;">
+          <input type="text" id="ej_dist_malaga_tid_en" class="fc-input-en" value="55 min" style="font-size:.78rem;padding:.35rem .6rem;text-align:center;">
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 100px 100px;gap:.5rem;align-items:center;padding:.4rem 0;border-bottom:1px solid rgba(184,138,30,.08);">
+          <input type="text" id="ej_dist_caminito_navn_da" class="fc-input-da" value="Caminito del Rey" style="font-size:.78rem;padding:.35rem .6rem;">
+          <input type="text" id="ej_dist_caminito_navn_en" class="fc-input-en" value="Caminito del Rey" style="font-size:.78rem;padding:.35rem .6rem;">
+          <input type="text" id="ej_dist_caminito_tid_da" class="fc-input-da" value="40 min" style="font-size:.78rem;padding:.35rem .6rem;text-align:center;">
+          <input type="text" id="ej_dist_caminito_tid_en" class="fc-input-en" value="40 min" style="font-size:.78rem;padding:.35rem .6rem;text-align:center;">
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 100px 100px;gap:.5rem;align-items:center;padding:.4rem 0;border-bottom:1px solid rgba(184,138,30,.08);">
+          <input type="text" id="ej_dist_ronda_navn_da" class="fc-input-da" value="Ronda" style="font-size:.78rem;padding:.35rem .6rem;">
+          <input type="text" id="ej_dist_ronda_navn_en" class="fc-input-en" value="Ronda" style="font-size:.78rem;padding:.35rem .6rem;">
+          <input type="text" id="ej_dist_ronda_tid_da" class="fc-input-da" value="75 min" style="font-size:.78rem;padding:.35rem .6rem;text-align:center;">
+          <input type="text" id="ej_dist_ronda_tid_en" class="fc-input-en" value="75 min" style="font-size:.78rem;padding:.35rem .6rem;text-align:center;">
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 100px 100px;gap:.5rem;align-items:center;padding:.4rem 0;border-bottom:1px solid rgba(184,138,30,.08);">
+          <input type="text" id="ej_dist_cordoba_navn_da" class="fc-input-da" value="Córdoba" style="font-size:.78rem;padding:.35rem .6rem;">
+          <input type="text" id="ej_dist_cordoba_navn_en" class="fc-input-en" value="Córdoba" style="font-size:.78rem;padding:.35rem .6rem;">
+          <input type="text" id="ej_dist_cordoba_tid_da" class="fc-input-da" value="90 min" style="font-size:.78rem;padding:.35rem .6rem;text-align:center;">
+          <input type="text" id="ej_dist_cordoba_tid_en" class="fc-input-en" value="90 min" style="font-size:.78rem;padding:.35rem .6rem;text-align:center;">
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 100px 100px;gap:.5rem;align-items:center;padding:.4rem 0;border-bottom:1px solid rgba(184,138,30,.08);">
+          <input type="text" id="ej_dist_granada_navn_da" class="fc-input-da" value="Granada" style="font-size:.78rem;padding:.35rem .6rem;">
+          <input type="text" id="ej_dist_granada_navn_en" class="fc-input-en" value="Granada" style="font-size:.78rem;padding:.35rem .6rem;">
+          <input type="text" id="ej_dist_granada_tid_da" class="fc-input-da" value="90 min" style="font-size:.78rem;padding:.35rem .6rem;text-align:center;">
+          <input type="text" id="ej_dist_granada_tid_en" class="fc-input-en" value="90 min" style="font-size:.78rem;padding:.35rem .6rem;text-align:center;">
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 100px 100px;gap:.5rem;align-items:center;padding:.4rem 0;border-bottom:1px solid rgba(184,138,30,.08);">
+          <input type="text" id="ej_dist_sevilla_navn_da" class="fc-input-da" value="Sevilla" style="font-size:.78rem;padding:.35rem .6rem;">
+          <input type="text" id="ej_dist_sevilla_navn_en" class="fc-input-en" value="Seville" style="font-size:.78rem;padding:.35rem .6rem;">
+          <input type="text" id="ej_dist_sevilla_tid_da" class="fc-input-da" value="2,5 timer" style="font-size:.78rem;padding:.35rem .6rem;text-align:center;">
+          <input type="text" id="ej_dist_sevilla_tid_en" class="fc-input-en" value="2.5 hours" style="font-size:.78rem;padding:.35rem .6rem;text-align:center;">
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 100px 100px;gap:.5rem;align-items:center;padding:.4rem 0;border-bottom:1px solid rgba(184,138,30,.08);">
+          <input type="text" id="ej_dist_lufthavn_navn_da" class="fc-input-da" value="Málaga Lufthavn" style="font-size:.78rem;padding:.35rem .6rem;">
+          <input type="text" id="ej_dist_lufthavn_navn_en" class="fc-input-en" value="Málaga Airport" style="font-size:.78rem;padding:.35rem .6rem;">
+          <input type="text" id="ej_dist_lufthavn_tid_da" class="fc-input-da" value="60 min" style="font-size:.78rem;padding:.35rem .6rem;text-align:center;">
+          <input type="text" id="ej_dist_lufthavn_tid_en" class="fc-input-en" value="60 min" style="font-size:.78rem;padding:.35rem .6rem;text-align:center;">
+        </div>
+        <div style="text-align:right;margin-top:.8rem;"><button onclick="gemEjendommen()" style="background:#2a7a74;color:#fff;border:none;padding:.5rem 1.4rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;">💾 Gem</button></div>
+      </div>
+    </div>
+
+    <!-- 9 · CTA -->
+    <div class="fc-block" id="ej_adm_cta" style="margin-bottom:1.5rem;">
+      <div class="fc-block-header"><span class="fc-block-title">9 · Call-to-action sektion</span></div>
+      <div class="fc-block-body">
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Overskrift (DA)</label><input type="text" id="ej_cta_h2_da" class="fc-input-da" value="Klar til at opleve Castillo del Alma?"></div>
+          <div><label class="fc-label fc-label-en">Heading (EN)</label><input type="text" id="ej_cta_h2_en" class="fc-input-en" value="Ready to experience Castillo del Alma?"></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Tekst (DA)</label><textarea id="ej_cta_text_da" class="fc-input-da fc-textarea">Book dit retreat, lej ejendommen privat eller kontakt os for en personlig dialog om dine ønsker.</textarea></div>
+          <div><label class="fc-label fc-label-en">Text (EN)</label><textarea id="ej_cta_text_en" class="fc-input-en fc-textarea">Book your retreat, rent the property privately or contact us for a personal conversation about your wishes.</textarea></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Knap 1 (DA)</label><input type="text" id="ej_cta_btn1_da" class="fc-input-da" value="Se Retreats"></div>
+          <div><label class="fc-label fc-label-en">Button 1 (EN)</label><input type="text" id="ej_cta_btn1_en" class="fc-input-en" value="View Retreats"></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Knap 2 (DA)</label><input type="text" id="ej_cta_btn2_da" class="fc-input-da" value="Kontakt os"></div>
+          <div><label class="fc-label fc-label-en">Button 2 (EN)</label><input type="text" id="ej_cta_btn2_en" class="fc-input-en" value="Contact us"></div>
+        </div>
+        <div style="text-align:right;margin-top:.8rem;"><button onclick="gemEjendommen()" style="background:#2a7a74;color:#fff;border:none;padding:.5rem 1.4rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;">💾 Gem</button></div>
+      </div>
+    </div>
+
+    <!-- 10 · FOOTER -->
+    <div class="fc-block" id="ej_adm_footer" style="margin-bottom:1.5rem;">
+      <div class="fc-block-header"><span class="fc-block-title">10 · Footer</span></div>
+      <div class="fc-block-body">
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Copyright-tekst (DA)</label><input type="text" id="ej_footer_copy_da" class="fc-input-da" value="© 2026 Castillo del Alma · Mollina, Málaga · All rights reserved"></div>
+          <div><label class="fc-label fc-label-en">Copyright text (EN)</label><input type="text" id="ej_footer_copy_en" class="fc-input-en" value="© 2026 Castillo del Alma · Mollina, Málaga · All rights reserved"></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Tilbage-link (DA)</label><input type="text" id="ej_footer_link_da" class="fc-input-da" value="← Tilbage til forsiden"></div>
+          <div><label class="fc-label fc-label-en">Back link (EN)</label><input type="text" id="ej_footer_link_en" class="fc-input-en" value="← Back to front page"></div>
+        </div>
+        <div style="text-align:right;margin-top:.8rem;"><button onclick="gemEjendommen()" style="background:#2a7a74;color:#fff;border:none;padding:.5rem 1.4rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;">💾 Gem</button></div>
+      </div>
+    </div>
+
   </div>
 
   <!-- FANE: UDLEJNING -->
@@ -3156,7 +3835,7 @@ function loadSubTab(sub) {
   if (sub === 'anmeldelser') loadAnmeldelserFane();
   if (sub === 'indstillinger') loadSettings();
   if (sub === 'forside') loadForside();
-  // 'ejendommen' og 'udlejning' tilføjes når deres indhold bygges
+  if (sub === 'ejendommen') loadEjendommensAdmin();
 }
 
 // ── ANMELDELSER ──
@@ -5535,6 +6214,207 @@ function tilfoejExtraDate() {
 function fjernExtraDate(i) {
   extraDatesState.splice(i, 1);
   renderExtraDatesListe();
+}
+
+// ── EJENDOMMEN ADMIN ──
+
+const EJ_CONTENT_KEYS = [
+  // nav
+  'nav_intro','nav_towers','nav_rooms','nav_fac','nav_sustain','nav_vineyard','nav_location','nav_back',
+  // hero
+  'hero_eyebrow','hero_h1','hero_img',
+  // intro
+  'intro_label','intro_h2','intro_p1','intro_p2','intro_p3','intro_img1','intro_img2',
+  // facts
+  'fact_area_h4','fact_area_p','fact_vineyard_h4','fact_vineyard_p','fact_towers_h4','fact_towers_p',
+  'fact_rooms_h4','fact_rooms_p','fact_year_h4','fact_year_p','fact_do_h4','fact_do_p',
+  // towers
+  'towers_label','towers_h2','towers_caption','towers_p1','towers_p2','towers_p3','towers_img',
+  // rooms
+  'rooms_label','rooms_h2','rooms_intro',
+  // facilities
+  'fac_label','fac_h2',
+  'fac_pool_h4','fac_pool_p','fac_sauna_finsk_h4','fac_sauna_finsk_p','fac_sauna_infra_h4','fac_sauna_infra_p',
+  'fac_faellesrum_h4','fac_faellesrum_p','fac_retreat_rum_h4','fac_retreat_rum_p',
+  'fac_terasser_h4','fac_terasser_p','fac_koekken_h4','fac_koekken_p','fac_spisebord_h4','fac_spisebord_p',
+  'fac_wifi_h4','fac_wifi_p','fac_parkering_h4','fac_parkering_p','fac_aflaaset_h4','fac_aflaaset_p',
+  'fac_vindyrkning_h4','fac_vindyrkning_p',
+  'fac_img1','fac_img2','fac_img3',
+  // sustainability
+  'sustain_label','sustain_h2','sustain_lead','sustain_p1','sustain_p2','sustain_p3','sustain_p4','sustain_p5',
+  'sustain_img1','sustain_img2',
+  'eco_solvarme_h4','eco_solvarme_p','eco_gulvvarme_h4','eco_gulvvarme_p','eco_isolering_h4','eco_isolering_p',
+  'eco_kloak_h4','eco_kloak_p','eco_broend_h4','eco_broend_p',
+  // vineyard
+  'vineyard_label','vineyard_h2','vineyard_p1','vineyard_p2','vineyard_p3','vineyard_p4','vineyard_img',
+  // location
+  'location_label','location_h2','location_p1','location_p2',
+  'dist_antequera_navn','dist_antequera_tid','dist_malaga_navn','dist_malaga_tid',
+  'dist_caminito_navn','dist_caminito_tid','dist_ronda_navn','dist_ronda_tid',
+  'dist_cordoba_navn','dist_cordoba_tid','dist_granada_navn','dist_granada_tid',
+  'dist_sevilla_navn','dist_sevilla_tid','dist_lufthavn_navn','dist_lufthavn_tid',
+  // cta + footer
+  'cta_h2','cta_text','cta_btn1','cta_btn2','footer_copy','footer_link',
+];
+
+async function loadEjendommensAdmin() {
+  if (!sb) return;
+  try {
+    const { data, error } = await sb.from('ejendommen_content').select('key,value');
+    if (error) throw error;
+    const map = {};
+    (data || []).forEach(r => { map[r.key] = r.value; });
+
+    // Udfyld alle felter
+    EJ_CONTENT_KEYS.forEach(key => {
+      ['da','en'].forEach(lang => {
+        const elId = `ej_${key}_${lang}`;
+        const el = document.getElementById(elId);
+        const val = map[lang === 'da' ? key : key + '_en'] || map[key];
+        if (el && val) el.value = val;
+        // Preview for billeder
+        if (el && val && (key.includes('_img') || key === 'hero_img')) {
+          const preview = document.getElementById(elId.replace('_url','') + '_preview') ||
+                          document.getElementById(`ej_${key}_preview`);
+          if (preview) { preview.src = val; preview.style.display = 'inline-block'; }
+        }
+      });
+    });
+
+    // Load rum-liste
+    await loadEjRomsListe();
+  } catch(e) {
+    console.warn('loadEjendommensAdmin fejl:', e.message);
+  }
+}
+
+async function gemEjendommen() {
+  if (!sb) return;
+  const upserts = [];
+  EJ_CONTENT_KEYS.forEach(key => {
+    ['da','en'].forEach(lang => {
+      const el = document.getElementById(`ej_${key}_${lang}`);
+      if (!el) return;
+      const dbKey = lang === 'en' ? key + '_en' : key;
+      upserts.push({ key: dbKey, value: el.value });
+    });
+  });
+
+  try {
+    const { error } = await sb.from('ejendommen_content').upsert(upserts, { onConflict: 'key' });
+    if (error) throw error;
+    // Gem rum
+    await gemEjRooms();
+    showToast('✓ Ejendommen gemt!');
+  } catch(e) {
+    showToast('Fejl: ' + e.message, true);
+  }
+}
+
+async function uploadEjBillede(inputId, urlFieldId, thumbId) {
+  const input = document.getElementById(inputId);
+  if (!input || !input.files.length) { showToast('Vælg en fil først', true); return; }
+  try {
+    const file = input.files[0];
+    const ext = file.name.split('.').pop();
+    const filename = `ejendommen/${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
+    const { error } = await sb.storage.from('retreat-images').upload(filename, file);
+    if (error) throw error;
+    const { data: urlData } = sb.storage.from('retreat-images').getPublicUrl(filename);
+    const urlField = document.getElementById(urlFieldId);
+    if (urlField) urlField.value = urlData.publicUrl;
+    const thumb = document.getElementById(thumbId);
+    if (thumb) { thumb.src = urlData.publicUrl; thumb.style.display = 'inline-block'; }
+    input.value = '';
+    showToast('Billede uploadet ✓');
+  } catch(e) {
+    showToast('Upload fejl: ' + e.message, true);
+  }
+}
+
+// ─── RUM EDITOR ───
+let ejRoomsState = [];
+
+async function loadEjRomsListe() {
+  if (!sb) return;
+  try {
+    const { data } = await sb.from('ejendommen_rooms').select('*').order('sort_order');
+    ejRoomsState = data || [];
+    renderEjRomsListe();
+  } catch(e) { console.warn('loadEjRomsListe fejl:', e.message); }
+}
+
+function renderEjRomsListe() {
+  const container = document.getElementById('ejRomsListe');
+  if (!container) return;
+  container.innerHTML = ejRoomsState.map((r, i) => {
+    let features = r.features || [];
+    if (typeof features === 'string') { try { features = JSON.parse(features); } catch(e) { features = []; } }
+    return `<div class="fc-block fc-sub" style="margin-bottom:.8rem;">
+      <div class="fc-block-header" style="cursor:pointer;background:rgba(184,138,30,.05);" onclick="this.parentElement.classList.toggle('fc-collapsed')">
+        <span class="fc-block-title" style="font-size:.82rem;">${String(i+1).padStart(2,'0')} · ${r.name_da || 'Nyt værelse'}</span>
+        <span style="font-size:.65rem;color:rgba(44,35,24,.4);">▾</span>
+      </div>
+      <div class="fc-block-body fc-collapsible">
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Navn (DA)</label><input type="text" id="ejr_${r.id}_name_da" class="fc-input-da" value="${r.name_da || ''}" placeholder="Suite del Alma"></div>
+          <div><label class="fc-label fc-label-en">Name (EN)</label><input type="text" id="ejr_${r.id}_name_en" class="fc-input-en" value="${r.name_en || ''}" placeholder="Suite del Alma"></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Beskrivelse (DA)</label><textarea id="ejr_${r.id}_desc_da" class="fc-input-da fc-textarea">${r.description_da || ''}</textarea></div>
+          <div><label class="fc-label fc-label-en">Description (EN)</label><textarea id="ejr_${r.id}_desc_en" class="fc-input-en fc-textarea">${r.description_en || ''}</textarea></div>
+        </div>
+        <div>
+          <label class="fc-label" style="color:rgba(44,35,24,.6);">Faciliteter (de små kasser — 3 til 7 tekster, ét per linje)</label>
+          <textarea id="ejr_${r.id}_features" class="fc-input-da fc-textarea" rows="4" placeholder="King-size&#10;Privat terrasse&#10;Badekar&#10;Tårnudsigt">${features.join('\n')}</textarea>
+        </div>
+        <div style="margin-top:.8rem;padding:.8rem;background:rgba(42,122,116,.04);border:1px solid rgba(42,122,116,.15);">
+          <label class="fc-label" style="color:#2a7a74;">📁 Billede</label>
+          <div style="display:flex;align-items:center;gap:.8rem;flex-wrap:wrap;margin-top:.4rem;">
+            <img id="ejr_${r.id}_img_preview" src="${r.hero_image || ''}" style="${r.hero_image ? '' : 'display:none;'}width:56px;height:56px;object-fit:cover;border-radius:3px;border:1px solid rgba(184,138,30,.3);flex-shrink:0;">
+            <input type="text" id="ejr_${r.id}_img_url" class="fc-input-da" value="${r.hero_image || ''}" placeholder="URL til billede" style="flex:1;">
+            <input type="file" id="ejr_${r.id}_img_file" accept="image/*" style="font-size:.76rem;" onchange="uploadEjRoomImg(${r.id})">
+            <button onclick="uploadEjRoomImg(${r.id})" style="background:#2a7a74;color:#fff;border:none;padding:.45rem 1.1rem;font-family:Manrope,sans-serif;font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;white-space:nowrap;">⬆ Upload</button>
+          </div>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+async function uploadEjRoomImg(roomId) {
+  const input = document.getElementById(`ejr_${roomId}_img_file`);
+  if (!input || !input.files.length) return;
+  try {
+    const file = input.files[0];
+    const ext = file.name.split('.').pop();
+    const filename = `ejendommen/rooms/${roomId}-${Date.now()}.${ext}`;
+    const { error } = await sb.storage.from('retreat-images').upload(filename, file);
+    if (error) throw error;
+    const { data: urlData } = sb.storage.from('retreat-images').getPublicUrl(filename);
+    const urlField = document.getElementById(`ejr_${roomId}_img_url`);
+    if (urlField) urlField.value = urlData.publicUrl;
+    const preview = document.getElementById(`ejr_${roomId}_img_preview`);
+    if (preview) { preview.src = urlData.publicUrl; preview.style.display = 'inline-block'; }
+    input.value = '';
+    showToast('Billede uploadet ✓');
+  } catch(e) { showToast('Upload fejl: ' + e.message, true); }
+}
+
+async function gemEjRooms() {
+  for (const r of ejRoomsState) {
+    const features_raw = document.getElementById(`ejr_${r.id}_features`)?.value || '';
+    const features = features_raw.split('\n').map(f => f.trim()).filter(Boolean);
+    const payload = {
+      name_da: document.getElementById(`ejr_${r.id}_name_da`)?.value || r.name_da,
+      name_en: document.getElementById(`ejr_${r.id}_name_en`)?.value || r.name_en,
+      description_da: document.getElementById(`ejr_${r.id}_desc_da`)?.value || r.description_da,
+      description_en: document.getElementById(`ejr_${r.id}_desc_en`)?.value || r.description_en,
+      features: JSON.stringify(features),
+      hero_image: document.getElementById(`ejr_${r.id}_img_url`)?.value || r.hero_image,
+    };
+    await sb.from('ejendommen_rooms').update(payload).eq('id', r.id);
+  }
 }
 
 // ── VÆRELSE PRISER EDITOR ──
