@@ -6423,6 +6423,29 @@ function renderEjRomsListe() {
   container.innerHTML = ejRoomsState.map((r, i) => {
     let features = r.features || [];
     if (typeof features === 'string') { try { features = JSON.parse(features); } catch(e) { features = []; } }
+    let features_en = r.features_en || [];
+    if (typeof features_en === 'string') { try { features_en = JSON.parse(features_en); } catch(e) { features_en = []; } }
+    let gallery = r.gallery_images || [];
+    if (typeof gallery === 'string') { try { gallery = JSON.parse(gallery); } catch(e) { gallery = []; } }
+
+    // Galleri-billeder (4 slots)
+    const galleryHtml = [0,1,2,3].map(idx => {
+      const url = gallery[idx] || '';
+      const isFirst = idx === 0;
+      const isLast = idx === 3 || idx === gallery.length - 1;
+      return `<div style="display:flex;align-items:center;gap:.6rem;padding:.4rem .6rem;background:rgba(44,35,24,.02);border:1px solid rgba(184,138,30,.1);">
+        <div style="display:flex;flex-direction:column;gap:2px;">
+          <button onclick="flytEjRoomImg(${r.id},${idx},-1)" ${idx===0?'disabled':''} style="width:20px;height:16px;font-size:.55rem;border:1px solid rgba(184,138,30,.3);color:#7a5c14;background:none;cursor:pointer;padding:0;${idx===0?'opacity:.3;':''}">▲</button>
+          <button onclick="flytEjRoomImg(${r.id},${idx},1)" ${idx===3?'disabled':''} style="width:20px;height:16px;font-size:.55rem;border:1px solid rgba(184,138,30,.3);color:#7a5c14;background:none;cursor:pointer;padding:0;${idx===3?'opacity:.3;':''}">▼</button>
+        </div>
+        <span style="font-size:.65rem;color:rgba(44,35,24,.4);min-width:16px;">${idx+1}</span>
+        ${url ? `<img src="${url}" style="width:44px;height:44px;object-fit:cover;border-radius:2px;flex-shrink:0;">` : '<div style="width:44px;height:44px;background:rgba(44,35,24,.06);border:1px dashed rgba(184,138,30,.3);flex-shrink:0;"></div>'}
+        <input type="text" id="ejr_${r.id}_gal${idx}" value="${url}" placeholder="Billede ${idx+1}" style="flex:1;font-size:.72rem;background:#faf6ee;border:1px solid rgba(184,138,30,.2);color:#2c2318;padding:.3rem .5rem;outline:none;">
+        <input type="file" id="ejr_${r.id}_gal${idx}_file" accept="image/*" style="font-size:.72rem;" onchange="uploadEjRoomGalleryImg(${r.id},${idx})">
+        <button onclick="uploadEjRoomGalleryImg(${r.id},${idx})" style="background:#2a7a74;color:#fff;border:none;padding:.35rem .8rem;font-family:Manrope,sans-serif;font-size:.6rem;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;white-space:nowrap;">⬆</button>
+      </div>`;
+    }).join('');
+
     return `<div class="fc-block fc-sub" style="margin-bottom:.8rem;">
       <div class="fc-block-header" style="cursor:pointer;background:rgba(184,138,30,.05);" onclick="this.parentElement.classList.toggle('fc-collapsed')">
         <span class="fc-block-title" style="font-size:.82rem;">${String(i+1).padStart(2,'0')} · ${r.name_da || 'Nyt værelse'}</span>
@@ -6437,54 +6460,87 @@ function renderEjRomsListe() {
           <div><label class="fc-label fc-label-da">Beskrivelse (DA)</label><textarea id="ejr_${r.id}_desc_da" class="fc-input-da fc-textarea">${r.description_da || ''}</textarea></div>
           <div><label class="fc-label fc-label-en">Description (EN)</label><textarea id="ejr_${r.id}_desc_en" class="fc-input-en fc-textarea">${r.description_en || ''}</textarea></div>
         </div>
-        <div>
-          <label class="fc-label" style="color:rgba(44,35,24,.6);">Faciliteter (de små kasser — 3 til 7 tekster, ét per linje)</label>
-          <textarea id="ejr_${r.id}_features" class="fc-input-da fc-textarea" rows="4" placeholder="King-size&#10;Privat terrasse&#10;Badekar&#10;Tårnudsigt">${features.join('\n')}</textarea>
+        <div class="fc-row">
+          <div>
+            <label class="fc-label fc-label-da">Faciliteter (de små kasser DA — ét per linje)</label>
+            <textarea id="ejr_${r.id}_features" class="fc-input-da fc-textarea" rows="4" placeholder="King-size&#10;Privat terrasse&#10;Badekar&#10;Tårnudsigt">${features.join('\n')}</textarea>
+          </div>
+          <div>
+            <label class="fc-label fc-label-en">Features (EN — one per line)</label>
+            <textarea id="ejr_${r.id}_features_en" class="fc-input-en fc-textarea" rows="4" placeholder="King-size&#10;Private terrace&#10;Bathtub&#10;Tower view">${features_en.join('\n')}</textarea>
+          </div>
         </div>
         <div style="margin-top:.8rem;padding:.8rem;background:rgba(42,122,116,.04);border:1px solid rgba(42,122,116,.15);">
-          <label class="fc-label" style="color:#2a7a74;">📁 Billede</label>
-          <div style="display:flex;align-items:center;gap:.8rem;flex-wrap:wrap;margin-top:.4rem;">
-            <img id="ejr_${r.id}_img_preview" src="${r.hero_image || ''}" style="${r.hero_image ? '' : 'display:none;'}width:56px;height:56px;object-fit:cover;border-radius:3px;border:1px solid rgba(184,138,30,.3);flex-shrink:0;">
-            <input type="text" id="ejr_${r.id}_img_url" class="fc-input-da" value="${r.hero_image || ''}" placeholder="URL til billede" style="flex:1;">
-            <input type="file" id="ejr_${r.id}_img_file" accept="image/*" style="font-size:.76rem;" onchange="uploadEjRoomImg(${r.id})">
-            <button onclick="uploadEjRoomImg(${r.id})" style="background:#2a7a74;color:#fff;border:none;padding:.45rem 1.1rem;font-family:Manrope,sans-serif;font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;white-space:nowrap;">⬆ Upload</button>
-          </div>
+          <label class="fc-label" style="color:#2a7a74;margin-bottom:.6rem;display:block;">📷 4 billeder — klik på billede på siden åbner næste (brug pilene til at ændre rækkefølge)</label>
+          <div style="display:flex;flex-direction:column;gap:.4rem;">${galleryHtml}</div>
         </div>
       </div>
     </div>`;
   }).join('');
 }
 
-async function uploadEjRoomImg(roomId) {
-  const input = document.getElementById(`ejr_${roomId}_img_file`);
+async function uploadEjRoomGalleryImg(roomId, idx) {
+  const input = document.getElementById(`ejr_${roomId}_gal${idx}_file`);
   if (!input || !input.files.length) return;
   try {
     const file = input.files[0];
     const ext = file.name.split('.').pop();
-    const filename = `ejendommen/rooms/${roomId}-${Date.now()}.${ext}`;
+    const filename = `ejendommen/rooms/${roomId}-gal${idx}-${Date.now()}.${ext}`;
     const { error } = await sb.storage.from('retreat-images').upload(filename, file);
     if (error) throw error;
     const { data: urlData } = sb.storage.from('retreat-images').getPublicUrl(filename);
-    const urlField = document.getElementById(`ejr_${roomId}_img_url`);
+    const urlField = document.getElementById(`ejr_${roomId}_gal${idx}`);
     if (urlField) urlField.value = urlData.publicUrl;
-    const preview = document.getElementById(`ejr_${roomId}_img_preview`);
-    if (preview) { preview.src = urlData.publicUrl; preview.style.display = 'inline-block'; }
+    // Opdater state og re-render
+    const room = ejRoomsState.find(r => r.id === roomId);
+    if (room) {
+      let gallery = room.gallery_images || [];
+      if (typeof gallery === 'string') { try { gallery = JSON.parse(gallery); } catch(e) { gallery = []; } }
+      while (gallery.length <= idx) gallery.push('');
+      gallery[idx] = urlData.publicUrl;
+      room.gallery_images = gallery;
+      renderEjRomsListe();
+    }
     input.value = '';
     showToast('Billede uploadet ✓');
   } catch(e) { showToast('Upload fejl: ' + e.message, true); }
 }
 
+function flytEjRoomImg(roomId, idx, dir) {
+  const room = ejRoomsState.find(r => r.id === roomId);
+  if (!room) return;
+  let gallery = room.gallery_images || [];
+  if (typeof gallery === 'string') { try { gallery = JSON.parse(gallery); } catch(e) { gallery = []; } }
+  while (gallery.length < 4) gallery.push('');
+  // Hent aktuelle URL-felter inden flytning
+  for (let i = 0; i < 4; i++) {
+    const el = document.getElementById(`ejr_${roomId}_gal${i}`);
+    if (el) gallery[i] = el.value;
+  }
+  const newIdx = idx + dir;
+  if (newIdx < 0 || newIdx > 3) return;
+  [gallery[idx], gallery[newIdx]] = [gallery[newIdx], gallery[idx]];
+  room.gallery_images = gallery;
+  renderEjRomsListe();
+}
+
 async function gemEjRooms() {
   for (const r of ejRoomsState) {
     const features_raw = document.getElementById(`ejr_${r.id}_features`)?.value || '';
+    const features_en_raw = document.getElementById(`ejr_${r.id}_features_en`)?.value || '';
     const features = features_raw.split('\n').map(f => f.trim()).filter(Boolean);
+    const features_en = features_en_raw.split('\n').map(f => f.trim()).filter(Boolean);
+    // Hent galleri-billeder fra felterne
+    const gallery = [0,1,2,3].map(i => document.getElementById(`ejr_${r.id}_gal${i}`)?.value || '').filter(Boolean);
     const payload = {
       name_da: document.getElementById(`ejr_${r.id}_name_da`)?.value || r.name_da,
       name_en: document.getElementById(`ejr_${r.id}_name_en`)?.value || r.name_en,
       description_da: document.getElementById(`ejr_${r.id}_desc_da`)?.value || r.description_da,
       description_en: document.getElementById(`ejr_${r.id}_desc_en`)?.value || r.description_en,
       features: JSON.stringify(features),
-      hero_image: document.getElementById(`ejr_${r.id}_img_url`)?.value || r.hero_image,
+      features_en: JSON.stringify(features_en),
+      gallery_images: JSON.stringify(gallery),
+      hero_image: gallery[0] || r.hero_image || null,
     };
     await sb.from('ejendommen_rooms').update(payload).eq('id', r.id);
   }
