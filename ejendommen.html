@@ -1286,20 +1286,19 @@ function renderEjRooms() {
     if (typeof features === 'string') { try { features = JSON.parse(features); } catch(e) { features = []; } }
     let gallery = r.gallery_images || [];
     if (typeof gallery === 'string') { try { gallery = JSON.parse(gallery); } catch(e) { gallery = []; } }
-    // Filtrer tomme URL'er
     gallery = gallery.filter(Boolean);
     const mainImg = gallery[0] || r.hero_image || '';
+    const hasMultiple = gallery.length > 1;
 
     const amenitiesHtml = features.map(f => `<span class="room-amenity">${f}</span>`).join('');
-    const hasGallery = gallery.length > 1;
 
-    return `<div class="room-card" ${hasGallery ? `onclick="openRoomLightbox(${i})" style="cursor:pointer;"` : ''}>
+    return `<div class="room-card" data-gallery='${JSON.stringify(gallery)}' data-gidx="0" ${hasMultiple ? 'onclick="cycleRoomImg(this)" style="cursor:pointer;"' : ''}>
       <div class="room-card-accent"></div>
-      <div class="room-card-img">
+      <div class="room-card-img" style="position:relative;">
         ${mainImg
-          ? `<img class="room-img-default" src="${mainImg}" alt="${name}" style="width:100%;height:100%;object-fit:cover;">`
+          ? `<img class="room-img-default" src="${mainImg}" alt="${name}" style="width:100%;height:100%;object-fit:cover;transition:opacity .35s;">`
           : `<div style="width:100%;height:100%;background:linear-gradient(145deg,#d4c0b0,#b8a090);"></div>`}
-        ${hasGallery ? '<div style="position:absolute;bottom:8px;right:8px;background:rgba(44,35,24,.6);color:#fff;font-size:.6rem;padding:.2rem .5rem;letter-spacing:.08em;">TAP FOR MEER</div>' : ''}
+        ${hasMultiple ? `<div style="position:absolute;bottom:8px;right:8px;background:rgba(44,35,24,.55);color:#fff;font-size:.58rem;padding:.2rem .5rem;letter-spacing:.06em;pointer-events:none;">1 / ${gallery.length}</div>` : ''}
       </div>
       <div class="room-card-body">
         <span class="room-card-num">${num}</span>
@@ -1311,62 +1310,23 @@ function renderEjRooms() {
   }).join('');
 }
 
-// ── LIGHTBOX TIL VÆRELSESBILLEDER ──
-let lbRoomIdx = 0;
-let lbImgIdx = 0;
-
-function openRoomLightbox(roomIdx) {
-  lbRoomIdx = roomIdx;
-  lbImgIdx = 0;
-  showRoomLightbox();
-}
-
-function showRoomLightbox() {
-  const r = ejRooms[lbRoomIdx];
-  if (!r) return;
-  let gallery = r.gallery_images || [];
-  if (typeof gallery === 'string') { try { gallery = JSON.parse(gallery); } catch(e) { gallery = []; } }
-  gallery = gallery.filter(Boolean);
-  if (!gallery.length) return;
-  if (lbImgIdx >= gallery.length) lbImgIdx = 0;
-
-  let lb = document.getElementById('ejRoomLightbox');
-  if (!lb) {
-    lb = document.createElement('div');
-    lb.id = 'ejRoomLightbox';
-    lb.style.cssText = 'position:fixed;inset:0;background:rgba(44,35,24,.92);z-index:9999;display:flex;align-items:center;justify-content:center;';
-    lb.onclick = e => { if (e.target === lb) closeRoomLightbox(); };
-    document.body.appendChild(lb);
+function cycleRoomImg(card) {
+  const gallery = JSON.parse(card.dataset.gallery || '[]');
+  if (gallery.length < 2) return;
+  let idx = parseInt(card.dataset.gidx || '0');
+  idx = (idx + 1) % gallery.length;
+  card.dataset.gidx = idx;
+  const img = card.querySelector('.room-img-default');
+  const counter = card.querySelector('.room-card-img div');
+  if (img) {
+    img.style.opacity = '0';
+    setTimeout(() => {
+      img.src = gallery[idx];
+      img.style.opacity = '1';
+    }, 180);
   }
-  lb.style.display = 'flex';
-  lb.innerHTML = `
-    <button onclick="closeRoomLightbox()" style="position:absolute;top:1.5rem;right:2rem;background:none;border:none;color:#fff;font-size:1.8rem;cursor:pointer;line-height:1;">✕</button>
-    <button onclick="prevRoomImg()" style="position:absolute;left:2rem;background:none;border:none;color:#fff;font-size:2.5rem;cursor:pointer;padding:1rem;opacity:${lbImgIdx === 0 ? '.3' : '1'};">‹</button>
-    <div style="max-width:min(90vw,1000px);text-align:center;">
-      <img src="${gallery[lbImgIdx]}" style="max-height:80vh;max-width:100%;object-fit:contain;display:block;margin:0 auto;">
-      <p style="color:rgba(255,255,255,.5);font-size:.7rem;margin-top:.8rem;letter-spacing:.1em;">${lbImgIdx + 1} / ${gallery.length}</p>
-    </div>
-    <button onclick="nextRoomImg()" style="position:absolute;right:2rem;background:none;border:none;color:#fff;font-size:2.5rem;cursor:pointer;padding:1rem;opacity:${lbImgIdx >= gallery.length - 1 ? '.3' : '1'};">›</button>`;
+  if (counter) counter.textContent = `${idx + 1} / ${gallery.length}`;
 }
-
-function prevRoomImg() { if (lbImgIdx > 0) { lbImgIdx--; showRoomLightbox(); } }
-function nextRoomImg() {
-  const r = ejRooms[lbRoomIdx];
-  let gallery = r?.gallery_images || [];
-  if (typeof gallery === 'string') { try { gallery = JSON.parse(gallery); } catch(e) { gallery = []; } }
-  gallery = gallery.filter(Boolean);
-  if (lbImgIdx < gallery.length - 1) { lbImgIdx++; showRoomLightbox(); }
-}
-function closeRoomLightbox() {
-  const lb = document.getElementById('ejRoomLightbox');
-  if (lb) lb.style.display = 'none';
-}
-document.addEventListener('keydown', e => {
-  if (!document.getElementById('ejRoomLightbox') || document.getElementById('ejRoomLightbox').style.display === 'none') return;
-  if (e.key === 'ArrowRight') nextRoomImg();
-  if (e.key === 'ArrowLeft') prevRoomImg();
-  if (e.key === 'Escape') closeRoomLightbox();
-});
 
 // Sprogvælger
 function setEjLang(lang) {
