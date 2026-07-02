@@ -1092,6 +1092,31 @@ function ejSC(key, fallback) {
   return val || ejData[key] || fallback || '';
 }
 
+const EJ_FAC_SVG = {
+  pool:   '<ellipse cx="12" cy="16" rx="9" ry="4"/><path d="M3 16v-4c0-2.2 4-4 9-4s9 1.8 9 4v4"/>',
+  fire:   '<path d="M12 2c0 0-5 6-5 12a5 5 0 0010 0C17 8 12 2 12 2z"/>',
+  home:   '<path d="M3 12L12 3l9 9M5 10v9h4v-4h6v4h4v-9"/>',
+  sun:    '<circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/>',
+  star:   '<polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/>',
+  fork:   '<path d="M8 3v4M8 7C6 7 5 8 5 10s1 3 3 3v8M16 3v8M16 11c2 0 3 1 3 3s-1 3-3 3v4"/>',
+  wifi:   '<path d="M5 12.55a11 11 0 0114.08 0M1.42 9a16 16 0 0121.16 0M8.53 16.11a6 6 0 016.95 0"/><circle cx="12" cy="20" r="1"/>',
+  car:    '<rect x="1" y="3" width="15" height="13"/><path d="M16 8h4l3 3v4h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/>',
+  shield: '<path d="M12 3L4 7v5c0 5.5 3.5 10.7 8 12 4.5-1.3 8-6.5 8-12V7L12 3z"/>',
+  leaf:   '<path d="M17 8C8 10 5.9 16.17 3.82 22L6 21c2-7 9-12 18-13-1 1-3 4-3 4s-6-2-12 6"/>',
+  drop:   '<path d="M12 2C12 2 5 10 5 15a7 7 0 0014 0C19 10 12 2 12 2z"/>',
+  wind:   '<path d="M9.59 4.59A2 2 0 1111 8H2m10.59 11.41A2 2 0 1114 16H2m15.73-8.27A2.5 2.5 0 1119.5 12H2"/>',
+  eye:    '<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>',
+  heart:  '<path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/>',
+  moon:   '<path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/>',
+  coffee: '<path d="M18 8h1a4 4 0 010 8h-1"/><path d="M2 8h16v9a4 4 0 01-4 4H6a4 4 0 01-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/>',
+  music:  '<path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/>',
+  book:   '<path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/>',
+  tv:     '<rect x="2" y="7" width="20" height="15" rx="2"/><polyline points="17 2 12 7 7 2"/>',
+  key:    '<path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 11-7.778 7.778 5.5 5.5 0 017.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/>',
+};
+
+const EJ_FAC_KEYS = ['pool','sauna_finsk','sauna_infra','faellesrum','retreat_rum','terasser','koekken','spisebord','wifi','parkering','aflaaset','vindyrkning'];
+
 async function loadEjendommensContent() {
   try {
     const [{ data: content }, { data: rooms }] = await Promise.all([
@@ -1226,6 +1251,16 @@ function applyEjContent() {
     const spans = el.querySelectorAll('span');
     if (ejSC(`dist_${k}_navn`) && spans[0]) spans[0].textContent = ejSC(`dist_${k}_navn`);
     if (ejSC(`dist_${k}_tid`) && spans[1]) spans[1].textContent = ejSC(`dist_${k}_tid`);
+  });
+
+  // FACILITIES — opdater ikoner fra database
+  EJ_FAC_KEYS.forEach(k => {
+    const iconKey = ejData[`fac_${k}_icon`];
+    if (!iconKey || !EJ_FAC_SVG[iconKey]) return;
+    const el = document.getElementById(`ej_fac_${k}`);
+    if (!el) return;
+    const svg = el.querySelector('.facility-icon svg');
+    if (svg) svg.innerHTML = EJ_FAC_SVG[iconKey];
   });
 
   // CTA
