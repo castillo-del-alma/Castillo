@@ -44,6 +44,10 @@ nav{
 .nav-links{display:flex;gap:2rem;list-style:none;align-items:center;}
 .nav-links a{font-size:.68rem;font-weight:400;letter-spacing:.14em;text-transform:uppercase;color:var(--text-mid);text-decoration:none;transition:color .3s;}
 .nav-links a:hover{color:var(--wine);}
+.lang-btn{border-radius:0;font-family:'Manrope',sans-serif;}
+.lang-btn.lang-btn-active{background:var(--wine);color:#fff !important;}
+.lang-btn.lang-btn-inactive{background:transparent;color:var(--wine) !important;}
+.lang-switcher{border-color:var(--wine);border-radius:0;}
 .nav-back{
   font-size:.68rem;font-weight:500;letter-spacing:.15em;text-transform:uppercase;
   color:var(--wine);text-decoration:none;display:flex;align-items:center;gap:.5rem;
@@ -1125,6 +1129,16 @@ function setBg(id, val) {
 
 function applyEjContent() {
   const l = ejLang;
+
+  // NAVIGATION
+  setText('ej_nav_intro', ejSC('nav_intro'));
+  setText('ej_nav_towers', ejSC('nav_towers'));
+  setText('ej_nav_rooms', ejSC('nav_rooms'));
+  setText('ej_nav_fac', ejSC('nav_fac'));
+  setText('ej_nav_sustain', ejSC('nav_sustain'));
+  setText('ej_nav_vineyard', ejSC('nav_vineyard'));
+  setText('ej_nav_location', ejSC('nav_location'));
+  setText('ej_nav_back', ejSC('nav_back'));
 
   // HERO
   setText('ej_hero_eyebrow', ejSC('hero_eyebrow'));
