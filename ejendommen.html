@@ -1087,6 +1087,17 @@ let ejData = {};
 let ejRooms = [];
 let ejLang = 'da';
 
+// Dansk hvis Danmark, ellers engelsk — baseret på IP-geolokation (samme mønster som index.html/retreat.html)
+async function determineStartLangEj() {
+  try {
+    const res = await fetch('https://ipapi.co/json/');
+    const geo = await res.json();
+    return (geo.country_code === 'DK') ? 'da' : 'en';
+  } catch(e) {
+    return 'da'; // fallback hvis geolokation fejler
+  }
+}
+
 function ejSC(key, fallback) {
   const val = ejData[ejLang === 'en' ? key + '_en' : key];
   return val || ejData[key] || fallback || '';
@@ -1119,10 +1130,17 @@ const EJ_FAC_KEYS = ['pool','sauna_finsk','sauna_infra','faellesrum','retreat_ru
 
 async function loadEjendommensContent() {
   try {
-    const [{ data: content }, { data: rooms }] = await Promise.all([
+    const [{ data: content }, { data: rooms }, startLang] = await Promise.all([
       ejSb.from('ejendommen_content').select('key,value'),
-      ejSb.from('ejendommen_rooms').select('*').eq('active', true).order('sort_order')
+      ejSb.from('ejendommen_rooms').select('*').eq('active', true).order('sort_order'),
+      determineStartLangEj()
     ]);
+    ejLang = startLang;
+    document.documentElement.lang = ejLang;
+    const btnDa = document.getElementById('ej-btn-da');
+    const btnEn = document.getElementById('ej-btn-en');
+    if (btnDa) { btnDa.classList.toggle('lang-btn-active', ejLang === 'da'); btnDa.classList.toggle('lang-btn-inactive', ejLang !== 'da'); }
+    if (btnEn) { btnEn.classList.toggle('lang-btn-active', ejLang === 'en'); btnEn.classList.toggle('lang-btn-inactive', ejLang !== 'en'); }
     (content || []).forEach(r => { ejData[r.key] = r.value; });
     ejRooms = rooms || [];
     applyEjContent();
