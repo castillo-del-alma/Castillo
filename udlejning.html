@@ -426,6 +426,10 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:3rem
 .reveal-right{opacity:0;transform:translateX(28px);transition:opacity .9s ease,transform .9s ease;}
 .reveal-right.visible{opacity:1;transform:translateX(0);}
 .d1{transition-delay:.1s;}.d2{transition-delay:.2s;}.d3{transition-delay:.3s;}
+.lang-btn{border-radius:0;font-family:'Manrope',sans-serif;}
+.lang-btn.lang-btn-active{background:var(--wine);color:#fff !important;}
+.lang-btn.lang-btn-inactive{background:transparent;color:var(--wine) !important;}
+.lang-switcher{border-color:var(--wine);border-radius:0;}
 </style>
 </head>
 <body>
@@ -435,13 +439,19 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:3rem
     <img src="img/logo-castillo-hvid_transperant.png" alt="Castillo del Alma" style="filter:brightness(0);">
   </a>
   <ul class="nav-links">
-    <li><a href="#intro">Om stedet</a></li>
-    <li><a href="#faciliteter">Vi tilbyder</a></li>
-    <li><a href="#design">Design et ophold</a></li>
-    <li><a href="#mere">Mere end et kursussted</a></li>
-    <li><a href="#kontakt">Kontakt</a></li>
+    <li><a href="#intro" id="navIntro">Om stedet</a></li>
+    <li><a href="#faciliteter" id="navFaciliteter">Vi tilbyder</a></li>
+    <li><a href="#design" id="navDesign">Design et ophold</a></li>
+    <li><a href="#mere" id="navMere">Mere end et kursussted</a></li>
+    <li><a href="#kontakt" id="navKontakt">Kontakt</a></li>
+    <li style="display:flex;align-items:center;gap:.4rem;margin-left:.8rem;">
+      <div class="lang-switcher" style="display:flex;border:1.5px solid;overflow:hidden;border-color:var(--wine);">
+        <button id="ul-btn-da" class="lang-btn lang-btn-active" onclick="setUlLang('da')" style="font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;padding:.3rem .6rem;border:none;cursor:pointer;font-family:'Manrope',sans-serif;">DA</button>
+        <button id="ul-btn-en" class="lang-btn lang-btn-inactive" onclick="setUlLang('en')" style="font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;padding:.3rem .6rem;border:none;cursor:pointer;font-family:'Manrope',sans-serif;">EN</button>
+      </div>
+    </li>
   </ul>
-  <a href="index.html" class="nav-back">← Tilbage til forsiden</a>
+  <a href="index.html" class="nav-back" id="navBack">← Tilbage til forsiden</a>
 </nav>
 
 <!-- ── HERO ── -->
@@ -449,8 +459,8 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:3rem
   <div class="page-hero-img" id="heroImg"></div>
   <div class="page-hero-overlay"></div>
   <div class="page-hero-content">
-    <span class="page-hero-eyebrow">Castillo del Alma · Mollina, Andalusien</span>
-    <h1>Afhold dit eget<br><em>retreat</em> og <em>event</em></h1>
+    <span class="page-hero-eyebrow" id="heroEyebrow">Castillo del Alma · Mollina, Andalusien</span>
+    <h1 id="heroH1">Afhold dit eget<br><em>retreat</em> og <em>event</em></h1>
   </div>
 </section>
 
@@ -459,19 +469,21 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:3rem
   <div class="section-inner">
     <div class="intro-two-col">
       <div class="reveal-left">
-        <div class="section-label">Du bringer visionen</div>
-        <h2>Vi skaber <em>rammerne</em></h2>
-        <p>Har du en passion for at skabe udvikling, fordybelse og nærvær? Drømmer du om at afholde dit eget retreat, kursus eller workshop i inspirerende omgivelser?</p>
-        <p>Midt i den andalusiske natur, omgivet af vinmarker, olivenlunde, bjerge og stilhed, finder du et sted, hvor dine gæster kan slippe hverdagens travlhed og være fuldt til stede.</p>
-        <p>Uanset om du er coach, terapeut, yogalærer, underviser, facilitator, kunstner eller arbejder med personlig udvikling, giver Castillo del Alma dig de optimale rammer for en mindeværdig oplevelse.</p>
-        <p><strong>På Castillo del Alma skaber vi de perfekte rammer — du skaber indholdet.</strong></p>
+        <div class="section-label" id="introLabel">Du bringer visionen</div>
+        <h2 id="introH2">Vi skaber <em>rammerne</em></h2>
+        <div id="introTextContainer">
+          <p>Har du en passion for at skabe udvikling, fordybelse og nærvær? Drømmer du om at afholde dit eget retreat, kursus eller workshop i inspirerende omgivelser?</p>
+          <p>Midt i den andalusiske natur, omgivet af vinmarker, olivenlunde, bjerge og stilhed, finder du et sted, hvor dine gæster kan slippe hverdagens travlhed og være fuldt til stede.</p>
+          <p>Uanset om du er coach, terapeut, yogalærer, underviser, facilitator, kunstner eller arbejder med personlig udvikling, giver Castillo del Alma dig de optimale rammer for en mindeværdig oplevelse.</p>
+          <p><strong id="introBold">På Castillo del Alma skaber vi de perfekte rammer — du skaber indholdet.</strong></p>
+        </div>
       </div>
       <div class="intro-img-stack reveal-right d1">
         <div class="intro-main-img">
-          <img src="img/group-people-making-breathworks-castillo-del-alma.jpg" alt="Retreat på Castillo del Alma">
+          <img id="introImg1" src="img/group-people-making-breathworks-castillo-del-alma.jpg" alt="Retreat på Castillo del Alma">
         </div>
         <div class="intro-small-img">
-          <img src="img/estate-pool.jpg" alt="Pool og have — Castillo del Alma">
+          <img id="introImg2" src="img/estate-pool.jpg" alt="Pool og have — Castillo del Alma">
         </div>
       </div>
     </div>
@@ -484,16 +496,16 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:3rem
 <section class="photo-strip">
   <div class="photo-strip-grid">
     <div class="strip-item">
-      <img src="img/wellness-yoga-castillo.png" alt="Yoga på Castillo del Alma">
+      <img id="strip1Img1" src="img/wellness-yoga-castillo.png" alt="Yoga på Castillo del Alma">
     </div>
     <div class="strip-item">
-      <img src="img/estate-dining.jpg" alt="Måltider på Castillo del Alma">
+      <img id="strip1Img2" src="img/estate-dining.jpg" alt="Måltider på Castillo del Alma">
     </div>
     <div class="strip-item">
-      <img src="img/IMG_0603.JPG" alt="Pool og have">
+      <img id="strip1Img3" src="img/IMG_0603.JPG" alt="Pool og have">
     </div>
     <div class="strip-item">
-      <img src="img/vinmark1.jpg" alt="Vinmarker ved Castillo del Alma">
+      <img id="strip1Img4" src="img/vinmark1.jpg" alt="Vinmarker ved Castillo del Alma">
     </div>
   </div>
 </section>
@@ -503,43 +515,22 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:3rem
   <div class="section-inner">
     <div class="faciliteter-grid">
       <div class="reveal-left">
-        <div class="section-label">Hvad du får</div>
-        <h2>Vi stiller <em>rammerne</em> til rådighed</h2>
-        <ul class="fac-list">
-          <li>Plads til op til 14 kursister og 2 undervisere</li>
-          <li>Smukke en suite værelser med høj komfort</li>
-          <li>Alle værelser er dobbeltværelser med enkeltsenge</li>
-          <li>Fælles stuer til ophold og samtale</li>
-          <li>Store terrasser og græsarealer til yoga og meditation</li>
-          <li>Lyse undervisnings- og samlingslokaler</li>
-          <li>Vandrestier på egen grund</li>
-          <li>Swimmingpool med afslapningsområder</li>
-          <li>Sund, hjemmelavet forplejning</li>
-          <li>Fokus på anti-inflammatorisk kost</li>
-          <li>Hurtigt WiFi på hele ejendommen</li>
-          <li>Daglig rengøring af fællesarealer</li>
-          <li>Hjælp med planlægning og koordinering</li>
-          <li>Transfer til og fra lufthavnen</li>
-          <li>Praktisk assistance under hele opholdet</li>
-          <li>Mulighed for markedsføring af jeres retreat</li>
-          <li>Gratis introduktion til NEO-frekvensbehandling</li>
-          <li>Gratis parkering på ejendommen</li>
-          <li>Rolige omgivelser uden trafik og støj</li>
-          <li>Skræddersy opholdet efter dine ønsker</li>
-        </ul>
-        <p style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.95rem;color:var(--text-light);margin-top:2rem;line-height:1.7;">
+        <div class="section-label" id="facLabel">Hvad du får</div>
+        <h2 id="facH2">Vi stiller <em>rammerne</em> til rådighed</h2>
+        <ul class="fac-list" id="facList"></ul>
+        <p id="facNote" style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.95rem;color:var(--text-light);margin-top:2rem;line-height:1.7;">
           Castillo del Alma kan ikke lejes uden værterne. Hvilken rolle vi skal spille, er op til dig.
         </p>
       </div>
       <div class="fac-visual reveal-right d1">
         <div class="fac-img">
-          <img src="img/estate-aerial.jpg" alt="Castillo del Alma — luftfoto">
+          <img id="facImg1" src="img/estate-aerial.jpg" alt="Castillo del Alma — luftfoto">
         </div>
         <div class="fac-img">
-          <img src="img/close-up-woman-meditating-lotus-position-sunset.jpg" alt="Meditation">
+          <img id="facImg2" src="img/close-up-woman-meditating-lotus-position-sunset.jpg" alt="Meditation">
         </div>
         <div class="fac-img">
-          <img src="img/yoga-class-concept.jpg" alt="Yoga">
+          <img id="facImg3" src="img/yoga-class-concept.jpg" alt="Yoga">
         </div>
       </div>
     </div>
@@ -552,18 +543,18 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:3rem
 <section class="design" id="design">
   <div class="section-inner">
     <div class="design-intro reveal">
-      <div class="section-label" style="justify-content:center;">Skræddersyede oplevelser</div>
-      <h2>Design et <em>ophold</em></h2>
-      <p>Der findes ferier, og så findes der oplevelser, man husker resten af livet.</p>
-      <p>På Castillo del Alma skaber vi ikke standardophold. Vi skaber skræddersyede oplevelser for grupper, der ønsker noget helt særligt. Uanset om I er en vennegruppe, en familie, en virksomhed, en forening eller en gruppe med en fælles passion, designer vi opholdet sammen med jer.</p>
-      <p>Midt blandt vinmarker, olivenlunde og de andalusiske bjerge kan I sammensætte præcis den ferie eller det retreat, I drømmer om. Vi tager os af planlægningen — I skal blot nyde oplevelsen.</p>
+      <div class="section-label" style="justify-content:center;" id="designLabel">Skræddersyede oplevelser</div>
+      <h2 id="designH2">Design et <em>ophold</em></h2>
+      <div id="designTextContainer">
+        <p>Der findes ferier, og så findes der oplevelser, man husker resten af livet.</p>
+        <p>På Castillo del Alma skaber vi ikke standardophold. Vi skaber skræddersyede oplevelser for grupper, der ønsker noget helt særligt. Uanset om I er en vennegruppe, en familie, en virksomhed, en forening eller en gruppe med en fælles passion, designer vi opholdet sammen med jer.</p>
+        <p>Midt blandt vinmarker, olivenlunde og de andalusiske bjerge kan I sammensætte præcis den ferie eller det retreat, I drømmer om. Vi tager os af planlægningen — I skal blot nyde oplevelsen.</p>
+      </div>
     </div>
 
     <div class="design-kategorier">
 
-      <div class="kat-kort reveal d1">
-        <span class="kat-titel">Gastronomi</span>
-        <ul class="kat-liste">
+      <div class="kat-kort reveal d1" id="kat1"><span class="kat-titel" id="kat1Titel">Gastronomi</span><ul class="kat-liste" id="kat1Liste">
           <li>Gourmet middage</li>
           <li>Gourmet workshops</li>
           <li>Tapas-aftener</li>
@@ -571,8 +562,7 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:3rem
           <li>Paella-kurser</li>
           <li>Ostesmagning</li>
           <li>Olivenolie-smagning</li>
-        </ul>
-      </div>
+        </ul></div>
 
       <div class="kat-kort kat-video reveal d1">
         <video
@@ -591,9 +581,7 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:3rem
         </div>
       </div>
 
-      <div class="kat-kort reveal d1">
-        <span class="kat-titel">Vinoplevelser</span>
-        <ul class="kat-liste">
+      <div class="kat-kort reveal d1" id="kat2"><span class="kat-titel" id="kat2Titel">Vinoplevelser</span><ul class="kat-liste" id="kat2Liste">
           <li>Rundvisning i vores vinmarker</li>
           <li>Vinsmagninger</li>
           <li>Besøg på lokale vingårde</li>
@@ -601,12 +589,9 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:3rem
           <li>Introduktion til vinfremstilling</li>
           <li>Høstoplevelser (i sæson)</li>
           <li>Wine & Dine-arrangementer</li>
-        </ul>
-      </div>
+        </ul></div>
 
-      <div class="kat-kort reveal d2">
-        <span class="kat-titel">Kultur og historie</span>
-        <ul class="kat-liste">
+      <div class="kat-kort reveal d2" id="kat3"><span class="kat-titel" id="kat3Titel">Kultur og historie</span><ul class="kat-liste" id="kat3Liste">
           <li>Guidede byture</li>
           <li>Historiske landsbyer</li>
           <li>Lokale markeder</li>
@@ -614,8 +599,7 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:3rem
           <li>Romerske ruiner</li>
           <li>Maurisk arkitektur</li>
           <li>Kunstgallerier</li>
-        </ul>
-      </div>
+        </ul></div>
 
       <div class="kat-kort kat-video reveal d2">
         <video
@@ -634,9 +618,7 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:3rem
         </div>
       </div>
 
-      <div class="kat-kort reveal d2">
-        <span class="kat-titel">Aktiv ferie</span>
-        <ul class="kat-liste">
+      <div class="kat-kort reveal d2" id="kat4"><span class="kat-titel" id="kat4Titel">Aktiv ferie</span><ul class="kat-liste" id="kat4Liste">
           <li>Vandreture</li>
           <li>Mountainbike</li>
           <li>Landevejscykling</li>
@@ -645,12 +627,9 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:3rem
           <li>Meditation</li>
           <li>Breathwork</li>
           <li>Personlig træning</li>
-        </ul>
-      </div>
+        </ul></div>
 
-      <div class="kat-kort reveal d1">
-        <span class="kat-titel">Velvære</span>
-        <ul class="kat-liste">
+      <div class="kat-kort reveal d1" id="kat5"><span class="kat-titel" id="kat5Titel">Velvære</span><ul class="kat-liste" id="kat5Liste">
           <li>Massage</li>
           <li>Sauna</li>
           <li>Isbad</li>
@@ -659,8 +638,7 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:3rem
           <li>Spa-behandlinger</li>
           <li>Stressreduktion</li>
           <li>Afslapning ved poolen</li>
-        </ul>
-      </div>
+        </ul></div>
 
       <div class="kat-kort kat-video reveal d2">
         <video
@@ -679,17 +657,14 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:3rem
         </div>
       </div>
 
-      <div class="kat-kort reveal d2">
-        <span class="kat-titel">Kreativitet</span>
-        <ul class="kat-liste">
+      <div class="kat-kort reveal d2" id="kat6"><span class="kat-titel" id="kat6Titel">Kreativitet</span><ul class="kat-liste" id="kat6Liste">
           <li>Malekurser</li>
           <li>Akvarel & akryl</li>
           <li>Smykkefremstilling</li>
           <li>Kreative workshops</li>
           <li>Musik & sang</li>
           <li>Skriveværksteder</li>
-        </ul>
-      </div>
+        </ul></div>
 
       <div class="kat-kort kat-video reveal d1">
         <video
@@ -725,9 +700,7 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:3rem
         </div>
       </div>
 
-      <div class="kat-kort reveal d1">
-        <span class="kat-titel">Personlig udvikling</span>
-        <ul class="kat-liste">
+      <div class="kat-kort reveal d1" id="kat7"><span class="kat-titel" id="kat7Titel">Personlig udvikling</span><ul class="kat-liste" id="kat7Liste">
           <li>Enneagram-workshops</li>
           <li>Teamudvikling</li>
           <li>Kommunikation</li>
@@ -735,12 +708,9 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:3rem
           <li>Mindset & motivation</li>
           <li>Livsbalance</li>
           <li>Stresshåndtering</li>
-        </ul>
-      </div>
+        </ul></div>
 
-      <div class="kat-kort reveal d2">
-        <span class="kat-titel">Foredrag & undervisning</span>
-        <ul class="kat-liste">
+      <div class="kat-kort reveal d2" id="kat8"><span class="kat-titel" id="kat8Titel">Foredrag & undervisning</span><ul class="kat-liste" id="kat8Liste">
           <li>Enneagrammet</li>
           <li>Sundhed & ernæring</li>
           <li>LCHF / Keto</li>
@@ -748,12 +718,9 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:3rem
           <li>Ledelse & kommunikation</li>
           <li>Iværksætteri</li>
           <li>Kunst og kultur</li>
-        </ul>
-      </div>
+        </ul></div>
 
-      <div class="kat-kort reveal d1">
-        <span class="kat-titel">Hobbyophold</span>
-        <ul class="kat-liste">
+      <div class="kat-kort reveal d1" id="kat9"><span class="kat-titel" id="kat9Titel">Hobbyophold</span><ul class="kat-liste" id="kat9Liste">
           <li>Strikning & hækling</li>
           <li>Fotografi</li>
           <li>Fuglekiggeri</li>
@@ -761,8 +728,7 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:3rem
           <li>Læseklubber</li>
           <li>Brætspil & bridge & skak</li>
           <li>Madlavning</li>
-        </ul>
-      </div>
+        </ul></div>
 
       <div class="kat-kort kat-video reveal d2">
         <video
@@ -781,9 +747,7 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:3rem
         </div>
       </div>
 
-      <div class="kat-kort reveal d2">
-        <span class="kat-titel">Udflugter</span>
-        <ul class="kat-liste">
+      <div class="kat-kort reveal d2" id="kat10"><span class="kat-titel" id="kat10Titel">Udflugter</span><ul class="kat-liste" id="kat10Liste">
           <li>Málaga & Ronda</li>
           <li>Granada & Córdoba</li>
           <li>Sevilla</li>
@@ -791,12 +755,9 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:3rem
           <li>El Torcal</li>
           <li>Nerja & Frigiliana</li>
           <li>Delfinsafari</li>
-        </ul>
-      </div>
+        </ul></div>
 
-      <div class="kat-kort reveal d1">
-        <span class="kat-titel">Særlige arrangementer</span>
-        <ul class="kat-liste">
+      <div class="kat-kort reveal d1" id="kat11"><span class="kat-titel" id="kat11Titel">Særlige arrangementer</span><ul class="kat-liste" id="kat11Liste">
           <li>Fødselsdage & jubilæer</li>
           <li>Bryllupper & sølvbryllup</li>
           <li>Firmaevents & kick-off</li>
@@ -804,8 +765,7 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:3rem
           <li>Netværksmøder</li>
           <li>Familietræf</li>
           <li>Venneophold</li>
-        </ul>
-      </div>
+        </ul></div>
 
       <div class="kat-kort kat-video reveal d2">
         <video
@@ -827,9 +787,9 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:3rem
     </div>
 
     <div class="design-cta reveal">
-      <p>Ønsker I et gourmetophold med fokus på vin? Et aktivt cykelophold? En uge med yoga og meditation? En kreativ malerejse? Eller måske en kombination af det hele?</p>
-      <strong>Hos Castillo del Alma er ingen grupper ens. Derfor bliver ingen ophold det heller.</strong>
-      <p>Vi hjælper jer med at sammensætte det perfekte program — fra ankomst til afrejse.</p>
+      <p id="designCtaP1">Ønsker I et gourmetophold med fokus på vin? Et aktivt cykelophold? En uge med yoga og meditation? En kreativ malerejse? Eller måske en kombination af det hele?</p>
+      <strong id="designCtaStrong">Hos Castillo del Alma er ingen grupper ens. Derfor bliver ingen ophold det heller.</strong>
+      <p id="designCtaP2">Vi hjælper jer med at sammensætte det perfekte program — fra ankomst til afrejse.</p>
     </div>
   </div>
 </section>
@@ -841,20 +801,22 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:3rem
   <div class="section-inner mere-inner">
     <div class="mere-grid">
       <div class="reveal-left">
-        <div class="section-label" style="color:rgba(238,222,160,.7);">
+        <div class="section-label" style="color:rgba(238,222,160,.7);" id="mereLabel">
           <span style="background:rgba(238,222,160,.7);"></span>
           Mere end et kursussted
         </div>
-        <h2>Et sted for <em>transformation</em></h2>
-        <p>Castillo del Alma er ikke blot en smuk ejendom. Det er et sted, hvor naturen, stilheden og den autentiske andalusiske atmosfære skaber plads til fordybelse, udvikling og ægte nærvær.</p>
-        <p>Mange oplever, at omgivelserne bliver en aktiv del af deres retreat og giver deltagerne ro til at mærke sig selv og skabe varige forandringer.</p>
-        <p>Som arrangør skal du kunne koncentrere dig om det vigtigste — dine deltagere. Vi hjælper gerne med logistik, indkvartering, måltider og koordinering, så du kan fokusere på at skabe en nærværende og inspirerende oplevelse.</p>
-        <div class="mere-quote">
+        <h2 id="mereH2">Et sted for <em>transformation</em></h2>
+        <div id="mereTextContainer">
+          <p>Castillo del Alma er ikke blot en smuk ejendom. Det er et sted, hvor naturen, stilheden og den autentiske andalusiske atmosfære skaber plads til fordybelse, udvikling og ægte nærvær.</p>
+          <p>Mange oplever, at omgivelserne bliver en aktiv del af deres retreat og giver deltagerne ro til at mærke sig selv og skabe varige forandringer.</p>
+          <p>Som arrangør skal du kunne koncentrere dig om det vigtigste — dine deltagere. Vi hjælper gerne med logistik, indkvartering, måltider og koordinering, så du kan fokusere på at skabe en nærværende og inspirerende oplevelse.</p>
+        </div>
+        <div class="mere-quote" id="mereQuote">
           Du bringer visionen —<br>vi skaber rammerne.
         </div>
       </div>
       <div class="mere-img reveal-right d1">
-        <img src="img/group-people-walking-along-path-dirt-stones-jungle.jpg" alt="Retreat oplevelse på Castillo del Alma">
+        <img id="mereImg" src="img/group-people-walking-along-path-dirt-stones-jungle.jpg" alt="Retreat oplevelse på Castillo del Alma">
       </div>
     </div>
   </div>
@@ -864,13 +826,13 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:3rem
 <section class="photo-strip">
   <div class="photo-strip-grid" style="grid-template-columns:repeat(3,1fr);height:340px;">
     <div class="strip-item">
-      <img src="img/aerial-view-people-having-dinner-backyard.jpg" alt="Fælles måltider">
+      <img id="strip2Img1" src="img/aerial-view-people-having-dinner-backyard.jpg" alt="Fælles måltider">
     </div>
     <div class="strip-item">
-      <img src="img/faceless-woman-lying-grass.jpg" alt="Afslapning i naturen">
+      <img id="strip2Img2" src="img/faceless-woman-lying-grass.jpg" alt="Afslapning i naturen">
     </div>
     <div class="strip-item">
-      <img src="img/group-men-sit-hill-overlooking-mountain.jpg" alt="Udsigt over Andalusien">
+      <img id="strip2Img3" src="img/group-men-sit-hill-overlooking-mountain.jpg" alt="Udsigt over Andalusien">
     </div>
   </div>
 </section>
@@ -882,12 +844,14 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:3rem
 
       <!-- Venstre: intro -->
       <div class="reveal-left kontakt-intro">
-        <div class="section-label">Tag det første skridt</div>
-        <h2>Fortæl os om din <em>vision</em></h2>
-        <p>Vi glæder os til at høre om dit projekt og drøfte mulighederne for dit næste retreat eller arrangement på Castillo del Alma.</p>
-        <p>Udfyld formularen, så vender vi tilbage inden for 24 timer til en uforpligtende samtale.</p>
+        <div class="section-label" id="kontaktLabel">Tag det første skridt</div>
+        <h2 id="kontaktH2">Fortæl os om din <em>vision</em></h2>
+        <div id="kontaktTextContainer">
+          <p>Vi glæder os til at høre om dit projekt og drøfte mulighederne for dit næste retreat eller arrangement på Castillo del Alma.</p>
+          <p>Udfyld formularen, så vender vi tilbage inden for 24 timer til en uforpligtende samtale.</p>
+        </div>
         <div class="kontakt-detail">
-          <span>Eller skriv direkte til</span>
+          <span id="kontaktEmailLabel">Eller skriv direkte til</span>
           <a href="mailto:booking@castillodelalma.es">booking@castillodelalma.es</a>
         </div>
       </div>
@@ -907,94 +871,66 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:3rem
 
             <div class="form-row">
               <div class="form-group">
-                <label for="navn">Navn *</label>
-                <input type="text" id="navn" name="navn" required placeholder="Dit fulde navn">
+                <label for="navn" id="lblNavn">Navn *</label>
+                <input type="text" id="navn" name="navn" required placeholder="">
               </div>
               <div class="form-group">
-                <label for="telefon">Telefon *</label>
-                <input type="tel" id="telefon" name="telefon" required placeholder="+45 12 34 56 78">
+                <label for="telefon" id="lblTelefon">Telefon *</label>
+                <input type="tel" id="telefon" name="telefon" required placeholder="+">
               </div>
             </div>
 
             <div class="form-row">
               <div class="form-group">
-                <label for="email">E-mail *</label>
-                <input type="email" id="email" name="email" required placeholder="din@email.dk">
+                <label for="email" id="lblEmail">E-mail *</label>
+                <input type="email" id="email" name="email" required placeholder="">
               </div>
               <div class="form-group">
-                <label for="hjemmeside">Hjemmeside</label>
-                <input type="url" id="hjemmeside" name="hjemmeside" placeholder="www.dinside.dk">
+                <label for="hjemmeside" id="lblHjemmeside">Hjemmeside</label>
+                <input type="url" id="hjemmeside" name="hjemmeside" placeholder="">
               </div>
             </div>
 
             <div class="form-row">
               <div class="form-group">
-                <label for="land">Land *</label>
-                <input type="text" id="land" name="land" required placeholder="Danmark">
+                <label for="land" id="lblLand">Land *</label>
+                <input type="text" id="land" name="land" required placeholder="">
               </div>
               <div class="form-group">
-                <label for="deltagere">Antal deltagere *</label>
-                <select id="deltagere" name="deltagere" required>
-                  <option value="" disabled selected>Vælg antal</option>
-                  <option value="1-5">1–5 deltagere</option>
-                  <option value="6-10">6–10 deltagere</option>
-                  <option value="11-14">11–14 deltagere</option>
-                  <option value="14+">14+ (kontakt os)</option>
-                </select>
+                <label for="deltagere" id="lblDeltagere">Antal deltagere *</label>
+                <select id="deltagere" name="deltagere" required></select>
               </div>
             </div>
 
             <div class="form-row">
               <div class="form-group">
-                <label for="periode">Ønsket periode *</label>
-                <input type="text" id="periode" name="periode" required placeholder="f.eks. marts 2026">
+                <label for="periode" id="lblPeriode">Ønsket periode *</label>
+                <input type="text" id="periode" name="periode" required placeholder="">
               </div>
               <div class="form-group">
-                <label for="varighed">Varighed *</label>
-                <select id="varighed" name="varighed" required>
-                  <option value="" disabled selected>Antal nætter</option>
-                  <option value="2-3">2–3 nætter</option>
-                  <option value="4-5">4–5 nætter</option>
-                  <option value="6-7">6–7 nætter</option>
-                  <option value="8+">8+ nætter</option>
-                </select>
+                <label for="varighed" id="lblVarighed">Varighed *</label>
+                <select id="varighed" name="varighed" required></select>
               </div>
             </div>
 
             <div class="form-group">
-              <label for="formaal">Hvad ønsker I at bruge stedet til? *</label>
-              <select id="formaal" name="formaal" required>
-                <option value="" disabled selected>Vælg type arrangement</option>
-                <option value="yoga">Yoga retreat</option>
-                <option value="meditation">Meditation / mindfulness</option>
-                <option value="coaching">Coaching / personlig udvikling</option>
-                <option value="terapi">Terapeutisk retreat</option>
-                <option value="kreativt">Kreativt retreat</option>
-                <option value="corporate">Corporate / teambuilding</option>
-                <option value="andet">Andet</option>
-              </select>
+              <label for="formaal" id="lblFormaal">Hvad ønsker I at bruge stedet til? *</label>
+              <select id="formaal" name="formaal" required></select>
             </div>
 
             <div class="form-group">
-              <label for="besked">Fortæl os mere om dit projekt *</label>
-              <textarea id="besked" name="besked" required placeholder="Beskriv din vision, dine deltagere, og hvad du drømmer om at skabe på Castillo del Alma..."></textarea>
+              <label for="besked" id="lblBesked">Fortæl os mere om dit projekt *</label>
+              <textarea id="besked" name="besked" required placeholder=""></textarea>
             </div>
 
             <div class="form-group">
-              <label for="kilde">Hvordan hørte du om os?</label>
-              <select id="kilde" name="kilde">
-                <option value="" disabled selected>Vælg en mulighed</option>
-                <option value="google">Google-søgning</option>
-                <option value="instagram">Instagram</option>
-                <option value="facebook">Facebook</option>
-                <option value="anbefaling">Anbefaling fra andre</option>
-                <option value="andet">Andet</option>
-              </select>
+              <label for="kilde" id="lblKilde">Hvordan hørte du om os?</label>
+              <select id="kilde" name="kilde"></select>
             </div>
 
             <!-- Simpel matematisk check -->
             <div class="form-math">
-              <span class="math-label">Sikkerhedstjek</span>
+              <span class="math-label" id="lblMath">Sikkerhedstjek</span>
               <span id="mathQuestion"></span>
               <div class="form-group" style="margin:0;">
                 <input type="number" id="mathAnswer" name="mathAnswer" placeholder="?" required style="width:80px;text-align:center;">
@@ -1006,9 +942,9 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:3rem
 
           <!-- Succes besked -->
           <div class="form-success" id="formSuccess">
-            <div class="section-label" style="justify-content:center;">Tak for din henvendelse</div>
-            <h3>Vi vender tilbage inden for 24 timer</h3>
-            <p>Vi glæder os til at høre mere om din vision og drøfte, hvordan Castillo del Alma kan blive rammen for dit næste retreat.</p>
+            <div class="section-label" style="justify-content:center;" id="successLabel">Tak for din henvendelse</div>
+            <h3 id="successH3">Vi vender tilbage inden for 24 timer</h3>
+            <p id="successText">Vi glæder os til at høre mere om din vision og drøfte, hvordan Castillo del Alma kan blive rammen for dit næste retreat.</p>
           </div>
         </div>
       </div>
@@ -1020,10 +956,208 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:3rem
 <footer>
   <div class="footer-bottom">
     <p>© 2026 Castillo del Alma · Mollina, Málaga · All rights reserved</p>
-    <a href="index.html">← Tilbage til forsiden</a>
+    <a href="index.html" id="footerBack">← Tilbage til forsiden</a>
   </div>
 </footer>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+// ── UDLEJNING: SPROG + INDHOLD (samme mønster som ejendommen.html) ──
+const SUPABASE_URL_UL = 'https://niniwgiytyqvdqejigxg.supabase.co';
+const SUPABASE_ANON_KEY_UL = 'sb_publishable_GwrNUpIuWzdg1oswOY5HzA_mKWqhd6y';
+const ulSb = supabase.createClient(SUPABASE_URL_UL, SUPABASE_ANON_KEY_UL);
+
+let ulData = {};
+let ulLang = 'da';
+
+const UL_STATIC_I18N = {
+  da: { sending: 'Sender...', mathQ: (a,b) => `Hvad er ${a} + ${b}?`, mathWrong: 'Sikkerhedstjekket er forkert. Prøv igen.', fillRequired: 'Udfyld venligst alle påkrævede felter (*).', vaelgAntal: 'Vælg antal', vaelgArrangement: 'Vælg type arrangement', vaelgMulighed: 'Vælg en mulighed' },
+  en: { sending: 'Sending...', mathQ: (a,b) => `What is ${a} + ${b}?`, mathWrong: 'The security check is incorrect. Please try again.', fillRequired: 'Please fill in all required fields (*).', vaelgAntal: 'Select number', vaelgArrangement: 'Select event type', vaelgMulighed: 'Select an option' }
+};
+
+async function determineStartLangUl() {
+  try {
+    const res = await fetch('https://ipapi.co/json/');
+    const geo = await res.json();
+    return (geo.country_code === 'DK') ? 'da' : 'en';
+  } catch(e) {
+    return 'da';
+  }
+}
+
+function ulSC(key, fallback) {
+  const val = ulData[ulLang === 'en' ? key + '_en' : key];
+  return val || ulData[key] || fallback || '';
+}
+
+function setText(id, val) {
+  const el = document.getElementById(id);
+  if (el && val) el.textContent = val;
+}
+function setHTML(id, val) {
+  const el = document.getElementById(id);
+  if (el && val) el.innerHTML = val;
+}
+function setImg(id, val) {
+  const el = document.getElementById(id);
+  if (el && val) el.src = val;
+}
+function setParagraphs(id, val) {
+  const el = document.getElementById(id);
+  if (el && val) el.innerHTML = val.split('\n').filter(Boolean).map(p => `<p>${p}</p>`).join('');
+}
+function setList(id, val) {
+  const el = document.getElementById(id);
+  if (el && val) el.innerHTML = val.split('\n').filter(Boolean).map(li => `<li>${li}</li>`).join('');
+}
+
+function setUlLang(lang) {
+  ulLang = lang;
+  document.documentElement.lang = lang;
+  const btnDa = document.getElementById('ul-btn-da');
+  const btnEn = document.getElementById('ul-btn-en');
+  if (btnDa) { btnDa.classList.toggle('lang-btn-active', lang === 'da'); btnDa.classList.toggle('lang-btn-inactive', lang !== 'da'); }
+  if (btnEn) { btnEn.classList.toggle('lang-btn-active', lang === 'en'); btnEn.classList.toggle('lang-btn-inactive', lang !== 'en'); }
+  applyUlContent();
+  renderUlDropdowns();
+}
+
+function applyUlContent() {
+  setText('heroEyebrow', ulSC('hero_eyebrow'));
+  setHTML('heroH1', ulSC('hero_h1'));
+  if (ulSC('hero_bg')) document.getElementById('heroImg').style.backgroundImage = `url('${ulSC('hero_bg')}')`;
+
+  setText('navIntro', ulLang === 'en' ? 'About the place' : 'Om stedet');
+  setText('navFaciliteter', ulLang === 'en' ? 'What we offer' : 'Vi tilbyder');
+  setText('navDesign', ulLang === 'en' ? 'Design a stay' : 'Design et ophold');
+  setText('navMere', ulLang === 'en' ? 'More than a venue' : 'Mere end et kursussted');
+  setText('navKontakt', ulLang === 'en' ? 'Contact' : 'Kontakt');
+  const navBackTxt = '← ' + (ulLang === 'en' ? 'Back to homepage' : 'Tilbage til forsiden');
+  setText('navBack', navBackTxt);
+  setText('footerBack', navBackTxt);
+
+  setText('introLabel', ulSC('intro_label'));
+  setHTML('introH2', ulSC('intro_h2'));
+  setParagraphs('introTextContainer', ulSC('intro_text'));
+  setText('introBold', ulSC('intro_bold'));
+  setImg('introImg1', ulSC('intro_img1'));
+  setImg('introImg2', ulSC('intro_img2'));
+
+  setImg('strip1Img1', ulSC('strip1_img1'));
+  setImg('strip1Img2', ulSC('strip1_img2'));
+  setImg('strip1Img3', ulSC('strip1_img3'));
+  setImg('strip1Img4', ulSC('strip1_img4'));
+
+  setText('facLabel', ulSC('fac_label'));
+  setHTML('facH2', ulSC('fac_h2'));
+  setList('facList', ulSC('fac_list'));
+  setText('facNote', ulSC('fac_note'));
+  setImg('facImg1', ulSC('fac_img1'));
+  setImg('facImg2', ulSC('fac_img2'));
+  setImg('facImg3', ulSC('fac_img3'));
+
+  setText('designLabel', ulSC('design_label'));
+  setHTML('designH2', ulSC('design_h2'));
+  setParagraphs('designTextContainer', ulSC('design_text'));
+
+  let kategorier = [];
+  try { kategorier = JSON.parse(ulData.design_kategorier || '[]'); } catch(e) {}
+  kategorier.forEach((k, i) => {
+    const n = i + 1;
+    const titel = ulLang === 'en' ? (k.titel_en || k.titel) : k.titel;
+    const liste = ulLang === 'en' ? (k.liste_en || k.liste) : k.liste;
+    setText(`kat${n}Titel`, titel);
+    setList(`kat${n}Liste`, liste);
+  });
+
+  setText('designCtaP1', ulSC('design_cta_p1'));
+  setText('designCtaStrong', ulSC('design_cta_strong'));
+  setText('designCtaP2', ulSC('design_cta_p2'));
+
+  const mereLabelEl = document.getElementById('mereLabel');
+  const mereLabelTxt = ulSC('mere_label');
+  if (mereLabelEl && mereLabelTxt) mereLabelEl.childNodes[mereLabelEl.childNodes.length-1].textContent = ' ' + mereLabelTxt;
+  setHTML('mereH2', ulSC('mere_h2'));
+  setParagraphs('mereTextContainer', ulSC('mere_text'));
+  setHTML('mereQuote', ulSC('mere_quote'));
+  setImg('mereImg', ulSC('mere_img'));
+
+  setImg('strip2Img1', ulSC('strip2_img1'));
+  setImg('strip2Img2', ulSC('strip2_img2'));
+  setImg('strip2Img3', ulSC('strip2_img3'));
+
+  setText('kontaktLabel', ulSC('kontakt_label'));
+  setHTML('kontaktH2', ulSC('kontakt_h2'));
+  setParagraphs('kontaktTextContainer', ulSC('kontakt_text'));
+  setText('kontaktEmailLabel', ulSC('kontakt_email_label'));
+
+  setText('lblNavn', ulSC('form_navn'));
+  setText('lblTelefon', ulSC('form_telefon'));
+  setText('lblEmail', ulSC('form_email'));
+  setText('lblHjemmeside', ulSC('form_hjemmeside'));
+  setText('lblLand', ulSC('form_land'));
+  setText('lblDeltagere', ulSC('form_deltagere'));
+  setText('lblPeriode', ulSC('form_periode'));
+  setText('lblVarighed', ulSC('form_varighed'));
+  setText('lblFormaal', ulSC('form_formaal'));
+  setText('lblBesked', ulSC('form_besked'));
+  setText('lblKilde', ulSC('form_kilde'));
+  setText('lblMath', ulSC('form_math_label'));
+  setText('submitBtn', ulSC('form_submit'));
+
+  const navnEl = document.getElementById('navn'); if (navnEl) navnEl.placeholder = ulSC('form_navn_ph');
+  const telEl = document.getElementById('telefon'); if (telEl) telEl.placeholder = ulSC('form_telefon_ph', '+');
+  const emailEl = document.getElementById('email'); if (emailEl) emailEl.placeholder = ulSC('form_email_ph');
+  const hjEl = document.getElementById('hjemmeside'); if (hjEl) hjEl.placeholder = ulSC('form_hjemmeside_ph');
+  const landEl = document.getElementById('land'); if (landEl) landEl.placeholder = ulSC('form_land_ph');
+  const periodeEl = document.getElementById('periode'); if (periodeEl) periodeEl.placeholder = ulSC('form_periode_ph');
+  const beskedEl = document.getElementById('besked'); if (beskedEl) beskedEl.placeholder = ulSC('form_besked_ph');
+
+  setText('successLabel', ulSC('success_label'));
+  setText('successH3', ulSC('success_h3'));
+  setText('successText', ulSC('success_text'));
+}
+
+function renderUlDropdowns() {
+  const I = UL_STATIC_I18N[ulLang];
+  const buildOptions = (key, placeholderTxt) => {
+    let opts = [];
+    try { opts = JSON.parse(ulData[key] || '[]'); } catch(e) {}
+    let html = `<option value="" disabled selected>${placeholderTxt}</option>`;
+    html += opts.map(o => `<option value="${(o.value||'').replace(/"/g,'&quot;')}">${ulLang === 'en' ? (o.label_en || o.label) : o.label}</option>`).join('');
+    return html;
+  };
+  const deltagereEl = document.getElementById('deltagere');
+  if (deltagereEl) { const cur = deltagereEl.value; deltagereEl.innerHTML = buildOptions('opt_deltagere', I.vaelgAntal); if (cur) deltagereEl.value = cur; }
+  const varighedEl = document.getElementById('varighed');
+  if (varighedEl) { const cur = varighedEl.value; varighedEl.innerHTML = buildOptions('opt_varighed', ulLang === 'en' ? 'Number of nights' : 'Antal nætter'); if (cur) varighedEl.value = cur; }
+  const formaalEl = document.getElementById('formaal');
+  if (formaalEl) { const cur = formaalEl.value; formaalEl.innerHTML = buildOptions('opt_formaal', I.vaelgArrangement); if (cur) formaalEl.value = cur; }
+  const kildeEl = document.getElementById('kilde');
+  if (kildeEl) { const cur = kildeEl.value; kildeEl.innerHTML = buildOptions('opt_kilde', I.vaelgMulighed); if (cur) kildeEl.value = cur; }
+}
+
+async function loadUlContent() {
+  try {
+    const [{ data: content }, startLang] = await Promise.all([
+      ulSb.from('udlejning_content').select('key,value'),
+      determineStartLangUl()
+    ]);
+    (content || []).forEach(r => { ulData[r.key] = r.value; });
+    ulLang = startLang;
+    document.documentElement.lang = ulLang;
+    const btnDa = document.getElementById('ul-btn-da');
+    const btnEn = document.getElementById('ul-btn-en');
+    if (btnDa) { btnDa.classList.toggle('lang-btn-active', ulLang === 'da'); btnDa.classList.toggle('lang-btn-inactive', ulLang !== 'da'); }
+    if (btnEn) { btnEn.classList.toggle('lang-btn-active', ulLang === 'en'); btnEn.classList.toggle('lang-btn-inactive', ulLang !== 'en'); }
+    applyUlContent();
+    renderUlDropdowns();
+  } catch(e) {
+    console.warn('udlejning content load fejl:', e.message);
+  }
+}
+document.addEventListener('DOMContentLoaded', loadUlContent);
+</script>
 <script>
 // Hero parallax load
 window.addEventListener('load', () => {
@@ -1062,7 +1196,7 @@ const mathPairs = [
 ];
 const pair = mathPairs[Math.floor(Math.random() * mathPairs.length)];
 const mathAnswer = pair[0] + pair[1];
-document.getElementById('mathQuestion').textContent = `Hvad er ${pair[0]} + ${pair[1]}?`;
+document.getElementById('mathQuestion').textContent = UL_STATIC_I18N[ulLang].mathQ(pair[0], pair[1]);
 
 document.getElementById('retreatForm').addEventListener('submit', async function(e) {
   e.preventDefault();
@@ -1083,7 +1217,7 @@ document.getElementById('retreatForm').addEventListener('submit', async function
   // Matematik check
   const userMath = parseInt(document.getElementById('mathAnswer').value);
   if (userMath !== mathAnswer) {
-    errorEl.textContent = `Sikkerhedstjekket er forkert. Prøv igen.`;
+    errorEl.textContent = UL_STATIC_I18N[ulLang].mathWrong;
     errorEl.style.display = 'block';
     document.getElementById('mathAnswer').value = '';
     document.getElementById('mathAnswer').focus();
@@ -1094,7 +1228,7 @@ document.getElementById('retreatForm').addEventListener('submit', async function
   const required = ['navn','telefon','email','land','deltagere','periode','varighed','formaal','besked'];
   for (const id of required) {
     if (!form[id] || !form[id].value.trim()) {
-      errorEl.textContent = 'Udfyld venligst alle påkrævede felter (*).';
+      errorEl.textContent = UL_STATIC_I18N[ulLang].fillRequired;
       errorEl.style.display = 'block';
       document.getElementById(id).focus();
       return;
@@ -1102,7 +1236,7 @@ document.getElementById('retreatForm').addEventListener('submit', async function
   }
 
   // Send via Netlify Function
-  submitBtn.textContent = 'Sender...';
+  submitBtn.textContent = UL_STATIC_I18N[ulLang].sending;
   submitBtn.disabled = true;
 
   const data = {
@@ -1133,9 +1267,9 @@ document.getElementById('retreatForm').addEventListener('submit', async function
       throw new Error('Server fejl');
     }
   } catch(err) {
-    errorEl.textContent = 'Der opstod en fejl. Prøv igen eller skriv direkte til booking@castillodelalma.es';
+    errorEl.textContent = ulLang === 'en' ? 'An error occurred. Please try again or write directly to booking@castillodelalma.es' : 'Der opstod en fejl. Prøv igen eller skriv direkte til booking@castillodelalma.es';
     errorEl.style.display = 'block';
-    submitBtn.textContent = 'Send forespørgsel';
+    submitBtn.textContent = ulSC('form_submit', ulLang === 'en' ? 'Send inquiry' : 'Send forespørgsel');
     submitBtn.disabled = false;
   }
 });

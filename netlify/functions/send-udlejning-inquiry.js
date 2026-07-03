@@ -21,16 +21,6 @@ exports.handler = async (event) => {
     return { statusCode: 400, body: 'Manglende påkrævede felter' };
   }
 
-  const formaalLabels = {
-    yoga: 'Yoga retreat', meditation: 'Meditation / mindfulness',
-    coaching: 'Coaching / personlig udvikling', terapi: 'Terapeutisk retreat',
-    kreativt: 'Kreativt retreat', corporate: 'Corporate / teambuilding', andet: 'Andet'
-  };
-  const kildeLabels = {
-    google: 'Google-søgning', instagram: 'Instagram', facebook: 'Facebook',
-    anbefaling: 'Anbefaling fra andre', andet: 'Andet'
-  };
-
   const resend = new Resend(process.env.RESEND_API_KEY);
 
   const internHtml = buildEmail({
@@ -51,11 +41,11 @@ exports.handler = async (event) => {
       {
         label: 'Arrangement',
         rows: [
-          ['Type arrangement', formaalLabels[formaal] || formaal],
+          ['Type arrangement', formaal],
           ['Antal deltagere', deltagere],
           ['Ønsket periode', periode],
           ['Varighed', varighed],
-          ['Fundet via', kildeLabels[kilde] || kilde || '—'],
+          ['Fundet via', kilde || '—'],
         ]
       },
       {
@@ -75,7 +65,7 @@ exports.handler = async (event) => {
       {
         label: 'Din forespørgsel',
         rows: [
-          ['Type arrangement', formaalLabels[formaal] || formaal],
+          ['Type arrangement', formaal],
           ['Antal deltagere', deltagere],
           ['Ønsket periode', periode],
           ['Varighed', varighed],
