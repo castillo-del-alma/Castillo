@@ -1237,20 +1237,55 @@ async function importCSV(input) {
   const lines = text.split('\n').filter(l => l.trim());
   const result = document.getElementById('importResult');
   result.textContent = 'Importerer…';
+
+  // Detect separator: semicolon or comma
+  const sep = lines[0].includes(';') ? ';' : ',';
+
+  // Skip header row if it contains non-email text in second column
+  const startIdx = lines[0].toLowerCase().includes('email') || lines[0].toLowerCase().includes('navn') ? 1 : 0;
+
+  // Map country names to da/en
+  const daCountries = ['denmark', 'danmark', 'da'];
+  function toLang(val) {
+    if (!val) return 'da';
+    const v = val.trim().toLowerCase();
+    return daCountries.includes(v) ? 'da' : 'en';
+  }
+
   let added = 0, skipped = 0;
-  for (const line of lines) {
-    const parts = line.split(',').map(p => p.trim().replace(/^"|"$/g, ''));
-    const [name, email, lang] = parts;
+  for (let i = startIdx; i < lines.length; i++) {
+    const parts = lines[i].split(sep).map(p => p.trim().replace(/^"|"$/g, ''));
+    // Format: navn/nr, email, sprog/land  — OR just: email
+    let name = null, email = null, lang = 'da';
+
+    if (parts.length >= 2) {
+      // Check if first col looks like an email
+      if (parts[0].includes('@')) {
+        email = parts[0];
+        lang = toLang(parts[1]);
+      } else {
+        // First col is name or number — skip numbers
+        name = isNaN(parts[0]) ? parts[0] : null;
+        email = parts[1];
+        lang = toLang(parts[2]);
+      }
+    } else {
+      email = parts[0];
+    }
+
     if (!email || !email.includes('@')) { skipped++; continue; }
+
     const { error } = await sb.from('newsletter_subscribers').insert({
-      full_name: name || null, email,
-      lang: lang === 'en' ? 'en' : 'da',
-      source: 'csv_import', status: 'active',
+      full_name: name || null,
+      email: email.toLowerCase(),
+      lang,
+      source: 'csv_import',
+      status: 'active',
       list_id: currentListId
     });
     if (error) { skipped++; } else { added++; }
   }
-  result.textContent = `Import færdig: ${added} tilføjet, ${skipped} sprunget over.`;
+  result.textContent = `Import færdig: ${added} tilføjet, ${skipped} sprunget over (dubletter eller ugyldige).`;
   await loadListSubscribers();
   input.value = '';
 }
