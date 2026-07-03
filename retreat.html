@@ -1812,14 +1812,17 @@ function renderAddonsInForm(addons) {
   }
   const label = retreatLang === 'en' ? 'Add-ons' : 'Tilvalg';
   const intro = retreatLang === 'en' ? 'Add-ons can be booked here. Settled upon departure.' : 'Tilvalg kan bestilles her. Afregning foretages ved afrejse.';
-  container.innerHTML = `<span class="form-addons-label">${label}</span><p style="font-size:13px;color:rgba(44,35,24,.8);margin:.3rem 0 .8rem;font-family:Manrope,sans-serif;font-weight:400;font-style:normal;">${intro}</p>` + addons.map((a, i) => `
+  container.innerHTML = `<span class="form-addons-label">${label}</span><p style="font-size:13px;color:rgba(44,35,24,.8);margin:.3rem 0 .8rem;font-family:Manrope,sans-serif;font-weight:400;font-style:normal;">${intro}</p>` + addons.map((a, i) => {
+    const displayText = retreatLang === 'en' ? (a.text_en || a.text) : a.text;
+    return `
     <label class="addon-item">
       <input type="checkbox" class="dynamic-addon" data-text="${(a.text||'').replace(/"/g,'&quot;')}" data-price="${a.price}">
       <span class="addon-box"></span>
-      <span class="addon-text">${a.text}</span>
+      <span class="addon-text">${displayText}</span>
       <span class="addon-price">€${a.price}</span>
     </label>
-  `).join('');
+  `;
+  }).join('');
 }
 
 document.addEventListener('DOMContentLoaded', loadRetreatData);

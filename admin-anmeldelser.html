@@ -6202,7 +6202,7 @@ async function gemRetreat() {
       ui_addon_after_en: document.getElementById('ui_addon_after_en').value.trim() || null,
       ui_addon_massage: document.getElementById('ui_addon_massage').value.trim() || null,
       ui_addon_massage_en: document.getElementById('ui_addon_massage_en').value.trim() || null,
-      addon_items: addonState.filter(a => a.text && a.text.trim() && a.price !== '' && !isNaN(parseFloat(a.price))).map(a => ({ text: a.text.trim(), price: parseFloat(a.price) })),
+      addon_items: addonState.filter(a => a.text && a.text.trim() && a.price !== '' && !isNaN(parseFloat(a.price))).map(a => ({ text: a.text.trim(), text_en: (a.text_en || '').trim() || null, price: parseFloat(a.price) })),
       max_guests: parseInt(document.getElementById('retreat_max_guests').value) || null,
       extra_dates: extraDatesState.filter(d => d.arrival && d.departure),
       retreat_images5: retreatBilleder5State.filter(b => b.url).map(b => b.url),
@@ -6827,8 +6827,9 @@ function renderAddonListe() {
     return;
   }
   container.innerHTML = addonState.map((a, i) => `
-    <div style="display:grid;grid-template-columns:1fr 100px auto;gap:.6rem;align-items:center;">
-      <input type="text" placeholder="Fx. Kropsmassage 60 min." value="${(a.text || '').replace(/"/g,'&quot;')}" oninput="addonState[${i}].text=this.value" style="background:rgba(44,35,24,.06);border:1px solid rgba(184,138,30,.2);color:#2c2318;padding:.6rem .8rem;font-family:'Manrope',sans-serif;font-size:.78rem;outline:none;">
+    <div style="display:grid;grid-template-columns:1fr 1fr 100px auto;gap:.6rem;align-items:center;">
+      <input type="text" placeholder="Fx. Kropsmassage 60 min. 🇩🇰" value="${(a.text || '').replace(/"/g,'&quot;')}" oninput="addonState[${i}].text=this.value" style="background:#fffef8;border:1px solid rgba(184,138,30,.3);color:#2c2318;padding:.6rem .8rem;font-family:'Manrope',sans-serif;font-size:.78rem;outline:none;">
+      <input type="text" placeholder="Fx. Body massage 60 min. 🇬🇧" value="${(a.text_en || '').replace(/"/g,'&quot;')}" oninput="addonState[${i}].text_en=this.value" style="background:#e8f4f3;border:1px solid #7fb3af;color:#2c2318;padding:.6rem .8rem;font-family:'Manrope',sans-serif;font-size:.78rem;outline:none;">
       <input type="text" inputmode="numeric" placeholder="Pris €" value="${a.price || ''}" oninput="addonState[${i}].price=this.value.replace(/[^0-9.]/g,'')" style="background:rgba(44,35,24,.06);border:1px solid rgba(184,138,30,.2);color:#2c2318;padding:.6rem .8rem;font-family:'Manrope',sans-serif;font-size:.78rem;outline:none;text-align:right;">
       <button type="button" onclick="fjernAddon(${i})" style="background:none;border:none;color:rgba(192,92,48,.6);cursor:pointer;font-size:.85rem;padding:.4rem;">✕</button>
     </div>
@@ -6836,7 +6837,7 @@ function renderAddonListe() {
 }
 
 function tilfoejAddon() {
-  addonState.push({ text: '', price: '' });
+  addonState.push({ text: '', text_en: '', price: '' });
   renderAddonListe();
 }
 
