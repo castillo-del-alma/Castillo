@@ -6924,7 +6924,7 @@ function gemProgramEditor() {
   document.getElementById('retreat_program_days').value = JSON.stringify(programDagState, null, 2);
   document.getElementById('retreat_program_days_en').value = JSON.stringify(programDagStateEN, null, 2);
   closeModal('modalProgramEditor');
-  showToast('Programdage opdateret (DA + EN) ✓');
+  showToast('Programdage opdateret i formularen — husk at klikke "💾 Gem retreat" for at gemme permanent!');
 }
 
 
@@ -6989,7 +6989,7 @@ function gemFaqEditor() {
   const preview = document.getElementById('faqPreview');
   if (preview) preview.textContent = faqState.length ? `${faqState.length} spørgsmål gemt (DA + EN)` : '';
   closeModal('modalFaqEditor');
-  showToast('FAQ opdateret (DA + EN) ✓');
+  showToast('FAQ opdateret i formularen — husk at klikke "💾 Gem retreat" for at gemme permanent!');
 }
 
 // ── HIGHLIGHTS EDITOR ──
@@ -7153,7 +7153,7 @@ function gemHighlightsEditor() {
   const preview = document.getElementById('highlightsPreview');
   if (preview) preview.textContent = highlightsState.length ? `${highlightsState.length} highlights gemt (DA + EN)` : '';
   closeModal('modalHighlightsEditor');
-  showToast('Highlights opdateret (DA + EN) ✓');
+  showToast('Highlights opdateret i formularen — husk at klikke "💾 Gem retreat" for at gemme permanent!');
 }
 
 // ── GLOBAL SETTINGS ──

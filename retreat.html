@@ -1162,6 +1162,17 @@ const R_ICON_SVG = {
 
 let retreatLang = 'da';
 
+// Dansk hvis Danmark, ellers engelsk — baseret på IP-geolokation (samme mønster som index.html)
+async function determineStartLang() {
+  try {
+    const res = await fetch('https://ipapi.co/json/');
+    const geo = await res.json();
+    return (geo.country_code === 'DK') ? 'da' : 'en';
+  } catch(e) {
+    return 'da'; // fallback hvis geolokation fejler
+  }
+}
+
 // Henter sprog-korrekt indhold fra CURRENT_RETREAT: _en-felt hvis EN og sat, ellers DA-felt, ellers fallback
 function rSC(key, fallback) {
   if (!CURRENT_RETREAT) return fallback || '';
@@ -1291,9 +1302,19 @@ async function loadRetreatData() {
     return;
   }
 
-  const { data, error } = await sbR.from('retreats').select('*').eq('slug', slug).single();
+  const [{ data, error }, startLang] = await Promise.all([
+    sbR.from('retreats').select('*').eq('slug', slug).single(),
+    determineStartLang()
+  ]);
+  retreatLang = startLang;
+  document.documentElement.lang = retreatLang;
+  const btnDa = document.getElementById('retreat-btn-da');
+  const btnEn = document.getElementById('retreat-btn-en');
+  if (btnDa) { btnDa.classList.toggle('lang-btn-active', retreatLang === 'da'); btnDa.classList.toggle('lang-btn-inactive', retreatLang !== 'da'); }
+  if (btnEn) { btnEn.classList.toggle('lang-btn-active', retreatLang === 'en'); btnEn.classList.toggle('lang-btn-inactive', retreatLang !== 'en'); }
+
   if (error || !data) {
-    document.getElementById('retreatTitle').textContent = 'Retreat ikke fundet';
+    document.getElementById('retreatTitle').textContent = retreatLang === 'en' ? 'Retreat not found' : 'Retreat ikke fundet';
     return;
   }
 
