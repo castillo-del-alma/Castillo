@@ -654,8 +654,8 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:3rem
           <option value="">Vælg dato</option>
         </select>
       </div>
-      <button class="btn-inquire" onclick="document.getElementById('booking').scrollIntoView({behavior:'smooth'})">Reserver</button>
-      <button class="btn-book" onclick="document.getElementById('booking').scrollIntoView({behavior:'smooth'})">Book nu</button>
+      <button class="btn-inquire" id="btnHeroReserver" onclick="document.getElementById('booking').scrollIntoView({behavior:'smooth'})">Reserver</button>
+      <button class="btn-book" id="btnHeroBook" onclick="document.getElementById('booking').scrollIntoView({behavior:'smooth'})">Book nu</button>
     </div>
   </div>
 </div>
@@ -723,16 +723,16 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:3rem
 <section class="included" id="included">
   <div class="section-inner">
     <div class="reveal">
-      <span class="section-label">Hvad er inkluderet</span>
-      <h2>Alt hvad du behøver</h2>
+      <span class="section-label" id="includedLabel">Hvad er inkluderet</span>
+      <h2 id="includedHeading">Alt hvad du behøver</h2>
     </div>
     <div class="included-cols reveal d1">
       <div class="included-list incl-yes">
-        <h3><span>✓</span> Inkluderet i prisen</h3>
+        <h3 id="includedYesHeading"><span>✓</span> Inkluderet i prisen</h3>
         <div id="includedListContainer"></div>
       </div>
       <div class="included-list incl-no">
-        <h3><span>✗</span> Ikke inkluderet</h3>
+        <h3 id="includedNoHeading"><span>✗</span> Ikke inkluderet</h3>
         <div id="excludedListContainer"></div>
       </div>
     </div>
@@ -826,8 +826,8 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:3rem
   <canvas class="section-canvas" data-palette="green"></canvas>
   <div class="section-inner">
     <div class="reveal">
-      <span class="section-label">Gæsternes oplevelser</span>
-      <h2 class="split-h">Hvad siger vores <em>gæster</em></h2>
+      <span class="section-label" id="reviewsLabel">Gæsternes oplevelser</span>
+      <h2 class="split-h" id="reviewsHeading">Hvad siger vores <em>gæster</em></h2>
     </div>
     <div class="reviews-grid reveal d1" id="reviewsGrid">
       <div style="grid-column:1/-1;text-align:center;padding:2rem;color:rgba(44,35,24,.4);font-size:.85rem;">Henter anmeldelser…</div>
@@ -849,7 +849,7 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:3rem
 <section class="faq" id="faq">
   <div class="section-inner">
     <div class="reveal">
-      <span class="section-label">Ofte stillede spørgsmål</span>
+      <span class="section-label" id="faqLabel">Ofte stillede spørgsmål</span>
       <h2 id="faqHeading">FAQ</h2>
     </div>
     <div class="faq-list reveal d1">
@@ -892,30 +892,30 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:3rem
   <div class="section-inner">
     <div class="booking-grid">
       <div class="reveal-left">
-        <span class="section-label" style="color:rgba(184,138,30,.7);">Book dit retreat</span>
-        <h2>Tag det første skridt</h2>
-        <p>Udfyld formularen og vi vender tilbage inden for 24 timer med bekræftelse og information om næste trin.</p>
-        <p>Har du spørgsmål inden du tilmelder dig, er du altid velkommen til at skrive eller ringe.</p>
-        <p class="policy-note">Ved tilmelding accepterer du vores betalings- og afbestillingsbetingelser. Depositum på 30% forfalder ved tilmelding og reserverer din plads. Restbeløbet forfalder 8 dage før retreatstart.</p>
+        <span class="section-label" id="bookLabel" style="color:rgba(184,138,30,.7);">Book dit retreat</span>
+        <h2 id="bookHeading">Tag det første skridt</h2>
+        <p id="bookIntro1">Udfyld formularen og vi vender tilbage inden for 24 timer med bekræftelse og information om næste trin.</p>
+        <p id="bookIntro2">Har du spørgsmål inden du tilmelder dig, er du altid velkommen til at skrive eller ringe.</p>
+        <p class="policy-note" id="bookPolicyNote">Ved tilmelding accepterer du vores betalings- og afbestillingsbetingelser. Depositum på 30% forfalder ved tilmelding og reserverer din plads. Restbeløbet forfalder 8 dage før retreatstart.</p>
       </div>
       <div class="reveal-right d2">
         <div class="booking-form">
           <div class="form-field">
-            <label>Retreat</label>
+            <label id="labelRetreat">Retreat</label>
             <input type="text" id="retreatNameField" value="" readonly style="background:#fff;color:#7a1f35;cursor:default;border-color:#d4c4a0;font-size:.68rem;font-weight:500;letter-spacing:.08em;text-transform:uppercase;">
           </div>
           <div class="form-row">
-            <div class="form-field"><label>Fornavn *</label><input id="f-fornavn" type="text" placeholder="Dit fornavn" required></div>
-            <div class="form-field"><label>Efternavn *</label><input id="f-efternavn" type="text" placeholder="Dit efternavn" required></div>
+            <div class="form-field"><label id="labelFornavn">Fornavn *</label><input id="f-fornavn" type="text" placeholder="Dit fornavn" required></div>
+            <div class="form-field"><label id="labelEfternavn">Efternavn *</label><input id="f-efternavn" type="text" placeholder="Dit efternavn" required></div>
           </div>
           <div class="form-row">
-            <div class="form-field"><label>E-mail *</label><input id="f-email" type="email" placeholder="din@email.com" required></div>
-            <div class="form-field"><label>Telefon *</label><input id="f-telefon" type="tel" placeholder="+45 xx xx xx xx" required></div>
+            <div class="form-field"><label id="labelEmail">E-mail *</label><input id="f-email" type="email" placeholder="din@email.com" required></div>
+            <div class="form-field"><label id="labelTelefon">Telefon *</label><input id="f-telefon" type="tel" placeholder="+45 xx xx xx xx" required></div>
           </div>
           <div class="form-field">
-            <label>Land</label>
+            <label id="labelLand">Land</label>
             <select id="f-land" required>
-              <option value="">Vælg dit land</option>
+              <option value="" id="optVaelgLand">Vælg dit land</option>
               <option value="Danmark">Danmark</option>
               <option value="Norge">Norge</option>
               <option value="Sverige">Sverige</option>
@@ -988,20 +988,20 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:3rem
           <div id="extra-guests"></div>
           <button type="button" class="add-guest-btn" onclick="addGuest()">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-            Tilføj gæst
+            <span id="labelTilfoejGaest">Tilføj gæst</span>
           </button>
           <div class="form-field">
-            <label>Vælg dato</label>
+            <label id="labelVaelgDato">Vælg dato</label>
             <select id="formDateSelect" onchange="handleFormDateChange()">
-              <option value="">Vælg foretrukken dato</option>
+              <option value="" id="optVaelgDato">Vælg foretrukken dato</option>
             </select>
           </div>
           <div class="form-field">
-            <label>Værelses-præference</label>
+            <label id="labelVaerelse">Værelses-præference</label>
             <select id="room-select">
-              <option value="">Vælg værelse</option>
+              <option value="" id="optVaelgVaerelse">Vælg værelse</option>
               <option id="opt-delt">Delt dobbeltværelse</option>
-              <option>Forespørg på enkeltværelse</option>
+              <option id="optEnkeltForesp">Forespørg på enkeltværelse</option>
             </select>
           </div>
           <div class="form-field">
@@ -1028,12 +1028,12 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:3rem
             </div>
           </div>
           <div class="form-field">
-            <label>Særlige ønsker</label>
+            <label id="labelOensker">Særlige ønsker</label>
             <textarea id="f-kommentar" placeholder="Skriv dine særlige ønsker eller behov"></textarea>
           </div>
           <div id="form-error" style="display:none;font-size:.78rem;color:#c05c30;margin-top:.2rem;"></div>
           <div class="form-btns">
-            <button type="button" class="form-submit form-submit-secondary" onclick="sendForespørgsel()">Reserver din plads</button>
+            <button type="button" class="form-submit form-submit-secondary" onclick="sendForespørgsel()" id="btnReserverPlads">Reserver din plads</button>
             <button type="button" class="form-submit" id="btn-depositum" onclick="visBetalingsvalg()">Book og betal</button>
           </div>
         </div>
@@ -1185,6 +1185,97 @@ function setText(id, val) {
   if (el && val) el.textContent = val;
 }
 
+// Statisk DA/EN-oversættelse for UI-tekster der ikke er knyttet til et admin-felt
+// (formular-labels, betalings-overlay, sektion-captions uden redigerbart admin-felt)
+const STATIC_I18N = {
+  da: {
+    reviewsLabel: 'Gæsternes oplevelser', reviewsHeading: 'Hvad siger vores <em>gæster</em>',
+    includedLabel: 'Hvad er inkluderet', includedHeading: 'Alt hvad du behøver',
+    includedYesHeading: '<span>✓</span> Inkluderet i prisen', includedNoHeading: '<span>✗</span> Ikke inkluderet',
+    faqLabel: 'Ofte stillede spørgsmål',
+    bookLabel: 'Book dit retreat', bookIntro2: 'Har du spørgsmål inden du tilmelder dig, er du altid velkommen til at skrive eller ringe.',
+    labelRetreat: 'Retreat', labelFornavn: 'Fornavn *', labelEfternavn: 'Efternavn *',
+    labelEmail: 'E-mail *', labelTelefon: 'Telefon *', labelLand: 'Land', optVaelgLand: 'Vælg dit land',
+    labelTilfoejGaest: 'Tilføj gæst', labelVaelgDato: 'Vælg dato', optVaelgDato: 'Vælg foretrukken dato',
+    labelVaerelse: 'Værelses-præference', optVaelgVaerelse: 'Vælg værelse', optDeltDobbelt: 'Delt dobbeltværelse',
+    optDobbelt: 'Dobbeltværelse', optEnkeltForesp: 'Forespørg på enkeltværelse',
+    labelOensker: 'Særlige ønsker', placeholderOensker: 'Skriv dine særlige ønsker eller behov',
+    btnReserverPlads: 'Reserver din plads', btnBookBetal: 'Book og betal', btnBookNuBetal: 'Book nu og betal',
+    btnHeroReserver: 'Reserver', btnHeroBook: 'Book nu',
+    bvTitle: 'Vælg betalingsform', bvSub: 'Hvor meget ønsker du at betale nu?',
+    bvDepositLabel: 'Depositum (30%) —', bvFullLabel: 'Fuldt beløb —', bvCustomLabel: 'Eller vælg eget beløb',
+    bvBetalPlaceholder: 'Beløb i €', bvBetalBtn: 'Betal', bvCancelBtn: 'Annuller',
+    guestLabel: 'Gæst', guestRemove: '✕ Fjern', guestFornavn: 'Fornavn', guestEfternavn: 'Efternavn', guestEmail: 'E-mail', guestEmailPlaceholder: 'gaest@email.com'
+  },
+  en: {
+    reviewsLabel: "Guests' experiences", reviewsHeading: 'What our <em>guests</em> say',
+    includedLabel: "What's included", includedHeading: 'Everything you need',
+    includedYesHeading: '<span>✓</span> Included in the price', includedNoHeading: '<span>✗</span> Not included',
+    faqLabel: 'Frequently asked questions',
+    bookLabel: 'Book your retreat', bookIntro2: 'If you have questions before signing up, feel free to write or call us anytime.',
+    labelRetreat: 'Retreat', labelFornavn: 'First name *', labelEfternavn: 'Last name *',
+    labelEmail: 'Email *', labelTelefon: 'Phone *', labelLand: 'Country', optVaelgLand: 'Select your country',
+    labelTilfoejGaest: 'Add guest', labelVaelgDato: 'Select date', optVaelgDato: 'Select preferred date',
+    labelVaerelse: 'Room preference', optVaelgVaerelse: 'Select room', optDeltDobbelt: 'Shared double room',
+    optDobbelt: 'Double room', optEnkeltForesp: 'Inquire about single room',
+    labelOensker: 'Special requests', placeholderOensker: 'Write any special requests or needs',
+    btnReserverPlads: 'Reserve your spot', btnBookBetal: 'Book and pay', btnBookNuBetal: 'Book now and pay',
+    btnHeroReserver: 'Reserve', btnHeroBook: 'Book now',
+    bvTitle: 'Choose payment method', bvSub: 'How much would you like to pay now?',
+    bvDepositLabel: 'Deposit (30%) —', bvFullLabel: 'Full amount —', bvCustomLabel: 'Or choose your own amount',
+    bvBetalPlaceholder: 'Amount in €', bvBetalBtn: 'Pay', bvCancelBtn: 'Cancel',
+    guestLabel: 'Guest', guestRemove: '✕ Remove', guestFornavn: 'First name', guestEfternavn: 'Last name', guestEmail: 'Email', guestEmailPlaceholder: 'guest@email.com'
+  }
+};
+
+function SI18N(key) {
+  return (STATIC_I18N[retreatLang] && STATIC_I18N[retreatLang][key]) || STATIC_I18N.da[key] || '';
+}
+
+function applyStaticLabels() {
+  setText('reviewsLabel', SI18N('reviewsLabel'));
+  const rh = document.getElementById('reviewsHeading'); if (rh) rh.innerHTML = SI18N('reviewsHeading');
+  setText('includedLabel', SI18N('includedLabel'));
+  setText('includedHeading', SI18N('includedHeading'));
+  const iy = document.getElementById('includedYesHeading'); if (iy) iy.innerHTML = SI18N('includedYesHeading');
+  const inh = document.getElementById('includedNoHeading'); if (inh) inh.innerHTML = SI18N('includedNoHeading');
+  setText('faqLabel', SI18N('faqLabel'));
+  setText('bookLabel', SI18N('bookLabel'));
+  setText('bookIntro2', SI18N('bookIntro2'));
+  setText('labelRetreat', SI18N('labelRetreat'));
+  setText('labelFornavn', SI18N('labelFornavn'));
+  setText('labelEfternavn', SI18N('labelEfternavn'));
+  setText('labelEmail', SI18N('labelEmail'));
+  setText('labelTelefon', SI18N('labelTelefon'));
+  setText('labelLand', SI18N('labelLand'));
+  setText('optVaelgLand', SI18N('optVaelgLand'));
+  setText('labelTilfoejGaest', SI18N('labelTilfoejGaest'));
+  setText('labelVaelgDato', SI18N('labelVaelgDato'));
+  setText('optVaelgDato', SI18N('optVaelgDato'));
+  setText('labelVaerelse', SI18N('labelVaerelse'));
+  setText('optVaelgVaerelse', SI18N('optVaelgVaerelse'));
+  setText('opt-delt', document.querySelectorAll('.guest-row').length > 0 ? SI18N('optDobbelt') : SI18N('optDeltDobbelt'));
+  setText('optEnkeltForesp', SI18N('optEnkeltForesp'));
+  setText('labelOensker', SI18N('labelOensker'));
+  const oensker = document.getElementById('f-kommentar'); if (oensker) oensker.placeholder = SI18N('placeholderOensker');
+  setText('btnReserverPlads', SI18N('btnReserverPlads'));
+  setText('btnHeroReserver', SI18N('btnHeroReserver'));
+  setText('btnHeroBook', SI18N('btnHeroBook'));
+  setText('bvTitle', SI18N('bvTitle'));
+  setText('bvSub', SI18N('bvSub'));
+  setText('bvDepositLabel', SI18N('bvDepositLabel'));
+  setText('bvFullLabel', SI18N('bvFullLabel'));
+  setText('bvCustomLabel', SI18N('bvCustomLabel'));
+  const bvEget = document.getElementById('bv-eget'); if (bvEget) bvEget.placeholder = SI18N('bvBetalPlaceholder');
+  setText('bvBetalBtn', SI18N('bvBetalBtn'));
+  setText('bvCancelBtn', SI18N('bvCancelBtn'));
+
+  // Book-heading/intro/policy fra admin (falder tilbage til statisk DA/EN hvis ikke sat)
+  const bh = document.getElementById('bookHeading'); if (bh) bh.textContent = rSC('ui_book_heading', retreatLang === 'en' ? 'Take the first step' : 'Tag det første skridt');
+  const bi1 = document.getElementById('bookIntro1'); if (bi1) bi1.textContent = rSC('ui_book_intro', retreatLang === 'en' ? 'Fill out the form and we will get back to you within 24 hours with confirmation and information about next steps.' : 'Udfyld formularen og vi vender tilbage inden for 24 timer med bekræftelse og information om næste trin.');
+  const bp = document.getElementById('bookPolicyNote'); if (bp) bp.textContent = rSC('ui_policy_note', retreatLang === 'en' ? 'By signing up you accept our payment and cancellation terms. A 30% deposit is due at sign-up and reserves your spot. The remaining balance is due 8 days before the retreat begins.' : 'Ved tilmelding accepterer du vores betalings- og afbestillingsbetingelser. Depositum på 30% forfalder ved tilmelding og reserverer din plads. Restbeløbet forfalder 8 dage før retreatstart.');
+}
+
 function setRetreatLang(lang) {
   retreatLang = lang;
   const btnDa = document.getElementById('retreat-btn-da');
@@ -1192,6 +1283,7 @@ function setRetreatLang(lang) {
   if (btnDa) { btnDa.classList.toggle('lang-btn-active', lang === 'da'); btnDa.classList.toggle('lang-btn-inactive', lang !== 'da'); }
   if (btnEn) { btnEn.classList.toggle('lang-btn-active', lang === 'en'); btnEn.classList.toggle('lang-btn-inactive', lang !== 'en'); }
   document.documentElement.lang = lang;
+  applyStaticLabels();
   if (CURRENT_RETREAT) {
     applyRetreatContent();
     buildDateOptions(CURRENT_RETREAT);
@@ -1324,6 +1416,7 @@ async function loadRetreatData() {
   DEPOSIT_DKK = Math.round(RETREAT_PRICE * DEPOSIT_PCT);
 
   applyRetreatContent();
+  applyStaticLabels();
   buildDateOptions(data);
   updatePriceDisplay();
 
@@ -1904,9 +1997,7 @@ function updateRoomLabel() {
   const opt = document.getElementById('opt-delt');
   if (!opt) return;
   const hasGuests = document.querySelectorAll('.guest-row').length > 0;
-  opt.textContent = hasGuests
-    ? 'Dobbeltværelse'
-    : 'Delt dobbeltværelse';
+  opt.textContent = hasGuests ? SI18N('optDobbelt') : SI18N('optDeltDobbelt');
 }
 
 function addGuest() {
@@ -1917,14 +2008,14 @@ function addGuest() {
   row.id = 'guest-' + guestCount;
   row.innerHTML = `
     <div class="guest-row-header">
-      <span>Gæst ${guestCount}</span>
-      <button type="button" class="remove-guest" onclick="removeGuest(${guestCount})">✕ Fjern</button>
+      <span>${SI18N('guestLabel')} ${guestCount}</span>
+      <button type="button" class="remove-guest" onclick="removeGuest(${guestCount})">${SI18N('guestRemove')}</button>
     </div>
     <div class="form-row">
-      <div class="form-field"><label>Fornavn</label><input type="text" placeholder="Fornavn"></div>
-      <div class="form-field"><label>Efternavn</label><input type="text" placeholder="Efternavn"></div>
+      <div class="form-field"><label>${SI18N('guestFornavn')}</label><input type="text" placeholder="${SI18N('guestFornavn')}"></div>
+      <div class="form-field"><label>${SI18N('guestEfternavn')}</label><input type="text" placeholder="${SI18N('guestEfternavn')}"></div>
     </div>
-    <div class="form-field"><label>E-mail</label><input type="email" placeholder="gaest@email.com"></div>`;
+    <div class="form-field"><label>${SI18N('guestEmail')}</label><input type="email" placeholder="${SI18N('guestEmailPlaceholder')}"></div>`;
   container.appendChild(row);
   updateRoomLabel();
   updatePriceDisplay();
@@ -1942,24 +2033,24 @@ function updatePriceDisplay() {
   const depositum = Math.round(RETREAT_PRICE * DEPOSIT_PCT * antalGaester);
   const btn = document.getElementById('btn-depositum');
   if (btn && !btn.disabled) {
-    btn.textContent = 'Book nu og betal';
+    btn.textContent = SI18N('btnBookNuBetal');
   }
 }
 </script>
 <div id="betalingsvalg-overlay">
   <div class="bv-box">
     <p class="bv-eyebrow">Castillo del Alma</p>
-    <h3 class="bv-title">Vælg betalingsform</h3>
-    <p class="bv-sub">Hvor meget ønsker du at betale nu?</p>
-    <button class="bv-btn bv-btn-primary" onclick="gennemfoerBetaling('deposit')">Depositum (30%) — €<span id="bv-deposit-amount">—</span></button>
-    <button class="bv-btn bv-btn-secondary" onclick="gennemfoerBetaling('full')">Fuldt beløb — €<span id="bv-full-amount">—</span></button>
+    <h3 class="bv-title" id="bvTitle">Vælg betalingsform</h3>
+    <p class="bv-sub" id="bvSub">Hvor meget ønsker du at betale nu?</p>
+    <button class="bv-btn bv-btn-primary" onclick="gennemfoerBetaling('deposit')"><span id="bvDepositLabel">Depositum (30%) —</span> €<span id="bv-deposit-amount">—</span></button>
+    <button class="bv-btn bv-btn-secondary" onclick="gennemfoerBetaling('full')"><span id="bvFullLabel">Fuldt beløb —</span> €<span id="bv-full-amount">—</span></button>
     <hr class="bv-divider">
-    <p style="font-size:.72rem;color:rgba(44,35,24,.5);margin:0 0 .6rem;">Eller vælg eget beløb</p>
+    <p style="font-size:.72rem;color:rgba(44,35,24,.5);margin:0 0 .6rem;" id="bvCustomLabel">Eller vælg eget beløb</p>
     <div class="bv-input-row">
       <input type="number" id="bv-eget" placeholder="Beløb i €" min="1">
-      <button class="bv-btn bv-btn-secondary" style="width:auto;white-space:nowrap;" onclick="gennemfoerBetaling('custom')">Betal</button>
+      <button class="bv-btn bv-btn-secondary" style="width:auto;white-space:nowrap;" onclick="gennemfoerBetaling('custom')" id="bvBetalBtn">Betal</button>
     </div>
-    <button class="bv-cancel" onclick="lukBetalingsvalg()">Annuller</button>
+    <button class="bv-cancel" onclick="lukBetalingsvalg()" id="bvCancelBtn">Annuller</button>
   </div>
 </div>
 </body>
