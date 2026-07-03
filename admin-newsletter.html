@@ -435,93 +435,144 @@ body { background: var(--cream); color: var(--dark); font-family: 'Georgia', ser
 
     <!-- ── TAB: SUBSCRIBERS ── -->
     <div class="tab-pane" id="tab-subscribers">
-      <div class="stats-grid">
-        <div class="stat-card"><div class="stat-num" id="subStatTotal">—</div><div class="stat-label">Totalt</div></div>
-        <div class="stat-card"><div class="stat-num" id="subStatActive">—</div><div class="stat-label">Aktive</div></div>
-        <div class="stat-card"><div class="stat-num" id="subStatUnsub">—</div><div class="stat-label">Afmeldt</div></div>
-        <div class="stat-card"><div class="stat-num" id="subStatDA">—</div><div class="stat-label">Dansk</div></div>
-      </div>
 
-      <div class="panel">
-        <div class="panel-head">
-          <span class="panel-title">➕ Tilføj abonnent</span>
+      <!-- LISTE-OVERSIGT (vises som standard) -->
+      <div id="listsView">
+        <div class="stats-grid">
+          <div class="stat-card"><div class="stat-num" id="subStatTotal">—</div><div class="stat-label">Abonnenter i alt</div></div>
+          <div class="stat-card"><div class="stat-num" id="subStatActive">—</div><div class="stat-label">Aktive</div></div>
+          <div class="stat-card"><div class="stat-num" id="subStatUnsub">—</div><div class="stat-label">Afmeldt</div></div>
+          <div class="stat-card"><div class="stat-num" id="subStatLists">—</div><div class="stat-label">Lister</div></div>
         </div>
-        <div class="panel-body">
-          <div class="form-2col">
-            <div class="form-row">
-              <label class="form-label">Navn</label>
-              <input type="text" class="form-input" id="addName" placeholder="Fulde navn">
+
+        <div class="panel">
+          <div class="panel-head">
+            <span class="panel-title">📋 Dine lister</span>
+            <button class="btn btn-sm btn-wine" onclick="showCreateList()">+ Opret ny liste</button>
+          </div>
+          <div class="panel-body" id="listsGrid" style="padding:16px;">
+            <div class="empty-state"><div class="spinner"></div></div>
+          </div>
+        </div>
+
+        <!-- Opret liste inline -->
+        <div class="panel" id="createListPanel" style="display:none;">
+          <div class="panel-head"><span class="panel-title">Opret ny liste</span></div>
+          <div class="panel-body">
+            <div class="form-2col">
+              <div class="form-row">
+                <label class="form-label">Listenavn</label>
+                <input type="text" class="form-input" id="newListName" placeholder="F.eks. VIP-gæster, Retreat-deltagere…">
+              </div>
+              <div class="form-row">
+                <label class="form-label">Beskrivelse (valgfri)</label>
+                <input type="text" class="form-input" id="newListDesc" placeholder="Kort beskrivelse af listen">
+              </div>
             </div>
-            <div class="form-row">
-              <label class="form-label">E-mail</label>
-              <input type="email" class="form-input" id="addEmail" placeholder="email@eksempel.com">
+            <div class="btn-group">
+              <button class="btn btn-wine" onclick="createList()">Opret liste</button>
+              <button class="btn btn-ghost" onclick="document.getElementById('createListPanel').style.display='none'">Annuller</button>
             </div>
           </div>
-          <div class="form-2col">
-            <div class="form-row">
-              <label class="form-label">Sprog</label>
-              <select class="form-select" id="addLang">
+        </div>
+      </div>
+
+      <!-- LISTE-DETALJE (vises når man klikker på en liste) -->
+      <div id="listDetailView" style="display:none;">
+
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:20px;">
+          <button class="btn btn-ghost btn-sm" onclick="backToLists()">← Alle lister</button>
+          <h2 id="listDetailName" style="font-size:18px;font-weight:normal;color:var(--dark);"></h2>
+          <span id="listDetailBadge" style="font-family:sans-serif;font-size:12px;color:var(--muted);"></span>
+        </div>
+
+        <div class="stats-grid" style="grid-template-columns:repeat(3,1fr);">
+          <div class="stat-card"><div class="stat-num" id="listStatCount">—</div><div class="stat-label">Aktive</div></div>
+          <div class="stat-card"><div class="stat-num" id="listStatDA">—</div><div class="stat-label">Dansk</div></div>
+          <div class="stat-card"><div class="stat-num" id="listStatEN">—</div><div class="stat-label">Engelsk</div></div>
+        </div>
+
+        <!-- Tilføj abonnent til liste -->
+        <div class="panel">
+          <div class="panel-head"><span class="panel-title">➕ Tilføj abonnent</span></div>
+          <div class="panel-body">
+            <div class="form-2col">
+              <div class="form-row">
+                <label class="form-label">Navn</label>
+                <input type="text" class="form-input" id="addName" placeholder="Fulde navn">
+              </div>
+              <div class="form-row">
+                <label class="form-label">E-mail</label>
+                <input type="email" class="form-input" id="addEmail" placeholder="email@eksempel.com">
+              </div>
+            </div>
+            <div class="form-2col">
+              <div class="form-row">
+                <label class="form-label">Sprog</label>
+                <select class="form-select" id="addLang">
+                  <option value="da">Dansk</option>
+                  <option value="en">Engelsk</option>
+                </select>
+              </div>
+              <div class="form-row">
+                <label class="form-label">Kilde</label>
+                <select class="form-select" id="addSource">
+                  <option value="manual">Manuel tilføjelse</option>
+                  <option value="booking">Booking</option>
+                  <option value="website">Hjemmeside</option>
+                  <option value="event">Arrangement</option>
+                </select>
+              </div>
+            </div>
+            <button class="btn btn-wine" onclick="addSubscriber()">Tilføj til listen</button>
+          </div>
+        </div>
+
+        <!-- Import CSV -->
+        <div class="panel">
+          <div class="panel-head"><span class="panel-title">📥 Import fra CSV</span></div>
+          <div class="panel-body">
+            <div class="import-area" onclick="document.getElementById('csvFile').click()">
+              <div>📂 Klik for at uploade CSV-fil</div>
+              <p class="form-hint" style="margin-top:8px;">Format: navn, email, sprog (da/en) — én per linje</p>
+            </div>
+            <input type="file" id="csvFile" accept=".csv" style="display:none" onchange="importCSV(this)">
+            <div id="importResult" style="margin-top:12px;font-family:sans-serif;font-size:13px;color:var(--muted);"></div>
+          </div>
+        </div>
+
+        <!-- Abonnentliste i detaljeview -->
+        <div class="panel">
+          <div class="panel-head">
+            <span class="panel-title" id="listTableTitle">Abonnenter</span>
+            <div style="display:flex;gap:8px;align-items:center;">
+              <input type="text" class="form-input" id="subSearch" placeholder="Søg…" style="width:180px;padding:6px 10px;font-size:13px;" oninput="filterSubs()">
+              <select class="form-select" id="subFilter" style="width:120px;padding:6px 10px;font-size:13px;" onchange="filterSubs()">
+                <option value="all">Alle</option>
+                <option value="active">Aktive</option>
+                <option value="unsubscribed">Afmeldt</option>
                 <option value="da">Dansk</option>
                 <option value="en">Engelsk</option>
               </select>
-            </div>
-            <div class="form-row">
-              <label class="form-label">Kilde</label>
-              <select class="form-select" id="addSource">
-                <option value="manual">Manuel tilføjelse</option>
-                <option value="booking">Booking</option>
-                <option value="website">Hjemmeside</option>
-                <option value="event">Arrangement</option>
-              </select>
+              <button class="btn btn-sm btn-ghost" onclick="exportCSV()">📤 Eksporter</button>
             </div>
           </div>
-          <button class="btn btn-wine" onclick="addSubscriber()">Tilføj abonnent</button>
-        </div>
-      </div>
-
-      <div class="panel">
-        <div class="panel-head">
-          <span class="panel-title">📥 Import fra CSV</span>
-        </div>
-        <div class="panel-body">
-          <div class="import-area" onclick="document.getElementById('csvFile').click()">
-            <div>📂 Klik for at uploade CSV-fil</div>
-            <p class="form-hint" style="margin-top:8px;">Format: navn, email, sprog (da/en) — én per linje</p>
-          </div>
-          <input type="file" id="csvFile" accept=".csv" style="display:none" onchange="importCSV(this)">
-          <div id="importResult" style="margin-top:12px;font-family:sans-serif;font-size:13px;color:var(--muted);"></div>
-        </div>
-      </div>
-
-      <div class="panel">
-        <div class="panel-head">
-          <span class="panel-title">👥 Abonnentliste</span>
-          <div style="display:flex;gap:8px;align-items:center;">
-            <input type="text" class="form-input" id="subSearch" placeholder="Søg…" style="width:200px;padding:6px 10px;font-size:13px;" oninput="filterSubs()">
-            <select class="form-select" id="subFilter" style="width:130px;padding:6px 10px;font-size:13px;" onchange="filterSubs()">
-              <option value="all">Alle</option>
-              <option value="active">Aktive</option>
-              <option value="unsubscribed">Afmeldt</option>
-              <option value="da">Dansk</option>
-              <option value="en">Engelsk</option>
-            </select>
-            <button class="btn btn-sm btn-ghost" onclick="exportCSV()">📤 Eksporter</button>
+          <div style="overflow-x:auto;">
+            <table class="sub-table" id="subTable">
+              <thead>
+                <tr>
+                  <th>Navn</th><th>E-mail</th><th>Sprog</th><th>Status</th>
+                  <th>Kilde</th><th>Tilmeldt</th><th></th>
+                </tr>
+              </thead>
+              <tbody id="subTableBody">
+                <tr><td colspan="7" class="empty-state"><div class="spinner"></div></td></tr>
+              </tbody>
+            </table>
           </div>
         </div>
-        <div style="overflow-x:auto;">
-          <table class="sub-table" id="subTable">
-            <thead>
-              <tr>
-                <th>Navn</th><th>E-mail</th><th>Sprog</th><th>Status</th>
-                <th>Kilde</th><th>Tilmeldt</th><th></th>
-              </tr>
-            </thead>
-            <tbody id="subTableBody">
-              <tr><td colspan="7" class="empty-state"><div class="spinner"></div></td></tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
+
+      </div><!-- /listDetailView -->
     </div>
 
     <!-- ── TAB: TEMPLATES ── -->
@@ -601,8 +652,11 @@ async function loadStats() {
   const { data: camps } = await sb.from('newsletter_campaigns').select('id,status');
   if (!subs) return;
   const active = subs.filter(s => s.status === 'active');
-  document.getElementById('statTotal').textContent = active.length;
-  document.getElementById('statDA').textContent = active.filter(s => s.lang === 'da').length;
+  // Count legacy website subs too
+  const { data: legacySubs } = await sb.from('newsletter').select('id');
+  const legacyCount = (legacySubs || []).length;
+  document.getElementById('statTotal').textContent = active.length + legacyCount;
+  document.getElementById('statDA').textContent = active.filter(s => s.lang === 'da').length + legacyCount;
   document.getElementById('statEN').textContent = active.filter(s => s.lang === 'en').length;
   document.getElementById('statCampaigns').textContent = (camps || []).filter(c => c.status === 'sent').length;
   updateRecipientCount(active);
@@ -921,22 +975,188 @@ function clearEditor() {
   document.getElementById('htmlEditor').value = '';
 }
 
-// ── SUBSCRIBERS ──
+// ── LISTS & SUBSCRIBERS ──
+let allLists = [];
+let currentListId = null;
+let currentListSlug = null; // 'website' = read from newsletter table
+let allSubs = [];
+
 async function loadSubscribers() {
-  const { data, error } = await sb.from('newsletter_subscribers').select('*').order('created_at', { ascending: false });
-  if (error) { console.error(error); return; }
-  allSubs = data || [];
-  renderSubStats();
-  renderSubTable(allSubs);
+  // Load lists + global stats
+  await loadLists();
 }
 
-function renderSubStats() {
-  const active = allSubs.filter(s => s.status === 'active');
-  const unsub = allSubs.filter(s => s.status === 'unsubscribed');
-  document.getElementById('subStatTotal').textContent = allSubs.length;
-  document.getElementById('subStatActive').textContent = active.length;
-  document.getElementById('subStatUnsub').textContent = unsub.length;
-  document.getElementById('subStatDA').textContent = active.filter(s => s.lang === 'da').length;
+async function loadLists() {
+  // Fetch custom lists
+  const { data: lists } = await sb.from('newsletter_lists').select('*').order('created_at', { ascending: true });
+  allLists = lists || [];
+
+  // Fetch counts from newsletter_subscribers
+  const { data: subs } = await sb.from('newsletter_subscribers').select('id,status,lang');
+  const allSubsFlat = subs || [];
+  const active = allSubsFlat.filter(s => s.status === 'active');
+
+  // Fetch count from legacy newsletter table
+  const { data: legacySubs } = await sb.from('newsletter').select('id');
+  const legacyCount = (legacySubs || []).length;
+
+  // Update global stats
+  document.getElementById('subStatTotal').textContent = allSubsFlat.length + legacyCount;
+  document.getElementById('subStatActive').textContent = active.length + legacyCount;
+  document.getElementById('subStatUnsub').textContent = allSubsFlat.filter(s => s.status === 'unsubscribed').length;
+  document.getElementById('subStatLists').textContent = allLists.length + 1; // +1 for website list
+
+  renderListsGrid(allLists, active.length, legacyCount);
+}
+
+function renderListsGrid(lists, totalActive, legacyCount) {
+  const grid = document.getElementById('listsGrid');
+
+  // Build list cards
+  const cards = [];
+
+  // Always show the website signup list first
+  cards.push(`
+    <div style="border:1px solid var(--border);background:var(--cream);padding:20px 24px;cursor:pointer;transition:border-color .15s;"
+         onclick="openList('website','Hjemmeside tilmeldinger')"
+         onmouseenter="this.style.borderColor='var(--gold)'" onmouseleave="this.style.borderColor='var(--border)'">
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:10px;">
+        <div>
+          <div style="font-size:15px;color:var(--dark);margin-bottom:4px;">🌐 Hjemmeside tilmeldinger</div>
+          <div style="font-family:sans-serif;font-size:12px;color:var(--muted);">Tilmeldinger fra castillodelalma.es</div>
+        </div>
+        <span class="badge badge-active">${legacyCount} aktive</span>
+      </div>
+      <div style="font-family:sans-serif;font-size:11px;color:var(--gold-muted);margin-top:8px;">Synkroniseret automatisk →</div>
+    </div>
+  `);
+
+  // Custom lists
+  lists.forEach(l => {
+    cards.push(`
+      <div style="border:1px solid var(--border);background:var(--cream);padding:20px 24px;cursor:pointer;transition:border-color .15s;"
+           onclick="openList('${l.id}','${l.name.replace(/'/g,"\\'")}', false)"
+           onmouseenter="this.style.borderColor='var(--gold)'" onmouseleave="this.style.borderColor='var(--border)'">
+        <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:10px;">
+          <div>
+            <div style="font-size:15px;color:var(--dark);margin-bottom:4px;">📋 ${l.name}</div>
+            <div style="font-family:sans-serif;font-size:12px;color:var(--muted);">${l.description || 'Ingen beskrivelse'}</div>
+          </div>
+          <span class="badge badge-active" id="listCount-${l.id}">— aktive</span>
+        </div>
+        <div style="display:flex;gap:8px;margin-top:8px;">
+          <button class="btn btn-sm btn-ghost" onclick="event.stopPropagation();renameList('${l.id}','${l.name.replace(/'/g,"\\'")}')">✎ Omdøb</button>
+          <button class="btn btn-sm btn-danger" onclick="event.stopPropagation();deleteList('${l.id}')">✕ Slet</button>
+        </div>
+      </div>
+    `);
+  });
+
+  grid.innerHTML = `<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;">${cards.join('')}</div>`;
+
+  // Load counts for custom lists
+  lists.forEach(async l => {
+    const { count } = await sb.from('newsletter_subscribers').select('id', { count: 'exact', head: true }).eq('list_id', l.id).eq('status', 'active');
+    const el = document.getElementById('listCount-' + l.id);
+    if (el) el.textContent = (count || 0) + ' aktive';
+  });
+}
+
+function showCreateList() {
+  document.getElementById('createListPanel').style.display = 'block';
+  document.getElementById('newListName').focus();
+}
+
+async function createList() {
+  const name = document.getElementById('newListName').value.trim();
+  if (!name) { toast('Udfyld listenavn', 'err'); return; }
+  const desc = document.getElementById('newListDesc').value.trim();
+  const { error } = await sb.from('newsletter_lists').insert({ name, description: desc || null });
+  if (error) { toast('Fejl: ' + error.message, 'err'); return; }
+  document.getElementById('newListName').value = '';
+  document.getElementById('newListDesc').value = '';
+  document.getElementById('createListPanel').style.display = 'none';
+  toast('Liste oprettet ✓', 'ok');
+  await loadLists();
+}
+
+async function renameList(id, currentName) {
+  const name = prompt('Nyt navn:', currentName);
+  if (!name || name === currentName) return;
+  await sb.from('newsletter_lists').update({ name }).eq('id', id);
+  toast('Omdøbt ✓', 'ok');
+  await loadLists();
+}
+
+async function deleteList(id) {
+  if (!confirm('Slet liste og alle dens abonnenter?')) return;
+  await sb.from('newsletter_subscribers').delete().eq('list_id', id);
+  await sb.from('newsletter_lists').delete().eq('id', id);
+  toast('Liste slettet', 'ok');
+  await loadLists();
+}
+
+async function openList(listId, listName, isWebsite) {
+  currentListId = listId;
+  currentListSlug = listId === 'website' ? 'website' : null;
+
+  document.getElementById('listsView').style.display = 'none';
+  document.getElementById('listDetailView').style.display = 'block';
+  document.getElementById('listDetailName').textContent = listId === 'website' ? '🌐 ' + listName : '📋 ' + listName;
+
+  // Hide add/import for website list (read-only)
+  const addPanel = document.querySelector('#listDetailView .panel:nth-child(2)');
+  const importPanel = document.querySelector('#listDetailView .panel:nth-child(3)');
+  if (listId === 'website') {
+    addPanel.style.display = 'none';
+    importPanel.style.display = 'none';
+    document.getElementById('listDetailBadge').textContent = 'Skrivebeskyttet — administreres via hjemmesidens tilmeldingsformular';
+  } else {
+    addPanel.style.display = 'block';
+    importPanel.style.display = 'block';
+    document.getElementById('listDetailBadge').textContent = '';
+  }
+
+  await loadListSubscribers();
+}
+
+function backToLists() {
+  currentListId = null;
+  currentListSlug = null;
+  document.getElementById('listsView').style.display = 'block';
+  document.getElementById('listDetailView').style.display = 'none';
+  loadLists();
+}
+
+async function loadListSubscribers() {
+  let subs = [];
+
+  if (currentListSlug === 'website') {
+    // Read from legacy newsletter table
+    const { data } = await sb.from('newsletter').select('*').order('created_at', { ascending: false });
+    subs = (data || []).map(r => ({
+      id: r.id,
+      full_name: r.navn || '',
+      email: r.email || '',
+      lang: r.land === 'Danmark' || r.land === 'DK' || r.land === 'da' ? 'da' : 'en',
+      status: 'active',
+      source: 'website',
+      created_at: r.created_at,
+      readonly: true
+    }));
+  } else {
+    const { data } = await sb.from('newsletter_subscribers').select('*').eq('list_id', currentListId).order('created_at', { ascending: false });
+    subs = data || [];
+  }
+
+  allSubs = subs;
+  const active = subs.filter(s => s.status === 'active');
+  document.getElementById('listStatCount').textContent = active.length;
+  document.getElementById('listStatDA').textContent = active.filter(s => s.lang === 'da').length;
+  document.getElementById('listStatEN').textContent = active.filter(s => s.lang === 'en').length;
+  document.getElementById('listTableTitle').textContent = `${subs.length} abonnenter`;
+  renderSubTable(subs);
+  updateRecipientCount(active);
 }
 
 function renderSubTable(subs) {
@@ -949,15 +1169,17 @@ function renderSubTable(subs) {
     <tr>
       <td>${s.full_name || '—'}</td>
       <td>${s.email}</td>
-      <td><span class="badge badge-${s.lang}">${s.lang === 'da' ? 'DA' : 'EN'}</span></td>
+      <td><span class="badge badge-${s.lang || 'da'}">${s.lang === 'en' ? 'EN' : 'DA'}</span></td>
       <td><span class="badge ${s.status === 'active' ? 'badge-active' : 'badge-unsub'}">${s.status === 'active' ? 'Aktiv' : 'Afmeldt'}</span></td>
       <td style="font-family:sans-serif;font-size:12px;color:var(--muted);">${s.source || '—'}</td>
       <td style="font-family:sans-serif;font-size:12px;color:var(--muted);">${fmtDate(s.created_at)}</td>
       <td>
-        ${s.status === 'active'
-          ? `<button class="btn btn-sm btn-danger" onclick="unsubscribe('${s.id}','${s.email}')">Afmeld</button>`
-          : `<button class="btn btn-sm btn-ghost" onclick="resubscribe('${s.id}')">Genaktiver</button>`}
-        <button class="btn btn-sm" onclick="deleteSub('${s.id}')" style="margin-left:4px;background:transparent;color:var(--muted);border:1px solid var(--border);">✕</button>
+        ${s.readonly ? '<span style="font-size:11px;color:var(--muted);font-family:sans-serif;">skrivebeskyttet</span>' : `
+          ${s.status === 'active'
+            ? `<button class="btn btn-sm btn-danger" onclick="unsubscribe('${s.id}','${s.email}')">Afmeld</button>`
+            : `<button class="btn btn-sm btn-ghost" onclick="resubscribe('${s.id}')">Genaktiver</button>`}
+          <button class="btn btn-sm" onclick="deleteSub('${s.id}')" style="margin-left:4px;background:transparent;color:var(--muted);border:1px solid var(--border);">✕</button>
+        `}
       </td>
     </tr>
   `).join('');
@@ -981,30 +1203,32 @@ async function addSubscriber() {
   const lang = document.getElementById('addLang').value;
   const source = document.getElementById('addSource').value;
   if (!email) { toast('Udfyld e-mail', 'err'); return; }
-  const { error } = await sb.from('newsletter_subscribers').insert({ email, full_name: name, lang, source, status: 'active' });
-  if (error) { toast(error.code === '23505' ? 'E-mail findes allerede' : 'Fejl: ' + error.message, 'err'); return; }
+  const { error } = await sb.from('newsletter_subscribers').insert({
+    email, full_name: name, lang, source, status: 'active', list_id: currentListId
+  });
+  if (error) { toast(error.code === '23505' ? 'E-mail findes allerede på denne liste' : 'Fejl: ' + error.message, 'err'); return; }
   document.getElementById('addEmail').value = '';
   document.getElementById('addName').value = '';
   toast('Abonnent tilføjet ✓', 'ok');
-  await loadSubscribers();
+  await loadListSubscribers();
 }
 
 async function unsubscribe(id, email) {
   if (!confirm(`Afmeld ${email}?`)) return;
   await sb.from('newsletter_subscribers').update({ status: 'unsubscribed', unsubscribed_at: new Date().toISOString() }).eq('id', id);
   toast('Afmeldt', 'ok');
-  await loadSubscribers();
+  await loadListSubscribers();
 }
 async function resubscribe(id) {
   await sb.from('newsletter_subscribers').update({ status: 'active', unsubscribed_at: null }).eq('id', id);
   toast('Genaktiveret ✓', 'ok');
-  await loadSubscribers();
+  await loadListSubscribers();
 }
 async function deleteSub(id) {
   if (!confirm('Slet abonnent permanent?')) return;
   await sb.from('newsletter_subscribers').delete().eq('id', id);
   toast('Slettet', 'ok');
-  await loadSubscribers();
+  await loadListSubscribers();
 }
 
 // ── CSV IMPORT ──
@@ -1020,27 +1244,25 @@ async function importCSV(input) {
     const [name, email, lang] = parts;
     if (!email || !email.includes('@')) { skipped++; continue; }
     const { error } = await sb.from('newsletter_subscribers').insert({
-      full_name: name || null,
-      email,
+      full_name: name || null, email,
       lang: lang === 'en' ? 'en' : 'da',
-      source: 'csv_import',
-      status: 'active'
+      source: 'csv_import', status: 'active',
+      list_id: currentListId
     });
     if (error) { skipped++; } else { added++; }
   }
   result.textContent = `Import færdig: ${added} tilføjet, ${skipped} sprunget over.`;
-  await loadSubscribers();
+  await loadListSubscribers();
   input.value = '';
 }
 
 function exportCSV() {
-  const active = allSubs.filter(s => s.status === 'active');
   const csv = ['Navn,E-mail,Sprog,Status,Tilmeldt'].concat(
-    active.map(s => `"${s.full_name || ''}","${s.email}","${s.lang}","${s.status}","${s.created_at}"`)
+    allSubs.map(s => `"${s.full_name || ''}","${s.email}","${s.lang || 'da'}","${s.status}","${s.created_at}"`)
   ).join('\n');
   const a = document.createElement('a');
   a.href = 'data:text/csv;charset=utf-8,' + encodeURIComponent(csv);
-  a.download = `newsletter-abonnenter-${new Date().toISOString().split('T')[0]}.csv`;
+  a.download = `abonnenter-${new Date().toISOString().split('T')[0]}.csv`;
   a.click();
 }
 
