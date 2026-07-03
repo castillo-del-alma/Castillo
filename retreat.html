@@ -39,6 +39,10 @@ nav{
 .nav-links{display:flex;gap:1.5rem;list-style:none;}
 .nav-links a{font-size:.66rem;letter-spacing:.12em;text-transform:uppercase;color:var(--text-mid);text-decoration:none;transition:color .3s;}
 .nav-links a:hover{color:var(--wine);}
+.lang-btn{border-radius:0;font-family:'Manrope',sans-serif;}
+.lang-btn.lang-btn-active{background:var(--wine);color:#fff !important;}
+.lang-btn.lang-btn-inactive{background:transparent;color:var(--wine) !important;}
+.lang-switcher{border-color:var(--wine);border-radius:0;}
 
 /* ── HERO ── */
 .retreat-hero{
@@ -589,15 +593,21 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:3rem
     <img src="img/logo-castillo-hvid_transperant.png" alt="Castillo del Alma">
   </a>
   <ul class="nav-links">
-    <li><a href="#overview">Om retreatet</a></li>
-    <li><a href="#highlights">Highlights</a></li>
-    <li><a href="#program">Program</a></li>
-    <li><a href="#included">Inkluderet</a></li>
-    <li><a href="#rooms">Værelser</a></li>
-    <li><a href="#reviews">Anmeldelser</a></li>
-    <li><a href="#booking">Book</a></li>
+    <li><a href="#overview" id="navAbout">Om retreatet</a></li>
+    <li><a href="#highlights" id="navHighlights">Highlights</a></li>
+    <li><a href="#program" id="navProgram">Program</a></li>
+    <li><a href="#included" id="navIncluded">Inkluderet</a></li>
+    <li><a href="#rooms" id="navRooms">Værelser</a></li>
+    <li><a href="#reviews" id="navReviews">Anmeldelser</a></li>
+    <li><a href="#booking" id="navBook">Book</a></li>
+    <li style="display:flex;align-items:center;gap:.4rem;margin-left:.8rem;">
+      <div class="lang-switcher" style="display:flex;border:1.5px solid;overflow:hidden;border-color:var(--wine);">
+        <button id="retreat-btn-da" class="lang-btn lang-btn-active" onclick="setRetreatLang('da')" style="font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;padding:.3rem .6rem;border:none;cursor:pointer;font-family:'Manrope',sans-serif;">DA</button>
+        <button id="retreat-btn-en" class="lang-btn lang-btn-inactive" onclick="setRetreatLang('en')" style="font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;padding:.3rem .6rem;border:none;cursor:pointer;font-family:'Manrope',sans-serif;">EN</button>
+      </div>
+    </li>
   </ul>
-  <a href="index.html#retreats" class="nav-back">← Alle retreats</a>
+  <a href="index.html#retreats" class="nav-back" id="navAllRetreats">← Alle retreats</a>
 </nav>
 
 <!-- HERO -->
@@ -746,11 +756,13 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:3rem
   <div class="section-inner">
     <div class="food-grid">
       <div class="reveal-left">
-        <span class="section-label">Mad & Drikke</span>
-        <h2>Nærende <em>andalusisk</em> køkken</h2>
-        <p>Mad er en central del af retreatoplevelsen. Alle måltider tilberedes med friske, lokale og sæsonbestemte råvarer fra regionen. Vi spiser enkelt, nærende og med respekt for kroppen.</p>
-        <p>Morgenmaden er let og energigivende — frugt, yoghurt, æg og brød. Frokosten er større og ofte et fælles bord med salater, grøntsager og proteiner. Aftensmaden er dagens sociale samlingspunkt — tre retter med lokale vine.</p>
-        <p>Særlige kostbehov imødekommes fuldt ud — vegetar, vegansk, glutenfri mv. Oplys ved tilmelding.</p>
+        <span class="section-label" id="foodLabel">Mad & Drikke</span>
+        <h2 id="foodHeading">Nærende <em>andalusisk</em> køkken</h2>
+        <div id="foodTextContainer">
+          <p>Mad er en central del af retreatoplevelsen. Alle måltider tilberedes med friske, lokale og sæsonbestemte råvarer fra regionen. Vi spiser enkelt, nærende og med respekt for kroppen.</p>
+          <p>Morgenmaden er let og energigivende — frugt, yoghurt, æg og brød. Frokosten er større og ofte et fælles bord med salater, grøntsager og proteiner. Aftensmaden er dagens sociale samlingspunkt — tre retter med lokale vine.</p>
+          <p>Særlige kostbehov imødekommes fuldt ud — vegetar, vegansk, glutenfri mv. Oplys ved tilmelding.</p>
+        </div>
       </div>
       <div class="food-img reveal-right d2">
         <img src="img/estate-dining.jpg" alt="Mad på Castillo del Alma">
@@ -838,7 +850,7 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:3rem
   <div class="section-inner">
     <div class="reveal">
       <span class="section-label">Ofte stillede spørgsmål</span>
-      <h2>FAQ</h2>
+      <h2 id="faqHeading">FAQ</h2>
     </div>
     <div class="faq-list reveal d1">
       <div class="faq-item open">
@@ -1148,19 +1160,47 @@ const R_ICON_SVG = {
   diamond: '<polygon points="12,2 22,12 12,22 2,12"/>',
 };
 
+let retreatLang = 'da';
+
+// Henter sprog-korrekt indhold fra CURRENT_RETREAT: _en-felt hvis EN og sat, ellers DA-felt, ellers fallback
+function rSC(key, fallback) {
+  if (!CURRENT_RETREAT) return fallback || '';
+  const val = retreatLang === 'en' ? CURRENT_RETREAT[key + '_en'] : CURRENT_RETREAT[key];
+  return val || CURRENT_RETREAT[key] || fallback || '';
+}
+
+function setText(id, val) {
+  const el = document.getElementById(id);
+  if (el && val) el.textContent = val;
+}
+
+function setRetreatLang(lang) {
+  retreatLang = lang;
+  const btnDa = document.getElementById('retreat-btn-da');
+  const btnEn = document.getElementById('retreat-btn-en');
+  if (btnDa) { btnDa.classList.toggle('lang-btn-active', lang === 'da'); btnDa.classList.toggle('lang-btn-inactive', lang !== 'da'); }
+  if (btnEn) { btnEn.classList.toggle('lang-btn-active', lang === 'en'); btnEn.classList.toggle('lang-btn-inactive', lang !== 'en'); }
+  document.documentElement.lang = lang;
+  if (CURRENT_RETREAT) {
+    applyRetreatContent();
+    buildDateOptions(CURRENT_RETREAT);
+    updatePriceDisplay();
+    applySectionVisibility(CURRENT_RETREAT);
+  }
+}
+
 function buildTeacherSection(data) {
-  const lang = document.documentElement.lang || 'da';
   const label = document.getElementById('facilitatorLabel');
   const heading = document.getElementById('facilitatorHeading');
   const role = document.getElementById('facilitatorRole');
   const bio = document.getElementById('facilitatorBio');
   const placeholder = document.getElementById('teacherImgPlaceholder');
 
-  if (label) label.textContent = data.ui_label_facilitator || 'Facilitator';
-  if (heading) heading.textContent = data.ui_teacher_heading || 'Din guide på rejsen';
-  if (role) role.textContent = data.ui_facilitator_role || '';
+  if (label) label.textContent = rSC('ui_label_facilitator', 'Facilitator');
+  if (heading) heading.textContent = rSC('ui_teacher_heading', retreatLang === 'en' ? 'Your guide on the journey' : 'Din guide på rejsen');
+  if (role) role.textContent = rSC('ui_facilitator_role', '');
   if (bio) {
-    const bioText = data.teacher_bio || '';
+    const bioText = rSC('teacher_bio', '');
     bio.innerHTML = bioText ? bioText.split('\n').filter(Boolean).map(p => `<p>${p}</p>`).join('') : '';
   }
 
@@ -1189,13 +1229,13 @@ function buildHighlightsSection(data) {
   const label = document.getElementById('highlightsLabel');
   if (!grid) return;
 
-  if (heading) heading.textContent = data.ui_highlights_heading || 'Hvad gør dette retreat særligt?';
-  if (label) label.textContent = data.ui_label_highlights || 'Retreat Highlights';
+  if (heading) heading.textContent = rSC('ui_highlights_heading', retreatLang === 'en' ? 'What makes this retreat special?' : 'Hvad gør dette retreat særligt?');
+  if (label) label.textContent = rSC('ui_label_highlights', 'Retreat Highlights');
 
   const items = [];
   for (let n = 1; n <= 6; n++) {
-    const title = data[`ui_highlight${n}_title`];
-    const text = data[`ui_highlight${n}_text`];
+    const title = rSC(`ui_highlight${n}_title`);
+    const text = rSC(`ui_highlight${n}_text`);
     const icon = data[`ui_highlight${n}_icon`] || 'star';
     if (title || text) {
       items.push({ title: title || '', text: text || '', icon });
@@ -1219,6 +1259,21 @@ function buildHighlightsSection(data) {
     </div>`).join('');
 }
 
+function renderFaqSection(data) {
+  const container = document.querySelector('.faq-list');
+  if (!container) return;
+  const items = retreatLang === 'en' && data.faq_items_en && data.faq_items_en.length ? data.faq_items_en : data.faq_items;
+  const heading = document.getElementById('faqHeading');
+  if (heading) heading.textContent = rSC('ui_faq_heading', 'FAQ');
+  // Behold det statiske fallback-indhold i HTML'en hvis retreatet ikke har egne FAQ-punkter sat i admin
+  if (!items || !items.length) return;
+  container.innerHTML = items.map((f, i) => `
+    <div class="faq-item${i === 0 ? ' open' : ''}">
+      <div class="faq-q" onclick="toggleFaq(this)"><span>${f.q || ''}</span><i>↓</i></div>
+      <div class="faq-a"><p>${f.a || ''}</p></div>
+    </div>`).join('');
+}
+
 function getSlugFromUrl() {
   const params = new URLSearchParams(window.location.search);
   return params.get('slug');
@@ -1226,7 +1281,7 @@ function getSlugFromUrl() {
 
 function fmtDateDK(d) {
   if (!d) return '—';
-  return new Date(d).toLocaleDateString('da-DK', { day: 'numeric', month: 'long', year: 'numeric' });
+  return new Date(d).toLocaleDateString(retreatLang === 'en' ? 'en-GB' : 'da-DK', { day: 'numeric', month: 'long', year: 'numeric' });
 }
 
 async function loadRetreatData() {
@@ -1247,55 +1302,78 @@ async function loadRetreatData() {
   DEPOSIT_PCT = parseFloat(data.deposit_pct) || 0.30;
   DEPOSIT_DKK = Math.round(RETREAT_PRICE * DEPOSIT_PCT);
 
+  applyRetreatContent();
+  buildDateOptions(data);
+  updatePriceDisplay();
+
+  // Sektion-synlighed (styret fra admin) — kør sidst så den ikke bliver overskrevet
+  applySectionVisibility(data);
+}
+
+function applyRetreatContent() {
+  const data = CURRENT_RETREAT;
+  if (!data) return;
+
   // Titel og hero
-  document.getElementById('pageTitle').textContent = `${data.title} — Castillo del Alma`;
-  document.getElementById('retreatTitle').innerHTML = (data.title || '').replace(' & ', '<br>&amp; ');
-  document.getElementById('retreatCategory').textContent = data.subtitle || '';
-  document.getElementById('retreatSubtitle').textContent = data.description || '';
-  document.getElementById('retreatNameField').value = `${data.title}${data.subtitle ? ' — ' + data.subtitle : ''}`;
+  document.getElementById('pageTitle').textContent = `${rSC('title')} — Castillo del Alma`;
+  document.getElementById('retreatTitle').innerHTML = (rSC('title') || '').replace(' & ', '<br>&amp; ');
+  document.getElementById('retreatCategory').textContent = rSC('subtitle');
+  document.getElementById('retreatSubtitle').textContent = rSC('description');
+  document.getElementById('retreatNameField').value = `${rSC('title')}${rSC('subtitle') ? ' — ' + rSC('subtitle') : ''}`;
 
   if (data.hero_image) {
     document.getElementById('heroBg').style.backgroundImage = `url('${data.hero_image}')`;
     document.getElementById('heroBg').classList.add('loaded');
   }
 
+  // Nav-labels
+  setText('navAbout', rSC('ui_nav_about', 'Om retreatet'));
+  setText('navHighlights', rSC('ui_nav_highlights', 'Highlights'));
+  setText('navProgram', rSC('ui_nav_program', 'Program'));
+  setText('navIncluded', rSC('ui_nav_included', 'Inkluderet'));
+  setText('navRooms', rSC('ui_nav_rooms', 'Værelser'));
+  setText('navReviews', rSC('ui_nav_reviews', 'Anmeldelser'));
+  setText('navBook', rSC('ui_nav_book', 'Book'));
+  const allRetreatsLink = document.getElementById('navAllRetreats');
+  if (allRetreatsLink) allRetreatsLink.innerHTML = '← ' + rSC('ui_all_retreats_link', retreatLang === 'en' ? 'All retreats' : 'Alle retreats');
+
   // Varighed
   let duration = '—';
   if (data.arrival_date && data.departure_date) {
     const nights = Math.round((new Date(data.departure_date) - new Date(data.arrival_date)) / (1000*60*60*24));
-    duration = `${nights} nætter · ${nights+1} dage`;
+    duration = retreatLang === 'en' ? `${nights} nights · ${nights+1} days` : `${nights} nætter · ${nights+1} dage`;
   }
   document.getElementById('pillNights').textContent = duration;
-  document.getElementById('pillLocation').textContent = data.location || 'Mollina · Málaga';
-  document.getElementById('pillLanguages').textContent = data.languages || '—';
-  document.getElementById('factLanguages').textContent = data.languages || '—';
-  document.getElementById('factLevel').textContent = data.level || '—';
+  document.getElementById('pillLocation').textContent = rSC('location', 'Mollina · Málaga');
+  document.getElementById('pillLanguages').textContent = rSC('languages', '—');
+  document.getElementById('factLanguages').textContent = rSC('languages', '—');
+  document.getElementById('factLevel').textContent = rSC('level', '—');
   document.getElementById('barDuration').textContent = duration;
   document.getElementById('barArrival').textContent = fmtDateDK(data.arrival_date);
   document.getElementById('barDeparture').textContent = fmtDateDK(data.departure_date);
-  document.getElementById('barPrice').textContent = RETREAT_PRICE ? `€${RETREAT_PRICE.toLocaleString('da-DK')}` : 'Kontakt os';
+  document.getElementById('barPrice').textContent = RETREAT_PRICE ? `€${RETREAT_PRICE.toLocaleString(retreatLang === 'en' ? 'en-US' : 'da-DK')}` : (retreatLang === 'en' ? 'Contact us' : 'Kontakt os');
 
   // Om retreatet
-  if (data.about_heading) document.getElementById('aboutHeading').textContent = data.about_heading;
+  const aboutHeadingEl = document.getElementById('aboutHeading');
+  if (aboutHeadingEl) aboutHeadingEl.textContent = rSC('about_heading', retreatLang === 'en' ? 'A break from everyday pace' : 'Et frirum fra hverdagens tempo');
   const aboutContainer = document.getElementById('aboutTextContainer');
   let aboutHtml = '';
-  if (data.about_text) {
-    aboutHtml += data.about_text.split('\n').filter(Boolean).map(p => `<p>${p}</p>`).join('');
-  }
-  if (data.about_quote) {
-    aboutHtml += `<blockquote>"${data.about_quote}"</blockquote>`;
-  }
-  aboutContainer.innerHTML = aboutHtml || '<p>Information om dette retreat opdateres snart.</p>';
+  const aboutText = rSC('about_text');
+  if (aboutText) aboutHtml += aboutText.split('\n').filter(Boolean).map(p => `<p>${p}</p>`).join('');
+  const aboutQuote = rSC('about_quote');
+  if (aboutQuote) aboutHtml += `<blockquote>"${aboutQuote}"</blockquote>`;
+  aboutContainer.innerHTML = aboutHtml || `<p>${retreatLang === 'en' ? 'Information about this retreat will be updated soon.' : 'Information om dette retreat opdateres snart.'}</p>`;
 
   // Quick facts
   document.getElementById('factDuration').textContent = duration;
-  document.getElementById('factMaxGuests').textContent = data.max_guests ? `${data.max_guests} personer` : '—';
-  document.getElementById('factLocation').textContent = data.location || 'Castillo del Alma';
+  document.getElementById('factMaxGuests').textContent = data.max_guests ? `${data.max_guests} ${retreatLang === 'en' ? 'guests' : 'personer'}` : '—';
+  document.getElementById('factLocation').textContent = rSC('location', 'Castillo del Alma');
 
   // Program
   const programContainer = document.getElementById('programDaysContainer');
-  if (data.program_days && data.program_days.length > 0) {
-    programContainer.innerHTML = data.program_days.map((d, i) => `
+  const programDays = (retreatLang === 'en' && data.program_days_en && data.program_days_en.length) ? data.program_days_en : data.program_days;
+  if (programDays && programDays.length > 0) {
+    programContainer.innerHTML = programDays.map((d, i) => `
       <div class="program-day${i === 0 ? ' open' : ''}">
         <div class="program-day-header" onclick="toggleDay(this)">
           <span class="program-day-num">${d.num || ''}</span>
@@ -1316,15 +1394,21 @@ async function loadRetreatData() {
   // Inkluderet / ikke inkluderet
   const inclContainer = document.getElementById('includedListContainer');
   const exclContainer = document.getElementById('excludedListContainer');
-  if (data.included_items && data.included_items.length > 0) {
-    inclContainer.innerHTML = data.included_items.map(item => `<div class="included-item">${item}</div>`).join('');
-  } else {
-    inclContainer.innerHTML = '<div class="included-item">Opdateres snart</div>';
+  let includedItems = data.included_items;
+  let excludedItems = data.excluded_items;
+  if (retreatLang === 'en') {
+    if (data.included_en) includedItems = data.included_en.split('\n').map(s => s.trim()).filter(Boolean);
+    if (data.excluded_en) excludedItems = data.excluded_en.split('\n').map(s => s.trim()).filter(Boolean);
   }
-  if (data.excluded_items && data.excluded_items.length > 0) {
-    exclContainer.innerHTML = data.excluded_items.map(item => `<div class="included-item">${item}</div>`).join('');
+  if (includedItems && includedItems.length > 0) {
+    inclContainer.innerHTML = includedItems.map(item => `<div class="included-item">${item}</div>`).join('');
   } else {
-    exclContainer.innerHTML = '<div class="included-item">Opdateres snart</div>';
+    inclContainer.innerHTML = `<div class="included-item">${retreatLang === 'en' ? 'Coming soon' : 'Opdateres snart'}</div>`;
+  }
+  if (excludedItems && excludedItems.length > 0) {
+    exclContainer.innerHTML = excludedItems.map(item => `<div class="included-item">${item}</div>`).join('');
+  } else {
+    exclContainer.innerHTML = `<div class="included-item">${retreatLang === 'en' ? 'Coming soon' : 'Opdateres snart'}</div>`;
   }
 
   // Værelser
@@ -1333,20 +1417,20 @@ async function loadRetreatData() {
   if (data.room_double_price) {
     roomsHtml += `
       <div class="room-option">
-        <h4>Delt dobbeltværelse</h4>
-        <div class="room-price">€${parseFloat(data.room_double_price).toLocaleString('da-DK')}</div>
-        <p>${data.room_double_text || ''}</p>
+        <h4>${retreatLang === 'en' ? 'Shared double room' : 'Delt dobbeltværelse'}</h4>
+        <div class="room-price">€${parseFloat(data.room_double_price).toLocaleString(retreatLang === 'en' ? 'en-US' : 'da-DK')}</div>
+        <p>${rSC('room_double_text', '')}</p>
       </div>`;
   }
   if (data.room_single_price) {
     roomsHtml += `
       <div class="room-option">
-        <h4>Enkeltværelse</h4>
-        <div class="room-price">€${parseFloat(data.room_single_price).toLocaleString('da-DK')}</div>
-        <p>${data.room_single_text || ''}</p>
+        <h4>${retreatLang === 'en' ? 'Single room' : 'Enkeltværelse'}</h4>
+        <div class="room-price">€${parseFloat(data.room_single_price).toLocaleString(retreatLang === 'en' ? 'en-US' : 'da-DK')}</div>
+        <p>${rSC('room_single_text', '')}</p>
       </div>`;
   }
-  roomsContainer.innerHTML = roomsHtml || '<p style="color:rgba(44,35,24,.4);grid-column:1/-1;text-align:center;">Værelsesoplysninger opdateres snart.</p>';
+  roomsContainer.innerHTML = roomsHtml || `<p style="color:rgba(44,35,24,.4);grid-column:1/-1;text-align:center;">${retreatLang === 'en' ? 'Room information coming soon.' : 'Værelsesoplysninger opdateres snart.'}</p>`;
 
   // 5 retreat-specifikke billeder
   const imgs5Section = document.getElementById('retreatImages5Section');
@@ -1364,8 +1448,16 @@ async function loadRetreatData() {
     }
   }
 
-  // Dato-dropdown
-  buildDateOptions(data);
+  // Mad & Drikke
+  setText('foodLabel', rSC('ui_label_food', 'Mad & Drikke'));
+  const foodHeadingEl = document.getElementById('foodHeading');
+  const foodHeadingVal = rSC('ui_food_heading', '');
+  if (foodHeadingEl && foodHeadingVal) foodHeadingEl.innerHTML = foodHeadingVal;
+  const foodTextEl = document.getElementById('foodTextContainer');
+  const foodTextVal = rSC('ui_food_text', '');
+  if (foodTextEl && foodTextVal) {
+    foodTextEl.innerHTML = foodTextVal.split('\n').filter(Boolean).map(p => `<p>${p}</p>`).join('');
+  }
 
   // Underviser-billeder og rolle
   buildTeacherSection(data);
@@ -1373,12 +1465,11 @@ async function loadRetreatData() {
   // Highlights med ikoner
   buildHighlightsSection(data);
 
+  // FAQ (dynamisk hvis retreatet har egne FAQ-punkter i admin, ellers standard-FAQ i HTML'en)
+  renderFaqSection(data);
+
   // Tilvalg i booking-formularen
   renderAddonsInForm(data.addon_items || []);
-  updatePriceDisplay();
-
-  // Sektion-synlighed (styret fra admin)
-  applySectionVisibility(data);
 }
 
 function applySectionVisibility(data) {
@@ -1413,9 +1504,10 @@ function buildDateOptions(data) {
     });
   }
 
+  const soonText = retreatLang === 'en' ? 'Dates coming soon' : 'Datoer opdateres snart';
   if (!allDates.length) {
-    select.innerHTML = '<option value="">Datoer opdateres snart</option>';
-    if (formSelect) formSelect.innerHTML = '<option value="">Datoer opdateres snart</option>';
+    select.innerHTML = `<option value="">${soonText}</option>`;
+    if (formSelect) formSelect.innerHTML = `<option value="">${soonText}</option>`;
     return;
   }
 
@@ -1455,7 +1547,7 @@ function updateDatesDisplay(dateObj) {
   document.getElementById('barDeparture').textContent = fmtDateDK(dateObj.departure);
 
   const nights = Math.round((new Date(dateObj.departure) - new Date(dateObj.arrival)) / (1000*60*60*24));
-  const durationText = `${nights} nætter · ${nights+1} dage`;
+  const durationText = retreatLang === 'en' ? `${nights} nights · ${nights+1} days` : `${nights} nætter · ${nights+1} dage`;
   document.getElementById('barDuration').textContent = durationText;
   document.getElementById('pillNights').textContent = durationText;
   document.getElementById('factDuration').textContent = durationText;
@@ -1471,7 +1563,9 @@ function renderAddonsInForm(addons) {
     container.style.display = 'none';
     return;
   }
-  container.innerHTML = '<span class="form-addons-label">Tilvalg</span><p style="font-size:13px;color:rgba(44,35,24,.8);margin:.3rem 0 .8rem;font-family:Manrope,sans-serif;font-weight:400;font-style:normal;">Tilvalg kan bestilles her. Afregning foretages ved afrejse.</p>' + addons.map((a, i) => `
+  const label = retreatLang === 'en' ? 'Add-ons' : 'Tilvalg';
+  const intro = retreatLang === 'en' ? 'Add-ons can be booked here. Settled upon departure.' : 'Tilvalg kan bestilles her. Afregning foretages ved afrejse.';
+  container.innerHTML = `<span class="form-addons-label">${label}</span><p style="font-size:13px;color:rgba(44,35,24,.8);margin:.3rem 0 .8rem;font-family:Manrope,sans-serif;font-weight:400;font-style:normal;">${intro}</p>` + addons.map((a, i) => `
     <label class="addon-item">
       <input type="checkbox" class="dynamic-addon" data-text="${(a.text||'').replace(/"/g,'&quot;')}" data-price="${a.price}">
       <span class="addon-box"></span>
