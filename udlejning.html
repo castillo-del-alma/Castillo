@@ -517,7 +517,28 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:3rem
       <div class="reveal-left">
         <div class="section-label" id="facLabel">Hvad du får</div>
         <h2 id="facH2">Vi stiller <em>rammerne</em> til rådighed</h2>
-        <ul class="fac-list" id="facList"></ul>
+        <ul class="fac-list" id="facList">
+          <li>Plads til op til 14 kursister og 2 undervisere</li>
+          <li>Smukke en suite værelser med høj komfort</li>
+          <li>Alle værelser er dobbeltværelser med enkeltsenge</li>
+          <li>Fælles stuer til ophold og samtale</li>
+          <li>Store terrasser og græsarealer til yoga og meditation</li>
+          <li>Lyse undervisnings- og samlingslokaler</li>
+          <li>Vandrestier på egen grund</li>
+          <li>Swimmingpool med afslapningsområder</li>
+          <li>Sund, hjemmelavet forplejning</li>
+          <li>Fokus på anti-inflammatorisk kost</li>
+          <li>Hurtigt WiFi på hele ejendommen</li>
+          <li>Daglig rengøring af fællesarealer</li>
+          <li>Hjælp med planlægning og koordinering</li>
+          <li>Transfer til og fra lufthavnen</li>
+          <li>Praktisk assistance under hele opholdet</li>
+          <li>Mulighed for markedsføring af jeres retreat</li>
+          <li>Gratis introduktion til NEO-frekvensbehandling</li>
+          <li>Gratis parkering på ejendommen</li>
+          <li>Rolige omgivelser uden trafik og støj</li>
+          <li>Skræddersy opholdet efter dine ønsker</li>
+        </ul>
         <p id="facNote" style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.95rem;color:var(--text-light);margin-top:2rem;line-height:1.7;">
           Castillo del Alma kan ikke lejes uden værterne. Hvilken rolle vi skal spille, er op til dig.
         </p>
@@ -1118,11 +1139,19 @@ function applyUlContent() {
   setText('successText', ulSC('success_text'));
 }
 
+const UL_OPT_DEFAULTS_PAGE = {
+  opt_deltagere: [{"value":"1-5 deltagere","label":"1–5 deltagere"},{"value":"6-10 deltagere","label":"6–10 deltagere"},{"value":"11-14 deltagere","label":"11–14 deltagere"},{"value":"14+ (kontakt os)","label":"14+ (kontakt os)"}],
+  opt_varighed: [{"value":"2-3 nætter","label":"2–3 nætter"},{"value":"4-5 nætter","label":"4–5 nætter"},{"value":"6-7 nætter","label":"6–7 nætter"},{"value":"8+ nætter","label":"8+ nætter"}],
+  opt_formaal: [{"value":"Yoga retreat","label":"Yoga retreat"},{"value":"Meditation / mindfulness","label":"Meditation / mindfulness"},{"value":"Coaching / personlig udvikling","label":"Coaching / personlig udvikling"},{"value":"Terapeutisk retreat","label":"Terapeutisk retreat"},{"value":"Kreativt retreat","label":"Kreativt retreat"},{"value":"Corporate / teambuilding","label":"Corporate / teambuilding"},{"value":"Andet","label":"Andet"}],
+  opt_kilde: [{"value":"Google-søgning","label":"Google-søgning"},{"value":"Instagram","label":"Instagram"},{"value":"Facebook","label":"Facebook"},{"value":"Anbefaling fra andre","label":"Anbefaling fra andre"},{"value":"Andet","label":"Andet"}]
+};
+
 function renderUlDropdowns() {
   const I = UL_STATIC_I18N[ulLang];
   const buildOptions = (key, placeholderTxt) => {
     let opts = [];
     try { opts = JSON.parse(ulData[key] || '[]'); } catch(e) {}
+    if (!opts.length) opts = UL_OPT_DEFAULTS_PAGE[key] || []; // Fallback hvis DB er tom
     let html = `<option value="" disabled selected>${placeholderTxt}</option>`;
     html += opts.map(o => `<option value="${(o.value||'').replace(/"/g,'&quot;')}">${ulLang === 'en' ? (o.label_en || o.label) : o.label}</option>`).join('');
     return html;
@@ -1138,23 +1167,30 @@ function renderUlDropdowns() {
 }
 
 async function loadUlContent() {
+  let startLang = 'da';
   try {
-    const [{ data: content }, startLang] = await Promise.all([
+    const results = await Promise.allSettled([
       ulSb.from('udlejning_content').select('key,value'),
       determineStartLangUl()
     ]);
-    (content || []).forEach(r => { ulData[r.key] = r.value; });
-    ulLang = startLang;
-    document.documentElement.lang = ulLang;
-    const btnDa = document.getElementById('ul-btn-da');
-    const btnEn = document.getElementById('ul-btn-en');
-    if (btnDa) { btnDa.classList.toggle('lang-btn-active', ulLang === 'da'); btnDa.classList.toggle('lang-btn-inactive', ulLang !== 'da'); }
-    if (btnEn) { btnEn.classList.toggle('lang-btn-active', ulLang === 'en'); btnEn.classList.toggle('lang-btn-inactive', ulLang !== 'en'); }
-    applyUlContent();
-    renderUlDropdowns();
+    if (results[0].status === 'fulfilled' && results[0].value.data) {
+      results[0].value.data.forEach(r => { ulData[r.key] = r.value; });
+    } else if (results[0].status === 'rejected') {
+      console.warn('udlejning_content hentning fejlede:', results[0].reason);
+    }
+    if (results[1].status === 'fulfilled') startLang = results[1].value;
   } catch(e) {
     console.warn('udlejning content load fejl:', e.message);
   }
+  ulLang = startLang;
+  document.documentElement.lang = ulLang;
+  const btnDa = document.getElementById('ul-btn-da');
+  const btnEn = document.getElementById('ul-btn-en');
+  if (btnDa) { btnDa.classList.toggle('lang-btn-active', ulLang === 'da'); btnDa.classList.toggle('lang-btn-inactive', ulLang !== 'da'); }
+  if (btnEn) { btnEn.classList.toggle('lang-btn-active', ulLang === 'en'); btnEn.classList.toggle('lang-btn-inactive', ulLang !== 'en'); }
+  // Disse to kaldes ALTID — falder tilbage til dagens tekst/valgmuligheder hvis databasen er tom eller utilgængelig
+  applyUlContent();
+  renderUlDropdowns();
 }
 document.addEventListener('DOMContentLoaded', loadUlContent);
 </script>

@@ -6902,40 +6902,256 @@ const UL_IMG_KEYS = [
   'mere_img',
   'strip2_img1','strip2_img2','strip2_img3'
 ];
+const UL_DEFAULTS = {
+  "hero_eyebrow": "Castillo del Alma · Mollina, Andalusien",
+  "hero_h1": "Afhold dit eget<br><em>retreat</em> og <em>event</em>",
+  "intro_label": "Du bringer visionen",
+  "intro_h2": "Vi skaber <em>rammerne</em>",
+  "intro_text": "Har du en passion for at skabe udvikling, fordybelse og nærvær? Drømmer du om at afholde dit eget retreat, kursus eller workshop i inspirerende omgivelser?\nMidt i den andalusiske natur, omgivet af vinmarker, olivenlunde, bjerge og stilhed, finder du et sted, hvor dine gæster kan slippe hverdagens travlhed og være fuldt til stede.\nUanset om du er coach, terapeut, yogalærer, underviser, facilitator, kunstner eller arbejder med personlig udvikling, giver Castillo del Alma dig de optimale rammer for en mindeværdig oplevelse.",
+  "intro_bold": "På Castillo del Alma skaber vi de perfekte rammer — du skaber indholdet.",
+  "fac_label": "Hvad du får",
+  "fac_h2": "Vi stiller <em>rammerne</em> til rådighed",
+  "fac_list": "Plads til op til 14 kursister og 2 undervisere\nSmukke en suite værelser med høj komfort\nAlle værelser er dobbeltværelser med enkeltsenge\nFælles stuer til ophold og samtale\nStore terrasser og græsarealer til yoga og meditation\nLyse undervisnings- og samlingslokaler\nVandrestier på egen grund\nSwimmingpool med afslapningsområder\nSund, hjemmelavet forplejning\nFokus på anti-inflammatorisk kost\nHurtigt WiFi på hele ejendommen\nDaglig rengøring af fællesarealer\nHjælp med planlægning og koordinering\nTransfer til og fra lufthavnen\nPraktisk assistance under hele opholdet\nMulighed for markedsføring af jeres retreat\nGratis introduktion til NEO-frekvensbehandling\nGratis parkering på ejendommen\nRolige omgivelser uden trafik og støj\nSkræddersy opholdet efter dine ønsker",
+  "fac_note": "Castillo del Alma kan ikke lejes uden værterne. Hvilken rolle vi skal spille, er op til dig.",
+  "design_label": "Skræddersyede oplevelser",
+  "design_h2": "Design et <em>ophold</em>",
+  "design_text": "Der findes ferier, og så findes der oplevelser, man husker resten af livet.\nPå Castillo del Alma skaber vi ikke standardophold. Vi skaber skræddersyede oplevelser for grupper, der ønsker noget helt særligt. Uanset om I er en vennegruppe, en familie, en virksomhed, en forening eller en gruppe med en fælles passion, designer vi opholdet sammen med jer.\nMidt blandt vinmarker, olivenlunde og de andalusiske bjerge kan I sammensætte præcis den ferie eller det retreat, I drømmer om. Vi tager os af planlægningen — I skal blot nyde oplevelsen.",
+  "design_cta_p1": "Ønsker I et gourmetophold med fokus på vin? Et aktivt cykelophold? En uge med yoga og meditation? En kreativ malerejse? Eller måske en kombination af det hele?",
+  "design_cta_strong": "Hos Castillo del Alma er ingen grupper ens. Derfor bliver ingen ophold det heller.",
+  "design_cta_p2": "Vi hjælper jer med at sammensætte det perfekte program — fra ankomst til afrejse.",
+  "mere_label": "Mere end et kursussted",
+  "mere_h2": "Et sted for <em>transformation</em>",
+  "mere_text": "Castillo del Alma er ikke blot en smuk ejendom. Det er et sted, hvor naturen, stilheden og den autentiske andalusiske atmosfære skaber plads til fordybelse, udvikling og ægte nærvær.\nMange oplever, at omgivelserne bliver en aktiv del af deres retreat og giver deltagerne ro til at mærke sig selv og skabe varige forandringer.\nSom arrangør skal du kunne koncentrere dig om det vigtigste — dine deltagere. Vi hjælper gerne med logistik, indkvartering, måltider og koordinering, så du kan fokusere på at skabe en nærværende og inspirerende oplevelse.",
+  "mere_quote": "Du bringer visionen —<br>vi skaber rammerne.",
+  "kontakt_label": "Tag det første skridt",
+  "kontakt_h2": "Fortæl os om din <em>vision</em>",
+  "kontakt_text": "Vi glæder os til at høre om dit projekt og drøfte mulighederne for dit næste retreat eller arrangement på Castillo del Alma.\nUdfyld formularen, så vender vi tilbage inden for 24 timer til en uforpligtende samtale.",
+  "kontakt_email_label": "Eller skriv direkte til",
+  "form_navn": "Navn *",
+  "form_navn_ph": "Dit fulde navn",
+  "form_telefon": "Telefon *",
+  "form_telefon_ph": "+45 12 34 56 78",
+  "form_email": "E-mail *",
+  "form_email_ph": "din@email.dk",
+  "form_hjemmeside": "Hjemmeside",
+  "form_hjemmeside_ph": "www.dinside.dk",
+  "form_land": "Land *",
+  "form_land_ph": "Danmark",
+  "form_deltagere": "Antal deltagere *",
+  "form_periode": "Ønsket periode *",
+  "form_periode_ph": "f.eks. marts 2026",
+  "form_varighed": "Varighed *",
+  "form_formaal": "Hvad ønsker I at bruge stedet til? *",
+  "form_besked": "Fortæl os mere om dit projekt *",
+  "form_besked_ph": "Beskriv din vision, dine deltagere, og hvad du drømmer om at skabe på Castillo del Alma...",
+  "form_kilde": "Hvordan hørte du om os?",
+  "form_math_label": "Sikkerhedstjek",
+  "form_submit": "Send forespørgsel",
+  "success_label": "Tak for din henvendelse",
+  "success_h3": "Vi vender tilbage inden for 24 timer",
+  "success_text": "Vi glæder os til at høre mere om din vision og drøfte, hvordan Castillo del Alma kan blive rammen for dit næste retreat."
+};
+const UL_IMG_DEFAULTS = {
+  "hero_bg": "img/group-people-making-breathworks-castillo-del-alma.jpg",
+  "intro_img1": "img/group-people-making-breathworks-castillo-del-alma.jpg",
+  "intro_img2": "img/estate-pool.jpg",
+  "strip1_img1": "img/wellness-yoga-castillo.png",
+  "strip1_img2": "img/estate-dining.jpg",
+  "strip1_img3": "img/IMG_0603.JPG",
+  "strip1_img4": "img/vinmark1.jpg",
+  "fac_img1": "img/estate-aerial.jpg",
+  "fac_img2": "img/close-up-woman-meditating-lotus-position-sunset.jpg",
+  "fac_img3": "img/yoga-class-concept.jpg",
+  "mere_img": "img/group-people-walking-along-path-dirt-stones-jungle.jpg",
+  "strip2_img1": "img/aerial-view-people-having-dinner-backyard.jpg",
+  "strip2_img2": "img/faceless-woman-lying-grass.jpg",
+  "strip2_img3": "img/group-men-sit-hill-overlooking-mountain.jpg"
+};
+const UL_KAT_DEFAULTS = [
+  {
+    "titel": "Gastronomi",
+    "liste": "Gourmet middage\nGourmet workshops\nTapas-aftener\nBBQ under stjernerne\nPaella-kurser\nOstesmagning\nOlivenolie-smagning"
+  },
+  {
+    "titel": "Vinoplevelser",
+    "liste": "Rundvisning i vores vinmarker\nVinsmagninger\nBesøg på lokale vingårde\nMød vinproducenterne\nIntroduktion til vinfremstilling\nHøstoplevelser (i sæson)\nWine & Dine-arrangementer"
+  },
+  {
+    "titel": "Kultur og historie",
+    "liste": "Guidede byture\nHistoriske landsbyer\nLokale markeder\nMuseer\nRomerske ruiner\nMaurisk arkitektur\nKunstgallerier"
+  },
+  {
+    "titel": "Aktiv ferie",
+    "liste": "Vandreture\nMountainbike\nLandevejscykling\nYoga\nQi Gong\nMeditation\nBreathwork\nPersonlig træning"
+  },
+  {
+    "titel": "Velvære",
+    "liste": "Massage\nSauna\nIsbad\nMeditation\nMindfulness\nSpa-behandlinger\nStressreduktion\nAfslapning ved poolen"
+  },
+  {
+    "titel": "Kreativitet",
+    "liste": "Malekurser\nAkvarel & akryl\nSmykkefremstilling\nKreative workshops\nMusik & sang\nSkriveværksteder"
+  },
+  {
+    "titel": "Personlig udvikling",
+    "liste": "Enneagram-workshops\nTeamudvikling\nKommunikation\nLedelsesudvikling\nMindset & motivation\nLivsbalance\nStresshåndtering"
+  },
+  {
+    "titel": "Foredrag & undervisning",
+    "liste": "Enneagrammet\nSundhed & ernæring\nLCHF / Keto\nMental trivsel\nLedelse & kommunikation\nIværksætteri\nKunst og kultur"
+  },
+  {
+    "titel": "Hobbyophold",
+    "liste": "Strikning & hækling\nFotografi\nFuglekiggeri\nSlægtsforskning\nLæseklubber\nBrætspil & bridge & skak\nMadlavning"
+  },
+  {
+    "titel": "Udflugter",
+    "liste": "Málaga & Ronda\nGranada & Córdoba\nSevilla\nCaminito del Rey\nEl Torcal\nNerja & Frigiliana\nDelfinsafari"
+  },
+  {
+    "titel": "Særlige arrangementer",
+    "liste": "Fødselsdage & jubilæer\nBryllupper & sølvbryllup\nFirmaevents & kick-off\nLederseminarer\nNetværksmøder\nFamilietræf\nVenneophold"
+  }
+];
+const UL_OPT_DEFAULTS = {
+  "deltagere": [
+    {
+      "value": "1-5 deltagere",
+      "label": "1–5 deltagere"
+    },
+    {
+      "value": "6-10 deltagere",
+      "label": "6–10 deltagere"
+    },
+    {
+      "value": "11-14 deltagere",
+      "label": "11–14 deltagere"
+    },
+    {
+      "value": "14+ (kontakt os)",
+      "label": "14+ (kontakt os)"
+    }
+  ],
+  "varighed": [
+    {
+      "value": "2-3 nætter",
+      "label": "2–3 nætter"
+    },
+    {
+      "value": "4-5 nætter",
+      "label": "4–5 nætter"
+    },
+    {
+      "value": "6-7 nætter",
+      "label": "6–7 nætter"
+    },
+    {
+      "value": "8+ nætter",
+      "label": "8+ nætter"
+    }
+  ],
+  "formaal": [
+    {
+      "value": "Yoga retreat",
+      "label": "Yoga retreat"
+    },
+    {
+      "value": "Meditation / mindfulness",
+      "label": "Meditation / mindfulness"
+    },
+    {
+      "value": "Coaching / personlig udvikling",
+      "label": "Coaching / personlig udvikling"
+    },
+    {
+      "value": "Terapeutisk retreat",
+      "label": "Terapeutisk retreat"
+    },
+    {
+      "value": "Kreativt retreat",
+      "label": "Kreativt retreat"
+    },
+    {
+      "value": "Corporate / teambuilding",
+      "label": "Corporate / teambuilding"
+    },
+    {
+      "value": "Andet",
+      "label": "Andet"
+    }
+  ],
+  "kilde": [
+    {
+      "value": "Google-søgning",
+      "label": "Google-søgning"
+    },
+    {
+      "value": "Instagram",
+      "label": "Instagram"
+    },
+    {
+      "value": "Facebook",
+      "label": "Facebook"
+    },
+    {
+      "value": "Anbefaling fra andre",
+      "label": "Anbefaling fra andre"
+    },
+    {
+      "value": "Andet",
+      "label": "Andet"
+    }
+  ]
+};
+
 let ulKategorierState = [];
 let ulDropdownState = { deltagere: [], varighed: [], formaal: [], kilde: [] };
 
 async function loadUdlejningAdmin() {
   if (!sb) return;
+  let map = {};
   try {
     const { data, error } = await sb.from('udlejning_content').select('key,value');
     if (error) throw error;
-    const map = {};
     (data || []).forEach(r => { map[r.key] = r.value; });
-
+  } catch(e) {
+    console.warn('loadUdlejningAdmin: kunne ikke hente udlejning_content (er tabellen oprettet?):', e.message);
+  }
+  try {
     UL_TEXT_KEYS.forEach(key => {
       ['da','en'].forEach(lang => {
         const el = document.getElementById(`ul_${key}_${lang}`);
-        const val = map[lang === 'da' ? key : key + '_en'];
-        if (el && val) el.value = val;
+        if (!el) return;
+        let val = map[lang === 'da' ? key : key + '_en'];
+        if (!val && lang === 'da') val = UL_DEFAULTS[key] || ''; // Fallback: dagens tekst, hvis DB er tom
+        if (val) el.value = val;
       });
     });
     UL_IMG_KEYS.forEach(key => {
       const el = document.getElementById(`ul_${key}_url`);
-      const val = map[key];
-      if (el && val) {
+      if (!el) return;
+      const val = map[key] || UL_IMG_DEFAULTS[key] || ''; // Fallback: dagens billede, hvis DB er tom
+      if (val) {
         el.value = val;
         const preview = document.getElementById(`ul_${key}_preview`);
         if (preview) { preview.src = val; preview.style.display = 'inline-block'; }
       }
     });
 
-    try { ulKategorierState = JSON.parse(map.design_kategorier || '[]'); } catch(e) { ulKategorierState = []; }
+    try {
+      const parsed = JSON.parse(map.design_kategorier || '[]');
+      ulKategorierState = parsed.length ? parsed : JSON.parse(JSON.stringify(UL_KAT_DEFAULTS));
+    } catch(e) { ulKategorierState = JSON.parse(JSON.stringify(UL_KAT_DEFAULTS)); }
+
+    const parseOptOrDefault = (raw, def) => {
+      try { const p = JSON.parse(raw || '[]'); return p.length ? p : JSON.parse(JSON.stringify(def)); }
+      catch(e) { return JSON.parse(JSON.stringify(def)); }
+    };
     ulDropdownState = {
-      deltagere: JSON.parse(map.opt_deltagere || '[]'),
-      varighed: JSON.parse(map.opt_varighed || '[]'),
-      formaal: JSON.parse(map.opt_formaal || '[]'),
-      kilde: JSON.parse(map.opt_kilde || '[]'),
+      deltagere: parseOptOrDefault(map.opt_deltagere, UL_OPT_DEFAULTS.deltagere),
+      varighed: parseOptOrDefault(map.opt_varighed, UL_OPT_DEFAULTS.varighed),
+      formaal: parseOptOrDefault(map.opt_formaal, UL_OPT_DEFAULTS.formaal),
+      kilde: parseOptOrDefault(map.opt_kilde, UL_OPT_DEFAULTS.kilde),
     };
     renderUlKategorierPreview();
   } catch(e) {
