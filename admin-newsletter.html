@@ -637,7 +637,6 @@ if (localStorage.getItem('cda_admin_auth') === '1') {
 }
 
 // ── INIT ──
-let allSubs = [];
 async function init() {
   sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
   await loadStats();
