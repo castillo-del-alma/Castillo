@@ -3305,7 +3305,12 @@ feeling more calm – and coming home to yourself again."</textarea></div>
 
     <!-- 7 · PROGRAM -->
     <div class="fc-block" id="ra_program" style="margin-bottom:1.5rem;">
-      <div class="fc-block-header"><span class="fc-block-title">7 · Program</span></div>
+      <div class="fc-block-header" style="display:flex;align-items:center;justify-content:space-between;">
+        <span class="fc-block-title">7 · Program</span>
+        <label style="display:flex;align-items:center;gap:.4rem;font-size:.65rem;color:rgba(44,35,24,.7);cursor:pointer;">
+          <input type="checkbox" id="ui_visible_program" checked style="cursor:pointer;"> Synlig på siden
+        </label>
+      </div>
       <div class="fc-block-body">
         <div class="fc-row">
           <div><label class="fc-label fc-label-da">Program-overskrift (DA)</label><input type="text" id="ui_program_heading" class="fc-input-da" placeholder="En uge for dig selv"></div>
@@ -3387,7 +3392,12 @@ feeling more calm – and coming home to yourself again."</textarea></div>
 
     <!-- 11 · UNDERVISER -->
     <div class="fc-block" id="ra_underviser" style="margin-bottom:1.5rem;">
-      <div class="fc-block-header"><span class="fc-block-title">11 · Underviser / Facilitator</span></div>
+      <div class="fc-block-header" style="display:flex;align-items:center;justify-content:space-between;">
+        <span class="fc-block-title">11 · Underviser / Facilitator</span>
+        <label style="display:flex;align-items:center;gap:.4rem;font-size:.65rem;color:rgba(44,35,24,.7);cursor:pointer;">
+          <input type="checkbox" id="ui_visible_facilitator" checked style="cursor:pointer;"> Synlig på siden
+        </label>
+      </div>
       <div class="fc-block-body">
         <div class="fc-row">
           <div><label class="fc-label fc-label-da">Titel/rolle (DA)</label><input type="text" id="ui_facilitator_role" class="fc-input-da" placeholder="Wellness Facilitator · Breathwork Practitioner"></div>
@@ -3484,7 +3494,12 @@ feeling more calm – and coming home to yourself again."</textarea></div>
 
     <!-- 14 · FAQ -->
     <div class="fc-block" id="ra_faq" style="margin-bottom:1.5rem;">
-      <div class="fc-block-header"><span class="fc-block-title">14 · FAQ</span></div>
+      <div class="fc-block-header" style="display:flex;align-items:center;justify-content:space-between;">
+        <span class="fc-block-title">14 · FAQ</span>
+        <label style="display:flex;align-items:center;gap:.4rem;font-size:.65rem;color:rgba(44,35,24,.7);cursor:pointer;">
+          <input type="checkbox" id="ui_visible_faq" checked style="cursor:pointer;"> Synlig på siden
+        </label>
+      </div>
       <div class="fc-block-body">
         <div class="fc-row">
           <div><label class="fc-label fc-label-da">FAQ-overskrift (DA)</label><input type="text" id="ui_faq_heading" class="fc-input-da" placeholder="Ofte stillede spørgsmål"></div>
@@ -5418,6 +5433,9 @@ function openNytRetreat() {
   try {
   document.getElementById('retreatModalTitel').textContent = 'Nyt retreat';
   document.getElementById('retreat_id').value = '';
+  document.getElementById('ui_visible_program').checked = true;
+  document.getElementById('ui_visible_facilitator').checked = true;
+  document.getElementById('ui_visible_faq').checked = true;
   document.getElementById('retreat_title').value = '';
   document.getElementById('retreat_title_en').value = '';
   document.getElementById('retreat_slug').value = '';
@@ -5695,6 +5713,13 @@ function redigerRetreat(id) {
 
 function udfyldRetreatForm(r) {
   document.getElementById('retreat_id').value = r.id;
+  const vis = r.visible_sections || {};
+  const visProgramEl = document.getElementById('ui_visible_program');
+  if (visProgramEl) visProgramEl.checked = vis.program !== false;
+  const visFacilitatorEl = document.getElementById('ui_visible_facilitator');
+  if (visFacilitatorEl) visFacilitatorEl.checked = vis.facilitator !== false;
+  const visFaqEl = document.getElementById('ui_visible_faq');
+  if (visFaqEl) visFaqEl.checked = vis.faq !== false;
   document.getElementById('retreat_title').value = r.title || '';
   document.getElementById('retreat_title_en').value = r.title_en || '';
   document.getElementById('retreat_slug').value = r.slug || '';
@@ -6186,7 +6211,12 @@ async function gemRetreat() {
       languages_en: document.getElementById('retreat_languages_en').value.trim() || null,
       level: document.getElementById('retreat_level').value.trim() || null,
       level_en: document.getElementById('retreat_level_en').value.trim() || null,
-      location_en: document.getElementById('retreat_location_en').value.trim() || null
+      location_en: document.getElementById('retreat_location_en').value.trim() || null,
+      visible_sections: {
+        program: document.getElementById('ui_visible_program')?.checked !== false,
+        facilitator: document.getElementById('ui_visible_facilitator')?.checked !== false,
+        faq: document.getElementById('ui_visible_faq')?.checked !== false
+      }
     };
 
     // Hent billeder — enten fra fil-upload eller fra URL-feltet (sat af uploadRetreatBillede)

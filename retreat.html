@@ -834,7 +834,7 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:3rem
 
 
 <!-- FAQ -->
-<section class="faq">
+<section class="faq" id="faq">
   <div class="section-inner">
     <div class="reveal">
       <span class="section-label">Ofte stillede spørgsmål</span>
@@ -1376,6 +1376,27 @@ async function loadRetreatData() {
   // Tilvalg i booking-formularen
   renderAddonsInForm(data.addon_items || []);
   updatePriceDisplay();
+
+  // Sektion-synlighed (styret fra admin)
+  applySectionVisibility(data);
+}
+
+function applySectionVisibility(data) {
+  const vis = data.visible_sections || {};
+  const sectionMap = { program: 'program', facilitator: 'facilitator', faq: 'faq' };
+
+  Object.keys(sectionMap).forEach(key => {
+    if (vis[key] === false) {
+      const el = document.getElementById(sectionMap[key]);
+      if (el) el.style.display = 'none';
+      // Skjul evt. tilhørende nav-link
+      const navLink = document.querySelector(`.nav-links a[href="#${sectionMap[key]}"]`);
+      if (navLink) {
+        const li = navLink.closest('li');
+        if (li) li.style.display = 'none';
+      }
+    }
+  });
 }
 
 function buildDateOptions(data) {
