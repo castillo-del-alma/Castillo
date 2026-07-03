@@ -762,9 +762,9 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:3rem
 <section class="retreat-rooms" id="rooms">
   <div class="section-inner">
     <div class="reveal">
-      <span class="section-label">Indkvartering & Priser</span>
-      <h2>Vælg dit værelse</h2>
-      <p class="intro">Alle værelser har eget badeværelse og er fuldt inkluderet i retreatprisen</p>
+      <span class="section-label" id="roomsLabel">Indkvartering</span>
+      <h2 id="roomsH2">Værelserne</h2>
+      <p class="intro" id="roomsIntro">Syv dobbelte eksklusive værelser, alle med ensuite badeværelse — designet til komfort, ro og nærvær</p>
     </div>
     <div class="rooms-options reveal d1" id="roomsContainer"></div>
   </div>
@@ -1564,7 +1564,8 @@ function applyRetreatContent() {
     exclContainer.innerHTML = `<div class="included-item">${retreatLang === 'en' ? 'Coming soon' : 'Opdateres snart'}</div>`;
   }
 
-  // Værelser — viser samme 7 værelser som ejendommen.html (kopieret visning, delt datakilde)
+  // Værelser — viser samme 7 værelser og overskrifter som ejendommen.html (kopieret visning, delt datakilde)
+  renderEjRoomsHeader();
   renderEjRoomsCopy();
 
   // 5 retreat-specifikke billeder
@@ -1608,17 +1609,37 @@ function applyRetreatContent() {
 }
 
 let EJ_ROOMS_CACHE = null;
+let EJ_CONTENT_CACHE = null;
+
+function ejContentSC(key, fallback) {
+  if (!EJ_CONTENT_CACHE) return fallback || '';
+  const val = retreatLang === 'en' ? EJ_CONTENT_CACHE[key + '_en'] : EJ_CONTENT_CACHE[key];
+  return val || EJ_CONTENT_CACHE[key] || fallback || '';
+}
 
 async function fetchAndRenderEjRooms() {
   try {
-    const { data: rooms, error } = await sbR.from('ejendommen_rooms').select('*').eq('active', true).order('sort_order');
-    if (error) throw error;
+    const [{ data: rooms, error: roomsErr }, { data: content, error: contentErr }] = await Promise.all([
+      sbR.from('ejendommen_rooms').select('*').eq('active', true).order('sort_order'),
+      sbR.from('ejendommen_content').select('key,value')
+    ]);
+    if (roomsErr) throw roomsErr;
     EJ_ROOMS_CACHE = rooms || [];
+    EJ_CONTENT_CACHE = {};
+    (content || []).forEach(r => { EJ_CONTENT_CACHE[r.key] = r.value; });
   } catch(e) {
-    console.warn('Kunne ikke hente værelser fra ejendommen_rooms:', e.message);
+    console.warn('Kunne ikke hente værelser fra ejendommen:', e.message);
     EJ_ROOMS_CACHE = [];
+    EJ_CONTENT_CACHE = {};
   }
+  renderEjRoomsHeader();
   renderEjRoomsCopy();
+}
+
+function renderEjRoomsHeader() {
+  setText('roomsLabel', ejContentSC('rooms_label', retreatLang === 'en' ? 'Accommodation' : 'Indkvartering'));
+  setText('roomsH2', ejContentSC('rooms_h2', retreatLang === 'en' ? 'The Rooms' : 'Værelserne'));
+  setText('roomsIntro', ejContentSC('rooms_intro', retreatLang === 'en' ? 'Seven exclusive double rooms, all with en-suite bathrooms — designed for comfort, calm and presence' : 'Syv dobbelte eksklusive værelser, alle med ensuite badeværelse — designet til komfort, ro og nærvær'));
 }
 
 function renderEjRoomsCopy() {
