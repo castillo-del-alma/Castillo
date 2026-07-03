@@ -493,7 +493,7 @@ body { background: var(--cream); color: var(--dark); font-family: 'Georgia', ser
         </div>
 
         <!-- Tilføj abonnent til liste -->
-        <div class="panel">
+        <div class="panel" id="listAddPanel">
           <div class="panel-head"><span class="panel-title">➕ Tilføj abonnent</span></div>
           <div class="panel-body">
             <div class="form-2col">
@@ -529,7 +529,7 @@ body { background: var(--cream); color: var(--dark); font-family: 'Georgia', ser
         </div>
 
         <!-- Import CSV -->
-        <div class="panel">
+        <div class="panel" id="listImportPanel">
           <div class="panel-head"><span class="panel-title">📥 Import fra CSV</span></div>
           <div class="panel-body">
             <div class="import-area" onclick="document.getElementById('csvFile').click()">
@@ -1104,8 +1104,8 @@ async function openList(listId, listName, isWebsite) {
   document.getElementById('listDetailName').textContent = listId === 'website' ? '🌐 ' + listName : '📋 ' + listName;
 
   // Hide add/import for website list (read-only)
-  const addPanel = document.querySelector('#listDetailView .panel:nth-child(2)');
-  const importPanel = document.querySelector('#listDetailView .panel:nth-child(3)');
+  const addPanel = document.getElementById('listAddPanel');
+  const importPanel = document.getElementById('listImportPanel');
   if (listId === 'website') {
     addPanel.style.display = 'none';
     importPanel.style.display = 'none';
