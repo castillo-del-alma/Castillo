@@ -1676,7 +1676,8 @@ function renderEjRoomsCopy() {
     container.innerHTML = `<p style="color:rgba(44,35,24,.4);grid-column:1/-1;text-align:center;">${retreatLang === 'en' ? 'Room information coming soon.' : 'Værelsesoplysninger opdateres snart.'}</p>`;
     return;
   }
-  container.className = 'ejrm-grid reveal d1';
+  const wasVisible = container.classList.contains('visible');
+  container.className = 'ejrm-grid reveal d1' + (wasVisible ? ' visible' : '');
   container.innerHTML = EJ_ROOMS_CACHE.map((r, i) => {
     const num = String(i + 1).padStart(2, '0');
     const name = retreatLang === 'en' ? (r.name_en || r.name_da) : r.name_da;
