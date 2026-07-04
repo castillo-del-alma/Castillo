@@ -654,6 +654,7 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:3rem
         <p id="facNote" style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.95rem;color:var(--text-light);margin-top:2rem;line-height:1.7;">
           Castillo del Alma kan ikke lejes uden værterne. Hvilken rolle vi skal spille, er op til dig.
         </p>
+        <a href="#kontakt" class="btn-wine-link ul-cta-link" style="margin-top:2.2rem;">Book en uforpligtende samtale</a>
       </div>
       <div class="fac-visual reveal-right d1">
         <div class="fac-img">
@@ -695,7 +696,7 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:3rem
       <span>Mulighed for hjælp til markedsføring af jeres retreat</span>
     </div>
     <div class="reveal d2" style="text-align:center;">
-      <a href="#kontakt" class="btn-wine-link" id="fungererCta">Book en uforpligtende samtale</a>
+      <a href="#kontakt" class="btn-wine-link ul-cta-link" id="fungererCta">Book en uforpligtende samtale</a>
     </div>
   </div>
 </section>
@@ -726,6 +727,7 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:3rem
           <p>Hvilken rolle vi skal spille, bestemmer du. Nogle arrangører ønsker fuld service og daglig sparring — andre foretrækker, at vi holder os diskret i baggrunden. Begge dele er en naturlig del af aftalen.</p>
           <p>Vi glæder os til at byde dig og dine deltagere velkommen.</p>
         </div>
+        <a href="#kontakt" class="btn-wine-link ul-cta-link" style="margin-top:1.2rem;">Book en uforpligtende samtale</a>
       </div>
     </div>
   </div>
@@ -1008,6 +1010,7 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:3rem
       <p id="designCtaP1">Ønsker I et gourmetophold med fokus på vin? Et aktivt cykelophold? En uge med yoga og meditation? En kreativ malerejse? Eller måske en kombination af det hele?</p>
       <strong id="designCtaStrong">Hos Castillo del Alma er ingen grupper ens. Derfor bliver ingen ophold det heller.</strong>
       <p id="designCtaP2">Vi hjælper jer med at sammensætte det perfekte program — fra ankomst til afrejse.</p>
+      <a href="#kontakt" class="btn-wine-link ul-cta-link" style="margin-top:2.4rem;">Book en uforpligtende samtale</a>
     </div>
   </div>
 </section>
@@ -1451,7 +1454,8 @@ function applyUlContent() {
   setParagraphs('fungererTextContainer', ulSC('fungerer_text'));
   renderUlSteps();
   renderUlFakta();
-  setText('fungererCta', ulSC('fungerer_cta'));
+  const ctaTxt = ulSC('fungerer_cta');
+  if (ctaTxt) document.querySelectorAll('.ul-cta-link').forEach(a => { a.textContent = ctaTxt; });
 
   setText('stemmerLabel', ulSC('stemmer_label'));
   setHTML('stemmerH2', ulSC('stemmer_h2'));
