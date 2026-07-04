@@ -831,7 +831,11 @@ function escAss(text) {
 }
 
 function buildAss() {
-  const fs = sizePx();
+  // libass måler skriftstørrelse på linjehøjden (ikke bogstavhøjden som browseren).
+  // Poppins' linjehøjde er 1,76x bogstavhøjden, så vi ganger op,
+  // for at den brændte tekst matcher forhåndsvisningen.
+  const BURN_SCALE = 1.76;
+  const fs = Math.round(sizePx() * BURN_SCALE);
   const color = hexToAss($('stColor').value);
   const boxMode = $('stBg').value === 'box';
   const pos = $('stPos').value;
@@ -850,7 +854,7 @@ WrapStyle: 0
 [V4+ Styles]
 Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding
 Style: Sub,${FONT_NAME},${fs},${color},${color},&H00000000,${backColor},0,0,0,0,100,100,0,0,${borderStyle},${outline},0,${align},60,60,${marginV},1
-Style: Wm,${FONT_NAME},${Math.round(videoH * 0.022)},&H40FFFFFF,&H40FFFFFF,&H00000000,&H80000000,0,0,0,0,100,100,0,0,1,2,0,7,40,40,40,1
+Style: Wm,${FONT_NAME},${Math.round(videoH * 0.022 * 1.76)},&H40FFFFFF,&H40FFFFFF,&H00000000,&H80000000,0,0,0,0,100,100,0,0,1,2,0,7,40,40,40,1
 
 [Events]
 Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
