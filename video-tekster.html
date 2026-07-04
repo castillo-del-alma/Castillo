@@ -1,0 +1,793 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Video-tekster · Castillo del Alma</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #faf6ef;
+    --card: #ffffff;
+    --ink: #3a332a;
+    --muted: #8a7f6f;
+    --line: #e8e0d2;
+    --accent: #9a7b4f;
+    --accent-dark: #7d6340;
+    --ok: #5a7d5a;
+    --warn: #a35b4a;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--cream);
+    color: var(--ink);
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 15px;
+    line-height: 1.55;
+    padding: 32px 18px 80px;
+  }
+  .wrap { max-width: 980px; margin: 0 auto; }
+  h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 600;
+    font-size: 34px;
+    letter-spacing: .5px;
+  }
+  .sub { color: var(--muted); margin-top: 4px; margin-bottom: 28px; }
+  .card {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 22px 24px;
+    margin-bottom: 22px;
+  }
+  .card h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 600;
+    font-size: 22px;
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .step-num {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 26px; height: 26px;
+    border-radius: 50%;
+    background: var(--accent);
+    color: #fff;
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+  }
+  .drop {
+    border: 2px dashed var(--line);
+    border-radius: 12px;
+    padding: 38px 20px;
+    text-align: center;
+    color: var(--muted);
+    cursor: pointer;
+    transition: border-color .15s, background .15s;
+  }
+  .drop:hover, .drop.over { border-color: var(--accent); background: #fdfaf4; }
+  .drop strong { color: var(--ink); }
+  button {
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    border: none;
+    border-radius: 9px;
+    padding: 10px 18px;
+    cursor: pointer;
+    background: var(--accent);
+    color: #fff;
+    transition: background .15s;
+  }
+  button:hover { background: var(--accent-dark); }
+  button:disabled { background: #cfc6b6; cursor: not-allowed; }
+  button.ghost {
+    background: transparent;
+    color: var(--accent-dark);
+    border: 1px solid var(--line);
+  }
+  button.ghost:hover { background: #f6f0e5; }
+  button.small { padding: 6px 12px; font-size: 13px; }
+  input[type="text"], input[type="number"], textarea, select {
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    color: var(--ink);
+    background: #fdfcf9;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 8px 10px;
+    width: 100%;
+  }
+  textarea { resize: vertical; min-height: 40px; }
+  input:focus, textarea:focus, select:focus { outline: 2px solid #d9c8a9; border-color: var(--accent); }
+  label { font-size: 13px; font-weight: 500; color: var(--muted); display: block; margin-bottom: 4px; }
+  .row { display: flex; gap: 14px; flex-wrap: wrap; align-items: flex-end; }
+  .row > div { flex: 1; min-width: 130px; }
+  .hidden { display: none !important; }
+
+  /* Video preview + subtitle overlay */
+  .preview-box {
+    position: relative;
+    max-width: 340px;
+    margin: 18px auto 0;
+    border-radius: 12px;
+    overflow: hidden;
+    background: #000;
+  }
+  .preview-box video { width: 100%; display: block; }
+  #subOverlay {
+    position: absolute;
+    left: 6%; right: 6%;
+    text-align: center;
+    pointer-events: none;
+    text-shadow: 0 0 4px rgba(0,0,0,.9), 0 0 8px rgba(0,0,0,.6);
+    font-weight: 600;
+    line-height: 1.3;
+  }
+  #subOverlay .en-line { opacity: .95; }
+  #wmOverlay {
+    position: absolute;
+    pointer-events: none;
+    font-size: 11px;
+    font-weight: 500;
+    color: rgba(255,255,255,.75);
+    text-shadow: 0 0 3px rgba(0,0,0,.7);
+  }
+  #wmLogoPrev { position: absolute; pointer-events: none; opacity: .85; }
+
+  /* Segment editor */
+  .seg {
+    display: grid;
+    grid-template-columns: 70px 70px 1fr 1fr 34px;
+    gap: 8px;
+    align-items: start;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--line);
+  }
+  .seg-head {
+    display: grid;
+    grid-template-columns: 70px 70px 1fr 1fr 34px;
+    gap: 8px;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: .5px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid var(--line);
+  }
+  .seg button.del {
+    background: transparent;
+    color: var(--warn);
+    padding: 6px;
+    font-size: 16px;
+    line-height: 1;
+  }
+  .lang-toggle { display: flex; gap: 8px; margin: 6px 0 16px; }
+  .lang-toggle button { background: #f2ecdf; color: var(--ink); }
+  .lang-toggle button.active { background: var(--accent); color: #fff; }
+
+  .presets { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; }
+  .status {
+    margin-top: 14px;
+    font-size: 14px;
+    color: var(--muted);
+    min-height: 20px;
+  }
+  .status.ok { color: var(--ok); }
+  .status.err { color: var(--warn); }
+  .bar {
+    height: 8px;
+    background: #efe8da;
+    border-radius: 5px;
+    overflow: hidden;
+    margin-top: 10px;
+  }
+  .bar > div {
+    height: 100%;
+    width: 0%;
+    background: var(--accent);
+    border-radius: 5px;
+    transition: width .3s;
+  }
+  .dl {
+    display: inline-block;
+    margin-top: 14px;
+    background: var(--ok);
+    color: #fff;
+    text-decoration: none;
+    padding: 11px 20px;
+    border-radius: 9px;
+    font-weight: 500;
+  }
+  .note { font-size: 13px; color: var(--muted); margin-top: 8px; }
+  @media (max-width: 720px) {
+    .seg, .seg-head { grid-template-columns: 60px 60px 1fr 34px; }
+    .seg .en-col, .seg-head .en-col { grid-column: 1 / -1; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Video-tekster</h1>
+  <p class="sub">Upload en reel med dansk indtaling — få undertekster på dansk og/eller engelsk brændt ind, klar til Instagram.</p>
+
+  <!-- TRIN 1: UPLOAD -->
+  <div class="card">
+    <h2><span class="step-num">1</span> Vælg video</h2>
+    <div class="drop" id="dropZone">
+      <strong>Klik her</strong> eller træk din video ind<br>
+      <span style="font-size:13px">MP4 / MOV · maks. ca. 100 MB</span>
+    </div>
+    <input type="file" id="fileInput" accept="video/*" class="hidden">
+    <div class="preview-box hidden" id="previewBox">
+      <video id="video" controls playsinline></video>
+      <div id="subOverlay"></div>
+      <div id="wmOverlay" class="hidden"></div>
+      <img id="wmLogoPrev" class="hidden" alt="">
+    </div>
+    <div class="status" id="fileStatus"></div>
+  </div>
+
+  <!-- TRIN 2: TRANSSKRIPTION -->
+  <div class="card hidden" id="cardTranscribe">
+    <h2><span class="step-num">2</span> Transskribér og oversæt</h2>
+    <p class="note" style="margin-top:0;margin-bottom:12px">Lyden udtrækkes i browseren og sendes til transskription. Den danske tekst oversættes automatisk til engelsk.</p>
+    <button id="btnTranscribe">Transskribér video</button>
+    <div class="bar hidden" id="transBar"><div></div></div>
+    <div class="status" id="transStatus"></div>
+  </div>
+
+  <!-- TRIN 3: REDIGÉR TEKSTER -->
+  <div class="card hidden" id="cardEdit">
+    <h2><span class="step-num">3</span> Redigér tekster</h2>
+    <label>Sprog i videoen</label>
+    <div class="lang-toggle" id="langToggle">
+      <button data-mode="da" class="active">Dansk</button>
+      <button data-mode="en">Engelsk</button>
+      <button data-mode="both">Begge</button>
+    </div>
+    <div class="seg-head">
+      <div>Start</div><div>Slut</div><div>Dansk</div><div class="en-col">Engelsk</div><div></div>
+    </div>
+    <div id="segList"></div>
+    <div style="margin-top:12px">
+      <button class="ghost small" id="btnAddSeg">+ Tilføj linje</button>
+    </div>
+    <p class="note">Tider er i sekunder. Klik på en linje for at hoppe til det sted i videoen.</p>
+  </div>
+
+  <!-- TRIN 4: STIL & VANDMÆRKE -->
+  <div class="card hidden" id="cardStyle">
+    <h2><span class="step-num">4</span> Stil og vandmærke</h2>
+    <label>Hurtige stilarter</label>
+    <div class="presets">
+      <button class="ghost small" data-preset="klassisk">Klassisk hvid</button>
+      <button class="ghost small" data-preset="creme">Castillo creme</button>
+      <button class="ghost small" data-preset="boks">Mørk boks</button>
+    </div>
+    <div class="row">
+      <div>
+        <label>Tekststørrelse</label>
+        <select id="stSize">
+          <option value="small">Lille</option>
+          <option value="medium" selected>Mellem</option>
+          <option value="large">Stor</option>
+        </select>
+      </div>
+      <div>
+        <label>Tekstfarve</label>
+        <input type="text" id="stColor" value="#FFFFFF">
+      </div>
+      <div>
+        <label>Baggrund</label>
+        <select id="stBg">
+          <option value="outline" selected>Kant (outline)</option>
+          <option value="box">Boks bag teksten</option>
+        </select>
+      </div>
+      <div>
+        <label>Placering</label>
+        <select id="stPos">
+          <option value="bottom" selected>Bund</option>
+          <option value="middle">Midt</option>
+          <option value="top">Top</option>
+        </select>
+      </div>
+    </div>
+    <div class="row" style="margin-top:16px">
+      <div>
+        <label>Vandmærke</label>
+        <select id="wmType">
+          <option value="none">Intet</option>
+          <option value="text" selected>Tekst</option>
+          <option value="logo">Logo (PNG)</option>
+        </select>
+      </div>
+      <div id="wmTextWrap">
+        <label>Vandmærke-tekst</label>
+        <input type="text" id="wmText" value="castillodelalma.es">
+      </div>
+      <div id="wmLogoWrap" class="hidden">
+        <label>Logo-fil (PNG med transparens)</label>
+        <input type="file" id="wmLogoFile" accept="image/png">
+      </div>
+      <div>
+        <label>Vandmærke-placering</label>
+        <select id="wmPos">
+          <option value="tr" selected>Øverst til højre</option>
+          <option value="tl">Øverst til venstre</option>
+          <option value="br">Nederst til højre</option>
+          <option value="bl">Nederst til venstre</option>
+        </select>
+      </div>
+    </div>
+    <p class="note">Forhåndsvisningen på videoen ovenfor viser cirka, hvordan det kommer til at se ud.</p>
+  </div>
+
+  <!-- TRIN 5: BRÆND & DOWNLOAD -->
+  <div class="card hidden" id="cardBurn">
+    <h2><span class="step-num">5</span> Brænd og download</h2>
+    <button id="btnBurn">Brænd tekster ind i videoen</button>
+    <div class="bar hidden" id="burnBar"><div></div></div>
+    <div class="status" id="burnStatus"></div>
+    <a class="dl hidden" id="dlLink" download="reel-med-tekster.mp4">Download færdig video</a>
+    <p class="note">Alt sker i din browser — videoen forlader aldrig din computer (kun lyden sendes til transskription). Herefter kan du lægge videoen op på Instagram som normalt.</p>
+  </div>
+</div>
+
+<script src="https://unpkg.com/@ffmpeg/ffmpeg@0.12.10/dist/umd/ffmpeg.js"></script>
+<script>
+/* ============================================================
+   Video-tekster · Castillo del Alma
+   1) Upload video  2) Udtræk lyd + transskribér (Netlify fn)
+   3) Redigér DA/EN segmenter  4) Stil + vandmærke
+   5) Brænd med ffmpeg.wasm (ASS-undertekster) og download
+   ============================================================ */
+
+const FN_URL = '/.netlify/functions/transcribe-video';
+const CORE_URL = 'https://unpkg.com/@ffmpeg/core@0.12.6/dist/umd/ffmpeg-core.js';
+const WASM_URL = 'https://unpkg.com/@ffmpeg/core@0.12.6/dist/umd/ffmpeg-core.wasm';
+const FONT_URLS = [
+  'https://cdn.jsdelivr.net/gh/google/fonts@main/ofl/poppins/Poppins-SemiBold.ttf',
+  'https://raw.githubusercontent.com/google/fonts/main/ofl/poppins/Poppins-SemiBold.ttf'
+];
+const FONT_NAME = 'Poppins SemiBold';
+
+const $ = (id) => document.getElementById(id);
+
+let videoFile = null;
+let videoW = 1080, videoH = 1920;
+let segments = [];           // { start, end, da, en }
+let langMode = 'da';         // 'da' | 'en' | 'both'
+let wmLogoData = null;       // Uint8Array of uploaded PNG
+let ffmpeg = null;
+let ffmpegLoaded = false;
+
+/* ---------- ffmpeg helpers ---------- */
+async function getFFmpeg(progressCb) {
+  if (!ffmpeg) {
+    const { FFmpeg } = FFmpegWASM;
+    ffmpeg = new FFmpeg();
+  }
+  if (progressCb) {
+    ffmpeg.on('progress', progressCb);
+  }
+  if (!ffmpegLoaded) {
+    await ffmpeg.load({ coreURL: CORE_URL, wasmURL: WASM_URL });
+    ffmpegLoaded = true;
+  }
+  return ffmpeg;
+}
+
+async function fileToUint8(file) {
+  return new Uint8Array(await file.arrayBuffer());
+}
+
+async function fetchUint8(urls) {
+  for (const url of urls) {
+    try {
+      const res = await fetch(url);
+      if (res.ok) return new Uint8Array(await res.arrayBuffer());
+    } catch (e) { /* prøv næste */ }
+  }
+  throw new Error('Kunne ikke hente skrifttype');
+}
+
+/* ---------- Trin 1: upload ---------- */
+const dropZone = $('dropZone');
+dropZone.addEventListener('click', () => $('fileInput').click());
+dropZone.addEventListener('dragover', (e) => { e.preventDefault(); dropZone.classList.add('over'); });
+dropZone.addEventListener('dragleave', () => dropZone.classList.remove('over'));
+dropZone.addEventListener('drop', (e) => {
+  e.preventDefault();
+  dropZone.classList.remove('over');
+  if (e.dataTransfer.files.length) handleFile(e.dataTransfer.files[0]);
+});
+$('fileInput').addEventListener('change', (e) => {
+  if (e.target.files.length) handleFile(e.target.files[0]);
+});
+
+function handleFile(file) {
+  if (!file.type.startsWith('video/')) {
+    setStatus('fileStatus', 'Filen ser ikke ud til at være en video.', 'err');
+    return;
+  }
+  if (file.size > 120 * 1024 * 1024) {
+    setStatus('fileStatus', 'Videoen er for stor (maks. ca. 100 MB). Komprimér den evt. først.', 'err');
+    return;
+  }
+  videoFile = file;
+  const url = URL.createObjectURL(file);
+  const video = $('video');
+  video.src = url;
+  video.onloadedmetadata = () => {
+    videoW = video.videoWidth;
+    videoH = video.videoHeight;
+    updatePreviewStyle();
+  };
+  $('previewBox').classList.remove('hidden');
+  $('cardTranscribe').classList.remove('hidden');
+  setStatus('fileStatus', `Valgt: ${file.name} (${(file.size / 1024 / 1024).toFixed(1)} MB)`, 'ok');
+}
+
+function setStatus(id, msg, cls) {
+  const el = $(id);
+  el.textContent = msg;
+  el.className = 'status' + (cls ? ' ' + cls : '');
+}
+
+/* ---------- Trin 2: udtræk lyd + transskribér ---------- */
+$('btnTranscribe').addEventListener('click', async () => {
+  if (!videoFile) return;
+  const btn = $('btnTranscribe');
+  btn.disabled = true;
+  $('transBar').classList.remove('hidden');
+  const barFill = $('transBar').firstElementChild;
+  barFill.style.width = '5%';
+
+  try {
+    setStatus('transStatus', 'Indlæser videomotor (første gang tager det lidt tid)…');
+    const ff = await getFFmpeg();
+    barFill.style.width = '20%';
+
+    setStatus('transStatus', 'Udtrækker lyd fra videoen…');
+    await ff.writeFile('input.mp4', await fileToUint8(videoFile));
+    await ff.exec(['-i', 'input.mp4', '-vn', '-ac', '1', '-ar', '16000', '-b:a', '64k', 'audio.mp3']);
+    let audio = await ff.readFile('audio.mp3');
+    barFill.style.width = '45%';
+
+    // Hvis lyden er for stor til funktionen, komprimér hårdere
+    if (audio.length > 4.2 * 1024 * 1024) {
+      setStatus('transStatus', 'Lydfilen er stor — komprimerer yderligere…');
+      await ff.exec(['-i', 'audio.mp3', '-ac', '1', '-ar', '16000', '-b:a', '32k', 'audio2.mp3']);
+      audio = await ff.readFile('audio2.mp3');
+    }
+
+    setStatus('transStatus', 'Transskriberer dansk tale og oversætter til engelsk…');
+    barFill.style.width = '60%';
+
+    const base64 = uint8ToBase64(audio);
+    const res = await fetch(FN_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ audioBase64: base64 })
+    });
+    const data = await res.json();
+    if (!res.ok || data.error) {
+      throw new Error(data.error || 'Transskription fejlede');
+    }
+    barFill.style.width = '100%';
+
+    segments = (data.segments || []).map(s => ({
+      start: s.start, end: s.end, da: s.da || '', en: s.en || ''
+    }));
+
+    if (segments.length === 0) {
+      setStatus('transStatus', 'Ingen tale fundet i videoen. Du kan tilføje linjer manuelt nedenfor.', 'err');
+    } else {
+      setStatus('transStatus', `Færdig — ${segments.length} tekstlinjer fundet. Gennemgå og ret dem nedenfor.`, 'ok');
+    }
+    renderSegments();
+    $('cardEdit').classList.remove('hidden');
+    $('cardStyle').classList.remove('hidden');
+    $('cardBurn').classList.remove('hidden');
+  } catch (err) {
+    console.error(err);
+    setStatus('transStatus', 'Fejl: ' + err.message, 'err');
+  } finally {
+    btn.disabled = false;
+  }
+});
+
+function uint8ToBase64(u8) {
+  let binary = '';
+  const chunk = 0x8000;
+  for (let i = 0; i < u8.length; i += chunk) {
+    binary += String.fromCharCode.apply(null, u8.subarray(i, i + chunk));
+  }
+  return btoa(binary);
+}
+
+/* ---------- Trin 3: segment-editor ---------- */
+function renderSegments() {
+  const list = $('segList');
+  list.innerHTML = '';
+  segments.forEach((s, i) => {
+    const row = document.createElement('div');
+    row.className = 'seg';
+    row.innerHTML = `
+      <input type="number" step="0.1" min="0" value="${s.start}" data-i="${i}" data-f="start">
+      <input type="number" step="0.1" min="0" value="${s.end}" data-i="${i}" data-f="end">
+      <textarea data-i="${i}" data-f="da">${escapeHtml(s.da)}</textarea>
+      <textarea class="en-col" data-i="${i}" data-f="en">${escapeHtml(s.en)}</textarea>
+      <button class="del" data-i="${i}" title="Slet linje">×</button>`;
+    list.appendChild(row);
+  });
+}
+
+$('segList').addEventListener('input', (e) => {
+  const i = e.target.dataset.i, f = e.target.dataset.f;
+  if (i === undefined) return;
+  const val = (f === 'start' || f === 'end') ? parseFloat(e.target.value) || 0 : e.target.value;
+  segments[i][f] = val;
+});
+$('segList').addEventListener('click', (e) => {
+  if (e.target.classList.contains('del')) {
+    segments.splice(e.target.dataset.i, 1);
+    renderSegments();
+  } else if (e.target.dataset.f === 'start' || e.target.dataset.f === 'end') {
+    $('video').currentTime = parseFloat(e.target.value) || 0;
+  }
+});
+$('btnAddSeg').addEventListener('click', () => {
+  const last = segments[segments.length - 1];
+  const t = last ? last.end : 0;
+  segments.push({ start: t, end: t + 2, da: '', en: '' });
+  renderSegments();
+});
+
+function escapeHtml(s) {
+  return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
+
+$('langToggle').addEventListener('click', (e) => {
+  if (!e.target.dataset.mode) return;
+  langMode = e.target.dataset.mode;
+  document.querySelectorAll('#langToggle button').forEach(b =>
+    b.classList.toggle('active', b.dataset.mode === langMode));
+});
+
+/* ---------- Trin 4: stil, presets, vandmærke ---------- */
+const PRESETS = {
+  klassisk: { color: '#FFFFFF', bg: 'outline', size: 'medium' },
+  creme:    { color: '#F5EBDD', bg: 'outline', size: 'medium' },
+  boks:     { color: '#FFFFFF', bg: 'box',     size: 'medium' }
+};
+document.querySelector('.presets').addEventListener('click', (e) => {
+  const p = PRESETS[e.target.dataset.preset];
+  if (!p) return;
+  $('stColor').value = p.color;
+  $('stBg').value = p.bg;
+  $('stSize').value = p.size;
+  updatePreviewStyle();
+});
+['stSize', 'stColor', 'stBg', 'stPos', 'wmType', 'wmText', 'wmPos'].forEach(id =>
+  $(id).addEventListener('input', updatePreviewStyle));
+
+$('wmType').addEventListener('change', () => {
+  $('wmTextWrap').classList.toggle('hidden', $('wmType').value !== 'text');
+  $('wmLogoWrap').classList.toggle('hidden', $('wmType').value !== 'logo');
+  updatePreviewStyle();
+});
+$('wmLogoFile').addEventListener('change', async (e) => {
+  if (!e.target.files.length) { wmLogoData = null; return; }
+  const f = e.target.files[0];
+  wmLogoData = await fileToUint8(f);
+  $('wmLogoPrev').src = URL.createObjectURL(f);
+  updatePreviewStyle();
+});
+
+function sizePx() {
+  // Skriftstørrelse i pixels relativt til videohøjden
+  const factor = { small: 0.032, medium: 0.042, large: 0.055 }[$('stSize').value];
+  return Math.round(videoH * factor);
+}
+
+function updatePreviewStyle() {
+  const ov = $('subOverlay');
+  const box = $('previewBox');
+  const scale = box.clientWidth / videoW || 0.3;
+  ov.style.fontSize = Math.max(10, sizePx() * scale) + 'px';
+  ov.style.color = $('stColor').value;
+  ov.style.fontFamily = "'Poppins','Inter',sans-serif";
+  const pos = $('stPos').value;
+  ov.style.top = pos === 'top' ? '6%' : pos === 'middle' ? '45%' : 'auto';
+  ov.style.bottom = pos === 'bottom' ? '8%' : 'auto';
+
+  // Vandmærke-preview
+  const wmT = $('wmOverlay'), wmL = $('wmLogoPrev');
+  wmT.classList.add('hidden'); wmL.classList.add('hidden');
+  const corner = $('wmPos').value;
+  const place = (el, small) => {
+    el.style.top = corner[0] === 't' ? '3%' : 'auto';
+    el.style.bottom = corner[0] === 'b' ? '3%' : 'auto';
+    el.style.left = corner[1] === 'l' ? '4%' : 'auto';
+    el.style.right = corner[1] === 'r' ? '4%' : 'auto';
+  };
+  if ($('wmType').value === 'text' && $('wmText').value.trim()) {
+    wmT.textContent = $('wmText').value.trim();
+    place(wmT);
+    wmT.classList.remove('hidden');
+  } else if ($('wmType').value === 'logo' && wmLogoData) {
+    wmL.style.width = '22%';
+    place(wmL);
+    wmL.classList.remove('hidden');
+  }
+}
+window.addEventListener('resize', updatePreviewStyle);
+
+/* Live undertekst-preview mens videoen spiller */
+$('video').addEventListener('timeupdate', () => {
+  const t = $('video').currentTime;
+  const seg = segments.find(s => t >= s.start && t <= s.end);
+  const ov = $('subOverlay');
+  if (!seg) { ov.innerHTML = ''; return; }
+  let html = '';
+  if (langMode === 'da' || langMode === 'both') html += escapeHtml(seg.da);
+  if (langMode === 'both' && seg.en) html += '<br><span class="en-line" style="font-size:.85em;font-style:italic">' + escapeHtml(seg.en) + '</span>';
+  if (langMode === 'en') html = escapeHtml(seg.en);
+  ov.innerHTML = html;
+});
+
+/* ---------- Trin 5: byg ASS + brænd ---------- */
+function hexToAss(hex) {
+  // #RRGGBB -> &H00BBGGRR
+  const h = hex.replace('#', '').padEnd(6, 'F');
+  return '&H00' + h.slice(4, 6) + h.slice(2, 4) + h.slice(0, 2);
+}
+
+function assTime(sec) {
+  sec = Math.max(0, sec);
+  const h = Math.floor(sec / 3600);
+  const m = Math.floor((sec % 3600) / 60);
+  const s = Math.floor(sec % 60);
+  const cs = Math.round((sec - Math.floor(sec)) * 100);
+  return `${h}:${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}.${String(cs).padStart(2, '0')}`;
+}
+
+function escAss(text) {
+  return String(text).replace(/\{/g, '(').replace(/\}/g, ')').replace(/\r?\n/g, '\\N');
+}
+
+function buildAss() {
+  const fs = sizePx();
+  const color = hexToAss($('stColor').value);
+  const boxMode = $('stBg').value === 'box';
+  const pos = $('stPos').value;
+  const align = pos === 'top' ? 8 : pos === 'middle' ? 5 : 2;
+  const marginV = Math.round(videoH * (pos === 'bottom' ? 0.08 : pos === 'top' ? 0.06 : 0));
+  const borderStyle = boxMode ? 3 : 1;
+  const outline = boxMode ? Math.round(fs * 0.35) : Math.max(2, Math.round(fs * 0.07));
+  const backColor = boxMode ? '&H66000000' : '&H80000000';
+
+  let ass = `[Script Info]
+ScriptType: v4.00+
+PlayResX: ${videoW}
+PlayResY: ${videoH}
+WrapStyle: 0
+
+[V4+ Styles]
+Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding
+Style: Sub,${FONT_NAME},${fs},${color},${color},&H00000000,${backColor},0,0,0,0,100,100,0,0,${borderStyle},${outline},0,${align},60,60,${marginV},1
+Style: Wm,${FONT_NAME},${Math.round(videoH * 0.022)},&H40FFFFFF,&H40FFFFFF,&H00000000,&H80000000,0,0,0,0,100,100,0,0,1,2,0,7,40,40,40,1
+
+[Events]
+Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
+`;
+
+  const enSize = Math.round(fs * 0.85);
+  for (const s of segments) {
+    if (s.end <= s.start) continue;
+    let text = '';
+    if (langMode === 'da') text = escAss(s.da);
+    else if (langMode === 'en') text = escAss(s.en);
+    else {
+      text = escAss(s.da);
+      if (s.en) text += `\\N{\\fs${enSize}\\i1}` + escAss(s.en);
+    }
+    if (!text.trim()) continue;
+    ass += `Dialogue: 0,${assTime(s.start)},${assTime(s.end)},Sub,,0,0,0,,${text}\n`;
+  }
+
+  // Tekst-vandmærke som ASS-event over hele videoen
+  if ($('wmType').value === 'text' && $('wmText').value.trim()) {
+    const corner = $('wmPos').value;
+    const wmAlign = { tl: 7, tr: 9, bl: 1, br: 3 }[corner];
+    const dur = assTime(($('video').duration || 3600));
+    ass += `Dialogue: 1,0:00:00.00,${dur},Wm,,0,0,0,,{\\an${wmAlign}}` + escAss($('wmText').value.trim()) + '\n';
+  }
+  return ass;
+}
+
+$('btnBurn').addEventListener('click', async () => {
+  if (!videoFile) return;
+  if (!segments.some(s => (langMode === 'en' ? s.en : s.da).trim())) {
+    setStatus('burnStatus', 'Der er ingen tekstlinjer at brænde ind.', 'err');
+    return;
+  }
+  const btn = $('btnBurn');
+  btn.disabled = true;
+  $('dlLink').classList.add('hidden');
+  $('burnBar').classList.remove('hidden');
+  const barFill = $('burnBar').firstElementChild;
+  barFill.style.width = '3%';
+
+  try {
+    setStatus('burnStatus', 'Forbereder videomotor og skrifttype…');
+    const ff = await getFFmpeg(({ progress }) => {
+      if (progress > 0 && progress <= 1) {
+        barFill.style.width = Math.round(10 + progress * 88) + '%';
+      }
+    });
+
+    // Skriv filer til det virtuelle filsystem
+    await ff.writeFile('input.mp4', await fileToUint8(videoFile));
+    try { await ff.createDir('/fonts'); } catch (e) { /* findes måske allerede */ }
+    const fontData = await fetchUint8(FONT_URLS);
+    await ff.writeFile('/fonts/sub.ttf', fontData);
+    await ff.writeFile('subs.ass', new TextEncoder().encode(buildAss()));
+
+    const useLogo = $('wmType').value === 'logo' && wmLogoData;
+    let args;
+    if (useLogo) {
+      await ff.writeFile('logo.png', wmLogoData);
+      const logoW = Math.round(videoW * 0.22);
+      const m = Math.round(videoW * 0.04);
+      const corner = $('wmPos').value;
+      const x = corner[1] === 'l' ? `${m}` : `W-w-${m}`;
+      const y = corner[0] === 't' ? `${m}` : `H-h-${m}`;
+      args = ['-i', 'input.mp4', '-i', 'logo.png',
+        '-filter_complex',
+        `[1:v]scale=${logoW}:-1[lg];[0:v]subtitles=subs.ass:fontsdir=/fonts[v0];[v0][lg]overlay=${x}:${y}[vout]`,
+        '-map', '[vout]', '-map', '0:a?',
+        '-c:v', 'libx264', '-preset', 'ultrafast', '-crf', '20',
+        '-c:a', 'copy', '-movflags', '+faststart', 'output.mp4'];
+    } else {
+      args = ['-i', 'input.mp4',
+        '-vf', 'subtitles=subs.ass:fontsdir=/fonts',
+        '-c:v', 'libx264', '-preset', 'ultrafast', '-crf', '20',
+        '-c:a', 'copy', '-movflags', '+faststart', 'output.mp4'];
+    }
+
+    setStatus('burnStatus', 'Brænder tekster ind — det kan tage nogle minutter…');
+    barFill.style.width = '10%';
+    await ff.exec(args);
+
+    const out = await ff.readFile('output.mp4');
+    if (!out || out.length < 1000) throw new Error('Den færdige video blev tom — prøv igen');
+    const blob = new Blob([out.buffer], { type: 'video/mp4' });
+    const url = URL.createObjectURL(blob);
+    const dl = $('dlLink');
+    dl.href = url;
+    dl.classList.remove('hidden');
+    barFill.style.width = '100%';
+    setStatus('burnStatus', `Færdig! (${(blob.size / 1024 / 1024).toFixed(1)} MB)`, 'ok');
+  } catch (err) {
+    console.error(err);
+    setStatus('burnStatus', 'Fejl under brænding: ' + err.message, 'err');
+  } finally {
+    btn.disabled = false;
+  }
+});
+</script>
+</body>
+</html>
