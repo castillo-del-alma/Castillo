@@ -2887,8 +2887,50 @@ feeling more calm – and coming home to yourself again."</textarea></div>
       </div>
     </div>
 
-    <div class="fc-block" data-section="ul_4 · faciliteter ("vi stiller rammerne til rådighed")">
-      <div class="fc-block-header"><span class="fc-block-title">4 · Faciliteter ("Vi stiller rammerne til rådighed")</span></div>
+    <div class="fc-block" data-section="ul_undervisning">
+      <div class="fc-block-header"><span class="fc-block-title">4 · Undervisningsfaciliteter (NY)</span></div>
+      <div class="fc-block-body">
+        <label style="display:flex;align-items:center;gap:.5rem;font-family:Manrope,sans-serif;font-size:.72rem;color:#2c2318;margin-bottom:1.2rem;cursor:pointer;background:rgba(184,138,30,.07);border:1px solid rgba(184,138,30,.2);padding:.6rem .9rem;"><input type="checkbox" id="ul_vis_undervisning" checked style="cursor:pointer;"> Synlig på siden — fjern fluebenet for at udelade sektionen fra udlejning.html</label>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Label (DA)</label><input type="text" id="ul_undervisning_label_da" class="fc-input-da" placeholder=""></div>
+          <div><label class="fc-label fc-label-en">Label (EN)</label><input type="text" id="ul_undervisning_label_en" class="fc-input-en" placeholder=""></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Overskrift (DA) — brug &lt;em&gt;</label><input type="text" id="ul_undervisning_h2_da" class="fc-input-da" placeholder=""></div>
+          <div><label class="fc-label fc-label-en">Overskrift (EN)</label><input type="text" id="ul_undervisning_h2_en" class="fc-input-en" placeholder=""></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Brødtekst (DA) — ét afsnit per linje</label><textarea id="ul_undervisning_text_da" class="fc-input-da" rows="5" style="resize:vertical;"></textarea></div>
+          <div><label class="fc-label fc-label-en">Brødtekst (EN)</label><textarea id="ul_undervisning_text_en" class="fc-input-en" rows="5" style="resize:vertical;"></textarea></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Punktliste (DA) — ét punkt per linje</label><textarea id="ul_undervisning_facts_da" class="fc-input-da" rows="6" style="resize:vertical;"></textarea></div>
+          <div><label class="fc-label fc-label-en">Punktliste (EN)</label><textarea id="ul_undervisning_facts_en" class="fc-input-en" rows="6" style="resize:vertical;"></textarea></div>
+        </div>
+        <div style="margin-top:.8rem;padding:.9rem;background:rgba(42,122,116,.06);border:1px solid rgba(42,122,116,.2);">
+          <label class="fc-label" style="color:#2a7a74;">📁 Stort billede</label>
+          <div style="display:flex;align-items:center;gap:.8rem;flex-wrap:wrap;margin-top:.5rem;">
+            <img id="ul_undervisning_img1_preview" src="" style="display:none;width:56px;height:56px;object-fit:cover;border-radius:3px;border:1px solid rgba(184,138,30,.3);flex-shrink:0;">
+            <input type="text" id="ul_undervisning_img1_url" class="fc-input-da" placeholder="URL indsættes automatisk ved upload" style="flex:1;">
+            <input type="file" id="ul_undervisning_img1_file" accept="image/*" style="font-size:.76rem;">
+            <button onclick="uploadEjBillede('ul_undervisning_img1_file','ul_undervisning_img1_url','ul_undervisning_img1_preview')" style="background:#2a7a74;color:#fff;border:none;padding:.45rem 1.1rem;font-family:Manrope,sans-serif;font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;white-space:nowrap;">⬆ Upload</button>
+          </div>
+        </div>
+        <div style="margin-top:.8rem;padding:.9rem;background:rgba(42,122,116,.06);border:1px solid rgba(42,122,116,.2);">
+          <label class="fc-label" style="color:#2a7a74;">📁 Bredt billede (nederst)</label>
+          <div style="display:flex;align-items:center;gap:.8rem;flex-wrap:wrap;margin-top:.5rem;">
+            <img id="ul_undervisning_img2_preview" src="" style="display:none;width:56px;height:56px;object-fit:cover;border-radius:3px;border:1px solid rgba(184,138,30,.3);flex-shrink:0;">
+            <input type="text" id="ul_undervisning_img2_url" class="fc-input-da" placeholder="URL indsættes automatisk ved upload" style="flex:1;">
+            <input type="file" id="ul_undervisning_img2_file" accept="image/*" style="font-size:.76rem;">
+            <button onclick="uploadEjBillede('ul_undervisning_img2_file','ul_undervisning_img2_url','ul_undervisning_img2_preview')" style="background:#2a7a74;color:#fff;border:none;padding:.45rem 1.1rem;font-family:Manrope,sans-serif;font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;white-space:nowrap;">⬆ Upload</button>
+          </div>
+        </div>
+        <div style="text-align:right;margin-top:.8rem;"><button onclick="gemUdlejning()" style="background:#2a7a74;color:#fff;border:none;padding:.5rem 1.4rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;">💾 Gem</button></div>
+      </div>
+    </div>
+
+    <div class="fc-block" data-section="ul_5 · faciliteter ("vi stiller rammerne til rådighed")">
+      <div class="fc-block-header"><span class="fc-block-title">5 · Faciliteter ("Vi stiller rammerne til rådighed")</span></div>
       <div class="fc-block-body">
         <div class="fc-row">
           <div><label class="fc-label fc-label-da">Label (DA)</label><input type="text" id="ul_fac_label_da" class="fc-input-da" placeholder=""></div>
@@ -2938,56 +2980,89 @@ feeling more calm – and coming home to yourself again."</textarea></div>
       </div>
     </div>
 
-    <div class="fc-block" data-section="ul_5 · design et ophold — intro">
-      <div class="fc-block-header"><span class="fc-block-title">5 · Design et ophold — Intro</span></div>
+    <div class="fc-block" data-section="ul_fungerer">
+      <div class="fc-block-header"><span class="fc-block-title">6 · Sådan fungerer det (NY)</span></div>
       <div class="fc-block-body">
+        <label style="display:flex;align-items:center;gap:.5rem;font-family:Manrope,sans-serif;font-size:.72rem;color:#2c2318;margin-bottom:1.2rem;cursor:pointer;background:rgba(184,138,30,.07);border:1px solid rgba(184,138,30,.2);padding:.6rem .9rem;"><input type="checkbox" id="ul_vis_fungerer" checked style="cursor:pointer;"> Synlig på siden — fjern fluebenet for at udelade sektionen fra udlejning.html</label>
         <div class="fc-row">
-          <div><label class="fc-label fc-label-da">Label (DA)</label><input type="text" id="ul_design_label_da" class="fc-input-da" placeholder=""></div>
-          <div><label class="fc-label fc-label-en">Label (EN)</label><input type="text" id="ul_design_label_en" class="fc-input-en" placeholder=""></div>
+          <div><label class="fc-label fc-label-da">Label (DA)</label><input type="text" id="ul_fungerer_label_da" class="fc-input-da" placeholder=""></div>
+          <div><label class="fc-label fc-label-en">Label (EN)</label><input type="text" id="ul_fungerer_label_en" class="fc-input-en" placeholder=""></div>
         </div>
         <div class="fc-row">
-          <div><label class="fc-label fc-label-da">Overskrift (DA) — brug &lt;em&gt;</label><input type="text" id="ul_design_h2_da" class="fc-input-da" placeholder=""></div>
-          <div><label class="fc-label fc-label-en">Overskrift (EN)</label><input type="text" id="ul_design_h2_en" class="fc-input-en" placeholder=""></div>
+          <div><label class="fc-label fc-label-da">Overskrift (DA) — brug &lt;em&gt;</label><input type="text" id="ul_fungerer_h2_da" class="fc-input-da" placeholder=""></div>
+          <div><label class="fc-label fc-label-en">Overskrift (EN)</label><input type="text" id="ul_fungerer_h2_en" class="fc-input-en" placeholder=""></div>
         </div>
-        
         <div class="fc-row">
-          <div><label class="fc-label fc-label-da">Brødtekst (DA) — ét afsnit per linje</label><textarea id="ul_design_text_da" class="fc-input-da" rows="4" style="resize:vertical;"></textarea></div>
-          <div><label class="fc-label fc-label-en">Brødtekst (EN)</label><textarea id="ul_design_text_en" class="fc-input-en" rows="4" style="resize:vertical;"></textarea></div>
+          <div><label class="fc-label fc-label-da">Intro-tekst (DA)</label><textarea id="ul_fungerer_text_da" class="fc-input-da" rows="2" style="resize:vertical;"></textarea></div>
+          <div><label class="fc-label fc-label-en">Intro-tekst (EN)</label><textarea id="ul_fungerer_text_en" class="fc-input-en" rows="2" style="resize:vertical;"></textarea></div>
+        </div>
+        <p style="font-size:.7rem;color:rgba(44,35,24,.5);margin:.2rem 0 1rem;">Trin-kort: ét trin per linje i formatet <b>Titel|Beskrivelse</b> (adskilt af lodret streg). Nummereringen 01/02/03 sættes automatisk.</p><div class="fc-row">
+          <div><label class="fc-label fc-label-da">Trin (DA) — Titel|Beskrivelse per linje</label><textarea id="ul_fungerer_steps_da" class="fc-input-da" rows="4" style="resize:vertical;"></textarea></div>
+          <div><label class="fc-label fc-label-en">Steps (EN)</label><textarea id="ul_fungerer_steps_en" class="fc-input-en" rows="4" style="resize:vertical;"></textarea></div>
+        </div>
+        <p style="font-size:.7rem;color:rgba(44,35,24,.5);margin:.2rem 0 1rem;">Fakta-badges: ét kort faktum per linje (fx afstand til lufthavn, kapacitet, svartid).</p><div class="fc-row">
+          <div><label class="fc-label fc-label-da">Fakta (DA) — ét per linje</label><textarea id="ul_fungerer_facts_da" class="fc-input-da" rows="5" style="resize:vertical;"></textarea></div>
+          <div><label class="fc-label fc-label-en">Facts (EN)</label><textarea id="ul_fungerer_facts_en" class="fc-input-en" rows="5" style="resize:vertical;"></textarea></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Knap-tekst (DA)</label><input type="text" id="ul_fungerer_cta_da" class="fc-input-da" placeholder=""></div>
+          <div><label class="fc-label fc-label-en">Button text (EN)</label><input type="text" id="ul_fungerer_cta_en" class="fc-input-en" placeholder=""></div>
         </div>
         <div style="text-align:right;margin-top:.8rem;"><button onclick="gemUdlejning()" style="background:#2a7a74;color:#fff;border:none;padding:.5rem 1.4rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;">💾 Gem</button></div>
       </div>
     </div>
 
-    <div class="fc-block" data-section="ul_kategorier">
-      <div class="fc-block-header"><span class="fc-block-title">6 · Design-kategorier (11 kort)</span></div>
+    <div class="fc-block" data-section="ul_stemmer">
+      <div class="fc-block-header"><span class="fc-block-title">7 · Anmeldelser fra arrangører (NY)</span></div>
       <div class="fc-block-body">
-        <p style="font-size:.72rem;color:rgba(44,35,24,.5);margin-bottom:1rem;">De 11 kategori-kort (Gastronomi, Vinoplevelser, osv.) — titel + liste, DA+EN. Videoerne mellem kortene redigeres ikke her.</p>
-        <div id="ulKategorierPreview" style="font-size:.72rem;color:rgba(44,35,24,.6);margin-bottom:.8rem;"></div>
-        <button type="button" onclick="openUlKategorierEditor()" style="background:#7a1f35;color:#fff;border:none;padding:.6rem 1.4rem;font-family:Manrope,sans-serif;font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;">✎ Redigér kategorier</button>
-      </div>
-    </div>
-
-    <div class="fc-block" data-section="ul_7 · design et ophold — cta-tekst">
-      <div class="fc-block-header"><span class="fc-block-title">7 · Design et ophold — CTA-tekst</span></div>
-      <div class="fc-block-body">
-        <div class="fc-row">
-          <div><label class="fc-label fc-label-da">Første linje (DA)</label><input type="text" id="ul_design_cta_p1_da" class="fc-input-da" placeholder=""></div>
-          <div><label class="fc-label fc-label-en">Første linje (EN)</label><input type="text" id="ul_design_cta_p1_en" class="fc-input-en" placeholder=""></div>
+        <label style="display:flex;align-items:center;gap:.5rem;font-family:Manrope,sans-serif;font-size:.72rem;color:#2c2318;margin-bottom:1.2rem;cursor:pointer;background:rgba(184,138,30,.07);border:1px solid rgba(184,138,30,.2);padding:.6rem .9rem;"><input type="checkbox" id="ul_vis_stemmer" checked style="cursor:pointer;"> Synlig på siden — fjern fluebenet for at udelade sektionen fra udlejning.html</label>
+        <p style="font-size:.7rem;color:rgba(44,35,24,.5);margin:.2rem 0 1rem;">⚠️ Sektionen vises FØRST på siden, når der er mindst ét citat herunder. Brug kun rigtige citater fra tidligere arrangører/deltagere. Format: <b>Citat|Navn|Rolle</b> — ét citat per linje.</p><div class="fc-row">
+          <div><label class="fc-label fc-label-da">Label (DA)</label><input type="text" id="ul_stemmer_label_da" class="fc-input-da" placeholder=""></div>
+          <div><label class="fc-label fc-label-en">Label (EN)</label><input type="text" id="ul_stemmer_label_en" class="fc-input-en" placeholder=""></div>
         </div>
         <div class="fc-row">
-          <div><label class="fc-label fc-label-da">Fed linje (DA)</label><input type="text" id="ul_design_cta_strong_da" class="fc-input-da" placeholder=""></div>
-          <div><label class="fc-label fc-label-en">Fed linje (EN)</label><input type="text" id="ul_design_cta_strong_en" class="fc-input-en" placeholder=""></div>
+          <div><label class="fc-label fc-label-da">Overskrift (DA) — brug &lt;em&gt;</label><input type="text" id="ul_stemmer_h2_da" class="fc-input-da" placeholder=""></div>
+          <div><label class="fc-label fc-label-en">Overskrift (EN)</label><input type="text" id="ul_stemmer_h2_en" class="fc-input-en" placeholder=""></div>
         </div>
         <div class="fc-row">
-          <div><label class="fc-label fc-label-da">Sidste linje (DA)</label><input type="text" id="ul_design_cta_p2_da" class="fc-input-da" placeholder=""></div>
-          <div><label class="fc-label fc-label-en">Sidste linje (EN)</label><input type="text" id="ul_design_cta_p2_en" class="fc-input-en" placeholder=""></div>
+          <div><label class="fc-label fc-label-da">Citater (DA) — Citat|Navn|Rolle per linje</label><textarea id="ul_stemmer_liste_da" class="fc-input-da" rows="5" style="resize:vertical;"></textarea></div>
+          <div><label class="fc-label fc-label-en">Quotes (EN)</label><textarea id="ul_stemmer_liste_en" class="fc-input-en" rows="5" style="resize:vertical;"></textarea></div>
         </div>
         <div style="text-align:right;margin-top:.8rem;"><button onclick="gemUdlejning()" style="background:#2a7a74;color:#fff;border:none;padding:.5rem 1.4rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;">💾 Gem</button></div>
       </div>
     </div>
 
-    <div class="fc-block" data-section="ul_8 · "mere end et kursussted"">
-      <div class="fc-block-header"><span class="fc-block-title">8 · "Mere end et kursussted"</span></div>
+    <div class="fc-block" data-section="ul_vaerter">
+      <div class="fc-block-header"><span class="fc-block-title">8 · Mød værterne (NY)</span></div>
+      <div class="fc-block-body">
+        <label style="display:flex;align-items:center;gap:.5rem;font-family:Manrope,sans-serif;font-size:.72rem;color:#2c2318;margin-bottom:1.2rem;cursor:pointer;background:rgba(184,138,30,.07);border:1px solid rgba(184,138,30,.2);padding:.6rem .9rem;"><input type="checkbox" id="ul_vis_vaerter" checked style="cursor:pointer;"> Synlig på siden — fjern fluebenet for at udelade sektionen fra udlejning.html</label>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Label (DA)</label><input type="text" id="ul_vaerter_label_da" class="fc-input-da" placeholder=""></div>
+          <div><label class="fc-label fc-label-en">Label (EN)</label><input type="text" id="ul_vaerter_label_en" class="fc-input-en" placeholder=""></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Overskrift (DA) — brug &lt;em&gt;</label><input type="text" id="ul_vaerter_h2_da" class="fc-input-da" placeholder=""></div>
+          <div><label class="fc-label fc-label-en">Overskrift (EN)</label><input type="text" id="ul_vaerter_h2_en" class="fc-input-en" placeholder=""></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Brødtekst (DA) — ét afsnit per linje</label><textarea id="ul_vaerter_text_da" class="fc-input-da" rows="5" style="resize:vertical;"></textarea></div>
+          <div><label class="fc-label fc-label-en">Brødtekst (EN)</label><textarea id="ul_vaerter_text_en" class="fc-input-en" rows="5" style="resize:vertical;"></textarea></div>
+        </div>
+        <div style="margin-top:.8rem;padding:.9rem;background:rgba(42,122,116,.06);border:1px solid rgba(42,122,116,.2);">
+          <label class="fc-label" style="color:#2a7a74;">📁 Billede af værterne</label>
+          <div style="display:flex;align-items:center;gap:.8rem;flex-wrap:wrap;margin-top:.5rem;">
+            <img id="ul_vaerter_img_preview" src="" style="display:none;width:56px;height:56px;object-fit:cover;border-radius:3px;border:1px solid rgba(184,138,30,.3);flex-shrink:0;">
+            <input type="text" id="ul_vaerter_img_url" class="fc-input-da" placeholder="URL indsættes automatisk ved upload" style="flex:1;">
+            <input type="file" id="ul_vaerter_img_file" accept="image/*" style="font-size:.76rem;">
+            <button onclick="uploadEjBillede('ul_vaerter_img_file','ul_vaerter_img_url','ul_vaerter_img_preview')" style="background:#2a7a74;color:#fff;border:none;padding:.45rem 1.1rem;font-family:Manrope,sans-serif;font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;white-space:nowrap;">⬆ Upload</button>
+          </div>
+        </div>
+        <div style="text-align:right;margin-top:.8rem;"><button onclick="gemUdlejning()" style="background:#2a7a74;color:#fff;border:none;padding:.5rem 1.4rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;">💾 Gem</button></div>
+      </div>
+    </div>
+
+    <div class="fc-block" data-section="ul_9 · "mere end et kursussted"">
+      <div class="fc-block-header"><span class="fc-block-title">9 · "Mere end et kursussted"</span></div>
       <div class="fc-block-body">
         <div class="fc-row">
           <div><label class="fc-label fc-label-da">Label (DA)</label><input type="text" id="ul_mere_label_da" class="fc-input-da" placeholder=""></div>
@@ -3019,8 +3094,56 @@ feeling more calm – and coming home to yourself again."</textarea></div>
       </div>
     </div>
 
-    <div class="fc-block" data-section="ul_9 · billedstribe 2">
-      <div class="fc-block-header"><span class="fc-block-title">9 · Billedstribe 2</span></div>
+    <div class="fc-block" data-section="ul_10 · design et ophold — intro">
+      <div class="fc-block-header"><span class="fc-block-title">10 · Design et ophold — Intro</span></div>
+      <div class="fc-block-body">
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Label (DA)</label><input type="text" id="ul_design_label_da" class="fc-input-da" placeholder=""></div>
+          <div><label class="fc-label fc-label-en">Label (EN)</label><input type="text" id="ul_design_label_en" class="fc-input-en" placeholder=""></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Overskrift (DA) — brug &lt;em&gt;</label><input type="text" id="ul_design_h2_da" class="fc-input-da" placeholder=""></div>
+          <div><label class="fc-label fc-label-en">Overskrift (EN)</label><input type="text" id="ul_design_h2_en" class="fc-input-en" placeholder=""></div>
+        </div>
+        
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Brødtekst (DA) — ét afsnit per linje</label><textarea id="ul_design_text_da" class="fc-input-da" rows="4" style="resize:vertical;"></textarea></div>
+          <div><label class="fc-label fc-label-en">Brødtekst (EN)</label><textarea id="ul_design_text_en" class="fc-input-en" rows="4" style="resize:vertical;"></textarea></div>
+        </div>
+        <div style="text-align:right;margin-top:.8rem;"><button onclick="gemUdlejning()" style="background:#2a7a74;color:#fff;border:none;padding:.5rem 1.4rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;">💾 Gem</button></div>
+      </div>
+    </div>
+
+    <div class="fc-block" data-section="ul_kategorier">
+      <div class="fc-block-header"><span class="fc-block-title">11 · Design-kategorier (11 kort)</span></div>
+      <div class="fc-block-body">
+        <p style="font-size:.72rem;color:rgba(44,35,24,.5);margin-bottom:1rem;">De 11 kategori-kort (Gastronomi, Vinoplevelser, osv.) — titel + liste, DA+EN. Videoerne mellem kortene redigeres ikke her.</p>
+        <div id="ulKategorierPreview" style="font-size:.72rem;color:rgba(44,35,24,.6);margin-bottom:.8rem;"></div>
+        <button type="button" onclick="openUlKategorierEditor()" style="background:#7a1f35;color:#fff;border:none;padding:.6rem 1.4rem;font-family:Manrope,sans-serif;font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;">✎ Redigér kategorier</button>
+      </div>
+    </div>
+
+    <div class="fc-block" data-section="ul_12 · design et ophold — cta-tekst">
+      <div class="fc-block-header"><span class="fc-block-title">12 · Design et ophold — CTA-tekst</span></div>
+      <div class="fc-block-body">
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Første linje (DA)</label><input type="text" id="ul_design_cta_p1_da" class="fc-input-da" placeholder=""></div>
+          <div><label class="fc-label fc-label-en">Første linje (EN)</label><input type="text" id="ul_design_cta_p1_en" class="fc-input-en" placeholder=""></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Fed linje (DA)</label><input type="text" id="ul_design_cta_strong_da" class="fc-input-da" placeholder=""></div>
+          <div><label class="fc-label fc-label-en">Fed linje (EN)</label><input type="text" id="ul_design_cta_strong_en" class="fc-input-en" placeholder=""></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Sidste linje (DA)</label><input type="text" id="ul_design_cta_p2_da" class="fc-input-da" placeholder=""></div>
+          <div><label class="fc-label fc-label-en">Sidste linje (EN)</label><input type="text" id="ul_design_cta_p2_en" class="fc-input-en" placeholder=""></div>
+        </div>
+        <div style="text-align:right;margin-top:.8rem;"><button onclick="gemUdlejning()" style="background:#2a7a74;color:#fff;border:none;padding:.5rem 1.4rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;">💾 Gem</button></div>
+      </div>
+    </div>
+
+    <div class="fc-block" data-section="ul_13 · billedstribe 2">
+      <div class="fc-block-header"><span class="fc-block-title">13 · Billedstribe 2</span></div>
       <div class="fc-block-body">
         <div style="margin-top:.8rem;padding:.9rem;background:rgba(42,122,116,.06);border:1px solid rgba(42,122,116,.2);">
           <label class="fc-label" style="color:#2a7a74;">📁 Billede 1</label>
@@ -3053,8 +3176,28 @@ feeling more calm – and coming home to yourself again."</textarea></div>
       </div>
     </div>
 
-    <div class="fc-block" data-section="ul_10 · kontakt — intro">
-      <div class="fc-block-header"><span class="fc-block-title">10 · Kontakt — Intro</span></div>
+    <div class="fc-block" data-section="ul_faq">
+      <div class="fc-block-header"><span class="fc-block-title">14 · FAQ (NY)</span></div>
+      <div class="fc-block-body">
+        <label style="display:flex;align-items:center;gap:.5rem;font-family:Manrope,sans-serif;font-size:.72rem;color:#2c2318;margin-bottom:1.2rem;cursor:pointer;background:rgba(184,138,30,.07);border:1px solid rgba(184,138,30,.2);padding:.6rem .9rem;"><input type="checkbox" id="ul_vis_ulfaq" checked style="cursor:pointer;"> Synlig på siden — fjern fluebenet for at udelade sektionen fra udlejning.html</label>
+        <p style="font-size:.7rem;color:rgba(44,35,24,.5);margin:.2rem 0 1rem;">Format: <b>Spørgsmål|Svar</b> — ét spørgsmål per linje (adskilt af lodret streg).</p><div class="fc-row">
+          <div><label class="fc-label fc-label-da">Label (DA)</label><input type="text" id="ul_ulfaq_label_da" class="fc-input-da" placeholder=""></div>
+          <div><label class="fc-label fc-label-en">Label (EN)</label><input type="text" id="ul_ulfaq_label_en" class="fc-input-en" placeholder=""></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Overskrift (DA)</label><input type="text" id="ul_ulfaq_h2_da" class="fc-input-da" placeholder=""></div>
+          <div><label class="fc-label fc-label-en">Overskrift (EN)</label><input type="text" id="ul_ulfaq_h2_en" class="fc-input-en" placeholder=""></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Spørgsmål & svar (DA) — Spørgsmål|Svar per linje</label><textarea id="ul_ulfaq_liste_da" class="fc-input-da" rows="8" style="resize:vertical;"></textarea></div>
+          <div><label class="fc-label fc-label-en">Q&A (EN)</label><textarea id="ul_ulfaq_liste_en" class="fc-input-en" rows="8" style="resize:vertical;"></textarea></div>
+        </div>
+        <div style="text-align:right;margin-top:.8rem;"><button onclick="gemUdlejning()" style="background:#2a7a74;color:#fff;border:none;padding:.5rem 1.4rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;">💾 Gem</button></div>
+      </div>
+    </div>
+
+    <div class="fc-block" data-section="ul_15 · kontakt — intro">
+      <div class="fc-block-header"><span class="fc-block-title">15 · Kontakt — Intro</span></div>
       <div class="fc-block-body">
         <div class="fc-row">
           <div><label class="fc-label fc-label-da">Label (DA)</label><input type="text" id="ul_kontakt_label_da" class="fc-input-da" placeholder=""></div>
@@ -3077,8 +3220,8 @@ feeling more calm – and coming home to yourself again."</textarea></div>
       </div>
     </div>
 
-    <div class="fc-block" data-section="ul_11 · kontaktformular — feltnavne">
-      <div class="fc-block-header"><span class="fc-block-title">11 · Kontaktformular — feltnavne</span></div>
+    <div class="fc-block" data-section="ul_16 · kontaktformular — feltnavne">
+      <div class="fc-block-header"><span class="fc-block-title">16 · Kontaktformular — feltnavne</span></div>
       <div class="fc-block-body">
         <div class="fc-row">
           <div><label class="fc-label fc-label-da">Navn-label (DA)</label><input type="text" id="ul_form_navn_da" class="fc-input-da" placeholder=""></div>
@@ -3165,15 +3308,15 @@ feeling more calm – and coming home to yourself again."</textarea></div>
     </div>
 
     <div class="fc-block" data-section="ul_dropdowns">
-      <div class="fc-block-header"><span class="fc-block-title">12 · Dropdown-valgmuligheder</span></div>
+      <div class="fc-block-header"><span class="fc-block-title">17 · Dropdown-valgmuligheder</span></div>
       <div class="fc-block-body">
         <p style="font-size:.72rem;color:rgba(44,35,24,.5);margin-bottom:1rem;">Redigér selve valgmulighederne i "Antal deltagere", "Varighed", "Formål" og "Hvordan hørte du om os".</p>
         <button type="button" onclick="openUlDropdownEditor()" style="background:#7a1f35;color:#fff;border:none;padding:.6rem 1.4rem;font-family:Manrope,sans-serif;font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;">✎ Redigér valgmuligheder</button>
       </div>
     </div>
 
-    <div class="fc-block" data-section="ul_13 · bekræftelses-besked">
-      <div class="fc-block-header"><span class="fc-block-title">13 · Bekræftelses-besked</span></div>
+    <div class="fc-block" data-section="ul_18 · bekræftelses-besked">
+      <div class="fc-block-header"><span class="fc-block-title">18 · Bekræftelses-besked</span></div>
       <div class="fc-block-body">
         <div class="fc-row">
           <div><label class="fc-label fc-label-da">Label (DA)</label><input type="text" id="ul_success_label_da" class="fc-input-da" placeholder=""></div>
@@ -6893,14 +7036,20 @@ const UL_TEXT_KEYS = [
   'form_hjemmeside','form_hjemmeside_ph','form_land','form_land_ph',
   'form_deltagere','form_periode','form_periode_ph','form_varighed','form_formaal',
   'form_besked','form_besked_ph','form_kilde','form_math_label','form_submit',
-  'success_label','success_h3','success_text'
+  'success_label','success_h3','success_text',
+  'undervisning_label','undervisning_h2','undervisning_text','undervisning_facts',
+  'fungerer_label','fungerer_h2','fungerer_text','fungerer_steps','fungerer_facts','fungerer_cta',
+  'stemmer_label','stemmer_h2','stemmer_liste',
+  'vaerter_label','vaerter_h2','vaerter_text',
+  'ulfaq_label','ulfaq_h2','ulfaq_liste'
 ];
 const UL_IMG_KEYS = [
   'hero_bg','intro_img1','intro_img2',
   'strip1_img1','strip1_img2','strip1_img3','strip1_img4',
   'fac_img1','fac_img2','fac_img3',
   'mere_img',
-  'strip2_img1','strip2_img2','strip2_img3'
+  'strip2_img1','strip2_img2','strip2_img3',
+  'undervisning_img1','undervisning_img2','vaerter_img'
 ];
 const UL_DEFAULTS = {
   "hero_eyebrow": "Castillo del Alma · Mollina, Andalusien",
@@ -6949,8 +7098,49 @@ const UL_DEFAULTS = {
   "form_submit": "Send forespørgsel",
   "success_label": "Tak for din henvendelse",
   "success_h3": "Vi vender tilbage inden for 24 timer",
-  "success_text": "Vi glæder os til at høre mere om din vision og drøfte, hvordan Castillo del Alma kan blive rammen for dit næste retreat."
+  "success_text": "Vi glæder os til at høre mere om din vision og drøfte, hvordan Castillo del Alma kan blive rammen for dit næste retreat.",
+  "undervisning_label": "Undervisningsfaciliteter",
+  "undervisning_h2": "Rum til <em>undervisning</em> og fordybelse",
+  "undervisning_text": "Hjertet i et godt retreat er rummet, du underviser i. På Castillo del Alma har I lyse undervisnings- og samlingslokaler samt store terrasser og græsarealer med plads til yoga, meditation, workshops og samtaler i plenum.\nI kan frit veksle mellem inde og ude — morgenyoga i solopgangen, undervisning i et køligt lokale midt på dagen og aftenmeditation under stjernerne.\nFortæl os om jeres program, så indretter vi lokalerne efter jeres behov, inden I ankommer.",
+  "undervisning_facts": "Lyse undervisnings- og samlingslokaler\nStore terrasser og græsarealer til yoga\nFælles stuer til samtale og gruppearbejde\nVandrestier på egen grund til walk & talk\nSwimmingpool med afslapningsområder\nRolige omgivelser uden trafik og støj",
+  "fungerer_label": "Sådan fungerer det",
+  "fungerer_h2": "Fra idé til <em>afholdt</em> retreat",
+  "fungerer_text": "Vi har gjort det enkelt at gå fra drøm til virkelighed. I får én samlet aftale og ét kontaktpunkt hele vejen.",
+  "fungerer_steps": "Fortæl os om din vision|Udfyld formularen eller book en uforpligtende samtale. Vi vender tilbage inden for 24 timer.\nVi skræddersyr et tilbud|Sammen fastlægger vi datoer, forplejning, transfer og program — og du får ét samlet, gennemsigtigt tilbud.\nDu underviser — vi driver stedet|Fra ankomst til afrejse tager vi os af logistik, måltider og praktik, så du kan fokusere 100% på dine deltagere.",
+  "fungerer_facts": "Ca. 50 minutter fra Málaga lufthavn\nTransfer til og fra lufthavnen kan inkluderes\nPlads til 14 deltagere + 2 undervisere\nÉt samlet tilbud — svar inden for 24 timer\nMulighed for hjælp til markedsføring af jeres retreat",
+  "fungerer_cta": "Book en uforpligtende samtale",
+  "stemmer_label": "Det siger arrangørerne",
+  "stemmer_h2": "Stemmer fra <em>tidligere</em> ophold",
+  "stemmer_liste": "",
+  "vaerter_label": "Mød værterne",
+  "vaerter_h2": "I lejer ikke bare et hus — I får <em>os</em> med",
+  "vaerter_text": "Castillo del Alma er vores hjem, og vi er på ejendommen under hele jeres ophold. Det betyder, at der altid er nogen til at tage sig af det praktiske — fra måltider og transfer til de små detaljer, der gør en forskel.\nHvilken rolle vi skal spille, bestemmer du. Nogle arrangører ønsker fuld service og daglig sparring — andre foretrækker, at vi holder os diskret i baggrunden. Begge dele er en naturlig del af aftalen.\nVi glæder os til at byde dig og dine deltagere velkommen.",
+  "ulfaq_label": "Ofte stillede spørgsmål",
+  "ulfaq_h2": "FAQ",
+  "ulfaq_liste": "Hvor mange deltagere er der plads til?|Der er plads til op til 14 kursister og 2 undervisere. Alle værelser er dobbeltværelser med enkeltsenge og eget badeværelse.\nHvordan fungerer prisen?|I får ét samlet tilbud baseret på antal deltagere, varighed og jeres ønsker til forplejning og program. Skriv til os, så vender vi tilbage med et uforpligtende tilbud inden for 24 timer.\nHvor langt er der til lufthavnen?|Ejendommen ligger i Mollina, ca. 50 minutters kørsel fra Málaga lufthavn. Vi tilbyder transfer til og fra lufthavnen.\nKan I tage hensyn til særlige diæter?|Ja. Vores køkken laver sund, hjemmelavet mad med fokus på anti-inflammatorisk kost, og vi tilpasser gerne menuen til allergier og særlige ønsker.\nHjælper I med markedsføringen af vores retreat?|Ja, vi tilbyder mulighed for at markedsføre jeres retreat via vores kanaler. Spørg os om mulighederne, når vi taler sammen.\nKan vi leje stedet uden værterne?|Nej — Castillo del Alma lejes altid med værtsparret, som står for driften under opholdet. Hvilken rolle vi derudover skal spille, er helt op til jer."
 };
+// EN-defaults for de NYE sektioner — udfyldes i felterne, hvis databasen er tom
+const UL_DEFAULTS_EN = {
+  "undervisning_label": "Teaching facilities",
+  "undervisning_h2": "Space for <em>teaching</em> and immersion",
+  "undervisning_text": "The heart of any good retreat is the room you teach in. At Castillo del Alma you have bright teaching and gathering spaces, plus large terraces and lawns with room for yoga, meditation, workshops and group sessions.\nYou can move freely between indoors and outdoors — sunrise yoga, teaching in a cool room at midday, and evening meditation under the stars.\nTell us about your programme and we will arrange the rooms to suit your needs before you arrive.",
+  "undervisning_facts": "Bright teaching and gathering spaces\nLarge terraces and lawns for yoga\nShared lounges for talks and group work\nWalking trails on the estate for walk & talk\nSwimming pool with relaxation areas\nQuiet surroundings without traffic or noise",
+  "fungerer_label": "How it works",
+  "fungerer_h2": "From idea to <em>hosted</em> retreat",
+  "fungerer_text": "We have made it simple to go from dream to reality. You get one agreement and one point of contact all the way.",
+  "fungerer_steps": "Tell us about your vision|Fill in the form or book a no-obligation call. We reply within 24 hours.\nWe tailor a quote|Together we set dates, catering, transfers and programme — and you receive one transparent, all-in quote.\nYou teach — we run the venue|From arrival to departure we handle logistics, meals and practicalities, so you can focus 100% on your participants.",
+  "fungerer_facts": "About 50 minutes from Málaga airport\nAirport transfers can be included\nRoom for 14 participants + 2 teachers\nOne all-in quote — reply within 24 hours\nHelp with marketing your retreat available",
+  "fungerer_cta": "Book a no-obligation call",
+  "stemmer_label": "What organisers say",
+  "stemmer_h2": "Voices from <em>previous</em> stays",
+  "vaerter_label": "Meet your hosts",
+  "vaerter_h2": "You don\u2019t just rent a house — you get <em>us</em> too",
+  "vaerter_text": "Castillo del Alma is our home, and we are on the estate throughout your stay. That means there is always someone to take care of the practical side — from meals and transfers to the small details that make a difference.\nWhich role we play is up to you. Some organisers want full service and daily sparring — others prefer us discreetly in the background. Both are a natural part of the agreement.\nWe look forward to welcoming you and your participants.",
+  "ulfaq_label": "Frequently asked questions",
+  "ulfaq_h2": "FAQ",
+  "ulfaq_liste": "How many participants can you host?|There is room for up to 14 participants and 2 teachers. All rooms are twin rooms with single beds and en-suite bathrooms.\nHow does pricing work?|You receive one all-in quote based on the number of participants, duration and your wishes for catering and programme. Write to us and we will get back within 24 hours with a no-obligation quote.\nHow far is the airport?|The estate is in Mollina, about 50 minutes by car from Málaga airport. We offer transfers to and from the airport.\nCan you accommodate special diets?|Yes. Our kitchen prepares healthy, homemade food with a focus on anti-inflammatory cuisine, and we gladly adapt the menu to allergies and special requests.\nDo you help market our retreat?|Yes, we offer the option of marketing your retreat through our channels. Ask us about the possibilities when we talk.\nCan we rent the venue without the hosts?|No — Castillo del Alma is always rented with the host couple, who run the venue during your stay. Beyond that, which role we play is entirely up to you."
+};
+const UL_VIS_KEYS = ['vis_undervisning','vis_fungerer','vis_stemmer','vis_vaerter','vis_ulfaq'];
 const UL_IMG_DEFAULTS = {
   "hero_bg": "img/group-people-making-breathworks-castillo-del-alma.jpg",
   "intro_img1": "img/group-people-making-breathworks-castillo-del-alma.jpg",
@@ -6965,7 +7155,10 @@ const UL_IMG_DEFAULTS = {
   "mere_img": "img/group-people-walking-along-path-dirt-stones-jungle.jpg",
   "strip2_img1": "img/aerial-view-people-having-dinner-backyard.jpg",
   "strip2_img2": "img/faceless-woman-lying-grass.jpg",
-  "strip2_img3": "img/group-men-sit-hill-overlooking-mountain.jpg"
+  "strip2_img3": "img/group-men-sit-hill-overlooking-mountain.jpg",
+  "undervisning_img1": "img/group-different-people-are-doing-meditative-yoga-practices-rooftop-beautiful-sunset-summer-evening.jpg",
+  "undervisning_img2": "img/yoga-singing-bowls.webp",
+  "vaerter_img": "img/erik-michael-castillo-del-alma.webp"
 };
 const UL_KAT_DEFAULTS = [
   {
@@ -7124,6 +7317,7 @@ async function loadUdlejningAdmin() {
         if (!el) return;
         let val = map[lang === 'da' ? key : key + '_en'];
         if (!val && lang === 'da') val = UL_DEFAULTS[key] || ''; // Fallback: dagens tekst, hvis DB er tom
+        if (!val && lang === 'en') val = UL_DEFAULTS_EN[key] || ''; // Fallback: engelske defaults for nye sektioner
         if (val) el.value = val;
       });
     });
@@ -7136,6 +7330,11 @@ async function loadUdlejningAdmin() {
         const preview = document.getElementById(`ul_${key}_preview`);
         if (preview) { preview.src = val; preview.style.display = 'inline-block'; }
       }
+    });
+
+    UL_VIS_KEYS.forEach(k => {
+      const el = document.getElementById('ul_' + k);
+      if (el) el.checked = map[k] !== '0'; // Synlig som standard
     });
 
     try {
@@ -7178,6 +7377,10 @@ async function gemUdlejning() {
   UL_IMG_KEYS.forEach(key => {
     const el = document.getElementById(`ul_${key}_url`);
     if (el) upserts.push({ key, value: el.value });
+  });
+  UL_VIS_KEYS.forEach(k => {
+    const el = document.getElementById('ul_' + k);
+    if (el) upserts.push({ key: k, value: el.checked ? '1' : '0' });
   });
   upserts.push({ key: 'design_kategorier', value: JSON.stringify(ulKategorierState) });
   upserts.push({ key: 'opt_deltagere', value: JSON.stringify(ulDropdownState.deltagere) });
