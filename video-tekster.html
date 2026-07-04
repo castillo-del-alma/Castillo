@@ -6,7 +6,7 @@
 <meta name="robots" content="noindex, nofollow">
 <title>Video-tekster · Castillo del Alma</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Inter:wght@400;500;600&family=Poppins:wght@800&display=swap" rel="stylesheet">
 <style>
   :root {
     --cream: #faf6ef;
@@ -129,8 +129,13 @@
     text-align: center;
     pointer-events: none;
     text-shadow: 0 0 4px rgba(0,0,0,.9), 0 0 8px rgba(0,0,0,.6);
-    font-weight: 600;
-    line-height: 1.3;
+    font-weight: 800;
+    line-height: 1.25;
+  }
+  #subOverlay.pop { animation: subpop .16s ease-out; }
+  @keyframes subpop {
+    from { transform: scale(.75); }
+    to { transform: scale(1); }
   }
   #subOverlay .en-line { opacity: .95; }
   #wmOverlay {
@@ -274,13 +279,38 @@
       <button class="ghost small" data-preset="creme">Castillo creme</button>
       <button class="ghost small" data-preset="boks">Mørk boks</button>
     </div>
+    <div class="row" style="margin-bottom:14px">
+      <div>
+        <label>Tekstvisning</label>
+        <select id="stFlow">
+          <option value="words" selected>Ord for ord (2-3 ad gangen)</option>
+          <option value="classic">Hele sætninger</option>
+        </select>
+      </div>
+      <div>
+        <label>Store bogstaver</label>
+        <select id="stCaps">
+          <option value="upper" selected>Ja (VERSALER)</option>
+          <option value="normal">Nej</option>
+        </select>
+      </div>
+      <div>
+        <label>Animation</label>
+        <select id="stAnim">
+          <option value="pop" selected>Pop</option>
+          <option value="fade">Fade</option>
+          <option value="none">Ingen</option>
+        </select>
+      </div>
+    </div>
     <div class="row">
       <div>
         <label>Tekststørrelse</label>
         <select id="stSize">
           <option value="small">Lille</option>
-          <option value="medium" selected>Mellem</option>
-          <option value="large">Stor</option>
+          <option value="medium">Mellem</option>
+          <option value="large" selected>Stor</option>
+          <option value="xl">Ekstra stor</option>
         </select>
       </div>
       <div>
@@ -357,10 +387,10 @@ const FN_URL = '/.netlify/functions/transcribe-video';
 const CORE_URL = '/ffmpeg/ffmpeg-core.js';
 const WASM_URL = '/ffmpeg/ffmpeg-core.wasm';
 const FONT_URLS = [
-  '/ffmpeg/Poppins-SemiBold.ttf',
-  'https://cdn.jsdelivr.net/gh/google/fonts@main/ofl/poppins/Poppins-SemiBold.ttf'
+  '/ffmpeg/Poppins-ExtraBold.ttf',
+  'https://cdn.jsdelivr.net/gh/google/fonts@main/ofl/poppins/Poppins-ExtraBold.ttf'
 ];
-const FONT_NAME = 'Poppins SemiBold';
+const FONT_NAME = 'Poppins ExtraBold';
 
 const $ = (id) => document.getElementById(id);
 
@@ -580,7 +610,7 @@ document.querySelector('.presets').addEventListener('click', (e) => {
   $('stSize').value = p.size;
   updatePreviewStyle();
 });
-['stSize', 'stColor', 'stBg', 'stPos', 'wmType', 'wmText', 'wmPos'].forEach(id =>
+['stSize', 'stColor', 'stBg', 'stPos', 'stFlow', 'stCaps', 'stAnim', 'wmType', 'wmText', 'wmPos'].forEach(id =>
   $(id).addEventListener('input', updatePreviewStyle));
 
 $('wmType').addEventListener('change', () => {
@@ -598,7 +628,7 @@ $('wmLogoFile').addEventListener('change', async (e) => {
 
 function sizePx() {
   // Skriftstørrelse i pixels relativt til videohøjden
-  const factor = { small: 0.032, medium: 0.042, large: 0.055 }[$('stSize').value];
+  const factor = { small: 0.040, medium: 0.055, large: 0.070, xl: 0.085 }[$('stSize').value];
   return Math.round(videoH * factor);
 }
 
@@ -638,17 +668,107 @@ window.addEventListener('resize', updatePreviewStyle);
 /* Live undertekst-preview mens videoen spiller */
 $('video').addEventListener('timeupdate', () => {
   const t = $('video').currentTime;
-  const seg = segments.find(s => t >= s.start && t <= s.end);
+  const cue = getCues().find(c => t >= c.start && t <= c.end);
   const ov = $('subOverlay');
-  if (!seg) { ov.innerHTML = ''; return; }
+  if (!cue) { ov.innerHTML = ''; ov.dataset.key = ''; return; }
   let html = '';
-  if (langMode === 'da' || langMode === 'both') html += escapeHtml(seg.da);
-  if (langMode === 'both' && seg.en) html += '<br><span class="en-line" style="font-size:.85em;font-style:italic">' + escapeHtml(seg.en) + '</span>';
-  if (langMode === 'en') html = escapeHtml(seg.en);
-  ov.innerHTML = html;
+  if (langMode === 'da' || langMode === 'both') html += escapeHtml(applyCaps(cue.da));
+  if (langMode === 'both' && cue.en) html += '<br><span class="en-line" style="font-size:.8em;font-style:italic">' + escapeHtml(applyCaps(cue.en)) + '</span>';
+  if (langMode === 'en') html = escapeHtml(applyCaps(cue.en));
+  const key = cue.start + '|' + html;
+  if (ov.dataset.key !== key) {
+    ov.dataset.key = key;
+    ov.innerHTML = html;
+    if ($('stAnim').value === 'pop') {
+      ov.classList.remove('pop');
+      void ov.offsetWidth; // genstart animationen
+      ov.classList.add('pop');
+    }
+  }
 });
 
 /* ---------- Trin 5: byg ASS + brænd ---------- */
+
+/* Opdeling af sætninger i småbidder (2-3 ord ad gangen) */
+function wordsOf(text) {
+  return String(text).trim().split(/\s+/).filter(Boolean);
+}
+
+function chunkList(words, maxWords = 3) {
+  const chunks = [];
+  let i = 0;
+  while (i < words.length) {
+    let take = Math.min(maxWords, words.length - i);
+    // Undgå at sidste bid kun bliver ét ord (2+2 i stedet for 3+1)
+    if (words.length - i === maxWords + 1) take = 2;
+    chunks.push(words.slice(i, i + take).join(' '));
+    i += take;
+  }
+  return chunks;
+}
+
+function splitIntoN(words, n) {
+  const out = [];
+  const base = Math.floor(words.length / n);
+  let rem = words.length % n;
+  let i = 0;
+  for (let k = 0; k < n; k++) {
+    const take = base + (rem > 0 ? 1 : 0);
+    if (rem > 0) rem--;
+    out.push(words.slice(i, i + take).join(' '));
+    i += take;
+  }
+  return out;
+}
+
+/* Omsætter de redigerede segmenter til visnings-bidder ("cues").
+   Ved ord-for-ord fordeles tiden inden for hvert segment
+   proportionalt med tekstlængden af hver bid. */
+function getCues() {
+  const flow = $('stFlow').value;
+  const cues = [];
+  for (const s of segments) {
+    if (s.end <= s.start) continue;
+    if (flow === 'classic') {
+      cues.push({ start: s.start, end: s.end, da: s.da, en: s.en });
+      continue;
+    }
+    const daW = wordsOf(s.da), enW = wordsOf(s.en);
+    let daC, enC;
+    if (langMode === 'da') {
+      daC = chunkList(daW);
+      enC = daC.map(() => '');
+    } else if (langMode === 'en') {
+      enC = chunkList(enW);
+      daC = enC.map(() => '');
+    } else {
+      daC = chunkList(daW);
+      enC = enW.length && daC.length ? splitIntoN(enW, daC.length) : daC.map(() => '');
+    }
+    const n = Math.max(daC.length, enC.length);
+    if (n === 0) continue;
+    const lens = [];
+    let total = 0;
+    for (let k = 0; k < n; k++) {
+      const L = ((daC[k] || '') + (enC[k] || '')).length || 1;
+      lens.push(L);
+      total += L;
+    }
+    const dur = s.end - s.start;
+    let t = s.start;
+    for (let k = 0; k < n; k++) {
+      const d = dur * lens[k] / total;
+      cues.push({ start: t, end: Math.min(s.end, t + d), da: daC[k] || '', en: enC[k] || '' });
+      t += d;
+    }
+  }
+  return cues;
+}
+
+function applyCaps(text) {
+  return $('stCaps').value === 'upper' ? String(text).toUpperCase() : String(text);
+}
+
 function hexToAss(hex) {
   // #RRGGBB -> &H00BBGGRR
   const h = hex.replace('#', '').padEnd(6, 'F');
@@ -694,18 +814,23 @@ Style: Wm,${FONT_NAME},${Math.round(videoH * 0.022)},&H40FFFFFF,&H40FFFFFF,&H000
 Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
 `;
 
-  const enSize = Math.round(fs * 0.85);
-  for (const s of segments) {
+  const enSize = Math.round(fs * 0.8);
+  const anim = $('stAnim').value;
+  let fx = '';
+  if (anim === 'pop') fx = '{\\fscx75\\fscy75\\t(0,120,\\fscx100\\fscy100)}';
+  else if (anim === 'fade') fx = '{\\fad(100,80)}';
+
+  for (const s of getCues()) {
     if (s.end <= s.start) continue;
     let text = '';
-    if (langMode === 'da') text = escAss(s.da);
-    else if (langMode === 'en') text = escAss(s.en);
+    if (langMode === 'da') text = escAss(applyCaps(s.da));
+    else if (langMode === 'en') text = escAss(applyCaps(s.en));
     else {
-      text = escAss(s.da);
-      if (s.en) text += `\\N{\\fs${enSize}\\i1}` + escAss(s.en);
+      text = escAss(applyCaps(s.da));
+      if (s.en) text += `\\N{\\fs${enSize}\\i1}` + escAss(applyCaps(s.en));
     }
     if (!text.trim()) continue;
-    ass += `Dialogue: 0,${assTime(s.start)},${assTime(s.end)},Sub,,0,0,0,,${text}\n`;
+    ass += `Dialogue: 0,${assTime(s.start)},${assTime(s.end)},Sub,,0,0,0,,${fx}${text}\n`;
   }
 
   // Tekst-vandmærke som ASS-event over hele videoen
