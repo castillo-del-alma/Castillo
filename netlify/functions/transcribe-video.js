@@ -1,7 +1,59 @@
 // transcribe-video.js
-// Modtager lyd (base64) fra video-tekster.html, transskriberer dansk tale
-// via OpenAI Whisper og oversætter hvert segment til engelsk.
+// 1) Modtager lyd (base64), transskriberer dansk tale via OpenAI Whisper
+//    og oversætter hvert segment til engelsk.
+// 2) Kan også kaldes med { translateLines: [...] } for kun at oversætte.
 // Kræver miljøvariablen OPENAI_API_KEY i Netlify.
+
+async function translateLines(apiKey, lines) {
+  const res = await fetch('https://api.openai.com/v1/chat/completions', {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${apiKey}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      model: 'gpt-4o-mini',
+      temperature: 0.2,
+      response_format: { type: 'json_object' },
+      messages: [
+        {
+          role: 'system',
+          content:
+            'You translate Danish subtitle lines into natural, concise English for on-screen video captions. ' +
+            'Input is a JSON object {"lines": [...]} with Danish strings. ' +
+            'Respond ONLY with a JSON object {"lines": [...]} containing the English translations, ' +
+            'exactly the same number of lines, in the same order.',
+        },
+        { role: 'user', content: JSON.stringify({ lines }) },
+      ],
+    }),
+  });
+
+  if (!res.ok) {
+    throw new Error('Oversættelses-API fejlede: ' + (await res.text()).slice(0, 200));
+  }
+  const data = await res.json();
+  const content = data.choices?.[0]?.message?.content || '';
+  const parsed = JSON.parse(content);
+  if (!Array.isArray(parsed.lines) || parsed.lines.length !== lines.length) {
+    throw new Error('Oversættelsen kom tilbage i forkert format');
+  }
+  return parsed.lines.map((t) => String(t).trim());
+}
+
+async function translateWithRetry(apiKey, lines) {
+  try {
+    return { lines: await translateLines(apiKey, lines) };
+  } catch (e1) {
+    console.error('Oversættelse forsøg 1 fejlede:', e1.message);
+    try {
+      return { lines: await translateLines(apiKey, lines) };
+    } catch (e2) {
+      console.error('Oversættelse forsøg 2 fejlede:', e2.message);
+      return { lines: lines.map(() => ''), error: e2.message };
+    }
+  }
+}
 
 exports.handler = async (event) => {
   const headers = {
@@ -13,7 +65,6 @@ exports.handler = async (event) => {
   if (event.httpMethod === 'OPTIONS') {
     return { statusCode: 200, headers, body: '' };
   }
-
   if (event.httpMethod !== 'POST') {
     return { statusCode: 405, headers, body: JSON.stringify({ error: 'Method not allowed' }) };
   }
@@ -28,14 +79,26 @@ exports.handler = async (event) => {
   }
 
   try {
-    const { audioBase64 } = JSON.parse(event.body || '{}');
+    const body = JSON.parse(event.body || '{}');
+
+    // Tilstand 2: kun oversættelse (bruges af "Oversæt igen"-knappen)
+    if (Array.isArray(body.translateLines)) {
+      const t = await translateWithRetry(apiKey, body.translateLines.map(String));
+      return {
+        statusCode: 200,
+        headers,
+        body: JSON.stringify({ lines: t.lines, translateError: t.error || null }),
+      };
+    }
+
+    // Tilstand 1: transskription + oversættelse
+    const { audioBase64 } = body;
     if (!audioBase64) {
       return { statusCode: 400, headers, body: JSON.stringify({ error: 'Ingen lyddata modtaget' }) };
     }
 
     const audioBuffer = Buffer.from(audioBase64, 'base64');
 
-    // 1) Transskription med Whisper (dansk, med tidsstempler pr. segment)
     const form = new FormData();
     form.append('file', new Blob([audioBuffer], { type: 'audio/mpeg' }), 'audio.mp3');
     form.append('model', 'whisper-1');
@@ -73,52 +136,14 @@ exports.handler = async (event) => {
       };
     }
 
-    // 2) Oversættelse af alle segmenter til engelsk i ét kald
-    const danishLines = segments.map((s) => s.da);
+    const t = await translateWithRetry(apiKey, segments.map((s) => s.da));
+    const result = segments.map((s, i) => ({ ...s, en: t.lines[i] || '' }));
 
-    const translateRes = await fetch('https://api.openai.com/v1/chat/completions', {
-      method: 'POST',
-      headers: {
-        Authorization: `Bearer ${apiKey}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        model: 'gpt-4o-mini',
-        temperature: 0.2,
-        messages: [
-          {
-            role: 'system',
-            content:
-              'You translate Danish subtitle lines to natural, concise English suitable for on-screen subtitles. ' +
-              'You receive a JSON array of Danish strings. Respond ONLY with a JSON array of English strings ' +
-              'of exactly the same length and order. No markdown, no explanations.',
-          },
-          { role: 'user', content: JSON.stringify(danishLines) },
-        ],
-      }),
-    });
-
-    let englishLines = danishLines.map(() => '');
-    if (translateRes.ok) {
-      try {
-        const tData = await translateRes.json();
-        const raw = (tData.choices?.[0]?.message?.content || '')
-          .replace(/```json|```/g, '')
-          .trim();
-        const parsed = JSON.parse(raw);
-        if (Array.isArray(parsed) && parsed.length === danishLines.length) {
-          englishLines = parsed.map((t) => String(t).trim());
-        }
-      } catch (e) {
-        console.error('Kunne ikke parse oversættelse:', e);
-      }
-    } else {
-      console.error('Oversættelse fejlede:', await translateRes.text());
-    }
-
-    const result = segments.map((s, i) => ({ ...s, en: englishLines[i] || '' }));
-
-    return { statusCode: 200, headers, body: JSON.stringify({ segments: result }) };
+    return {
+      statusCode: 200,
+      headers,
+      body: JSON.stringify({ segments: result, translateError: t.error || null }),
+    };
   } catch (err) {
     console.error('Serverfejl:', err);
     return {
