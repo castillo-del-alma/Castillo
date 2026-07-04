@@ -6,7 +6,7 @@
 <meta name="robots" content="noindex, nofollow">
 <title>Video-tekster · Castillo del Alma</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Inter:wght@400;500;600&family=Poppins:wght@800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Inter:wght@400;500;600&family=Poppins:wght@800&family=Cinzel:wght@800&display=swap" rel="stylesheet">
 <style>
   :root {
     --cream: #faf6ef;
@@ -309,6 +309,13 @@
     </div>
     <div class="row">
       <div>
+        <label>Skrifttype</label>
+        <select id="stFont">
+          <option value="cinzel" selected>Cinzel (elegant)</option>
+          <option value="poppins">Poppins (moderne)</option>
+        </select>
+      </div>
+      <div>
         <label>Tekststørrelse</label>
         <select id="stSize">
           <option value="small">Lille</option>
@@ -409,11 +416,26 @@
 const FN_URL = '/.netlify/functions/transcribe-video';
 const CORE_URL = '/ffmpeg/ffmpeg-core.js';
 const WASM_URL = '/ffmpeg/ffmpeg-core.wasm';
-const FONT_URLS = [
-  '/ffmpeg/Poppins-ExtraBold.ttf',
-  'https://cdn.jsdelivr.net/gh/google/fonts@main/ofl/poppins/Poppins-ExtraBold.ttf'
-];
-const FONT_NAME = 'Poppins ExtraBold';
+/* Skrifttyper til brænding. 'scale' er korrektionen mellem browserens
+   bogstavhøjde og brænde-motorens linjehøjde — målt pr. skrifttype. */
+const FONTS = {
+  cinzel: {
+    name: 'Cinzel ExtraBold',
+    urls: ['/ffmpeg/Cinzel-ExtraBold.ttf'],
+    css: "'Cinzel', serif",
+    scale: 1.348
+  },
+  poppins: {
+    name: 'Poppins ExtraBold',
+    urls: ['/ffmpeg/Poppins-ExtraBold.ttf',
+           'https://cdn.jsdelivr.net/gh/google/fonts@main/ofl/poppins/Poppins-ExtraBold.ttf'],
+    css: "'Poppins','Inter',sans-serif",
+    scale: 1.76
+  }
+};
+function currentFont() {
+  return FONTS[$('stFont').value] || FONTS.cinzel;
+}
 
 const $ = (id) => document.getElementById(id);
 
@@ -670,7 +692,7 @@ document.querySelector('.presets').addEventListener('click', (e) => {
   $('stOutSize').value = p.outSize;
   updatePreviewStyle();
 });
-['stSize', 'stColor', 'stBg', 'stPos', 'stFlow', 'stCaps', 'stAnim', 'stOutSize', 'stOutColor', 'wmType', 'wmText', 'wmPos'].forEach(id =>
+['stFont', 'stSize', 'stColor', 'stBg', 'stPos', 'stFlow', 'stCaps', 'stAnim', 'stOutSize', 'stOutColor', 'wmType', 'wmText', 'wmPos'].forEach(id =>
   $(id).addEventListener('input', updatePreviewStyle));
 
 $('wmType').addEventListener('change', () => {
@@ -702,7 +724,7 @@ function updatePreviewStyle() {
   const scale = box.clientWidth / videoW || 0.3;
   ov.style.fontSize = Math.max(10, sizePx() * scale) + 'px';
   ov.style.color = $('stColor').value;
-  ov.style.fontFamily = "'Poppins','Inter',sans-serif";
+  ov.style.fontFamily = currentFont().css;
   const pos = $('stPos').value;
   ov.style.top = pos === 'top' ? '6%' : pos === 'middle' ? '45%' : 'auto';
   ov.style.bottom = pos === 'bottom' ? '8%' : 'auto';
@@ -868,11 +890,10 @@ function escAss(text) {
 }
 
 function buildAss() {
-  // libass måler skriftstørrelse på linjehøjden (ikke bogstavhøjden som browseren).
-  // Poppins' linjehøjde er 1,76x bogstavhøjden, så vi ganger op,
-  // for at den brændte tekst matcher forhåndsvisningen.
-  const BURN_SCALE = 1.76;
-  const fs = Math.round(sizePx() * BURN_SCALE);
+  // Brænde-motoren måler skriftstørrelse på linjehøjden (ikke bogstavhøjden
+  // som browseren), så vi ganger op med skrifttypens målte faktor.
+  const font = currentFont();
+  const fs = Math.round(sizePx() * font.scale);
   const color = hexToAss($('stColor').value);
   const boxMode = $('stBg').value === 'box';
   const pos = $('stPos').value;
@@ -894,8 +915,8 @@ WrapStyle: 0
 
 [V4+ Styles]
 Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding
-Style: Sub,${FONT_NAME},${fs},${color},${color},${outlineColour},${backColor},0,0,0,0,100,100,0,0,${borderStyle},${outline},0,${align},60,60,${marginV},1
-Style: Wm,${FONT_NAME},${Math.round(videoH * 0.022 * 1.76)},&H40FFFFFF,&H40FFFFFF,&H00000000,&H80000000,0,0,0,0,100,100,0,0,1,2,0,7,40,40,40,1
+Style: Sub,${font.name},${fs},${color},${color},${outlineColour},${backColor},0,0,0,0,100,100,0,0,${borderStyle},${outline},0,${align},60,60,${marginV},1
+Style: Wm,${font.name},${Math.round(videoH * 0.022 * font.scale)},&H40FFFFFF,&H40FFFFFF,&H00000000,&H80000000,0,0,0,0,100,100,0,0,1,2,0,7,40,40,40,1
 
 [Events]
 Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
@@ -954,7 +975,7 @@ $('btnBurn').addEventListener('click', async () => {
     // Skriv filer til det virtuelle filsystem
     await ff.writeFile('input.mp4', await fileToUint8(videoFile));
     try { await ff.createDir('/fonts'); } catch (e) { /* findes måske allerede */ }
-    const fontData = await fetchUint8(FONT_URLS);
+    const fontData = await fetchUint8(currentFont().urls);
     await ff.writeFile('/fonts/sub.ttf', fontData);
     await ff.writeFile('subs.ass', new TextEncoder().encode(buildAss()));
 
