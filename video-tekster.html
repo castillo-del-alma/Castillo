@@ -286,6 +286,7 @@
         <label>Tekstvisning</label>
         <select id="stFlow">
           <option value="word1" selected>Ét ord ad gangen</option>
+          <option value="word2">To ord ad gangen</option>
           <option value="words">2-3 ord ad gangen</option>
           <option value="classic">Hele sætninger</option>
         </select>
@@ -774,7 +775,7 @@ function getCues() {
       cues.push({ start: s.start, end: s.end, da: s.da, en: s.en });
       continue;
     }
-    const maxW = flow === 'word1' ? 1 : 3;
+    const maxW = flow === 'word1' ? 1 : flow === 'word2' ? 2 : 3;
     const daW = wordsOf(s.da), enW = wordsOf(s.en);
     let daC, enC;
     if (langMode === 'da') {
