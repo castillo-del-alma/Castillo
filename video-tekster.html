@@ -339,6 +339,22 @@
     </div>
     <div class="row" style="margin-top:16px">
       <div>
+        <label>Kanttykkelse</label>
+        <select id="stOutSize">
+          <option value="none">Ingen</option>
+          <option value="thin">Tynd</option>
+          <option value="medium" selected>Mellem</option>
+          <option value="thick">Tyk</option>
+          <option value="xthick">Ekstra tyk</option>
+        </select>
+      </div>
+      <div>
+        <label>Kantfarve</label>
+        <input type="text" id="stOutColor" value="#000000">
+      </div>
+    </div>
+    <div class="row" style="margin-top:16px">
+      <div>
         <label>Vandmærke</label>
         <select id="wmType">
           <option value="none">Intet</option>
@@ -640,9 +656,9 @@ $('langToggle').addEventListener('click', (e) => {
 
 /* ---------- Trin 4: stil, presets, vandmærke ---------- */
 const PRESETS = {
-  klassisk: { color: '#FFFFFF', bg: 'outline', size: 'medium' },
-  creme:    { color: '#F5EBDD', bg: 'outline', size: 'medium' },
-  boks:     { color: '#FFFFFF', bg: 'box',     size: 'medium' }
+  klassisk: { color: '#FFFFFF', bg: 'outline', size: 'large', outColor: '#000000', outSize: 'medium' },
+  creme:    { color: '#F5EBDD', bg: 'outline', size: 'large', outColor: '#3A2E1F', outSize: 'medium' },
+  boks:     { color: '#FFFFFF', bg: 'box',     size: 'large', outColor: '#000000', outSize: 'medium' }
 };
 document.querySelector('.presets').addEventListener('click', (e) => {
   const p = PRESETS[e.target.dataset.preset];
@@ -650,9 +666,11 @@ document.querySelector('.presets').addEventListener('click', (e) => {
   $('stColor').value = p.color;
   $('stBg').value = p.bg;
   $('stSize').value = p.size;
+  $('stOutColor').value = p.outColor;
+  $('stOutSize').value = p.outSize;
   updatePreviewStyle();
 });
-['stSize', 'stColor', 'stBg', 'stPos', 'stFlow', 'stCaps', 'stAnim', 'wmType', 'wmText', 'wmPos'].forEach(id =>
+['stSize', 'stColor', 'stBg', 'stPos', 'stFlow', 'stCaps', 'stAnim', 'stOutSize', 'stOutColor', 'wmType', 'wmText', 'wmPos'].forEach(id =>
   $(id).addEventListener('input', updatePreviewStyle));
 
 $('wmType').addEventListener('change', () => {
@@ -674,6 +692,10 @@ function sizePx() {
   return Math.round(videoH * factor);
 }
 
+function outlineFactor() {
+  return { none: 0, thin: 0.04, medium: 0.07, thick: 0.11, xthick: 0.16 }[$('stOutSize').value];
+}
+
 function updatePreviewStyle() {
   const ov = $('subOverlay');
   const box = $('previewBox');
@@ -684,6 +706,20 @@ function updatePreviewStyle() {
   const pos = $('stPos').value;
   ov.style.top = pos === 'top' ? '6%' : pos === 'middle' ? '45%' : 'auto';
   ov.style.bottom = pos === 'bottom' ? '8%' : 'auto';
+
+  // Kant og boks i forhåndsvisningen
+  const boxMode = $('stBg').value === 'box';
+  const of = outlineFactor();
+  if (!boxMode && of > 0) {
+    ov.style.webkitTextStroke = Math.max(1, sizePx() * of * scale) + 'px ' + $('stOutColor').value;
+    ov.style.textShadow = '0 0 6px rgba(0,0,0,.5)';
+  } else {
+    ov.style.webkitTextStroke = '0px transparent';
+    ov.style.textShadow = boxMode ? 'none' : '0 0 4px rgba(0,0,0,.9), 0 0 8px rgba(0,0,0,.6)';
+  }
+  ov.style.background = boxMode ? 'rgba(0,0,0,.45)' : 'transparent';
+  ov.style.borderRadius = boxMode ? '8px' : '0';
+  ov.style.padding = boxMode ? '.12em .3em' : '0';
 
   // Vandmærke-preview
   const wmT = $('wmOverlay'), wmL = $('wmLogoPrev');
@@ -843,8 +879,12 @@ function buildAss() {
   const align = pos === 'top' ? 8 : pos === 'middle' ? 5 : 2;
   const marginV = Math.round(videoH * (pos === 'bottom' ? 0.08 : pos === 'top' ? 0.06 : 0));
   const borderStyle = boxMode ? 3 : 1;
-  const outline = boxMode ? Math.round(fs * 0.35) : Math.max(2, Math.round(fs * 0.07));
-  const backColor = boxMode ? '&H66000000' : '&H80000000';
+  const of = outlineFactor();
+  const outline = boxMode ? Math.round(fs * 0.28) : Math.round(fs * of);
+  // Ved boks (BorderStyle 3) tegnes boksen med OutlineColour-feltet;
+  // ved almindelig kant er OutlineColour selve kantens farve.
+  const outlineColour = boxMode ? '&H66000000' : hexToAss($('stOutColor').value);
+  const backColor = '&H80000000';
 
   let ass = `[Script Info]
 ScriptType: v4.00+
@@ -854,7 +894,7 @@ WrapStyle: 0
 
 [V4+ Styles]
 Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding
-Style: Sub,${FONT_NAME},${fs},${color},${color},&H00000000,${backColor},0,0,0,0,100,100,0,0,${borderStyle},${outline},0,${align},60,60,${marginV},1
+Style: Sub,${FONT_NAME},${fs},${color},${color},${outlineColour},${backColor},0,0,0,0,100,100,0,0,${borderStyle},${outline},0,${align},60,60,${marginV},1
 Style: Wm,${FONT_NAME},${Math.round(videoH * 0.022 * 1.76)},&H40FFFFFF,&H40FFFFFF,&H00000000,&H80000000,0,0,0,0,100,100,0,0,1,2,0,7,40,40,40,1
 
 [Events]
