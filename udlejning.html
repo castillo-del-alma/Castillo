@@ -359,6 +359,24 @@ nav{
 .stemme-citat{font-family:'Cormorant Garamond',serif;font-size:1.08rem;font-style:italic;font-weight:300;line-height:1.85;color:var(--text-mid);margin-bottom:1.4rem;}
 .stemme-navn{font-family:'Cinzel',serif;font-size:.75rem;letter-spacing:.14em;text-transform:uppercase;color:var(--charcoal);display:block;}
 .stemme-rolle{font-family:'Manrope',sans-serif;font-size:.66rem;letter-spacing:.1em;text-transform:uppercase;color:var(--text-light);display:block;margin-top:.3rem;}
+/* Ét enkelt citat: stor centreret kasse i stedet for kort-grid */
+.stemmer-grid.stemmer-solo-wrap{display:block;max-width:780px;margin:3rem auto 0;}
+.stemme-solo{
+  position:relative;background:var(--beige);text-align:center;
+  padding:4.2rem 3.2rem 3.2rem;border-top:2px solid var(--gold);
+  box-shadow:8px 8px 0 var(--sand);
+}
+.stemme-solo::before{
+  content:'\201C';font-family:'Cormorant Garamond',serif;font-weight:300;
+  font-size:6rem;line-height:0;color:var(--gold);
+  position:absolute;top:2.6rem;left:50%;transform:translateX(-50%);
+}
+.stemme-solo .stemme-citat{
+  font-size:clamp(1.15rem,2vw,1.4rem);line-height:1.9;margin:0 0 1.8rem;
+}
+.stemme-solo .stemme-navn{font-size:.82rem;}
+.stemme-solo .stemme-rolle{margin-top:.4rem;}
+@media (max-width:600px){.stemme-solo{padding:3.4rem 1.6rem 2.4rem;}}
 
 /* ── MØD VÆRTERNE ── */
 .vaerter{background:var(--beige);padding:8rem 0;}
@@ -1325,7 +1343,13 @@ function renderUlStemmer() {
   const rows = (raw || '').split('\n').map(l => l.trim()).filter(Boolean).map(l => l.split('|'));
   if (!rows.length || ulData['vis_stemmer'] === '0') { sec.style.display = 'none'; return; }
   sec.style.display = '';
-  grid.innerHTML = rows.map(r => `<div class="stemme-kort"><p class="stemme-citat">\u201C${(r[0]||'').trim()}\u201D</p><span class="stemme-navn">${(r[1]||'').trim()}</span><span class="stemme-rolle">${(r[2]||'').trim()}</span></div>`).join('');
+  grid.classList.toggle('stemmer-solo-wrap', rows.length === 1);
+  if (rows.length === 1) {
+    const r = rows[0];
+    grid.innerHTML = `<div class="stemme-solo"><p class="stemme-citat">${(r[0]||'').trim()}</p><span class="stemme-navn">${(r[1]||'').trim()}</span><span class="stemme-rolle">${(r[2]||'').trim()}</span></div>`;
+  } else {
+    grid.innerHTML = rows.map(r => `<div class="stemme-kort"><p class="stemme-citat">\u201C${(r[0]||'').trim()}\u201D</p><span class="stemme-navn">${(r[1]||'').trim()}</span><span class="stemme-rolle">${(r[2]||'').trim()}</span></div>`).join('');
+  }
 }
 
 function renderUlFaq() {
