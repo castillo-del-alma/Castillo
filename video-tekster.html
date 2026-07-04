@@ -141,10 +141,16 @@
     font-weight: 800;
     line-height: 1.25;
   }
-  #subOverlay.pop { animation: subpop .16s ease-out; }
+  #subOverlay.pop { animation: subpop .18s cubic-bezier(.34,1.56,.64,1); }
   @keyframes subpop {
-    from { transform: scale(.75); }
-    to { transform: scale(1); }
+    0% { transform: scale(.6); }
+    70% { transform: scale(1.06); }
+    100% { transform: scale(1); }
+  }
+  #subOverlay.fadein { animation: subfade .22s ease-out; }
+  @keyframes subfade {
+    from { opacity: 0; }
+    to { opacity: 1; }
   }
   #subOverlay .en-line { opacity: .95; }
   #wmOverlay {
@@ -791,10 +797,14 @@ $('video').addEventListener('timeupdate', () => {
   if (ov.dataset.key !== key) {
     ov.dataset.key = key;
     ov.innerHTML = html;
-    if ($('stAnim').value === 'pop') {
-      ov.classList.remove('pop');
+    const animSel = $('stAnim').value;
+    ov.classList.remove('pop', 'fadein');
+    if (animSel === 'pop') {
       void ov.offsetWidth; // genstart animationen
       ov.classList.add('pop');
+    } else if (animSel === 'fade') {
+      void ov.offsetWidth;
+      ov.classList.add('fadein');
     }
   }
 });
@@ -938,12 +948,21 @@ Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
 
   const enSize = Math.round(fs * 0.8);
   const anim = $('stAnim').value;
-  let fx = '';
-  if (anim === 'pop') fx = '{\\fscx75\\fscy75\\t(0,120,\\fscx100\\fscy100)}';
-  else if (anim === 'fade') fx = '{\\fad(100,80)}';
 
   for (const s of getCues()) {
     if (s.end <= s.start) continue;
+    // Animation tilpasset hvor længe ordet står på skærmen
+    let fx = '';
+    const durMs = Math.round((s.end - s.start) * 1000);
+    if (anim === 'pop') {
+      const d1 = Math.min(140, Math.round(durMs * 0.4));
+      const d2 = Math.min(d1 + 60, Math.round(durMs * 0.6));
+      fx = `{\\fscx60\\fscy60\\t(0,${d1},\\fscx106\\fscy106)\\t(${d1},${d2},\\fscx100\\fscy100)}`;
+    } else if (anim === 'fade') {
+      const fin = Math.min(150, Math.round(durMs * 0.4));
+      const fout = Math.min(100, Math.round(durMs * 0.3));
+      fx = `{\\fad(${fin},${fout})}`;
+    }
     let text = '';
     if (langMode === 'da') text = escAss(applyCaps(s.da));
     else if (langMode === 'en') text = escAss(applyCaps(s.en));
