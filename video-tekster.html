@@ -108,6 +108,15 @@
   }
   textarea { resize: vertical; min-height: 40px; }
   input:focus, textarea:focus, select:focus { outline: 2px solid #d9c8a9; border-color: var(--accent); }
+  input[type="color"] {
+    width: 100%;
+    height: 38px;
+    padding: 3px 5px;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    background: #fdfcf9;
+    cursor: pointer;
+  }
   label { font-size: 13px; font-weight: 500; color: var(--muted); display: block; margin-bottom: 4px; }
   .row { display: flex; gap: 14px; flex-wrap: wrap; align-items: flex-end; }
   .row > div { flex: 1; min-width: 130px; }
@@ -277,6 +286,7 @@
     <h2><span class="step-num">4</span> Stil og vandmærke</h2>
     <label>Hurtige stilarter</label>
     <div class="presets">
+      <button class="ghost small" data-preset="hvid">Hvid på hvid</button>
       <button class="ghost small" data-preset="klassisk">Klassisk hvid</button>
       <button class="ghost small" data-preset="creme">Castillo creme</button>
       <button class="ghost small" data-preset="boks">Mørk boks</button>
@@ -326,7 +336,7 @@
       </div>
       <div>
         <label>Tekstfarve</label>
-        <input type="text" id="stColor" value="#FFFFFF">
+        <input type="color" id="stColor" value="#FFFFFF">
       </div>
       <div>
         <label>Baggrund</label>
@@ -357,7 +367,7 @@
       </div>
       <div>
         <label>Kantfarve</label>
-        <input type="text" id="stOutColor" value="#000000">
+        <input type="color" id="stOutColor" value="#000000">
       </div>
     </div>
     <div class="row" style="margin-top:16px">
@@ -678,6 +688,7 @@ $('langToggle').addEventListener('click', (e) => {
 
 /* ---------- Trin 4: stil, presets, vandmærke ---------- */
 const PRESETS = {
+  hvid:     { color: '#FFFFFF', bg: 'outline', size: 'large', outColor: '#FFFFFF', outSize: 'medium' },
   klassisk: { color: '#FFFFFF', bg: 'outline', size: 'large', outColor: '#000000', outSize: 'medium' },
   creme:    { color: '#F5EBDD', bg: 'outline', size: 'large', outColor: '#3A2E1F', outSize: 'medium' },
   boks:     { color: '#FFFFFF', bg: 'box',     size: 'large', outColor: '#000000', outSize: 'medium' }
@@ -725,6 +736,7 @@ function updatePreviewStyle() {
   ov.style.fontSize = Math.max(10, sizePx() * scale) + 'px';
   ov.style.color = $('stColor').value;
   ov.style.fontFamily = currentFont().css;
+  ov.style.letterSpacing = '0.05em';
   const pos = $('stPos').value;
   ov.style.top = pos === 'top' ? '6%' : pos === 'middle' ? '45%' : 'auto';
   ov.style.bottom = pos === 'bottom' ? '8%' : 'auto';
@@ -906,6 +918,8 @@ function buildAss() {
   // ved almindelig kant er OutlineColour selve kantens farve.
   const outlineColour = boxMode ? '&H66000000' : hexToAss($('stOutColor').value);
   const backColor = '&H80000000';
+  // Lidt luft mellem bogstaverne, så kanten ikke får dem til at vokse sammen
+  const spacing = Math.round(sizePx() * 0.05);
 
   let ass = `[Script Info]
 ScriptType: v4.00+
@@ -915,7 +929,7 @@ WrapStyle: 0
 
 [V4+ Styles]
 Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding
-Style: Sub,${font.name},${fs},${color},${color},${outlineColour},${backColor},0,0,0,0,100,100,0,0,${borderStyle},${outline},0,${align},60,60,${marginV},1
+Style: Sub,${font.name},${fs},${color},${color},${outlineColour},${backColor},0,0,0,0,100,100,${spacing},0,${borderStyle},${outline},0,${align},60,60,${marginV},1
 Style: Wm,${font.name},${Math.round(videoH * 0.022 * font.scale)},&H40FFFFFF,&H40FFFFFF,&H00000000,&H80000000,0,0,0,0,100,100,0,0,1,2,0,7,40,40,40,1
 
 [Events]
