@@ -344,7 +344,7 @@
   </div>
 </div>
 
-<script src="https://unpkg.com/@ffmpeg/ffmpeg@0.12.10/dist/umd/ffmpeg.js"></script>
+<script src="/ffmpeg/ffmpeg.js"></script>
 <script>
 /* ============================================================
    Video-tekster · Castillo del Alma
@@ -354,11 +354,11 @@
    ============================================================ */
 
 const FN_URL = '/.netlify/functions/transcribe-video';
-const CORE_URL = 'https://unpkg.com/@ffmpeg/core@0.12.6/dist/umd/ffmpeg-core.js';
-const WASM_URL = 'https://unpkg.com/@ffmpeg/core@0.12.6/dist/umd/ffmpeg-core.wasm';
+const CORE_URL = '/ffmpeg/ffmpeg-core.js';
+const WASM_URL = '/ffmpeg/ffmpeg-core.wasm';
 const FONT_URLS = [
-  'https://cdn.jsdelivr.net/gh/google/fonts@main/ofl/poppins/Poppins-SemiBold.ttf',
-  'https://raw.githubusercontent.com/google/fonts/main/ofl/poppins/Poppins-SemiBold.ttf'
+  '/ffmpeg/Poppins-SemiBold.ttf',
+  'https://cdn.jsdelivr.net/gh/google/fonts@main/ofl/poppins/Poppins-SemiBold.ttf'
 ];
 const FONT_NAME = 'Poppins SemiBold';
 
