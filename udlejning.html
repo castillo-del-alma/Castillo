@@ -380,6 +380,11 @@ nav{
 .stemme-solo .stemme-rolle{margin-top:.4rem;}
 @media (max-width:600px){.stemme-solo{padding:3.4rem 1.6rem 2.4rem;}}
 
+/* ── CANVAS-SEKTIONER: organiske cirkler (fra index.html) ── */
+.has-canvas{position:relative;overflow:hidden;}
+.section-canvas{position:absolute;inset:0;pointer-events:none;z-index:0;opacity:1;}
+.has-canvas > *:not(.section-canvas){position:relative;z-index:1;}
+
 /* ── PRISER ── */
 .pris{background:var(--section-alt);padding:8rem 0;}
 .pris-top{display:grid;grid-template-columns:1.15fr 1fr;gap:5rem;align-items:center;margin-bottom:3.2rem;}
@@ -662,7 +667,8 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:3rem
 <div class="divider"></div>
 
 <!-- ── PRISER (NY) ── -->
-<section class="pris" id="priser">
+<section class="pris has-canvas" id="priser">
+  <canvas class="section-canvas" data-palette="warm"></canvas>
   <div class="section-inner">
     <div class="pris-top">
       <div class="reveal-left">
@@ -755,7 +761,8 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:3rem
 <div class="divider"></div>
 
 <!-- ── SÅDAN FUNGERER DET (NY) ── -->
-<section class="fungerer" id="fungerer">
+<section class="fungerer has-canvas" id="fungerer">
+  <canvas class="section-canvas" data-palette="green"></canvas>
   <div class="section-inner">
     <div class="reveal" style="text-align:center;max-width:720px;margin:0 auto;">
       <div class="section-label" style="justify-content:center;" id="fungererLabel">Sådan fungerer det</div>
@@ -1797,6 +1804,127 @@ document.getElementById('retreatForm').addEventListener('submit', async function
     submitBtn.disabled = false;
   }
 });
+
+/* ═══════════════════════════════════════════
+   SECTION CANVASES — organiske cirkler (fra index.html)
+═══════════════════════════════════════════ */
+const PALETTES = {
+  warm: [[184,138,30],[192,92,48],[122,31,53],[212,168,48]],
+  green:[[106,114,64],[138,148,88],[184,138,30],[58,110,50]],
+};
+
+class SectionRings {
+  constructor(canvas, palette){
+    this.c   = canvas;
+    this.ctx = canvas.getContext('2d');
+    this.pal = palette;
+    this.rings = [];
+    this.resize();
+    this.init();
+    this.running = false;
+  }
+  resize(){
+    this.W = this.c.width  = this.c.parentElement.offsetWidth;
+    this.H = this.c.height = this.c.parentElement.offsetHeight;
+  }
+  init(){
+    this.rings = Array.from({length:16},()=>this.newRing(true));
+  }
+  newRing(init=false){
+    const r = {
+      cx: Math.random()*this.W,
+      cy: Math.random()*this.H,
+      rx: Math.random()*260+80,
+      ry: 0,
+      rot: Math.random()*Math.PI*2,
+      rotV:(Math.random()-.5)*.0022,
+      vx: (Math.random()-.5)*.18,
+      vy: (Math.random()-.5)*.18,
+      wob:Array.from({length:5},()=>({a:Math.random()*Math.PI*2,s:(Math.random()-.5)*.006,m:Math.random()*16+4})),
+      col: this.pal[Math.floor(Math.random()*this.pal.length)],
+      lw: Math.random()*.55+.25,
+      life:0,
+      maxL:Math.random()*800+500,
+    };
+    r.ry = r.rx * (.65+Math.random()*.25);
+    if(init) r.life = Math.floor(Math.random()*r.maxL);
+    return r;
+  }
+  update(){
+    this.rings.forEach(r=>{
+      r.cx+=r.vx; r.cy+=r.vy; r.rot+=r.rotV;
+      r.wob.forEach(w=>w.a+=w.s);
+      r.life++;
+      if(r.life>r.maxL) Object.assign(r,this.newRing());
+    });
+  }
+  draw(){
+    const ctx=this.ctx;
+    ctx.clearRect(0,0,this.W,this.H);
+    this.rings.forEach(r=>{
+      const t=r.life/r.maxL;
+      const fade=Math.sin(t*Math.PI)*.28;
+      const wx=r.wob[0].m*Math.sin(r.wob[0].a);
+      const wy=r.wob[1].m*Math.sin(r.wob[1].a);
+      const rxi=r.rx+r.wob[2].m*Math.sin(r.wob[2].a);
+      const ryi=r.ry+r.wob[3].m*Math.sin(r.wob[3].a);
+      ctx.save();
+      ctx.translate(r.cx+wx,r.cy+wy);
+      ctx.rotate(r.rot);
+      const pts=72;
+      ctx.beginPath();
+      for(let i=0;i<=pts;i++){
+        const a=(i/pts)*Math.PI*2;
+        const noise=1+.035*Math.sin(a*3+r.wob[0].a)+.025*Math.cos(a*7+r.wob[4].a);
+        const x=Math.cos(a)*rxi*noise;
+        const y=Math.sin(a)*ryi*noise;
+        i===0?ctx.moveTo(x,y):ctx.lineTo(x,y);
+      }
+      ctx.closePath();
+      const [rv,gv,bv]=r.col;
+      ctx.strokeStyle=`rgba(${rv},${gv},${bv},${fade})`;
+      ctx.lineWidth=r.lw;
+      ctx.stroke();
+      ctx.restore();
+    });
+  }
+  start(){
+    if(this.running) return;
+    this.running=true;
+    const loop=()=>{
+      if(!this.running) return;
+      this.update();this.draw();
+      requestAnimationFrame(loop);
+    };
+    requestAnimationFrame(loop);
+  }
+  stop(){this.running=false;}
+}
+
+const sectionAnimators = [];
+document.querySelectorAll('.section-canvas').forEach(canvas=>{
+  const key = canvas.dataset.palette||'warm';
+  const anim = new SectionRings(canvas, PALETTES[key]);
+  sectionAnimators.push({canvas, anim, started:false});
+});
+
+window.addEventListener('resize',()=>{
+  sectionAnimators.forEach(({anim})=>{
+    anim.resize();
+    anim.rings=[];
+    anim.init();
+  });
+});
+
+const canvasObs = new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    const entry = sectionAnimators.find(x=>x.canvas===e.target);
+    if(!entry) return;
+    if(e.isIntersecting){ entry.anim.start(); entry.started=true; }
+    else if(entry.started){ entry.anim.stop(); }
+  });
+},{threshold:.01});
+sectionAnimators.forEach(({canvas})=>canvasObs.observe(canvas));
 </script>
 </body>
 </html>
