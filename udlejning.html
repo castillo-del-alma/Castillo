@@ -1317,12 +1317,33 @@ function toggleFaq(q){
   item.classList.toggle('open');
 }
 
+function ulParseRows(raw) {
+  // Én række per linje med '|'. Linjer UDEN '|' er ombrudte fortsættelser:
+  // før første række limes de på NÆSTE linje, ellers på forrige rækkes sidste felt.
+  const rows = [];
+  let pending = '';
+  (raw || '').split('\n').map(l => l.trim()).filter(Boolean).forEach(l => {
+    if (l.includes('|')) {
+      const parts = l.split('|').map(x => x.trim());
+      if (pending) { parts[0] = (pending + ' ' + parts[0]).trim(); pending = ''; }
+      rows.push(parts);
+    } else if (rows.length) {
+      const last = rows[rows.length - 1];
+      last[last.length - 1] = (last[last.length - 1] + ' ' + l).trim();
+    } else {
+      pending = (pending + ' ' + l).trim();
+    }
+  });
+  if (pending) rows.push([pending]);
+  return rows;
+}
+
 function renderUlSteps() {
   const wrap = document.getElementById('fungererSteps');
   if (!wrap) return;
   const raw = ulSC('fungerer_steps');
   if (!raw) return;
-  const steps = raw.split('\n').map(l => l.trim()).filter(Boolean).map(l => l.split('|'));
+  const steps = ulParseRows(raw);
   if (!steps.length) return;
   wrap.innerHTML = steps.map((st, i) => `<div class="step-kort"><span class="step-nr">0${i+1}</span><h3>${(st[0]||'').trim()}</h3><p>${(st[1]||'').trim()}</p></div>`).join('');
 }
@@ -1340,7 +1361,7 @@ function renderUlStemmer() {
   const grid = document.getElementById('stemmerGrid');
   if (!sec || !grid) return;
   const raw = ulSC('stemmer_liste');
-  const rows = (raw || '').split('\n').map(l => l.trim()).filter(Boolean).map(l => l.split('|'));
+  const rows = ulParseRows(raw);
   if (!rows.length || ulData['vis_stemmer'] === '0') { sec.style.display = 'none'; return; }
   sec.style.display = '';
   grid.classList.toggle('stemmer-solo-wrap', rows.length === 1);
@@ -1356,7 +1377,7 @@ function renderUlFaq() {
   const list = document.getElementById('ulfaqList');
   if (!list) return;
   const raw = ulSC('ulfaq_liste');
-  const rows = (raw || '').split('\n').map(l => l.trim()).filter(Boolean).map(l => l.split('|'));
+  const rows = ulParseRows(raw);
   if (!rows.length) return;
   list.innerHTML = rows.map((r, i) => `<div class="faq-item${i === 0 ? ' open' : ''}"><div class="faq-q" onclick="toggleFaq(this)"><span>${(r[0]||'').trim()}</span><i>\u25BC</i></div><div class="faq-a"><p>${(r[1]||'').trim()}</p></div></div>`).join('');
 }
