@@ -14,7 +14,7 @@ exports.handler = async (event) => {
   const {
     navn, telefon, email, hjemmeside, land,
     deltagere, periode, varighed, formaal,
-    besked, kilde
+    besked, kilde, ringop
   } = data;
 
   if (!navn || !telefon || !email || !land || !deltagere || !periode || !varighed || !formaal || !besked) {
@@ -36,6 +36,7 @@ exports.handler = async (event) => {
           ['E-mail', email],
           ['Hjemmeside', hjemmeside || '—'],
           ['Land', land],
+          ['Ønsker opringning', ringop ? 'JA — ring venligst op' : 'Nej'],
         ]
       },
       {

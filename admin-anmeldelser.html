@@ -3353,6 +3353,10 @@ feeling more calm – and coming home to yourself again."</textarea></div>
           <div><label class="fc-label fc-label-en">(EN)</label><input type="text" id="ul_form_kilde_en" class="fc-input-en" placeholder=""></div>
         </div>
         <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Ring-mig-op afkrydsning (DA)</label><input type="text" id="ul_form_ringop_da" class="fc-input-da" placeholder=""></div>
+          <div><label class="fc-label fc-label-en">(EN)</label><input type="text" id="ul_form_ringop_en" class="fc-input-en" placeholder=""></div>
+        </div>
+        <div class="fc-row">
           <div><label class="fc-label fc-label-da">Sikkerhedstjek-label (DA)</label><input type="text" id="ul_form_math_label_da" class="fc-input-da" placeholder=""></div>
           <div><label class="fc-label fc-label-en">(EN)</label><input type="text" id="ul_form_math_label_en" class="fc-input-en" placeholder=""></div>
         </div>
@@ -7092,7 +7096,7 @@ const UL_TEXT_KEYS = [
   'form_navn','form_navn_ph','form_telefon','form_telefon_ph','form_email','form_email_ph',
   'form_hjemmeside','form_hjemmeside_ph','form_land','form_land_ph',
   'form_deltagere','form_periode','form_periode_ph','form_varighed','form_formaal',
-  'form_besked','form_besked_ph','form_kilde','form_math_label','form_submit',
+  'form_besked','form_besked_ph','form_kilde','form_ringop','form_math_label','form_submit',
   'success_label','success_h3','success_text',
   'undervisning_label','undervisning_h2','undervisning_text','undervisning_facts',
   'fungerer_label','fungerer_h2','fungerer_text','fungerer_steps','fungerer_facts','fungerer_cta',
@@ -7185,7 +7189,8 @@ const UL_DEFAULTS = {
   "pris_tilvalg_titel": "Skræddersy jeres ophold",
   "pris_tilvalg_text": "Alle retreats er forskellige. Derfor kan I tilvælge de ydelser, der passer bedst til jeres gruppe, blandt andet:",
   "pris_tilvalg_liste": "Antal måltider pr. dag\nKosttyper og særlige diætønsker\nDrikkevarer\nTransfer til og fra lufthavnen\nUdflugter og lokale oplevelser",
-  "pris_outro": "Vi udarbejder altid et skræddersyet tilbud, så I kun betaler for de ydelser, I har brug for — og får et retreat, der passer perfekt til jer."
+  "pris_outro": "Vi udarbejder altid et skræddersyet tilbud, så I kun betaler for de ydelser, I har brug for — og får et retreat, der passer perfekt til jer.",
+  "form_ringop": "Jeg ønsker at blive ringet op"
 };
 // EN-defaults for de NYE sektioner — udfyldes i felterne, hvis databasen er tom
 const UL_DEFAULTS_EN = {
@@ -7215,7 +7220,8 @@ const UL_DEFAULTS_EN = {
   "pris_tilvalg_titel": "Tailor your stay",
   "pris_tilvalg_text": "Every retreat is different. That is why you can add the services that suit your group best, including:",
   "pris_tilvalg_liste": "Number of meals per day\nDiet types and special dietary requests\nBeverages\nAirport transfers\nExcursions and local experiences",
-  "pris_outro": "We always prepare a tailored quote, so you only pay for the services you need — and get a retreat that fits you perfectly."
+  "pris_outro": "We always prepare a tailored quote, so you only pay for the services you need — and get a retreat that fits you perfectly.",
+  "form_ringop": "I would like to be called back"
 };
 const UL_VIS_KEYS = ['vis_undervisning','vis_pris','vis_fungerer','vis_stemmer','vis_vaerter','vis_ulfaq'];
 const UL_IMG_DEFAULTS = {

@@ -1250,6 +1250,13 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:3rem
               <select id="kilde" name="kilde"></select>
             </div>
 
+            <div class="form-group">
+              <label for="ringop" style="display:flex;align-items:center;gap:.7rem;cursor:pointer;font-size:.68rem;letter-spacing:.14em;">
+                <input type="checkbox" id="ringop" name="ringop" style="width:17px;height:17px;accent-color:var(--wine);cursor:pointer;flex-shrink:0;margin:0;">
+                <span id="lblRingop">Jeg ønsker at blive ringet op</span>
+              </label>
+            </div>
+
             <!-- Simpel matematisk check -->
             <div class="form-math">
               <span class="math-label" id="lblMath">Sikkerhedstjek</span>
@@ -1347,7 +1354,9 @@ const UL_SEED = {
   pris_tilvalg_liste: 'Antal måltider pr. dag\nKosttyper og særlige diætønsker\nDrikkevarer\nTransfer til og fra lufthavnen\nUdflugter og lokale oplevelser',
   pris_tilvalg_liste_en: 'Number of meals per day\nDiet types and special dietary requests\nBeverages\nAirport transfers\nExcursions and local experiences',
   pris_outro: 'Vi udarbejder altid et skræddersyet tilbud, så I kun betaler for de ydelser, I har brug for — og får et retreat, der passer perfekt til jer.',
-  pris_outro_en: 'We always prepare a tailored quote, so you only pay for the services you need — and get a retreat that fits you perfectly.'
+  pris_outro_en: 'We always prepare a tailored quote, so you only pay for the services you need — and get a retreat that fits you perfectly.',
+  form_ringop: 'Jeg ønsker at blive ringet op',
+  form_ringop_en: 'I would like to be called back'
 };
 
 const UL_STATIC_I18N = {
@@ -1574,6 +1583,7 @@ function applyUlContent() {
   setText('lblFormaal', ulSC('form_formaal'));
   setText('lblBesked', ulSC('form_besked'));
   setText('lblKilde', ulSC('form_kilde'));
+  setText('lblRingop', ulSC('form_ringop'));
   setText('lblMath', ulSC('form_math_label'));
   setText('submitBtn', ulSC('form_submit'));
 
@@ -1782,6 +1792,7 @@ document.getElementById('retreatForm').addEventListener('submit', async function
     formaal:    form.formaal.value,
     besked:     form.besked.value.trim(),
     kilde:      form.kilde.value,
+    ringop:     form.ringop.checked,
   };
 
   try {
