@@ -2933,8 +2933,61 @@ feeling more calm – and coming home to yourself again."</textarea></div>
       </div>
     </div>
 
-    <div class="fc-block" data-section="ul_5 · faciliteter ("vi stiller rammerne til rådighed")">
-      <div class="fc-block-header"><span class="fc-block-title">5 · Faciliteter ("Vi stiller rammerne til rådighed")</span></div>
+    <div class="fc-block" data-section="ul_5">
+      <div class="fc-block-header"><span class="fc-block-title">5 · Priser (NY)</span></div>
+      <div class="fc-block-body">
+        <label style="display:flex;align-items:center;gap:.5rem;font-family:Manrope,sans-serif;font-size:.72rem;color:#2c2318;margin-bottom:1.2rem;cursor:pointer;background:rgba(184,138,30,.07);border:1px solid rgba(184,138,30,.2);padding:.6rem .9rem;"><input type="checkbox" id="ul_vis_pris" checked style="cursor:pointer;"> Synlig på siden — fjern fluebenet for at udelade sektionen fra udlejning.html</label>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Label (DA)</label><input type="text" id="ul_pris_label_da" class="fc-input-da" placeholder=""></div>
+          <div><label class="fc-label fc-label-en">Label (EN)</label><input type="text" id="ul_pris_label_en" class="fc-input-en" placeholder=""></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Overskrift (DA) — brug &lt;em&gt;</label><input type="text" id="ul_pris_h2_da" class="fc-input-da" placeholder=""></div>
+          <div><label class="fc-label fc-label-en">Overskrift (EN)</label><input type="text" id="ul_pris_h2_en" class="fc-input-en" placeholder=""></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Intro-tekst (DA)</label><textarea id="ul_pris_text_da" class="fc-input-da" rows="3" style="resize:vertical;"></textarea></div>
+          <div><label class="fc-label fc-label-en">Intro-tekst (EN)</label><textarea id="ul_pris_text_en" class="fc-input-en" rows="3" style="resize:vertical;"></textarea></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Grundpris-boks: titel (DA)</label><input type="text" id="ul_pris_grund_titel_da" class="fc-input-da" placeholder=""></div>
+          <div><label class="fc-label fc-label-en">Base price box: title (EN)</label><input type="text" id="ul_pris_grund_titel_en" class="fc-input-en" placeholder=""></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Grundpris: inkluderet (DA) — ét punkt per linje</label><textarea id="ul_pris_grund_liste_da" class="fc-input-da" rows="5" style="resize:vertical;"></textarea></div>
+          <div><label class="fc-label fc-label-en">Base price: included (EN)</label><textarea id="ul_pris_grund_liste_en" class="fc-input-en" rows="5" style="resize:vertical;"></textarea></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Tilvalg-boks: titel (DA)</label><input type="text" id="ul_pris_tilvalg_titel_da" class="fc-input-da" placeholder=""></div>
+          <div><label class="fc-label fc-label-en">Add-ons box: title (EN)</label><input type="text" id="ul_pris_tilvalg_titel_en" class="fc-input-en" placeholder=""></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Tilvalg: intro (DA)</label><textarea id="ul_pris_tilvalg_text_da" class="fc-input-da" rows="2" style="resize:vertical;"></textarea></div>
+          <div><label class="fc-label fc-label-en">Add-ons: intro (EN)</label><textarea id="ul_pris_tilvalg_text_en" class="fc-input-en" rows="2" style="resize:vertical;"></textarea></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Tilvalg: liste (DA) — ét punkt per linje</label><textarea id="ul_pris_tilvalg_liste_da" class="fc-input-da" rows="6" style="resize:vertical;"></textarea></div>
+          <div><label class="fc-label fc-label-en">Add-ons: list (EN)</label><textarea id="ul_pris_tilvalg_liste_en" class="fc-input-en" rows="6" style="resize:vertical;"></textarea></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Afsluttende tekst (DA)</label><textarea id="ul_pris_outro_da" class="fc-input-da" rows="2" style="resize:vertical;"></textarea></div>
+          <div><label class="fc-label fc-label-en">Closing text (EN)</label><textarea id="ul_pris_outro_en" class="fc-input-en" rows="2" style="resize:vertical;"></textarea></div>
+        </div>
+        <div style="margin-top:.8rem;padding:.9rem;background:rgba(42,122,116,.06);border:1px solid rgba(42,122,116,.2);">
+          <label class="fc-label" style="color:#2a7a74;">📁 Billede (vises ved siden af intro-teksten)</label>
+          <div style="display:flex;align-items:center;gap:.8rem;flex-wrap:wrap;margin-top:.5rem;">
+            <img id="ul_pris_img_preview" src="" style="display:none;width:56px;height:56px;object-fit:cover;border-radius:3px;border:1px solid rgba(184,138,30,.3);flex-shrink:0;">
+            <input type="text" id="ul_pris_img_url" class="fc-input-da" placeholder="URL indsættes automatisk ved upload" style="flex:1;">
+            <input type="file" id="ul_pris_img_file" accept="image/*" style="font-size:.76rem;">
+            <button onclick="uploadEjBillede('ul_pris_img_file','ul_pris_img_url','ul_pris_img_preview')" style="background:#2a7a74;color:#fff;border:none;padding:.45rem 1.1rem;font-family:Manrope,sans-serif;font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;white-space:nowrap;">⬆ Upload</button>
+          </div>
+        </div>
+        <div style="text-align:right;margin-top:.8rem;"><button onclick="gemUdlejning()" style="background:#2a7a74;color:#fff;border:none;padding:.5rem 1.4rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;">💾 Gem</button></div>
+      </div>
+    </div>
+
+    <div class="fc-block" data-section="ul_6 · faciliteter ("vi stiller rammerne til rådighed")">
+      <div class="fc-block-header"><span class="fc-block-title">6 · Faciliteter ("Vi stiller rammerne til rådighed")</span></div>
       <div class="fc-block-body">
         <div class="fc-row">
           <div><label class="fc-label fc-label-da">Label (DA)</label><input type="text" id="ul_fac_label_da" class="fc-input-da" placeholder=""></div>
@@ -2985,7 +3038,7 @@ feeling more calm – and coming home to yourself again."</textarea></div>
     </div>
 
     <div class="fc-block" data-section="ul_fungerer">
-      <div class="fc-block-header"><span class="fc-block-title">6 · Sådan fungerer det (NY)</span></div>
+      <div class="fc-block-header"><span class="fc-block-title">7 · Sådan fungerer det (NY)</span></div>
       <div class="fc-block-body">
         <label style="display:flex;align-items:center;gap:.5rem;font-family:Manrope,sans-serif;font-size:.72rem;color:#2c2318;margin-bottom:1.2rem;cursor:pointer;background:rgba(184,138,30,.07);border:1px solid rgba(184,138,30,.2);padding:.6rem .9rem;"><input type="checkbox" id="ul_vis_fungerer" checked style="cursor:pointer;"> Synlig på siden — fjern fluebenet for at udelade sektionen fra udlejning.html</label>
         <div class="fc-row">
@@ -3017,7 +3070,7 @@ feeling more calm – and coming home to yourself again."</textarea></div>
     </div>
 
     <div class="fc-block" data-section="ul_stemmer">
-      <div class="fc-block-header"><span class="fc-block-title">7 · Anmeldelser fra arrangører (NY)</span></div>
+      <div class="fc-block-header"><span class="fc-block-title">8 · Anmeldelser fra arrangører (NY)</span></div>
       <div class="fc-block-body">
         <label style="display:flex;align-items:center;gap:.5rem;font-family:Manrope,sans-serif;font-size:.72rem;color:#2c2318;margin-bottom:1.2rem;cursor:pointer;background:rgba(184,138,30,.07);border:1px solid rgba(184,138,30,.2);padding:.6rem .9rem;"><input type="checkbox" id="ul_vis_stemmer" checked style="cursor:pointer;"> Synlig på siden — fjern fluebenet for at udelade sektionen fra udlejning.html</label>
         <p style="font-size:.7rem;color:rgba(44,35,24,.5);margin:.2rem 0 1rem;">⚠️ Sektionen vises FØRST på siden, når der er mindst ét citat herunder. Brug kun rigtige citater fra tidligere arrangører/deltagere. Format: <b>Citat|Navn|Rolle</b> — ét citat per linje.</p><div class="fc-row">
@@ -3037,7 +3090,7 @@ feeling more calm – and coming home to yourself again."</textarea></div>
     </div>
 
     <div class="fc-block" data-section="ul_vaerter">
-      <div class="fc-block-header"><span class="fc-block-title">8 · Mød værterne (NY)</span></div>
+      <div class="fc-block-header"><span class="fc-block-title">9 · Mød værterne (NY)</span></div>
       <div class="fc-block-body">
         <label style="display:flex;align-items:center;gap:.5rem;font-family:Manrope,sans-serif;font-size:.72rem;color:#2c2318;margin-bottom:1.2rem;cursor:pointer;background:rgba(184,138,30,.07);border:1px solid rgba(184,138,30,.2);padding:.6rem .9rem;"><input type="checkbox" id="ul_vis_vaerter" checked style="cursor:pointer;"> Synlig på siden — fjern fluebenet for at udelade sektionen fra udlejning.html</label>
         <div class="fc-row">
@@ -3065,8 +3118,8 @@ feeling more calm – and coming home to yourself again."</textarea></div>
       </div>
     </div>
 
-    <div class="fc-block" data-section="ul_9 · "mere end et kursussted"">
-      <div class="fc-block-header"><span class="fc-block-title">9 · "Mere end et kursussted"</span></div>
+    <div class="fc-block" data-section="ul_10 · "mere end et kursussted"">
+      <div class="fc-block-header"><span class="fc-block-title">10 · "Mere end et kursussted"</span></div>
       <div class="fc-block-body">
         <div class="fc-row">
           <div><label class="fc-label fc-label-da">Label (DA)</label><input type="text" id="ul_mere_label_da" class="fc-input-da" placeholder=""></div>
@@ -3098,8 +3151,8 @@ feeling more calm – and coming home to yourself again."</textarea></div>
       </div>
     </div>
 
-    <div class="fc-block" data-section="ul_10 · design et ophold — intro">
-      <div class="fc-block-header"><span class="fc-block-title">10 · Design et ophold — Intro</span></div>
+    <div class="fc-block" data-section="ul_11 · design et ophold — intro">
+      <div class="fc-block-header"><span class="fc-block-title">11 · Design et ophold — Intro</span></div>
       <div class="fc-block-body">
         <div class="fc-row">
           <div><label class="fc-label fc-label-da">Label (DA)</label><input type="text" id="ul_design_label_da" class="fc-input-da" placeholder=""></div>
@@ -3119,7 +3172,7 @@ feeling more calm – and coming home to yourself again."</textarea></div>
     </div>
 
     <div class="fc-block" data-section="ul_kategorier">
-      <div class="fc-block-header"><span class="fc-block-title">11 · Design-kategorier (11 kort)</span></div>
+      <div class="fc-block-header"><span class="fc-block-title">12 · Design-kategorier (11 kort)</span></div>
       <div class="fc-block-body">
         <p style="font-size:.72rem;color:rgba(44,35,24,.5);margin-bottom:1rem;">De 11 kategori-kort (Gastronomi, Vinoplevelser, osv.) — titel + liste, DA+EN. Videoerne mellem kortene redigeres ikke her.</p>
         <div id="ulKategorierPreview" style="font-size:.72rem;color:rgba(44,35,24,.6);margin-bottom:.8rem;"></div>
@@ -3127,8 +3180,8 @@ feeling more calm – and coming home to yourself again."</textarea></div>
       </div>
     </div>
 
-    <div class="fc-block" data-section="ul_12 · design et ophold — cta-tekst">
-      <div class="fc-block-header"><span class="fc-block-title">12 · Design et ophold — CTA-tekst</span></div>
+    <div class="fc-block" data-section="ul_13 · design et ophold — cta-tekst">
+      <div class="fc-block-header"><span class="fc-block-title">13 · Design et ophold — CTA-tekst</span></div>
       <div class="fc-block-body">
         <div class="fc-row">
           <div><label class="fc-label fc-label-da">Første linje (DA)</label><input type="text" id="ul_design_cta_p1_da" class="fc-input-da" placeholder=""></div>
@@ -3146,8 +3199,8 @@ feeling more calm – and coming home to yourself again."</textarea></div>
       </div>
     </div>
 
-    <div class="fc-block" data-section="ul_13 · billedstribe 2">
-      <div class="fc-block-header"><span class="fc-block-title">13 · Billedstribe 2</span></div>
+    <div class="fc-block" data-section="ul_14 · billedstribe 2">
+      <div class="fc-block-header"><span class="fc-block-title">14 · Billedstribe 2</span></div>
       <div class="fc-block-body">
         <div style="margin-top:.8rem;padding:.9rem;background:rgba(42,122,116,.06);border:1px solid rgba(42,122,116,.2);">
           <label class="fc-label" style="color:#2a7a74;">📁 Billede 1</label>
@@ -3181,7 +3234,7 @@ feeling more calm – and coming home to yourself again."</textarea></div>
     </div>
 
     <div class="fc-block" data-section="ul_faq">
-      <div class="fc-block-header"><span class="fc-block-title">14 · FAQ (NY)</span></div>
+      <div class="fc-block-header"><span class="fc-block-title">15 · FAQ (NY)</span></div>
       <div class="fc-block-body">
         <label style="display:flex;align-items:center;gap:.5rem;font-family:Manrope,sans-serif;font-size:.72rem;color:#2c2318;margin-bottom:1.2rem;cursor:pointer;background:rgba(184,138,30,.07);border:1px solid rgba(184,138,30,.2);padding:.6rem .9rem;"><input type="checkbox" id="ul_vis_ulfaq" checked style="cursor:pointer;"> Synlig på siden — fjern fluebenet for at udelade sektionen fra udlejning.html</label>
         <p style="font-size:.7rem;color:rgba(44,35,24,.5);margin:.2rem 0 1rem;">Format: <b>Spørgsmål|Svar</b> — ét spørgsmål per linje (adskilt af lodret streg).</p><div class="fc-row">
@@ -3200,8 +3253,8 @@ feeling more calm – and coming home to yourself again."</textarea></div>
       </div>
     </div>
 
-    <div class="fc-block" data-section="ul_15 · kontakt — intro">
-      <div class="fc-block-header"><span class="fc-block-title">15 · Kontakt — Intro</span></div>
+    <div class="fc-block" data-section="ul_16 · kontakt — intro">
+      <div class="fc-block-header"><span class="fc-block-title">16 · Kontakt — Intro</span></div>
       <div class="fc-block-body">
         <div class="fc-row">
           <div><label class="fc-label fc-label-da">Label (DA)</label><input type="text" id="ul_kontakt_label_da" class="fc-input-da" placeholder=""></div>
@@ -3224,8 +3277,8 @@ feeling more calm – and coming home to yourself again."</textarea></div>
       </div>
     </div>
 
-    <div class="fc-block" data-section="ul_16 · kontaktformular — feltnavne">
-      <div class="fc-block-header"><span class="fc-block-title">16 · Kontaktformular — feltnavne</span></div>
+    <div class="fc-block" data-section="ul_17 · kontaktformular — feltnavne">
+      <div class="fc-block-header"><span class="fc-block-title">17 · Kontaktformular — feltnavne</span></div>
       <div class="fc-block-body">
         <div class="fc-row">
           <div><label class="fc-label fc-label-da">Navn-label (DA)</label><input type="text" id="ul_form_navn_da" class="fc-input-da" placeholder=""></div>
@@ -3312,15 +3365,15 @@ feeling more calm – and coming home to yourself again."</textarea></div>
     </div>
 
     <div class="fc-block" data-section="ul_dropdowns">
-      <div class="fc-block-header"><span class="fc-block-title">17 · Dropdown-valgmuligheder</span></div>
+      <div class="fc-block-header"><span class="fc-block-title">18 · Dropdown-valgmuligheder</span></div>
       <div class="fc-block-body">
         <p style="font-size:.72rem;color:rgba(44,35,24,.5);margin-bottom:1rem;">Redigér selve valgmulighederne i "Antal deltagere", "Varighed", "Formål" og "Hvordan hørte du om os".</p>
         <button type="button" onclick="openUlDropdownEditor()" style="background:#7a1f35;color:#fff;border:none;padding:.6rem 1.4rem;font-family:Manrope,sans-serif;font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;">✎ Redigér valgmuligheder</button>
       </div>
     </div>
 
-    <div class="fc-block" data-section="ul_18 · bekræftelses-besked">
-      <div class="fc-block-header"><span class="fc-block-title">18 · Bekræftelses-besked</span></div>
+    <div class="fc-block" data-section="ul_19 · bekræftelses-besked">
+      <div class="fc-block-header"><span class="fc-block-title">19 · Bekræftelses-besked</span></div>
       <div class="fc-block-body">
         <div class="fc-row">
           <div><label class="fc-label fc-label-da">Label (DA)</label><input type="text" id="ul_success_label_da" class="fc-input-da" placeholder=""></div>
@@ -7045,7 +7098,9 @@ const UL_TEXT_KEYS = [
   'fungerer_label','fungerer_h2','fungerer_text','fungerer_steps','fungerer_facts','fungerer_cta',
   'stemmer_label','stemmer_h2','stemmer_liste',
   'vaerter_label','vaerter_h2','vaerter_text',
-  'ulfaq_label','ulfaq_h2','ulfaq_liste'
+  'ulfaq_label','ulfaq_h2','ulfaq_liste',
+  'pris_label','pris_h2','pris_text','pris_grund_titel','pris_grund_liste',
+  'pris_tilvalg_titel','pris_tilvalg_text','pris_tilvalg_liste','pris_outro'
 ];
 const UL_IMG_KEYS = [
   'hero_bg','intro_img1','intro_img2',
@@ -7053,7 +7108,7 @@ const UL_IMG_KEYS = [
   'fac_img1','fac_img2','fac_img3',
   'mere_img',
   'strip2_img1','strip2_img2','strip2_img3',
-  'undervisning_img1','undervisning_img2','vaerter_img'
+  'undervisning_img1','undervisning_img2','vaerter_img','pris_img'
 ];
 const UL_DEFAULTS = {
   "hero_eyebrow": "Castillo del Alma · Mollina, Andalusien",
@@ -7121,7 +7176,16 @@ const UL_DEFAULTS = {
   "vaerter_text": "Castillo del Alma er vores hjem, og vi er på ejendommen under hele jeres ophold. Det betyder, at der altid er nogen til at tage sig af det praktiske — fra måltider og transfer til de små detaljer, der gør en forskel.\nHvilken rolle vi skal spille, bestemmer du. Nogle arrangører ønsker fuld service og daglig sparring — andre foretrækker, at vi holder os diskret i baggrunden. Begge dele er en naturlig del af aftalen.\nVi glæder os til at byde dig og dine deltagere velkommen.",
   "ulfaq_label": "Ofte stillede spørgsmål",
   "ulfaq_h2": "FAQ",
-  "ulfaq_liste": "Hvor mange deltagere er der plads til?|Der er plads til op til 14 kursister og 2 undervisere. Alle værelser er dobbeltværelser med enkeltsenge og eget badeværelse.\nHvordan fungerer prisen?|I får ét samlet tilbud baseret på antal deltagere, varighed og jeres ønsker til forplejning og program. Skriv til os, så vender vi tilbage med et uforpligtende tilbud inden for 24 timer.\nHvor langt er der til lufthavnen?|Ejendommen ligger i Mollina, ca. 50 minutters kørsel fra Málaga lufthavn. Vi tilbyder transfer til og fra lufthavnen.\nKan I tage hensyn til særlige diæter?|Ja. Vores køkken laver sund, hjemmelavet mad med fokus på anti-inflammatorisk kost, og vi tilpasser gerne menuen til allergier og særlige ønsker.\nHjælper I med markedsføringen af vores retreat?|Ja, vi tilbyder mulighed for at markedsføre jeres retreat via vores kanaler. Spørg os om mulighederne, når vi taler sammen.\nKan vi leje stedet uden værterne?|Nej — Castillo del Alma lejes altid med værtsparret, som står for driften under opholdet. Hvilken rolle vi derudover skal spille, er helt op til jer."
+  "ulfaq_liste": "Hvor mange deltagere er der plads til?|Der er plads til op til 14 kursister og 2 undervisere. Alle værelser er dobbeltværelser med enkeltsenge og eget badeværelse.\nHvordan fungerer prisen?|I får ét samlet tilbud baseret på antal deltagere, varighed og jeres ønsker til forplejning og program. Skriv til os, så vender vi tilbage med et uforpligtende tilbud inden for 24 timer.\nHvor langt er der til lufthavnen?|Ejendommen ligger i Mollina, ca. 50 minutters kørsel fra Málaga lufthavn. Vi tilbyder transfer til og fra lufthavnen.\nKan I tage hensyn til særlige diæter?|Ja. Vores køkken laver sund, hjemmelavet mad med fokus på anti-inflammatorisk kost, og vi tilpasser gerne menuen til allergier og særlige ønsker.\nHjælper I med markedsføringen af vores retreat?|Ja, vi tilbyder mulighed for at markedsføre jeres retreat via vores kanaler. Spørg os om mulighederne, når vi taler sammen.\nKan vi leje stedet uden værterne?|Nej — Castillo del Alma lejes altid med værtsparret, som står for driften under opholdet. Hvilken rolle vi derudover skal spille, er helt op til jer.",
+  "pris_label": "Priser",
+  "pris_h2": "En enkel og <em>gennemsigtig</em> pris",
+  "pris_text": "Hos Castillo del Alma gør vi det nemt at planlægge jeres retreat. Derfor arbejder vi med en fast grundpris, som giver jer friheden til at sammensætte opholdet, så det passer præcis til jeres ønsker, program og budget.",
+  "pris_grund_titel": "Grundprisen er €6.000 og inkluderer:",
+  "pris_grund_liste": "Overnatning for op til 16 personer (inklusive arrangør)\nEksklusiv adgang til hele ejendommen og alle faciliteter\nFri kaffe, te og drikkevand under hele opholdet\nFuld rengøring",
+  "pris_tilvalg_titel": "Skræddersy jeres ophold",
+  "pris_tilvalg_text": "Alle retreats er forskellige. Derfor kan I tilvælge de ydelser, der passer bedst til jeres gruppe, blandt andet:",
+  "pris_tilvalg_liste": "Antal måltider pr. dag\nKosttyper og særlige diætønsker\nDrikkevarer\nTransfer til og fra lufthavnen\nUdflugter og lokale oplevelser",
+  "pris_outro": "Vi udarbejder altid et skræddersyet tilbud, så I kun betaler for de ydelser, I har brug for — og får et retreat, der passer perfekt til jer."
 };
 // EN-defaults for de NYE sektioner — udfyldes i felterne, hvis databasen er tom
 const UL_DEFAULTS_EN = {
@@ -7142,9 +7206,18 @@ const UL_DEFAULTS_EN = {
   "vaerter_text": "Castillo del Alma is our home, and we are on the estate throughout your stay. That means there is always someone to take care of the practical side — from meals and transfers to the small details that make a difference.\nWhich role we play is up to you. Some organisers want full service and daily sparring — others prefer us discreetly in the background. Both are a natural part of the agreement.\nWe look forward to welcoming you and your participants.",
   "ulfaq_label": "Frequently asked questions",
   "ulfaq_h2": "FAQ",
-  "ulfaq_liste": "How many participants can you host?|There is room for up to 14 participants and 2 teachers. All rooms are twin rooms with single beds and en-suite bathrooms.\nHow does pricing work?|You receive one all-in quote based on the number of participants, duration and your wishes for catering and programme. Write to us and we will get back within 24 hours with a no-obligation quote.\nHow far is the airport?|The estate is in Mollina, about 50 minutes by car from Málaga airport. We offer transfers to and from the airport.\nCan you accommodate special diets?|Yes. Our kitchen prepares healthy, homemade food with a focus on anti-inflammatory cuisine, and we gladly adapt the menu to allergies and special requests.\nDo you help market our retreat?|Yes, we offer the option of marketing your retreat through our channels. Ask us about the possibilities when we talk.\nCan we rent the venue without the hosts?|No — Castillo del Alma is always rented with the host couple, who run the venue during your stay. Beyond that, which role we play is entirely up to you."
+  "ulfaq_liste": "How many participants can you host?|There is room for up to 14 participants and 2 teachers. All rooms are twin rooms with single beds and en-suite bathrooms.\nHow does pricing work?|You receive one all-in quote based on the number of participants, duration and your wishes for catering and programme. Write to us and we will get back within 24 hours with a no-obligation quote.\nHow far is the airport?|The estate is in Mollina, about 50 minutes by car from Málaga airport. We offer transfers to and from the airport.\nCan you accommodate special diets?|Yes. Our kitchen prepares healthy, homemade food with a focus on anti-inflammatory cuisine, and we gladly adapt the menu to allergies and special requests.\nDo you help market our retreat?|Yes, we offer the option of marketing your retreat through our channels. Ask us about the possibilities when we talk.\nCan we rent the venue without the hosts?|No — Castillo del Alma is always rented with the host couple, who run the venue during your stay. Beyond that, which role we play is entirely up to you.",
+  "pris_label": "Pricing",
+  "pris_h2": "One simple, <em>transparent</em> price",
+  "pris_text": "At Castillo del Alma we make it easy to plan your retreat. We work with a fixed base price, giving you the freedom to compose the stay so it matches your wishes, programme and budget.",
+  "pris_grund_titel": "The base price is €6,000 and includes:",
+  "pris_grund_liste": "Accommodation for up to 16 people (including the organiser)\nExclusive access to the entire estate and all facilities\nUnlimited coffee, tea and drinking water throughout your stay\nFull cleaning",
+  "pris_tilvalg_titel": "Tailor your stay",
+  "pris_tilvalg_text": "Every retreat is different. That is why you can add the services that suit your group best, including:",
+  "pris_tilvalg_liste": "Number of meals per day\nDiet types and special dietary requests\nBeverages\nAirport transfers\nExcursions and local experiences",
+  "pris_outro": "We always prepare a tailored quote, so you only pay for the services you need — and get a retreat that fits you perfectly."
 };
-const UL_VIS_KEYS = ['vis_undervisning','vis_fungerer','vis_stemmer','vis_vaerter','vis_ulfaq'];
+const UL_VIS_KEYS = ['vis_undervisning','vis_pris','vis_fungerer','vis_stemmer','vis_vaerter','vis_ulfaq'];
 const UL_IMG_DEFAULTS = {
   "hero_bg": "img/group-people-making-breathworks-castillo-del-alma.jpg",
   "intro_img1": "img/group-people-making-breathworks-castillo-del-alma.jpg",
@@ -7162,7 +7235,8 @@ const UL_IMG_DEFAULTS = {
   "strip2_img3": "img/group-men-sit-hill-overlooking-mountain.jpg",
   "undervisning_img1": "img/group-different-people-are-doing-meditative-yoga-practices-rooftop-beautiful-sunset-summer-evening.jpg",
   "undervisning_img2": "img/yoga-singing-bowls.webp",
-  "vaerter_img": "img/erik-michael-castillo-del-alma.webp"
+  "vaerter_img": "img/erik-michael-castillo-del-alma.webp",
+  "pris_img": "img/estate-aerial.jpg"
 };
 const UL_KAT_DEFAULTS = [
   {

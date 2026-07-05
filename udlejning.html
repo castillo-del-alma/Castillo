@@ -380,6 +380,24 @@ nav{
 .stemme-solo .stemme-rolle{margin-top:.4rem;}
 @media (max-width:600px){.stemme-solo{padding:3.4rem 1.6rem 2.4rem;}}
 
+/* ── PRISER ── */
+.pris{background:var(--section-alt);padding:8rem 0;}
+.pris-top{display:grid;grid-template-columns:1.15fr 1fr;gap:5rem;align-items:center;margin-bottom:3.2rem;}
+.pris-img{overflow:hidden;box-shadow:8px 8px 0 var(--sand);aspect-ratio:4/3;}
+.pris-img img{width:100%;height:100%;object-fit:cover;display:block;}
+.pris-kort-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-bottom:2.8rem;}
+.pris-kort{background:var(--cream);padding:2.6rem 2.4rem;border-top:2px solid var(--gold);}
+.pris-kort h3{font-family:'Cinzel',serif;font-weight:400;font-size:.95rem;letter-spacing:.12em;text-transform:uppercase;color:var(--charcoal);margin-bottom:1.1rem;line-height:1.6;}
+.pris-kort .pris-intro{font-family:'Cormorant Garamond',serif;font-size:1rem;font-weight:300;line-height:1.8;color:var(--text-mid);margin-bottom:1rem;}
+.pris-liste{list-style:none;display:flex;flex-direction:column;gap:.55rem;}
+.pris-liste li{font-family:'Cormorant Garamond',serif;font-size:1rem;font-weight:300;line-height:1.65;color:var(--text-mid);padding-left:1.4rem;position:relative;}
+.pris-liste li::before{content:'✓';position:absolute;left:0;color:var(--olive);font-size:.85rem;}
+.pris-outro{font-family:'Cormorant Garamond',serif;font-size:1.08rem;font-style:italic;font-weight:300;line-height:1.9;color:var(--text-mid);text-align:center;max-width:720px;margin:0 auto 2.4rem;}
+@media (max-width:860px){
+  .pris-top{grid-template-columns:1fr;gap:2.5rem;}
+  .pris-kort-grid{grid-template-columns:1fr;}
+}
+
 /* ── MØD VÆRTERNE ── */
 .vaerter{background:var(--beige);padding:8rem 0;}
 .vaerter-grid{display:grid;grid-template-columns:1fr 1.25fr;gap:6rem;align-items:center;}
@@ -541,6 +559,7 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:3rem
   <ul class="nav-links">
     <li><a href="#intro" id="navIntro">Om stedet</a></li>
     <li><a href="#faciliteter" id="navFaciliteter">Vi tilbyder</a></li>
+    <li><a href="#priser" id="navPriser">Priser</a></li>
     <li><a href="#design" id="navDesign">Design et ophold</a></li>
     <li><a href="#mere" id="navMere">Mere end et kursussted</a></li>
     <li><a href="#kontakt" id="navKontakt">Kontakt</a></li>
@@ -641,6 +660,48 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:3rem
 </section>
 
 <div class="divider"></div>
+
+<!-- ── PRISER (NY) ── -->
+<section class="pris" id="priser">
+  <div class="section-inner">
+    <div class="pris-top">
+      <div class="reveal-left">
+        <div class="section-label" id="prisLabel">Priser</div>
+        <h2 class="ul-h2" id="prisH2">En enkel og <em>gennemsigtig</em> pris</h2>
+        <div class="ul-p" id="prisTextContainer">
+          <p>Hos Castillo del Alma gør vi det nemt at planlægge jeres retreat. Derfor arbejder vi med en fast grundpris, som giver jer friheden til at sammensætte opholdet, så det passer præcis til jeres ønsker, program og budget.</p>
+        </div>
+      </div>
+      <div class="pris-img reveal-right d1"><img id="prisImg" src="img/estate-aerial.jpg" alt="Castillo del Alma — hele ejendommen"></div>
+    </div>
+    <div class="pris-kort-grid">
+      <div class="pris-kort reveal d1">
+        <h3 id="prisGrundTitel">Grundprisen er €6.000 og inkluderer:</h3>
+        <ul class="pris-liste" id="prisGrundListe">
+          <li>Overnatning for op til 16 personer (inklusive arrangør)</li>
+          <li>Eksklusiv adgang til hele ejendommen og alle faciliteter</li>
+          <li>Fri kaffe, te og drikkevand under hele opholdet</li>
+          <li>Fuld rengøring</li>
+        </ul>
+      </div>
+      <div class="pris-kort reveal d2">
+        <h3 id="prisTilvalgTitel">Skræddersy jeres ophold</h3>
+        <p class="pris-intro" id="prisTilvalgText">Alle retreats er forskellige. Derfor kan I tilvælge de ydelser, der passer bedst til jeres gruppe, blandt andet:</p>
+        <ul class="pris-liste" id="prisTilvalgListe">
+          <li>Antal måltider pr. dag</li>
+          <li>Kosttyper og særlige diætønsker</li>
+          <li>Drikkevarer</li>
+          <li>Transfer til og fra lufthavnen</li>
+          <li>Udflugter og lokale oplevelser</li>
+        </ul>
+      </div>
+    </div>
+    <p class="pris-outro reveal" id="prisOutro">Vi udarbejder altid et skræddersyet tilbud, så I kun betaler for de ydelser, I har brug for — og får et retreat, der passer perfekt til jer.</p>
+    <div class="reveal d1" style="text-align:center;">
+      <a href="#kontakt" class="btn-wine-link ul-cta-link">Book en uforpligtende samtale</a>
+    </div>
+  </div>
+</section>
 
 <!-- ── FACILITETER ── -->
 <section class="faciliteter" id="faciliteter">
@@ -1261,7 +1322,25 @@ const UL_SEED = {
   ulfaq_h2: 'FAQ',
   ulfaq_h2_en: 'FAQ',
   ulfaq_liste: 'Hvor mange deltagere er der plads til?|Der er plads til op til 14 kursister og 2 undervisere. Alle værelser er dobbeltværelser med enkeltsenge og eget badeværelse.\nHvordan fungerer prisen?|I får ét samlet tilbud baseret på antal deltagere, varighed og jeres ønsker til forplejning og program. Skriv til os, så vender vi tilbage med et uforpligtende tilbud inden for 24 timer.\nHvor langt er der til lufthavnen?|Ejendommen ligger i Mollina, ca. 50 minutters kørsel fra Málaga lufthavn. Vi tilbyder transfer til og fra lufthavnen.\nKan I tage hensyn til særlige diæter?|Ja. Vores køkken laver sund, hjemmelavet mad med fokus på anti-inflammatorisk kost, og vi tilpasser gerne menuen til allergier og særlige ønsker.\nHjælper I med markedsføringen af vores retreat?|Ja, vi tilbyder mulighed for at markedsføre jeres retreat via vores kanaler. Spørg os om mulighederne, når vi taler sammen.\nKan vi leje stedet uden værterne?|Nej — Castillo del Alma lejes altid med værtsparret, som står for driften under opholdet. Hvilken rolle vi derudover skal spille, er helt op til jer.',
-  ulfaq_liste_en: 'How many participants can you host?|There is room for up to 14 participants and 2 teachers. All rooms are twin rooms with single beds and en-suite bathrooms.\nHow does pricing work?|You receive one all-in quote based on the number of participants, duration and your wishes for catering and programme. Write to us and we will get back within 24 hours with a no-obligation quote.\nHow far is the airport?|The estate is in Mollina, about 50 minutes by car from Málaga airport. We offer transfers to and from the airport.\nCan you accommodate special diets?|Yes. Our kitchen prepares healthy, homemade food with a focus on anti-inflammatory cuisine, and we gladly adapt the menu to allergies and special requests.\nDo you help market our retreat?|Yes, we offer the option of marketing your retreat through our channels. Ask us about the possibilities when we talk.\nCan we rent the venue without the hosts?|No — Castillo del Alma is always rented with the host couple, who run the venue during your stay. Beyond that, which role we play is entirely up to you.'
+  ulfaq_liste_en: 'How many participants can you host?|There is room for up to 14 participants and 2 teachers. All rooms are twin rooms with single beds and en-suite bathrooms.\nHow does pricing work?|You receive one all-in quote based on the number of participants, duration and your wishes for catering and programme. Write to us and we will get back within 24 hours with a no-obligation quote.\nHow far is the airport?|The estate is in Mollina, about 50 minutes by car from Málaga airport. We offer transfers to and from the airport.\nCan you accommodate special diets?|Yes. Our kitchen prepares healthy, homemade food with a focus on anti-inflammatory cuisine, and we gladly adapt the menu to allergies and special requests.\nDo you help market our retreat?|Yes, we offer the option of marketing your retreat through our channels. Ask us about the possibilities when we talk.\nCan we rent the venue without the hosts?|No — Castillo del Alma is always rented with the host couple, who run the venue during your stay. Beyond that, which role we play is entirely up to you.',
+  pris_label: 'Priser',
+  pris_label_en: 'Pricing',
+  pris_h2: 'En enkel og <em>gennemsigtig</em> pris',
+  pris_h2_en: 'One simple, <em>transparent</em> price',
+  pris_text: 'Hos Castillo del Alma gør vi det nemt at planlægge jeres retreat. Derfor arbejder vi med en fast grundpris, som giver jer friheden til at sammensætte opholdet, så det passer præcis til jeres ønsker, program og budget.',
+  pris_text_en: 'At Castillo del Alma we make it easy to plan your retreat. We work with a fixed base price, giving you the freedom to compose the stay so it matches your wishes, programme and budget.',
+  pris_grund_titel: 'Grundprisen er €6.000 og inkluderer:',
+  pris_grund_titel_en: 'The base price is €6,000 and includes:',
+  pris_grund_liste: 'Overnatning for op til 16 personer (inklusive arrangør)\nEksklusiv adgang til hele ejendommen og alle faciliteter\nFri kaffe, te og drikkevand under hele opholdet\nFuld rengøring',
+  pris_grund_liste_en: 'Accommodation for up to 16 people (including the organiser)\nExclusive access to the entire estate and all facilities\nUnlimited coffee, tea and drinking water throughout your stay\nFull cleaning',
+  pris_tilvalg_titel: 'Skræddersy jeres ophold',
+  pris_tilvalg_titel_en: 'Tailor your stay',
+  pris_tilvalg_text: 'Alle retreats er forskellige. Derfor kan I tilvælge de ydelser, der passer bedst til jeres gruppe, blandt andet:',
+  pris_tilvalg_text_en: 'Every retreat is different. That is why you can add the services that suit your group best, including:',
+  pris_tilvalg_liste: 'Antal måltider pr. dag\nKosttyper og særlige diætønsker\nDrikkevarer\nTransfer til og fra lufthavnen\nUdflugter og lokale oplevelser',
+  pris_tilvalg_liste_en: 'Number of meals per day\nDiet types and special dietary requests\nBeverages\nAirport transfers\nExcursions and local experiences',
+  pris_outro: 'Vi udarbejder altid et skræddersyet tilbud, så I kun betaler for de ydelser, I har brug for — og får et retreat, der passer perfekt til jer.',
+  pris_outro_en: 'We always prepare a tailored quote, so you only pay for the services you need — and get a retreat that fits you perfectly.'
 };
 
 const UL_STATIC_I18N = {
@@ -1388,7 +1467,7 @@ function renderUlFaq() {
 
 // "Udelad fra siden": sektioner skjules hvis vis_<id> = '0' i udlejning_content
 function applyUlVisibility() {
-  const visMap = { undervisning: 'vis_undervisning', fungerer: 'vis_fungerer', vaerter: 'vis_vaerter', ulfaq: 'vis_ulfaq' };
+  const visMap = { undervisning: 'vis_undervisning', priser: 'vis_pris', fungerer: 'vis_fungerer', vaerter: 'vis_vaerter', ulfaq: 'vis_ulfaq' };
   Object.keys(visMap).forEach(id => {
     const el = document.getElementById(id);
     if (el) el.style.display = (ulData[visMap[id]] === '0') ? 'none' : '';
@@ -1402,6 +1481,7 @@ function applyUlContent() {
 
   setText('navIntro', ulLang === 'en' ? 'About the place' : 'Om stedet');
   setText('navFaciliteter', ulLang === 'en' ? 'What we offer' : 'Vi tilbyder');
+  setText('navPriser', ulLang === 'en' ? 'Pricing' : 'Priser');
   setText('navDesign', ulLang === 'en' ? 'Design a stay' : 'Design et ophold');
   setText('navMere', ulLang === 'en' ? 'More than a venue' : 'Mere end et kursussted');
   setText('navKontakt', ulLang === 'en' ? 'Contact' : 'Kontakt');
@@ -1526,6 +1606,17 @@ function applyUlContent() {
   setHTML('vaerterH2', ulSC('vaerter_h2'));
   setParagraphs('vaerterTextContainer', ulSC('vaerter_text'));
   setImg('vaerterImg', ulSC('vaerter_img'));
+
+  setText('prisLabel', ulSC('pris_label'));
+  setHTML('prisH2', ulSC('pris_h2'));
+  setParagraphs('prisTextContainer', ulSC('pris_text'));
+  setText('prisGrundTitel', ulSC('pris_grund_titel'));
+  setList('prisGrundListe', ulSC('pris_grund_liste'));
+  setText('prisTilvalgTitel', ulSC('pris_tilvalg_titel'));
+  setText('prisTilvalgText', ulSC('pris_tilvalg_text'));
+  setList('prisTilvalgListe', ulSC('pris_tilvalg_liste'));
+  setText('prisOutro', ulSC('pris_outro'));
+  setImg('prisImg', ulSC('pris_img'));
 
   setText('ulfaqLabel', ulSC('ulfaq_label'));
   setHTML('ulfaqH2', ulSC('ulfaq_h2'));
