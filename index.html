@@ -2396,7 +2396,7 @@ function SC(key, fallback) {
 
 function scSet(id, key, fallback) {
   const el = document.getElementById(id);
-  if (el) el.textContent = SC(key, fallback !== undefined ? fallback : el.textContent);
+  if (el) el.innerHTML = SC(key, fallback !== undefined ? fallback : el.textContent); // Tillader <b>, <br>, <em> m.fl. fra admin
 }
 
 function scSetHTML(id, key, fallback) {

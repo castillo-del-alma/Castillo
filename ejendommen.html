@@ -1152,7 +1152,7 @@ async function loadEjendommensContent() {
 
 function setText(id, val) {
   const el = document.getElementById(id);
-  if (el && val) el.textContent = val;
+  if (el && val) el.innerHTML = val; // Tillader <b>, <br>, <em> m.fl. fra admin
 }
 
 function setHTML(id, val) {
