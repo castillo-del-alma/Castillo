@@ -1433,13 +1433,25 @@ function applyUlContent() {
 
   let kategorier = [];
   try { kategorier = JSON.parse(ulData.design_kategorier || '[]'); } catch(e) {}
-  kategorier.forEach((k, i) => {
-    const n = i + 1;
-    const titel = ulLang === 'en' ? (k.titel_en || k.titel) : k.titel;
-    const liste = ulLang === 'en' ? (k.liste_en || k.liste) : k.liste;
-    setText(`kat${n}Titel`, titel);
-    setList(`kat${n}Liste`, liste);
-  });
+  // Tomme kort (uden titel og liste på begge sprog) fjernes — resten rykker op
+  const katBrugbare = kategorier.filter(k =>
+    ((k.titel || '').trim() || (k.liste || '').trim() || (k.titel_en || '').trim() || (k.liste_en || '').trim()));
+  if (katBrugbare.length) {
+    katBrugbare.forEach((k, i) => {
+      const n = i + 1;
+      const kort = document.getElementById(`kat${n}`);
+      if (kort) kort.style.display = '';
+      const titel = ulLang === 'en' ? (k.titel_en || k.titel) : k.titel;
+      const liste = ulLang === 'en' ? (k.liste_en || k.liste) : k.liste;
+      setText(`kat${n}Titel`, titel);
+      setList(`kat${n}Liste`, liste);
+    });
+    for (let n = katBrugbare.length + 1; ; n++) {
+      const kort = document.getElementById(`kat${n}`);
+      if (!kort) break;
+      kort.style.display = 'none';
+    }
+  }
 
   setText('designCtaP1', ulSC('design_cta_p1'));
   setText('designCtaStrong', ulSC('design_cta_strong'));
