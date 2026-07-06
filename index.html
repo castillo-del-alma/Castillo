@@ -1268,9 +1268,9 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:5rem
         <a href="ejendommen.html" class="cta-link">Udforsk ejendommen</a>
       </div>
       <div class="estate-visual reveal-right d2">
-        <div class="estate-img"><div class="estate-img-inner"><div class="estate-img-ph ph1" style="background:none;"><img src="img/estate-aerial.jpg" style="width:100%;height:100%;object-fit:cover;object-position:center;display:block;" id="imgEstate1"></div></div></div>
-        <div class="estate-img"><div class="estate-img-inner"><div class="estate-img-ph ph2" style="background:none;"><img src="img/estate-pool.jpg" style="width:100%;height:100%;object-fit:cover;object-position:center;display:block;" id="imgEstate2"></div></div></div>
-        <div class="estate-img"><div class="estate-img-inner"><div class="estate-img-ph ph3" style="background:none;"><img src="img/logo-castillo-ny-43.png" style="width:100%;height:100%;object-fit:cover;display:block;" id="imgEstate3"></div></div></div>
+        <div class="estate-img"><div class="estate-img-inner"><div class="estate-img-ph ph1" style="background:none;"><img src="img/estate-aerial.jpg" alt="Luftfoto af Castillo del Alma — ejendommen og vinmarkerne i Mollina" style="width:100%;height:100%;object-fit:cover;object-position:center;display:block;" id="imgEstate1"></div></div></div>
+        <div class="estate-img"><div class="estate-img-inner"><div class="estate-img-ph ph2" style="background:none;"><img src="img/estate-pool.jpg" alt="Poolområdet på Castillo del Alma" style="width:100%;height:100%;object-fit:cover;object-position:center;display:block;" id="imgEstate2"></div></div></div>
+        <div class="estate-img"><div class="estate-img-inner"><div class="estate-img-ph ph3" style="background:none;"><img src="img/logo-castillo-ny-43.png" alt="" style="width:100%;height:100%;object-fit:cover;display:block;" id="imgEstate3"></div></div></div>
       </div>
     </div>
   </div>
@@ -2036,6 +2036,7 @@ function showItem(index) {
   } else {
     const img = document.createElement('img');
     img.src = item.style.backgroundImage.replace(/url\(['"]?|['"]?\)/g, '');
+    img.alt = item.getAttribute('aria-label') || 'Castillo del Alma';
     lbInner.appendChild(img);
   }
   lbCounter.textContent = (index + 1) + ' / ' + visibleItems.length;
@@ -2771,6 +2772,18 @@ function applySiteLang() {
 }
 
 // ── DYNAMISK GALLERI FRA SUPABASE STORAGE ──
+// Menneskelæsbar ALT-tekst ud fra filnavn (fjerner tidsstempler og præfikser)
+function altFraFilnavn(navn) {
+  const ren = decodeURIComponent(navn)
+    .replace(/\.[^.]+$/, '')
+    .replace(/^\d+[_-]/, '')
+    .replace(/^castillo-del-alma-?/i, '')
+    .replace(/-\d{10,}$/, '')
+    .replace(/[-_]+/g, ' ')
+    .trim();
+  return ren ? 'Castillo del Alma — ' + ren : 'Castillo del Alma';
+}
+
 async function loadUploadedGalleryItems() {
   const grid = document.querySelector('.gallery-grid');
   const emptyMsg = document.getElementById('galleryEmptyMsg');
@@ -2812,6 +2825,8 @@ async function loadUploadedGalleryItems() {
         item.appendChild(thumbVideo);
       } else {
         item.style.backgroundImage = `url('${urlData.publicUrl}')`;
+        item.setAttribute('role', 'img');
+        item.setAttribute('aria-label', altFraFilnavn(f.name));
       }
       item.innerHTML += '<div class="gallery-item-overlay"></div>' + (isVideo
         ? '<div class="gallery-item-play"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></div>'

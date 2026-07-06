@@ -6598,9 +6598,22 @@ function udfyldRetreatForm(r) {
   document.getElementById('modalRetreat').classList.add('open');
 }
 
+// Fælles SEO-venligt filnavn: castillo-del-alma-<beskrivelse>-<tidsstempel>.<ext>
+function cdaFilename(originalName) {
+  const dot = originalName.lastIndexOf('.');
+  const ext = dot > -1 ? originalName.slice(dot + 1).toLowerCase() : 'jpg';
+  const base = (dot > -1 ? originalName.slice(0, dot) : originalName)
+    .toLowerCase()
+    .replace(/æ/g, 'ae').replace(/ø/g, 'oe').replace(/å/g, 'aa')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '')
+    .replace(/^castillo-del-alma-?/, '')
+    .slice(0, 60);
+  return `castillo-del-alma-${base || 'billede'}-${Date.now()}.${ext}`;
+}
+
 async function uploadRetreatImage(file) {
-  const ext = file.name.split('.').pop();
-  const filename = `${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
+  const filename = cdaFilename(file.name);
   const { data, error } = await sb.storage.from('retreat-images').upload(filename, file);
   if (error) throw error;
   const { data: urlData } = sb.storage.from('retreat-images').getPublicUrl(filename);
@@ -7559,8 +7572,7 @@ async function uploadEjBillede(inputId, urlFieldId, thumbId) {
   if (!input || !input.files.length) { showToast('Vælg en fil først', true); return; }
   try {
     const file = input.files[0];
-    const ext = file.name.split('.').pop();
-    const filename = `ejendommen/${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
+    const filename = `ejendommen/${cdaFilename(file.name)}`;
     const { error } = await sb.storage.from('retreat-images').upload(filename, file);
     if (error) throw error;
     const { data: urlData } = sb.storage.from('retreat-images').getPublicUrl(filename);
@@ -7654,8 +7666,7 @@ async function uploadEjRoomGalleryImg(roomId, idx) {
   if (!input || !input.files.length) return;
   try {
     const file = input.files[0];
-    const ext = file.name.split('.').pop();
-    const filename = `ejendommen/rooms/${roomId}-gal${idx}-${Date.now()}.${ext}`;
+    const filename = `ejendommen/rooms/${cdaFilename(`vaerelse-${roomId}-${idx + 1}-${file.name}`)}`;
     const { error } = await sb.storage.from('retreat-images').upload(filename, file);
     if (error) throw error;
     const { data: urlData } = sb.storage.from('retreat-images').getPublicUrl(filename);
@@ -8419,7 +8430,7 @@ async function uploadGalleriFiler() {
   status.textContent = `Uploader ${input.files.length} fil(er)...`;
   let okCount = 0;
   for (const file of input.files) {
-    const safeName = Date.now() + '_' + file.name.replace(/[^a-zA-Z0-9.\-_]/g, '_');
+    const safeName = cdaFilename(file.name);
     try {
       const { error } = await sb.storage.from(GALLERI_BUCKET).upload(GALLERI_PREFIX + safeName, file);
       if (error) throw error;
@@ -8464,7 +8475,7 @@ async function uploadSectionMedia(inputId, contentKey) {
       const marker = '/object/public/' + MEDIA_BUCKET + '/';
       if (oldUrl.includes(marker)) oldPath = decodeURIComponent(oldUrl.split(marker)[1].split('?')[0]);
     } catch(_) { /* oprydning er best-effort */ }
-    const safeName = Date.now() + '_' + file.name.replace(/[^a-zA-Z0-9.\-_]/g, '_');
+    const safeName = cdaFilename(file.name);
     const { error } = await sb.storage.from(MEDIA_BUCKET).upload(MEDIA_PREFIX + safeName, file);
     if (error) throw error;
     const { data: urlData } = sb.storage.from(MEDIA_BUCKET).getPublicUrl(MEDIA_PREFIX + safeName);
