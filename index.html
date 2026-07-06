@@ -2433,14 +2433,15 @@ async function loadSiteContent() {
   }
 }
 
+// Sprog fra brugerens egen browser-indstilling (ingen ekstern IP-tjeneste → GDPR-venligt)
 async function determineStartLang() {
-  // Dansk hvis Danmark, ellers engelsk — baseret på IP-geolokation
   try {
-    const res = await fetch('https://ipapi.co/json/');
-    const geo = await res.json();
-    return (geo.country_code === 'DK') ? 'da' : 'en';
+    const langs = (navigator.languages && navigator.languages.length ? navigator.languages : [navigator.language])
+      .filter(Boolean).map(l => l.toLowerCase());
+    if (langs.some(l => l.startsWith('da'))) return 'da';   // dansk browser
+    return langs.length ? 'en' : 'da';                      // kendt ikke-dansk → en; helt ukendt → da
   } catch(e) {
-    return 'da'; // fallback hvis geolokation fejler
+    return 'da';
   }
 }
 

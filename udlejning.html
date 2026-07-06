@@ -1363,11 +1363,13 @@ const UL_STATIC_I18N = {
   en: { sending: 'Sending...', mathQ: (a,b) => `What is ${a} + ${b}?`, mathWrong: 'The security check is incorrect. Please try again.', fillRequired: 'Please fill in all required fields (*).', vaelgAntal: 'Select number', vaelgArrangement: 'Select event type', vaelgMulighed: 'Select an option' }
 };
 
+// Sprog fra brugerens egen browser-indstilling (ingen ekstern IP-tjeneste → GDPR-venligt)
 async function determineStartLangUl() {
   try {
-    const res = await fetch('https://ipapi.co/json/');
-    const geo = await res.json();
-    return (geo.country_code === 'DK') ? 'da' : 'en';
+    const langs = (navigator.languages && navigator.languages.length ? navigator.languages : [navigator.language])
+      .filter(Boolean).map(l => l.toLowerCase());
+    if (langs.some(l => l.startsWith('da'))) return 'da';   // dansk browser
+    return langs.length ? 'en' : 'da';                      // kendt ikke-dansk → en; helt ukendt → da
   } catch(e) {
     return 'da';
   }
