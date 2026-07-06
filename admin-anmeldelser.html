@@ -8456,12 +8456,24 @@ async function uploadSectionMedia(inputId, contentKey) {
   const file = input.files[0];
   if (status) status.textContent = 'Uploader...';
   try {
+    // Husk den gamle fil, så vi kan rydde op efter erstatning
+    let oldPath = null;
+    try {
+      const { data: oldRow } = await sb.from('site_content').select('value').eq('key', contentKey).maybeSingle();
+      const oldUrl = oldRow?.value || '';
+      const marker = '/object/public/' + MEDIA_BUCKET + '/';
+      if (oldUrl.includes(marker)) oldPath = decodeURIComponent(oldUrl.split(marker)[1].split('?')[0]);
+    } catch(_) { /* oprydning er best-effort */ }
     const safeName = Date.now() + '_' + file.name.replace(/[^a-zA-Z0-9.\-_]/g, '_');
     const { error } = await sb.storage.from(MEDIA_BUCKET).upload(MEDIA_PREFIX + safeName, file);
     if (error) throw error;
     const { data: urlData } = sb.storage.from(MEDIA_BUCKET).getPublicUrl(MEDIA_PREFIX + safeName);
     const { error: saveError } = await sb.from('site_content').upsert({ key: contentKey, value: urlData.publicUrl }, { onConflict: 'key' });
     if (saveError) throw saveError;
+    // Ny fil er gemt i DB — slet den gamle version (best-effort)
+    if (oldPath && oldPath !== MEDIA_PREFIX + safeName) {
+      try { await sb.storage.from(MEDIA_BUCKET).remove([oldPath]); } catch(_) {}
+    }
     if (status) status.textContent = '✓ Uploadet og gemt';
     showToast('Billede/video uploadet ✓');
     input.value = '';
