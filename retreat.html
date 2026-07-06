@@ -51,11 +51,12 @@ nav{
 }
 .retreat-hero-bg{
   position:absolute;inset:0;
-  background-image:url('img/close-up-woman-meditating-lotus-position-sunset.jpg');
+  background-color:#2c2318;
   background-size:cover;background-position:center;
-  transform:scale(1.04);transition:transform 8s ease;
+  opacity:0;transform:scale(1.04);
+  transition:transform 8s ease,opacity .9s ease;
 }
-.retreat-hero-bg.loaded{transform:scale(1);}
+.retreat-hero-bg.loaded{opacity:1;transform:scale(1);}
 .retreat-hero-overlay{
   position:absolute;inset:0;
   background:linear-gradient(to bottom,rgba(44,35,24,.3) 0%,rgba(44,35,24,.15) 40%,rgba(44,35,24,.8) 100%);
@@ -1083,8 +1084,21 @@ const revObs = new IntersectionObserver(entries=>{
 },{threshold:.1});
 document.querySelectorAll('.reveal,.reveal-left,.reveal-right').forEach(el=>revObs.observe(el));
 
-// Hero bg
-document.getElementById('heroBg').classList.add('loaded');
+// Hero bg — preload + fade-in (undgår flash af gammelt billede)
+const HERO_FALLBACK = 'img/close-up-woman-meditating-lotus-position-sunset.jpg';
+function setHeroImage(url) {
+  const el = document.getElementById('heroBg');
+  if (!el) return;
+  const finalUrl = url || HERO_FALLBACK;
+  if (el.dataset.heroUrl === finalUrl) return;
+  el.dataset.heroUrl = finalUrl;
+  const im = new Image();
+  im.onload = () => { el.style.backgroundImage = `url('${finalUrl}')`; el.classList.add('loaded'); };
+  im.onerror = () => {
+    if (finalUrl !== HERO_FALLBACK) { el.dataset.heroUrl = ''; setHeroImage(HERO_FALLBACK); }
+  };
+  im.src = finalUrl;
+}
 
 // Program accordion
 function toggleDay(header){
@@ -1455,6 +1469,7 @@ async function loadRetreatData() {
   const slug = getSlugFromUrl();
   if (!slug) {
     document.getElementById('retreatTitle').textContent = 'Retreat ikke fundet';
+    setHeroImage(null);
     return;
   }
 
@@ -1472,6 +1487,7 @@ async function loadRetreatData() {
 
   if (error || !data) {
     document.getElementById('retreatTitle').textContent = retreatLang === 'en' ? 'Retreat not found' : 'Retreat ikke fundet';
+    setHeroImage(null);
     return;
   }
 
@@ -1501,10 +1517,7 @@ function applyRetreatContent() {
   document.getElementById('retreatSubtitle').textContent = rSC('description');
   document.getElementById('retreatNameField').value = `${rSC('title')}${rSC('subtitle') ? ' — ' + rSC('subtitle') : ''}`;
 
-  if (data.hero_image) {
-    document.getElementById('heroBg').style.backgroundImage = `url('${data.hero_image}')`;
-    document.getElementById('heroBg').classList.add('loaded');
-  }
+  setHeroImage(data.hero_image);
 
   // Nav-labels
   setText('navAbout', rSC('ui_nav_about', 'Om retreatet'));
