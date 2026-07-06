@@ -3138,15 +3138,6 @@ feeling more calm – and coming home to yourself again."</textarea></div>
           <div><label class="fc-label fc-label-da">Citat (DA) — brug &lt;br&gt;</label><input type="text" id="ul_mere_quote_da" class="fc-input-da" placeholder=""></div>
           <div><label class="fc-label fc-label-en">Citat (EN)</label><input type="text" id="ul_mere_quote_en" class="fc-input-en" placeholder=""></div>
         </div>
-        <div style="margin-top:.8rem;padding:.9rem;background:rgba(42,122,116,.06);border:1px solid rgba(42,122,116,.2);">
-          <label class="fc-label" style="color:#2a7a74;">📁 Billede</label>
-          <div style="display:flex;align-items:center;gap:.8rem;flex-wrap:wrap;margin-top:.5rem;">
-            <img id="ul_mere_img_preview" src="" style="display:none;width:56px;height:56px;object-fit:cover;border-radius:3px;border:1px solid rgba(184,138,30,.3);flex-shrink:0;">
-            <input type="text" id="ul_mere_img_url" class="fc-input-da" placeholder="URL indsættes automatisk ved upload" style="flex:1;">
-            <input type="file" id="ul_mere_img_file" accept="image/*" style="font-size:.76rem;">
-            <button onclick="uploadEjBillede('ul_mere_img_file','ul_mere_img_url','ul_mere_img_preview')" style="background:#2a7a74;color:#fff;border:none;padding:.45rem 1.1rem;font-family:Manrope,sans-serif;font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;white-space:nowrap;">⬆ Upload</button>
-          </div>
-        </div>
         <div style="text-align:right;margin-top:.8rem;"><button onclick="gemUdlejning()" style="background:#2a7a74;color:#fff;border:none;padding:.5rem 1.4rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;">💾 Gem</button></div>
       </div>
     </div>
@@ -7123,7 +7114,6 @@ const UL_IMG_KEYS = [
   'hero_bg','intro_img1','intro_img2',
   'strip1_img1','strip1_img2','strip1_img3','strip1_img4',
   'fac_img1','fac_img2','fac_img3',
-  'mere_img',
   'strip2_img1','strip2_img2','strip2_img3',
   'undervisning_img1','undervisning_img2','vaerter_img','pris_img'
 ];
@@ -7248,7 +7238,6 @@ const UL_IMG_DEFAULTS = {
   "fac_img1": "img/estate-aerial.jpg",
   "fac_img2": "img/close-up-woman-meditating-lotus-position-sunset.jpg",
   "fac_img3": "img/yoga-class-concept.jpg",
-  "mere_img": "img/group-people-walking-along-path-dirt-stones-jungle.jpg",
   "strip2_img1": "img/aerial-view-people-having-dinner-backyard.jpg",
   "strip2_img2": "img/faceless-woman-lying-grass.jpg",
   "strip2_img3": "img/group-men-sit-hill-overlooking-mountain.jpg",

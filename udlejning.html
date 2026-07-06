@@ -297,14 +297,8 @@ nav{
 
 /* ── MER END ET KURSUSSTED ── */
 .mere{background:var(--charcoal);padding:8rem 0;position:relative;overflow:hidden;}
-.mere::before{
-  content:'';position:absolute;inset:0;
-  background-image:url('img/vinmark1.jpg');
-  background-size:cover;background-position:center;
-  opacity:.12;
-}
 .mere-inner{position:relative;z-index:1;}
-.mere-grid{display:grid;grid-template-columns:1fr 1fr;gap:7rem;align-items:center;}
+.mere-grid{max-width:760px;margin:0 auto;}
 .mere h2{
   font-family:'Cinzel',serif;font-weight:300;
   font-size:clamp(2rem,3.5vw,3rem);letter-spacing:.08em;
@@ -318,11 +312,6 @@ nav{
   border-left:2px solid var(--gold);
   padding-left:2rem;margin-top:3rem;line-height:1.6;
 }
-.mere-img{
-  width:100%;aspect-ratio:4/5;overflow:hidden;
-  position:relative;
-}
-.mere-img img{width:100%;height:100%;object-fit:cover;display:block;}
 
 
 /* ── NYE SEKTIONER: fælles ── */
@@ -851,9 +840,6 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:3rem
         <div class="mere-quote" id="mereQuote">
           Du bringer visionen —<br>vi skaber rammerne.
         </div>
-      </div>
-      <div class="mere-img reveal-right d1">
-        <img id="mereImg" src="img/group-people-walking-along-path-dirt-stones-jungle.jpg" alt="Retreat oplevelse på Castillo del Alma">
       </div>
     </div>
   </div>
@@ -1574,7 +1560,6 @@ function applyUlContent() {
   setHTML('mereH2', ulSC('mere_h2'));
   setParagraphs('mereTextContainer', ulSC('mere_text'));
   setHTML('mereQuote', ulSC('mere_quote'));
-  setImg('mereImg', ulSC('mere_img'));
 
   setImg('strip2Img1', ulSC('strip2_img1'));
   setImg('strip2Img2', ulSC('strip2_img2'));
