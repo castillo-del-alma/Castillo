@@ -1661,6 +1661,8 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:5rem
   <div class="footer-bottom">
     <p id="footerCopyright">© 2026 Castillo del Alma · Mollina, Málaga · All rights reserved</p>
     <div class="footer-social">
+      <a href="privacidad.html" id="footerLegalPrivacy">Privatliv</a>
+      <a href="aviso-legal.html" id="footerLegalNotice">Juridisk meddelelse</a>
       <a href="#" id="footerSocial1">Instagram</a>
       <a href="#" id="footerSocial2">Facebook</a>
     </div>
@@ -2766,6 +2768,13 @@ function applySiteLang() {
   set('footerSocial2', 'footer_social2_tekst');
   setHref('footerSocial1', 'footer_social1_url');
   setHref('footerSocial2', 'footer_social2_url');
+
+  // Juridiske links (hardcoded — styres ikke fra admin)
+  const _legalEN = currentSiteLang === 'en';
+  const fLegalP = document.getElementById('footerLegalPrivacy');
+  if (fLegalP) fLegalP.textContent = _legalEN ? 'Privacy' : 'Privatliv';
+  const fLegalN = document.getElementById('footerLegalNotice');
+  if (fLegalN) fLegalN.textContent = _legalEN ? 'Legal Notice' : 'Juridisk meddelelse';
 
   applySectionToggles();
 }

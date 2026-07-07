@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Persondatapolitik — Castillo del Alma</title>
+<meta name="robots" content="noindex,follow">
+<link rel="stylesheet" href="fonts/fonts.css">
+<style>
+:root {
+  --cream:      #faf6ee;
+  --beige:      #f0e8d5;
+  --sand:       #e0d0b0;
+  --stone:      #c8b898;
+  --charcoal:   #2c2318;
+  --text:       #2c2318;
+  --text-mid:   #5c4e3a;
+  --text-light: #9a8c7a;
+  --wine:       #7a1f35;
+  --wine-light: #a03048;
+  --terracotta: #c05c30;
+  --olive:      #6a7240;
+  --gold:       #b88a1e;
+  --gold-light: #d4a830;
+  --teal:       #3a6e6a;
+  --section-alt:#ede4d0;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{font-family:'Manrope',sans-serif;background:var(--cream);color:var(--text);overflow-x:hidden;}
+
+/* ── NAV ── */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:200;
+  padding:1.4rem 4rem;
+  display:flex;justify-content:space-between;align-items:center;
+  background:rgba(250,246,238,.96);
+  backdrop-filter:blur(16px);
+  border-bottom:1px solid rgba(184,138,30,.15);
+  box-shadow:0 2px 28px rgba(44,35,24,.06);
+}
+.nav-logo img{height:48px;width:auto;}
+.nav-right{display:flex;align-items:center;gap:1.6rem;}
+.lang-btn{border-radius:0;font-family:'Manrope',sans-serif;}
+.lang-btn.lang-btn-active{background:var(--wine);color:#fff !important;}
+.lang-btn.lang-btn-inactive{background:transparent;color:var(--wine) !important;}
+.lang-switcher{border-color:var(--wine);border-radius:0;}
+.nav-back{
+  font-size:.68rem;font-weight:500;letter-spacing:.15em;text-transform:uppercase;
+  color:var(--wine);text-decoration:none;display:flex;align-items:center;gap:.5rem;
+  transition:gap .3s;
+}
+.nav-back:hover{gap:.8rem;}
+
+/* ── HEADER ── */
+.legal-header{
+  background:var(--charcoal);
+  padding:11rem 4rem 4.5rem;
+  text-align:center;
+}
+.legal-header .eyebrow{
+  font-size:.62rem;letter-spacing:.34em;text-transform:uppercase;
+  color:var(--gold-light);margin-bottom:1.2rem;
+}
+.legal-header h1{
+  font-family:'Cinzel',serif;font-weight:400;
+  font-size:clamp(1.7rem,3.4vw,2.6rem);
+  color:var(--cream);letter-spacing:.06em;
+}
+.legal-header .subtitle{
+  font-family:'Cormorant Garamond',serif;font-style:italic;
+  font-size:1.05rem;color:rgba(250,246,238,.62);margin-top:1rem;
+}
+
+/* ── CONTENT ── */
+.legal-wrap{max-width:780px;margin:0 auto;padding:4.5rem 2rem 6rem;}
+.legal-section{margin-bottom:3.2rem;}
+.legal-section h2{
+  font-family:'Cinzel',serif;font-weight:400;
+  font-size:1.15rem;letter-spacing:.08em;color:var(--wine);
+  margin-bottom:1.1rem;
+  padding-bottom:.6rem;border-bottom:1px solid rgba(184,138,30,.25);
+}
+.legal-section p, .legal-section li{
+  font-family:'Cormorant Garamond',serif;
+  font-size:1.08rem;line-height:1.75;color:var(--text-mid);
+  margin-bottom:.9rem;
+}
+.legal-section ul{padding-left:1.4rem;margin-bottom:.9rem;}
+.legal-section a{color:var(--wine);text-decoration:none;border-bottom:1px solid rgba(122,31,53,.3);transition:border-color .3s;}
+.legal-section a:hover{border-color:var(--wine);}
+.id-block{
+  background:var(--beige);border-left:3px solid var(--gold);
+  padding:1.6rem 1.8rem;margin-bottom:.9rem;
+}
+.id-block p{margin-bottom:.35rem;}
+.id-block b{color:var(--text);font-weight:600;}
+.legal-updated{
+  font-family:'Manrope',sans-serif;font-size:.68rem;letter-spacing:.12em;
+  text-transform:uppercase;color:var(--text-light);margin-top:2.5rem;
+}
+
+/* ── SPROG ── */
+.lang-en{display:none;}
+body.en .lang-en{display:block;}
+body.en .lang-da{display:none;}
+body.en span.lang-en{display:inline;}
+
+/* ── FOOTER ── */
+footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:3rem 4rem;}
+.footer-bottom{max-width:1320px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;}
+.footer-bottom p{font-size:.68rem;color:rgba(255,255,255,.48);letter-spacing:.04em;}
+.footer-links{display:flex;gap:1.6rem;flex-wrap:wrap;}
+.footer-bottom a{font-size:.68rem;color:rgba(255,255,255,.62);text-decoration:none;transition:color .3s;}
+.footer-bottom a:hover{color:var(--gold);}
+
+@media(max-width:760px){
+  nav{padding:1.1rem 1.4rem;}
+  .legal-header{padding:9rem 1.6rem 3.5rem;}
+  .legal-wrap{padding:3.2rem 1.4rem 4.5rem;}
+  .footer-bottom{flex-direction:column;text-align:center;}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-logo">
+    <img src="img/taarne-hvid-trans.png" alt="Castillo del Alma">
+  </a>
+  <div class="nav-right">
+    <div class="lang-switcher" style="display:flex;border:1.5px solid;overflow:hidden;border-color:var(--wine);">
+      <button id="al-btn-da" class="lang-btn lang-btn-active" onclick="setLegalLang('da')" style="font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;padding:.3rem .6rem;border:none;cursor:pointer;font-family:'Manrope',sans-serif;">DA</button>
+      <button id="al-btn-en" class="lang-btn lang-btn-inactive" onclick="setLegalLang('en')" style="font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;padding:.3rem .6rem;border:none;cursor:pointer;font-family:'Manrope',sans-serif;">EN</button>
+    </div>
+    <a href="index.html" class="nav-back" id="al_nav_back">← Tilbage til forsiden</a>
+  </div>
+</nav>
+
+<header class="legal-header">
+  <div class="eyebrow">Castillo del Alma</div>
+  <h1><span class="lang-da">Persondatapolitik</span><span class="lang-en">Privacy Policy</span></h1>
+  <div class="subtitle">Política de Privacidad · GDPR / LOPDGDD</div>
+</header>
+
+<main class="legal-wrap">
+
+<!-- ═══════════ DANSK ═══════════ -->
+<div class="lang-da">
+
+  <div class="legal-section">
+    <h2>1. Dataansvarlig</h2>
+    <div class="id-block">
+      <p><b>Virksomhed:</b> NEO Studio Mijas S.L.</p>
+      <p><b>NIF:</b> B67914515</p>
+      <p><b>Adresse:</b> Parcela 57, Polígono 34, 29532 Mollina, Málaga, Spanien</p>
+      <p><b>E-mail:</b> <a href="mailto:hello@castillodelalma.es">hello@castillodelalma.es</a></p>
+    </div>
+    <p>NEO Studio Mijas S.L. (herefter "Castillo del Alma" eller "vi") er dataansvarlig for behandlingen af de personoplysninger, du afgiver via dette websted. Behandlingen sker i overensstemmelse med EU's databeskyttelsesforordning (GDPR, forordning (EU) 2016/679) og den spanske lov LOPDGDD 3/2018.</p>
+  </div>
+
+  <div class="legal-section">
+    <h2>2. Hvilke oplysninger indsamler vi?</h2>
+    <p>Vi indsamler kun de oplysninger, du selv giver os:</p>
+    <ul>
+      <li><b>Forespørgsler og kontakt:</b> navn, e-mailadresse, eventuelt telefonnummer samt indholdet af din besked.</li>
+      <li><b>Booking og betaling:</b> navn, kontaktoplysninger og betalingsrelaterede oplysninger. Kortoplysninger behandles udelukkende af vores betalingsudbyder Stripe og gemmes aldrig hos os.</li>
+      <li><b>Nyhedsbrev:</b> din e-mailadresse, når du tilmelder dig.</li>
+      <li><b>Anmeldelser:</b> navn og anmeldelsestekst, når du selv indsender en anmeldelse.</li>
+    </ul>
+    <p>Vi indsamler ikke oplysninger om dig fra tredjeparter og foretager ikke profilering eller automatiske afgørelser.</p>
+  </div>
+
+  <div class="legal-section">
+    <h2>3. Formål og retsgrundlag</h2>
+    <ul>
+      <li><b>Besvarelse af henvendelser</b> — på grundlag af vores legitime interesse i at svare dig (GDPR art. 6, stk. 1, litra f).</li>
+      <li><b>Gennemførelse af bookinger, ophold og betalinger</b> — nødvendigt for opfyldelse af aftalen med dig (art. 6, stk. 1, litra b).</li>
+      <li><b>Bogføring og fakturering</b> — nødvendigt for at overholde retlige forpligtelser efter spansk skatte- og regnskabslovgivning (art. 6, stk. 1, litra c).</li>
+      <li><b>Nyhedsbrev</b> — på grundlag af dit samtykke (art. 6, stk. 1, litra a). Du kan til enhver tid trække samtykket tilbage via afmeldingslinket i hver mail.</li>
+      <li><b>Offentliggørelse af anmeldelser</b> — på grundlag af dit samtykke, som du giver ved indsendelsen.</li>
+    </ul>
+  </div>
+
+  <div class="legal-section">
+    <h2>4. Modtagere og databehandlere</h2>
+    <p>Vi videregiver ikke dine oplysninger til tredjeparter til deres egne formål. Vi benytter følgende databehandlere til at drive webstedet og vores services:</p>
+    <ul>
+      <li><b>Supabase</b> — database og lagring af indhold, bookinger og henvendelser.</li>
+      <li><b>Netlify</b> — hosting af webstedet og serverfunktioner.</li>
+      <li><b>Stripe</b> — behandling af betalinger.</li>
+      <li><b>Resend</b> — udsendelse af e-mails (bekræftelser og nyhedsbreve).</li>
+    </ul>
+    <p>Nogle af disse leverandører kan behandle oplysninger uden for EU/EØS. I så fald sker overførslen på grundlag af EU-Kommissionens standardkontraktbestemmelser og/eller EU-U.S. Data Privacy Framework, som sikrer et tilsvarende beskyttelsesniveau.</p>
+  </div>
+
+  <div class="legal-section">
+    <h2>5. Opbevaring</h2>
+    <ul>
+      <li><b>Henvendelser:</b> så længe det er nødvendigt for at behandle din sag.</li>
+      <li><b>Booking-, betalings- og fakturaoplysninger:</b> så længe lovgivningen kræver det (spansk skatte- og regnskabslovgivning).</li>
+      <li><b>Nyhedsbrev:</b> indtil du afmelder dig.</li>
+    </ul>
+  </div>
+
+  <div class="legal-section">
+    <h2>6. Dine rettigheder</h2>
+    <p>Du har ret til indsigt i, berigtigelse af og sletning af dine personoplysninger samt ret til begrænsning af behandlingen, dataportabilitet og indsigelse. Har du givet samtykke, kan du til enhver tid trække det tilbage med virkning for fremtiden.</p>
+    <p>Skriv til <a href="mailto:hello@castillodelalma.es">hello@castillodelalma.es</a> for at udøve dine rettigheder. Du kan desuden klage til den spanske databeskyttelsesmyndighed, Agencia Española de Protección de Datos (AEPD), <a href="https://www.aepd.es" target="_blank" rel="noopener">www.aepd.es</a> — eller til databeskyttelsesmyndigheden i dit eget EU-land, fx Datatilsynet i Danmark.</p>
+  </div>
+
+  <div class="legal-section">
+    <h2>7. Cookies</h2>
+    <p>Webstedet sætter ikke egne cookies og anvender ikke sporings- eller analyseværktøjer. Dit foretrukne sprog registreres alene ud fra din browsers sprogindstilling og gemmes ikke.</p>
+    <p>Gennemfører du en betaling, sker det via Stripes betalingsside, hvor Stripe kan sætte teknisk nødvendige cookies på deres eget domæne. Se <a href="https://stripe.com/privacy" target="_blank" rel="noopener">Stripes privatlivspolitik</a>.</p>
+  </div>
+
+  <div class="legal-section">
+    <h2>8. Sikkerhed</h2>
+    <p>Vi anvender passende tekniske og organisatoriske foranstaltninger for at beskytte dine oplysninger, herunder krypteret forbindelse (HTTPS), adgangsbegrænsning og anerkendte, sikkerhedscertificerede leverandører.</p>
+  </div>
+
+  <div class="legal-section">
+    <h2>9. Ændringer af denne politik</h2>
+    <p>Vi kan opdatere denne persondatapolitik, fx ved ændringer i vores services eller i lovgivningen. Den gældende version findes altid på denne side.</p>
+  </div>
+
+  <p class="legal-updated">Senest opdateret: juli 2026</p>
+</div>
+
+<!-- ═══════════ ENGLISH ═══════════ -->
+<div class="lang-en">
+
+  <div class="legal-section">
+    <h2>1. Data controller</h2>
+    <div class="id-block">
+      <p><b>Company:</b> NEO Studio Mijas S.L.</p>
+      <p><b>Tax ID (NIF):</b> B67914515</p>
+      <p><b>Address:</b> Parcela 57, Polígono 34, 29532 Mollina, Málaga, Spain</p>
+      <p><b>E-mail:</b> <a href="mailto:hello@castillodelalma.es">hello@castillodelalma.es</a></p>
+    </div>
+    <p>NEO Studio Mijas S.L. (hereinafter "Castillo del Alma" or "we") is the data controller for the personal data you provide through this website. Processing is carried out in accordance with the EU General Data Protection Regulation (GDPR, Regulation (EU) 2016/679) and Spanish Law LOPDGDD 3/2018.</p>
+  </div>
+
+  <div class="legal-section">
+    <h2>2. What data do we collect?</h2>
+    <p>We only collect the data you provide to us yourself:</p>
+    <ul>
+      <li><b>Enquiries and contact:</b> name, e-mail address, telephone number (if provided) and the content of your message.</li>
+      <li><b>Bookings and payments:</b> name, contact details and payment-related information. Card details are processed exclusively by our payment provider Stripe and are never stored by us.</li>
+      <li><b>Newsletter:</b> your e-mail address when you subscribe.</li>
+      <li><b>Reviews:</b> name and review text when you submit a review yourself.</li>
+    </ul>
+    <p>We do not collect data about you from third parties and do not carry out profiling or automated decision-making.</p>
+  </div>
+
+  <div class="legal-section">
+    <h2>3. Purposes and legal basis</h2>
+    <ul>
+      <li><b>Responding to enquiries</b> — based on our legitimate interest in replying to you (GDPR Art. 6(1)(f)).</li>
+      <li><b>Handling bookings, stays and payments</b> — necessary for the performance of the contract with you (Art. 6(1)(b)).</li>
+      <li><b>Accounting and invoicing</b> — necessary to comply with legal obligations under Spanish tax and accounting law (Art. 6(1)(c)).</li>
+      <li><b>Newsletter</b> — based on your consent (Art. 6(1)(a)). You may withdraw your consent at any time via the unsubscribe link in every e-mail.</li>
+      <li><b>Publication of reviews</b> — based on the consent you give when submitting.</li>
+    </ul>
+  </div>
+
+  <div class="legal-section">
+    <h2>4. Recipients and processors</h2>
+    <p>We do not share your data with third parties for their own purposes. We use the following processors to operate the website and our services:</p>
+    <ul>
+      <li><b>Supabase</b> — database and storage of content, bookings and enquiries.</li>
+      <li><b>Netlify</b> — hosting of the website and server functions.</li>
+      <li><b>Stripe</b> — payment processing.</li>
+      <li><b>Resend</b> — sending of e-mails (confirmations and newsletters).</li>
+    </ul>
+    <p>Some of these providers may process data outside the EU/EEA. In such cases, transfers take place on the basis of the European Commission's Standard Contractual Clauses and/or the EU-U.S. Data Privacy Framework, which ensure an equivalent level of protection.</p>
+  </div>
+
+  <div class="legal-section">
+    <h2>5. Retention</h2>
+    <ul>
+      <li><b>Enquiries:</b> for as long as necessary to handle your request.</li>
+      <li><b>Booking, payment and invoice data:</b> for as long as required by law (Spanish tax and accounting legislation).</li>
+      <li><b>Newsletter:</b> until you unsubscribe.</li>
+    </ul>
+  </div>
+
+  <div class="legal-section">
+    <h2>6. Your rights</h2>
+    <p>You have the right to access, rectify and erase your personal data, as well as the right to restriction of processing, data portability and objection. Where processing is based on consent, you may withdraw it at any time with effect for the future.</p>
+    <p>Write to <a href="mailto:hello@castillodelalma.es">hello@castillodelalma.es</a> to exercise your rights. You may also lodge a complaint with the Spanish data protection authority, Agencia Española de Protección de Datos (AEPD), <a href="https://www.aepd.es" target="_blank" rel="noopener">www.aepd.es</a> — or with the supervisory authority in your own EU country.</p>
+  </div>
+
+  <div class="legal-section">
+    <h2>7. Cookies</h2>
+    <p>This website does not set its own cookies and does not use tracking or analytics tools. Your preferred language is detected solely from your browser's language settings and is not stored.</p>
+    <p>If you make a payment, it takes place on Stripe's payment page, where Stripe may set technically necessary cookies on its own domain. See <a href="https://stripe.com/privacy" target="_blank" rel="noopener">Stripe's privacy policy</a>.</p>
+  </div>
+
+  <div class="legal-section">
+    <h2>8. Security</h2>
+    <p>We apply appropriate technical and organisational measures to protect your data, including encrypted connections (HTTPS), access restrictions and reputable, security-certified providers.</p>
+  </div>
+
+  <div class="legal-section">
+    <h2>9. Changes to this policy</h2>
+    <p>We may update this privacy policy, for example following changes to our services or to legislation. The current version is always available on this page.</p>
+  </div>
+
+  <p class="legal-updated">Last updated: July 2026</p>
+</div>
+
+</main>
+
+<footer>
+  <div class="footer-bottom">
+    <p>© 2026 Castillo del Alma · Mollina, Málaga · All rights reserved</p>
+    <div class="footer-links">
+      <a href="aviso-legal.html" id="al_footer_privacy">Juridisk meddelelse</a>
+      <a href="index.html" id="al_footer_back">← Tilbage til forsiden</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+let legalLang = 'da';
+
+function detectLegalLang(){
+  try{
+    const langs = (navigator.languages && navigator.languages.length ? navigator.languages : [navigator.language])
+      .filter(Boolean).map(l => String(l).toLowerCase());
+    return langs.some(l => l.startsWith('da')) ? 'da' : 'en';
+  }catch(e){ return 'da'; }
+}
+
+function setLegalLang(lang){
+  legalLang = (lang === 'en') ? 'en' : 'da';
+  document.body.classList.toggle('en', legalLang === 'en');
+  document.documentElement.lang = legalLang;
+
+  const btnDa = document.getElementById('al-btn-da');
+  const btnEn = document.getElementById('al-btn-en');
+  if (btnDa) { btnDa.classList.toggle('lang-btn-active', legalLang === 'da'); btnDa.classList.toggle('lang-btn-inactive', legalLang !== 'da'); }
+  if (btnEn) { btnEn.classList.toggle('lang-btn-active', legalLang === 'en'); btnEn.classList.toggle('lang-btn-inactive', legalLang !== 'en'); }
+
+  const navBack = document.getElementById('al_nav_back');
+  if (navBack) navBack.textContent = legalLang === 'en' ? '← Back to the front page' : '← Tilbage til forsiden';
+  const footBack = document.getElementById('al_footer_back');
+  if (footBack) footBack.textContent = legalLang === 'en' ? '← Back to the front page' : '← Tilbage til forsiden';
+  const footPriv = document.getElementById('al_footer_privacy');
+  if (footPriv) footPriv.textContent = legalLang === 'en' ? 'Legal Notice' : 'Juridisk meddelelse';
+
+  document.title = legalLang === 'en'
+    ? 'Privacy Policy — Castillo del Alma'
+    : 'Persondatapolitik — Castillo del Alma';
+}
+
+setLegalLang(detectLegalLang());
+</script>
+
+</body>
+</html>

@@ -1071,7 +1071,11 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:3rem
 <footer>
   <div class="footer-bottom">
     <p>© 2026 Castillo del Alma · Mollina, Málaga · All rights reserved</p>
-    <a href="index.html">← Tilbage til forsiden</a>
+    <div style="display:flex;gap:1.6rem;flex-wrap:wrap;align-items:center;">
+      <a href="privacidad.html" id="rt_footer_privacy">Persondatapolitik</a>
+      <a href="aviso-legal.html" id="rt_footer_legal">Juridisk meddelelse</a>
+      <a href="index.html" id="rt_footer_back">← Tilbage til forsiden</a>
+    </div>
   </div>
 </footer>
 
@@ -1294,6 +1298,9 @@ function SI18N(key) {
 }
 
 function applyStaticLabels() {
+  setText('rt_footer_privacy', retreatLang === 'en' ? 'Privacy Policy' : 'Persondatapolitik');
+  setText('rt_footer_legal', retreatLang === 'en' ? 'Legal Notice' : 'Juridisk meddelelse');
+  setText('rt_footer_back', retreatLang === 'en' ? '← Back to the front page' : '← Tilbage til forsiden');
   setText('reviewsLabel', SI18N('reviewsLabel'));
   const rh = document.getElementById('reviewsHeading'); if (rh) rh.innerHTML = SI18N('reviewsHeading');
   setText('includedLabel', SI18N('includedLabel'));

@@ -1038,7 +1038,11 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:3rem
 <footer>
   <div class="footer-bottom">
     <p id="ej_footer_copy">© 2026 Castillo del Alma · Mollina, Málaga · All rights reserved</p>
-    <a href="index.html" id="ej_footer_link">← Tilbage til forsiden</a>
+    <div style="display:flex;gap:1.6rem;flex-wrap:wrap;align-items:center;">
+      <a href="privacidad.html" id="ej_footer_privacy">Persondatapolitik</a>
+      <a href="aviso-legal.html" id="ej_footer_legal">Juridisk meddelelse</a>
+      <a href="index.html" id="ej_footer_link">← Tilbage til forsiden</a>
+    </div>
   </div>
 </footer>
 
@@ -1289,6 +1293,8 @@ function applyEjContent() {
   // FOOTER
   setText('ej_footer_copy', ejSC('footer_copy'));
   setText('ej_footer_link', ejSC('footer_link'));
+  setText('ej_footer_privacy', ejLang === 'en' ? 'Privacy Policy' : 'Persondatapolitik');
+  setText('ej_footer_legal', ejLang === 'en' ? 'Legal Notice' : 'Juridisk meddelelse');
 }
 
 function renderEjRooms() {
