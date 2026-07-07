@@ -1240,7 +1240,7 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:5rem
       <p id="retreatsText2" style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.35rem;font-weight:300;color:var(--text-light);max-width:680px;margin:0 auto 2rem;">Du kan også leje faciliteterne til dine egne gæster, retreats eller workshops,<br>og virksomheder finder de perfekte rammer til seminarer, teambuilding og strategidage.</p>
       <a href="/udlejning.html" class="btn-wine" id="retreatsBtn">Lej Castillo del Alma</a>
     </div>
-    <div class="reveal d2" id="retreatsImageRow" style="display:none;margin-top:3.5rem;display:grid;grid-template-columns:repeat(5,1fr);gap:.6rem;">
+    <div class="reveal d2" id="retreatsImageRow" style="display:none;margin-top:3.5rem;grid-template-columns:repeat(5,1fr);gap:.6rem;">
       <div class="retreats-img-item" id="retreatsImg1" style="aspect-ratio:1/1;background-size:cover;background-position:center;overflow:hidden;cursor:pointer;transition:transform .4s;"></div>
       <div class="retreats-img-item" id="retreatsImg2" style="aspect-ratio:1/1;background-size:cover;background-position:center;overflow:hidden;cursor:pointer;transition:transform .4s;"></div>
       <div class="retreats-img-item" id="retreatsImg3" style="aspect-ratio:1/1;background-size:cover;background-position:center;overflow:hidden;cursor:pointer;transition:transform .4s;"></div>
@@ -2354,8 +2354,12 @@ async function loadRetreatsGrid() {
   // Hover: vis retreat-specifikke billeder i billed-rækken
   const imgRow = document.getElementById('retreatsImageRow');
   const imgEls = [1,2,3,4,5].map(n => document.getElementById(`retreatsImg${n}`));
-  // Gem de generelle billeder
-  const generalImgs = imgEls.map(el => el ? el.style.backgroundImage : '');
+  // De "generelle" billeder gendannes altid fra kilden (siteContentData), så et
+  // for tidligt DOM-snapshot ikke kan tømme rækken efter hover.
+  const generalBg = (j) => {
+    const url = siteContentData[`media_retreats_img${j + 1}`];
+    return url ? `url('${url}')` : '';
+  };
 
   document.querySelectorAll('.retreat-card').forEach((card, i) => {
     const r = data[i];
@@ -2372,8 +2376,8 @@ async function loadRetreatsGrid() {
     });
     card.addEventListener('mouseleave', () => {
       if (!imgRow) return;
-      generalImgs.forEach((bg, j) => {
-        if (imgEls[j]) imgEls[j].style.backgroundImage = bg;
+      imgEls.forEach((el, j) => {
+        if (el) el.style.backgroundImage = generalBg(j);
       });
     });
   });
@@ -2935,7 +2939,14 @@ function applyUploadedMedia() {
     if (id.startsWith('retreatsImg')) anyRetreatsImg = true;
   });
   const retreatsRow = document.getElementById('retreatsImageRow');
-  if (retreatsRow) retreatsRow.style.display = anyRetreatsImg ? 'grid' : 'none';
+  if (retreatsRow) {
+    if (anyRetreatsImg) {
+      retreatsRow.style.display = 'grid';
+      retreatsRow.classList.add('visible'); // opacity:1 uanset om scroll-observeren nåede den
+    } else {
+      retreatsRow.style.display = 'none';
+    }
+  }
 }
 </script>
 </body>
