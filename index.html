@@ -421,6 +421,22 @@ section{position:relative;z-index:1;}
   z-index:2;
 }
 .retreat-card-accent{position:absolute;top:0;left:0;right:0;height:3px;z-index:3;}
+/* Tilgængeligheds-badge i toppen af kortet */
+.retreat-avail{
+  position:absolute;top:1rem;left:1.7rem;z-index:5;
+  font-family:'Manrope',sans-serif;font-size:.54rem;font-weight:600;
+  letter-spacing:.16em;text-transform:uppercase;
+  padding:.34rem .7rem;border-radius:2px;
+  display:inline-flex;align-items:center;gap:.42rem;
+  backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);
+}
+.retreat-avail::before{content:'';width:5px;height:5px;border-radius:50%;flex:none;}
+.retreat-avail.avail-good{background:rgba(106,114,64,.85);color:#eef3dc;}
+.retreat-avail.avail-good::before{background:#bcda7c;}
+.retreat-avail.avail-few{background:rgba(192,92,48,.9);color:#fff;}
+.retreat-avail.avail-few::before{background:#ffd3a6;}
+.retreat-avail.avail-sold{background:rgba(44,35,24,.82);color:rgba(255,255,255,.72);}
+.retreat-avail.avail-sold::before{background:rgba(255,255,255,.42);}
 .card-1 .retreat-card-accent{background:linear-gradient(90deg,var(--terracotta),var(--gold));}
 .card-2 .retreat-card-accent{background:linear-gradient(90deg,var(--olive),#b8c870);}
 .card-3 .retreat-card-accent{background:linear-gradient(90deg,#7858a0,#b090d0);}
@@ -2249,6 +2265,31 @@ function visReviewDetalje(rEncoded) {
   modal.onclick = e => { if (e.target === modal) modal.style.display = 'none'; };
 }
 
+let _availCache = null;
+async function fetchRetreatAvailability() {
+  if (_availCache) return _availCache;
+  try {
+    const r = await fetch('/.netlify/functions/retreat-availability');
+    if (r.ok) { _availCache = (await r.json()).booked || {}; return _availCache; }
+  } catch (e) { /* fejler pænt — badge skjules */ }
+  return {};
+}
+
+function buildAvailBadge(r, bookedCount, isEN) {
+  const max = parseInt(r.max_guests, 10);
+  if (!max || max <= 0) return '';           // ingen kapacitet sat → ingen badge
+  const left = max - (bookedCount || 0);
+  let cls, txt;
+  if (left <= 0) {
+    cls = 'avail-sold'; txt = isEN ? 'Sold out' : 'Udsolgt';
+  } else if (left / max <= 0.25) {
+    cls = 'avail-few';  txt = isEN ? 'Few spaces left' : 'Få ledige pladser';
+  } else {
+    cls = 'avail-good'; txt = isEN ? 'Available' : 'Ledige pladser';
+  }
+  return `<div class="retreat-avail ${cls}">${txt}</div>`;
+}
+
 async function loadRetreatsGrid() {
   const grid = document.getElementById('retreatsGrid');
   if (!grid) return;
@@ -2263,6 +2304,8 @@ async function loadRetreatsGrid() {
     grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:3rem;color:rgba(255,255,255,.4);">Ingen retreats tilgængelige i øjeblikket</div>';
     return;
   }
+
+  const bookedMap = await fetchRetreatAvailability();
 
   grid.innerHTML = data.map((r, i) => {
     const num = String(i + 1).padStart(2, '0');
@@ -2299,6 +2342,7 @@ async function loadRetreatsGrid() {
         <div class="retreat-card-overlay"></div>
         ${isPride ? '<div class="pride-overlay"></div>' : ''}
         <div class="retreat-card-accent"${accentStyle}></div>
+        ${buildAvailBadge(r, bookedMap[r.id] || 0, isEN)}
         <div class="retreat-card-content">
           <h3>${title.replace(' & ', '<br>&amp; ').replace(' og ', '<br>').replace(' and ', '<br>and ')}</h3>
           <p>${description}</p>
