@@ -2279,10 +2279,9 @@ function buildAvailBadge(r, bookedCount, isEN) {
   const max = parseInt(r.max_guests, 10);
   if (!max || max <= 0) return '';           // ingen kapacitet sat → ingen badge
   const left = max - (bookedCount || 0);
+  if (left <= 0) return '';                   // fuldt booket → ingen badge (kortet skal stadig indbyde til klik)
   let cls, txt;
-  if (left <= 0) {
-    cls = 'avail-sold'; txt = isEN ? 'Sold out' : 'Udsolgt';
-  } else if (left / max <= 0.25) {
+  if (left / max <= 0.25) {
     cls = 'avail-few';  txt = isEN ? 'Few spaces left' : 'Få ledige pladser';
   } else {
     cls = 'avail-good'; txt = isEN ? 'Available' : 'Ledige pladser';
