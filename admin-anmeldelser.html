@@ -6365,6 +6365,7 @@ function openNytRetreat() {
   document.getElementById('retreat_teacher_bio_en').value = 'An experienced wellness facilitator specialising in nervous system regulation, breathwork and somatic therapy. With many years of experience from retreats across Scandinavia and Southern Europe.';
   document.getElementById('retreatSaveBtn').textContent = 'Opret retreat';
   document.getElementById('modalRetreat').classList.add('open');
+  setupRetreatTranslateButtons();
   } catch(e) {
     console.error('openNytRetreat fejl:', e.message, e.stack);
     alert('Fejl ved åbning: ' + e.message);
@@ -6595,6 +6596,65 @@ function udfyldRetreatForm(r) {
   cardFileData = null;
   document.getElementById('retreatSaveBtn').textContent = 'Gem ændringer';
   document.getElementById('modalRetreat').classList.add('open');
+  setupRetreatTranslateButtons();
+}
+
+// ─────────────────────────────────────────────────────────────
+// OVERSÆT-KNAPPER i retreat-editoren
+// Under hvert engelsk felt: en knap der oversætter det danske
+// modstykke (samme id uden _en) via /.netlify/functions/translate-field
+// ─────────────────────────────────────────────────────────────
+function setupRetreatTranslateButtons() {
+  const modal = document.getElementById('modalRetreat');
+  if (!modal) return;
+  modal.querySelectorAll('.fc-input-en').forEach(enEl => {
+    const enId = enEl.id;
+    if (!enId || !enId.endsWith('_en')) return;
+    const daId = enId.slice(0, -3);
+    if (!document.getElementById(daId)) return;      // intet dansk modstykke
+    const wrap = enEl.parentNode;
+    if (!wrap || wrap.querySelector('.translate-btn')) return; // undgå dublet
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'translate-btn';
+    btn.dataset.da = daId;
+    btn.dataset.en = enId;
+    btn.textContent = '⇄ Oversæt til engelsk';
+    btn.style.cssText = 'margin-top:.35rem;background:rgba(58,110,106,.1);border:1px solid rgba(58,110,106,.35);color:#2a7a74;padding:.3rem .7rem;font-family:Manrope,sans-serif;font-size:.58rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;border-radius:2px;transition:background .2s;';
+    btn.onmouseover = () => { btn.style.background = 'rgba(58,110,106,.2)'; };
+    btn.onmouseout  = () => { btn.style.background = 'rgba(58,110,106,.1)'; };
+    btn.onclick = () => oversaetRetreatFelt(btn);
+    wrap.appendChild(btn);
+  });
+}
+
+async function oversaetRetreatFelt(btn) {
+  const daEl = document.getElementById(btn.dataset.da);
+  const enEl = document.getElementById(btn.dataset.en);
+  if (!daEl || !enEl) return;
+  const daText = (daEl.value || '').trim();
+  if (!daText) { showToast('Udfyld det danske felt først', true); return; }
+
+  const original = btn.textContent;
+  btn.disabled = true;
+  btn.textContent = 'Oversætter…';
+  try {
+    const res = await fetch('/.netlify/functions/translate-field', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ text: daText })
+    });
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok || !data.translation) throw new Error(data.error || 'Ukendt fejl');
+    enEl.value = data.translation;
+    enEl.dispatchEvent(new Event('input', { bubbles: true })); // trig evt. lyttere
+    btn.textContent = '✓ Oversat — husk 💾 Gem';
+    setTimeout(() => { btn.textContent = original; btn.disabled = false; }, 2200);
+  } catch (e) {
+    showToast('Oversættelse fejlede: ' + e.message, true);
+    btn.textContent = original;
+    btn.disabled = false;
+  }
 }
 
 // Fælles SEO-venligt filnavn: castillo-del-alma-<beskrivelse>-<tidsstempel>.<ext>
