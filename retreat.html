@@ -107,6 +107,13 @@ nav{
   border-bottom:1px solid rgba(184,138,30,.15);
   box-shadow:0 4px 20px rgba(44,35,24,.06);
 }
+/* PRIDE: regnbue-stribe i toppen af baren (overgang mod hero) — vises kun når retreatet har pride */
+.booking-bar-pride{
+  height:4px;width:100%;
+  background:linear-gradient(90deg,#e40303,#ff8c00,#ffed00,#008026,#004dff,#750787);
+  display:none;
+}
+.booking-bar.is-pride .booking-bar-pride{display:block;}
 .booking-bar-inner{
   max-width:1320px;margin:0 auto;padding:1.3rem 4rem .9rem;
   display:flex;justify-content:space-between;align-items:center;
@@ -652,7 +659,8 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:3rem
 </section>
 
 <!-- BOOKING BAR -->
-<div class="booking-bar">
+<div class="booking-bar" id="bookingBar">
+  <div class="booking-bar-pride"></div>
   <div class="booking-bar-inner">
     <div class="booking-bar-info">
       <div class="booking-bar-stat">
@@ -1515,6 +1523,13 @@ async function loadRetreatData() {
 function applyRetreatContent() {
   const data = CURRENT_RETREAT;
   if (!data) return;
+
+  // PRIDE-stribe i toppen af booking-baren (styret af pride-flaget)
+  const bookingBarEl = document.getElementById('bookingBar');
+  if (bookingBarEl) {
+    const isPride = (data.pride === true) || (data.pride === undefined && data.slug === 'gay-retreat-og-faellesskab');
+    bookingBarEl.classList.toggle('is-pride', isPride);
+  }
 
   // Titel og hero
   document.getElementById('pageTitle').textContent = `${rSC('title')} — Castillo del Alma`;

@@ -424,7 +424,9 @@ section{position:relative;z-index:1;}
 .card-1 .retreat-card-accent{background:linear-gradient(90deg,var(--terracotta),var(--gold));}
 .card-2 .retreat-card-accent{background:linear-gradient(90deg,var(--olive),#b8c870);}
 .card-3 .retreat-card-accent{background:linear-gradient(90deg,#7858a0,#b090d0);}
-.card-4 .retreat-card-accent{background:linear-gradient(90deg,#e40303,#ff8c00,#ffed00,#008026,#004dff,#750787);}
+.card-4 .retreat-card-accent{background:linear-gradient(90deg,var(--wine),var(--terracotta));}
+/* PRIDE: regnbue-toplinje — styres af pride-flaget i databasen, ikke af kortets position */
+.retreat-card.is-pride .retreat-card-accent{background:linear-gradient(90deg,#e40303,#ff8c00,#ffed00,#008026,#004dff,#750787) !important;}
 .card-5 .retreat-card-accent{background:linear-gradient(90deg,var(--gold),var(--gold-light));}
 .card-6 .retreat-card-accent{background:linear-gradient(90deg,var(--teal),#70b8c0);}
 .card-7 .retreat-card-accent{background:linear-gradient(90deg,var(--terracotta),var(--wine));}
@@ -2264,7 +2266,7 @@ async function loadRetreatsGrid() {
 
   grid.innerHTML = data.map((r, i) => {
     const num = String(i + 1).padStart(2, '0');
-    const isPride = r.slug === 'gay-retreat-og-faellesskab';
+    const isPride = (r.pride === true) || (r.pride === undefined && r.slug === 'gay-retreat-og-faellesskab');
     const isEN = currentSiteLang === 'en';
     const title = isEN ? (r.title_en || r.title || '') : (r.title || '');
     const subtitle = isEN ? (r.subtitle_en || r.subtitle || '') : (r.subtitle || '');
@@ -2291,7 +2293,7 @@ async function loadRetreatsGrid() {
       accentStyle = ` style="background:${accentPalette[h % accentPalette.length]};"`;
     }
     return `
-      <div class="retreat-card card-${i+1}" ${clickAttr}>
+      <div class="retreat-card card-${i+1}${isPride ? ' is-pride' : ''}" ${clickAttr}>
         <div class="retreat-card-bg" style="background-image:url('${r.card_image || ''}');background-size:cover;background-position:center;"></div>
         <div class="retreat-card-photo-fade"></div>
         <div class="retreat-card-overlay"></div>

@@ -3686,6 +3686,12 @@ feeling more calm – and coming home to yourself again."</textarea></div>
     <div class="fc-block" id="ra_grundoplysninger" style="margin-bottom:1.5rem;">
       <div class="fc-block-header"><span class="fc-block-title">1 · Grundoplysninger</span></div>
       <div class="fc-block-body">
+        <div style="margin-bottom:1rem;padding:.7rem 1rem;border:1px solid rgba(184,138,30,.25);border-left:4px solid #750787;background:linear-gradient(90deg,rgba(228,3,3,.05),rgba(255,140,0,.05),rgba(255,237,0,.05),rgba(0,128,38,.05),rgba(0,77,255,.05),rgba(117,7,135,.05));">
+          <label style="display:flex;align-items:center;gap:.6rem;font-size:.82rem;cursor:pointer;font-weight:500;">
+            <input type="checkbox" id="retreat_pride" style="width:18px;height:18px;cursor:pointer;">
+            🏳️‍🌈 PRIDE-retreat — vis regnbue-stribe i toppen af kortet (forsiden) og i booking-baren (retreat-siden)
+          </label>
+        </div>
         <div class="fc-row">
           <div><label class="fc-label fc-label-da">Titel (DA)</label><input type="text" id="retreat_title" class="fc-input-da" placeholder="Kunsten at sænke tempoet"></div>
           <div><label class="fc-label fc-label-en">Title (EN)</label><input type="text" id="retreat_title_en" class="fc-input-en" placeholder="The Art of Slowing Down"></div>
@@ -6097,6 +6103,7 @@ function openNytRetreat() {
   document.getElementById('ui_visible_program').checked = true;
   document.getElementById('ui_visible_facilitator').checked = true;
   document.getElementById('ui_visible_faq').checked = true;
+  { const _p = document.getElementById('retreat_pride'); if (_p) _p.checked = false; }
   document.getElementById('retreat_title').value = '';
   document.getElementById('retreat_title_en').value = '';
   document.getElementById('retreat_slug').value = '';
@@ -6381,6 +6388,7 @@ function udfyldRetreatForm(r) {
   if (visFacilitatorEl) visFacilitatorEl.checked = vis.facilitator !== false;
   const visFaqEl = document.getElementById('ui_visible_faq');
   if (visFaqEl) visFaqEl.checked = vis.faq !== false;
+  { const _p = document.getElementById('retreat_pride'); if (_p) _p.checked = r.pride === true; }
   document.getElementById('retreat_title').value = r.title || '';
   document.getElementById('retreat_title_en').value = r.title_en || '';
   document.getElementById('retreat_slug').value = r.slug || '';
@@ -6675,6 +6683,7 @@ async function gemRetreat() {
     const payload = {
       title,
       slug,
+      pride: (function(){ const _p = document.getElementById('retreat_pride'); return _p ? _p.checked : false; })(),
       subtitle: document.getElementById('retreat_subtitle').value.trim() || null,
       subtitle_en: document.getElementById('retreat_subtitle_en').value.trim() || null,
       description: document.getElementById('retreat_description').value.trim() || null,
