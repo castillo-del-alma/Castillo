@@ -6639,14 +6639,7 @@ async function oversaetRetreatFelt(btn) {
   btn.disabled = true;
   btn.textContent = 'Oversætter…';
   try {
-    const res = await fetch('/.netlify/functions/translate-field', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ text: daText })
-    });
-    const data = await res.json().catch(() => ({}));
-    if (!res.ok || !data.translation) throw new Error(data.error || 'Ukendt fejl');
-    enEl.value = data.translation;
+    enEl.value = await translateText(daText);
     enEl.dispatchEvent(new Event('input', { bubbles: true })); // trig evt. lyttere
     btn.textContent = '✓ Oversat — husk 💾 Gem';
     setTimeout(() => { btn.textContent = original; btn.disabled = false; }, 2200);
@@ -6654,6 +6647,57 @@ async function oversaetRetreatFelt(btn) {
     showToast('Oversættelse fejlede: ' + e.message, true);
     btn.textContent = original;
     btn.disabled = false;
+  }
+}
+
+// Delt hjælper: oversætter én dansk tekst til engelsk via Netlify-funktionen
+async function translateText(daText) {
+  const res = await fetch('/.netlify/functions/translate-field', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ text: daText })
+  });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok || !data.translation) throw new Error(data.error || 'Ukendt fejl');
+  return data.translation;
+}
+
+// Oversæt ét highlight-kort (titel + tekst) — state-baseret, re-renderer bagefter
+async function oversaetHighlight(i, btn) {
+  const h = highlightsState[i] || {};
+  const daTitle = (h.title || '').trim();
+  const daText = (h.text || '').trim();
+  if (!daTitle && !daText) { showToast('Udfyld det danske highlight først', true); return; }
+  btn.disabled = true;
+  btn.textContent = 'Oversætter…';
+  try {
+    if (!highlightsStateEN[i]) highlightsStateEN[i] = { title: '', text: '' };
+    if (daTitle) highlightsStateEN[i].title = await translateText(daTitle);
+    if (daText)  highlightsStateEN[i].text  = await translateText(daText);
+    renderHighlightsListe();
+    showToast('Highlight oversat — husk 💾 Gem');
+  } catch (e) {
+    showToast('Oversættelse fejlede: ' + e.message, true);
+    btn.disabled = false;
+    btn.textContent = '⇄ Oversæt til engelsk';
+  }
+}
+
+// Oversæt ét tilvalg (add-on) — state-baseret, re-renderer bagefter
+async function oversaetAddon(i, btn) {
+  const a = addonState[i] || {};
+  const da = (a.text || '').trim();
+  if (!da) { showToast('Udfyld det danske tilvalg først', true); return; }
+  btn.disabled = true;
+  btn.textContent = '…';
+  try {
+    addonState[i].text_en = await translateText(da);
+    renderAddonListe();
+    showToast('Tilvalg oversat — husk 💾 Gem');
+  } catch (e) {
+    showToast('Oversættelse fejlede: ' + e.message, true);
+    btn.disabled = false;
+    btn.textContent = '⇄';
   }
 }
 
@@ -8036,9 +8080,10 @@ function renderAddonListe() {
     return;
   }
   container.innerHTML = addonState.map((a, i) => `
-    <div style="display:grid;grid-template-columns:1fr 1fr 100px auto;gap:.6rem;align-items:center;">
+    <div style="display:grid;grid-template-columns:1fr 1fr auto 100px auto;gap:.6rem;align-items:center;">
       <input type="text" placeholder="Fx. Kropsmassage 60 min. 🇩🇰" value="${(a.text || '').replace(/"/g,'&quot;')}" oninput="addonState[${i}].text=this.value" style="background:#fffef8;border:1px solid rgba(184,138,30,.3);color:#2c2318;padding:.6rem .8rem;font-family:'Manrope',sans-serif;font-size:.78rem;outline:none;">
       <input type="text" placeholder="Fx. Body massage 60 min. 🇬🇧" value="${(a.text_en || '').replace(/"/g,'&quot;')}" oninput="addonState[${i}].text_en=this.value" style="background:#e8f4f3;border:1px solid #7fb3af;color:#2c2318;padding:.6rem .8rem;font-family:'Manrope',sans-serif;font-size:.78rem;outline:none;">
+      <button type="button" onclick="oversaetAddon(${i}, this)" title="Oversæt til engelsk" style="background:rgba(58,110,106,.1);border:1px solid rgba(58,110,106,.35);color:#2a7a74;padding:.55rem .65rem;font-size:.9rem;line-height:1;cursor:pointer;border-radius:2px;">⇄</button>
       <input type="text" inputmode="numeric" placeholder="Pris €" value="${a.price || ''}" oninput="addonState[${i}].price=this.value.replace(/[^0-9.]/g,'')" style="background:rgba(44,35,24,.06);border:1px solid rgba(184,138,30,.2);color:#2c2318;padding:.6rem .8rem;font-family:'Manrope',sans-serif;font-size:.78rem;outline:none;text-align:right;">
       <button type="button" onclick="fjernAddon(${i})" style="background:none;border:none;color:rgba(192,92,48,.6);cursor:pointer;font-size:.85rem;padding:.4rem;">✕</button>
     </div>
@@ -8318,6 +8363,7 @@ function renderHighlightsListe() {
         <div style="background:#f5fcfb;padding:.8rem;display:flex;flex-direction:column;gap:.5rem;">
           <input type="text" placeholder="Title 🇬🇧" value="${en.title || ''}" oninput="highlightsStateEN[${i}].title=this.value" style="${EN}">
           <textarea placeholder="Text 🇬🇧..." oninput="highlightsStateEN[${i}].text=this.value" style="${EN}min-height:70px;resize:vertical;">${en.text || ''}</textarea>
+          <button type="button" onclick="oversaetHighlight(${i}, this)" style="align-self:flex-start;margin-top:.1rem;background:rgba(58,110,106,.1);border:1px solid rgba(58,110,106,.35);color:#2a7a74;padding:.3rem .7rem;font-family:Manrope,sans-serif;font-size:.58rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;border-radius:2px;">⇄ Oversæt til engelsk</button>
         </div>
       </div>
     </div>`;
