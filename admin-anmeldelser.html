@@ -3439,6 +3439,18 @@ feeling more calm – and coming home to yourself again."</textarea></div>
       <button onclick="gemSettings()" style="margin-top:1.2rem;background:var(--wine);color:#fff;border:none;padding:.7rem 2rem;font-family:Manrope,sans-serif;font-size:.68rem;font-weight:500;letter-spacing:.18em;text-transform:uppercase;cursor:pointer;">💾 Gem indstillinger</button>
       <span id="settingsSavedMsg" style="display:none;margin-left:1rem;font-size:.75rem;color:#2a7a74;">✓ Gemt!</span>
     </div>
+
+    <div style="background:rgba(184,138,30,.06);border:1px solid rgba(184,138,30,.2);padding:1.5rem;margin-bottom:2rem;">
+      <h3 style="font-family:Cinzel,serif;font-weight:300;font-size:1rem;letter-spacing:.08em;color:#2c2318;margin-bottom:1rem;">🧹 Oprydning i billedlager</h3>
+      <p style="font-size:.72rem;color:rgba(44,35,24,.5);margin-bottom:1rem;">Scanner Supabase-lageret og finder billeder, der ikke længere bruges på nogen side (retreats, forside, ejendommen, udlejning). Galleriet er ikke omfattet — dets billeder styres under fanen Forside. Ubrugte filer kan slettes her for at spare lagerplads.</p>
+      <button onclick="findUbrugteBilleder()" style="background:#2a7a74;color:#fff;border:none;padding:.55rem 1.6rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;">🔍 Find ubrugte billeder</button>
+      <span id="oprydStatus" style="margin-left:1rem;font-size:.75rem;color:rgba(44,35,24,.6);"></span>
+      <div id="oprydVaelgAlle" style="display:none;margin-top:1.2rem;">
+        <label style="font-size:.72rem;color:#2c2318;cursor:pointer;"><input type="checkbox" id="oprydAlleChk" onchange="toggleAlleUbrugte(this.checked)" style="margin-right:.4rem;">Vælg alle</label>
+      </div>
+      <div id="oprydListe" style="margin-top:.8rem;display:grid;gap:.4rem;"></div>
+      <button id="oprydSletBtn" onclick="sletValgteUbrugte()" style="display:none;margin-top:1.2rem;background:var(--wine);color:#fff;border:none;padding:.7rem 2rem;font-family:Manrope,sans-serif;font-size:.68rem;font-weight:500;letter-spacing:.18em;text-transform:uppercase;cursor:pointer;">🗑 Slet valgte</button>
+    </div>
   </div>
 
   </div><!-- /tab-sprog -->
@@ -6360,6 +6372,11 @@ function openNytRetreat() {
   // Billeder/datoer
   document.getElementById('retreat_hero_image').value = '';
   document.getElementById('retreat_card_image').value = '';
+  saetBilledPreview('retreat_hero_preview', '');
+  saetBilledPreview('retreat_card_preview', '');
+  { const _hf = document.getElementById('retreat_hero_file'); if (_hf) _hf.value = ''; }
+  { const _cf = document.getElementById('retreat_card_file'); if (_cf) _cf.value = ''; }
+  retreatOrigImages = { hero: '', card: '' };
   document.getElementById('retreat_booking_deadline').value = '';
   document.getElementById('retreat_teacher_bio').value = 'En erfaren wellness-facilitator med speciale i nervesystemsregulering, breathwork og somatic therapy. Med mange års erfaring fra retreats i Skandinavien og Sydeuropa skabes et trygt og professionelt rum for transformation.';
   document.getElementById('retreat_teacher_bio_en').value = 'An experienced wellness facilitator specialising in nervous system regulation, breathwork and somatic therapy. With many years of experience from retreats across Scandinavia and Southern Europe.';
@@ -6402,8 +6419,14 @@ function udfyldRetreatForm(r) {
   document.getElementById('retreat_price').value = r.price || '';
   document.getElementById('retreat_deposit_pct').value = r.deposit_pct ? Math.round(r.deposit_pct * 100) : '30';
   document.getElementById('retreat_active').value = r.active ? 'true' : 'false';
-  document.getElementById('retreat_hero_preview').innerHTML = r.hero_image ? `<img src="${r.hero_image}" style="max-width:100%;max-height:120px;">` : '';
-  document.getElementById('retreat_card_preview').innerHTML = r.card_image ? `<img src="${r.card_image}" style="max-width:100%;max-height:120px;">` : '';
+  // Billed-URL-felter + thumbnails (previews er <img>-elementer — sæt src, ikke innerHTML)
+  { const _hu = document.getElementById('retreat_hero_image'); if (_hu) _hu.value = r.hero_image || ''; }
+  { const _cu = document.getElementById('retreat_card_image'); if (_cu) _cu.value = r.card_image || ''; }
+  saetBilledPreview('retreat_hero_preview', r.hero_image);
+  saetBilledPreview('retreat_card_preview', r.card_image);
+  { const _hf = document.getElementById('retreat_hero_file'); if (_hf) _hf.value = ''; }
+  { const _cf = document.getElementById('retreat_card_file'); if (_cf) _cf.value = ''; }
+  retreatOrigImages = { hero: r.hero_image || '', card: r.card_image || '' };
   document.getElementById('retreat_location').value = r.location || '';
   document.getElementById('retreat_languages_en').value = r.languages_en || '';
   document.getElementById('retreat_level_en').value = r.level_en || '';
@@ -6715,6 +6738,31 @@ function cdaFilename(originalName) {
   return `castillo-del-alma-${base || 'billede'}-${Date.now()}.${ext}`;
 }
 
+// ── Billed-preview + storage-oprydningshjælpere ──
+let retreatOrigImages = { hero: '', card: '' }; // snapshot af DB-værdier ved åbning af editor
+
+function saetBilledPreview(id, url) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  if (url) { el.src = url; el.style.display = 'inline-block'; }
+  else { el.removeAttribute('src'); el.style.display = 'none'; }
+}
+
+function cdaStoragePath(url) {
+  // Returnerer stien i retreat-images-bucket for en public URL — ellers null
+  if (!url) return null;
+  const marker = '/object/public/retreat-images/';
+  if (!url.includes(marker)) return null;
+  return decodeURIComponent(url.split(marker)[1].split('?')[0]);
+}
+
+async function cdaSletStorageFil(url) {
+  // Best-effort: sletter en fil i retreat-images ud fra dens public URL
+  const path = cdaStoragePath(url);
+  if (!path || path.startsWith('galleri/')) return; // galleriet styres separat
+  try { await sb.storage.from('retreat-images').remove([path]); } catch(_) { /* oprydning er best-effort */ }
+}
+
 async function uploadRetreatImage(file) {
   const filename = cdaFilename(file.name);
   const { data, error } = await sb.storage.from('retreat-images').upload(filename, file);
@@ -6728,8 +6776,16 @@ async function uploadRetreatBillede(inputId, urlFieldId, thumbId) {
   const input = document.getElementById(inputId);
   if (!input || !input.files.length) { showToast('Vælg en fil først', true); return; }
   try {
-    const url = await uploadRetreatImage(input.files[0]);
     const urlField = document.getElementById(urlFieldId);
+    const prevUrl = urlField ? urlField.value.trim() : '';
+    const url = await uploadRetreatImage(input.files[0]);
+    // Ryd op: hvis feltet indeholdt en ugemt upload fra denne session (ikke DB-værdien
+    // og ikke brugt af andre retreats), slettes den mellemliggende fil
+    const origVals = Object.values(retreatOrigImages);
+    const brugtAndetsteds = prevUrl && JSON.stringify(allRetreats || []).includes(prevUrl);
+    if (prevUrl && prevUrl !== url && !origVals.includes(prevUrl) && !brugtAndetsteds) {
+      cdaSletStorageFil(prevUrl);
+    }
     if (urlField) urlField.value = url;
     const thumb = document.getElementById(thumbId);
     if (thumb) { thumb.src = url; thumb.style.display = 'inline-block'; }
@@ -7030,6 +7086,22 @@ async function gemRetreat() {
       const { error } = await sb.from('retreats').insert(payload);
       if (error) throw error;
     }
+
+    // Auto-oprydning: slet gamle hero/card-filer, der netop er blevet erstattet.
+    // Kun EFTER succesfuld gem, kun hvis billedet ikke bruges af dette eller andre retreats.
+    try {
+      const nyHero = ('hero_image' in payload) ? payload.hero_image : retreatOrigImages.hero;
+      const nyCard = ('card_image' in payload) ? payload.card_image : retreatOrigImages.card;
+      const iBrugNu = [nyHero, nyCard].filter(Boolean);
+      const andreJson = JSON.stringify((allRetreats || []).filter(x => String(x.id) !== String(id || '')));
+      for (const gammel of [retreatOrigImages.hero, retreatOrigImages.card]) {
+        if (!gammel) continue;
+        if (iBrugNu.includes(gammel)) continue;
+        if (andreJson.includes(gammel)) continue;
+        await cdaSletStorageFil(gammel);
+      }
+      retreatOrigImages = { hero: nyHero || '', card: nyCard || '' };
+    } catch(_) { /* oprydning er best-effort */ }
 
     // Bliv på siden — vis gem-bekræftelse øverst
     const savedMsg = document.getElementById('retreatSavedMsg');
@@ -8608,6 +8680,100 @@ function showMediaThumbnail(inputId, url) {
   } else {
     thumbEl.src = url;
     thumbEl.style.display = 'inline-block';
+  }
+}
+
+// ── OPRYDNING: FIND & SLET UBRUGTE BILLEDER I STORAGE ──
+let ubrugteFiler = [];
+
+async function findUbrugteBilleder() {
+  const status = document.getElementById('oprydStatus');
+  const liste = document.getElementById('oprydListe');
+  const sletBtn = document.getElementById('oprydSletBtn');
+  const vaelgAlle = document.getElementById('oprydVaelgAlle');
+  if (status) status.textContent = 'Scanner lager og indhold...';
+  if (liste) liste.innerHTML = '';
+  if (sletBtn) sletBtn.style.display = 'none';
+  if (vaelgAlle) vaelgAlle.style.display = 'none';
+  try {
+    // 1) Alle filer i bucket (rod + ejendommen/ + forside-medier/; galleri/ er altid i brug)
+    const prefixes = ['', 'ejendommen', 'forside-medier'];
+    const filer = [];
+    for (const p of prefixes) {
+      const { data, error } = await sb.storage.from('retreat-images').list(p, { limit: 1000 });
+      if (error) throw error;
+      (data || []).forEach(f => {
+        if (!f.id) return;                       // mapper har ikke id
+        if (f.name.startsWith('.')) return;      // placeholder-filer
+        filer.push({ path: p ? `${p}/${f.name}` : f.name, size: f.metadata?.size || 0 });
+      });
+    }
+    // 2) Alt refereret indhold fra databasen samles til én stor tekst
+    const tekster = [];
+    const hent = async (tabel) => {
+      try { const { data } = await sb.from(tabel).select('*'); if (data) tekster.push(JSON.stringify(data)); }
+      catch(_) { /* tabel kan mangle — best effort */ }
+    };
+    await hent('retreats');
+    await hent('site_content');
+    await hent('ejendommen_content');
+    await hent('ejendommen_rooms');
+    await hent('udlejning_content');
+    await hent('settings');
+    const altIndhold = tekster.join('\n');
+    // 3) Ubrugte = filer hvis sti ikke optræder i noget indhold
+    ubrugteFiler = filer.filter(f =>
+      !altIndhold.includes(f.path) &&
+      !altIndhold.includes(f.path.split('/').map(encodeURIComponent).join('/'))
+    );
+    if (!ubrugteFiler.length) {
+      if (status) status.textContent = `✓ Ingen ubrugte billeder fundet (${filer.length} filer i alt er alle i brug)`;
+      return;
+    }
+    const totalMB = (ubrugteFiler.reduce((s, f) => s + f.size, 0) / 1048576).toFixed(1);
+    if (status) status.textContent = `Fandt ${ubrugteFiler.length} ubrugte filer (${totalMB} MB)`;
+    if (vaelgAlle) vaelgAlle.style.display = 'block';
+    const alleChk = document.getElementById('oprydAlleChk');
+    if (alleChk) alleChk.checked = false;
+    if (liste) liste.innerHTML = ubrugteFiler.map((f, i) => {
+      const { data: urlData } = sb.storage.from('retreat-images').getPublicUrl(f.path);
+      const kb = f.size ? (f.size / 1024).toFixed(0) + ' KB' : '';
+      return `<label style="display:flex;align-items:center;gap:.8rem;padding:.4rem .6rem;background:rgba(44,35,24,.02);border:1px solid rgba(184,138,30,.12);cursor:pointer;">
+        <input type="checkbox" class="opryd-chk" data-i="${i}">
+        <img src="${urlData.publicUrl}" loading="lazy" style="width:44px;height:44px;object-fit:cover;border-radius:2px;flex-shrink:0;background:rgba(44,35,24,.06);" onerror="this.style.visibility='hidden'">
+        <span style="flex:1;font-size:.7rem;color:#2c2318;word-break:break-all;">${f.path}</span>
+        <span style="font-size:.65rem;color:rgba(44,35,24,.4);white-space:nowrap;">${kb}</span>
+      </label>`;
+    }).join('');
+    if (sletBtn) sletBtn.style.display = 'inline-block';
+  } catch(e) {
+    if (status) status.textContent = '';
+    showToast('Fejl ved scanning: ' + e.message, true);
+  }
+}
+
+function toggleAlleUbrugte(checked) {
+  document.querySelectorAll('.opryd-chk').forEach(c => { c.checked = checked; });
+}
+
+async function sletValgteUbrugte() {
+  const valgte = [...document.querySelectorAll('.opryd-chk:checked')].map(c => ubrugteFiler[+c.dataset.i]).filter(Boolean);
+  if (!valgte.length) { showToast('Vælg mindst én fil', true); return; }
+  if (!confirm(`Slet ${valgte.length} filer permanent fra lageret? Dette kan ikke fortrydes.`)) return;
+  const status = document.getElementById('oprydStatus');
+  if (status) status.textContent = 'Sletter...';
+  try {
+    const paths = valgte.map(f => f.path);
+    // Slet i bidder af 50 for at undgå for store requests
+    for (let i = 0; i < paths.length; i += 50) {
+      const { error } = await sb.storage.from('retreat-images').remove(paths.slice(i, i + 50));
+      if (error) throw error;
+    }
+    showToast(`${valgte.length} filer slettet ✓`);
+    findUbrugteBilleder(); // gen-scan
+  } catch(e) {
+    if (status) status.textContent = '';
+    showToast('Fejl ved sletning: ' + e.message, true);
   }
 }
 
