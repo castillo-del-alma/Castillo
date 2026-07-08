@@ -3464,7 +3464,8 @@ feeling more calm – and coming home to yourself again."</textarea></div>
       <div class="stat"><span class="stat-num" id="statIndtjent">—</span><span class="stat-label">Modtaget (€)</span></div>
     </div>
     <div class="kunde-toolbar">
-      <button class="btn-primary" onclick="openNyKunde()">+ Ny kunde</button>
+      <!-- Manuel tilmelding bruges ikke — normale tilmeldinger via retreat-siden sikrer korrekt retreat_id, dato og betalingsstatus. Fjern style="display:none" for at vise knappen igen. -->
+      <button class="btn-primary" onclick="openNyKunde()" style="display:none">+ Ny kunde</button>
       <button class="btn-secondary" onclick="loadKunder()">↺ Opdater</button>
       <button class="btn-secondary" onclick="visAnmeldelser()" style="background:rgba(184,138,30,.12);border-color:rgba(184,138,30,.3);color:#7a5c14;">★ Anmeldelser</button>
       <input type="text" id="kundeSearch" placeholder="Søg navn eller email..." oninput="renderKunder()">
