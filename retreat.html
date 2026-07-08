@@ -2003,7 +2003,9 @@ class SectionRings {
     this.H = this.c.height = this.c.parentElement.offsetHeight;
   }
   init(){
-    this.rings = Array.from({length:16},()=>this.newRing(true));
+    const area = this.W * this.H;
+    const count = Math.min(44, Math.max(16, Math.round(area / 45000)));
+    this.rings = Array.from({length:count},()=>this.newRing(true));
   }
   newRing(init=false){
     const r = {
@@ -2090,6 +2092,22 @@ window.addEventListener('resize',()=>{
     anim.init();
   });
 });
+
+// Følg med når sektionen ændrer højde (fx når værelses-kort loades asynkront),
+// så cirklerne altid dækker hele baggrunden
+if ('ResizeObserver' in window) {
+  const sectionResizeObs = new ResizeObserver(entries=>{
+    entries.forEach(entry=>{
+      const rec = sectionAnimators.find(x=>x.canvas.parentElement===entry.target);
+      if(!rec) return;
+      rec.anim.resize();
+      rec.anim.init();
+    });
+  });
+  sectionAnimators.forEach(({canvas})=>{
+    if(canvas.parentElement) sectionResizeObs.observe(canvas.parentElement);
+  });
+}
 
 const canvasObs = new IntersectionObserver(entries=>{
   entries.forEach(e=>{
