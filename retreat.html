@@ -229,29 +229,29 @@ nav{
   display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;
 }
 .highlight-item{
-  background:var(--beige);padding:2.4rem 2.2rem;
-  border-top:3px solid var(--gold);
-  border-radius:4px;
+  position:relative;overflow:hidden;
+  background:#357178;padding:2.4rem 2.2rem;
+  border-top:2px solid var(--gold);
+  border-radius:0 0 4px 4px;
   transition:transform .3s,box-shadow .3s;
 }
-.highlight-item:hover{transform:translateY(-3px);box-shadow:0 8px 24px rgba(0,0,0,.06);}
-.highlight-item:nth-child(3n+1){background:#e6ebe3;border-top-color:#7d8f74;}
-.highlight-item:nth-child(3n+2){background:#f1e5de;border-top-color:#b08268;}
-.highlight-item:nth-child(3n){background:#e1e8e9;border-top-color:#6f8a8d;}
-.highlight-icon{
-  width:30px;height:30px;color:var(--teal);margin-bottom:1rem;
+.highlight-item:hover{transform:translateY(-3px);box-shadow:0 8px 24px rgba(0,0,0,.12);}
+.highlight-canvas{
+  position:absolute;inset:0;width:100%;height:100%;
+  pointer-events:none;z-index:0;
 }
-.highlight-item:nth-child(3n+1) .highlight-icon{color:#7d8f74;}
-.highlight-item:nth-child(3n+2) .highlight-icon{color:#b08268;}
-.highlight-item:nth-child(3n) .highlight-icon{color:#6f8a8d;}
+.highlight-item > *:not(.highlight-canvas){position:relative;z-index:1;}
+.highlight-icon{
+  width:30px;height:30px;color:#fff;margin-bottom:1rem;opacity:.9;
+}
 .highlight-icon svg{width:100%;height:100%;}
 .highlight-item h4{
   font-family:'Cormorant Garamond',serif;font-weight:400;
-  font-size:1.05rem;color:var(--charcoal);margin-bottom:.5rem;
+  font-size:1.05rem;color:#fff;margin-bottom:.5rem;
 }
 .highlight-item p{
   font-family:'Cormorant Garamond',serif;font-size:.92rem;
-  font-weight:300;line-height:1.75;color:var(--text-mid);
+  font-weight:300;line-height:1.75;color:rgba(255,255,255,.86);
 }
 
 /* ── PROGRAM ── */
@@ -1444,6 +1444,7 @@ function buildHighlightsSection(data) {
 
   grid.innerHTML = items.map(item => `
     <div class="highlight-item">
+      <canvas class="highlight-canvas"></canvas>
       <div class="highlight-icon">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
           ${R_ICON_SVG[item.icon] || R_ICON_SVG['star']}
@@ -1452,6 +1453,119 @@ function buildHighlightsSection(data) {
       <h4>${item.title}</h4>
       <p>${item.text}</p>
     </div>`).join('');
+
+  initHighlightRings();
+}
+
+// ── Rolige ringe inde i highlight-kasserne (mini-udgave af baggrundsanimationen) ──
+let highlightRingAnimators = [];
+let highlightRingObserver = null;
+
+function initHighlightRings() {
+  // Ryd op efter tidligere render (fx sprogskift der genopbygger gridet)
+  highlightRingAnimators.forEach(a => a.stop());
+  highlightRingAnimators = [];
+  if (highlightRingObserver) { highlightRingObserver.disconnect(); highlightRingObserver = null; }
+
+  const reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (reduceMotion) return; // respektér brugerens bevægelsespræference — statiske kasser
+
+  const canvases = document.querySelectorAll('#highlightsGrid .highlight-canvas');
+  if (!canvases.length) return;
+
+  canvases.forEach(cv => highlightRingAnimators.push(new HighlightRings(cv)));
+
+  window.addEventListener('resize', highlightRingsResize);
+
+  highlightRingObserver = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      const anim = highlightRingAnimators.find(a => a.c === e.target);
+      if (!anim) return;
+      if (e.isIntersecting) anim.start(); else anim.stop();
+    });
+  }, { threshold: .01 });
+  highlightRingAnimators.forEach(a => highlightRingObserver.observe(a.c));
+}
+
+function highlightRingsResize() {
+  highlightRingAnimators.forEach(a => a.resize());
+}
+
+class HighlightRings {
+  constructor(canvas) {
+    this.c = canvas;
+    this.ctx = canvas.getContext('2d');
+    this.running = false;
+    this.resize();
+    this.rings = Array.from({ length: 4 }, () => this.newRing(true));
+  }
+  resize() {
+    this.W = this.c.width  = this.c.parentElement.offsetWidth;
+    this.H = this.c.height = this.c.parentElement.offsetHeight;
+  }
+  newRing(init = false) {
+    const r = {
+      cx: Math.random() * this.W,
+      cy: Math.random() * this.H,
+      rx: Math.random() * 70 + 40,
+      ry: 0,
+      rot: Math.random() * Math.PI * 2,
+      rotV: (Math.random() - .5) * .0022,
+      vx: (Math.random() - .5) * .10,
+      vy: (Math.random() - .5) * .10,
+      wob: Array.from({ length: 5 }, () => ({ a: Math.random() * Math.PI * 2, s: (Math.random() - .5) * .006, m: Math.random() * 8 + 3 })),
+      lw: Math.random() * .5 + .3,
+      life: 0,
+      maxL: Math.random() * 700 + 500,
+    };
+    r.ry = r.rx * (.65 + Math.random() * .25);
+    if (init) r.life = Math.floor(Math.random() * r.maxL);
+    return r;
+  }
+  step() {
+    const ctx = this.ctx;
+    ctx.clearRect(0, 0, this.W, this.H);
+    this.rings.forEach(r => {
+      r.cx += r.vx; r.cy += r.vy; r.rot += r.rotV;
+      r.wob.forEach(w => w.a += w.s);
+      r.life++;
+      if (r.life > r.maxL) Object.assign(r, this.newRing(false));
+      const t = r.life / r.maxL;
+      const fade = Math.sin(t * Math.PI) * .16;
+      const wx = r.wob[0].m * Math.sin(r.wob[0].a);
+      const wy = r.wob[1].m * Math.sin(r.wob[1].a);
+      const rxi = r.rx + r.wob[2].m * Math.sin(r.wob[2].a);
+      const ryi = r.ry + r.wob[3].m * Math.sin(r.wob[3].a);
+      ctx.save();
+      ctx.translate(r.cx + wx, r.cy + wy);
+      ctx.rotate(r.rot);
+      ctx.beginPath();
+      const pts = 64;
+      for (let i = 0; i <= pts; i++) {
+        const a = (i / pts) * Math.PI * 2;
+        const noise = 1 + .035 * Math.sin(a * 3 + r.wob[0].a) + .025 * Math.cos(a * 7 + r.wob[4].a);
+        const x = Math.cos(a) * rxi * noise;
+        const y = Math.sin(a) * ryi * noise;
+        i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+      }
+      ctx.closePath();
+      ctx.strokeStyle = `rgba(255,252,244,${fade})`;
+      ctx.lineWidth = r.lw;
+      ctx.stroke();
+      ctx.restore();
+    });
+  }
+  start() {
+    if (this.running) return;
+    this.running = true;
+    const loop = () => {
+      if (!this.running) return;
+      this.step();
+      requestAnimationFrame(loop);
+    };
+    requestAnimationFrame(loop);
+  }
+  stop() { this.running = false; }
 }
 
 function renderFaqSection(data) {
