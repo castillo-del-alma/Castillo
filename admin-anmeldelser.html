@@ -6095,25 +6095,32 @@ function renderRetreats() {
     const upAttrs = i === 0 ? 'disabled style="opacity:.3;cursor:default;"' : '';
     const downAttrs = i === allRetreats.length - 1 ? 'disabled style="opacity:.3;cursor:default;"' : '';
 
-    // TILMELDTE (betalt mindst depositum) — for den øverste (aktive) dato + øvrige datoer
+    // TILMELDTE (betalt mindst depositum) — ALLE datoer opstillet ens, én pr. række
     const t = (window.retreatTilmeldte && window.retreatTilmeldte[r.id]) || { byDate: {}, total: 0 };
     const max = parseInt(r.max_guests, 10);
-    const topDate = r.arrival_date ? String(r.arrival_date).slice(0, 10) : '';
-    const topCount = topDate ? (t.byDate[topDate] || 0) : 0;
-    const naestenFuld = max && max > 0 && topCount / max >= 0.75;
-    const talFarve = naestenFuld ? '#c05c30' : '#4a5028';
+
+    // Byg komplet dato-liste i editorens rækkefølge: primær + ekstra-datoer
+    const alleDatoer = [];
+    if (r.arrival_date) alleDatoer.push({ arrival: r.arrival_date, departure: r.departure_date });
+    let extra = r.extra_dates;
+    if (typeof extra === 'string') { try { extra = JSON.parse(extra); } catch (e) { extra = []; } }
+    (Array.isArray(extra) ? extra : []).forEach(d => { if (d && d.arrival) alleDatoer.push({ arrival: d.arrival, departure: d.departure }); });
+    // Medtag evt. booking-datoer, der ikke findes i konfigurationen, så intet antal skjules
+    const konfigSet = new Set(alleDatoer.map(d => String(d.arrival).slice(0, 10)));
+    Object.keys(t.byDate).forEach(d => { if (!konfigSet.has(d) && t.byDate[d] > 0) alleDatoer.push({ arrival: d, departure: null }); });
+
+    const datoRaekker = alleDatoer.map(d => {
+      const key = String(d.arrival).slice(0, 10);
+      const antal = t.byDate[key] || 0;
+      const datoTekst = d.departure ? `${fmt(d.arrival)} – ${fmt(d.departure)}` : fmt(d.arrival);
+      return `<div style="font-size:.82rem;color:#4a5028;margin:.16rem 0;"><strong>${datoTekst}</strong>: <strong>${antal}${max ? ' / ' + max : ''}</strong></div>`;
+    }).join('');
+
     const tilmeldteHtml = `
-      <div style="display:flex;align-items:center;gap:.45rem;margin:.55rem 0 .1rem;font-size:.82rem;color:${talFarve};font-weight:600;">
-        <span>👤 Tilmeldte${topDate ? ' · øverste dato' : ''}:</span>
-        <strong style="font-size:.95rem;">${topCount}${max ? ' / ' + max : ''}</strong>
-        ${naestenFuld ? '<span style="font-size:.62rem;letter-spacing:.08em;text-transform:uppercase;background:rgba(192,92,48,.14);color:#c05c30;padding:.12rem .4rem;border-radius:2px;">Næsten fuld</span>' : ''}
+      <div style="margin:.55rem 0 .3rem;">
+        <div style="font-size:.72rem;letter-spacing:.04em;text-transform:uppercase;color:rgba(74,80,40,.85);font-weight:600;margin-bottom:.3rem;">👤 Tilmeldte pr. dato</div>
+        ${datoRaekker || '<div style="font-size:.8rem;color:rgba(44,35,24,.5);">Ingen datoer oprettet</div>'}
       </div>`;
-    const andreDatoer = Object.keys(t.byDate)
-      .filter(d => d !== topDate && t.byDate[d] > 0)
-      .sort();
-    const andreHtml = andreDatoer.length
-      ? `<div style="font-size:.72rem;color:rgba(44,35,24,.55);margin:0 0 .2rem;">Øvrige datoer: ${andreDatoer.map(d => `${fmt(d)}: <strong>${t.byDate[d]}</strong>`).join(' · ')}</div>`
-      : '';
 
     return `
     <div class="kunde-card">
@@ -6128,7 +6135,6 @@ function renderRetreats() {
         <strong>${fmt(r.arrival_date)} – ${fmt(r.departure_date)}</strong>
       </div>
       ${tilmeldteHtml}
-      ${andreHtml}
       <div style="font-size:.85rem;color:rgba(44,35,24,.9);margin:.5rem 0;">€${r.price ? Math.round(r.price/7.46) : '—'} pr. gæst</div>
       <div class="kunde-actions">
         <button class="kunde-btn" style="padding:.35rem .6rem;" onclick="moveRetreat('${r.id}','up')" ${upAttrs}>↑</button>
