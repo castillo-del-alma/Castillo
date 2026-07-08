@@ -3732,18 +3732,11 @@ feeling more calm – and coming home to yourself again."</textarea></div>
           <div><label class="fc-label fc-label-da">Sprog på retreat (DA)</label><input type="text" id="retreat_languages" class="fc-input-da" placeholder="Dansk / Engelsk"></div>
           <div><label class="fc-label fc-label-en">Languages (EN)</label><input type="text" id="retreat_languages_en" class="fc-input-en" placeholder="Danish / English"></div>
         </div>
-        <div class="fc-row">
-          <div>
-            <label class="fc-label">Synlig på hjemmesiden</label>
-            <label style="display:flex;align-items:center;gap:.5rem;font-size:.8rem;margin-top:.4rem;cursor:pointer;">
-              <input type="checkbox" id="retreat_active"> Vis retreat offentligt
-            </label>
-          </div>
-          <div>
-            <label class="fc-label" style="color:rgba(44,35,24,.6);">Alternative datoer</label>
-            <div id="extraDatesListe" style="display:flex;flex-direction:column;gap:.5rem;margin-top:.4rem;"></div>
-            <button type="button" onclick="tilfoejExtraDate()" style="margin-top:.6rem;background:rgba(184,138,30,.1);border:1px solid rgba(184,138,30,.3);color:#7a5c14;padding:.5rem 1rem;font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;width:100%;">+ Tilføj alternativ dato</button>
-          </div>
+        <div style="margin-bottom:1rem;">
+          <label class="fc-label">Synlig på hjemmesiden</label>
+          <label style="display:flex;align-items:center;gap:.5rem;font-size:.8rem;margin-top:.4rem;cursor:pointer;">
+            <input type="checkbox" id="retreat_active"> Vis retreat offentligt
+          </label>
         </div>
         <div style="text-align:right;margin-top:1rem;padding-top:.8rem;border-top:1px solid rgba(184,138,30,.12);">
           <button type="button" onclick="gemRetreat()" style="background:var(--wine);color:#fff;border:none;padding:.5rem 1.4rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;">💾 Gem retreat</button>
@@ -3755,9 +3748,12 @@ feeling more calm – and coming home to yourself again."</textarea></div>
     <div class="fc-block" id="ra_datoer" style="margin-bottom:1.5rem;">
       <div class="fc-block-header"><span class="fc-block-title">2 · Datoer, deltagere & pris</span></div>
       <div class="fc-block-body">
-        <div class="fc-row">
-          <div><label class="fc-label">Ankomstdato</label><input type="date" id="retreat_arrival" class="fc-input-da"></div>
-          <div><label class="fc-label">Afrejsedato</label><input type="date" id="retreat_departure" class="fc-input-da"></div>
+        <div style="margin-bottom:1rem;">
+          <label class="fc-label">Datoer <span style="font-weight:400;text-transform:none;letter-spacing:0;color:rgba(44,35,24,.55);">— øverste dato vises på forsidekortet og er forudvalgt på retreat-siden. Brug ▲▼ til at ændre rækkefølgen.</span></label>
+          <div id="datesListe" style="display:flex;flex-direction:column;gap:.5rem;margin-top:.5rem;"></div>
+          <button type="button" onclick="tilfoejDato()" style="margin-top:.6rem;background:rgba(184,138,30,.1);border:1px solid rgba(184,138,30,.3);color:#7a5c14;padding:.5rem 1rem;font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;width:100%;">+ Tilføj dato</button>
+          <input type="date" id="retreat_arrival" style="display:none">
+          <input type="date" id="retreat_departure" style="display:none">
         </div>
         <div class="fc-row">
           <div><label class="fc-label">Max. deltagere</label><input type="number" id="retreat_max_guests" class="fc-input-da" placeholder="10" min="1"></div>
@@ -6123,8 +6119,6 @@ function openNytRetreat() {
   document.getElementById('retreat_subtitle_en').value = 'Wellness · Nervous System · Calm';
   document.getElementById('retreat_description').value = 'Et retreat for dig, der har brug for at sænke tempoet og genfinde forbindelsen til dig selv.';
   document.getElementById('retreat_description_en').value = 'A retreat for those who need to slow down and reconnect with themselves.';
-  document.getElementById('retreat_arrival').value = '';
-  document.getElementById('retreat_departure').value = '';
   document.getElementById('retreat_price').value = '1495';
   document.getElementById('retreat_deposit_pct').value = '30';
   document.getElementById('retreat_active').value = 'true';
@@ -6331,7 +6325,7 @@ function openNytRetreat() {
   document.getElementById('ui_addon_massage_en').value = 'Body massage 60 min.';
   addonState = [];
   renderAddonListe();
-  extraDatesState = [];
+  datesState = [{ arrival: '', departure: '' }];
   retreatBilleder5State = [];
   renderRetreatBilleder5();
   teacherImgsState = [{url:'',name:''},{url:'',name:''},{url:'',name:''}];
@@ -6343,7 +6337,7 @@ function openNytRetreat() {
     { room_da: 'Enkeltværelse', room_en: 'Single room', price: 1995 },
   ];
   renderRoomPricingListe();
-  renderExtraDatesListe();
+  renderDatesListe();
   document.getElementById('retreat_max_guests').value = '';
   document.getElementById('retreat_languages').value = '';
   document.getElementById('retreat_level').value = '';
@@ -6414,8 +6408,6 @@ function udfyldRetreatForm(r) {
   document.getElementById('retreat_subtitle_en').value = r.subtitle_en || '';
   document.getElementById('retreat_description').value = r.description || '';
   document.getElementById('retreat_description_en').value = r.description_en || '';
-  document.getElementById('retreat_arrival').value = r.arrival_date || '';
-  document.getElementById('retreat_departure').value = r.departure_date || '';
   document.getElementById('retreat_price').value = r.price || '';
   document.getElementById('retreat_deposit_pct').value = r.deposit_pct ? Math.round(r.deposit_pct * 100) : '30';
   document.getElementById('retreat_active').value = r.active ? 'true' : 'false';
@@ -6598,7 +6590,8 @@ function udfyldRetreatForm(r) {
   document.getElementById('ui_addon_massage_en').value = r.ui_addon_massage_en || 'Body massage 60 min.';
   addonState = r.addon_items ? JSON.parse(JSON.stringify(r.addon_items)) : [];
   renderAddonListe();
-  extraDatesState = r.extra_dates ? JSON.parse(JSON.stringify(r.extra_dates)) : [];
+  datesState = [{ arrival: r.arrival_date || '', departure: r.departure_date || '' }]
+    .concat(r.extra_dates ? JSON.parse(JSON.stringify(r.extra_dates)) : []);
   let imgs5 = r.retreat_images5;
   if (typeof imgs5 === 'string') { try { imgs5 = JSON.parse(imgs5); } catch(e) { imgs5 = []; } }
   retreatBilleder5State = Array.isArray(imgs5) ? imgs5.map(url => ({ url })) : [];
@@ -6611,7 +6604,7 @@ function udfyldRetreatForm(r) {
     if (el && r[`ui_highlight${n}_icon`]) el.value = r[`ui_highlight${n}_icon`];
   });
   loadHighlightsIntoSection(r);
-  renderExtraDatesListe();
+  renderDatesListe();
   document.getElementById('retreat_max_guests').value = r.max_guests || '';
   document.getElementById('retreat_languages').value = r.languages || '';
   document.getElementById('retreat_level').value = r.level || '';
@@ -7047,7 +7040,7 @@ async function gemRetreat() {
       ui_addon_massage_en: document.getElementById('ui_addon_massage_en').value.trim() || null,
       addon_items: addonState.filter(a => a.text && a.text.trim() && a.price !== '' && !isNaN(parseFloat(a.price))).map(a => ({ text: a.text.trim(), text_en: (a.text_en || '').trim() || null, price: parseFloat(a.price) })),
       max_guests: parseInt(document.getElementById('retreat_max_guests').value) || null,
-      extra_dates: extraDatesState.filter(d => d.arrival && d.departure),
+      extra_dates: datesState.slice(1).filter(d => d.arrival && d.departure),
       retreat_images5: retreatBilleder5State.filter(b => b.url).map(b => b.url),
       ...getTeacherImgsPayload(),
       languages: document.getElementById('retreat_languages').value.trim() || null,
@@ -7137,32 +7130,56 @@ async function sletRetreat(id, title) {
   loadRetreats();
 }
 
-// ── EXTRA DATES EDITOR ──
-let extraDatesState = [];
+// ── DATOER EDITOR (samlet liste — øverste dato er den primære, resten er alternative) ──
+// Bookinger tælles kun pr. retreat (ikke pr. dato), så tilgængeligheds-badgen
+// (Ledige/Få ledige/Udsolgt) kan kun vises meningsfuldt sammen med ÉN dato —
+// derfor styrer rækkefølgen her hvilken dato der vises på forsidekortet.
+let datesState = [];
 
-function renderExtraDatesListe() {
-  const container = document.getElementById('extraDatesListe');
-  if (!extraDatesState.length) {
-    container.innerHTML = '<div style="color:rgba(44,35,24,.72);font-style:italic;padding:.5rem 0;">Ingen ekstra datoer endnu</div>';
+function syncPrimaryDateFields() {
+  const primaer = datesState[0] || { arrival: '', departure: '' };
+  const _a = document.getElementById('retreat_arrival'); if (_a) _a.value = primaer.arrival || '';
+  const _d = document.getElementById('retreat_departure'); if (_d) _d.value = primaer.departure || '';
+}
+
+function renderDatesListe() {
+  const container = document.getElementById('datesListe');
+  if (!container) return;
+  if (!datesState.length) {
+    container.innerHTML = '<div style="color:rgba(44,35,24,.72);font-style:italic;padding:.5rem 0;">Ingen datoer endnu</div>';
+    syncPrimaryDateFields();
     return;
   }
-  container.innerHTML = extraDatesState.map((d, i) => `
-    <div style="display:grid;grid-template-columns:1fr 1fr auto;gap:.6rem;align-items:center;">
-      <input type="date" value="${d.arrival || ''}" oninput="extraDatesState[${i}].arrival=this.value" style="background:rgba(44,35,24,.06);border:1px solid rgba(184,138,30,.2);color:#2c2318;padding:.6rem .8rem;font-family:'Manrope',sans-serif;font-size:.78rem;outline:none;">
-      <input type="date" value="${d.departure || ''}" oninput="extraDatesState[${i}].departure=this.value" style="background:rgba(44,35,24,.06);border:1px solid rgba(184,138,30,.2);color:#2c2318;padding:.6rem .8rem;font-family:'Manrope',sans-serif;font-size:.78rem;outline:none;">
-      <button type="button" onclick="fjernExtraDate(${i})" style="background:none;border:none;color:rgba(192,92,48,.6);cursor:pointer;font-size:.85rem;padding:.4rem;">✕</button>
+  container.innerHTML = datesState.map((d, i) => `
+    <div style="display:grid;grid-template-columns:auto 1fr 1fr auto auto;gap:.5rem;align-items:center;">
+      <div style="display:flex;flex-direction:column;gap:1px;">
+        <button type="button" onclick="flytDato(${i},-1)" ${i===0?'disabled':''} style="width:20px;height:16px;font-size:.55rem;border:1px solid rgba(184,138,30,.3);color:#7a5c14;background:none;cursor:pointer;padding:0;${i===0?'opacity:.3;':''}">▲</button>
+        <button type="button" onclick="flytDato(${i},1)" ${i===datesState.length-1?'disabled':''} style="width:20px;height:16px;font-size:.55rem;border:1px solid rgba(184,138,30,.3);color:#7a5c14;background:none;cursor:pointer;padding:0;${i===datesState.length-1?'opacity:.3;':''}">▼</button>
+      </div>
+      <input type="date" value="${d.arrival || ''}" oninput="datesState[${i}].arrival=this.value; syncPrimaryDateFields();" style="background:rgba(44,35,24,.06);border:1px solid rgba(184,138,30,.2);color:#2c2318;padding:.6rem .8rem;font-family:'Manrope',sans-serif;font-size:.78rem;outline:none;">
+      <input type="date" value="${d.departure || ''}" oninput="datesState[${i}].departure=this.value; syncPrimaryDateFields();" style="background:rgba(44,35,24,.06);border:1px solid rgba(184,138,30,.2);color:#2c2318;padding:.6rem .8rem;font-family:'Manrope',sans-serif;font-size:.78rem;outline:none;">
+      <span style="font-size:.58rem;letter-spacing:.06em;text-transform:uppercase;color:${i===0?'#7a5c14':'rgba(44,35,24,.35)'};white-space:nowrap;">${i===0?'Primær':''}</span>
+      <button type="button" onclick="fjernDato(${i})" style="background:none;border:none;color:rgba(192,92,48,.6);cursor:pointer;font-size:.85rem;padding:.4rem;">✕</button>
     </div>
   `).join('');
+  syncPrimaryDateFields();
 }
 
-function tilfoejExtraDate() {
-  extraDatesState.push({ arrival: '', departure: '' });
-  renderExtraDatesListe();
+function tilfoejDato() {
+  datesState.push({ arrival: '', departure: '' });
+  renderDatesListe();
 }
 
-function fjernExtraDate(i) {
-  extraDatesState.splice(i, 1);
-  renderExtraDatesListe();
+function fjernDato(i) {
+  datesState.splice(i, 1);
+  renderDatesListe();
+}
+
+function flytDato(i, retning) {
+  const j = i + retning;
+  if (j < 0 || j >= datesState.length) return;
+  [datesState[i], datesState[j]] = [datesState[j], datesState[i]];
+  renderDatesListe();
 }
 
 // ── EJENDOMMEN ADMIN ──
