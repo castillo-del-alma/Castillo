@@ -1902,7 +1902,7 @@ function buildDateOptions(data) {
   }
   if (data.extra_dates && data.extra_dates.length) {
     data.extra_dates.forEach(d => {
-      if (d.arrival && d.departure) allDates.push(d);
+      if (d.arrival && d.departure) allDates.push({ arrival: d.arrival, departure: d.departure, soldout: !!d.soldout });
     });
   }
 
@@ -1913,16 +1913,23 @@ function buildDateOptions(data) {
     return;
   }
 
+  const soldoutText = retreatLang === 'en' ? ' — SOLD OUT' : ' — UDSOLGT';
   const optionsHtml = allDates.map((d, i) => {
-    const label = `${fmtDateDK(d.arrival)} – ${fmtDateDK(d.departure)}`;
-    return `<option value="${i}">${label}</option>`;
+    const label = `${fmtDateDK(d.arrival)} – ${fmtDateDK(d.departure)}${d.soldout ? soldoutText : ''}`;
+    return `<option value="${i}"${d.soldout ? ' disabled' : ''}>${label}</option>`;
   }).join('');
 
   select.innerHTML = optionsHtml;
   if (formSelect) formSelect.innerHTML = optionsHtml;
 
   window.ALL_RETREAT_DATES = allDates;
-  updateDatesDisplay(allDates[0]);
+
+  // Vælg første ledige dato (springer udsolgte over — normalt er den primære altid ledig)
+  let firstOpen = allDates.findIndex(d => !d.soldout);
+  if (firstOpen < 0) firstOpen = 0;
+  select.value = String(firstOpen);
+  if (formSelect) formSelect.value = String(firstOpen);
+  updateDatesDisplay(allDates[firstOpen]);
 }
 
 function handleDateChange() {
@@ -1930,6 +1937,7 @@ function handleDateChange() {
   const formSelect = document.getElementById('formDateSelect');
   const idx = parseInt(select.value);
   if (isNaN(idx) || !window.ALL_RETREAT_DATES) return;
+  if (window.ALL_RETREAT_DATES[idx] && window.ALL_RETREAT_DATES[idx].soldout) return; // udsolgt dato kan ikke vælges
   if (formSelect) formSelect.value = select.value;
   updateDatesDisplay(window.ALL_RETREAT_DATES[idx]);
 }
@@ -1939,6 +1947,7 @@ function handleFormDateChange() {
   const select = document.getElementById('dateSelect');
   const idx = parseInt(formSelect.value);
   if (isNaN(idx) || !window.ALL_RETREAT_DATES) return;
+  if (window.ALL_RETREAT_DATES[idx] && window.ALL_RETREAT_DATES[idx].soldout) return; // udsolgt dato kan ikke vælges
   if (select) select.value = formSelect.value;
   updateDatesDisplay(window.ALL_RETREAT_DATES[idx]);
 }

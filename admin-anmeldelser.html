@@ -7040,7 +7040,7 @@ async function gemRetreat() {
       ui_addon_massage_en: document.getElementById('ui_addon_massage_en').value.trim() || null,
       addon_items: addonState.filter(a => a.text && a.text.trim() && a.price !== '' && !isNaN(parseFloat(a.price))).map(a => ({ text: a.text.trim(), text_en: (a.text_en || '').trim() || null, price: parseFloat(a.price) })),
       max_guests: parseInt(document.getElementById('retreat_max_guests').value) || null,
-      extra_dates: datesState.slice(1).filter(d => d.arrival && d.departure),
+      extra_dates: datesState.slice(1).filter(d => d.arrival && d.departure).map(d => d.soldout ? { arrival: d.arrival, departure: d.departure, soldout: true } : { arrival: d.arrival, departure: d.departure }),
       retreat_images5: retreatBilleder5State.filter(b => b.url).map(b => b.url),
       ...getTeacherImgsPayload(),
       languages: document.getElementById('retreat_languages').value.trim() || null,
@@ -7151,13 +7151,16 @@ function renderDatesListe() {
     return;
   }
   container.innerHTML = datesState.map((d, i) => `
-    <div style="display:grid;grid-template-columns:auto 1fr 1fr auto auto;gap:.5rem;align-items:center;">
+    <div style="display:grid;grid-template-columns:auto 1fr 1fr auto auto auto;gap:.5rem;align-items:center;">
       <div style="display:flex;flex-direction:column;gap:1px;">
         <button type="button" onclick="flytDato(${i},-1)" ${i===0?'disabled':''} style="width:20px;height:16px;font-size:.55rem;border:1px solid rgba(184,138,30,.3);color:#7a5c14;background:none;cursor:pointer;padding:0;${i===0?'opacity:.3;':''}">▲</button>
         <button type="button" onclick="flytDato(${i},1)" ${i===datesState.length-1?'disabled':''} style="width:20px;height:16px;font-size:.55rem;border:1px solid rgba(184,138,30,.3);color:#7a5c14;background:none;cursor:pointer;padding:0;${i===datesState.length-1?'opacity:.3;':''}">▼</button>
       </div>
-      <input type="date" value="${d.arrival || ''}" oninput="datesState[${i}].arrival=this.value; syncPrimaryDateFields();" style="background:rgba(44,35,24,.06);border:1px solid rgba(184,138,30,.2);color:#2c2318;padding:.6rem .8rem;font-family:'Manrope',sans-serif;font-size:.78rem;outline:none;">
-      <input type="date" value="${d.departure || ''}" oninput="datesState[${i}].departure=this.value; syncPrimaryDateFields();" style="background:rgba(44,35,24,.06);border:1px solid rgba(184,138,30,.2);color:#2c2318;padding:.6rem .8rem;font-family:'Manrope',sans-serif;font-size:.78rem;outline:none;">
+      <input type="date" value="${d.arrival || ''}" oninput="datesState[${i}].arrival=this.value; syncPrimaryDateFields();" style="background:rgba(44,35,24,.06);border:1px solid rgba(184,138,30,.2);color:#2c2318;padding:.6rem .8rem;font-family:'Manrope',sans-serif;font-size:.78rem;outline:none;${d.soldout?'opacity:.55;':''}">
+      <input type="date" value="${d.departure || ''}" oninput="datesState[${i}].departure=this.value; syncPrimaryDateFields();" style="background:rgba(44,35,24,.06);border:1px solid rgba(184,138,30,.2);color:#2c2318;padding:.6rem .8rem;font-family:'Manrope',sans-serif;font-size:.78rem;outline:none;${d.soldout?'opacity:.55;':''}">
+      <label title="${i===0?'Den primære (øverste) dato er altid den aktive salgsdato og kan ikke markeres udsolgt — flyt den ned med ▼ først':'Vises som UDSOLGT i dato-menuen på retreat-siden og kan ikke vælges til booking'}" style="display:flex;align-items:center;gap:.35rem;font-size:.58rem;letter-spacing:.06em;text-transform:uppercase;color:${i===0?'rgba(44,35,24,.3)':(d.soldout?'#c05c30':'rgba(44,35,24,.6)')};white-space:nowrap;cursor:${i===0?'not-allowed':'pointer'};">
+        <input type="checkbox" ${d.soldout?'checked':''} ${i===0?'disabled':''} onchange="datesState[${i}].soldout=this.checked; renderDatesListe();" style="accent-color:#c05c30;cursor:${i===0?'not-allowed':'pointer'};">Udsolgt
+      </label>
       <span style="font-size:.58rem;letter-spacing:.06em;text-transform:uppercase;color:${i===0?'#7a5c14':'rgba(44,35,24,.35)'};white-space:nowrap;">${i===0?'Primær':''}</span>
       <button type="button" onclick="fjernDato(${i})" style="background:none;border:none;color:rgba(192,92,48,.6);cursor:pointer;font-size:.85rem;padding:.4rem;">✕</button>
     </div>
@@ -7179,6 +7182,8 @@ function flytDato(i, retning) {
   const j = i + retning;
   if (j < 0 || j >= datesState.length) return;
   [datesState[i], datesState[j]] = [datesState[j], datesState[i]];
+  // Primær (øverste) dato er altid den aktive salgsdato — ryd evt. udsolgt-flag
+  if (datesState[0] && datesState[0].soldout) datesState[0].soldout = false;
   renderDatesListe();
 }
 
