@@ -2270,18 +2270,30 @@ async function fetchRetreatAvailability() {
   if (_availCache) return _availCache;
   try {
     const r = await fetch('/.netlify/functions/retreat-availability');
-    if (r.ok) { _availCache = (await r.json()).booked || {}; return _availCache; }
+    if (r.ok) {
+      const data = await r.json();
+      _availCache = { booked: data.booked || {}, bookedByDate: data.bookedByDate || {} };
+      return _availCache;
+    }
   } catch (e) { /* fejler pænt — badge skjules */ }
-  return {};
+  return { booked: {}, bookedByDate: {} };
 }
 
-function buildAvailBadge(r, bookedCount, isEN) {
+function buildAvailBadge(r, availData, isEN) {
   const max = parseInt(r.max_guests, 10);
   if (!max || max <= 0) return '';           // ingen kapacitet sat → ingen badge
-  const left = max - (bookedCount || 0);
-  if (left <= 0) return '';                   // fuldt booket → ingen badge (kortet skal stadig indbyde til klik)
+
+  // Cyklus-princip: badgen følger KUN den øverste dato i retreatets datoliste
+  // (arrival_date). Udsolgte datoer flyttes manuelt ned i bunden i admin, og
+  // tællingen starter så automatisk forfra med den nye øverste dato.
+  const topDate = r.arrival_date ? String(r.arrival_date).slice(0, 10) : '';
+  const byDate = (availData && availData.bookedByDate && availData.bookedByDate[r.id]) || {};
+  const bookedCount = topDate ? (byDate[topDate] || 0) : 0;
+
+  const left = max - bookedCount;
+  if (left <= 0) return '';                   // holdet er fyldt → ingen badge (Erik flytter datoen ned og cyklussen fortsætter)
   let cls, txt;
-  if (left / max <= 0.25) {
+  if (bookedCount / max >= 0.75) {
     cls = 'avail-few';  txt = isEN ? 'Few spaces left' : 'Få ledige pladser';
   } else {
     cls = 'avail-good'; txt = isEN ? 'Available' : 'Ledige pladser';
@@ -2304,7 +2316,7 @@ async function loadRetreatsGrid() {
     return;
   }
 
-  const bookedMap = await fetchRetreatAvailability();
+  const availData = await fetchRetreatAvailability();
 
   grid.innerHTML = data.map((r, i) => {
     const num = String(i + 1).padStart(2, '0');
@@ -2341,7 +2353,7 @@ async function loadRetreatsGrid() {
         <div class="retreat-card-overlay"></div>
         ${isPride ? '<div class="pride-overlay"></div>' : ''}
         <div class="retreat-card-accent"${accentStyle}></div>
-        ${buildAvailBadge(r, bookedMap[r.id] || 0, isEN)}
+        ${buildAvailBadge(r, availData, isEN)}
         <div class="retreat-card-content">
           <h3>${title.replace(' & ', '<br>&amp; ').replace(' og ', '<br>').replace(' and ', '<br>and ')}</h3>
           <p>${description}</p>
