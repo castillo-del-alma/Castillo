@@ -773,7 +773,8 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:3rem
 </section>
 
 <!-- ROOMS & PRICES -->
-<section class="retreat-rooms" id="rooms">
+<section class="retreat-rooms has-canvas" id="rooms">
+  <canvas class="section-canvas" data-palette="brown"></canvas>
   <div class="section-inner">
     <div class="reveal">
       <span class="section-label" id="roomsLabel">Indkvartering</span>
@@ -1984,7 +1985,9 @@ function renderAddonsInForm(addons) {
 document.addEventListener('DOMContentLoaded', loadRetreatData);
 
 const PALETTES = {
-  warm: [[184,138,30],[192,92,48],[122,31,53],[212,168,48]],
+  warm:  [[184,138,30],[192,92,48],[122,31,53],[212,168,48]],
+  brown: [[124,74,40],[150,86,50],[102,60,34],[86,52,30]],
+  green: [[70,90,66],[95,115,78],[55,75,60],[120,130,85]],
 };
 
 class SectionRings {
@@ -2078,7 +2081,7 @@ class SectionRings {
 const sectionAnimators = [];
 document.querySelectorAll('.section-canvas').forEach(canvas=>{
   const key = canvas.dataset.palette||'warm';
-  const anim = new SectionRings(canvas, PALETTES[key]);
+  const anim = new SectionRings(canvas, PALETTES[key] || PALETTES.warm);
   sectionAnimators.push({canvas, anim, started:false});
 });
 
