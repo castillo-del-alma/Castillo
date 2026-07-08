@@ -6043,7 +6043,44 @@ async function loadRetreats() {
     }
   }
 
+  await beregnTilmeldte();
   renderRetreats();
+}
+
+// Tæller TILMELDTE pr. retreat = gæster på bookinger, der har betalt MINDST
+// depositum (mindst én betaling med status 'paid'). Grupperes pr. dato, så
+// hver dato-kohorte kan vises for sig. Manuelle bookinger (uden retreat_id)
+// matches på retreat_name.
+async function beregnTilmeldte() {
+  window.retreatTilmeldte = {};
+  let bookinger = [];
+  try {
+    const { data } = await sb.from('customers')
+      .select('bookings(retreat_id,retreat_name,guests,arrival_date,payments(status))');
+    bookinger = (data || []).flatMap(k => k.bookings || []);
+  } catch (e) {
+    console.warn('Kunne ikke hente bookinger til tilmeldte-tal:', e);
+    return;
+  }
+
+  const hoererTil = (b, r) => b.retreat_id ? (b.retreat_id === r.id)
+    : (b.retreat_name && r.title && b.retreat_name === r.title);
+
+  allRetreats.forEach(r => {
+    const byDate = {};
+    let total = 0;
+    bookinger.forEach(b => {
+      if (!hoererTil(b, r)) return;
+      const harBetalt = Array.isArray(b.payments) && b.payments.some(p => p && p.status === 'paid');
+      if (!harBetalt) return;
+      const n = parseInt(b.guests, 10);
+      const g = isNaN(n) ? 0 : n;
+      total += g;
+      const d = b.arrival_date ? String(b.arrival_date).slice(0, 10) : '';
+      if (d) byDate[d] = (byDate[d] || 0) + g;
+    });
+    window.retreatTilmeldte[r.id] = { byDate, total };
+  });
 }
 
 function renderRetreats() {
@@ -6056,6 +6093,27 @@ function renderRetreats() {
   grid.innerHTML = allRetreats.map((r, i) => {
     const upAttrs = i === 0 ? 'disabled style="opacity:.3;cursor:default;"' : '';
     const downAttrs = i === allRetreats.length - 1 ? 'disabled style="opacity:.3;cursor:default;"' : '';
+
+    // TILMELDTE (betalt mindst depositum) — for den øverste (aktive) dato + øvrige datoer
+    const t = (window.retreatTilmeldte && window.retreatTilmeldte[r.id]) || { byDate: {}, total: 0 };
+    const max = parseInt(r.max_guests, 10);
+    const topDate = r.arrival_date ? String(r.arrival_date).slice(0, 10) : '';
+    const topCount = topDate ? (t.byDate[topDate] || 0) : 0;
+    const naestenFuld = max && max > 0 && topCount / max >= 0.75;
+    const talFarve = naestenFuld ? '#c05c30' : '#4a5028';
+    const tilmeldteHtml = `
+      <div style="display:flex;align-items:center;gap:.45rem;margin:.55rem 0 .1rem;font-size:.82rem;color:${talFarve};font-weight:600;">
+        <span>👤 Tilmeldte${topDate ? ' · øverste dato' : ''}:</span>
+        <strong style="font-size:.95rem;">${topCount}${max ? ' / ' + max : ''}</strong>
+        ${naestenFuld ? '<span style="font-size:.62rem;letter-spacing:.08em;text-transform:uppercase;background:rgba(192,92,48,.14);color:#c05c30;padding:.12rem .4rem;border-radius:2px;">Næsten fuld</span>' : ''}
+      </div>`;
+    const andreDatoer = Object.keys(t.byDate)
+      .filter(d => d !== topDate && t.byDate[d] > 0)
+      .sort();
+    const andreHtml = andreDatoer.length
+      ? `<div style="font-size:.72rem;color:rgba(44,35,24,.55);margin:0 0 .2rem;">Øvrige datoer: ${andreDatoer.map(d => `${fmt(d)}: <strong>${t.byDate[d]}</strong>`).join(' · ')}</div>`
+      : '';
+
     return `
     <div class="kunde-card">
       <div class="kunde-card-header">
@@ -6068,6 +6126,8 @@ function renderRetreats() {
       <div class="kunde-booking">
         <strong>${fmt(r.arrival_date)} – ${fmt(r.departure_date)}</strong>
       </div>
+      ${tilmeldteHtml}
+      ${andreHtml}
       <div style="font-size:.85rem;color:rgba(44,35,24,.9);margin:.5rem 0;">€${r.price ? Math.round(r.price/7.46) : '—'} pr. gæst</div>
       <div class="kunde-actions">
         <button class="kunde-btn" style="padding:.35rem .6rem;" onclick="moveRetreat('${r.id}','up')" ${upAttrs}>↑</button>
