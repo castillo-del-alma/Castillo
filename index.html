@@ -2281,21 +2281,18 @@ async function fetchRetreatAvailability() {
 
 function buildAvailBadge(r, availData, isEN) {
   const max = parseInt(r.max_guests, 10);
-  if (!max || max <= 0) return '';           // ingen kapacitet sat → ingen badge
 
-  // Cyklus-princip: badgen følger KUN den øverste dato i retreatets datoliste
-  // (arrival_date). Udsolgte datoer flyttes manuelt ned i bunden i admin, og
-  // tællingen starter så automatisk forfra med den nye øverste dato.
-  if (r.arrival_soldout) return '';           // øverste dato manuelt markeret udsolgt → ingen badge
+  // Badgen viser ALTID én af to tilstande — den er ALDRIG tom.
+  // Den følger den øverste (aktive) dato i retreatet. Når en dato fyldes,
+  // markeres den UDSOLGT og flyttes ned i admin, hvorefter en frisk dato
+  // rykker op som ny øverste — og badgen viser "Ledige pladser" igen.
   const topDate = r.arrival_date ? String(r.arrival_date).slice(0, 10) : '';
   const byDate = (availData && availData.bookedByDate && availData.bookedByDate[r.id]) || {};
   const bookedCount = topDate ? (byDate[topDate] || 0) : 0;
 
-  const left = max - bookedCount;
-  if (left <= 0) return '';                   // holdet er fyldt → ingen badge (Erik flytter datoen ned og cyklussen fortsætter)
   let cls, txt;
-  if (bookedCount / max >= 0.75) {
-    cls = 'avail-few';  txt = isEN ? 'Few spaces left' : 'Få ledige pladser';
+  if (max && max > 0 && bookedCount / max >= 0.75) {
+    cls = 'avail-few';  txt = isEN ? 'Only a few spaces left' : 'Kun få ledige pladser';
   } else {
     cls = 'avail-good'; txt = isEN ? 'Available' : 'Ledige pladser';
   }
