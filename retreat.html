@@ -1898,7 +1898,7 @@ function buildDateOptions(data) {
   const allDates = [];
 
   if (data.arrival_date && data.departure_date) {
-    allDates.push({ arrival: data.arrival_date, departure: data.departure_date });
+    allDates.push({ arrival: data.arrival_date, departure: data.departure_date, soldout: !!data.arrival_soldout });
   }
   if (data.extra_dates && data.extra_dates.length) {
     data.extra_dates.forEach(d => {

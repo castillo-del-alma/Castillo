@@ -2286,6 +2286,7 @@ function buildAvailBadge(r, availData, isEN) {
   // Cyklus-princip: badgen følger KUN den øverste dato i retreatets datoliste
   // (arrival_date). Udsolgte datoer flyttes manuelt ned i bunden i admin, og
   // tællingen starter så automatisk forfra med den nye øverste dato.
+  if (r.arrival_soldout) return '';           // øverste dato manuelt markeret udsolgt → ingen badge
   const topDate = r.arrival_date ? String(r.arrival_date).slice(0, 10) : '';
   const byDate = (availData && availData.bookedByDate && availData.bookedByDate[r.id]) || {};
   const bookedCount = topDate ? (byDate[topDate] || 0) : 0;
