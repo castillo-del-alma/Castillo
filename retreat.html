@@ -746,6 +746,28 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:3rem
   .footer-bottom{flex-direction:column;gap:1.1rem;text-align:center;}
   .footer-bottom > div{justify-content:center;}
 }
+
+/* ── CTA-bånd mellem sektioner (scroller til booking) ── */
+.retreat-cta-band{
+  background:var(--beige);
+  border-top:1px solid rgba(184,138,30,.15);
+  border-bottom:1px solid rgba(184,138,30,.15);
+  padding:3.4rem 0;
+}
+.retreat-cta-band .section-inner{
+  display:flex;flex-direction:column;align-items:center;gap:1.4rem;text-align:center;
+}
+.retreat-cta-heading{
+  font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:300;
+  font-size:clamp(1.3rem,2.6vw,1.9rem);color:var(--charcoal);
+  line-height:1.5;max-width:600px;
+}
+.retreat-cta-btn{
+  font-family:'Manrope',sans-serif;font-size:.7rem;font-weight:500;
+  letter-spacing:.2em;text-transform:uppercase;color:#fff;background:var(--wine);
+  border:none;padding:1rem 2.8rem;cursor:pointer;transition:background .3s;
+}
+.retreat-cta-btn:hover{background:var(--wine-light);}
 </style>
 </head>
 <body>
@@ -888,6 +910,14 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:3rem
 
 <div class="section-inner"><div class="divider"></div></div>
 
+<!-- CTA -->
+<div class="retreat-cta-band reveal">
+  <div class="section-inner">
+    <p class="retreat-cta-heading">Klar til at give dig selv denne oplevelse?</p>
+    <button class="retreat-cta-btn" onclick="document.getElementById('booking').scrollIntoView({behavior:'smooth'})">Book dette retreat</button>
+  </div>
+</div>
+
 <!-- INCLUDED -->
 <section class="included" id="included">
   <div class="section-inner">
@@ -990,6 +1020,14 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:3rem
 
 <div class="section-inner"><div class="divider"></div></div>
 
+
+<!-- CTA -->
+<div class="retreat-cta-band reveal">
+  <div class="section-inner">
+    <p class="retreat-cta-heading">Klar til at give dig selv denne oplevelse?</p>
+    <button class="retreat-cta-btn" onclick="document.getElementById('booking').scrollIntoView({behavior:'smooth'})">Book dette retreat</button>
+  </div>
+</div>
 
 <!-- ══════ ANMELDELSER ══════ -->
 <section class="reviews-section" id="reviews">
@@ -1412,7 +1450,8 @@ const STATIC_I18N = {
     bvBetalPlaceholder: 'Beløb i €', bvBetalBtn: 'Betal', bvCancelBtn: 'Annuller',
     guestLabel: 'Gæst', guestRemove: '✕ Fjern', guestFornavn: 'Fornavn', guestEfternavn: 'Efternavn', guestEmail: 'E-mail', guestEmailPlaceholder: 'gaest@email.com',
     barDurationLabel: 'Varighed', barArrivalLabel: 'Ankomst', barDepartureLabel: 'Afrejse', barFraLabel: 'Fra', barPerLabel: 'pr. person · delt værelse',
-    quickFactsHeading: 'Retreat info', factDurationLabel: 'Varighed', factMaxGuestsLabel: 'Maks. deltagere', factLevelLabel: 'Niveau', factLanguagesLabel: 'Sprog', factLocationLabel: 'Sted'
+    quickFactsHeading: 'Retreat info', factDurationLabel: 'Varighed', factMaxGuestsLabel: 'Maks. deltagere', factLevelLabel: 'Niveau', factLanguagesLabel: 'Sprog', factLocationLabel: 'Sted',
+    ctaHeading: 'Klar til at give dig selv denne oplevelse?', ctaBtn: 'Book dette retreat'
   },
   en: {
     reviewsLabel: "Guests' experiences", reviewsHeading: 'What our <em>guests</em> say',
@@ -1433,7 +1472,8 @@ const STATIC_I18N = {
     bvBetalPlaceholder: 'Amount in €', bvBetalBtn: 'Pay', bvCancelBtn: 'Cancel',
     guestLabel: 'Guest', guestRemove: '✕ Remove', guestFornavn: 'First name', guestEfternavn: 'Last name', guestEmail: 'Email', guestEmailPlaceholder: 'guest@email.com',
     barDurationLabel: 'Duration', barArrivalLabel: 'Arrival', barDepartureLabel: 'Departure', barFraLabel: 'From', barPerLabel: 'per person · shared room',
-    quickFactsHeading: 'Retreat info', factDurationLabel: 'Duration', factMaxGuestsLabel: 'Max. guests', factLevelLabel: 'Level', factLanguagesLabel: 'Languages', factLocationLabel: 'Location'
+    quickFactsHeading: 'Retreat info', factDurationLabel: 'Duration', factMaxGuestsLabel: 'Max. guests', factLevelLabel: 'Level', factLanguagesLabel: 'Languages', factLocationLabel: 'Location',
+    ctaHeading: 'Ready to give yourself this experience?', ctaBtn: 'Book this retreat'
   }
 };
 
@@ -1452,6 +1492,8 @@ function applyStaticLabels() {
   const iy = document.getElementById('includedYesHeading'); if (iy) iy.innerHTML = SI18N('includedYesHeading');
   const inh = document.getElementById('includedNoHeading'); if (inh) inh.innerHTML = SI18N('includedNoHeading');
   setText('faqLabel', SI18N('faqLabel'));
+  document.querySelectorAll('.retreat-cta-heading').forEach(el => el.textContent = SI18N('ctaHeading'));
+  document.querySelectorAll('.retreat-cta-btn').forEach(el => el.textContent = SI18N('ctaBtn'));
   setText('bookLabel', SI18N('bookLabel'));
   setText('bookIntro2', SI18N('bookIntro2'));
   setText('labelRetreat', SI18N('labelRetreat'));
