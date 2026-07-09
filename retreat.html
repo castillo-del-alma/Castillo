@@ -418,7 +418,7 @@ body.menu-open .nav-burger span:nth-child(3){ transform:translateY(-9px) rotate(
 }
 .retreat-rooms p.intro{
   font-family:'Cormorant Garamond',serif;font-size:1.05rem;
-  font-weight:300;color:var(--text-light);margin-bottom:3rem;
+  font-weight:300;color:var(--text-mid);margin-bottom:3rem;
   font-style:italic;
 }
 .rooms-options{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;}
@@ -768,6 +768,24 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:3rem
   border:none;padding:1rem 2.8rem;cursor:pointer;transition:background .3s;
 }
 .retreat-cta-btn:hover{background:var(--wine-light);}
+
+/* ── Større brødtekster på mobil (kun @media — desktop uændret) ── */
+@media (max-width:768px){
+  .overview-text p{font-size:1.2rem;}
+  .overview-text blockquote{font-size:1.3rem;}
+  .highlight-item p{font-size:1.15rem;}
+  .program-day-content p{font-size:1.12rem;}
+  .included-item{font-size:1.1rem;}
+  .retreat-rooms p.intro{font-size:1.15rem;}
+  .room-option p{font-size:1.05rem;}
+  .ejrm-card p{font-size:1.1rem;}
+  .retreat-food p{font-size:1.15rem;}
+  .facilitator p{font-size:1.15rem;}
+  .review-text{font-size:1.1rem;}
+  .review-quote{font-size:1.3rem;}
+  .faq-a p{font-size:1.1rem;}
+  .booking-section p{font-size:1.2rem;}
+}
 </style>
 </head>
 <body>
