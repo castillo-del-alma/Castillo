@@ -261,7 +261,7 @@ body.menu-open .nav-burger span:nth-child(3){ transform:translateY(-9px) rotate(
 }
 .rooms-header p{
   font-family:'Cormorant Garamond',serif;font-style:italic;
-  font-size:1.2rem;font-weight:300;color:var(--text-light);
+  font-size:1.2rem;font-weight:300;color:var(--text-mid);
 }
 .rooms-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;}
 .room-card{
@@ -353,7 +353,7 @@ body.menu-open .nav-burger span:nth-child(3){ transform:translateY(-9px) rotate(
   font-family:'Cormorant Garamond',serif;font-weight:400;
   font-size:1rem;color:var(--charcoal);margin-bottom:.2rem;
 }
-.facility-text p{font-size:.75rem;color:var(--text-light);line-height:1.5;}
+.facility-text p{font-size:.75rem;color:var(--text-mid);line-height:1.5;}
 
 .facilities-visual{
   display:grid;grid-template-columns:1fr 1fr;
@@ -643,6 +643,21 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:3rem
   .footer-bottom > div{justify-content:center;}
 }
 
+
+/* ── Større brødtekster på mobil (kun @media — desktop uændret) ── */
+@media (max-width:768px){
+  .intro-two-col p{font-size:1.2rem;}
+  .towers p{font-size:1.18rem;}
+  .rooms-header p{font-size:1.3rem;}
+  .room-card p{font-size:1.1rem;}
+  .facility-text p{font-size:.95rem;}
+  .vineyard-detail p{font-size:1.18rem;}
+  .location p{font-size:1.18rem;}
+  .estate-cta p{font-size:1.3rem;}
+  .sustain-lead{font-size:1.22rem;}
+  .sustain-body{font-size:1.15rem;}
+  .sustain-eco-item p,.sustain-pillar p{font-size:1.02rem;}
+}
 </style>
 </head>
 <body>
