@@ -771,6 +771,8 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:3rem
 
 /* ── Større brødtekster på mobil (kun @media — desktop uændret) ── */
 @media (max-width:768px){
+  /* Hindr sidelæns pan/scroll på iOS — skal også sidde på html, ikke kun body */
+  html{overflow-x:hidden;}
   .overview-text p{font-size:1.2rem;}
   .overview-text blockquote{font-size:1.3rem;}
   .highlight-item p{font-size:1.15rem;}

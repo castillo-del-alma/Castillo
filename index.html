@@ -1249,6 +1249,8 @@ body.menu-open .nav-burger span:nth-child(3){ transform:translateY(-9px) rotate(
 
 /* ── Telefon (≤768px): afstande, billeder, formular, footer, overløb ── */
 @media (max-width:768px){
+  /* Hindr sidelæns pan/scroll på iOS — skal også sidde på html, ikke kun body */
+  html{overflow-x:hidden;}
   /* Mindre lodret luft i sektionerne */
   .intro{padding:4.5rem 0 4rem;}
   .retreats,.estate,.vineyard,.experiences,.gallery-section,.wellness,.newsletter,.reviews-section,.om-os,.testimonial{padding:4.5rem 0;}
