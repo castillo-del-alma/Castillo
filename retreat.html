@@ -688,6 +688,64 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:3rem
 .review-stars{color:#b88a1e;font-size:1.15rem;letter-spacing:.15em;margin-bottom:1.4rem;text-align:center;}
 .review-quote{font-family:'Cormorant Garamond',serif;font-size:1.2rem;font-style:italic;color:#2c2318;line-height:1.85;flex:1;text-align:center;display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden;}
 .review-author{margin-top:1.6rem;padding-top:1rem;border-top:1px solid rgba(184,138,30,.15);font-size:.62rem;letter-spacing:.18em;text-transform:uppercase;color:rgba(44,35,24,.5);text-align:center;}
+
+/* ══════════════════════════════════════════════
+   MOBIL-LAYOUT for retreat.html
+   Alt i @media — desktop-visningen er uændret
+══════════════════════════════════════════════ */
+
+/* ── Booking-bar: statisk + stablet (≤900px, når hamburger-menuen aktiveres) ── */
+@media (max-width:900px){
+  .booking-bar{position:static;top:auto;}
+  .booking-bar-inner{flex-direction:column;align-items:stretch;gap:1.1rem;padding:1.2rem 1.4rem;}
+  .booking-bar-info{flex-wrap:wrap;gap:1rem 2rem;justify-content:flex-start;}
+  .booking-bar-price{align-items:flex-start;}
+  .booking-bar-actions{flex-direction:column;align-items:stretch;gap:.7rem;}
+  .date-select{min-width:0;width:100%;}
+  .btn-book,.btn-inquire{width:100%;text-align:center;}
+}
+
+/* ── Grids kollapser (≤860px): 2-kolonne → 1, 3-kolonne → 2 ── */
+@media (max-width:860px){
+  .overview-grid{grid-template-columns:1fr;gap:2.5rem;}
+  .included-cols{grid-template-columns:1fr;gap:2.5rem;}
+  .food-grid{grid-template-columns:1fr;gap:2.5rem;}
+  .facilitator-grid{grid-template-columns:1fr;gap:2rem;}
+  .facilitator-photo{margin:0 auto;}
+  .booking-grid{grid-template-columns:1fr;gap:2.5rem;}
+  .form-row{grid-template-columns:1fr;}
+  .highlights-grid{grid-template-columns:1fr 1fr;}
+  .rooms-options{grid-template-columns:1fr 1fr;}
+  .ejrm-grid{grid-template-columns:1fr 1fr;}
+  .reviews-grid{grid-template-columns:1fr 1fr;}
+}
+
+/* ── Telefon (≤768px): afstande, hero, 1-kolonne, formular, footer ── */
+@media (max-width:768px){
+  /* Mindre lodret luft i sektionerne */
+  .retreat-overview,.highlights,.program,.included,.retreat-rooms,.retreat-food,.facilitator,.reviews,.reviews-section,.booking-section,.faq{padding:4rem 0;}
+  /* Mindre vandret margin */
+  .section-inner{padding:0 1.4rem;}
+  /* Hero */
+  .retreat-hero{min-height:56vh;}
+  .retreat-hero-content{padding:0 1.4rem 2.4rem;}
+  .retreat-hero-sub{font-size:1.1rem;}
+  /* Mindre afstand under overskrifter */
+  .highlights h2,.program h2,.included h2{margin-bottom:2.2rem;}
+  /* 3-kolonne → 1 på telefon */
+  .highlights-grid{grid-template-columns:1fr;}
+  .rooms-options{grid-template-columns:1fr;}
+  .ejrm-grid{grid-template-columns:1fr;}
+  .reviews-grid{grid-template-columns:1fr;}
+  #retreatImages5Grid{grid-template-columns:repeat(2,1fr)!important;}
+  /* Formularfelter: 16px så iOS ikke zoomer ind ved tastning */
+  .form-field input,.form-field select,.form-field textarea{font-size:16px;letter-spacing:.04em;}
+  .form-field input::placeholder{font-size:16px;}
+  /* Footer stakket */
+  footer{padding:2.6rem 1.4rem;}
+  .footer-bottom{flex-direction:column;gap:1.1rem;text-align:center;}
+  .footer-bottom > div{justify-content:center;}
+}
 </style>
 </head>
 <body>
