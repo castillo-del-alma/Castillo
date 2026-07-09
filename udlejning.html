@@ -625,6 +625,65 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:3rem
 .lang-btn.lang-btn-active{background:var(--wine);color:#fff !important;}
 .lang-btn.lang-btn-inactive{background:transparent;color:var(--wine) !important;}
 .lang-switcher{border-color:var(--wine);border-radius:0;}
+
+/* ══════════════════════════════════════════════
+   MOBIL-LAYOUT for udlejning.html
+   Alt i @media — desktop-visningen er uændret
+══════════════════════════════════════════════ */
+
+/* ── Tablet & mobil: kollaps resterende fler-kolonne-grids ── */
+@media (max-width:860px){
+  .intro-two-col{grid-template-columns:1fr;gap:3rem;}
+  .faciliteter-grid{grid-template-columns:1fr;gap:3rem;}
+  .fac-list{grid-template-columns:1fr;}
+  .kontakt-grid{grid-template-columns:1fr;gap:3rem;}
+}
+
+/* ── Telefon: afstande, hero, foto-strib, formular, footer ── */
+@media (max-width:768px){
+  /* Mindre lodret luft i alle sektioner */
+  .intro{padding:4.5rem 0 4rem;}
+  .undervisning,.pris,.faciliteter,.fungerer,.stemmer,.vaerter,.mere,.design,.kontakt,.faq{padding:4.5rem 0;}
+
+  /* Mindre vandret margin */
+  .section-inner{padding:0 1.4rem;}
+
+  /* Hero */
+  .page-hero{height:56vh;min-height:380px;}
+  .page-hero-content{padding:0 1.4rem 2.4rem;}
+
+  /* Intro-billedstak: undgå at det lille billede skubber siden ud */
+  .intro-img-stack{margin-top:1rem;}
+  .intro-small-img{left:auto;right:1rem;bottom:-1.2rem;width:48%;}
+
+  /* Foto-strib: 4 → 2 kolonner */
+  .photo-strip-grid{grid-template-columns:repeat(2,1fr);height:auto;}
+  .strip-item{aspect-ratio:4/3;}
+
+  /* Undervisning-billeder lidt tættere */
+  .undervisning-imgs{gap:1rem;}
+
+  /* Design-sektion: mindre store afstande */
+  .design-intro{margin-bottom:2.6rem;}
+  .design-cta{margin-top:3rem;padding-top:2.6rem;}
+
+  /* Mere-citat */
+  .mere-quote{padding-left:1.4rem;margin-top:2rem;}
+
+  /* Kontakt-formular */
+  .retreat-form{padding:1.8rem 1.4rem;}
+  .form-row{grid-template-columns:1fr;}
+
+  /* FAQ */
+  .faq h2{margin-bottom:2.2rem;}
+  .faq-q{padding:1.1rem 1.3rem;gap:1rem;}
+  .faq-a p{padding-left:1.3rem;padding-right:1.3rem;}
+
+  /* Footer stakkes */
+  footer{padding:2.6rem 1.4rem;}
+  .footer-bottom{flex-direction:column;gap:1.2rem;text-align:center;justify-content:center;}
+  .footer-bottom > div{justify-content:center;}
+}
 </style>
 </head>
 <body>
