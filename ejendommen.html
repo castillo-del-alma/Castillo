@@ -646,6 +646,14 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:3rem
 
 /* ── Større brødtekster på mobil (kun @media — desktop uændret) ── */
 @media (max-width:768px){
+  /* Hindr sidelæns pan/scroll på iOS — skal også sidde på html, ikke kun body */
+  html{overflow-x:hidden;}
+  /* Fakta-grid: værn mod at lange ord/tal ("40.000 m²", "Denominación")
+     presser kolonnerne bredere end skærmen */
+  .estate-facts{gap:1rem;}
+  .estate-fact{min-width:0;}
+  .estate-fact h4{font-size:1.35rem;}
+  .estate-fact p{overflow-wrap:anywhere;}
   .intro-two-col p{font-size:1.2rem;}
   .towers p{font-size:1.18rem;}
   .rooms-header p{font-size:1.3rem;}
