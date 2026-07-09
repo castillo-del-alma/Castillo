@@ -53,6 +53,79 @@ nav{
 }
 .nav-back:hover{gap:.8rem;}
 
+/* ══════════════════════════════
+   MOBILMENU (≤900px) — slide-in fra højre
+   Alt i @media, så desktop-visningen er uændret
+══════════════════════════════ */
+.nav-burger{
+  display:none;
+  position:relative; z-index:12;
+  width:30px; height:20px; padding:0; margin:0;
+  background:none; border:none; cursor:pointer;
+  flex-direction:column; justify-content:space-between;
+}
+.nav-burger span{
+  display:block; height:2px; width:100%;
+  background:var(--charcoal);
+  transition:transform .35s ease, opacity .25s ease;
+}
+body.menu-open .nav-burger span:nth-child(1){ transform:translateY(9px) rotate(45deg); }
+body.menu-open .nav-burger span:nth-child(2){ opacity:0; }
+body.menu-open .nav-burger span:nth-child(3){ transform:translateY(-9px) rotate(-45deg); }
+
+.nav-backdrop{
+  display:none;
+  position:fixed; inset:0; z-index:9990;
+  background:rgba(30,22,12,.45);
+  opacity:0; pointer-events:none;
+  transition:opacity .4s ease;
+  -webkit-backdrop-filter:blur(2px); backdrop-filter:blur(2px);
+}
+
+@media (max-width:900px){
+  nav{ padding:1.1rem 1.6rem; z-index:9999; }
+  .nav-burger{ display:flex; }
+  .nav-backdrop{ display:block; }
+  body.menu-open .nav-backdrop{ opacity:1; pointer-events:auto; }
+  body.menu-open{ overflow:hidden; }
+
+  /* nav-links → slide-in panel fra højre */
+  .nav-links{
+    position:fixed; top:0; right:0; z-index:10;
+    height:100vh; height:100svh;
+    width:min(82vw,360px);
+    flex-direction:column; align-items:stretch; justify-content:flex-start;
+    gap:0;
+    padding:6rem 2rem 6rem;
+    background:rgba(250,246,238,.99);
+    -webkit-backdrop-filter:blur(20px); backdrop-filter:blur(20px);
+    border-left:1px solid rgba(184,138,30,.2);
+    box-shadow:-16px 0 48px rgba(44,35,24,.16);
+    overflow-y:auto; overscroll-behavior:contain;
+    transform:translateX(100%);
+    transition:transform .45s cubic-bezier(.4,0,.2,1);
+  }
+  body.menu-open .nav-links{ transform:translateX(0); }
+  .nav-links > li{ width:100%; border-bottom:1px solid rgba(184,138,30,.1); }
+  .nav-links > li:last-child{ border-bottom:none; }
+  .nav-links a{ display:block; padding:1rem 0; font-size:.8rem; letter-spacing:.16em; }
+  .nav-links > li[style]{ margin-left:0 !important; margin-top:1.4rem !important; }
+
+  /* Tilbage-knap glider med ind som bund-footer i panelet */
+  .nav-back{
+    position:fixed; right:0; bottom:0; z-index:11;
+    width:min(82vw,360px);
+    justify-content:center;
+    margin:0; padding:1.3rem 2rem;
+    background:rgba(250,246,238,.99);
+    -webkit-backdrop-filter:blur(20px); backdrop-filter:blur(20px);
+    border-top:1px solid rgba(184,138,30,.16);
+    transform:translateX(100%);
+    transition:transform .45s cubic-bezier(.4,0,.2,1);
+  }
+  body.menu-open .nav-back{ transform:translateX(0); }
+}
+
 /* ── HERO ── */
 .page-hero{
   height:70vh;min-height:500px;
@@ -532,7 +605,10 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:3rem
   <a href="index.html" class="nav-logo">
     <img src="img/taarne-hvid-trans.png" alt="Castillo del Alma">
   </a>
-  <ul class="nav-links">
+  <button class="nav-burger" id="navBurger" aria-label="Åbn menu" aria-controls="navLinks" aria-expanded="false">
+    <span></span><span></span><span></span>
+  </button>
+  <ul class="nav-links" id="navLinks">
     <li><a href="#intro" id="ej_nav_intro">Ejendommen</a></li>
     <li><a href="#towers" id="ej_nav_towers">Tårnene</a></li>
     <li><a href="#rooms" id="ej_nav_rooms">Indkvartering</a></li>
@@ -549,6 +625,9 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:3rem
   </ul>
   <a href="index.html" class="nav-back" id="ej_nav_back">← Tilbage til forsiden</a>
 </nav>
+
+<!-- MOBIL-MENU BACKDROP -->
+<div class="nav-backdrop" id="navBackdrop"></div>
 
 <!-- HERO -->
 <section class="page-hero">
@@ -1442,5 +1521,22 @@ const canvasObs=new IntersectionObserver(entries=>{
 sectionAnimators.forEach(({canvas})=>canvasObs.observe(canvas));
 </script>
 
+<!-- MOBILMENU — slide-in toggle (isoleret, påvirker ikke desktop) -->
+<script>
+(function(){
+  const burger = document.getElementById('navBurger');
+  const backdrop = document.getElementById('navBackdrop');
+  if(!burger) return;
+  const isMobile = () => window.matchMedia('(max-width:900px)').matches;
+  function openMenu(){ document.body.classList.add('menu-open'); burger.setAttribute('aria-expanded','true'); }
+  function closeMenu(){ document.body.classList.remove('menu-open'); burger.setAttribute('aria-expanded','false'); }
+  function toggleMenu(){ document.body.classList.contains('menu-open') ? closeMenu() : openMenu(); }
+  burger.addEventListener('click', toggleMenu);
+  if(backdrop) backdrop.addEventListener('click', closeMenu);
+  document.querySelectorAll('.nav-links a, .nav-back').forEach(a => a.addEventListener('click', closeMenu));
+  document.addEventListener('keydown', (e) => { if(e.key === 'Escape') closeMenu(); });
+  window.addEventListener('resize', () => { if(!isMobile()) closeMenu(); });
+})();
+</script>
 </body>
 </html>
