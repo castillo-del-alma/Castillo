@@ -6140,6 +6140,7 @@ function renderRetreats() {
         <button class="kunde-btn" style="padding:.35rem .6rem;" onclick="moveRetreat('${r.id}','up')" ${upAttrs}>↑</button>
         <button class="kunde-btn" style="padding:.35rem .6rem;" onclick="moveRetreat('${r.id}','down')" ${downAttrs}>↓</button>
         <button class="kunde-btn kunde-btn-view" onclick="redigerRetreat('${r.id}')">Redigér</button>
+        <button class="kunde-btn" style="background:rgba(74,80,40,.1);color:#4a5028;border:1px solid rgba(74,80,40,.28);font-weight:600;" onclick="dublerRetreat('${r.id}')">Dublér</button>
         <button class="kunde-btn" style="background:rgba(192,92,48,.12);color:#7a3818;border:1px solid rgba(192,92,48,.3);font-weight:600;" onclick="sletRetreat('${r.id}','${r.title}')">Slet</button>
       </div>
     </div>
@@ -7196,6 +7197,48 @@ async function sletRetreat(id, title) {
   if (error) { showToast('Fejl: ' + error.message, true); return; }
   showToast('Retreat slettet');
   loadRetreats();
+}
+
+async function dublerRetreat(id) {
+  try {
+    // Hent den fulde retreat-række (alle kolonner)
+    const { data: orig, error: e1 } = await sb.from('retreats').select('*').eq('id', id).single();
+    if (e1 || !orig) { showToast('Kunne ikke hente retreatet', true); return; }
+
+    // Byg kopi — uden id/tidsstempler (databasen sætter nye)
+    const kopi = { ...orig };
+    delete kopi.id;
+    delete kopi.created_at;
+    delete kopi.updated_at;
+
+    // Generér unik slug (…-kopi, …-kopi-2, …)
+    const brugte = new Set((allRetreats || []).map(r => r.slug).filter(Boolean));
+    const base = (orig.slug || 'retreat') + '-kopi';
+    let nySlug = base, n = 2;
+    while (brugte.has(nySlug)) { nySlug = base + '-' + n; n++; }
+    kopi.slug = nySlug;
+
+    // Markér som kopi, opret SKJULT (så den ikke straks vises live), placér sidst
+    kopi.title = (orig.title || 'Retreat') + ' (kopi)';
+    if (orig.title_en) kopi.title_en = orig.title_en + ' (copy)';
+    kopi.active = false;
+    const maxOrder = (allRetreats || []).reduce((m, r) => Math.max(m, r.sort_order || 0), 0);
+    kopi.sort_order = maxOrder + 1;
+
+    // Indsæt kopien (kun selve retreatet — bookinger/betalinger kopieres IKKE med)
+    const { data: ny, error: e2 } = await sb.from('retreats').insert(kopi).select().single();
+    if (e2) { showToast('Fejl ved dublering: ' + e2.message, true); return; }
+
+    showToast('Retreat dubleret ✓ (oprettet som skjult)');
+    await loadRetreats();
+
+    // Åbn kopien til videre redigering
+    let nyId = ny && ny.id;
+    if (!nyId) { const f = (allRetreats || []).find(r => r.slug === nySlug); if (f) nyId = f.id; }
+    if (nyId) redigerRetreat(nyId);
+  } catch (e) {
+    showToast('Fejl: ' + e.message, true);
+  }
 }
 
 // ── DATOER EDITOR (samlet liste — øverste dato er den primære, resten er alternative) ──
