@@ -34,6 +34,9 @@ nav{
   transition:gap .3s;
 }
 .nav-back:hover{gap:.8rem;}
+.nav-links{display:flex;gap:1.5rem;list-style:none;}
+.nav-links a{font-size:.66rem;letter-spacing:.12em;text-transform:uppercase;color:var(--text-mid);text-decoration:none;transition:color .3s;}
+.nav-links a:hover{color:var(--wine);}
 
 /* ══════════════════════════════
    MOBILMENU (≤900px) — slide-in fra højre
@@ -107,9 +110,6 @@ body.menu-open .nav-burger span:nth-child(3){ transform:translateY(-9px) rotate(
   }
   body.menu-open .nav-back{ transform:translateX(0); }
 }
-.nav-links{display:flex;gap:1.5rem;list-style:none;}
-.nav-links a{font-size:.66rem;letter-spacing:.12em;text-transform:uppercase;color:var(--text-mid);text-decoration:none;transition:color .3s;}
-.nav-links a:hover{color:var(--wine);}
 .lang-btn{border-radius:0;font-family:'Manrope',sans-serif;}
 .lang-btn.lang-btn-active{background:var(--wine);color:#fff !important;}
 .lang-btn.lang-btn-inactive{background:transparent;color:var(--wine) !important;}
