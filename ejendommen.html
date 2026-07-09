@@ -596,6 +596,53 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:3rem
 .section-canvas{position:absolute;inset:0;pointer-events:none;z-index:0;opacity:1;}
 .has-canvas > *:not(.section-canvas){position:relative;z-index:1;}
 
+/* ══════════════════════════════════════════════
+   MOBIL-LAYOUT for ejendommen.html
+   Alt i @media — desktop-visningen er uændret
+══════════════════════════════════════════════ */
+
+/* ── Grids kollapser (≤860px) ── */
+@media (max-width:860px){
+  .intro-two-col{grid-template-columns:1fr;gap:3rem;}
+  .towers-grid{grid-template-columns:1fr;gap:3rem;}
+  .facilities-grid{grid-template-columns:1fr;gap:3rem;}
+  .facility-list{grid-template-columns:1fr;}
+  .vineyard-detail-grid{grid-template-columns:1fr;gap:3rem;}
+  .location-grid{grid-template-columns:1fr;gap:3rem;}
+  .sustain-top{grid-template-columns:1fr;gap:2.5rem;}
+  .sustain-imgtext{grid-template-columns:1fr;gap:2.5rem;}
+  .rooms-grid{grid-template-columns:1fr 1fr;}
+  .sustain-five{grid-template-columns:repeat(3,1fr);}
+}
+
+/* ── Telefon (≤768px): afstande, hero, 1-kolonne, footer ── */
+@media (max-width:768px){
+  /* Mindre lodret luft i sektionerne */
+  .estate-intro{padding:4.5rem 0 4rem;}
+  .towers,.rooms,.facilities,.sustainability,.vineyard-detail,.location,.estate-cta{padding:4.5rem 0;}
+  /* Mindre vandret margin */
+  .section-inner{padding:0 1.4rem;}
+  /* Hero */
+  .page-hero{height:56vh;min-height:380px;}
+  .page-hero-content{padding:0 1.4rem 2.4rem;}
+  /* Intro-billedstak: undgå at det lille billede skubber siden ud */
+  .intro-img-stack{margin-top:1rem;}
+  .intro-main-img{aspect-ratio:4/3;}
+  .intro-small-img{left:auto;right:1rem;bottom:-1.2rem;width:46%;}
+  /* Grids → 1 kolonne på telefon */
+  .rooms-grid{grid-template-columns:1fr;}
+  .sustain-five{grid-template-columns:repeat(2,1fr);}
+  /* Mindre store afstande */
+  .rooms-header{margin-bottom:2.6rem;}
+  /* CTA-knapper i fuld bredde */
+  .cta-btns{flex-direction:column;}
+  .cta-btns .btn-wine,.cta-btns .btn-outline-light{text-align:center;}
+  /* Footer stakket */
+  footer{padding:2.6rem 1.4rem;}
+  .footer-bottom{flex-direction:column;gap:1.1rem;text-align:center;}
+  .footer-bottom > div{justify-content:center;}
+}
+
 </style>
 </head>
 <body>
