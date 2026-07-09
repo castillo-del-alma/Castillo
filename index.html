@@ -1290,6 +1290,13 @@ body.menu-open .nav-burger span:nth-child(3){ transform:translateY(-9px) rotate(
   .exp-grid{grid-template-columns:1fr;}
 }
 
+
+/* ── Anker-scroll på mobil: land med luft under den faste nav, så
+     sektions-labelen (fx "OPLEVELSER & LIVSNYDELSE") altid er synlig.
+     Desktop-finjusteringen ovenfor er uændret. ── */
+@media (max-width:900px){
+  section[id],#estate,#experiences,#gallery,#om-os,#retreats{scroll-margin-top:95px;}
+}
 </style>
 </head>
 <body>
