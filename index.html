@@ -1129,6 +1129,102 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:5rem
   padding-left:1.8rem;
 }
 
+/* ══════════════════════════════
+   MOBILMENU (≤900px) — slide-in fra højre
+   Alt ligger i @media, så desktop-visningen er uændret
+══════════════════════════════ */
+.nav-burger{
+  display:none; /* vises kun ≤900px */
+  position:relative; z-index:12;
+  width:30px; height:20px; padding:0; margin:0;
+  background:none; border:none; cursor:pointer;
+  flex-direction:column; justify-content:space-between;
+}
+.nav-burger span{
+  display:block; height:2px; width:100%;
+  background:rgba(255,255,255,.92);
+  transition:transform .35s ease, opacity .25s ease, background .3s ease;
+}
+nav.scrolled .nav-burger span,
+body.menu-open .nav-burger span{ background:var(--charcoal); }
+body.menu-open .nav-burger span:nth-child(1){ transform:translateY(9px) rotate(45deg); }
+body.menu-open .nav-burger span:nth-child(2){ opacity:0; }
+body.menu-open .nav-burger span:nth-child(3){ transform:translateY(-9px) rotate(-45deg); }
+
+.nav-backdrop{
+  display:none;
+  position:fixed; inset:0; z-index:9998;
+  background:rgba(30,22,12,.45);
+  opacity:0; pointer-events:none;
+  transition:opacity .4s ease;
+  -webkit-backdrop-filter:blur(2px); backdrop-filter:blur(2px);
+}
+
+@media (max-width:900px){
+  nav{ padding:1.1rem 1.6rem; }
+  nav.scrolled{ padding:.9rem 1.6rem; }
+  .nav-burger{ display:flex; }
+  .nav-backdrop{ display:block; }
+  body.menu-open .nav-backdrop{ opacity:1; pointer-events:auto; }
+  body.menu-open{ overflow:hidden; }
+
+  /* nav-links bliver et slide-in panel fra højre */
+  .nav-links{
+    position:fixed; top:0; right:0; z-index:10;
+    height:100vh; height:100svh;
+    width:min(82vw,360px);
+    flex-direction:column; align-items:stretch; justify-content:flex-start;
+    gap:0;
+    padding:6rem 2rem 2.4rem;
+    background:rgba(250,246,238,.99);
+    -webkit-backdrop-filter:blur(20px); backdrop-filter:blur(20px);
+    border-left:1px solid rgba(184,138,30,.2);
+    box-shadow:-16px 0 48px rgba(44,35,24,.16);
+    overflow-y:auto; overscroll-behavior:contain;
+    transform:translateX(100%);
+    transition:transform .45s cubic-bezier(.4,0,.2,1);
+  }
+  body.menu-open .nav-links{ transform:translateX(0); }
+
+  .nav-links > li{ width:100%; border-bottom:1px solid rgba(184,138,30,.1); }
+  .nav-links > li:last-child{ border-bottom:none; }
+  .nav-links a{
+    color:var(--text-mid);
+    display:block; padding:1rem 0;
+    font-size:.8rem; letter-spacing:.16em;
+  }
+  nav.scrolled .nav-links a{ color:var(--text-mid); }
+  .nav-links a:hover,.nav-links a:focus{ color:var(--wine); }
+
+  /* Book-knap fylder bredden */
+  .nav-book{
+    display:block; text-align:center;
+    margin:1.1rem 0 .4rem; padding:.9rem 1.6rem;
+  }
+  nav.scrolled .nav-book{ color:#fff!important; }
+
+  /* Dropdown → tap-accordion */
+  .nav-dd-trigger{ justify-content:space-between; width:100%; }
+  .nav-dd-arrow{ font-size:1rem; }
+  .nav-has-dd.open .nav-dd-arrow{ transform:rotate(90deg); opacity:.8; }
+  .nav-dd{
+    position:static; left:auto; top:auto; transform:none;
+    opacity:1; pointer-events:auto;
+    background:transparent; -webkit-backdrop-filter:none; backdrop-filter:none;
+    border:none; box-shadow:none; min-width:0; width:100%;
+    padding:0; margin:0;
+    max-height:0; overflow:hidden;
+    transition:max-height .4s ease;
+  }
+  .nav-has-dd:hover .nav-dd{ transform:none; }
+  .nav-has-dd.open .nav-dd{ max-height:600px; }
+  .nav-dd a{ padding:.7rem 0 .7rem 1.2rem; font-size:.68rem; color:var(--text-light) !important; }
+  .nav-dd a:hover{ background:transparent; color:var(--wine) !important; padding-left:1.6rem; }
+
+  /* Sprogskifter nederst i panelet */
+  .lang-switcher-item{ margin-top:1.6rem !important; margin-left:0 !important; }
+}
+
 </style>
 </head>
 <body>
@@ -1138,7 +1234,10 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:5rem
   <a href="#" class="nav-logo">
     <img src="img/taarn-hvid.png" alt="Castillo del Alma">
   </a>
-  <ul class="nav-links">
+  <button class="nav-burger" id="navBurger" aria-label="Åbn menu" aria-controls="navLinks" aria-expanded="false">
+    <span></span><span></span><span></span>
+  </button>
+  <ul class="nav-links" id="navLinks">
     <li class="nav-has-dd">
       <a href="#estate" class="nav-dd-trigger" id="navMainEstate">The Estate <span class="nav-dd-arrow">›</span></a>
       <ul class="nav-dd">
@@ -1166,6 +1265,9 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:5rem
     </li>
   </ul>
 </nav>
+
+<!-- MOBIL-MENU BACKDROP -->
+<div class="nav-backdrop" id="navBackdrop"></div>
 
 <!-- ══════ HERO ══════ -->
 <section class="hero">
@@ -2959,6 +3061,39 @@ function applyUploadedMedia() {
     }
   }
 }
+</script>
+
+<!-- MOBILMENU — slide-in toggle (isoleret, påvirker ikke desktop) -->
+<script>
+(function(){
+  const burger = document.getElementById('navBurger');
+  const backdrop = document.getElementById('navBackdrop');
+  if(!burger) return;
+  const isMobile = () => window.matchMedia('(max-width:900px)').matches;
+  function openMenu(){ document.body.classList.add('menu-open'); burger.setAttribute('aria-expanded','true'); }
+  function closeMenu(){
+    document.body.classList.remove('menu-open');
+    burger.setAttribute('aria-expanded','false');
+    document.querySelectorAll('.nav-has-dd.open').forEach(el => el.classList.remove('open'));
+  }
+  function toggleMenu(){ document.body.classList.contains('menu-open') ? closeMenu() : openMenu(); }
+  burger.addEventListener('click', toggleMenu);
+  if(backdrop) backdrop.addEventListener('click', closeMenu);
+  // Klik på links: dropdown-trigger folder ud på mobil; alle andre lukker menuen
+  document.querySelectorAll('.nav-links a').forEach(a => {
+    a.addEventListener('click', (e) => {
+      if(a.classList.contains('nav-dd-trigger') && isMobile()){
+        e.preventDefault();
+        const li = a.closest('.nav-has-dd');
+        if(li) li.classList.toggle('open');
+        return;
+      }
+      closeMenu();
+    });
+  });
+  document.addEventListener('keydown', (e) => { if(e.key === 'Escape') closeMenu(); });
+  window.addEventListener('resize', () => { if(!isMobile()) closeMenu(); });
+})();
 </script>
 </body>
 </html>
