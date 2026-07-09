@@ -2107,5 +2107,28 @@ sectionAnimators.forEach(({canvas})=>canvasObs.observe(canvas));
   window.addEventListener('resize', () => { if(!isMobile()) closeMenu(); });
 })();
 </script>
+
+<!-- Vis første frame af oplevelses-videoerne (så de ikke står blanke ved scroll) -->
+<script>
+(function(){
+  var vids = document.querySelectorAll('.kat-video video');
+  if(!vids.length) return;
+  function showFirstFrame(v){
+    var seek = function(){ try { if (v.currentTime < 0.05) v.currentTime = 0.1; } catch(e){} };
+    if (v.readyState >= 1) seek();
+    else v.addEventListener('loadedmetadata', seek, { once:true });
+  }
+  if ('IntersectionObserver' in window){
+    var io = new IntersectionObserver(function(entries, obs){
+      entries.forEach(function(e){
+        if (e.isIntersecting){ showFirstFrame(e.target); obs.unobserve(e.target); }
+      });
+    }, { rootMargin: '300px 0px' });
+    vids.forEach(function(v){ io.observe(v); });
+  } else {
+    vids.forEach(showFirstFrame);
+  }
+})();
+</script>
 </body>
 </html>
