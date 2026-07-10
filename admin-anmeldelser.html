@@ -4436,7 +4436,10 @@ feeling more calm – and coming home to yourself again."</textarea></div>
       <div style="font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;color:#2a7a74;font-weight:600;">🇬🇧 QUESTION / ANSWER</div>
     </div>
     <div id="faqListe" style="display:flex;flex-direction:column;gap:1rem;"></div>
-    <button type="button" onclick="tilfoejFaq()" style="margin-top:1rem;width:100%;background:rgba(184,138,30,.1);border:1px solid rgba(184,138,30,.3);color:var(--gold);padding:.7rem;font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;">+ Tilføj spørgsmål</button>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:.8rem;margin-top:1rem;">
+      <button type="button" onclick="tilfoejFaq()" style="background:rgba(184,138,30,.1);border:1px solid rgba(184,138,30,.3);color:var(--gold);padding:.7rem;font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;">+ Tilføj spørgsmål</button>
+      <button type="button" id="faqOversaetAlleBtn" onclick="oversaetAlleFaq(this)" style="background:rgba(58,110,106,.1);border:1px solid rgba(58,110,106,.35);color:#2a7a74;padding:.7rem;font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;">⇄ Oversæt alle til engelsk</button>
+    </div>
     <div class="modal-actions">
       <button class="btn-secondary" onclick="closeModal('modalFaqEditor')">Luk uden at gemme</button>
       <button class="btn-primary" onclick="gemFaqEditor()">Gem og luk</button>
@@ -8500,6 +8503,14 @@ function openFaqEditor() {
   document.getElementById('modalFaqEditor').classList.add('open');
 }
 
+function escFaq(s) {
+  return String(s == null ? '' : s)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+}
+
 function renderFaqListe() {
   const container = document.getElementById('faqListe');
   if (!faqState.length) {
@@ -8508,26 +8519,95 @@ function renderFaqListe() {
   }
   const DA = 'background:#fffef8;border:1px solid rgba(184,138,30,.3);color:#2c2318;padding:.5rem .7rem;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;width:100%;';
   const EN = 'background:#e8f4f3;border:1px solid #7fb3af;color:#2c2318;padding:.5rem .7rem;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;width:100%;';
+  const ARROW = 'background:rgba(44,35,24,.06);border:1px solid rgba(44,35,24,.15);color:#2c2318;cursor:pointer;font-size:.75rem;line-height:1;padding:.3rem .55rem;border-radius:2px;';
   container.innerHTML = faqState.map((f, i) => {
     const en = faqStateEN[i] || { q: '', a: '' };
+    const upDis = i === 0 ? 'disabled style="' + ARROW + 'opacity:.25;cursor:default;"' : 'style="' + ARROW + '"';
+    const dnDis = i === faqState.length - 1 ? 'disabled style="' + ARROW + 'opacity:.25;cursor:default;"' : 'style="' + ARROW + '"';
     return `
     <div style="border:1px solid rgba(184,138,30,.15);overflow:hidden;">
       <div style="display:flex;justify-content:space-between;align-items:center;background:rgba(44,35,24,.04);padding:.5rem 1rem;border-bottom:1px solid rgba(184,138,30,.1);">
         <span style="font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;color:rgba(44,35,24,.5);">Spørgsmål ${i + 1}</span>
-        <button type="button" onclick="fjernFaq(${i})" style="background:none;border:none;color:rgba(192,92,48,.6);cursor:pointer;font-size:.85rem;">✕ Fjern</button>
+        <div style="display:flex;align-items:center;gap:.4rem;">
+          <button type="button" onclick="flytFaq(${i},-1)" title="Flyt op" ${upDis}>▲</button>
+          <button type="button" onclick="flytFaq(${i},1)" title="Flyt ned" ${dnDis}>▼</button>
+          <button type="button" onclick="oversaetFaq(${i}, this)" title="Oversæt til engelsk" style="background:rgba(58,110,106,.1);border:1px solid rgba(58,110,106,.35);color:#2a7a74;padding:.3rem .55rem;font-size:.75rem;line-height:1;cursor:pointer;border-radius:2px;">⇄</button>
+          <button type="button" onclick="fjernFaq(${i})" style="background:none;border:none;color:rgba(192,92,48,.6);cursor:pointer;font-size:.85rem;">✕ Fjern</button>
+        </div>
       </div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:1px;background:rgba(184,138,30,.1);">
         <div style="background:#fff;padding:.8rem;display:flex;flex-direction:column;gap:.5rem;">
-          <input type="text" placeholder="Spørgsmål 🇩🇰" value="${f.q || ''}" oninput="faqState[${i}].q=this.value" style="${DA}">
-          <textarea placeholder="Svar 🇩🇰..." oninput="faqState[${i}].a=this.value" style="${DA}min-height:80px;resize:vertical;">${f.a || ''}</textarea>
+          <input type="text" placeholder="Spørgsmål 🇩🇰" value="${escFaq(f.q)}" oninput="faqState[${i}].q=this.value" style="${DA}">
+          <textarea placeholder="Svar 🇩🇰..." oninput="faqState[${i}].a=this.value" style="${DA}min-height:80px;resize:vertical;">${escFaq(f.a)}</textarea>
         </div>
         <div style="background:#f5fcfb;padding:.8rem;display:flex;flex-direction:column;gap:.5rem;">
-          <input type="text" placeholder="Question 🇬🇧" value="${en.q || ''}" oninput="faqStateEN[${i}].q=this.value" style="${EN}">
-          <textarea placeholder="Answer 🇬🇧..." oninput="faqStateEN[${i}].a=this.value" style="${EN}min-height:80px;resize:vertical;">${en.a || ''}</textarea>
+          <input type="text" placeholder="Question 🇬🇧" value="${escFaq(en.q)}" oninput="faqStateEN[${i}].q=this.value" style="${EN}">
+          <textarea placeholder="Answer 🇬🇧..." oninput="faqStateEN[${i}].a=this.value" style="${EN}min-height:80px;resize:vertical;">${escFaq(en.a)}</textarea>
         </div>
       </div>
     </div>`;
   }).join('');
+}
+
+function flytFaq(i, dir) {
+  const j = i + dir;
+  if (j < 0 || j >= faqState.length) return;
+  [faqState[i], faqState[j]] = [faqState[j], faqState[i]];
+  while (faqStateEN.length < faqState.length) faqStateEN.push({ q: '', a: '' });
+  [faqStateEN[i], faqStateEN[j]] = [faqStateEN[j], faqStateEN[i]];
+  renderFaqListe();
+}
+
+async function oversaetFaq(i, btn) {
+  const f = faqState[i];
+  if (!f || (!String(f.q || '').trim() && !String(f.a || '').trim())) { showToast('Udfyld det danske spørgsmål/svar først'); return; }
+  const orig = btn.textContent;
+  btn.textContent = '…';
+  btn.disabled = true;
+  try {
+    if (!faqStateEN[i]) faqStateEN[i] = { q: '', a: '' };
+    if (String(f.q || '').trim()) faqStateEN[i].q = await translateText(f.q);
+    if (String(f.a || '').trim()) faqStateEN[i].a = await translateText(f.a);
+    renderFaqListe();
+    showToast('Oversat til engelsk — husk "Gem og luk" + "💾 Gem retreat"');
+  } catch (e) {
+    console.error('FAQ-oversættelse fejlede:', e);
+    showToast('Oversættelse fejlede — prøv igen');
+    btn.textContent = orig;
+    btn.disabled = false;
+  }
+}
+
+// Oversætter alle punkter hvor det engelske felt er tomt (overskriver ikke eksisterende EN-tekst)
+async function oversaetAlleFaq(btn) {
+  if (!faqState.length) { showToast('Ingen spørgsmål at oversætte'); return; }
+  const orig = btn.textContent;
+  btn.disabled = true;
+  let done = 0, skipped = 0, failed = 0;
+  try {
+    for (let i = 0; i < faqState.length; i++) {
+      btn.textContent = `Oversætter ${i + 1} af ${faqState.length}…`;
+      const f = faqState[i];
+      if (!faqStateEN[i]) faqStateEN[i] = { q: '', a: '' };
+      const en = faqStateEN[i];
+      const needQ = String(f.q || '').trim() && !String(en.q || '').trim();
+      const needA = String(f.a || '').trim() && !String(en.a || '').trim();
+      if (!needQ && !needA) { skipped++; continue; }
+      try {
+        if (needQ) en.q = await translateText(f.q);
+        if (needA) en.a = await translateText(f.a);
+        done++;
+      } catch (e) { console.error('FAQ ' + (i + 1) + ' fejlede:', e); failed++; }
+    }
+    renderFaqListe();
+    let msg = `${done} oversat`;
+    if (skipped) msg += `, ${skipped} sprunget over (havde allerede EN)`;
+    if (failed) msg += `, ${failed} fejlede`;
+    showToast(msg + ' — husk "Gem og luk" + "💾 Gem retreat"');
+  } finally {
+    btn.textContent = orig;
+    btn.disabled = false;
+  }
 }
 
 function tilfoejFaq() {

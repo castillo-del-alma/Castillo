@@ -1814,7 +1814,18 @@ class HighlightRings {
 function renderFaqSection(data) {
   const container = document.querySelector('.faq-list');
   if (!container) return;
-  const items = retreatLang === 'en' && data.faq_items_en && data.faq_items_en.length ? data.faq_items_en : data.faq_items;
+  // EN vælges pr. punkt: tomme engelske felter falder tilbage til dansk (undgår blanke spørgsmål)
+  let items = data.faq_items;
+  if (retreatLang === 'en' && Array.isArray(data.faq_items) && data.faq_items.length) {
+    const enArr = Array.isArray(data.faq_items_en) ? data.faq_items_en : [];
+    items = data.faq_items.map((da, i) => {
+      const en = enArr[i] || {};
+      return {
+        q: (en.q && String(en.q).trim()) ? en.q : (da.q || ''),
+        a: (en.a && String(en.a).trim()) ? en.a : (da.a || '')
+      };
+    });
+  }
   const heading = document.getElementById('faqHeading');
   if (heading) heading.textContent = rSC('ui_faq_heading', 'FAQ');
   // Behold det statiske fallback-indhold i HTML'en hvis retreatet ikke har egne FAQ-punkter sat i admin
