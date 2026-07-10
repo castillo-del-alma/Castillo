@@ -3684,6 +3684,7 @@ feeling more calm – and coming home to yourself again."</textarea></div>
         <a href="#ra_navigation" style="font-size:.72rem;color:#7a5c14;background:#fffef8;border:1px solid rgba(184,138,30,.3);padding:.35rem .8rem;text-decoration:none;">5 · Navigation</a>
         <a href="#ra_hurtiginfo" style="font-size:.72rem;color:#7a5c14;background:#fffef8;border:1px solid rgba(184,138,30,.3);padding:.35rem .8rem;text-decoration:none;">6 · Hurtig-info</a>
         <a href="#ra_program" style="font-size:.72rem;color:#7a5c14;background:#fffef8;border:1px solid rgba(184,138,30,.3);padding:.35rem .8rem;text-decoration:none;">7 · Program</a>
+        <a href="#ra_fritekst" style="font-size:.72rem;color:#7a5c14;background:#fffef8;border:1px solid rgba(184,138,30,.3);padding:.35rem .8rem;text-decoration:none;">7b · Fritekst</a>
         <a href="#ra_inkluderet" style="font-size:.72rem;color:#7a5c14;background:#fffef8;border:1px solid rgba(184,138,30,.3);padding:.35rem .8rem;text-decoration:none;">8 · Inkluderet</a>
         <a href="#ra_vaerelser" style="font-size:.72rem;color:#7a5c14;background:#fffef8;border:1px solid rgba(184,138,30,.3);padding:.35rem .8rem;text-decoration:none;">9 · Værelser</a>
         <a href="#ra_mad" style="font-size:.72rem;color:#7a5c14;background:#fffef8;border:1px solid rgba(184,138,30,.3);padding:.35rem .8rem;text-decoration:none;">10 · Mad</a>
@@ -3956,6 +3957,31 @@ feeling more calm – and coming home to yourself again."</textarea></div>
     </div>
 
     <!-- 8 · INKLUDERET -->
+    <!-- 7b · FRITEKST -->
+    <div class="fc-block" id="ra_fritekst" style="margin-bottom:1.5rem;">
+      <div class="fc-block-header" style="display:flex;align-items:center;justify-content:space-between;">
+        <span class="fc-block-title">7b · Fritekst-sektion (før Inkluderet)</span>
+        <label style="display:flex;align-items:center;gap:.4rem;font-size:.65rem;color:rgba(44,35,24,.7);cursor:pointer;">
+          <input type="checkbox" id="ui_visible_freetext" checked style="cursor:pointer;"> Synlig på siden
+        </label>
+      </div>
+      <div class="fc-block-body">
+        <p style="font-size:.68rem;color:rgba(44,35,24,.55);margin:0 0 1rem;">Fuld bredde tekst-sektion. Vises kun, når brødteksten er udfyldt og togglen er tændt. Tom linje = nyt afsnit. Inline HTML (&lt;b&gt;, &lt;em&gt;, &lt;br&gt;) virker.</p>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Lille overskrift / label (DA)</label><input type="text" id="ui_freetext_label" class="fc-input-da" placeholder="fx Om ugen"></div>
+          <div><label class="fc-label fc-label-en">Small heading / label (EN)</label><input type="text" id="ui_freetext_label_en" class="fc-input-en" placeholder="e.g. About the week"></div>
+        </div>
+        <div class="fc-row" style="margin-top:1rem;">
+          <div><label class="fc-label fc-label-da">Overskrift (DA)</label><input type="text" id="ui_freetext_heading" class="fc-input-da" placeholder="fx En pause fra hverdagen"></div>
+          <div><label class="fc-label fc-label-en">Heading (EN)</label><input type="text" id="ui_freetext_heading_en" class="fc-input-en" placeholder="e.g. A break from everyday life"></div>
+        </div>
+        <div class="fc-row" style="margin-top:1rem;">
+          <div><label class="fc-label fc-label-da">Brødtekst (DA)</label><textarea id="ui_freetext_body" class="fc-input-da fc-textarea" rows="7" style="resize:vertical;"></textarea></div>
+          <div><label class="fc-label fc-label-en">Body text (EN)</label><textarea id="ui_freetext_body_en" class="fc-input-en fc-textarea" rows="7" style="resize:vertical;"></textarea></div>
+        </div>
+      </div>
+    </div>
+
     <div class="fc-block" id="ra_inkluderet" style="margin-bottom:1.5rem;">
       <div class="fc-block-header"><span class="fc-block-title">8 · Inkluderet / Ikke inkluderet</span></div>
       <div class="fc-block-body">
@@ -6225,6 +6251,8 @@ function openNytRetreat() {
   document.getElementById('ui_visible_program').checked = true;
   document.getElementById('ui_visible_facilitator').checked = true;
   document.getElementById('ui_visible_faq').checked = true;
+  { const _e = document.getElementById('ui_visible_freetext'); if (_e) _e.checked = true; }
+  ['ui_freetext_label','ui_freetext_label_en','ui_freetext_heading','ui_freetext_heading_en','ui_freetext_body','ui_freetext_body_en'].forEach(id => { const _e = document.getElementById(id); if (_e) _e.value = ''; });
   { const _p = document.getElementById('retreat_pride'); if (_p) _p.checked = false; }
   document.getElementById('retreat_title').value = '';
   document.getElementById('retreat_title_en').value = '';
@@ -6514,6 +6542,14 @@ function udfyldRetreatForm(r) {
   if (visFacilitatorEl) visFacilitatorEl.checked = vis.facilitator !== false;
   const visFaqEl = document.getElementById('ui_visible_faq');
   if (visFaqEl) visFaqEl.checked = vis.faq !== false;
+  const visFreetextEl = document.getElementById('ui_visible_freetext');
+  if (visFreetextEl) visFreetextEl.checked = vis.freetext !== false;
+  { const _e = document.getElementById('ui_freetext_label'); if (_e) _e.value = r.freetext_label || ''; }
+  { const _e = document.getElementById('ui_freetext_label_en'); if (_e) _e.value = r.freetext_label_en || ''; }
+  { const _e = document.getElementById('ui_freetext_heading'); if (_e) _e.value = r.freetext_heading || ''; }
+  { const _e = document.getElementById('ui_freetext_heading_en'); if (_e) _e.value = r.freetext_heading_en || ''; }
+  { const _e = document.getElementById('ui_freetext_body'); if (_e) _e.value = r.freetext_body || ''; }
+  { const _e = document.getElementById('ui_freetext_body_en'); if (_e) _e.value = r.freetext_body_en || ''; }
   { const _p = document.getElementById('retreat_pride'); if (_p) _p.checked = r.pride === true; }
   document.getElementById('retreat_title').value = r.title || '';
   document.getElementById('retreat_title_en').value = r.title_en || '';
@@ -7163,10 +7199,17 @@ async function gemRetreat() {
       level: document.getElementById('retreat_level').value.trim() || null,
       level_en: document.getElementById('retreat_level_en').value.trim() || null,
       location_en: document.getElementById('retreat_location_en').value.trim() || null,
+      freetext_label: document.getElementById('ui_freetext_label')?.value.trim() || null,
+      freetext_label_en: document.getElementById('ui_freetext_label_en')?.value.trim() || null,
+      freetext_heading: document.getElementById('ui_freetext_heading')?.value.trim() || null,
+      freetext_heading_en: document.getElementById('ui_freetext_heading_en')?.value.trim() || null,
+      freetext_body: document.getElementById('ui_freetext_body')?.value.trim() || null,
+      freetext_body_en: document.getElementById('ui_freetext_body_en')?.value.trim() || null,
       visible_sections: {
         program: document.getElementById('ui_visible_program')?.checked !== false,
         facilitator: document.getElementById('ui_visible_facilitator')?.checked !== false,
-        faq: document.getElementById('ui_visible_faq')?.checked !== false
+        faq: document.getElementById('ui_visible_faq')?.checked !== false,
+        freetext: document.getElementById('ui_visible_freetext')?.checked !== false
       }
     };
 

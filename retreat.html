@@ -376,6 +376,10 @@ body.menu-open .nav-burger span:nth-child(3){ transform:translateY(-9px) rotate(
 }
 
 /* ── INCLUDED ── */
+.freetext{padding:7rem 0;}
+.freetext-body{font-size:1.02rem;line-height:1.95;color:rgba(44,35,24,.82);}
+.freetext-body p{margin:0 0 1.4rem;}
+.freetext-body p:last-child{margin-bottom:0;}
 .included{background:var(--section-alt);padding:7rem 0;}
 .included h2{
   font-family:'Cinzel',serif;font-weight:300;
@@ -937,6 +941,17 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:3rem
     <button class="retreat-cta-btn" onclick="document.getElementById('booking').scrollIntoView({behavior:'smooth'})">Book dette retreat</button>
   </div>
 </div>
+
+<!-- FRITEKST -->
+<section class="freetext" id="freetext" style="display:none;">
+  <div class="section-inner">
+    <div class="reveal">
+      <span class="section-label" id="freetextLabel"></span>
+      <h2 id="freetextHeading"></h2>
+    </div>
+    <div class="freetext-body reveal d1" id="freetextBody"></div>
+  </div>
+</section>
 
 <!-- INCLUDED -->
 <section class="included" id="included">
@@ -1936,6 +1951,29 @@ function applyRetreatContent() {
     document.getElementById('program').style.display = 'none';
   }
 
+  // Fritekst-sektion (fuld bredde tekst før Inkluderet)
+  {
+    const ftVis = (data.visible_sections || {}).freetext !== false;
+    const ftLabel = retreatLang === 'en' ? (data.freetext_label_en || data.freetext_label) : data.freetext_label;
+    const ftHeading = retreatLang === 'en' ? (data.freetext_heading_en || data.freetext_heading) : data.freetext_heading;
+    const ftBody = retreatLang === 'en' ? (data.freetext_body_en || data.freetext_body) : data.freetext_body;
+    const ftSection = document.getElementById('freetext');
+    if (ftSection) {
+      if (ftVis && ftBody && ftBody.trim()) {
+        document.getElementById('freetextLabel').textContent = ftLabel || '';
+        document.getElementById('freetextHeading').innerHTML = ftHeading || '';
+        // Tomme linjer adskiller afsnit; enkelte linjeskift bliver <br>; inline HTML bevares
+        document.getElementById('freetextBody').innerHTML = ftBody.trim()
+          .split(/\n\s*\n/)
+          .map(p => '<p>' + p.trim().replace(/\n/g, '<br>') + '</p>')
+          .join('');
+        ftSection.style.display = '';
+      } else {
+        ftSection.style.display = 'none';
+      }
+    }
+  }
+
   // Inkluderet / ikke inkluderet
   const inclContainer = document.getElementById('includedListContainer');
   const exclContainer = document.getElementById('excludedListContainer');
@@ -2094,7 +2132,7 @@ function cycleEjRoomImg(card) {
 
 function applySectionVisibility(data) {
   const vis = data.visible_sections || {};
-  const sectionMap = { program: 'program', facilitator: 'facilitator', faq: 'faq' };
+  const sectionMap = { program: 'program', facilitator: 'facilitator', faq: 'faq', freetext: 'freetext' };
 
   Object.keys(sectionMap).forEach(key => {
     if (vis[key] === false) {
