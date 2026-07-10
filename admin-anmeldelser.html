@@ -5872,6 +5872,11 @@ async function visDetalje(kundeId) {
       ${(booking.selected_addons||[]).length > 0 ? `<div class="detalje-row"><span class="detalje-key">Tilvalg (bestilt)</span><span class="detalje-val" style="color:rgba(44,35,24,.85);">${(booking.selected_addons||[]).map(a=>a.text+(a.price?' (€'+a.price+')':'')).join(', ')}</span></div>` : tilvalgCharges.length > 0 ? `<div class="detalje-row"><span class="detalje-key">Tilvalg</span><span class="detalje-val" style="color:rgba(44,35,24,.85);">${tilvalgCharges.map(c=>c.description.replace('Tilvalg: ','')).join(', ')}</span></div>` : ''}
     </div>`;
 
+    html += `<div class="detalje-section" id="pasAdminSection">
+      <h4>Pas / politiregistrering</h4>
+      <p style="color:rgba(44,35,24,.5);font-size:.75rem;">Henter…</p>
+    </div>`;
+
     html += `<div class="detalje-section">
       <h4>Økonomi</h4>
       <div class="detalje-row"><span class="detalje-key">Retreat pris</span><span class="detalje-val">€${parseFloat(booking.total_price).toFixed(2)}</span></div>
@@ -5937,6 +5942,7 @@ async function visDetalje(kundeId) {
 
   document.getElementById('detaljeSections').innerHTML = html;
   aktivDetaljeBookingId = booking ? booking.id : null;
+  if (booking) loadPasAdmin(kunde.email, booking);
   
   // Reset til info fane
   document.querySelectorAll('.detalje-tab').forEach((b,i) => {
@@ -5963,6 +5969,46 @@ async function visDetalje(kundeId) {
 
   document.getElementById('modalDetalje').classList.add('open');
   if (booking) startAdminRealtime(booking.id);
+}
+
+// ── PAS / POLITIREGISTRERING (read-only i admin) ──
+async function loadPasAdmin(email, booking) {
+  const sec = document.getElementById('pasAdminSection');
+  if (!sec) return;
+  let guests = [];
+  try {
+    const res = await fetch('/.netlify/functions/booking-guests', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ action: 'get', email: email, booking_id: booking.id })
+    });
+    if (res.ok) {
+      const d = await res.json();
+      guests = Array.isArray(d.guests) ? d.guests : [];
+    }
+  } catch(e) { /* vises som ikke udfyldt */ }
+
+  const antal = Math.max(1, parseInt(booking.guests, 10) || 1);
+  const esc = s => String(s == null ? '' : s).replace(/&/g,'&amp;').replace(/</g,'&lt;');
+  const fmtDato = d => d ? new Date(d + 'T00:00:00').toLocaleDateString('da-DK', { day: 'numeric', month: 'short', year: 'numeric' }) : '—';
+
+  let inner = '<h4>Pas / politiregistrering</h4>';
+  const komplette = guests.filter(g => g.full_name && g.passport_number && g.passport_expiry && g.passport_issued).length;
+
+  if (guests.length === 0) {
+    inner += '<p style="color:rgba(44,35,24,.55);font-size:.78rem;font-style:italic;">Ikke udfyldt endnu — gæsten registrerer via Min Booking</p>';
+  } else {
+    inner += `<div style="font-size:.68rem;margin-bottom:.6rem;color:${komplette >= antal ? '#6a7240' : 'var(--wine)'};font-family:Manrope,sans-serif;">${komplette} af ${antal} gæster registreret${komplette >= antal ? ' ✓' : ''}</div>`;
+    guests.forEach(g => {
+      inner += `<div style="border:1px solid rgba(184,138,30,.2);padding:.6rem .8rem;margin-bottom:.5rem;">
+        <div style="font-size:.8rem;font-weight:600;color:var(--charcoal);">Gæst ${g.guest_no}: ${esc(g.full_name) || '—'}</div>
+        <div style="font-size:.72rem;color:rgba(44,35,24,.7);margin-top:.25rem;">
+          Pasnr: <b>${esc(g.passport_number) || '—'}</b> &nbsp;·&nbsp; Udløber: ${fmtDato(g.passport_expiry)} &nbsp;·&nbsp; Udstedt i: ${esc(g.passport_issued) || '—'}
+        </div>
+      </div>`;
+    });
+  }
+  sec.innerHTML = inner;
 }
 
 // ── BETALINGSTYPE VÆLGER ──

@@ -114,6 +114,7 @@ body{font-family:'Manrope',sans-serif;background:var(--cream);color:var(--charco
     </div>
     <div class="tab-content active" id="tab-booking">
       <div class="booking-card" id="bookingCard"><div class="empty-state">Henter booking...</div></div>
+      <div class="booking-card" id="pasCard" style="display:none;margin-top:1.5rem;"></div>
     </div>
     <div class="tab-content" id="tab-betalinger">
       <div id="betalingerIndhold"><div class="empty-state">Henter betalinger...</div></div>
@@ -224,6 +225,7 @@ async function loadPortal(email) {
   }
   document.getElementById('portalNavn').textContent = kunde.full_name;
   renderBooking();
+  loadPasRegistrering();
   renderBetalinger();
   checkUnread();
   startRealtimeBeskeder();
@@ -266,6 +268,133 @@ function renderBooking() {
       <button onclick="gemTilvalg()" style="margin-top:1rem;background:#b88a1e;border:none;color:#fff;padding:.65rem 1.5rem;font-size:.62rem;letter-spacing:.18em;text-transform:uppercase;cursor:pointer;font-family:'Manrope',sans-serif;">Gem tilvalg</button>
       <div id="tilvalgMsg" style="font-size:.72rem;margin-top:.5rem;min-height:1rem;"></div>
     </div>` : ''}`;
+}
+
+// ── REJSEREGISTRERING (pas til politianmeldelse) ──
+let pasGuests = [];
+
+function pasEsc(s) {
+  return String(s == null ? '' : s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/"/g,'&quot;');
+}
+
+async function loadPasRegistrering() {
+  const card = document.getElementById('pasCard');
+  if (!card) return;
+  if (!bookingData) { card.style.display = 'none'; return; }
+  card.style.display = 'block';
+  card.innerHTML = '<div class="empty-state">Henter rejseregistrering...</div>';
+  pasGuests = [];
+  try {
+    const res = await fetch('/.netlify/functions/booking-guests', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ action: 'get', email: userEmail, booking_id: bookingData.id })
+    });
+    if (res.ok) {
+      const d = await res.json();
+      pasGuests = Array.isArray(d.guests) ? d.guests : [];
+    }
+  } catch(e) { /* viser tom formular */ }
+  renderPasForm();
+}
+
+function renderPasForm() {
+  const card = document.getElementById('pasCard');
+  const antal = Math.max(1, parseInt(bookingData.guests, 10) || 1);
+  const lblStyle = "display:block;font-size:.6rem;letter-spacing:.15em;text-transform:uppercase;color:rgba(44,35,24,.5);font-family:'Manrope',sans-serif;";
+  const inpStyle = "width:100%;box-sizing:border-box;margin-top:.35rem;padding:.55rem .7rem;border:1px solid var(--sand);background:#fff;font-size:.85rem;color:var(--charcoal);font-family:'Manrope',sans-serif;";
+
+  let udfyldt = 0;
+  const rows = [];
+  for (let i = 1; i <= antal; i++) {
+    const saved = pasGuests.find(g => g.guest_no === i) || {};
+    if (saved.full_name && saved.passport_number && saved.passport_expiry && saved.passport_issued) udfyldt++;
+    let navn = saved.full_name || '';
+    if (!navn) navn = i === 1 ? (portalKundeNavn || '') : (((bookingData.extra_guests || [])[i - 2] || {}).navn || '');
+    rows.push(`
+      <div style="border:1px solid var(--sand);padding:1rem 1.1rem;margin-bottom:.8rem;">
+        <div style="font-size:.62rem;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);margin-bottom:.7rem;font-family:'Manrope',sans-serif;">Gæst ${i}${i === 1 ? ' · booker' : ''}</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:.7rem;">
+          <label style="${lblStyle}grid-column:1/-1;">Fulde navn (som i passet)
+            <input type="text" class="pas-navn" data-no="${i}" value="${pasEsc(navn)}" style="${inpStyle}" autocomplete="off"></label>
+          <label style="${lblStyle}">Pasnummer
+            <input type="text" class="pas-nr" data-no="${i}" value="${pasEsc(saved.passport_number || '')}" style="${inpStyle}" autocomplete="off"></label>
+          <label style="${lblStyle}">Udløbsdato
+            <input type="date" class="pas-udlob" data-no="${i}" value="${pasEsc(saved.passport_expiry || '')}" style="${inpStyle}"></label>
+          <label style="${lblStyle}grid-column:1/-1;">Udstedt i (land)
+            <input type="text" class="pas-land" data-no="${i}" value="${pasEsc(saved.passport_issued || '')}" style="${inpStyle}" autocomplete="off"></label>
+        </div>
+      </div>`);
+  }
+
+  const status = udfyldt === antal
+    ? '<span style="color:#6a7240;">✓ Alle gæster er registreret</span>'
+    : `<span style="color:var(--wine);">${udfyldt} af ${antal} gæster registreret — udfyld venligst resten</span>`;
+
+  card.innerHTML = `
+    <div class="booking-card-header">
+      <div class="booking-retreat" style="font-size:1.1rem;">Rejseregistrering</div>
+    </div>
+    <p style="font-size:.82rem;color:rgba(44,35,24,.72);line-height:1.6;margin:.3rem 0 .5rem;">
+      Spansk lov kræver, at vi registrerer alle overnattende gæster hos politiet.
+      Udfyld venligst pasoplysninger for hver gæst på bookingen inden ankomst.
+    </p>
+    <div style="font-size:.75rem;margin-bottom:1rem;font-family:'Manrope',sans-serif;">${status}</div>
+    ${rows.join('')}
+    <button onclick="gemPasRegistrering()" style="background:#b88a1e;border:none;color:#fff;padding:.65rem 1.5rem;font-size:.62rem;letter-spacing:.18em;text-transform:uppercase;cursor:pointer;font-family:'Manrope',sans-serif;">Gem registrering</button>
+    <div id="pasMsg" style="font-size:.72rem;margin-top:.5rem;min-height:1rem;"></div>`;
+}
+
+async function gemPasRegistrering() {
+  if (!bookingData) return;
+  const msg = document.getElementById('pasMsg');
+  const antal = Math.max(1, parseInt(bookingData.guests, 10) || 1);
+  const idag = new Date().toISOString().slice(0, 10);
+  const guests = [];
+
+  for (let i = 1; i <= antal; i++) {
+    const val = cls => { const el = document.querySelector('.' + cls + '[data-no="' + i + '"]'); return el ? el.value.trim() : ''; };
+    const g = { guest_no: i, full_name: val('pas-navn'), passport_number: val('pas-nr'), passport_expiry: val('pas-udlob'), passport_issued: val('pas-land') };
+    if (!g.full_name || !g.passport_number || !g.passport_expiry || !g.passport_issued) {
+      msg.style.color = '#7a1f35';
+      msg.textContent = 'Udfyld venligst alle felter for gæst ' + i;
+      return;
+    }
+    if (g.passport_expiry <= idag) {
+      msg.style.color = '#7a1f35';
+      msg.textContent = 'Passet for gæst ' + i + ' er udløbet — kontakt os venligst';
+      return;
+    }
+    if (bookingData.departure_date && g.passport_expiry < bookingData.departure_date) {
+      msg.style.color = '#7a1f35';
+      msg.textContent = 'Passet for gæst ' + i + ' udløber før afrejse — kontakt os venligst';
+      return;
+    }
+    guests.push(g);
+  }
+
+  msg.style.color = 'rgba(44,35,24,.5)';
+  msg.textContent = 'Gemmer…';
+  try {
+    const res = await fetch('/.netlify/functions/booking-guests', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ action: 'save', email: userEmail, booking_id: bookingData.id, guests })
+    });
+    if (!res.ok) {
+      const d = await res.json().catch(() => ({}));
+      throw new Error(d.error || 'Kunne ikke gemme');
+    }
+    pasGuests = guests;
+    renderPasForm();
+    const okMsg = document.getElementById('pasMsg');
+    okMsg.style.color = '#6a7240';
+    okMsg.textContent = '✓ Registrering gemt — tak!';
+    setTimeout(() => { if (okMsg) okMsg.textContent = ''; }, 4000);
+  } catch(e) {
+    msg.style.color = '#7a1f35';
+    msg.textContent = 'Fejl: ' + e.message;
+  }
 }
 
 async function gemTilvalg() {
