@@ -2673,14 +2673,22 @@ async function loadSiteContent() {
 // Geo-baseret sprogvalg: Danmark → dansk, resten af verden → engelsk.
 // Bruger Netlifys geo-header via egen function (ingen ekstern IP-tjeneste → GDPR-venligt).
 async function determineStartLang() {
+  // Samme geo-svar genbruges på tværs af sider i samme besøg (hurtigere + konsistent sprog)
+  try {
+    const cached = sessionStorage.getItem('cda_geo_lang');
+    if (cached === 'da' || cached === 'en') return cached;
+  } catch(e) { /* sessionStorage utilgængelig → henter geo hver gang */ }
   try {
     const ctrl = new AbortController();
-    const t = setTimeout(() => ctrl.abort(), 2500);
+    const t = setTimeout(() => ctrl.abort(), 4000);
     const res = await fetch('/.netlify/functions/geo-lang', { signal: ctrl.signal });
     clearTimeout(t);
     if (res.ok) {
       const geo = await res.json();
-      if (geo && (geo.lang === 'da' || geo.lang === 'en')) return geo.lang;
+      if (geo && (geo.lang === 'da' || geo.lang === 'en')) {
+        try { sessionStorage.setItem('cda_geo_lang', geo.lang); } catch(e) {}
+        return geo.lang;
+      }
     }
   } catch(e) { /* geo utilgængelig (fx lokal test) → fallback til browsersprog nedenfor */ }
   try {
