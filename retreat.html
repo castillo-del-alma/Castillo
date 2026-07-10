@@ -377,8 +377,16 @@ body.menu-open .nav-burger span:nth-child(3){ transform:translateY(-9px) rotate(
 
 /* ── INCLUDED ── */
 .freetext{padding:7rem 0;}
-.freetext-body{font-size:1.02rem;line-height:1.95;color:rgba(44,35,24,.82);}
-.freetext-body p{margin:0 0 1.4rem;}
+.freetext h2{
+  font-family:'Cinzel',serif;font-weight:300;
+  font-size:clamp(1.8rem,3vw,2.6rem);letter-spacing:.08em;
+  color:var(--charcoal);margin-bottom:1.8rem;line-height:1.2;
+}
+.freetext h2 em{color:var(--wine);font-style:normal;}
+.freetext-body p{
+  font-family:'Cormorant Garamond',serif;font-size:1.1rem;
+  font-weight:300;line-height:1.95;color:var(--text-mid);margin:0 0 1.4rem;
+}
 .freetext-body p:last-child{margin-bottom:0;}
 .included{background:var(--section-alt);padding:7rem 0;}
 .included h2{
@@ -778,6 +786,7 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:3rem
   /* Hindr sidelæns pan/scroll på iOS — skal også sidde på html, ikke kun body */
   html{overflow-x:hidden;}
   .overview-text p{font-size:1.2rem;}
+  .freetext-body p{font-size:1.2rem;}
   .overview-text blockquote{font-size:1.3rem;}
   .highlight-item p{font-size:1.15rem;}
   .program-day-content p{font-size:1.12rem;}
