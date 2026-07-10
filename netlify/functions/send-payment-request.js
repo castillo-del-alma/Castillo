@@ -29,15 +29,17 @@ exports.handler = async (event) => {
   let departureStr = '—';
   let depositAmount = 0;
 
-  const lang = getLang(null);
-  const t = texts[lang];
+  let lang = getLang(null);
+  let t = texts[lang];
   try {
-    const bookingRes = await fetch(`${SUPABASE_URL}/rest/v1/bookings?id=eq.${bookingId}&select=retreat_name,arrival_date,departure_date,deposit_amount`, {
+    const bookingRes = await fetch(`${SUPABASE_URL}/rest/v1/bookings?id=eq.${bookingId}&select=retreat_name,arrival_date,departure_date,deposit_amount,customers(nationality)`, {
       headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
     });
     const bookingArr = await bookingRes.json();
     const bookingInfo = Array.isArray(bookingArr) ? bookingArr[0] : null;
     if (bookingInfo) {
+      lang = getLang(bookingInfo.customers && bookingInfo.customers.nationality);
+      t = texts[lang];
       retreatName = bookingInfo.retreat_name || retreatName;
       arrivalStr = fmtDateDK(bookingInfo.arrival_date);
       departureStr = fmtDateDK(bookingInfo.departure_date);

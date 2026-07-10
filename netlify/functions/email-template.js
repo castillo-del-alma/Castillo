@@ -106,8 +106,9 @@ const texts = {
 };
 
 function getLang(nationality) {
-  const danish = ['Danmark', 'Denmark', 'DK', 'da', 'Danmark/Denmark'];
-  return danish.includes(nationality) ? 'da' : 'en';
+  // Danmark → dansk, alle andre lande → engelsk (robust over for store/små bogstaver)
+  const danish = ['danmark', 'denmark', 'dk', 'da', 'dan', 'dnk', 'danmark/denmark', 'dansk', 'danish'];
+  return danish.includes(String(nationality || '').trim().toLowerCase()) ? 'da' : 'en';
 }
 
 function fmtDate(iso, lang) {

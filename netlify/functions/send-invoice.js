@@ -82,6 +82,8 @@ exports.handler = async (event) => {
     const booking = bArr[0];
     if (!booking) throw new Error('Booking ikke fundet');
     const customer = booking.customers;
+    const invLang = getLang(customer && customer.nationality);
+    const invT = texts[invLang];
     const paidPayments = (booking.payments||[]).filter(p=>p.status==='paid');
     const totalPaid = paidPayments.reduce((s,p)=>s+parseFloat(p.amount),0);
 
@@ -102,22 +104,22 @@ exports.handler = async (event) => {
       body: JSON.stringify({
         from:'Castillo del Alma <booking@castillodelalma.es>',
         to: customer.email,
-        subject:`Faktura ${invoice.invoice_number} — Castillo del Alma`,
+        subject:`${invLang === 'da' ? 'Faktura' : 'Invoice'} ${invoice.invoice_number} — Castillo del Alma`,
         html: buildEmail({
-          lang: getLang(null),
-          title: texts['da'].invoice_title,
-          intro: texts['da'].invoice_intro,
+          lang: invLang,
+          title: invT.invoice_title,
+          intro: invT.invoice_intro,
           sections: [{
             label: '',
             rows: [
-              ['Faktura nr.', invoice.invoice_number],
+              [invLang === 'da' ? 'Faktura nr.' : 'Invoice no.', invoice.invoice_number],
               ['Total', '€' + totalPaid.toFixed(2)],
-              ['Moms 10%', '€' + (totalPaid/1.1*0.1).toFixed(2)]
+              [invLang === 'da' ? 'Moms 10%' : 'VAT 10%', '€' + (totalPaid/1.1*0.1).toFixed(2)]
             ]
           }],
-          note: texts['da'].invoice_attached
+          note: invT.invoice_attached
         }),
-        attachments:[{ filename:`faktura-${invoice.invoice_number}.pdf`, content:Buffer.from(pdfBuffer).toString('base64') }]
+        attachments:[{ filename:`${invLang === 'da' ? 'faktura' : 'invoice'}-${invoice.invoice_number}.pdf`, content:Buffer.from(pdfBuffer).toString('base64') }]
       })
     });
 

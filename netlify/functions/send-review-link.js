@@ -7,7 +7,17 @@ exports.handler = async (event) => {
   const fornavn = kundeNavn.split(' ')[0];
   const link = `https://castillodelalma.es/anmeldelse.html?booking=${bookingId}`;
 
-  const lang = getLang(null);
+  // Sprog fra kundens land: Danmark → dansk, resten → engelsk
+  let lang = 'en';
+  try {
+    const SUPABASE_URL = process.env.SUPABASE_URL;
+    const SUPABASE_KEY = process.env.SUPABASE_SERVICE_KEY || process.env.SUPABASE_ANON_KEY;
+    const cRes = await fetch(`${SUPABASE_URL}/rest/v1/customers?email=eq.${encodeURIComponent(kundeEmail)}&select=nationality&limit=1`, {
+      headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
+    });
+    const cArr = await cRes.json();
+    lang = getLang(Array.isArray(cArr) && cArr[0] ? cArr[0].nationality : null);
+  } catch(e) { /* fallback: engelsk */ }
   const t = texts[lang];
   try {
     const res = await fetch('https://api.resend.com/emails', {

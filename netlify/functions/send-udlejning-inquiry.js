@@ -1,5 +1,5 @@
 const { Resend } = require('resend');
-const { buildEmail } = require('./email-template');
+const { buildEmail, getLang } = require('./email-template');
 
 exports.handler = async (event) => {
   if (event.httpMethod !== 'POST') return { statusCode: 405, body: 'Method Not Allowed' };
@@ -58,22 +58,38 @@ exports.handler = async (event) => {
     ]
   });
 
-  const bekræftHtml = buildEmail({
-    lang: 'da',
+  // Bekræftelse til forespørgeren: dansk hvis land = Danmark, ellers engelsk
+  const ulLang = getLang(land);
+  const U = ulLang === 'da' ? {
+    subject: 'Tak for din forespørgsel — Castillo del Alma',
     title: 'Tak for din forespørgsel',
     intro: `Kære ${navn},\n\nTak for din interesse i at afholde dit retreat på Castillo del Alma. Vi har modtaget din forespørgsel og vender tilbage inden for 24 timer.`,
+    secLabel: 'Din forespørgsel', lType: 'Type arrangement', lDeltagere: 'Antal deltagere', lPeriode: 'Ønsket periode', lVarighed: 'Varighed',
+    note: 'Har du spørgsmål i mellemtiden, er du velkommen til at skrive direkte til hello@castillodelalma.es'
+  } : {
+    subject: 'Thank you for your inquiry — Castillo del Alma',
+    title: 'Thank you for your inquiry',
+    intro: `Dear ${navn},\n\nThank you for your interest in hosting your retreat at Castillo del Alma. We have received your inquiry and will get back to you within 24 hours.`,
+    secLabel: 'Your inquiry', lType: 'Type of event', lDeltagere: 'Number of participants', lPeriode: 'Preferred period', lVarighed: 'Duration',
+    note: 'If you have any questions in the meantime, feel free to write directly to hello@castillodelalma.es'
+  };
+
+  const bekræftHtml = buildEmail({
+    lang: ulLang,
+    title: U.title,
+    intro: U.intro,
     sections: [
       {
-        label: 'Din forespørgsel',
+        label: U.secLabel,
         rows: [
-          ['Type arrangement', formaal],
-          ['Antal deltagere', deltagere],
-          ['Ønsket periode', periode],
-          ['Varighed', varighed],
+          [U.lType, formaal],
+          [U.lDeltagere, deltagere],
+          [U.lPeriode, periode],
+          [U.lVarighed, varighed],
         ]
       }
     ],
-    note: 'Har du spørgsmål i mellemtiden, er du velkommen til at skrive direkte til hello@castillodelalma.es'
+    note: U.note
   });
 
   try {
@@ -88,7 +104,7 @@ exports.handler = async (event) => {
       resend.emails.send({
         from: 'Castillo del Alma <booking@castillodelalma.es>',
         to: email,
-        subject: 'Tak for din forespørgsel — Castillo del Alma',
+        subject: U.subject,
         html: bekræftHtml
       })
     ]);

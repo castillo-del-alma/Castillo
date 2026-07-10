@@ -5,7 +5,7 @@
 // så samme booking aldrig får påmindelsen to gange.
 
 const { Resend } = require('resend');
-const { buildEmail } = require('./email-template');
+const { buildEmail, getLang } = require('./email-template');
 
 const SUPABASE_URL = process.env.SUPABASE_URL;
 const SUPABASE_KEY = process.env.SUPABASE_SERVICE_KEY || process.env.SUPABASE_ANON_KEY;
@@ -27,7 +27,7 @@ exports.handler = async () => {
   // 1) Bekræftede bookinger med ankomst inden for de næste 7 dage
   const bookingRes = await fetch(
     `${SUPABASE_URL}/rest/v1/bookings` +
-    `?select=id,guests,arrival_date,retreat_name,customer_id,customers(email,full_name)` +
+    `?select=id,guests,arrival_date,retreat_name,customer_id,customers(email,full_name,nationality)` +
     `&arrival_date=gte.${isoDate(today)}` +
     `&arrival_date=lte.${isoDate(om7dage)}` +
     `&status=eq.${encodeURIComponent('bekræftet')}`,
@@ -72,33 +72,53 @@ exports.handler = async () => {
       continue;
     }
 
-    // 4) Send påmindelsen
+    // 4) Send påmindelsen — dansk til danske kunder, engelsk til alle andre
+    const lang = getLang(b.customers && b.customers.nationality);
     const mangler = antal - komplette;
-    const ankomstTxt = new Date(b.arrival_date + 'T00:00:00').toLocaleDateString('da-DK', {
+    const ankomstTxt = new Date(b.arrival_date + 'T00:00:00').toLocaleDateString(lang === 'da' ? 'da-DK' : 'en-GB', {
       weekday: 'long', day: 'numeric', month: 'long', year: 'numeric'
     });
 
-    const html = buildEmail({
-      lang: 'da',
+    const R = lang === 'da' ? {
+      subject: 'Husk jeres rejseregistrering — Castillo del Alma',
       title: 'Husk jeres rejseregistrering',
       intro: `Kære ${navn}. Vi glæder os til at byde jer velkommen til Castillo del Alma om en uge. ` +
         `Spansk lov kræver, at vi registrerer alle overnattende gæster hos politiet, og vi mangler stadig ` +
         `pasoplysninger for ${mangler === antal ? 'alle gæster' : mangler + ' af ' + antal + ' gæster'} på jeres booking. ` +
         `Det tager kun et par minutter at udfylde via Min booking.`,
+      secLabel: 'Jeres ophold', lRetreat: 'Retreat', lArrival: 'Ankomst', lGuests: 'Gæster', lReg: 'Registreret',
+      regVal: `${komplette} af ${antal}`, btn: 'Udfyld rejseregistrering',
+      note: 'Har I spørgsmål eller problemer med registreringen, så svar blot på denne mail.'
+    } : {
+      subject: 'Travel registration reminder — Castillo del Alma',
+      title: 'Please complete your travel registration',
+      intro: `Dear ${navn}. We look forward to welcoming you to Castillo del Alma in a week. ` +
+        `Spanish law requires us to register all overnight guests with the police, and we are still missing ` +
+        `passport details for ${mangler === antal ? 'all guests' : mangler + ' of ' + antal + ' guests'} on your booking. ` +
+        `It only takes a couple of minutes via My booking.`,
+      secLabel: 'Your stay', lRetreat: 'Retreat', lArrival: 'Arrival', lGuests: 'Guests', lReg: 'Registered',
+      regVal: `${komplette} of ${antal}`, btn: 'Complete travel registration',
+      note: 'If you have any questions or issues with the registration, simply reply to this email.'
+    };
+
+    const html = buildEmail({
+      lang,
+      title: R.title,
+      intro: R.intro,
       sections: [{
-        label: 'Jeres ophold',
+        label: R.secLabel,
         rows: [
-          ['Retreat', b.retreat_name || ''],
-          ['Ankomst', ankomstTxt],
-          ['Gæster', String(antal)],
-          ['Registreret', `${komplette} af ${antal}`]
+          [R.lRetreat, b.retreat_name || ''],
+          [R.lArrival, ankomstTxt],
+          [R.lGuests, String(antal)],
+          [R.lReg, R.regVal]
         ]
       }],
-      buttons: [{ label: 'Udfyld rejseregistrering', url: 'https://castillodelalma.es/min-booking.html' }],
-      note: 'Har I spørgsmål eller problemer med registreringen, så svar blot på denne mail.'
+      buttons: [{ label: R.btn, url: 'https://castillodelalma.es/min-booking.html' }],
+      note: R.note
     });
 
-    const subject = 'Husk jeres rejseregistrering — Castillo del Alma';
+    const subject = R.subject;
     try {
       await resend.emails.send({
         from: 'Castillo del Alma <booking@castillodelalma.es>',
