@@ -2,6 +2,10 @@
   functions = "netlify/functions"
   command = "cd netlify/functions && npm install"
 
+# Pas-påmindelse: kører dagligt kl. 07:00 UTC (09:00 spansk sommertid)
+[functions."pas-reminder"]
+  schedule = "0 7 * * *"
+
 [[headers]]
   for = "/admin-anmeldelser.html"
   [headers.values]
