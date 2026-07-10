@@ -7445,6 +7445,16 @@ async function loadEjendommensAdmin() {
         if (el && map[key]) el.value = map[key];
         return;
       }
+      // Billedfelter bruger ét _url-input (ikke sprogspecifikt) + thumbnail-preview
+      const urlEl = document.getElementById(`ej_${key}_url`);
+      if (urlEl) {
+        if (map[key]) {
+          urlEl.value = map[key];
+          const preview = document.getElementById(`ej_${key}_preview`);
+          if (preview) { preview.src = map[key]; preview.style.display = 'inline-block'; }
+        }
+        return;
+      }
       ['da','en'].forEach(lang => {
         const elId = `ej_${key}_${lang}`;
         const el = document.getElementById(elId);
@@ -7474,6 +7484,9 @@ async function gemEjendommen() {
       if (el) upserts.push({ key, value: el.value });
       return;
     }
+    // Billedfelter bruger ét _url-input — gemmes under basisnøglen
+    const urlEl = document.getElementById(`ej_${key}_url`);
+    if (urlEl) { upserts.push({ key, value: urlEl.value.trim() }); return; }
     ['da','en'].forEach(lang => {
       const el = document.getElementById(`ej_${key}_${lang}`);
       if (!el) return;
