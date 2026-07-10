@@ -1530,8 +1530,19 @@ const UL_STATIC_I18N = {
   en: { sending: 'Sending...', mathQ: (a,b) => `What is ${a} + ${b}?`, mathWrong: 'The security check is incorrect. Please try again.', fillRequired: 'Please fill in all required fields (*).', vaelgAntal: 'Select number', vaelgArrangement: 'Select event type', vaelgMulighed: 'Select an option' }
 };
 
-// Sprog fra brugerens egen browser-indstilling (ingen ekstern IP-tjeneste → GDPR-venligt)
+// Geo-baseret sprogvalg: Danmark → dansk, resten af verden → engelsk.
+// Bruger Netlifys geo-header via egen function (ingen ekstern IP-tjeneste → GDPR-venligt).
 async function determineStartLangUl() {
+  try {
+    const ctrl = new AbortController();
+    const t = setTimeout(() => ctrl.abort(), 2500);
+    const res = await fetch('/.netlify/functions/geo-lang', { signal: ctrl.signal });
+    clearTimeout(t);
+    if (res.ok) {
+      const geo = await res.json();
+      if (geo && (geo.lang === 'da' || geo.lang === 'en')) return geo.lang;
+    }
+  } catch(e) { /* geo utilgængelig (fx lokal test) → fallback til browsersprog nedenfor */ }
   try {
     const langs = (navigator.languages && navigator.languages.length ? navigator.languages : [navigator.language])
       .filter(Boolean).map(l => l.toLowerCase());

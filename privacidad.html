@@ -130,8 +130,8 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:3rem
   </a>
   <div class="nav-right">
     <div class="lang-switcher" style="display:flex;border:1.5px solid;overflow:hidden;border-color:var(--wine);">
-      <button id="al-btn-da" class="lang-btn lang-btn-active" onclick="setLegalLang('da')" style="font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;padding:.3rem .6rem;border:none;cursor:pointer;font-family:'Manrope',sans-serif;">DA</button>
-      <button id="al-btn-en" class="lang-btn lang-btn-inactive" onclick="setLegalLang('en')" style="font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;padding:.3rem .6rem;border:none;cursor:pointer;font-family:'Manrope',sans-serif;">EN</button>
+      <button id="al-btn-da" class="lang-btn lang-btn-active" onclick="setLegalLang('da', true)" style="font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;padding:.3rem .6rem;border:none;cursor:pointer;font-family:'Manrope',sans-serif;">DA</button>
+      <button id="al-btn-en" class="lang-btn lang-btn-inactive" onclick="setLegalLang('en', true)" style="font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;padding:.3rem .6rem;border:none;cursor:pointer;font-family:'Manrope',sans-serif;">EN</button>
     </div>
     <a href="index.html" class="nav-back" id="al_nav_back">← Tilbage til forsiden</a>
   </div>
@@ -334,7 +334,9 @@ function detectLegalLang(){
   }catch(e){ return 'da'; }
 }
 
-function setLegalLang(lang){
+let userChoseLegalLang = false;
+function setLegalLang(lang, manual){
+  if (manual) userChoseLegalLang = true;
   legalLang = (lang === 'en') ? 'en' : 'da';
   document.body.classList.toggle('en', legalLang === 'en');
   document.documentElement.lang = legalLang;
@@ -356,7 +358,23 @@ function setLegalLang(lang){
     : 'Persondatapolitik — Castillo del Alma';
 }
 
-setLegalLang(detectLegalLang());
+setLegalLang(detectLegalLang());   // øjeblikkeligt bud fra browsersprog (undgår tomt/forkert flash)
+
+// Geo-baseret sprogvalg: Danmark → dansk, resten af verden → engelsk.
+// Bruger Netlifys geo-header via egen function (ingen ekstern IP-tjeneste → GDPR-venligt).
+async function applyGeoLegalLang(){
+  try{
+    const ctrl = new AbortController();
+    const t = setTimeout(() => ctrl.abort(), 2500);
+    const res = await fetch('/.netlify/functions/geo-lang', { signal: ctrl.signal });
+    clearTimeout(t);
+    if (res.ok){
+      const geo = await res.json();
+      if (!userChoseLegalLang && geo && (geo.lang === 'da' || geo.lang === 'en')) setLegalLang(geo.lang);
+    }
+  }catch(e){ /* geo utilgængelig → beholder browsersprog-valget */ }
+}
+applyGeoLegalLang();
 </script>
 
 </body>
