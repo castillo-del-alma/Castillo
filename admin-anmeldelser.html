@@ -4132,12 +4132,13 @@ feeling more calm – and coming home to yourself again."</textarea></div>
           <div><label class="fc-label fc-label-en">Food description (EN)</label><textarea id="ui_food_text_en" class="fc-input-en fc-textarea" rows="4" placeholder="Food is a central part of the retreat experience. All meals are prepared with fresh, local and seasonal ingredients from the region."></textarea></div>
         </div>
         <div style="margin-top:.8rem;padding:.9rem;background:rgba(42,122,116,.06);border:1px solid rgba(42,122,116,.2);">
-          <label class="fc-label" style="color:#2a7a74;">📁 Mad-billede (vises til højre for teksten — tomt felt = standardbilledet)</label>
+          <label class="fc-label" style="color:#2a7a74;">🎬 Mad-video eller -billede (video afspilles automatisk i loop — MP4 anbefales; tomt felt = standardbilledet)</label>
           <div style="display:flex;align-items:center;gap:.8rem;flex-wrap:wrap;margin-top:.5rem;">
             <img id="ra_food_img_preview" src="" style="display:none;width:56px;height:56px;object-fit:cover;border-radius:3px;border:1px solid rgba(184,138,30,.3);flex-shrink:0;">
+            <video id="ra_food_vid_preview" muted loop playsinline style="display:none;width:56px;height:56px;object-fit:cover;border-radius:3px;border:1px solid rgba(184,138,30,.3);flex-shrink:0;"></video>
             <input type="text" id="ra_food_img_url" class="fc-input-da" placeholder="URL indsættes automatisk ved upload" style="flex:1;">
-            <input type="file" id="ra_food_img_file" accept="image/*" style="font-size:.76rem;">
-            <button type="button" onclick="uploadRetreatBillede('ra_food_img_file','ra_food_img_url','ra_food_img_preview')" style="background:#2a7a74;color:#fff;border:none;padding:.45rem 1.1rem;font-family:Manrope,sans-serif;font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;white-space:nowrap;">⬆ Upload</button>
+            <input type="file" id="ra_food_img_file" accept="video/*,image/*" style="font-size:.76rem;">
+            <button type="button" onclick="uploadRetreatFoodMedie('ra_food_img_file','ra_food_img_url')" style="background:#2a7a74;color:#fff;border:none;padding:.45rem 1.1rem;font-family:Manrope,sans-serif;font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;white-space:nowrap;">⬆ Upload</button>
           </div>
         </div>
         <div style="text-align:right;margin-top:1rem;padding-top:.8rem;border-top:1px solid rgba(184,138,30,.12);">
@@ -6624,7 +6625,7 @@ function openNytRetreat() {
   { const _hf = document.getElementById('retreat_hero_file'); if (_hf) _hf.value = ''; }
   { const _cf = document.getElementById('retreat_card_file'); if (_cf) _cf.value = ''; }
   { const _fu = document.getElementById('ra_food_img_url'); if (_fu) _fu.value = ''; }
-  saetBilledPreview('ra_food_img_preview', '');
+  saetFoodMediePreview('');
   { const _ff = document.getElementById('ra_food_img_file'); if (_ff) _ff.value = ''; }
   retreatOrigImages = { hero: '', card: '', food: '' };
   document.getElementById('retreat_booking_deadline').value = '';
@@ -6751,7 +6752,7 @@ function udfyldRetreatForm(r) {
   { const _el = document.getElementById('ui_room_single_heading'); if (_el) _el.value = r.ui_room_single_heading || 'Enkeltværelse'; }
   { const _el = document.getElementById('ui_room_single_heading_en'); if (_el) _el.value = r.ui_room_single_heading_en || 'Single Room'; }
   { const _el = document.getElementById('ra_food_img_url'); if (_el) _el.value = r.ui_food_img || ''; }
-  saetBilledPreview('ra_food_img_preview', r.ui_food_img);
+  saetFoodMediePreview(r.ui_food_img);
   { const _ff = document.getElementById('ra_food_img_file'); if (_ff) _ff.value = ''; }
   document.getElementById('ui_food_heading').value = r.ui_food_heading || 'Nærende andalusisk køkken';
   document.getElementById('ui_food_text').value = r.ui_food_text || 'Mad er en central del af retreatoplevelsen. Alle måltider tilberedes med friske, lokale og sæsonbestemte råvarer fra regionen. Vi spiser enkelt, nærende og med respekt for kroppen.\nMorgenmaden er let og energigivende — frugt, yoghurt, æg og brød. Frokosten er større og ofte et fælles bord med salater, grøntsager og proteiner. Aftensmaden er dagens sociale samlingspunkt — tre retter med lokale vine.\nSærlige kostbehov imødekommes fuldt ud — vegetar, vegansk, glutenfri mv. Oplys ved tilmelding.';
@@ -7051,6 +7052,48 @@ async function uploadRetreatBillede(inputId, urlFieldId, thumbId) {
     if (thumb) { thumb.src = url; thumb.style.display = 'inline-block'; }
     input.value = '';
     showToast('Billede uploadet ✓');
+  } catch(e) {
+    showToast('Upload fejl: ' + e.message, true);
+  }
+}
+
+function erVideoUrl(url) {
+  return !!url && /\.(mp4|webm|m4v|mov)(\?|$)/i.test(url);
+}
+
+function saetFoodMediePreview(url) {
+  const img = document.getElementById('ra_food_img_preview');
+  const vid = document.getElementById('ra_food_vid_preview');
+  if (img) { img.removeAttribute('src'); img.style.display = 'none'; }
+  if (vid) { vid.removeAttribute('src'); vid.style.display = 'none'; }
+  if (!url) return;
+  if (erVideoUrl(url)) {
+    if (vid) { vid.src = url; vid.style.display = 'inline-block'; vid.play().catch(() => {}); }
+  } else {
+    if (img) { img.src = url; img.style.display = 'inline-block'; }
+  }
+}
+
+// Upload af mad-medie (video ELLER billede) — samme oprydningslogik som uploadRetreatBillede
+async function uploadRetreatFoodMedie(inputId, urlFieldId) {
+  const input = document.getElementById(inputId);
+  if (!input || !input.files.length) { showToast('Vælg en fil først', true); return; }
+  const file = input.files[0];
+  if (file.size > 45 * 1024 * 1024) { showToast('Filen er for stor (maks. 45 MB) — kompres videoen først', true); return; }
+  try {
+    showToast('Uploader… (video kan tage lidt tid)');
+    const urlField = document.getElementById(urlFieldId);
+    const prevUrl = urlField ? urlField.value.trim() : '';
+    const url = await uploadRetreatImage(file);
+    const origVals = Object.values(retreatOrigImages);
+    const brugtAndetsteds = prevUrl && JSON.stringify(allRetreats || []).includes(prevUrl);
+    if (prevUrl && prevUrl !== url && !origVals.includes(prevUrl) && !brugtAndetsteds) {
+      cdaSletStorageFil(prevUrl);
+    }
+    if (urlField) urlField.value = url;
+    saetFoodMediePreview(url);
+    input.value = '';
+    showToast(erVideoUrl(url) ? 'Video uploadet ✓' : 'Billede uploadet ✓');
   } catch(e) {
     showToast('Upload fejl: ' + e.message, true);
   }

@@ -490,6 +490,7 @@ body.menu-open .nav-burger span:nth-child(3){ transform:translateY(-9px) rotate(
   box-shadow:8px 8px 0 var(--sand),9px 9px 0 var(--stone);
 }
 .food-img img{width:100%;height:100%;object-fit:cover;display:block;}
+.food-img video{width:100%;height:100%;object-fit:cover;display:block;}
 
 /* ── FACILITATOR ── */
 .facilitator{background:var(--cream);padding:7rem 0;}
@@ -2049,7 +2050,23 @@ function applyRetreatContent() {
     foodTextEl.innerHTML = foodTextVal.split('\n').filter(Boolean).map(p => `<p>${p}</p>`).join('');
   }
   const foodImgEl = document.getElementById('foodImg');
-  if (foodImgEl && data.ui_food_img) foodImgEl.src = data.ui_food_img;
+  const foodMedie = data.ui_food_img || '';
+  if (foodMedie && /\.(mp4|webm|m4v|mov)(\?|$)/i.test(foodMedie)) {
+    // Video: autoplay i loop (muted + playsinline kræves af iOS/Safari for autoplay)
+    const foodWrap = foodImgEl ? foodImgEl.parentElement : document.querySelector('.food-img');
+    if (foodWrap) {
+      const v = document.createElement('video');
+      v.src = foodMedie;
+      v.autoplay = true; v.muted = true; v.loop = true;
+      v.setAttribute('muted', ''); v.setAttribute('playsinline', '');
+      v.setAttribute('aria-label', 'Mad på Castillo del Alma');
+      foodWrap.innerHTML = '';
+      foodWrap.appendChild(v);
+      v.play().catch(() => {}); // enkelte browsere kræver eksplicit play()
+    }
+  } else if (foodImgEl && foodMedie) {
+    foodImgEl.src = foodMedie;
+  }
 
   // Underviser-billeder og rolle
   buildTeacherSection(data);
