@@ -1,0 +1,817 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kontakt — Castillo del Alma</title>
+<link rel="stylesheet" href="fonts/fonts.css">
+<style>
+:root {
+  --cream:      #faf6ee;
+  --beige:      #f0e8d5;
+  --sand:       #e0d0b0;
+  --stone:      #c8b898;
+  --charcoal:   #2c2318;
+  --text:       #2c2318;
+  --text-mid:   #5c4e3a;
+  --text-light: #9a8c7a;
+  --wine:       #7a1f35;
+  --wine-light: #a03048;
+  --terracotta: #c05c30;
+  --olive:      #6a7240;
+  --gold:       #b88a1e;
+  --gold-light: #d4a830;
+  --teal:       #3a6e6a;
+  --section-alt:#ede4d0;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{font-family:'Manrope',sans-serif;background:var(--cream);color:var(--text);overflow-x:hidden;}
+
+/* ── NAV ── */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:200;
+  padding:1.4rem 4rem;
+  display:flex;justify-content:space-between;align-items:center;
+  background:rgba(250,246,238,.96);
+  backdrop-filter:blur(16px);
+  border-bottom:1px solid rgba(184,138,30,.15);
+  box-shadow:0 2px 28px rgba(44,35,24,.06);
+}
+.nav-logo img{height:48px;width:auto;}
+.nav-links{display:flex;gap:2rem;list-style:none;align-items:center;}
+.nav-links a{font-size:.68rem;font-weight:400;letter-spacing:.14em;text-transform:uppercase;color:var(--text-mid);text-decoration:none;transition:color .3s;}
+.nav-links a:hover{color:var(--wine);}
+.nav-back{
+  font-size:.68rem;font-weight:500;letter-spacing:.15em;text-transform:uppercase;
+  color:var(--wine);text-decoration:none;display:flex;align-items:center;gap:.5rem;
+  transition:gap .3s;
+}
+.nav-back:hover{gap:.8rem;}
+
+/* ══════════════════════════════
+   MOBILMENU (≤900px) — slide-in fra højre
+   Alt i @media, så desktop-visningen er uændret
+══════════════════════════════ */
+.nav-burger{
+  display:none;
+  position:relative; z-index:12;
+  width:30px; height:20px; padding:0; margin:0;
+  background:none; border:none; cursor:pointer;
+  flex-direction:column; justify-content:space-between;
+}
+.nav-burger span{
+  display:block; height:2px; width:100%;
+  background:var(--charcoal);
+  transition:transform .35s ease, opacity .25s ease;
+}
+body.menu-open .nav-burger span:nth-child(1){ transform:translateY(9px) rotate(45deg); }
+body.menu-open .nav-burger span:nth-child(2){ opacity:0; }
+body.menu-open .nav-burger span:nth-child(3){ transform:translateY(-9px) rotate(-45deg); }
+
+.nav-backdrop{
+  display:none;
+  position:fixed; inset:0; z-index:9990;
+  background:rgba(30,22,12,.45);
+  opacity:0; pointer-events:none;
+  transition:opacity .4s ease;
+  -webkit-backdrop-filter:blur(2px); backdrop-filter:blur(2px);
+}
+
+@media (max-width:900px){
+  nav{ padding:1.1rem 1.6rem; z-index:9999; }
+  .nav-burger{ display:flex; }
+  .nav-backdrop{ display:block; }
+  body.menu-open .nav-backdrop{ opacity:1; pointer-events:auto; }
+  body.menu-open{ overflow:hidden; }
+
+  /* nav-links → slide-in panel fra højre */
+  .nav-links{
+    position:fixed; top:0; right:0; z-index:10;
+    height:100vh; height:100svh;
+    width:min(82vw,360px);
+    flex-direction:column; align-items:stretch; justify-content:flex-start;
+    gap:0;
+    padding:6rem 2rem 6rem;
+    background:rgba(250,246,238,.99);
+    -webkit-backdrop-filter:blur(20px); backdrop-filter:blur(20px);
+    border-left:1px solid rgba(184,138,30,.2);
+    box-shadow:-16px 0 48px rgba(44,35,24,.16);
+    overflow-y:auto; overscroll-behavior:contain;
+    transform:translateX(100%);
+    transition:transform .45s cubic-bezier(.4,0,.2,1);
+  }
+  body.menu-open .nav-links{ transform:translateX(0); }
+  .nav-links > li{ width:100%; border-bottom:1px solid rgba(184,138,30,.1); }
+  .nav-links > li:last-child{ border-bottom:none; }
+  .nav-links a{ display:block; padding:1rem 0; font-size:.8rem; letter-spacing:.16em; }
+  .nav-links > li[style]{ margin-left:0 !important; margin-top:1.4rem !important; }
+
+  /* Tilbage-knap glider med ind som bund-footer i panelet */
+  .nav-back{
+    position:fixed; right:0; bottom:0; z-index:11;
+    width:min(82vw,360px);
+    justify-content:center;
+    margin:0; padding:1.3rem 2rem;
+    background:rgba(250,246,238,.99);
+    -webkit-backdrop-filter:blur(20px); backdrop-filter:blur(20px);
+    border-top:1px solid rgba(184,138,30,.16);
+    transform:translateX(100%);
+    transition:transform .45s cubic-bezier(.4,0,.2,1);
+  }
+  body.menu-open .nav-back{ transform:translateX(0); }
+}
+
+/* ── HERO ── */
+.page-hero{
+  height:60vh;min-height:440px;
+  position:relative;overflow:hidden;
+  display:flex;align-items:flex-end;
+  margin-top:0;
+}
+.page-hero-img{
+  position:absolute;inset:0;
+  background-color:#2c2318;
+  background-size:cover;background-position:center 40%;
+  opacity:0;transform:scale(1.03);
+  transition:transform 8s ease,opacity .9s ease;
+}
+.page-hero-img.loaded{opacity:1;transform:scale(1);}
+.page-hero-overlay{
+  position:absolute;inset:0;
+  background:linear-gradient(to bottom,rgba(44,35,24,.2) 0%,rgba(44,35,24,.15) 40%,rgba(44,35,24,.75) 100%);
+}
+.page-hero-content{
+  position:relative;z-index:2;
+  padding:0 4rem 4rem;
+  max-width:1320px;margin:0 auto;width:100%;
+}
+.page-hero-eyebrow{
+  font-size:.62rem;letter-spacing:.4em;text-transform:uppercase;
+  color:rgba(238,222,160,.8);margin-bottom:1rem;display:block;
+}
+.page-hero h1{
+  font-family:'Cinzel',serif;font-weight:300;
+  font-size:clamp(2.5rem,6vw,5rem);
+  letter-spacing:.1em;color:#fff;line-height:1.1;
+  text-shadow:0 2px 32px rgba(0,0,0,.4);
+}
+.page-hero h1 em{color:transparent;-webkit-text-stroke:1px rgba(255,255,255,.7);font-style:normal;}
+
+/* ── LAYOUT ── */
+.section-inner{max-width:1320px;margin:0 auto;padding:0 4rem;}
+.section-label{
+  font-size:.6rem;letter-spacing:.4em;text-transform:uppercase;
+  color:var(--gold);margin-bottom:1.4rem;
+  display:flex;align-items:center;gap:1rem;
+}
+.section-label::before{content:'';width:28px;height:1px;background:var(--gold);flex-shrink:0;}
+.divider{height:1px;background:linear-gradient(to right,transparent,rgba(184,138,30,.22),transparent);max-width:1320px;margin:0 auto;}
+
+/* ── KONTAKT ── */
+.kontakt{background:var(--cream);padding:8rem 0;}
+.kontakt-grid{display:grid;grid-template-columns:1fr 1.6fr;gap:7rem;align-items:start;}
+.kontakt-intro h2{
+  font-family:'Cinzel',serif;font-weight:300;
+  font-size:clamp(1.8rem,3vw,2.8rem);letter-spacing:.08em;
+  color:var(--charcoal);margin-bottom:1.5rem;line-height:1.2;
+}
+.kontakt-intro h2 em{color:var(--wine);font-style:normal;}
+.kontakt-intro p{
+  font-family:'Cormorant Garamond',serif;font-size:1.08rem;
+  font-weight:300;line-height:1.95;color:var(--text-mid);margin-bottom:1.2rem;
+}
+.kontakt-detail{
+  display:flex;align-items:center;gap:.8rem;margin-top:2.5rem;
+  padding-top:2rem;border-top:1px solid rgba(184,138,30,.2);
+  font-family:'Cormorant Garamond',serif;font-size:1rem;
+  font-weight:300;color:var(--text-mid);
+}
+.kontakt-detail a{color:var(--wine);text-decoration:none;}
+.kontakt-detail a:hover{text-decoration:underline;}
+
+/* Form */
+.retreat-form{background:var(--beige);padding:3rem;border-top:2px solid var(--gold);}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;margin-bottom:0;}
+.form-group{display:flex;flex-direction:column;gap:.5rem;margin-bottom:1.2rem;}
+.form-group label{
+  font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--text-light);font-family:'Manrope',sans-serif;
+}
+.form-group input,
+.form-group textarea{
+  background:#fff;border:1px solid var(--sand);
+  padding:.85rem 1rem;
+  font-family:'Cormorant Garamond',serif;font-size:1rem;
+  color:var(--text);outline:none;
+  transition:border-color .3s;
+  border-radius:0;
+  -webkit-appearance:none;
+}
+.form-group input:focus,
+.form-group textarea:focus{border-color:var(--gold);}
+.form-group textarea{resize:vertical;min-height:140px;}
+.form-math{
+  display:flex;align-items:center;gap:1rem;margin-bottom:1.5rem;
+  padding:1rem;background:rgba(184,138,30,.06);border:1px solid rgba(184,138,30,.2);
+}
+.form-math span{font-family:'Cormorant Garamond',serif;font-size:1rem;color:var(--text-mid);}
+.form-math input{width:80px;text-align:center;}
+.form-math .math-label{font-size:.6rem;letter-spacing:.15em;text-transform:uppercase;color:var(--text-light);}
+
+/* Honeypot — skjult for mennesker, synlig for bots */
+.hp-field{position:absolute;left:-9999px;top:-9999px;opacity:0;height:0;width:0;overflow:hidden;}
+
+.btn-wine{
+  font-size:.7rem;font-weight:500;letter-spacing:.2em;text-transform:uppercase;
+  color:#fff;background:var(--wine);padding:1rem 2.5rem;
+  border:none;cursor:pointer;transition:background .3s;width:100%;margin-top:.5rem;
+}
+.btn-wine:hover{background:var(--wine-light);}
+
+.form-success{
+  display:none;text-align:center;padding:3rem 2rem;
+}
+.form-success h3{
+  font-family:'Cinzel',serif;font-weight:300;font-size:1.5rem;
+  letter-spacing:.08em;color:var(--charcoal);margin-bottom:1rem;
+}
+.form-success p{
+  font-family:'Cormorant Garamond',serif;font-size:1.05rem;
+  font-weight:300;color:var(--text-mid);line-height:1.8;
+}
+.form-error{
+  display:none;padding:.8rem 1rem;background:rgba(122,31,53,.08);
+  border-left:3px solid var(--wine);margin-bottom:1rem;
+  font-family:'Cormorant Garamond',serif;font-size:.95rem;color:var(--wine);
+}
+
+/* ── LOCATION ── */
+.location{background:var(--section-alt);padding:8rem 0;}
+.location-grid{display:grid;grid-template-columns:1fr 1fr;gap:7rem;align-items:start;}
+.location h2{
+  font-family:'Cinzel',serif;font-weight:300;
+  font-size:clamp(2rem,3.5vw,3rem);letter-spacing:.08em;
+  color:var(--charcoal);margin-bottom:2rem;
+}
+.location h2 em{color:var(--teal);font-style:normal;}
+.location h2 .phonetic {
+  font-family:'Cormorant Garamond',serif;
+  font-size:.5em; font-weight:300; font-style:italic;
+  color:var(--text-light); letter-spacing:.04em;
+  vertical-align:middle; margin:0 .2em;
+}
+.location p{font-family:'Cormorant Garamond',serif;font-size:1.08rem;font-weight:300;line-height:1.95;color:var(--text-mid);margin-bottom:1.4rem;}
+.location-distances{
+  margin-top:2.5rem;
+  border-top:1px solid rgba(184,138,30,.2);
+  padding-top:2rem;
+}
+.location-distance{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:.9rem 0;
+  border-bottom:1px solid rgba(184,138,30,.1);
+}
+.location-distance span:first-child{
+  font-family:'Cormorant Garamond',serif;font-size:1.05rem;
+  font-weight:300;color:var(--text-mid);
+}
+.location-distance span:last-child{
+  font-family:'Cinzel',serif;font-size:.8rem;
+  letter-spacing:.1em;color:var(--gold);font-weight:300;
+}
+.location-map{
+  background:var(--cream);
+  border:1px solid var(--sand);
+  aspect-ratio:4/3;
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Cormorant Garamond',serif;font-style:italic;
+  color:var(--text-light);font-size:1rem;
+  overflow:hidden;position:relative;
+}
+.location-map iframe{
+  width:100%;height:100%;border:none;
+}
+
+/* ── FOOTER ── */
+footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:3rem 4rem;}
+.footer-bottom{max-width:1320px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;}
+.footer-bottom p{font-size:.68rem;color:rgba(255,255,255,.48);letter-spacing:.04em;}
+.footer-bottom a{font-size:.68rem;color:rgba(255,255,255,.62);text-decoration:none;transition:color .3s;}
+.footer-bottom a:hover{color:var(--gold);}
+
+/* ── REVEAL ── */
+.reveal{opacity:0;transform:translateY(28px);transition:opacity .9s ease,transform .9s ease;}
+.reveal.visible{opacity:1;transform:translateY(0);}
+.reveal-left{opacity:0;transform:translateX(-28px);transition:opacity .9s ease,transform .9s ease;}
+.reveal-left.visible{opacity:1;transform:translateX(0);}
+.reveal-right{opacity:0;transform:translateX(28px);transition:opacity .9s ease,transform .9s ease;}
+.reveal-right.visible{opacity:1;transform:translateX(0);}
+.d1{transition-delay:.15s;}
+.d2{transition-delay:.3s;}
+
+/* ── MOBIL (≤900px) — alt i @media, base-CSS urørt ── */
+@media (max-width:900px){
+  html{overflow-x:hidden;}
+  .page-hero-content{padding:0 1.6rem 3rem;}
+  .section-inner{padding:0 1.6rem;}
+  .kontakt,.location{padding:4.5rem 0;}
+  .kontakt-grid{grid-template-columns:1fr;gap:3rem;}
+  .location-grid{grid-template-columns:1fr;gap:3rem;}
+  .retreat-form{padding:2rem 1.4rem;}
+  .form-row{grid-template-columns:1fr;gap:0;}
+  .kontakt-intro p{font-size:1.18rem;}
+  .location p{font-size:1.18rem;}
+  /* iOS: 16px hindrer auto-zoom ved fokus i felter */
+  .form-group input,
+  .form-group textarea,
+  .form-math input{font-size:16px;}
+  .footer-bottom{flex-direction:column;gap:1.2rem;text-align:center;}
+  section[id]{scroll-margin-top:95px;}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-logo">
+    <img src="img/taarne-hvid-trans.png" alt="Castillo del Alma">
+  </a>
+  <button class="nav-burger" id="navBurger" aria-label="Åbn menu" aria-controls="navLinks" aria-expanded="false">
+    <span></span><span></span><span></span>
+  </button>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="#kontakt" id="navKontakt">Kontakt</a></li>
+    <li><a href="#location" id="navLocation">Beliggenhed</a></li>
+    <li style="display:flex;align-items:center;gap:.4rem;margin-left:.8rem;">
+      <div class="lang-switcher" style="display:flex;border:1.5px solid;overflow:hidden;border-color:var(--wine);">
+        <button id="kt-btn-da" class="lang-btn lang-btn-active" onclick="setKtLang('da')" style="font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;padding:.3rem .6rem;border:none;cursor:pointer;font-family:'Manrope',sans-serif;">DA</button>
+        <button id="kt-btn-en" class="lang-btn lang-btn-inactive" onclick="setKtLang('en')" style="font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;padding:.3rem .6rem;border:none;cursor:pointer;font-family:'Manrope',sans-serif;">EN</button>
+      </div>
+    </li>
+  </ul>
+  <a href="index.html" class="nav-back" id="navBack">← Tilbage til forsiden</a>
+</nav>
+
+<!-- MOBIL-MENU BACKDROP -->
+<div class="nav-backdrop" id="navBackdrop"></div>
+
+<!-- ── HERO ── -->
+<section class="page-hero">
+  <div class="page-hero-img" id="heroImg"></div>
+  <div class="page-hero-overlay"></div>
+  <div class="page-hero-content">
+    <span class="page-hero-eyebrow" id="heroEyebrow">Castillo del Alma · Mollina, Andalusien</span>
+    <h1 id="heroH1">Kontakt <em>os</em></h1>
+  </div>
+</section>
+
+<!-- ── KONTAKT ── -->
+<section class="kontakt" id="kontakt">
+  <div class="section-inner">
+    <div class="kontakt-grid">
+
+      <!-- Venstre: intro -->
+      <div class="reveal-left kontakt-intro">
+        <div class="section-label" id="kontaktLabel">Vi glæder os til at høre fra dig</div>
+        <h2 id="kontaktH2">Skriv til <em>os</em></h2>
+        <div id="kontaktTextContainer">
+          <p>Har du spørgsmål om vores retreats, ejendommen eller mulighederne for at afholde dit eget arrangement? Skriv til os — vi svarer gerne.</p>
+          <p>Udfyld formularen, så vender vi tilbage inden for 24 timer.</p>
+        </div>
+        <div class="kontakt-detail">
+          <span id="kontaktEmailLabel">Eller skriv direkte til</span>
+          <a href="mailto:hello@castillodelalma.es" id="kontaktEmailLink">hello@castillodelalma.es</a>
+        </div>
+      </div>
+
+      <!-- Højre: formular -->
+      <div class="reveal-right d1">
+        <div class="retreat-form" id="formWrap">
+          <div class="form-error" id="formError">Der opstod en fejl. Prøv igen eller skriv direkte til os.</div>
+
+          <form id="kontaktForm" novalidate>
+
+            <!-- HONEYPOT — skjult felt, bots udfylder det, mennesker ikke -->
+            <div class="hp-field" aria-hidden="true">
+              <label for="website_url">Lad dette felt være tomt</label>
+              <input type="text" id="website_url" name="website_url" tabindex="-1" autocomplete="off">
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="navn" id="lblNavn">Navn *</label>
+                <input type="text" id="navn" name="navn" required placeholder="">
+              </div>
+              <div class="form-group">
+                <label for="email" id="lblEmail">E-mail *</label>
+                <input type="email" id="email" name="email" required placeholder="">
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="telefon" id="lblTelefon">Telefon</label>
+              <input type="tel" id="telefon" name="telefon" placeholder="+">
+            </div>
+
+            <div class="form-group">
+              <label for="besked" id="lblBesked">Din besked *</label>
+              <textarea id="besked" name="besked" required placeholder=""></textarea>
+            </div>
+
+            <!-- Simpel matematisk check ("er du et menneske?") -->
+            <div class="form-math">
+              <span class="math-label" id="lblMath">Sikkerhedstjek</span>
+              <span id="mathQuestion"></span>
+              <div class="form-group" style="margin:0;">
+                <input type="number" id="mathAnswer" name="mathAnswer" placeholder="?" required style="width:80px;text-align:center;">
+              </div>
+            </div>
+
+            <button type="submit" class="btn-wine" id="submitBtn">Send besked</button>
+          </form>
+
+          <!-- Succes besked -->
+          <div class="form-success" id="formSuccess">
+            <div class="section-label" style="justify-content:center;" id="successLabel">Tak for din besked</div>
+            <h3 id="successH3">Vi vender tilbage inden for 24 timer</h3>
+            <p id="successText">Tak fordi du skrev til os. Vi har modtaget din besked og har sendt dig en bekræftelse på e-mail.</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ── LOCATION ── -->
+<section class="location" id="location">
+  <div class="section-inner">
+    <div class="location-grid">
+      <div class="reveal-left">
+        <span class="section-label" id="kt_location_label">Beliggenhed</span>
+        <h2 id="kt_location_h2">Mollina <span class="phonetic" id="kt_location_phonetic">/moˈʎina/</span><br>hjertet af <em>Andalucía</em></h2>
+        <p id="kt_location_p1">Castillo del Alma ligger i Mollina, en lille andalusisk by i Málaga-provinsen. Omgivet af vinmarker, olivenlunde og et imponerende bjerglandskab er stedet perfekt til at koble fra og finde ro.</p>
+        <p id="kt_location_p2">Placeringen er ideel — central nok til at udforske Andalusiens kulturelle skatte, men tilpas afsides til at give den stilhed og fred som et retreat kræver.</p>
+        <div class="location-distances">
+          <div class="location-distance" id="kt_dist_antequera"><span>Antequera</span><span>15 min</span></div>
+          <div class="location-distance" id="kt_dist_malaga"><span>Málaga ciudad</span><span>55 min</span></div>
+          <div class="location-distance" id="kt_dist_caminito"><span>Caminito del Rey</span><span>40 min</span></div>
+          <div class="location-distance" id="kt_dist_ronda"><span>Ronda</span><span>75 min</span></div>
+          <div class="location-distance" id="kt_dist_cordoba"><span>Córdoba</span><span>90 min</span></div>
+          <div class="location-distance" id="kt_dist_granada"><span>Granada</span><span>90 min</span></div>
+          <div class="location-distance" id="kt_dist_sevilla"><span>Sevilla</span><span>2,5 timer</span></div>
+          <div class="location-distance" id="kt_dist_lufthavn"><span>Málaga Lufthavn</span><span>60 min</span></div>
+        </div>
+      </div>
+      <div class="location-map reveal-right d2">
+        <iframe id="kt_location_map"
+          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d12562.8!2d-4.6506!3d37.1534!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd72b1d3ef80d34d%3A0x0!2sMollina%2C+M%C3%A1laga!5e0!3m2!1sda!2sdk!4v1"
+          allowfullscreen loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade">
+        </iframe>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-bottom">
+    <p id="footerCopy">© 2026 Castillo del Alma · Mollina, Málaga · All rights reserved</p>
+    <div style="display:flex;gap:1.6rem;flex-wrap:wrap;align-items:center;">
+      <a href="privacidad.html" id="footerPrivacy">Persondatapolitik</a>
+      <a href="aviso-legal.html" id="footerLegal">Juridisk meddelelse</a>
+      <a href="index.html" id="footerBack">← Tilbage til forsiden</a>
+    </div>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+// ── KONTAKT: SPROG + INDHOLD (samme mønster som udlejning.html) ──
+const SUPABASE_URL_KT = 'https://niniwgiytyqvdqejigxg.supabase.co';
+const SUPABASE_ANON_KEY_KT = 'sb_publishable_GwrNUpIuWzdg1oswOY5HzA_mKWqhd6y';
+const ktSb = supabase.createClient(SUPABASE_URL_KT, SUPABASE_ANON_KEY_KT);
+
+let ktData = {};
+let ktLang = 'da';
+
+// Fallback-defaults (DA + EN) — bruges når databasen (endnu) ikke har værdier
+const KT_SEED = {
+  nav_kontakt: 'Kontakt',            nav_kontakt_en: 'Contact',
+  nav_location: 'Beliggenhed',       nav_location_en: 'Location',
+  hero_eyebrow: 'Castillo del Alma · Mollina, Andalusien',
+  hero_eyebrow_en: 'Castillo del Alma · Mollina, Andalusia',
+  hero_h1: 'Kontakt <em>os</em>',
+  hero_h1_en: 'Contact <em>us</em>',
+  kontakt_label: 'Vi glæder os til at høre fra dig',
+  kontakt_label_en: 'We look forward to hearing from you',
+  kontakt_h2: 'Skriv til <em>os</em>',
+  kontakt_h2_en: 'Write to <em>us</em>',
+  kontakt_text: 'Har du spørgsmål om vores retreats, ejendommen eller mulighederne for at afholde dit eget arrangement? Skriv til os — vi svarer gerne.\nUdfyld formularen, så vender vi tilbage inden for 24 timer.',
+  kontakt_text_en: 'Do you have questions about our retreats, the estate or the possibilities of hosting your own event? Write to us — we are happy to help.\nFill in the form and we will get back to you within 24 hours.',
+  kontakt_email_label: 'Eller skriv direkte til',
+  kontakt_email_label_en: 'Or write directly to',
+  kontakt_email: 'hello@castillodelalma.es',
+  form_navn: 'Navn *',               form_navn_en: 'Name *',
+  form_email: 'E-mail *',            form_email_en: 'Email *',
+  form_telefon: 'Telefon',           form_telefon_en: 'Phone',
+  form_besked: 'Din besked *',       form_besked_en: 'Your message *',
+  form_math_label: 'Sikkerhedstjek', form_math_label_en: 'Security check',
+  form_submit: 'Send besked',        form_submit_en: 'Send message',
+  success_label: 'Tak for din besked',
+  success_label_en: 'Thank you for your message',
+  success_h3: 'Vi vender tilbage inden for 24 timer',
+  success_h3_en: 'We will get back to you within 24 hours',
+  success_text: 'Tak fordi du skrev til os. Vi har modtaget din besked og har sendt dig en bekræftelse på e-mail.',
+  success_text_en: 'Thank you for writing to us. We have received your message and have sent you a confirmation by email.',
+  location_label: 'Beliggenhed',     location_label_en: 'Location',
+  location_h2: 'Mollina <span class="phonetic">/moˈʎina/</span><br>hjertet af <em>Andalucía</em>',
+  location_h2_en: 'Mollina <span class="phonetic">/moˈʎina/</span><br>the heart of <em>Andalucía</em>',
+  location_p1: 'Castillo del Alma ligger i Mollina, en lille andalusisk by i Málaga-provinsen. Omgivet af vinmarker, olivenlunde og et imponerende bjerglandskab er stedet perfekt til at koble fra og finde ro.',
+  location_p1_en: 'Castillo del Alma is located in Mollina, a small Andalusian town in the Málaga province. Surrounded by vineyards, olive groves and an impressive mountain landscape, the place is perfect for disconnecting and finding calm.',
+  location_p2: 'Placeringen er ideel — central nok til at udforske Andalusiens kulturelle skatte, men tilpas afsides til at give den stilhed og fred som et retreat kræver.',
+  location_p2_en: 'The location is ideal — central enough to explore Andalusia\'s cultural treasures, but sufficiently remote to provide the silence and peace that a retreat requires.',
+  dist_antequera_navn: 'Antequera',        dist_antequera_navn_en: 'Antequera',        dist_antequera_tid: '15 min',   dist_antequera_tid_en: '15 min',
+  dist_malaga_navn: 'Málaga ciudad',       dist_malaga_navn_en: 'Málaga city',         dist_malaga_tid: '55 min',      dist_malaga_tid_en: '55 min',
+  dist_caminito_navn: 'Caminito del Rey',  dist_caminito_navn_en: 'Caminito del Rey',  dist_caminito_tid: '40 min',    dist_caminito_tid_en: '40 min',
+  dist_ronda_navn: 'Ronda',                dist_ronda_navn_en: 'Ronda',                dist_ronda_tid: '75 min',       dist_ronda_tid_en: '75 min',
+  dist_cordoba_navn: 'Córdoba',            dist_cordoba_navn_en: 'Córdoba',            dist_cordoba_tid: '90 min',     dist_cordoba_tid_en: '90 min',
+  dist_granada_navn: 'Granada',            dist_granada_navn_en: 'Granada',            dist_granada_tid: '90 min',     dist_granada_tid_en: '90 min',
+  dist_sevilla_navn: 'Sevilla',            dist_sevilla_navn_en: 'Seville',            dist_sevilla_tid: '2,5 timer',  dist_sevilla_tid_en: '2.5 hours',
+  dist_lufthavn_navn: 'Málaga Lufthavn',   dist_lufthavn_navn_en: 'Málaga Airport',    dist_lufthavn_tid: '60 min',    dist_lufthavn_tid_en: '60 min',
+  footer_copy: '© 2026 Castillo del Alma · Mollina, Málaga · All rights reserved',
+  footer_copy_en: '© 2026 Castillo del Alma · Mollina, Málaga · All rights reserved',
+};
+
+const KT_STATIC_I18N = {
+  da: { sending: 'Sender...', mathQ: (a,b) => `Hvad er ${a} + ${b}?`, mathWrong: 'Sikkerhedstjekket er forkert. Prøv igen.', fillRequired: 'Udfyld venligst alle påkrævede felter (*).' },
+  en: { sending: 'Sending...', mathQ: (a,b) => `What is ${a} + ${b}?`, mathWrong: 'The security check is incorrect. Please try again.', fillRequired: 'Please fill in all required fields (*).' }
+};
+
+// Geo-baseret sprogvalg: Danmark → dansk, resten af verden → engelsk.
+// Bruger Netlifys geo-header via egen function (ingen ekstern IP-tjeneste → GDPR-venligt).
+async function determineStartLangKt() {
+  try {
+    const cached = sessionStorage.getItem('cda_geo_lang');
+    if (cached === 'da' || cached === 'en') return cached;
+  } catch(e) { /* sessionStorage utilgængelig → henter geo hver gang */ }
+  try {
+    const ctrl = new AbortController();
+    const t = setTimeout(() => ctrl.abort(), 4000);
+    const res = await fetch('/.netlify/functions/geo-lang', { signal: ctrl.signal });
+    clearTimeout(t);
+    if (res.ok) {
+      const geo = await res.json();
+      if (geo && (geo.lang === 'da' || geo.lang === 'en')) {
+        try { sessionStorage.setItem('cda_geo_lang', geo.lang); } catch(e) {}
+        return geo.lang;
+      }
+    }
+  } catch(e) { /* geo utilgængelig (fx lokal test) → fallback til browsersprog nedenfor */ }
+  try {
+    const langs = (navigator.languages && navigator.languages.length ? navigator.languages : [navigator.language])
+      .filter(Boolean).map(l => l.toLowerCase());
+    if (langs.some(l => l.startsWith('da'))) return 'da';
+    return langs.length ? 'en' : 'da';
+  } catch(e) {
+    return 'da';
+  }
+}
+
+function ktSC(key, fallback) {
+  const val = ktData[ktLang === 'en' ? key + '_en' : key];
+  return val || ktData[key] || fallback || '';
+}
+
+function setText(id, val) {
+  const el = document.getElementById(id);
+  if (el && val) el.innerHTML = val; // Tillader <b>, <br>, <em> m.fl. fra admin
+}
+function setParagraphs(id, val) {
+  const el = document.getElementById(id);
+  if (el && val) el.innerHTML = val.split('\n').filter(Boolean).map(p => `<p>${p}</p>`).join('');
+}
+
+function setKtLang(lang) {
+  ktLang = lang;
+  document.documentElement.lang = lang;
+  const btnDa = document.getElementById('kt-btn-da');
+  const btnEn = document.getElementById('kt-btn-en');
+  if (btnDa) { btnDa.classList.toggle('lang-btn-active', lang === 'da'); btnDa.classList.toggle('lang-btn-inactive', lang !== 'da'); }
+  if (btnEn) { btnEn.classList.toggle('lang-btn-active', lang === 'en'); btnEn.classList.toggle('lang-btn-inactive', lang !== 'en'); }
+  applyKtContent();
+}
+
+function ktSetHeroImage(url) {
+  const el = document.getElementById('heroImg');
+  if (!el) return;
+  const finalUrl = url || 'img/estate-pool.jpg';
+  const im = new Image();
+  im.onload = () => { el.style.backgroundImage = `url('${finalUrl}')`; el.classList.add('loaded'); };
+  im.src = finalUrl;
+}
+
+function applyKtContent() {
+  // NAV
+  setText('navKontakt', ktSC('nav_kontakt'));
+  setText('navLocation', ktSC('nav_location'));
+  setText('navBack', ktLang === 'en' ? '← Back to the front page' : '← Tilbage til forsiden');
+
+  // HERO
+  setText('heroEyebrow', ktSC('hero_eyebrow'));
+  setText('heroH1', ktSC('hero_h1'));
+
+  // KONTAKT
+  setText('kontaktLabel', ktSC('kontakt_label'));
+  setText('kontaktH2', ktSC('kontakt_h2'));
+  setParagraphs('kontaktTextContainer', ktSC('kontakt_text'));
+  setText('kontaktEmailLabel', ktSC('kontakt_email_label'));
+  const emailLink = document.getElementById('kontaktEmailLink');
+  const emailVal = ktData['kontakt_email'] || KT_SEED.kontakt_email;
+  if (emailLink && emailVal) { emailLink.textContent = emailVal; emailLink.href = 'mailto:' + emailVal; }
+
+  // FORMULAR
+  setText('lblNavn', ktSC('form_navn'));
+  setText('lblEmail', ktSC('form_email'));
+  setText('lblTelefon', ktSC('form_telefon'));
+  setText('lblBesked', ktSC('form_besked'));
+  setText('lblMath', ktSC('form_math_label'));
+  setText('submitBtn', ktSC('form_submit'));
+  setText('successLabel', ktSC('success_label'));
+  setText('successH3', ktSC('success_h3'));
+  setText('successText', ktSC('success_text'));
+
+  // LOCATION (kan skjules med vis_location = '0')
+  const locSec = document.getElementById('location');
+  const locNavLi = document.getElementById('navLocation') ? document.getElementById('navLocation').parentElement : null;
+  if (ktData['vis_location'] === '0') {
+    if (locSec) locSec.style.display = 'none';
+    if (locNavLi) locNavLi.style.display = 'none';
+  } else {
+    if (locSec) locSec.style.display = '';
+    if (locNavLi) locNavLi.style.display = '';
+    setText('kt_location_label', ktSC('location_label'));
+    setText('kt_location_h2', ktSC('location_h2'));
+    setText('kt_location_p1', ktSC('location_p1'));
+    setText('kt_location_p2', ktSC('location_p2'));
+    const distItems = ['antequera','malaga','caminito','ronda','cordoba','granada','sevilla','lufthavn'];
+    distItems.forEach(k => {
+      const el = document.getElementById(`kt_dist_${k}`);
+      if (!el) return;
+      const spans = el.querySelectorAll('span');
+      if (ktSC(`dist_${k}_navn`) && spans[0]) spans[0].innerHTML = ktSC(`dist_${k}_navn`);
+      if (ktSC(`dist_${k}_tid`) && spans[1]) spans[1].innerHTML = ktSC(`dist_${k}_tid`);
+    });
+    const mapEl = document.getElementById('kt_location_map');
+    if (mapEl && ktData['location_map_url'] && mapEl.src !== ktData['location_map_url']) {
+      mapEl.src = ktData['location_map_url'];
+    }
+  }
+
+  // FOOTER
+  setText('footerCopy', ktSC('footer_copy'));
+  setText('footerPrivacy', ktLang === 'en' ? 'Privacy Policy' : 'Persondatapolitik');
+  setText('footerLegal', ktLang === 'en' ? 'Legal Notice' : 'Juridisk meddelelse');
+  setText('footerBack', ktLang === 'en' ? '← Back to the front page' : '← Tilbage til forsiden');
+}
+
+// Lang-switcher farver
+(function(){
+  const style = document.createElement('style');
+  style.textContent = '.lang-btn-active{background:var(--wine);color:#fff;} .lang-btn-inactive{background:transparent;color:var(--wine);}';
+  document.head.appendChild(style);
+})();
+
+// ── INIT ──
+(async function initKt() {
+  ktData = Object.assign({}, KT_SEED); // Fallback-first: defaults ligger klar, databasen overskriver
+  const langPromise = determineStartLangKt();
+  try {
+    const { data, error } = await ktSb.from('kontakt_content').select('key,value');
+    if (error) throw error;
+    (data || []).forEach(r => { if (r.value !== null && r.value !== '') ktData[r.key] = r.value; });
+  } catch(e) {
+    console.warn('kontakt_content hentning fejlede (er tabellen oprettet?):', e.message);
+  }
+  ktLang = await langPromise;
+  setKtLang(ktLang);
+  ktSetHeroImage(ktData['hero_bg']);
+})();
+
+// ── MATEMATIK-CHECK ("er du et menneske?") ──
+let mathA = 0, mathB = 0, mathAnswerVal = 0;
+function initMath() {
+  mathA = Math.floor(Math.random() * 8) + 1;
+  mathB = Math.floor(Math.random() * 8) + 1;
+  mathAnswerVal = mathA + mathB;
+  const q = document.getElementById('mathQuestion');
+  if (q) q.textContent = KT_STATIC_I18N[ktLang].mathQ(mathA, mathB);
+}
+initMath();
+// Opdater spørgsmålet når sproget skiftes
+const _origSetKtLang = setKtLang;
+setKtLang = function(lang) { _origSetKtLang(lang); initMath(); };
+
+// ── FORM SUBMIT ──
+document.getElementById('kontaktForm').addEventListener('submit', async function(e) {
+  e.preventDefault();
+
+  const form = e.target;
+  const errorEl = document.getElementById('formError');
+  const submitBtn = document.getElementById('submitBtn');
+  errorEl.style.display = 'none';
+
+  // Honeypot check — hvis udfyldt er det en bot
+  if (document.getElementById('website_url').value !== '') {
+    console.log('Bot detected via honeypot');
+    form.style.display = 'none';
+    document.getElementById('formSuccess').style.display = 'block';
+    return;
+  }
+
+  // Matematik check
+  const userMath = parseInt(document.getElementById('mathAnswer').value);
+  if (userMath !== mathAnswerVal) {
+    errorEl.textContent = KT_STATIC_I18N[ktLang].mathWrong;
+    errorEl.style.display = 'block';
+    document.getElementById('mathAnswer').value = '';
+    document.getElementById('mathAnswer').focus();
+    return;
+  }
+
+  // Valider påkrævede felter
+  const required = ['navn','email','besked'];
+  for (const id of required) {
+    const el = document.getElementById(id);
+    if (!el || !el.value.trim()) {
+      errorEl.textContent = KT_STATIC_I18N[ktLang].fillRequired;
+      errorEl.style.display = 'block';
+      if (el) el.focus();
+      return;
+    }
+  }
+
+  // Send via Netlify Function
+  submitBtn.textContent = KT_STATIC_I18N[ktLang].sending;
+  submitBtn.disabled = true;
+
+  const data = {
+    navn:    document.getElementById('navn').value.trim(),
+    email:   document.getElementById('email').value.trim(),
+    telefon: document.getElementById('telefon') ? document.getElementById('telefon').value.trim() : '',
+    besked:  document.getElementById('besked').value.trim(),
+    lang:    ktLang,
+    website_url: document.getElementById('website_url').value, // honeypot valideres også serverside
+  };
+
+  try {
+    const res = await fetch('/.netlify/functions/send-kontakt-besked', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    });
+
+    if (res.ok) {
+      form.style.display = 'none';
+      document.getElementById('formSuccess').style.display = 'block';
+    } else {
+      throw new Error('Server fejl');
+    }
+  } catch(err) {
+    const em = ktData['kontakt_email'] || 'hello@castillodelalma.es';
+    errorEl.textContent = ktLang === 'en' ? `An error occurred. Please try again or write directly to ${em}` : `Der opstod en fejl. Prøv igen eller skriv direkte til ${em}`;
+    errorEl.style.display = 'block';
+    submitBtn.textContent = ktSC('form_submit', ktLang === 'en' ? 'Send message' : 'Send besked');
+    submitBtn.disabled = false;
+  }
+});
+
+// ── REVEAL ──
+const revObs = new IntersectionObserver(entries=>{
+  entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');revObs.unobserve(e.target);}});
+},{threshold:.1});
+document.querySelectorAll('.reveal,.reveal-left,.reveal-right').forEach(el=>revObs.observe(el));
+</script>
+
+<!-- MOBILMENU — slide-in toggle (isoleret, påvirker ikke desktop) -->
+<script>
+(function(){
+  const burger = document.getElementById('navBurger');
+  const backdrop = document.getElementById('navBackdrop');
+  if(!burger) return;
+  const isMobile = () => window.matchMedia('(max-width:900px)').matches;
+  function openMenu(){ document.body.classList.add('menu-open'); burger.setAttribute('aria-expanded','true'); }
+  function closeMenu(){ document.body.classList.remove('menu-open'); burger.setAttribute('aria-expanded','false'); }
+  function toggleMenu(){ document.body.classList.contains('menu-open') ? closeMenu() : openMenu(); }
+  burger.addEventListener('click', toggleMenu);
+  if(backdrop) backdrop.addEventListener('click', closeMenu);
+  document.querySelectorAll('.nav-links a, .nav-back').forEach(a => a.addEventListener('click', closeMenu));
+  document.addEventListener('keydown', (e) => { if(e.key === 'Escape') closeMenu(); });
+  window.addEventListener('resize', () => { if(!isMobile()) closeMenu(); });
+})();
+</script>
+</body>
+</html>
