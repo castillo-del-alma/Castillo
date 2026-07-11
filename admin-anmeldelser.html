@@ -368,6 +368,7 @@ body{font-family:'Manrope',sans-serif;background:#f0e8d5;color:#2c2318;min-heigh
       <button class="subtab-btn active" onclick="switchSubTab('forside',this)">Forside</button>
       <button class="subtab-btn" onclick="switchSubTab('ejendommen',this)">Ejendommen</button>
       <button class="subtab-btn" onclick="switchSubTab('udlejning',this)">Udlejning</button>
+      <button class="subtab-btn" onclick="switchSubTab('kontakt',this)">Kontakt</button>
       <button class="subtab-btn" onclick="switchSubTab('anmeldelser',this)">Se anmeldelser</button>
       <button class="subtab-btn" onclick="switchSubTab('indstillinger',this)">Indstillinger</button>
     </div>
@@ -2033,9 +2034,8 @@ feeling more calm – and coming home to yourself again."</textarea></div>
         <a href="#ej_adm_fac" style="font-size:.72rem;color:#7a5c14;background:#fffef8;border:1px solid rgba(184,138,30,.3);padding:.35rem .8rem;text-decoration:none;">5 · Faciliteter</a>
         <a href="#ej_adm_sustain" style="font-size:.72rem;color:#7a5c14;background:#fffef8;border:1px solid rgba(184,138,30,.3);padding:.35rem .8rem;text-decoration:none;">6 · Bæredygtighed</a>
         <a href="#ej_adm_vineyard" style="font-size:.72rem;color:#7a5c14;background:#fffef8;border:1px solid rgba(184,138,30,.3);padding:.35rem .8rem;text-decoration:none;">7 · Vingården</a>
-        <a href="#ej_adm_location" style="font-size:.72rem;color:#7a5c14;background:#fffef8;border:1px solid rgba(184,138,30,.3);padding:.35rem .8rem;text-decoration:none;">8 · Beliggenhed</a>
-        <a href="#ej_adm_cta" style="font-size:.72rem;color:#7a5c14;background:#fffef8;border:1px solid rgba(184,138,30,.3);padding:.35rem .8rem;text-decoration:none;">9 · CTA</a>
-        <a href="#ej_adm_footer" style="font-size:.72rem;color:#7a5c14;background:#fffef8;border:1px solid rgba(184,138,30,.3);padding:.35rem .8rem;text-decoration:none;">10 · Footer</a>
+        <a href="#ej_adm_cta" style="font-size:.72rem;color:#7a5c14;background:#fffef8;border:1px solid rgba(184,138,30,.3);padding:.35rem .8rem;text-decoration:none;">8 · CTA</a>
+        <a href="#ej_adm_footer" style="font-size:.72rem;color:#7a5c14;background:#fffef8;border:1px solid rgba(184,138,30,.3);padding:.35rem .8rem;text-decoration:none;">9 · Footer</a>
       </div>
     </div>
 
@@ -2066,10 +2066,6 @@ feeling more calm – and coming home to yourself again."</textarea></div>
         <div class="fc-row">
           <div><label class="fc-label fc-label-da">Vingården</label><input type="text" id="ej_nav_vineyard_da" class="fc-input-da" value="Vingården"></div>
           <div><label class="fc-label fc-label-en">The Vineyard</label><input type="text" id="ej_nav_vineyard_en" class="fc-input-en" value="The Vineyard"></div>
-        </div>
-        <div class="fc-row">
-          <div><label class="fc-label fc-label-da">Beliggenhed</label><input type="text" id="ej_nav_location_da" class="fc-input-da" value="Beliggenhed"></div>
-          <div><label class="fc-label fc-label-en">Location</label><input type="text" id="ej_nav_location_en" class="fc-input-en" value="Location"></div>
         </div>
         <div class="fc-row">
           <div><label class="fc-label fc-label-da">← Tilbage til forsiden</label><input type="text" id="ej_nav_back_da" class="fc-input-da" value="← Tilbage til forsiden"></div>
@@ -2640,82 +2636,9 @@ feeling more calm – and coming home to yourself again."</textarea></div>
       </div>
     </div>
 
-    <!-- 8 · BELIGGENHED -->
-    <div class="fc-block" id="ej_adm_location" style="margin-bottom:1.5rem;">
-      <div class="fc-block-header"><span class="fc-block-title">8 · Beliggenhed</span></div>
-      <div class="fc-block-body">
-        <div class="fc-row">
-          <div><label class="fc-label fc-label-da">Label (DA)</label><input type="text" id="ej_location_label_da" class="fc-input-da" value="Beliggenhed"></div>
-          <div><label class="fc-label fc-label-en">Label (EN)</label><input type="text" id="ej_location_label_en" class="fc-input-en" value="Location"></div>
-        </div>
-        <div class="fc-row">
-          <div><label class="fc-label fc-label-da">Overskrift (DA)</label><input type="text" id="ej_location_h2_da" class="fc-input-da" value="Mollina — hjertet af *Andalucía*"></div>
-          <div><label class="fc-label fc-label-en">Heading (EN)</label><input type="text" id="ej_location_h2_en" class="fc-input-en" value="Mollina — the heart of *Andalucía*"></div>
-        </div>
-        <div class="fc-row">
-          <div><label class="fc-label fc-label-da">Afsnit 1 (DA)</label><textarea id="ej_location_p1_da" class="fc-input-da fc-textarea">Castillo del Alma ligger i Mollina, en lille andalusisk by i Málaga-provinsen. Omgivet af vinmarker, olivenlunde og et imponerende bjerglandskab er stedet perfekt til at koble fra og finde ro.</textarea></div>
-          <div><label class="fc-label fc-label-en">Paragraph 1 (EN)</label><textarea id="ej_location_p1_en" class="fc-input-en fc-textarea">Castillo del Alma is located in Mollina, a small Andalusian town in the Málaga province. Surrounded by vineyards, olive groves and an impressive mountain landscape, the place is perfect for disconnecting and finding calm.</textarea></div>
-        </div>
-        <div class="fc-row">
-          <div><label class="fc-label fc-label-da">Afsnit 2 (DA)</label><textarea id="ej_location_p2_da" class="fc-input-da fc-textarea">Placeringen er ideel — central nok til at udforske Andalusiens kulturelle skatte, men tilpas afsides til at give den stilhed og fred som et retreat kræver.</textarea></div>
-          <div><label class="fc-label fc-label-en">Paragraph 2 (EN)</label><textarea id="ej_location_p2_en" class="fc-input-en fc-textarea">The location is ideal — central enough to explore Andalusia's cultural treasures, but sufficiently remote to provide the silence and peace that a retreat requires.</textarea></div>
-        </div>
-        <p style="font-size:.68rem;color:rgba(44,35,24,.4);margin:1rem 0 .6rem;">Afstande (by + tid):</p>
-        <div style="display:grid;grid-template-columns:1fr 1fr 100px 100px;gap:.5rem;align-items:center;padding:.4rem 0;border-bottom:1px solid rgba(184,138,30,.08);">
-          <input type="text" id="ej_dist_antequera_navn_da" class="fc-input-da" value="Antequera" style="font-size:.78rem;padding:.35rem .6rem;">
-          <input type="text" id="ej_dist_antequera_navn_en" class="fc-input-en" value="Antequera" style="font-size:.78rem;padding:.35rem .6rem;">
-          <input type="text" id="ej_dist_antequera_tid_da" class="fc-input-da" value="15 min" style="font-size:.78rem;padding:.35rem .6rem;text-align:center;">
-          <input type="text" id="ej_dist_antequera_tid_en" class="fc-input-en" value="15 min" style="font-size:.78rem;padding:.35rem .6rem;text-align:center;">
-        </div>
-        <div style="display:grid;grid-template-columns:1fr 1fr 100px 100px;gap:.5rem;align-items:center;padding:.4rem 0;border-bottom:1px solid rgba(184,138,30,.08);">
-          <input type="text" id="ej_dist_malaga_navn_da" class="fc-input-da" value="Málaga ciudad" style="font-size:.78rem;padding:.35rem .6rem;">
-          <input type="text" id="ej_dist_malaga_navn_en" class="fc-input-en" value="Málaga city" style="font-size:.78rem;padding:.35rem .6rem;">
-          <input type="text" id="ej_dist_malaga_tid_da" class="fc-input-da" value="55 min" style="font-size:.78rem;padding:.35rem .6rem;text-align:center;">
-          <input type="text" id="ej_dist_malaga_tid_en" class="fc-input-en" value="55 min" style="font-size:.78rem;padding:.35rem .6rem;text-align:center;">
-        </div>
-        <div style="display:grid;grid-template-columns:1fr 1fr 100px 100px;gap:.5rem;align-items:center;padding:.4rem 0;border-bottom:1px solid rgba(184,138,30,.08);">
-          <input type="text" id="ej_dist_caminito_navn_da" class="fc-input-da" value="Caminito del Rey" style="font-size:.78rem;padding:.35rem .6rem;">
-          <input type="text" id="ej_dist_caminito_navn_en" class="fc-input-en" value="Caminito del Rey" style="font-size:.78rem;padding:.35rem .6rem;">
-          <input type="text" id="ej_dist_caminito_tid_da" class="fc-input-da" value="40 min" style="font-size:.78rem;padding:.35rem .6rem;text-align:center;">
-          <input type="text" id="ej_dist_caminito_tid_en" class="fc-input-en" value="40 min" style="font-size:.78rem;padding:.35rem .6rem;text-align:center;">
-        </div>
-        <div style="display:grid;grid-template-columns:1fr 1fr 100px 100px;gap:.5rem;align-items:center;padding:.4rem 0;border-bottom:1px solid rgba(184,138,30,.08);">
-          <input type="text" id="ej_dist_ronda_navn_da" class="fc-input-da" value="Ronda" style="font-size:.78rem;padding:.35rem .6rem;">
-          <input type="text" id="ej_dist_ronda_navn_en" class="fc-input-en" value="Ronda" style="font-size:.78rem;padding:.35rem .6rem;">
-          <input type="text" id="ej_dist_ronda_tid_da" class="fc-input-da" value="75 min" style="font-size:.78rem;padding:.35rem .6rem;text-align:center;">
-          <input type="text" id="ej_dist_ronda_tid_en" class="fc-input-en" value="75 min" style="font-size:.78rem;padding:.35rem .6rem;text-align:center;">
-        </div>
-        <div style="display:grid;grid-template-columns:1fr 1fr 100px 100px;gap:.5rem;align-items:center;padding:.4rem 0;border-bottom:1px solid rgba(184,138,30,.08);">
-          <input type="text" id="ej_dist_cordoba_navn_da" class="fc-input-da" value="Córdoba" style="font-size:.78rem;padding:.35rem .6rem;">
-          <input type="text" id="ej_dist_cordoba_navn_en" class="fc-input-en" value="Córdoba" style="font-size:.78rem;padding:.35rem .6rem;">
-          <input type="text" id="ej_dist_cordoba_tid_da" class="fc-input-da" value="90 min" style="font-size:.78rem;padding:.35rem .6rem;text-align:center;">
-          <input type="text" id="ej_dist_cordoba_tid_en" class="fc-input-en" value="90 min" style="font-size:.78rem;padding:.35rem .6rem;text-align:center;">
-        </div>
-        <div style="display:grid;grid-template-columns:1fr 1fr 100px 100px;gap:.5rem;align-items:center;padding:.4rem 0;border-bottom:1px solid rgba(184,138,30,.08);">
-          <input type="text" id="ej_dist_granada_navn_da" class="fc-input-da" value="Granada" style="font-size:.78rem;padding:.35rem .6rem;">
-          <input type="text" id="ej_dist_granada_navn_en" class="fc-input-en" value="Granada" style="font-size:.78rem;padding:.35rem .6rem;">
-          <input type="text" id="ej_dist_granada_tid_da" class="fc-input-da" value="90 min" style="font-size:.78rem;padding:.35rem .6rem;text-align:center;">
-          <input type="text" id="ej_dist_granada_tid_en" class="fc-input-en" value="90 min" style="font-size:.78rem;padding:.35rem .6rem;text-align:center;">
-        </div>
-        <div style="display:grid;grid-template-columns:1fr 1fr 100px 100px;gap:.5rem;align-items:center;padding:.4rem 0;border-bottom:1px solid rgba(184,138,30,.08);">
-          <input type="text" id="ej_dist_sevilla_navn_da" class="fc-input-da" value="Sevilla" style="font-size:.78rem;padding:.35rem .6rem;">
-          <input type="text" id="ej_dist_sevilla_navn_en" class="fc-input-en" value="Seville" style="font-size:.78rem;padding:.35rem .6rem;">
-          <input type="text" id="ej_dist_sevilla_tid_da" class="fc-input-da" value="2,5 timer" style="font-size:.78rem;padding:.35rem .6rem;text-align:center;">
-          <input type="text" id="ej_dist_sevilla_tid_en" class="fc-input-en" value="2.5 hours" style="font-size:.78rem;padding:.35rem .6rem;text-align:center;">
-        </div>
-        <div style="display:grid;grid-template-columns:1fr 1fr 100px 100px;gap:.5rem;align-items:center;padding:.4rem 0;border-bottom:1px solid rgba(184,138,30,.08);">
-          <input type="text" id="ej_dist_lufthavn_navn_da" class="fc-input-da" value="Málaga Lufthavn" style="font-size:.78rem;padding:.35rem .6rem;">
-          <input type="text" id="ej_dist_lufthavn_navn_en" class="fc-input-en" value="Málaga Airport" style="font-size:.78rem;padding:.35rem .6rem;">
-          <input type="text" id="ej_dist_lufthavn_tid_da" class="fc-input-da" value="60 min" style="font-size:.78rem;padding:.35rem .6rem;text-align:center;">
-          <input type="text" id="ej_dist_lufthavn_tid_en" class="fc-input-en" value="60 min" style="font-size:.78rem;padding:.35rem .6rem;text-align:center;">
-        </div>
-        <div style="text-align:right;margin-top:.8rem;"><button onclick="gemEjendommen()" style="background:#2a7a74;color:#fff;border:none;padding:.5rem 1.4rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;">💾 Gem</button></div>
-      </div>
-    </div>
-
-    <!-- 9 · CTA -->
+    <!-- 8 · CTA -->
     <div class="fc-block" id="ej_adm_cta" style="margin-bottom:1.5rem;">
-      <div class="fc-block-header"><span class="fc-block-title">9 · Call-to-action sektion</span></div>
+      <div class="fc-block-header"><span class="fc-block-title">8 · Call-to-action sektion</span></div>
       <div class="fc-block-body">
         <div class="fc-row">
           <div><label class="fc-label fc-label-da">Overskrift (DA)</label><input type="text" id="ej_cta_h2_da" class="fc-input-da" value="Klar til at opleve Castillo del Alma?"></div>
@@ -2737,9 +2660,9 @@ feeling more calm – and coming home to yourself again."</textarea></div>
       </div>
     </div>
 
-    <!-- 10 · FOOTER -->
+    <!-- 9 · FOOTER -->
     <div class="fc-block" id="ej_adm_footer" style="margin-bottom:1.5rem;">
-      <div class="fc-block-header"><span class="fc-block-title">10 · Footer</span></div>
+      <div class="fc-block-header"><span class="fc-block-title">9 · Footer</span></div>
       <div class="fc-block-body">
         <div class="fc-row">
           <div><label class="fc-label fc-label-da">Copyright-tekst (DA)</label><input type="text" id="ej_footer_copy_da" class="fc-input-da" value="© 2026 Castillo del Alma · Mollina, Málaga · All rights reserved"></div>
@@ -3361,6 +3284,204 @@ feeling more calm – and coming home to yourself again."</textarea></div>
           <div><label class="fc-label fc-label-en">(EN)</label><textarea id="ul_success_text_en" class="fc-input-en" rows="4" style="resize:vertical;"></textarea></div>
         </div>
         <div style="text-align:right;margin-top:.8rem;"><button onclick="gemUdlejning()" style="background:#2a7a74;color:#fff;border:none;padding:.5rem 1.4rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;">💾 Gem</button></div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- FANE: KONTAKT -->
+  <div class="subtab-content" id="tab-kontakt" style="padding:2rem 3rem;max-width:1100px;">
+    <h2 style="font-family:Cinzel,serif;font-weight:300;font-size:1.4rem;letter-spacing:.08em;color:#2c2318;margin-bottom:.4rem;">Kontakt (kontakt.html)</h2>
+    <p style="font-size:.75rem;color:rgba(44,35,24,.5);margin-bottom:2rem;">Alt indhold på kontaktsiden. DA/EN side om side. Husk 💾 Gem — tekst i felterne er ikke gemt før da.</p>
+
+    <div class="fc-block" data-section="kt_1 · hero">
+      <div class="fc-block-header"><span class="fc-block-title">1 · Hero</span></div>
+      <div class="fc-block-body">
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Eyebrow-tekst (DA)</label><input type="text" id="kt_hero_eyebrow_da" class="fc-input-da" placeholder=""></div>
+          <div><label class="fc-label fc-label-en">Eyebrow text (EN)</label><input type="text" id="kt_hero_eyebrow_en" class="fc-input-en" placeholder=""></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">H1 — brug &lt;br&gt; &lt;em&gt; for linjeskift/kursiv (DA)</label><input type="text" id="kt_hero_h1_da" class="fc-input-da" placeholder=""></div>
+          <div><label class="fc-label fc-label-en">H1 (EN)</label><input type="text" id="kt_hero_h1_en" class="fc-input-en" placeholder=""></div>
+        </div>
+        <div style="margin-top:.8rem;padding:.9rem;background:rgba(42,122,116,.06);border:1px solid rgba(42,122,116,.2);">
+          <label class="fc-label" style="color:#2a7a74;">📁 Hero-baggrundsbillede</label>
+          <div style="display:flex;align-items:center;gap:.8rem;flex-wrap:wrap;margin-top:.5rem;">
+            <img id="kt_hero_bg_preview" src="" style="display:none;width:56px;height:56px;object-fit:cover;border-radius:3px;border:1px solid rgba(184,138,30,.3);flex-shrink:0;">
+            <input type="text" id="kt_hero_bg_url" class="fc-input-da" placeholder="URL indsættes automatisk ved upload" style="flex:1;">
+            <input type="file" id="kt_hero_bg_file" accept="image/*" style="font-size:.76rem;">
+            <button onclick="uploadEjBillede('kt_hero_bg_file','kt_hero_bg_url','kt_hero_bg_preview')" style="background:#2a7a74;color:#fff;border:none;padding:.45rem 1.1rem;font-family:Manrope,sans-serif;font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;white-space:nowrap;">⬆ Upload</button>
+          </div>
+        </div>
+        <div style="text-align:right;margin-top:.8rem;"><button onclick="gemKontakt()" style="background:#2a7a74;color:#fff;border:none;padding:.5rem 1.4rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;">💾 Gem</button></div>
+      </div>
+    </div>
+
+    <div class="fc-block" data-section="kt_2 · kontakt-intro">
+      <div class="fc-block-header"><span class="fc-block-title">2 · Kontakt-sektion (intro + e-mail)</span></div>
+      <div class="fc-block-body">
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Label (DA)</label><input type="text" id="kt_kontakt_label_da" class="fc-input-da" placeholder=""></div>
+          <div><label class="fc-label fc-label-en">Label (EN)</label><input type="text" id="kt_kontakt_label_en" class="fc-input-en" placeholder=""></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Overskrift — brug &lt;em&gt; (DA)</label><input type="text" id="kt_kontakt_h2_da" class="fc-input-da" placeholder=""></div>
+          <div><label class="fc-label fc-label-en">Heading (EN)</label><input type="text" id="kt_kontakt_h2_en" class="fc-input-en" placeholder=""></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Brødtekst — ét afsnit per linje (DA)</label><textarea id="kt_kontakt_text_da" class="fc-input-da" rows="4" style="resize:vertical;"></textarea></div>
+          <div><label class="fc-label fc-label-en">Body text (EN)</label><textarea id="kt_kontakt_text_en" class="fc-input-en" rows="4" style="resize:vertical;"></textarea></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">"Skriv direkte til"-tekst (DA)</label><input type="text" id="kt_kontakt_email_label_da" class="fc-input-da" placeholder=""></div>
+          <div><label class="fc-label fc-label-en">"Write directly to" text (EN)</label><input type="text" id="kt_kontakt_email_label_en" class="fc-input-en" placeholder=""></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label">E-mailadresse (vises + modtager mailto-klik — samme på begge sprog)</label><input type="text" id="kt_kontakt_email_single" class="fc-input-da" placeholder="hello@castillodelalma.es"></div>
+          <div></div>
+        </div>
+        <div style="text-align:right;margin-top:.8rem;"><button onclick="gemKontakt()" style="background:#2a7a74;color:#fff;border:none;padding:.5rem 1.4rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;">💾 Gem</button></div>
+      </div>
+    </div>
+
+    <div class="fc-block" data-section="kt_3 · formular">
+      <div class="fc-block-header"><span class="fc-block-title">3 · Formular (labels + succes-besked)</span></div>
+      <div class="fc-block-body">
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Felt: Navn (DA)</label><input type="text" id="kt_form_navn_da" class="fc-input-da" placeholder=""></div>
+          <div><label class="fc-label fc-label-en">Field: Name (EN)</label><input type="text" id="kt_form_navn_en" class="fc-input-en" placeholder=""></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Felt: E-mail (DA)</label><input type="text" id="kt_form_email_da" class="fc-input-da" placeholder=""></div>
+          <div><label class="fc-label fc-label-en">Field: Email (EN)</label><input type="text" id="kt_form_email_en" class="fc-input-en" placeholder=""></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Felt: Telefon (DA)</label><input type="text" id="kt_form_telefon_da" class="fc-input-da" placeholder=""></div>
+          <div><label class="fc-label fc-label-en">Field: Phone (EN)</label><input type="text" id="kt_form_telefon_en" class="fc-input-en" placeholder=""></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Felt: Besked (DA)</label><input type="text" id="kt_form_besked_da" class="fc-input-da" placeholder=""></div>
+          <div><label class="fc-label fc-label-en">Field: Message (EN)</label><input type="text" id="kt_form_besked_en" class="fc-input-en" placeholder=""></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Sikkerhedstjek-label (DA)</label><input type="text" id="kt_form_math_label_da" class="fc-input-da" placeholder=""></div>
+          <div><label class="fc-label fc-label-en">Security check label (EN)</label><input type="text" id="kt_form_math_label_en" class="fc-input-en" placeholder=""></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Send-knap (DA)</label><input type="text" id="kt_form_submit_da" class="fc-input-da" placeholder=""></div>
+          <div><label class="fc-label fc-label-en">Submit button (EN)</label><input type="text" id="kt_form_submit_en" class="fc-input-en" placeholder=""></div>
+        </div>
+        <p style="font-size:.68rem;color:rgba(44,35,24,.4);margin:1rem 0 .6rem;">Succes-besked (vises når formularen er sendt):</p>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Succes-label (DA)</label><input type="text" id="kt_success_label_da" class="fc-input-da" placeholder=""></div>
+          <div><label class="fc-label fc-label-en">Success label (EN)</label><input type="text" id="kt_success_label_en" class="fc-input-en" placeholder=""></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Succes-overskrift (DA)</label><input type="text" id="kt_success_h3_da" class="fc-input-da" placeholder=""></div>
+          <div><label class="fc-label fc-label-en">Success heading (EN)</label><input type="text" id="kt_success_h3_en" class="fc-input-en" placeholder=""></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Succes-tekst (DA)</label><textarea id="kt_success_text_da" class="fc-input-da" rows="3" style="resize:vertical;"></textarea></div>
+          <div><label class="fc-label fc-label-en">Success text (EN)</label><textarea id="kt_success_text_en" class="fc-input-en" rows="3" style="resize:vertical;"></textarea></div>
+        </div>
+        <div style="text-align:right;margin-top:.8rem;"><button onclick="gemKontakt()" style="background:#2a7a74;color:#fff;border:none;padding:.5rem 1.4rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;">💾 Gem</button></div>
+      </div>
+    </div>
+
+    <div class="fc-block" id="kt_adm_location" data-section="kt_4 · beliggenhed">
+      <div class="fc-block-header"><span class="fc-block-title">4 · Beliggenhed (flyttet fra Ejendommen)</span></div>
+      <div class="fc-block-body">
+        <label style="display:flex;align-items:center;gap:.5rem;font-family:Manrope,sans-serif;font-size:.72rem;color:#2c2318;margin-bottom:1.2rem;cursor:pointer;background:rgba(184,138,30,.07);border:1px solid rgba(184,138,30,.2);padding:.6rem .9rem;"><input type="checkbox" id="kt_vis_location" checked style="cursor:pointer;"> Synlig på siden — fjern fluebenet for at udelade sektionen fra kontakt.html</label>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Label (DA)</label><input type="text" id="kt_location_label_da" class="fc-input-da" placeholder=""></div>
+          <div><label class="fc-label fc-label-en">Label (EN)</label><input type="text" id="kt_location_label_en" class="fc-input-en" placeholder=""></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Overskrift — brug &lt;br&gt; &lt;em&gt; (DA)</label><input type="text" id="kt_location_h2_da" class="fc-input-da" placeholder=""></div>
+          <div><label class="fc-label fc-label-en">Heading (EN)</label><input type="text" id="kt_location_h2_en" class="fc-input-en" placeholder=""></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Afsnit 1 (DA)</label><textarea id="kt_location_p1_da" class="fc-input-da" rows="3" style="resize:vertical;"></textarea></div>
+          <div><label class="fc-label fc-label-en">Paragraph 1 (EN)</label><textarea id="kt_location_p1_en" class="fc-input-en" rows="3" style="resize:vertical;"></textarea></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Afsnit 2 (DA)</label><textarea id="kt_location_p2_da" class="fc-input-da" rows="3" style="resize:vertical;"></textarea></div>
+          <div><label class="fc-label fc-label-en">Paragraph 2 (EN)</label><textarea id="kt_location_p2_en" class="fc-input-en" rows="3" style="resize:vertical;"></textarea></div>
+        </div>
+        <p style="font-size:.68rem;color:rgba(44,35,24,.4);margin:1rem 0 .6rem;">Afstande (by + tid):</p>
+        <div style="display:grid;grid-template-columns:1fr 1fr 100px 100px;gap:.5rem;align-items:center;padding:.4rem 0;border-bottom:1px solid rgba(184,138,30,.08);">
+          <input type="text" id="kt_dist_antequera_navn_da" class="fc-input-da" placeholder="Antequera" style="font-size:.78rem;padding:.35rem .6rem;">
+          <input type="text" id="kt_dist_antequera_navn_en" class="fc-input-en" placeholder="Antequera" style="font-size:.78rem;padding:.35rem .6rem;">
+          <input type="text" id="kt_dist_antequera_tid_da" class="fc-input-da" placeholder="15 min" style="font-size:.78rem;padding:.35rem .6rem;text-align:center;">
+          <input type="text" id="kt_dist_antequera_tid_en" class="fc-input-en" placeholder="15 min" style="font-size:.78rem;padding:.35rem .6rem;text-align:center;">
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 100px 100px;gap:.5rem;align-items:center;padding:.4rem 0;border-bottom:1px solid rgba(184,138,30,.08);">
+          <input type="text" id="kt_dist_malaga_navn_da" class="fc-input-da" placeholder="Málaga ciudad" style="font-size:.78rem;padding:.35rem .6rem;">
+          <input type="text" id="kt_dist_malaga_navn_en" class="fc-input-en" placeholder="Málaga city" style="font-size:.78rem;padding:.35rem .6rem;">
+          <input type="text" id="kt_dist_malaga_tid_da" class="fc-input-da" placeholder="55 min" style="font-size:.78rem;padding:.35rem .6rem;text-align:center;">
+          <input type="text" id="kt_dist_malaga_tid_en" class="fc-input-en" placeholder="55 min" style="font-size:.78rem;padding:.35rem .6rem;text-align:center;">
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 100px 100px;gap:.5rem;align-items:center;padding:.4rem 0;border-bottom:1px solid rgba(184,138,30,.08);">
+          <input type="text" id="kt_dist_caminito_navn_da" class="fc-input-da" placeholder="Caminito del Rey" style="font-size:.78rem;padding:.35rem .6rem;">
+          <input type="text" id="kt_dist_caminito_navn_en" class="fc-input-en" placeholder="Caminito del Rey" style="font-size:.78rem;padding:.35rem .6rem;">
+          <input type="text" id="kt_dist_caminito_tid_da" class="fc-input-da" placeholder="40 min" style="font-size:.78rem;padding:.35rem .6rem;text-align:center;">
+          <input type="text" id="kt_dist_caminito_tid_en" class="fc-input-en" placeholder="40 min" style="font-size:.78rem;padding:.35rem .6rem;text-align:center;">
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 100px 100px;gap:.5rem;align-items:center;padding:.4rem 0;border-bottom:1px solid rgba(184,138,30,.08);">
+          <input type="text" id="kt_dist_ronda_navn_da" class="fc-input-da" placeholder="Ronda" style="font-size:.78rem;padding:.35rem .6rem;">
+          <input type="text" id="kt_dist_ronda_navn_en" class="fc-input-en" placeholder="Ronda" style="font-size:.78rem;padding:.35rem .6rem;">
+          <input type="text" id="kt_dist_ronda_tid_da" class="fc-input-da" placeholder="75 min" style="font-size:.78rem;padding:.35rem .6rem;text-align:center;">
+          <input type="text" id="kt_dist_ronda_tid_en" class="fc-input-en" placeholder="75 min" style="font-size:.78rem;padding:.35rem .6rem;text-align:center;">
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 100px 100px;gap:.5rem;align-items:center;padding:.4rem 0;border-bottom:1px solid rgba(184,138,30,.08);">
+          <input type="text" id="kt_dist_cordoba_navn_da" class="fc-input-da" placeholder="Córdoba" style="font-size:.78rem;padding:.35rem .6rem;">
+          <input type="text" id="kt_dist_cordoba_navn_en" class="fc-input-en" placeholder="Córdoba" style="font-size:.78rem;padding:.35rem .6rem;">
+          <input type="text" id="kt_dist_cordoba_tid_da" class="fc-input-da" placeholder="90 min" style="font-size:.78rem;padding:.35rem .6rem;text-align:center;">
+          <input type="text" id="kt_dist_cordoba_tid_en" class="fc-input-en" placeholder="90 min" style="font-size:.78rem;padding:.35rem .6rem;text-align:center;">
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 100px 100px;gap:.5rem;align-items:center;padding:.4rem 0;border-bottom:1px solid rgba(184,138,30,.08);">
+          <input type="text" id="kt_dist_granada_navn_da" class="fc-input-da" placeholder="Granada" style="font-size:.78rem;padding:.35rem .6rem;">
+          <input type="text" id="kt_dist_granada_navn_en" class="fc-input-en" placeholder="Granada" style="font-size:.78rem;padding:.35rem .6rem;">
+          <input type="text" id="kt_dist_granada_tid_da" class="fc-input-da" placeholder="90 min" style="font-size:.78rem;padding:.35rem .6rem;text-align:center;">
+          <input type="text" id="kt_dist_granada_tid_en" class="fc-input-en" placeholder="90 min" style="font-size:.78rem;padding:.35rem .6rem;text-align:center;">
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 100px 100px;gap:.5rem;align-items:center;padding:.4rem 0;border-bottom:1px solid rgba(184,138,30,.08);">
+          <input type="text" id="kt_dist_sevilla_navn_da" class="fc-input-da" placeholder="Sevilla" style="font-size:.78rem;padding:.35rem .6rem;">
+          <input type="text" id="kt_dist_sevilla_navn_en" class="fc-input-en" placeholder="Seville" style="font-size:.78rem;padding:.35rem .6rem;">
+          <input type="text" id="kt_dist_sevilla_tid_da" class="fc-input-da" placeholder="2,5 timer" style="font-size:.78rem;padding:.35rem .6rem;text-align:center;">
+          <input type="text" id="kt_dist_sevilla_tid_en" class="fc-input-en" placeholder="2.5 hours" style="font-size:.78rem;padding:.35rem .6rem;text-align:center;">
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 100px 100px;gap:.5rem;align-items:center;padding:.4rem 0;border-bottom:1px solid rgba(184,138,30,.08);">
+          <input type="text" id="kt_dist_lufthavn_navn_da" class="fc-input-da" placeholder="Málaga Lufthavn" style="font-size:.78rem;padding:.35rem .6rem;">
+          <input type="text" id="kt_dist_lufthavn_navn_en" class="fc-input-en" placeholder="Málaga Airport" style="font-size:.78rem;padding:.35rem .6rem;">
+          <input type="text" id="kt_dist_lufthavn_tid_da" class="fc-input-da" placeholder="60 min" style="font-size:.78rem;padding:.35rem .6rem;text-align:center;">
+          <input type="text" id="kt_dist_lufthavn_tid_en" class="fc-input-en" placeholder="60 min" style="font-size:.78rem;padding:.35rem .6rem;text-align:center;">
+        </div>
+        <div class="fc-row" style="margin-top:1rem;">
+          <div><label class="fc-label">Google Maps embed-URL (samme på begge sprog — lad stå tom for standardkortet)</label><input type="text" id="kt_location_map_url_single" class="fc-input-da" placeholder="https://www.google.com/maps/embed?..."></div>
+          <div></div>
+        </div>
+        <div style="text-align:right;margin-top:.8rem;"><button onclick="gemKontakt()" style="background:#2a7a74;color:#fff;border:none;padding:.5rem 1.4rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;">💾 Gem</button></div>
+      </div>
+    </div>
+
+    <div class="fc-block" data-section="kt_5 · nav og footer">
+      <div class="fc-block-header"><span class="fc-block-title">5 · Navigation &amp; footer</span></div>
+      <div class="fc-block-body">
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Nav-link: Kontakt (DA)</label><input type="text" id="kt_nav_kontakt_da" class="fc-input-da" placeholder=""></div>
+          <div><label class="fc-label fc-label-en">Nav link: Contact (EN)</label><input type="text" id="kt_nav_kontakt_en" class="fc-input-en" placeholder=""></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Nav-link: Beliggenhed (DA)</label><input type="text" id="kt_nav_location_da" class="fc-input-da" placeholder=""></div>
+          <div><label class="fc-label fc-label-en">Nav link: Location (EN)</label><input type="text" id="kt_nav_location_en" class="fc-input-en" placeholder=""></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Footer-copyright (DA)</label><input type="text" id="kt_footer_copy_da" class="fc-input-da" placeholder=""></div>
+          <div><label class="fc-label fc-label-en">Footer copyright (EN)</label><input type="text" id="kt_footer_copy_en" class="fc-input-en" placeholder=""></div>
+        </div>
+        <div style="text-align:right;margin-top:.8rem;"><button onclick="gemKontakt()" style="background:#2a7a74;color:#fff;border:none;padding:.5rem 1.4rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;">💾 Gem</button></div>
       </div>
     </div>
   </div>
@@ -4593,6 +4714,7 @@ function loadSubTab(sub) {
   if (sub === 'forside') loadForside();
   if (sub === 'ejendommen') loadEjendommensAdmin();
   if (sub === 'udlejning') loadUdlejningAdmin();
+  if (sub === 'kontakt') loadKontaktAdmin();
 }
 
 // ── ANMELDELSER ──
@@ -7369,7 +7491,7 @@ function flytDato(i, retning) {
 
 const EJ_CONTENT_KEYS = [
   // nav
-  'nav_intro','nav_towers','nav_rooms','nav_fac','nav_sustain','nav_vineyard','nav_location','nav_back',
+  'nav_intro','nav_towers','nav_rooms','nav_fac','nav_sustain','nav_vineyard','nav_back',
   // hero
   'hero_eyebrow','hero_h1','hero_img',
   // intro
@@ -7399,12 +7521,6 @@ const EJ_CONTENT_KEYS = [
   'eco_kloak_h4','eco_kloak_p','eco_broend_h4','eco_broend_p',
   // vineyard
   'vineyard_label','vineyard_h2','vineyard_p1','vineyard_p2','vineyard_p3','vineyard_p4','vineyard_img',
-  // location
-  'location_label','location_h2','location_p1','location_p2',
-  'dist_antequera_navn','dist_antequera_tid','dist_malaga_navn','dist_malaga_tid',
-  'dist_caminito_navn','dist_caminito_tid','dist_ronda_navn','dist_ronda_tid',
-  'dist_cordoba_navn','dist_cordoba_tid','dist_granada_navn','dist_granada_tid',
-  'dist_sevilla_navn','dist_sevilla_tid','dist_lufthavn_navn','dist_lufthavn_tid',
   // cta + footer
   'cta_h2','cta_text','cta_btn1','cta_btn2','footer_copy','footer_link',
 ];
@@ -7876,6 +7992,159 @@ async function gemUdlejning() {
     const { error } = await sb.from('udlejning_content').upsert(upserts, { onConflict: 'key' });
     if (error) throw error;
     showToast('✓ Udlejning gemt!');
+  } catch(e) {
+    showToast('Fejl: ' + e.message, true);
+  }
+}
+
+
+// ─── KONTAKT (kontakt.html) ───
+const KT_TEXT_KEYS = [
+  'hero_eyebrow','hero_h1',
+  'kontakt_label','kontakt_h2','kontakt_text','kontakt_email_label',
+  'form_navn','form_email','form_telefon','form_besked','form_math_label','form_submit',
+  'success_label','success_h3','success_text',
+  'location_label','location_h2','location_p1','location_p2',
+  'dist_antequera_navn','dist_antequera_tid','dist_malaga_navn','dist_malaga_tid',
+  'dist_caminito_navn','dist_caminito_tid','dist_ronda_navn','dist_ronda_tid',
+  'dist_cordoba_navn','dist_cordoba_tid','dist_granada_navn','dist_granada_tid',
+  'dist_sevilla_navn','dist_sevilla_tid','dist_lufthavn_navn','dist_lufthavn_tid',
+  'nav_kontakt','nav_location','footer_copy'
+];
+const KT_IMG_KEYS = ['hero_bg'];
+const KT_SINGLE_KEYS = ['kontakt_email','location_map_url']; // ikke sprogspecifikke
+const KT_VIS_KEYS = ['vis_location'];
+
+const KT_DEFAULTS = {
+  hero_eyebrow: 'Castillo del Alma · Mollina, Andalusien',
+  hero_h1: 'Kontakt <em>os</em>',
+  kontakt_label: 'Vi glæder os til at høre fra dig',
+  kontakt_h2: 'Skriv til <em>os</em>',
+  kontakt_text: 'Har du spørgsmål om vores retreats, ejendommen eller mulighederne for at afholde dit eget arrangement? Skriv til os — vi svarer gerne.\nUdfyld formularen, så vender vi tilbage inden for 24 timer.',
+  kontakt_email_label: 'Eller skriv direkte til',
+  form_navn: 'Navn *', form_email: 'E-mail *', form_telefon: 'Telefon', form_besked: 'Din besked *',
+  form_math_label: 'Sikkerhedstjek', form_submit: 'Send besked',
+  success_label: 'Tak for din besked',
+  success_h3: 'Vi vender tilbage inden for 24 timer',
+  success_text: 'Tak fordi du skrev til os. Vi har modtaget din besked og har sendt dig en bekræftelse på e-mail.',
+  location_label: 'Beliggenhed',
+  location_h2: 'Mollina <span class="phonetic">/moˈʎina/</span><br>hjertet af <em>Andalucía</em>',
+  location_p1: 'Castillo del Alma ligger i Mollina, en lille andalusisk by i Málaga-provinsen. Omgivet af vinmarker, olivenlunde og et imponerende bjerglandskab er stedet perfekt til at koble fra og finde ro.',
+  location_p2: 'Placeringen er ideel — central nok til at udforske Andalusiens kulturelle skatte, men tilpas afsides til at give den stilhed og fred som et retreat kræver.',
+  dist_antequera_navn: 'Antequera', dist_antequera_tid: '15 min',
+  dist_malaga_navn: 'Málaga ciudad', dist_malaga_tid: '55 min',
+  dist_caminito_navn: 'Caminito del Rey', dist_caminito_tid: '40 min',
+  dist_ronda_navn: 'Ronda', dist_ronda_tid: '75 min',
+  dist_cordoba_navn: 'Córdoba', dist_cordoba_tid: '90 min',
+  dist_granada_navn: 'Granada', dist_granada_tid: '90 min',
+  dist_sevilla_navn: 'Sevilla', dist_sevilla_tid: '2,5 timer',
+  dist_lufthavn_navn: 'Málaga Lufthavn', dist_lufthavn_tid: '60 min',
+  nav_kontakt: 'Kontakt', nav_location: 'Beliggenhed',
+  footer_copy: '© 2026 Castillo del Alma · Mollina, Málaga · All rights reserved',
+};
+const KT_DEFAULTS_EN = {
+  hero_eyebrow: 'Castillo del Alma · Mollina, Andalusia',
+  hero_h1: 'Contact <em>us</em>',
+  kontakt_label: 'We look forward to hearing from you',
+  kontakt_h2: 'Write to <em>us</em>',
+  kontakt_text: 'Do you have questions about our retreats, the estate or the possibilities of hosting your own event? Write to us — we are happy to help.\nFill in the form and we will get back to you within 24 hours.',
+  kontakt_email_label: 'Or write directly to',
+  form_navn: 'Name *', form_email: 'Email *', form_telefon: 'Phone', form_besked: 'Your message *',
+  form_math_label: 'Security check', form_submit: 'Send message',
+  success_label: 'Thank you for your message',
+  success_h3: 'We will get back to you within 24 hours',
+  success_text: 'Thank you for writing to us. We have received your message and have sent you a confirmation by email.',
+  location_label: 'Location',
+  location_h2: 'Mollina <span class="phonetic">/moˈʎina/</span><br>the heart of <em>Andalucía</em>',
+  location_p1: 'Castillo del Alma is located in Mollina, a small Andalusian town in the Málaga province. Surrounded by vineyards, olive groves and an impressive mountain landscape, the place is perfect for disconnecting and finding calm.',
+  location_p2: "The location is ideal — central enough to explore Andalusia's cultural treasures, but sufficiently remote to provide the silence and peace that a retreat requires.",
+  dist_antequera_navn: 'Antequera', dist_antequera_tid: '15 min',
+  dist_malaga_navn: 'Málaga city', dist_malaga_tid: '55 min',
+  dist_caminito_navn: 'Caminito del Rey', dist_caminito_tid: '40 min',
+  dist_ronda_navn: 'Ronda', dist_ronda_tid: '75 min',
+  dist_cordoba_navn: 'Córdoba', dist_cordoba_tid: '90 min',
+  dist_granada_navn: 'Granada', dist_granada_tid: '90 min',
+  dist_sevilla_navn: 'Seville', dist_sevilla_tid: '2.5 hours',
+  dist_lufthavn_navn: 'Málaga Airport', dist_lufthavn_tid: '60 min',
+  nav_kontakt: 'Contact', nav_location: 'Location',
+  footer_copy: '© 2026 Castillo del Alma · Mollina, Málaga · All rights reserved',
+};
+const KT_SINGLE_DEFAULTS = { kontakt_email: 'hello@castillodelalma.es', location_map_url: '' };
+
+async function loadKontaktAdmin() {
+  if (!sb) return;
+  let map = {};
+  try {
+    const { data, error } = await sb.from('kontakt_content').select('key,value');
+    if (error) throw error;
+    (data || []).forEach(r => { map[r.key] = r.value; });
+  } catch(e) {
+    console.warn('loadKontaktAdmin: kunne ikke hente kontakt_content (er tabellen oprettet? Kør sql/kontakt_content.sql):', e.message);
+  }
+  try {
+    KT_TEXT_KEYS.forEach(key => {
+      ['da','en'].forEach(lang => {
+        const el = document.getElementById(`kt_${key}_${lang}`);
+        if (!el) return;
+        let val = map[lang === 'da' ? key : key + '_en'];
+        if (!val && lang === 'da') val = KT_DEFAULTS[key] || '';
+        if (!val && lang === 'en') val = KT_DEFAULTS_EN[key] || '';
+        if (val) el.value = val;
+      });
+    });
+    KT_IMG_KEYS.forEach(key => {
+      const el = document.getElementById(`kt_${key}_url`);
+      if (!el) return;
+      const val = map[key] || '';
+      if (val) {
+        el.value = val;
+        const preview = document.getElementById(`kt_${key}_preview`);
+        if (preview) { preview.src = val; preview.style.display = 'inline-block'; }
+      }
+    });
+    KT_SINGLE_KEYS.forEach(key => {
+      const el = document.getElementById(`kt_${key}_single`);
+      if (!el) return;
+      const val = map[key] || KT_SINGLE_DEFAULTS[key] || '';
+      if (val) el.value = val;
+    });
+    KT_VIS_KEYS.forEach(k => {
+      const el = document.getElementById('kt_' + k);
+      if (el) el.checked = map[k] !== '0'; // Synlig som standard
+    });
+  } catch(e) {
+    console.warn('loadKontaktAdmin fejl:', e.message);
+  }
+}
+
+async function gemKontakt() {
+  if (!sb) return;
+  const upserts = [];
+  KT_TEXT_KEYS.forEach(key => {
+    ['da','en'].forEach(lang => {
+      const el = document.getElementById(`kt_${key}_${lang}`);
+      if (!el) return;
+      const dbKey = lang === 'en' ? key + '_en' : key;
+      upserts.push({ key: dbKey, value: el.value });
+    });
+  });
+  KT_IMG_KEYS.forEach(key => {
+    const el = document.getElementById(`kt_${key}_url`);
+    if (el) upserts.push({ key, value: el.value.trim() });
+  });
+  KT_SINGLE_KEYS.forEach(key => {
+    const el = document.getElementById(`kt_${key}_single`);
+    if (el) upserts.push({ key, value: el.value.trim() });
+  });
+  KT_VIS_KEYS.forEach(k => {
+    const el = document.getElementById('kt_' + k);
+    if (el) upserts.push({ key: k, value: el.checked ? '1' : '0' });
+  });
+
+  try {
+    const { error } = await sb.from('kontakt_content').upsert(upserts, { onConflict: 'key' });
+    if (error) throw error;
+    showToast('✓ Kontakt gemt!');
   } catch(e) {
     showToast('Fejl: ' + e.message, true);
   }
