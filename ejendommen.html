@@ -391,59 +391,6 @@ body.menu-open .nav-burger span:nth-child(3){ transform:translateY(-9px) rotate(
 }
 .vineyard-img img{width:100%;height:100%;object-fit:cover;display:block;}
 
-/* ── LOCATION ── */
-.location{background:var(--cream);padding:8rem 0;}
-.location-grid{display:grid;grid-template-columns:1fr 1fr;gap:7rem;align-items:start;}
-.location h2{
-  font-family:'Cinzel',serif;font-weight:300;
-  font-size:clamp(2rem,3.5vw,3rem);letter-spacing:.08em;
-  color:var(--charcoal);margin-bottom:2rem;
-}
-.location h2 em{color:var(--teal);font-style:normal;}
-.location h2 .phonetic {
-  font-family:'Cormorant Garamond',serif;
-  font-size:.5em; font-weight:300; font-style:italic;
-  color:var(--text-light); letter-spacing:.04em;
-  vertical-align:middle; margin:0 .2em;
-}
-.location-phonetic{
-  font-family:'Cormorant Garamond',serif;
-  font-size:.95rem;font-weight:300;font-style:italic;
-  color:var(--text-light);letter-spacing:.05em;
-  margin-bottom:1.8rem;margin-top:-.6rem;
-}
-.location p{font-family:'Cormorant Garamond',serif;font-size:1.08rem;font-weight:300;line-height:1.95;color:var(--text-mid);margin-bottom:1.4rem;}
-.location-distances{
-  margin-top:2.5rem;
-  border-top:1px solid rgba(184,138,30,.2);
-  padding-top:2rem;
-}
-.location-distance{
-  display:flex;justify-content:space-between;align-items:center;
-  padding:.9rem 0;
-  border-bottom:1px solid rgba(184,138,30,.1);
-}
-.location-distance span:first-child{
-  font-family:'Cormorant Garamond',serif;font-size:1.05rem;
-  font-weight:300;color:var(--text-mid);
-}
-.location-distance span:last-child{
-  font-family:'Cinzel',serif;font-size:.8rem;
-  letter-spacing:.1em;color:var(--gold);font-weight:300;
-}
-.location-map{
-  background:var(--section-alt);
-  border:1px solid var(--sand);
-  aspect-ratio:4/3;
-  display:flex;align-items:center;justify-content:center;
-  font-family:'Cormorant Garamond',serif;font-style:italic;
-  color:var(--text-light);font-size:1rem;
-  overflow:hidden;position:relative;
-}
-.location-map iframe{
-  width:100%;height:100%;border:none;
-}
-
 /* ── CTA ── */
 .estate-cta{
   background:var(--charcoal);
@@ -608,7 +555,6 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:3rem
   .facilities-grid{grid-template-columns:1fr;gap:3rem;}
   .facility-list{grid-template-columns:1fr;}
   .vineyard-detail-grid{grid-template-columns:1fr;gap:3rem;}
-  .location-grid{grid-template-columns:1fr;gap:3rem;}
   .sustain-top{grid-template-columns:1fr;gap:2.5rem;}
   .sustain-imgtext{grid-template-columns:1fr;gap:2.5rem;}
   .rooms-grid{grid-template-columns:1fr 1fr;}
@@ -619,7 +565,7 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:3rem
 @media (max-width:768px){
   /* Mindre lodret luft i sektionerne */
   .estate-intro{padding:4.5rem 0 4rem;}
-  .towers,.rooms,.facilities,.sustainability,.vineyard-detail,.location,.estate-cta{padding:4.5rem 0;}
+  .towers,.rooms,.facilities,.sustainability,.vineyard-detail,.estate-cta{padding:4.5rem 0;}
   /* Mindre vandret margin */
   .section-inner{padding:0 1.4rem;}
   /* Hero */
@@ -660,7 +606,6 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:3rem
   .room-card p{font-size:1.1rem;}
   .facility-text p{font-size:.95rem;}
   .vineyard-detail p{font-size:1.18rem;}
-  .location p{font-size:1.18rem;}
   .estate-cta p{font-size:1.3rem;}
   .sustain-lead{font-size:1.22rem;}
   .sustain-body{font-size:1.15rem;}
@@ -690,7 +635,6 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:3rem
     <li><a href="#facilities" id="ej_nav_fac">Faciliteter</a></li>
     <li><a href="#sustainability" id="ej_nav_sustain">Bæredygtighed</a></li>
     <li><a href="#vineyard" id="ej_nav_vineyard">Vingården</a></li>
-    <li><a href="#location" id="ej_nav_location">Beliggenhed</a></li>
     <li style="display:flex;align-items:center;gap:.4rem;margin-left:.8rem;">
       <div class="lang-switcher" style="display:flex;border:1.5px solid;overflow:hidden;border-color:var(--wine);">
         <button id="ej-btn-da" class="lang-btn lang-btn-active" onclick="setEjLang('da')" style="font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;padding:.3rem .6rem;border:none;cursor:pointer;font-family:'Manrope',sans-serif;">DA</button>
@@ -1143,37 +1087,6 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:3rem
   </div>
 </section>
 
-<!-- LOCATION -->
-<section class="location" id="location">
-  <div class="section-inner">
-    <div class="location-grid">
-      <div class="reveal-left">
-        <span class="section-label" id="ej_location_label">Beliggenhed</span>
-        <h2 class="split-h" id="ej_location_h2">Mollina <span class="phonetic" id="ej_location_phonetic">/moˈʎina/</span><br>hjertet af <em id="ej_location_h2_em">Andalucía</em></h2>
-        <p id="ej_location_p1">Castillo del Alma ligger i Mollina, en lille andalusisk by i Málaga-provinsen. Omgivet af vinmarker, olivenlunde og et imponerende bjerglandskab er stedet perfekt til at koble fra og finde ro.</p>
-        <p id="ej_location_p2">Placeringen er ideel — central nok til at udforske Andalusiens kulturelle skatte, men tilpas afsides til at give den stilhed og fred som et retreat kræver.</p>
-        <div class="location-distances">
-          <div class="location-distance" id="ej_dist_antequera"><span>Antequera</span><span>15 min</span></div>
-          <div class="location-distance" id="ej_dist_malaga"><span>Málaga ciudad</span><span>55 min</span></div>
-          <div class="location-distance" id="ej_dist_caminito"><span>Caminito del Rey</span><span>40 min</span></div>
-          <div class="location-distance" id="ej_dist_ronda"><span>Ronda</span><span>75 min</span></div>
-          <div class="location-distance" id="ej_dist_cordoba"><span>Córdoba</span><span>90 min</span></div>
-          <div class="location-distance" id="ej_dist_granada"><span>Granada</span><span>90 min</span></div>
-          <div class="location-distance" id="ej_dist_sevilla"><span>Sevilla</span><span>2,5 timer</span></div>
-          <div class="location-distance" id="ej_dist_lufthavn"><span>Málaga Lufthavn</span><span>60 min</span></div>
-        </div>
-      </div>
-      <div class="location-map reveal-right d2">
-        <iframe
-          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d12562.8!2d-4.6506!3d37.1534!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd72b1d3ef80d34d%3A0x0!2sMollina%2C+M%C3%A1laga!5e0!3m2!1sda!2sdk!4v1"
-          allowfullscreen loading="lazy"
-          referrerpolicy="no-referrer-when-downgrade">
-        </iframe>
-      </div>
-    </div>
-  </div>
-</section>
-
 <!-- CTA -->
 <section class="estate-cta">
   <div class="section-inner">
@@ -1193,6 +1106,7 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:3rem
   <div class="footer-bottom">
     <p id="ej_footer_copy">© 2026 Castillo del Alma · Mollina, Málaga · All rights reserved</p>
     <div style="display:flex;gap:1.6rem;flex-wrap:wrap;align-items:center;">
+      <a href="kontakt.html" id="ej_footer_kontakt">Kontakt</a>
       <a href="privacidad.html" id="ej_footer_privacy">Persondatapolitik</a>
       <a href="aviso-legal.html" id="ej_footer_legal">Juridisk meddelelse</a>
       <a href="index.html" id="ej_footer_link">← Tilbage til forsiden</a>
@@ -1356,7 +1270,6 @@ function applyEjContent() {
   setText('ej_nav_fac', ejSC('nav_fac'));
   setText('ej_nav_sustain', ejSC('nav_sustain'));
   setText('ej_nav_vineyard', ejSC('nav_vineyard'));
-  setText('ej_nav_location', ejSC('nav_location'));
   setText('ej_nav_back', ejSC('nav_back'));
 
   // HERO
@@ -1433,20 +1346,6 @@ function applyEjContent() {
   for (let i = 1; i <= 4; i++) setText(`ej_vineyard_p${i}`, ejSC(`vineyard_p${i}`));
   setImg('ej_vineyard_img', ejSC('vineyard_img'));
 
-  // LOCATION
-  setText('ej_location_label', ejSC('location_label'));
-  if (ejSC('location_h2')) setHTML('ej_location_h2', ejSC('location_h2'));
-  setText('ej_location_p1', ejSC('location_p1'));
-  setText('ej_location_p2', ejSC('location_p2'));
-  const distItems = ['antequera','malaga','caminito','ronda','cordoba','granada','sevilla','lufthavn'];
-  distItems.forEach(k => {
-    const el = document.getElementById(`ej_dist_${k}`);
-    if (!el) return;
-    const spans = el.querySelectorAll('span');
-    if (ejSC(`dist_${k}_navn`) && spans[0]) spans[0].textContent = ejSC(`dist_${k}_navn`);
-    if (ejSC(`dist_${k}_tid`) && spans[1]) spans[1].textContent = ejSC(`dist_${k}_tid`);
-  });
-
   // FACILITIES — opdater ikoner fra database
   EJ_FAC_KEYS.forEach(k => {
     const iconKey = ejData[`fac_${k}_icon`];
@@ -1466,6 +1365,7 @@ function applyEjContent() {
   // FOOTER
   setText('ej_footer_copy', ejSC('footer_copy'));
   setText('ej_footer_link', ejSC('footer_link'));
+  setText('ej_footer_kontakt', ejLang === 'en' ? 'Contact' : 'Kontakt');
   setText('ej_footer_privacy', ejLang === 'en' ? 'Privacy Policy' : 'Persondatapolitik');
   setText('ej_footer_legal', ejLang === 'en' ? 'Legal Notice' : 'Juridisk meddelelse');
 }
