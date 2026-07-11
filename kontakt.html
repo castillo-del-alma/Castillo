@@ -394,8 +394,8 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:3rem
 
             <!-- HONEYPOT — skjult felt, bots udfylder det, mennesker ikke -->
             <div class="hp-field" aria-hidden="true">
-              <label for="website_url">Lad dette felt være tomt</label>
-              <input type="text" id="website_url" name="website_url" tabindex="-1" autocomplete="off">
+              <label for="cda_kontrol_x9">Lad dette felt være tomt</label>
+              <input type="text" id="cda_kontrol_x9" name="cda_kontrol_x9" tabindex="-1" autocomplete="one-time-code">
             </div>
 
             <div class="form-row">
@@ -725,7 +725,7 @@ document.getElementById('kontaktForm').addEventListener('submit', async function
   errorEl.style.display = 'none';
 
   // Honeypot check — hvis udfyldt er det en bot
-  if (document.getElementById('website_url').value !== '') {
+  if (document.getElementById('cda_kontrol_x9').value !== '') {
     console.log('Bot detected via honeypot');
     form.style.display = 'none';
     document.getElementById('formSuccess').style.display = 'block';
@@ -764,7 +764,7 @@ document.getElementById('kontaktForm').addEventListener('submit', async function
     telefon: document.getElementById('telefon') ? document.getElementById('telefon').value.trim() : '',
     besked:  document.getElementById('besked').value.trim(),
     lang:    ktLang,
-    website_url: document.getElementById('website_url').value, // honeypot valideres også serverside
+    website_url: document.getElementById('cda_kontrol_x9').value, // honeypot valideres også serverside
   };
 
   try {
