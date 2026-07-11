@@ -1448,6 +1448,7 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:3rem
   <div class="footer-bottom">
     <p>© 2026 Castillo del Alma · Mollina, Málaga · All rights reserved</p>
     <div style="display:flex;gap:1.6rem;flex-wrap:wrap;align-items:center;">
+      <a href="kontakt.html" id="footerKontakt">Kontakt</a>
       <a href="privacidad.html" id="footerPrivacy">Persondatapolitik</a>
       <a href="aviso-legal.html" id="footerLegal">Juridisk meddelelse</a>
       <a href="index.html" id="footerBack">← Tilbage til forsiden</a>
@@ -1691,6 +1692,7 @@ function applyUlContent() {
   const navBackTxt = '← ' + (ulLang === 'en' ? 'Back to homepage' : 'Tilbage til forsiden');
   setText('navBack', navBackTxt);
   setText('footerBack', navBackTxt);
+  setText('footerKontakt', ulLang === 'en' ? 'Contact' : 'Kontakt');
   setText('footerPrivacy', ulLang === 'en' ? 'Privacy Policy' : 'Persondatapolitik');
   setText('footerLegal', ulLang === 'en' ? 'Legal Notice' : 'Juridisk meddelelse');
 
