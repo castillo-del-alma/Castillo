@@ -1842,12 +1842,8 @@ body.menu-open .nav-burger span:nth-child(3){ transform:translateY(-9px) rotate(
       <li><a href="ejendommen.html#facilities" id="footerCol1Link3">Faciliteter</a></li>
       <li><a href="ejendommen.html#sustainability" id="footerCol1Link4">Bæredygtighed</a></li>
     </ul></div>
-    <div class="footer-col"><h4 id="footerCol2Heading">Retreats</h4><ul>
-      <li><a href="#experiences" id="footerCol2Link1">Kultur &amp; Udflugter</a></li>
-      <li><a href="retreat.html?slug=kunsten-at-saenke-tempoet" id="footerCol2Link2">Sænk tempoet</a></li>
-      <li><a href="#retreats" id="footerCol2Link3">Rejsen indad</a></li>
-      <li><a href="retreat.html?slug=gay-retreat-og-faellesskab" id="footerCol2Link4">Gay Retreat</a></li>
-      <li><a href="udlejning.html" id="footerCol2Link5">Lej Castillo</a></li>
+    <div class="footer-col"><h4 id="footerCol2Heading">Retreats</h4><ul id="footerRetreatsList">
+      <li><a href="#retreats">Alle retreats</a></li>
     </ul></div>
     <div class="footer-col"><h4 id="footerCol3Heading">Information</h4><ul>
       <li><a href="#experiences" id="footerCol3Link1">Oplevelser</a></li>
@@ -2480,6 +2476,19 @@ function buildAvailBadge(r, availData, isEN) {
   return `<div class="retreat-avail ${cls}">${txt}</div>`;
 }
 
+// Footer: RETREATS-kolonnen viser altid kun de aktive retreats med deres aktuelle titler.
+// Kaldes fra loadRetreatsGrid (samme data/sortering som kortene) — genrenderes automatisk ved DA/EN-skift.
+function renderFooterRetreats(data) {
+  const list = document.getElementById('footerRetreatsList');
+  if (!list || !data || !data.length) return;
+  const isEN = currentSiteLang === 'en';
+  const esc = s => String(s == null ? '' : s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  list.innerHTML = data.map(r => {
+    const title = isEN ? (r.title_en || r.title || '') : (r.title || '');
+    return `<li><a href="retreat.html?slug=${encodeURIComponent(r.slug)}">${esc(title)}</a></li>`;
+  }).join('');
+}
+
 async function loadRetreatsGrid() {
   const grid = document.getElementById('retreatsGrid');
   if (!grid) return;
@@ -2496,6 +2505,8 @@ async function loadRetreatsGrid() {
   }
 
   const availData = await fetchRetreatAvailability();
+
+  renderFooterRetreats(data);
 
   grid.innerHTML = data.map((r, i) => {
     const num = String(i + 1).padStart(2, '0');
@@ -3011,7 +3022,7 @@ function applySiteLang() {
   set('footerCol2Heading', 'footer_kol2_titel');
   set('footerCol3Heading', 'footer_kol3_titel');
   for (let i = 1; i <= 4; i++) set('footerCol1Link' + i, 'footer_kol1_link' + i + '_tekst');
-  for (let i = 1; i <= 5; i++) set('footerCol2Link' + i, 'footer_kol2_link' + i + '_tekst');
+  // Kolonne 2 (Retreats) renderes dynamisk fra aktive retreats — se renderFooterRetreats()
   for (let i = 1; i <= 5; i++) set('footerCol3Link' + i, 'footer_kol3_link' + i + '_tekst');
   // Links (href) opdateres uafhængigt af sprog — de samme destinationer gælder for begge sprog
   const setHref = (id, key) => {
@@ -3021,7 +3032,6 @@ function applySiteLang() {
     if (url) el.href = url;
   };
   for (let i = 1; i <= 4; i++) setHref('footerCol1Link' + i, 'footer_kol1_link' + i + '_url');
-  for (let i = 1; i <= 5; i++) setHref('footerCol2Link' + i, 'footer_kol2_link' + i + '_url');
   for (let i = 1; i <= 5; i++) setHref('footerCol3Link' + i, 'footer_kol3_link' + i + '_url');
   set('footerCopyright', 'footer_copyright');
   set('footerSocial1', 'footer_social1_tekst');
