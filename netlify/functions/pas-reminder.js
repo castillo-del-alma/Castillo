@@ -83,7 +83,7 @@ exports.handler = async () => {
       subject: 'Husk jeres rejseregistrering — Castillo del Alma',
       title: 'Husk jeres rejseregistrering',
       intro: `Kære ${navn}. Vi glæder os til at byde jer velkommen til Castillo del Alma om en uge. ` +
-        `Spansk lov kræver, at vi registrerer alle overnattende gæster hos politiet, og vi mangler stadig ` +
+        `Spansk lov kræver, at vi registrerer alle overnattende gæster hos de spanske myndigheder, og vi mangler stadig ` +
         `pasoplysninger for ${mangler === antal ? 'alle gæster' : mangler + ' af ' + antal + ' gæster'} på jeres booking. ` +
         `Det tager kun et par minutter at udfylde via Min booking.`,
       secLabel: 'Jeres ophold', lRetreat: 'Retreat', lArrival: 'Ankomst', lGuests: 'Gæster', lReg: 'Registreret',
@@ -93,7 +93,7 @@ exports.handler = async () => {
       subject: 'Travel registration reminder — Castillo del Alma',
       title: 'Please complete your travel registration',
       intro: `Dear ${navn}. We look forward to welcoming you to Castillo del Alma in a week. ` +
-        `Spanish law requires us to register all overnight guests with the police, and we are still missing ` +
+        `Spanish law requires us to register all overnight guests with the Spanish authorities, and we are still missing ` +
         `passport details for ${mangler === antal ? 'all guests' : mangler + ' of ' + antal + ' guests'} on your booking. ` +
         `It only takes a couple of minutes via My booking.`,
       secLabel: 'Your stay', lRetreat: 'Retreat', lArrival: 'Arrival', lGuests: 'Guests', lReg: 'Registered',
