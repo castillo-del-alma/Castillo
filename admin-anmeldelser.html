@@ -4131,6 +4131,15 @@ feeling more calm – and coming home to yourself again."</textarea></div>
           <div><label class="fc-label fc-label-da">Mad-beskrivelse (DA)</label><textarea id="ui_food_text" class="fc-input-da fc-textarea" rows="4" placeholder="Mad er en central del af retreatoplevelsen. Alle måltider tilberedes med friske, lokale og sæsonbestemte råvarer fra regionen."></textarea></div>
           <div><label class="fc-label fc-label-en">Food description (EN)</label><textarea id="ui_food_text_en" class="fc-input-en fc-textarea" rows="4" placeholder="Food is a central part of the retreat experience. All meals are prepared with fresh, local and seasonal ingredients from the region."></textarea></div>
         </div>
+        <div style="margin-top:.8rem;padding:.9rem;background:rgba(42,122,116,.06);border:1px solid rgba(42,122,116,.2);">
+          <label class="fc-label" style="color:#2a7a74;">📁 Mad-billede (vises til højre for teksten — tomt felt = standardbilledet)</label>
+          <div style="display:flex;align-items:center;gap:.8rem;flex-wrap:wrap;margin-top:.5rem;">
+            <img id="ra_food_img_preview" src="" style="display:none;width:56px;height:56px;object-fit:cover;border-radius:3px;border:1px solid rgba(184,138,30,.3);flex-shrink:0;">
+            <input type="text" id="ra_food_img_url" class="fc-input-da" placeholder="URL indsættes automatisk ved upload" style="flex:1;">
+            <input type="file" id="ra_food_img_file" accept="image/*" style="font-size:.76rem;">
+            <button type="button" onclick="uploadRetreatBillede('ra_food_img_file','ra_food_img_url','ra_food_img_preview')" style="background:#2a7a74;color:#fff;border:none;padding:.45rem 1.1rem;font-family:Manrope,sans-serif;font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;white-space:nowrap;">⬆ Upload</button>
+          </div>
+        </div>
         <div style="text-align:right;margin-top:1rem;padding-top:.8rem;border-top:1px solid rgba(184,138,30,.12);">
           <button type="button" onclick="gemRetreat()" style="background:var(--wine);color:#fff;border:none;padding:.5rem 1.4rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;">💾 Gem retreat</button>
         </div>
@@ -6614,7 +6623,10 @@ function openNytRetreat() {
   saetBilledPreview('retreat_card_preview', '');
   { const _hf = document.getElementById('retreat_hero_file'); if (_hf) _hf.value = ''; }
   { const _cf = document.getElementById('retreat_card_file'); if (_cf) _cf.value = ''; }
-  retreatOrigImages = { hero: '', card: '' };
+  { const _fu = document.getElementById('ra_food_img_url'); if (_fu) _fu.value = ''; }
+  saetBilledPreview('ra_food_img_preview', '');
+  { const _ff = document.getElementById('ra_food_img_file'); if (_ff) _ff.value = ''; }
+  retreatOrigImages = { hero: '', card: '', food: '' };
   document.getElementById('retreat_booking_deadline').value = '';
   document.getElementById('retreat_teacher_bio').value = 'En erfaren wellness-facilitator med speciale i nervesystemsregulering, breathwork og somatic therapy. Med mange års erfaring fra retreats i Skandinavien og Sydeuropa skabes et trygt og professionelt rum for transformation.';
   document.getElementById('retreat_teacher_bio_en').value = 'An experienced wellness facilitator specialising in nervous system regulation, breathwork and somatic therapy. With many years of experience from retreats across Scandinavia and Southern Europe.';
@@ -6670,7 +6682,7 @@ function udfyldRetreatForm(r) {
   saetBilledPreview('retreat_card_preview', r.card_image);
   { const _hf = document.getElementById('retreat_hero_file'); if (_hf) _hf.value = ''; }
   { const _cf = document.getElementById('retreat_card_file'); if (_cf) _cf.value = ''; }
-  retreatOrigImages = { hero: r.hero_image || '', card: r.card_image || '' };
+  retreatOrigImages = { hero: r.hero_image || '', card: r.card_image || '', food: r.ui_food_img || '' };
   document.getElementById('retreat_location').value = r.location || '';
   document.getElementById('retreat_languages_en').value = r.languages_en || '';
   document.getElementById('retreat_level_en').value = r.level_en || '';
@@ -6738,6 +6750,9 @@ function udfyldRetreatForm(r) {
   { const _el = document.getElementById('ui_room_double_heading_en'); if (_el) _el.value = r.ui_room_double_heading_en || 'Shared Double Room'; }
   { const _el = document.getElementById('ui_room_single_heading'); if (_el) _el.value = r.ui_room_single_heading || 'Enkeltværelse'; }
   { const _el = document.getElementById('ui_room_single_heading_en'); if (_el) _el.value = r.ui_room_single_heading_en || 'Single Room'; }
+  { const _el = document.getElementById('ra_food_img_url'); if (_el) _el.value = r.ui_food_img || ''; }
+  saetBilledPreview('ra_food_img_preview', r.ui_food_img);
+  { const _ff = document.getElementById('ra_food_img_file'); if (_ff) _ff.value = ''; }
   document.getElementById('ui_food_heading').value = r.ui_food_heading || 'Nærende andalusisk køkken';
   document.getElementById('ui_food_text').value = r.ui_food_text || 'Mad er en central del af retreatoplevelsen. Alle måltider tilberedes med friske, lokale og sæsonbestemte råvarer fra regionen. Vi spiser enkelt, nærende og med respekt for kroppen.\nMorgenmaden er let og energigivende — frugt, yoghurt, æg og brød. Frokosten er større og ofte et fælles bord med salater, grøntsager og proteiner. Aftensmaden er dagens sociale samlingspunkt — tre retter med lokale vine.\nSærlige kostbehov imødekommes fuldt ud — vegetar, vegansk, glutenfri mv. Oplys ved tilmelding.';
   document.getElementById('ui_food_text_en').value = r.ui_food_text_en || 'Food is a central part of the retreat experience. All meals are prepared with fresh, local and seasonal ingredients from the region. We eat simply, nutritiously and with respect for the body.\nBreakfast is light and energising — fruit, yoghurt, eggs and bread. Lunch is more substantial, often a shared table with salads, vegetables and proteins. Dinner is the social highlight of the day — three courses with local wines.\nSpecial dietary requirements are fully accommodated — vegetarian, vegan, gluten-free etc. Please inform us at registration.';
@@ -6984,7 +6999,7 @@ function cdaFilename(originalName) {
 }
 
 // ── Billed-preview + storage-oprydningshjælpere ──
-let retreatOrigImages = { hero: '', card: '' }; // snapshot af DB-værdier ved åbning af editor
+let retreatOrigImages = { hero: '', card: '', food: '' }; // snapshot af DB-værdier ved åbning af editor
 
 function saetBilledPreview(id, url) {
   const el = document.getElementById(id);
@@ -7165,6 +7180,7 @@ async function gemRetreat() {
       ui_room_double_heading_en: document.getElementById('ui_room_double_heading_en').value.trim() || null,
       ui_room_single_heading: document.getElementById('ui_room_single_heading').value.trim() || null,
       ui_room_single_heading_en: document.getElementById('ui_room_single_heading_en').value.trim() || null,
+      ui_food_img: (document.getElementById('ra_food_img_url')?.value || '').trim() || null,
       ui_food_heading: document.getElementById('ui_food_heading').value.trim() || null,
       ui_food_text: document.getElementById('ui_food_text').value.trim() || null,
       ui_teacher_heading: document.getElementById('ui_teacher_heading').value.trim() || null,
@@ -7345,15 +7361,16 @@ async function gemRetreat() {
     try {
       const nyHero = ('hero_image' in payload) ? payload.hero_image : retreatOrigImages.hero;
       const nyCard = ('card_image' in payload) ? payload.card_image : retreatOrigImages.card;
-      const iBrugNu = [nyHero, nyCard].filter(Boolean);
+      const nyFood = ('ui_food_img' in payload) ? payload.ui_food_img : retreatOrigImages.food;
+      const iBrugNu = [nyHero, nyCard, nyFood].filter(Boolean);
       const andreJson = JSON.stringify((allRetreats || []).filter(x => String(x.id) !== String(id || '')));
-      for (const gammel of [retreatOrigImages.hero, retreatOrigImages.card]) {
+      for (const gammel of [retreatOrigImages.hero, retreatOrigImages.card, retreatOrigImages.food]) {
         if (!gammel) continue;
         if (iBrugNu.includes(gammel)) continue;
         if (andreJson.includes(gammel)) continue;
         await cdaSletStorageFil(gammel);
       }
-      retreatOrigImages = { hero: nyHero || '', card: nyCard || '' };
+      retreatOrigImages = { hero: nyHero || '', card: nyCard || '', food: nyFood || '' };
     } catch(_) { /* oprydning er best-effort */ }
 
     // Bliv på siden — vis gem-bekræftelse øverst

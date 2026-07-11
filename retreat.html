@@ -1011,7 +1011,7 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:3rem
         </div>
       </div>
       <div class="food-img reveal-right d2">
-        <img src="img/estate-dining.jpg" alt="Mad på Castillo del Alma">
+        <img src="img/estate-dining.jpg" alt="Mad på Castillo del Alma" id="foodImg">
       </div>
     </div>
   </div>
@@ -2048,6 +2048,8 @@ function applyRetreatContent() {
   if (foodTextEl && foodTextVal) {
     foodTextEl.innerHTML = foodTextVal.split('\n').filter(Boolean).map(p => `<p>${p}</p>`).join('');
   }
+  const foodImgEl = document.getElementById('foodImg');
+  if (foodImgEl && data.ui_food_img) foodImgEl.src = data.ui_food_img;
 
   // Underviser-billeder og rolle
   buildTeacherSection(data);
