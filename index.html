@@ -1844,6 +1844,7 @@ body.menu-open .nav-burger span:nth-child(3){ transform:translateY(-9px) rotate(
     </ul></div>
     <div class="footer-col"><h4 id="footerCol2Heading">Retreats</h4><ul id="footerRetreatsList">
       <li><a href="#retreats">Alle retreats</a></li>
+      <li style="margin-top:1rem;"><a href="udlejning.html">Afhold dit retreat</a></li>
     </ul></div>
     <div class="footer-col"><h4 id="footerCol3Heading">Information</h4><ul>
       <li><a href="#experiences" id="footerCol3Link1">Oplevelser</a></li>
@@ -2487,6 +2488,13 @@ function renderFooterRetreats(data) {
     const title = isEN ? (r.title_en || r.title || '') : (r.title || '');
     return `<li><a href="retreat.html?slug=${encodeURIComponent(r.slug)}">${esc(title)}</a></li>`;
   }).join('');
+  // Ekstra, admin-styret link efter sidste retreat (med ekstra linjeskift).
+  // Tekst: footer_kol2_ekstra_tekst (DA/EN) · URL: footer_kol2_ekstra_url — inline HTML tilladt i teksten.
+  const extraText = SC('footer_kol2_ekstra_tekst', isEN ? 'Host your retreat' : 'Afhold dit retreat');
+  if (extraText) {
+    const extraUrl = siteContentData['footer_kol2_ekstra_url'] || 'udlejning.html';
+    list.innerHTML += `<li style="margin-top:1rem;"><a href="${esc(extraUrl)}">${extraText}</a></li>`;
+  }
 }
 
 async function loadRetreatsGrid() {
