@@ -2008,6 +2008,46 @@ feeling more calm – and coming home to yourself again."</textarea></div>
       </div>
     </div>
 
+
+    <div class="fc-block" id="sik_adm_blok" data-section="din sikkerhed">
+      <div class="fc-block-header"><span class="fc-block-title">🧯 Din sikkerhed (vises nederst på Forside, Ejendommen OG Udlejning)</span></div>
+      <div class="fc-block-body">
+        <label style="display:flex;align-items:center;gap:.5rem;font-family:Manrope,sans-serif;font-size:.72rem;color:#2c2318;margin-bottom:1.2rem;cursor:pointer;background:rgba(184,138,30,.07);border:1px solid rgba(184,138,30,.2);padding:.6rem .9rem;"><input type="checkbox" id="sik_vis" checked style="cursor:pointer;"> Synlig — fjern fluebenet for at skjule sektionen på alle tre sider</label>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Label (DA)</label><input type="text" id="sik_label_da" class="fc-input-da" placeholder="Din sikkerhed"></div>
+          <div><label class="fc-label fc-label-en">Label (EN)</label><input type="text" id="sik_label_en" class="fc-input-en" placeholder="Your safety"></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Overskrift (DA) — brug &lt;em&gt; for farve</label><input type="text" id="sik_h2_da" class="fc-input-da" placeholder="Du er i &lt;em&gt;gode hænder&lt;/em&gt;"></div>
+          <div><label class="fc-label fc-label-en">Heading (EN)</label><input type="text" id="sik_h2_en" class="fc-input-en" placeholder="You are in &lt;em&gt;good hands&lt;/em&gt;"></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Brødtekst (DA) — ét afsnit per linje</label><textarea id="sik_text_da" class="fc-input-da" rows="5" style="resize:vertical;"></textarea></div>
+          <div><label class="fc-label fc-label-en">Body text (EN)</label><textarea id="sik_text_en" class="fc-input-en" rows="5" style="resize:vertical;"></textarea></div>
+        </div>
+        <div style="margin-top:.8rem;padding:.9rem;background:rgba(42,122,116,.06);border:1px solid rgba(42,122,116,.2);">
+          <label class="fc-label" style="color:#2a7a74;">📁 Stort billede (bagerst i kolonnen)</label>
+          <div style="display:flex;align-items:center;gap:.8rem;flex-wrap:wrap;margin-top:.5rem;">
+            <img id="sik_img1_preview" src="" style="display:none;width:56px;height:56px;object-fit:cover;border-radius:3px;border:1px solid rgba(184,138,30,.3);flex-shrink:0;">
+            <input type="text" id="sik_img1_url" class="fc-input-da" placeholder="URL indsættes automatisk ved upload" style="flex:1;">
+            <input type="file" id="sik_img1_file" accept="image/*" style="font-size:.76rem;">
+            <button onclick="uploadEjBillede('sik_img1_file','sik_img1_url','sik_img1_preview')" style="background:#2a7a74;color:#fff;border:none;padding:.45rem 1.1rem;font-family:Manrope,sans-serif;font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;white-space:nowrap;">⬆ Upload</button>
+          </div>
+        </div>
+        <div style="margin-top:.8rem;padding:.9rem;background:rgba(42,122,116,.06);border:1px solid rgba(42,122,116,.2);">
+          <label class="fc-label" style="color:#2a7a74;">📁 Lille billede (lægger sig halvt henover det store — kan udelades)</label>
+          <div style="display:flex;align-items:center;gap:.8rem;flex-wrap:wrap;margin-top:.5rem;">
+            <img id="sik_img2_preview" src="" style="display:none;width:56px;height:56px;object-fit:cover;border-radius:3px;border:1px solid rgba(184,138,30,.3);flex-shrink:0;">
+            <input type="text" id="sik_img2_url" class="fc-input-da" placeholder="URL indsættes automatisk ved upload" style="flex:1;">
+            <input type="file" id="sik_img2_file" accept="image/*" style="font-size:.76rem;">
+            <button onclick="uploadEjBillede('sik_img2_file','sik_img2_url','sik_img2_preview')" style="background:#2a7a74;color:#fff;border:none;padding:.45rem 1.1rem;font-family:Manrope,sans-serif;font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;white-space:nowrap;">⬆ Upload</button>
+          </div>
+        </div>
+        <p style="font-size:.68rem;color:rgba(44,35,24,.4);margin-top:.8rem;">Uden stort billede vises sektionen med tekst i fuld bredde. Sektionen deles af alle tre sider — én rettelse her slår igennem overalt.</p>
+        <div style="text-align:right;margin-top:.8rem;"><button onclick="gemSikkerhed()" style="background:#2a7a74;color:#fff;border:none;padding:.5rem 1.4rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;">💾 Gem</button></div>
+      </div>
+    </div>
+
   </div>
 
   <!-- FANE: RETREATS -->
@@ -4721,7 +4761,7 @@ function switchSubTab(sub, btn) {
 function loadSubTab(sub) {
   if (sub === 'anmeldelser') loadAnmeldelserFane();
   if (sub === 'indstillinger') loadSettings();
-  if (sub === 'forside') loadForside();
+  if (sub === 'forside') { loadForside(); loadSikkerhedAdmin(); }
   if (sub === 'ejendommen') loadEjendommensAdmin();
   if (sub === 'udlejning') loadUdlejningAdmin();
   if (sub === 'kontakt') loadKontaktAdmin();
@@ -8057,6 +8097,68 @@ async function gemUdlejning() {
   }
 }
 
+
+
+// ─── DIN SIKKERHED (fælles sektion på forside/ejendommen/udlejning — site_content) ───
+const SIK_TEXT_KEYS = ['sikkerhed_label','sikkerhed_h2','sikkerhed_text'];
+const SIK_ADM_DEFAULTS = {
+  sikkerhed_label: 'Din sikkerhed',
+  sikkerhed_h2: 'Du er i <em>gode hænder</em>',
+  sikkerhed_text: 'Castillo del Alma lever fuldt op til de spanske myndigheders krav til brandsikkerhed — med brandslukkere, tydeligt markerede flugtveje og løbende kontrol.\nOg skulle uheldet alligevel være ude, er du i gode hænder: begge værter er uddannet i førstehjælp og i brug af hjertestarter. Hjertestarteren er placeret centralt i huset.',
+};
+const SIK_ADM_DEFAULTS_EN = {
+  sikkerhed_label: 'Your safety',
+  sikkerhed_h2: 'You are in <em>good hands</em>',
+  sikkerhed_text: "Castillo del Alma fully complies with the Spanish authorities' fire safety requirements — with fire extinguishers, clearly marked escape routes and regular inspections.\nAnd should an accident occur, you are in good hands: both hosts are trained in first aid and in the use of a defibrillator. The defibrillator is centrally located in the house.",
+};
+
+async function loadSikkerhedAdmin() {
+  if (!sb) return;
+  let map = {};
+  try {
+    const { data, error } = await sb.from('site_content').select('key,value').like('key', 'sikkerhed_%');
+    if (error) throw error;
+    (data || []).forEach(r => { map[r.key] = r.value; });
+  } catch(e) { console.warn('loadSikkerhedAdmin:', e.message); }
+  SIK_TEXT_KEYS.forEach(key => {
+    const da = document.getElementById('sik_' + key.replace('sikkerhed_','') + '_da');
+    const en = document.getElementById('sik_' + key.replace('sikkerhed_','') + '_en');
+    if (da) da.value = map[key] || SIK_ADM_DEFAULTS[key] || '';
+    if (en) en.value = map[key + '_en'] || SIK_ADM_DEFAULTS_EN[key] || '';
+  });
+  ['sikkerhed_img1','sikkerhed_img2'].forEach((key, i) => {
+    const el = document.getElementById('sik_img' + (i+1) + '_url');
+    if (el) el.value = map[key] || '';
+    const prev = document.getElementById('sik_img' + (i+1) + '_preview');
+    if (prev) { if (map[key]) { prev.src = map[key]; prev.style.display = 'inline-block'; } else { prev.removeAttribute('src'); prev.style.display = 'none'; } }
+  });
+  const vis = document.getElementById('sik_vis');
+  if (vis) vis.checked = map['sikkerhed_vis'] !== '0';
+}
+
+async function gemSikkerhed() {
+  if (!sb) return;
+  const upserts = [];
+  SIK_TEXT_KEYS.forEach(key => {
+    const da = document.getElementById('sik_' + key.replace('sikkerhed_','') + '_da');
+    const en = document.getElementById('sik_' + key.replace('sikkerhed_','') + '_en');
+    if (da) upserts.push({ key, value: da.value });
+    if (en) upserts.push({ key: key + '_en', value: en.value });
+  });
+  ['sikkerhed_img1','sikkerhed_img2'].forEach((key, i) => {
+    const el = document.getElementById('sik_img' + (i+1) + '_url');
+    if (el) upserts.push({ key, value: el.value.trim() });
+  });
+  const vis = document.getElementById('sik_vis');
+  if (vis) upserts.push({ key: 'sikkerhed_vis', value: vis.checked ? '1' : '0' });
+  try {
+    const { error } = await sb.from('site_content').upsert(upserts, { onConflict: 'key' });
+    if (error) throw error;
+    showToast('✓ Din sikkerhed gemt!');
+  } catch(e) {
+    showToast('Fejl: ' + e.message, true);
+  }
+}
 
 // ─── KONTAKT (kontakt.html) ───
 const KT_TEXT_KEYS = [
