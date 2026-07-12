@@ -161,6 +161,13 @@
     text-shadow: 0 0 3px rgba(0,0,0,.7);
   }
   #wmLogoPrev { position: absolute; pointer-events: none; opacity: .85; }
+  #frPrev {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+  }
 
   /* Segment editor */
   .seg {
@@ -249,6 +256,7 @@
     <input type="file" id="fileInput" accept="video/*" class="hidden">
     <div class="preview-box hidden" id="previewBox">
       <video id="video" controls playsinline></video>
+      <img id="frPrev" class="hidden" alt="">
       <div id="subOverlay"></div>
       <div id="wmOverlay" class="hidden"></div>
       <img id="wmLogoPrev" class="hidden" alt="">
@@ -402,6 +410,65 @@
         </select>
       </div>
     </div>
+    <div style="margin-top:22px; padding-top:18px; border-top:1px solid var(--line)">
+      <div class="row">
+        <div style="flex:0 0 auto">
+          <label>Fast overlay (1080 × 1920)</label>
+          <button id="frToggle">Overlay: Til</button>
+        </div>
+        <div>
+          <label>Egen overlay (PNG med transparens)</label>
+          <input type="file" id="frFile" accept="image/png">
+        </div>
+        <div style="flex:0 0 auto">
+          <label>&nbsp;</label>
+          <button class="ghost" id="frReset">Nulstil til standard</button>
+        </div>
+      </div>
+      <div class="row" style="margin-top:14px">
+        <div style="flex:2; min-width:220px">
+          <label>Slug-tekst (højrestillet i øverste bånd)</label>
+          <input type="text" id="frSlug" placeholder="fx VINSMAGNING I MOLLINA">
+        </div>
+        <div>
+          <label>Størrelse (px)</label>
+          <input type="number" id="frSize" value="40" min="10" max="140" step="1">
+        </div>
+        <div>
+          <label>Farve</label>
+          <input type="color" id="frColor" value="#7a6440">
+        </div>
+        <div>
+          <label>Skrifttype</label>
+          <select id="frFont">
+            <option value="cinzel" selected>Cinzel</option>
+            <option value="cormorant">Cormorant Garamond</option>
+            <option value="poppins">Poppins</option>
+            <option value="inter">Inter</option>
+          </select>
+        </div>
+      </div>
+      <div class="row" style="margin-top:14px">
+        <div>
+          <label>Kant (outline)</label>
+          <select id="frOutSize">
+            <option value="0" selected>Ingen</option>
+            <option value="0.04">Tynd</option>
+            <option value="0.07">Mellem</option>
+            <option value="0.11">Tyk</option>
+          </select>
+        </div>
+        <div>
+          <label>Kantfarve</label>
+          <input type="color" id="frOutColor" value="#FFFFFF">
+        </div>
+        <div>
+          <label>Lodret placering (% fra top)</label>
+          <input type="number" id="frY" value="3.4" min="0" max="100" step="0.2">
+        </div>
+      </div>
+      <p class="note">Overlayet strækkes over hele videoen. Standard-rammen ligger fast på siden — uploader du en egen PNG, bruges den i stedet, og "Nulstil til standard" skifter tilbage. Slug-teksten skrives med højre kant 4,5&nbsp;% fra billedkanten.</p>
+    </div>
     <p class="note">Forhåndsvisningen på videoen ovenfor viser cirka, hvordan det kommer til at se ud.</p>
   </div>
 
@@ -461,6 +528,17 @@ let langMode = 'da';         // 'da' | 'en' | 'both'
 let wmLogoData = null;       // Uint8Array of uploaded PNG
 let ffmpeg = null;
 let ffmpegLoaded = false;
+
+/* Fast overlay (ramme) */
+const FR_DEFAULT_URL = 'img/video-overlay-standard.png';
+const FR_FONTS = {
+  cinzel:    { css: 'Cinzel',              weight: 700 },
+  cormorant: { css: 'Cormorant Garamond',  weight: 600 },
+  poppins:   { css: 'Poppins',             weight: 800 },
+  inter:     { css: 'Inter',               weight: 600 }
+};
+let frOn = true;             // overlay til/fra
+let frImg = null;            // Image-objekt (standard eller egen upload)
 
 /* ---------- ffmpeg helpers ---------- */
 async function getFFmpeg(progressCb) {
@@ -523,6 +601,7 @@ function handleFile(file) {
     videoW = video.videoWidth;
     videoH = video.videoHeight;
     updatePreviewStyle();
+    updateFramePreview();
   };
   $('previewBox').classList.remove('hidden');
   $('cardTranscribe').classList.remove('hidden');
@@ -723,6 +802,105 @@ $('wmLogoFile').addEventListener('change', async (e) => {
   $('wmLogoPrev').src = URL.createObjectURL(f);
   updatePreviewStyle();
 });
+
+/* ---------- Fast overlay (ramme) med slug ---------- */
+function loadFrameImage(src) {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    img.onload = () => resolve(img);
+    img.onerror = () => reject(new Error('Kunne ikke indlæse overlay-billedet'));
+    img.src = src;
+  });
+}
+
+/* Tegner ramme + slug på et canvas i videoens opløsning.
+   Bruges både til forhåndsvisning og til brænding, så de er identiske. */
+async function renderFrameCanvas() {
+  if (!frOn || !frImg) return null;
+  const W = videoW || 1080, H = videoH || 1920;
+  const canvas = document.createElement('canvas');
+  canvas.width = W; canvas.height = H;
+  const ctx = canvas.getContext('2d');
+  ctx.drawImage(frImg, 0, 0, W, H);
+
+  const text = $('frSlug').value.trim();
+  if (text) {
+    const font = FR_FONTS[$('frFont').value] || FR_FONTS.cinzel;
+    // Størrelsen angives i 1920-skala og omregnes til videoens faktiske højde
+    const px = Math.max(6, Math.round((parseFloat($('frSize').value) || 40) * H / 1920));
+    const fontStr = `${font.weight} ${px}px '${font.css}'`;
+    try { await document.fonts.load(fontStr, text); } catch (e) { /* fallback-font */ }
+    ctx.font = fontStr;
+    if ('letterSpacing' in ctx) ctx.letterSpacing = '0.06em';
+    ctx.textAlign = 'right';
+    ctx.textBaseline = 'middle';
+    const x = Math.round(W * 0.955);
+    const y = Math.round(H * (parseFloat($('frY').value) || 3.4) / 100);
+    const of = parseFloat($('frOutSize').value) || 0;
+    if (of > 0) {
+      ctx.lineJoin = 'round';
+      ctx.lineWidth = Math.max(1, px * of * 2); // canvas-stroke er centreret, derfor × 2
+      ctx.strokeStyle = $('frOutColor').value;
+      ctx.strokeText(text, x, y);
+    }
+    ctx.fillStyle = $('frColor').value;
+    ctx.fillText(text, x, y);
+  }
+  return canvas;
+}
+
+let frRenderSeq = 0;
+async function updateFramePreview() {
+  const seq = ++frRenderSeq;
+  const prev = $('frPrev');
+  const canvas = await renderFrameCanvas();
+  if (seq !== frRenderSeq) return; // en nyere rendering er undervejs
+  if (!canvas) { prev.classList.add('hidden'); return; }
+  prev.src = canvas.toDataURL('image/png');
+  prev.classList.remove('hidden');
+}
+
+function setFrToggle() {
+  const btn = $('frToggle');
+  btn.textContent = frOn ? 'Overlay: Til' : 'Overlay: Fra';
+  btn.classList.toggle('ghost', !frOn);
+}
+
+$('frToggle').addEventListener('click', () => {
+  frOn = !frOn;
+  setFrToggle();
+  updateFramePreview();
+});
+
+$('frFile').addEventListener('change', async (e) => {
+  if (!e.target.files.length) return;
+  const f = e.target.files[0];
+  try {
+    frImg = await loadFrameImage(URL.createObjectURL(f));
+    updateFramePreview();
+  } catch (err) {
+    console.error(err);
+  }
+});
+
+$('frReset').addEventListener('click', async () => {
+  $('frFile').value = '';
+  try {
+    frImg = await loadFrameImage(FR_DEFAULT_URL);
+    updateFramePreview();
+  } catch (err) {
+    console.error(err);
+  }
+});
+
+['frSlug', 'frSize', 'frColor', 'frFont', 'frOutSize', 'frOutColor', 'frY'].forEach(id =>
+  $(id).addEventListener('input', updateFramePreview));
+
+// Indlæs standard-overlayet ved start
+setFrToggle();
+loadFrameImage(FR_DEFAULT_URL)
+  .then(img => { frImg = img; updateFramePreview(); })
+  .catch(err => console.error(err));
 
 function sizePx() {
   // Skriftstørrelse i pixels relativt til videohøjden
@@ -1012,7 +1190,27 @@ $('btnBurn').addEventListener('click', async () => {
     await ff.writeFile('subs.ass', new TextEncoder().encode(buildAss()));
 
     const useLogo = $('wmType').value === 'logo' && wmLogoData;
-    let args;
+    const frCanvas = await renderFrameCanvas();
+    const useFrame = !!frCanvas;
+    if (useFrame) {
+      const blob = await new Promise(res => frCanvas.toBlob(res, 'image/png'));
+      await ff.writeFile('frame.png', new Uint8Array(await blob.arrayBuffer()));
+    }
+
+    // Filterkæde: [ramme-overlay] -> undertekster -> [vandmærke-logo]
+    const inputs = ['-i', 'input.mp4'];
+    const parts = [];
+    let cur = '[0:v]';
+    let idx = 1;
+    if (useFrame) {
+      inputs.push('-i', 'frame.png');
+      parts.push(`[${idx}:v]scale=${videoW}:${videoH}[fr]`);
+      parts.push(`${cur}[fr]overlay=0:0[vfr]`);
+      cur = '[vfr]';
+      idx++;
+    }
+    parts.push(`${cur}subtitles=subs.ass:fontsdir=/fonts[vsub]`);
+    cur = '[vsub]';
     if (useLogo) {
       await ff.writeFile('logo.png', wmLogoData);
       const logoW = Math.round(videoW * 0.22);
@@ -1020,18 +1218,16 @@ $('btnBurn').addEventListener('click', async () => {
       const corner = $('wmPos').value;
       const x = corner[1] === 'l' ? `${m}` : `W-w-${m}`;
       const y = corner[0] === 't' ? `${m}` : `H-h-${m}`;
-      args = ['-i', 'input.mp4', '-i', 'logo.png',
-        '-filter_complex',
-        `[1:v]scale=${logoW}:-1[lg];[0:v]subtitles=subs.ass:fontsdir=/fonts[v0];[v0][lg]overlay=${x}:${y}[vout]`,
-        '-map', '[vout]', '-map', '0:a?',
-        '-c:v', 'libx264', '-preset', 'ultrafast', '-crf', '20',
-        '-c:a', 'copy', '-movflags', '+faststart', 'output.mp4'];
-    } else {
-      args = ['-i', 'input.mp4',
-        '-vf', 'subtitles=subs.ass:fontsdir=/fonts',
-        '-c:v', 'libx264', '-preset', 'ultrafast', '-crf', '20',
-        '-c:a', 'copy', '-movflags', '+faststart', 'output.mp4'];
+      inputs.push('-i', 'logo.png');
+      parts.push(`[${idx}:v]scale=${logoW}:-1[lg]`);
+      parts.push(`${cur}[lg]overlay=${x}:${y}[vout]`);
+      cur = '[vout]';
     }
+    const args = [...inputs,
+      '-filter_complex', parts.join(';'),
+      '-map', cur, '-map', '0:a?',
+      '-c:v', 'libx264', '-preset', 'ultrafast', '-crf', '20',
+      '-c:a', 'copy', '-movflags', '+faststart', 'output.mp4'];
 
     setStatus('burnStatus', 'Brænder tekster ind — det kan tage nogle minutter…');
     barFill.style.width = '10%';
