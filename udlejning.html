@@ -742,13 +742,13 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:3rem
     <span></span><span></span><span></span>
   </button>
   <ul class="nav-links" id="navLinks">
-    <li><a href="#intro" id="navIntro">Om stedet</a></li>
-    <li><a href="#faciliteter" id="navFaciliteter">Vi tilbyder</a></li>
-    <li><a href="#priser" id="navPriser">Priser</a></li>
-    <li><a href="#design" id="navDesign">Design et ophold</a></li>
-    <li><a href="#mere" id="navMere">Mere end et kursussted</a></li>
-    <li><a href="#kontakt" id="navKontakt">Kontakt</a></li>
-    <li style="display:flex;align-items:center;gap:.4rem;margin-left:.8rem;">
+    <li class="nav-item"><a href="#intro" id="navIntro">Om stedet</a></li>
+    <li class="nav-item"><a href="#faciliteter" id="navFaciliteter">Vi tilbyder</a></li>
+    <li class="nav-item"><a href="#priser" id="navPriser">Priser</a></li>
+    <li class="nav-item"><a href="#design" id="navDesign">Design et ophold</a></li>
+    <li class="nav-item"><a href="#mere" id="navMere">Mere end et kursussted</a></li>
+    <li class="nav-item"><a href="#kontakt" id="navKontakt">Kontakt</a></li>
+    <li class="nav-lang-li" style="display:flex;align-items:center;gap:.4rem;margin-left:.8rem;">
       <div class="lang-switcher" style="display:flex;border:1.5px solid;overflow:hidden;border-color:var(--wine);">
         <button id="ul-btn-da" class="lang-btn lang-btn-active" onclick="setUlLang('da')" style="font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;padding:.3rem .6rem;border:none;cursor:pointer;font-family:'Manrope',sans-serif;">DA</button>
         <button id="ul-btn-en" class="lang-btn lang-btn-inactive" onclick="setUlLang('en')" style="font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;padding:.3rem .6rem;border:none;cursor:pointer;font-family:'Manrope',sans-serif;">EN</button>
@@ -800,7 +800,7 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:3rem
 <div class="divider"></div>
 
 <!-- ── PHOTO STRIP ── -->
-<section class="photo-strip">
+<section class="photo-strip" id="fotostrip1">
   <div class="photo-strip-grid">
     <div class="strip-item">
       <img id="strip1Img1" src="img/wellness-yoga-castillo.png" alt="Yoga på Castillo del Alma">
@@ -1286,7 +1286,7 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:3rem
 </section>
 
 <!-- ── PHOTO STRIP 2 ── -->
-<section class="photo-strip">
+<section class="photo-strip" id="fotostrip2">
   <div class="photo-strip-grid" style="grid-template-columns:repeat(3,1fr);height:340px;">
     <div class="strip-item">
       <img id="strip2Img1" src="img/aerial-view-people-having-dinner-backyard.jpg" alt="Fælles måltider">
@@ -1710,12 +1710,79 @@ function renderUlFaq() {
 }
 
 // "Udelad fra siden": sektioner skjules hvis vis_<id> = '0' i udlejning_content
+// Gælder ALLE sektioner — en divider lige efter en skjult sektion skjules med
 function applyUlVisibility() {
-  const visMap = { undervisning: 'vis_undervisning', priser: 'vis_pris', fungerer: 'vis_fungerer', vaerter: 'vis_vaerter', ulfaq: 'vis_ulfaq' };
+  const visMap = {
+    intro: 'vis_intro', fotostrip1: 'vis_strip1', undervisning: 'vis_undervisning',
+    priser: 'vis_pris', faciliteter: 'vis_fac', fungerer: 'vis_fungerer',
+    vaerter: 'vis_vaerter', mere: 'vis_mere', design: 'vis_design',
+    fotostrip2: 'vis_strip2', ulfaq: 'vis_ulfaq', kontakt: 'vis_kontakt', sikkerhed: 'vis_sikkerhed'
+  };
   Object.keys(visMap).forEach(id => {
     const el = document.getElementById(id);
-    if (el) el.style.display = (ulData[visMap[id]] === '0') ? 'none' : '';
+    if (!el) return;
+    const skjult = ulData[visMap[id]] === '0';
+    el.style.display = skjult ? 'none' : '';
+    const next = el.nextElementSibling;
+    if (next && next.classList && next.classList.contains('divider')) next.style.display = skjult ? 'none' : '';
   });
+}
+
+// ── NAVIGATION (menu) — redigeres i admin under Udlejning, gemmes som JSON i nav_links ──
+const UL_NAV_SEED = [
+  { tekst: 'Om stedet', tekst_en: 'About the place', link: '#intro', vis: '1' },
+  { tekst: 'Vi tilbyder', tekst_en: 'What we offer', link: '#faciliteter', vis: '1' },
+  { tekst: 'Priser', tekst_en: 'Pricing', link: '#priser', vis: '1' },
+  { tekst: 'Design et ophold', tekst_en: 'Design a stay', link: '#design', vis: '1' },
+  { tekst: 'Mere end et kursussted', tekst_en: 'More than a venue', link: '#mere', vis: '1' },
+  { tekst: 'Kontakt', tekst_en: 'Contact', link: '#kontakt', vis: '1' }
+];
+
+function renderUlNav() {
+  const ul = document.getElementById('navLinks');
+  if (!ul) return;
+  let links = [];
+  try { links = JSON.parse(ulData.nav_links || '[]'); } catch(e) {}
+  if (!Array.isArray(links) || !links.length) links = UL_NAV_SEED;
+  ul.querySelectorAll('li.nav-item').forEach(li => li.remove());
+  const anker = ul.querySelector('li.nav-lang-li'); // sprogvælgeren bliver altid sidst
+  const frag = document.createDocumentFragment();
+  links
+    .filter(l => l && l.vis !== '0' && ((l.tekst || '').trim() || (l.tekst_en || '').trim()) && (l.link || '').trim())
+    .forEach(l => {
+      const li = document.createElement('li');
+      li.className = 'nav-item';
+      const a = document.createElement('a');
+      a.href = (l.link || '').trim();
+      a.innerHTML = ulLang === 'en' ? ((l.tekst_en || '').trim() || l.tekst) : ((l.tekst || '').trim() || l.tekst_en);
+      li.appendChild(a);
+      frag.appendChild(li);
+    });
+  ul.insertBefore(frag, anker);
+}
+
+// ── SEKTIONSRÆKKEFØLGE — flyttes med pile i admin, gemmes som JSON i sektion_orden ──
+// Kører kun én gang pr. sideindlæsning; en divider lige efter en sektion flytter med
+const UL_SEKTION_STANDARD_ORDEN = ['intro','fotostrip1','undervisning','priser','faciliteter','fungerer','stemmer','vaerter','mere','design','fotostrip2','ulfaq','kontakt','sikkerhed'];
+let ulOrdenAnvendt = false;
+function applyUlSektionOrden() {
+  if (ulOrdenAnvendt) return;
+  let orden = [];
+  try { orden = JSON.parse(ulData.sektion_orden || '[]'); } catch(e) {}
+  if (!Array.isArray(orden) || !orden.length) return;
+  orden = orden.filter(id => UL_SEKTION_STANDARD_ORDEN.includes(id));
+  UL_SEKTION_STANDARD_ORDEN.forEach(id => { if (!orden.includes(id)) orden.push(id); }); // nye sektioner uden gemt plads kommer bagerst
+  const footer = document.querySelector('footer');
+  if (!footer || !footer.parentNode) return;
+  orden.forEach(id => {
+    const sec = document.getElementById(id);
+    if (!sec) return;
+    const next = sec.nextElementSibling;
+    const divider = (next && next.classList && next.classList.contains('divider')) ? next : null;
+    footer.parentNode.insertBefore(sec, footer);
+    if (divider) footer.parentNode.insertBefore(divider, footer);
+  });
+  ulOrdenAnvendt = true;
 }
 
 function applyUlContent() {
@@ -1723,12 +1790,7 @@ function applyUlContent() {
   setHTML('heroH1', ulSC('hero_h1'));
   ulSetHeroImage(ulSC('hero_bg'));
 
-  setText('navIntro', ulLang === 'en' ? 'About the place' : 'Om stedet');
-  setText('navFaciliteter', ulLang === 'en' ? 'What we offer' : 'Vi tilbyder');
-  setText('navPriser', ulLang === 'en' ? 'Pricing' : 'Priser');
-  setText('navDesign', ulLang === 'en' ? 'Design a stay' : 'Design et ophold');
-  setText('navMere', ulLang === 'en' ? 'More than a venue' : 'Mere end et kursussted');
-  setText('navKontakt', ulLang === 'en' ? 'Contact' : 'Kontakt');
+  renderUlNav();
   const navBackTxt = '← ' + (ulLang === 'en' ? 'Back to homepage' : 'Tilbage til forsiden');
   setText('navBack', navBackTxt);
   setText('footerBack', navBackTxt);
@@ -1922,7 +1984,8 @@ async function loadUlContent() {
   const btnEn = document.getElementById('ul-btn-en');
   if (btnDa) { btnDa.classList.toggle('lang-btn-active', ulLang === 'da'); btnDa.classList.toggle('lang-btn-inactive', ulLang !== 'da'); }
   if (btnEn) { btnEn.classList.toggle('lang-btn-active', ulLang === 'en'); btnEn.classList.toggle('lang-btn-inactive', ulLang !== 'en'); }
-  // Disse to kaldes ALTID — falder tilbage til dagens tekst/valgmuligheder hvis databasen er tom eller utilgængelig
+  // Disse kaldes ALTID — falder tilbage til dagens tekst/valgmuligheder hvis databasen er tom eller utilgængelig
+  applyUlSektionOrden();
   applyUlContent();
   renderUlDropdowns();
 }
@@ -1959,14 +2022,14 @@ document.querySelectorAll('.reveal, .reveal-left, .reveal-right').forEach(el => 
 
 // Nav active links
 const sections = document.querySelectorAll('section[id]');
-const navLinks = document.querySelectorAll('.nav-links a');
 window.addEventListener('scroll', () => {
   let current = '';
   sections.forEach(s => {
     if (s.offsetParent === null) return; // Spring skjulte sektioner over (fx "udelad fra siden")
     if (window.scrollY >= s.offsetTop - 120) current = s.id;
   });
-  navLinks.forEach(a => {
+  // Slås op ved hvert scroll — nav-links gen-renderes ved sprogskift/admin-ændringer
+  document.querySelectorAll('.nav-links a').forEach(a => {
     a.style.color = a.getAttribute('href') === '#' + current ? 'var(--wine)' : '';
   });
 });
@@ -2190,7 +2253,10 @@ sectionAnimators.forEach(({canvas})=>canvasObs.observe(canvas));
   function toggleMenu(){ document.body.classList.contains('menu-open') ? closeMenu() : openMenu(); }
   burger.addEventListener('click', toggleMenu);
   if(backdrop) backdrop.addEventListener('click', closeMenu);
-  document.querySelectorAll('.nav-links a, .nav-back').forEach(a => a.addEventListener('click', closeMenu));
+  // Delegation: nav-links gen-renderes dynamisk, så lytteren sidder på <ul>
+  const navUl = document.getElementById('navLinks');
+  if (navUl) navUl.addEventListener('click', (e) => { if (e.target.closest('a')) closeMenu(); });
+  document.querySelectorAll('.nav-back').forEach(a => a.addEventListener('click', closeMenu));
   document.addEventListener('keydown', (e) => { if(e.key === 'Escape') closeMenu(); });
   window.addEventListener('resize', () => { if(!isMobile()) closeMenu(); });
 })();
@@ -2233,7 +2299,9 @@ sectionAnimators.forEach(({canvas})=>canvasObs.observe(canvas));
     const d = window.CDA_SIK || {};
     const sec = document.getElementById('sikkerhed');
     if (!sec) return;
-    if (d['sikkerhed_vis'] === '0') { sec.style.display = 'none'; return; }
+    // Skjules hvis den globale sikkerhed_vis ELLER udlejningssidens eget vis_sikkerhed er slået fra
+    const ulSkjult = (typeof ulData !== 'undefined' && ulData && ulData['vis_sikkerhed'] === '0');
+    if (d['sikkerhed_vis'] === '0' || ulSkjult) { sec.style.display = 'none'; return; }
     sec.style.display = '';
     const g = k => (lang === 'en' ? (d[k + '_en'] || d[k]) : d[k]) || '';
     const set = (id, v) => { const el = document.getElementById(id); if (el && v) el.innerHTML = v; };
