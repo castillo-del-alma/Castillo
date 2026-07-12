@@ -2697,6 +2697,19 @@ feeling more calm – and coming home to yourself again."</textarea></div>
   <div class="subtab-content" id="tab-udlejning" style="padding:2rem 3rem;max-width:1100px;">
     <h2 style="font-family:Cinzel,serif;font-weight:300;font-size:1.4rem;letter-spacing:.08em;color:#2c2318;margin-bottom:.4rem;">Udlejning (udlejning.html)</h2>
     <p style="font-size:.75rem;color:rgba(44,35,24,.5);margin-bottom:2rem;">Alt indhold på "Afhold dit eget retreat"-siden. DA/EN side om side, ligesom Ejendommen-fanen.</p>
+    <div class="fc-block" data-section="ul_0 · navigation & rækkefølge">
+      <div class="fc-block-header"><span class="fc-block-title">0 · Navigation (menu) &amp; sektionsrækkefølge</span></div>
+      <div class="fc-block-body">
+        <p style="font-family:Manrope,sans-serif;font-size:.72rem;color:#7a6a52;margin-bottom:.8rem;">Menu-links på udlejningssiden: navn (DA/EN), link (fx <b>#priser</b> eller en fuld URL), synlighed og rækkefølge med pilene.</p>
+        <div id="ulNavEditor"></div>
+        <button onclick="ulNavTilfoej()" style="background:#2a7a74;color:#fff;border:none;padding:.45rem 1.1rem;font-family:Manrope,sans-serif;font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;margin-top:.4rem;">+ Tilføj menu-link</button>
+        <hr style="border:none;border-top:1px solid rgba(184,138,30,.25);margin:1.4rem 0;">
+        <p style="font-family:Manrope,sans-serif;font-size:.72rem;color:#7a6a52;margin-bottom:.8rem;">Sektionernes rækkefølge på siden — flyt med pilene, og slå sektioner til/fra med <b>Synlig</b>. "Din sikkerhed"-fluebenet her gælder KUN udlejningssiden.</p>
+        <div id="ulOrdenEditor"></div>
+        <div style="text-align:right;margin-top:.8rem;"><button onclick="gemUdlejning()" style="background:#2a7a74;color:#fff;border:none;padding:.5rem 1.4rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;">💾 Gem</button></div>
+      </div>
+    </div>
+
     <div class="fc-block" data-section="ul_1 · hero">
       <div class="fc-block-header"><span class="fc-block-title">1 · Hero</span></div>
       <div class="fc-block-body">
@@ -2809,7 +2822,6 @@ feeling more calm – and coming home to yourself again."</textarea></div>
     <div class="fc-block" data-section="ul_undervisning">
       <div class="fc-block-header"><span class="fc-block-title">4 · Undervisningsfaciliteter (NY)</span></div>
       <div class="fc-block-body">
-        <label style="display:flex;align-items:center;gap:.5rem;font-family:Manrope,sans-serif;font-size:.72rem;color:#2c2318;margin-bottom:1.2rem;cursor:pointer;background:rgba(184,138,30,.07);border:1px solid rgba(184,138,30,.2);padding:.6rem .9rem;"><input type="checkbox" id="ul_vis_undervisning" checked style="cursor:pointer;"> Synlig på siden — fjern fluebenet for at udelade sektionen fra udlejning.html</label>
         <div class="fc-row">
           <div><label class="fc-label fc-label-da">Label (DA)</label><input type="text" id="ul_undervisning_label_da" class="fc-input-da" placeholder=""></div>
           <div><label class="fc-label fc-label-en">Label (EN)</label><input type="text" id="ul_undervisning_label_en" class="fc-input-en" placeholder=""></div>
@@ -2851,7 +2863,6 @@ feeling more calm – and coming home to yourself again."</textarea></div>
     <div class="fc-block" data-section="ul_5">
       <div class="fc-block-header"><span class="fc-block-title">5 · Priser (NY)</span></div>
       <div class="fc-block-body">
-        <label style="display:flex;align-items:center;gap:.5rem;font-family:Manrope,sans-serif;font-size:.72rem;color:#2c2318;margin-bottom:1.2rem;cursor:pointer;background:rgba(184,138,30,.07);border:1px solid rgba(184,138,30,.2);padding:.6rem .9rem;"><input type="checkbox" id="ul_vis_pris" checked style="cursor:pointer;"> Synlig på siden — fjern fluebenet for at udelade sektionen fra udlejning.html</label>
         <div class="fc-row">
           <div><label class="fc-label fc-label-da">Label (DA)</label><input type="text" id="ul_pris_label_da" class="fc-input-da" placeholder=""></div>
           <div><label class="fc-label fc-label-en">Label (EN)</label><input type="text" id="ul_pris_label_en" class="fc-input-en" placeholder=""></div>
@@ -2955,7 +2966,6 @@ feeling more calm – and coming home to yourself again."</textarea></div>
     <div class="fc-block" data-section="ul_fungerer">
       <div class="fc-block-header"><span class="fc-block-title">7 · Sådan fungerer det (NY)</span></div>
       <div class="fc-block-body">
-        <label style="display:flex;align-items:center;gap:.5rem;font-family:Manrope,sans-serif;font-size:.72rem;color:#2c2318;margin-bottom:1.2rem;cursor:pointer;background:rgba(184,138,30,.07);border:1px solid rgba(184,138,30,.2);padding:.6rem .9rem;"><input type="checkbox" id="ul_vis_fungerer" checked style="cursor:pointer;"> Synlig på siden — fjern fluebenet for at udelade sektionen fra udlejning.html</label>
         <div class="fc-row">
           <div><label class="fc-label fc-label-da">Label (DA)</label><input type="text" id="ul_fungerer_label_da" class="fc-input-da" placeholder=""></div>
           <div><label class="fc-label fc-label-en">Label (EN)</label><input type="text" id="ul_fungerer_label_en" class="fc-input-en" placeholder=""></div>
@@ -2987,7 +2997,6 @@ feeling more calm – and coming home to yourself again."</textarea></div>
     <div class="fc-block" data-section="ul_stemmer">
       <div class="fc-block-header"><span class="fc-block-title">8 · Anmeldelser fra arrangører (NY)</span></div>
       <div class="fc-block-body">
-        <label style="display:flex;align-items:center;gap:.5rem;font-family:Manrope,sans-serif;font-size:.72rem;color:#2c2318;margin-bottom:1.2rem;cursor:pointer;background:rgba(184,138,30,.07);border:1px solid rgba(184,138,30,.2);padding:.6rem .9rem;"><input type="checkbox" id="ul_vis_stemmer" checked style="cursor:pointer;"> Synlig på siden — fjern fluebenet for at udelade sektionen fra udlejning.html</label>
         <p style="font-size:.7rem;color:rgba(44,35,24,.5);margin:.2rem 0 1rem;">⚠️ Sektionen vises FØRST på siden, når der er mindst ét citat herunder. Brug kun rigtige citater fra tidligere arrangører/deltagere. Format: <b>Citat|Navn|Rolle</b> — ét citat per linje.</p><div class="fc-row">
           <div><label class="fc-label fc-label-da">Label (DA)</label><input type="text" id="ul_stemmer_label_da" class="fc-input-da" placeholder=""></div>
           <div><label class="fc-label fc-label-en">Label (EN)</label><input type="text" id="ul_stemmer_label_en" class="fc-input-en" placeholder=""></div>
@@ -3007,7 +3016,6 @@ feeling more calm – and coming home to yourself again."</textarea></div>
     <div class="fc-block" data-section="ul_vaerter">
       <div class="fc-block-header"><span class="fc-block-title">9 · Mød værterne (NY)</span></div>
       <div class="fc-block-body">
-        <label style="display:flex;align-items:center;gap:.5rem;font-family:Manrope,sans-serif;font-size:.72rem;color:#2c2318;margin-bottom:1.2rem;cursor:pointer;background:rgba(184,138,30,.07);border:1px solid rgba(184,138,30,.2);padding:.6rem .9rem;"><input type="checkbox" id="ul_vis_vaerter" checked style="cursor:pointer;"> Synlig på siden — fjern fluebenet for at udelade sektionen fra udlejning.html</label>
         <div class="fc-row">
           <div><label class="fc-label fc-label-da">Label (DA)</label><input type="text" id="ul_vaerter_label_da" class="fc-input-da" placeholder=""></div>
           <div><label class="fc-label fc-label-en">Label (EN)</label><input type="text" id="ul_vaerter_label_en" class="fc-input-en" placeholder=""></div>
@@ -3142,7 +3150,6 @@ feeling more calm – and coming home to yourself again."</textarea></div>
     <div class="fc-block" data-section="ul_faq">
       <div class="fc-block-header"><span class="fc-block-title">15 · FAQ (NY)</span></div>
       <div class="fc-block-body">
-        <label style="display:flex;align-items:center;gap:.5rem;font-family:Manrope,sans-serif;font-size:.72rem;color:#2c2318;margin-bottom:1.2rem;cursor:pointer;background:rgba(184,138,30,.07);border:1px solid rgba(184,138,30,.2);padding:.6rem .9rem;"><input type="checkbox" id="ul_vis_ulfaq" checked style="cursor:pointer;"> Synlig på siden — fjern fluebenet for at udelade sektionen fra udlejning.html</label>
         <p style="font-size:.7rem;color:rgba(44,35,24,.5);margin:.2rem 0 1rem;">Format: <b>Spørgsmål|Svar</b> — ét spørgsmål per linje (adskilt af lodret streg).</p><div class="fc-row">
           <div><label class="fc-label fc-label-da">Label (DA)</label><input type="text" id="ul_ulfaq_label_da" class="fc-input-da" placeholder=""></div>
           <div><label class="fc-label fc-label-en">Label (EN)</label><input type="text" id="ul_ulfaq_label_en" class="fc-input-en" placeholder=""></div>
@@ -7856,7 +7863,95 @@ const UL_DEFAULTS_EN = {
   "pris_outro": "We always prepare a tailored quote, so you only pay for the services you need — and get a retreat that fits you perfectly.",
   "form_ringop": "I would like to be called back"
 };
-const UL_VIS_KEYS = ['vis_undervisning','vis_pris','vis_fungerer','vis_stemmer','vis_vaerter','vis_ulfaq'];
+// ── Navigation (menu) & sektionsrækkefølge — redigeres i blok 0 ──
+const UL_NAV_ADM_DEFAULTS = [
+  { tekst: 'Om stedet', tekst_en: 'About the place', link: '#intro', vis: '1' },
+  { tekst: 'Vi tilbyder', tekst_en: 'What we offer', link: '#faciliteter', vis: '1' },
+  { tekst: 'Priser', tekst_en: 'Pricing', link: '#priser', vis: '1' },
+  { tekst: 'Design et ophold', tekst_en: 'Design a stay', link: '#design', vis: '1' },
+  { tekst: 'Mere end et kursussted', tekst_en: 'More than a venue', link: '#mere', vis: '1' },
+  { tekst: 'Kontakt', tekst_en: 'Contact', link: '#kontakt', vis: '1' }
+];
+const UL_SEKTION_DEFS = [
+  { id: 'intro',        navn: 'Intro — "Vi skaber rammerne"',            key: 'vis_intro' },
+  { id: 'fotostrip1',   navn: 'Billedstribe 1',                          key: 'vis_strip1' },
+  { id: 'undervisning', navn: 'Undervisningsfaciliteter',                key: 'vis_undervisning' },
+  { id: 'priser',       navn: 'Priser',                                  key: 'vis_pris' },
+  { id: 'faciliteter',  navn: 'Faciliteter — "Vi stiller rammerne…"',    key: 'vis_fac' },
+  { id: 'fungerer',     navn: 'Sådan fungerer det',                      key: 'vis_fungerer' },
+  { id: 'stemmer',      navn: 'Stemmer (citater)',                       key: 'vis_stemmer' },
+  { id: 'vaerter',      navn: 'Værterne',                                key: 'vis_vaerter' },
+  { id: 'mere',         navn: 'Mere end et kursussted',                  key: 'vis_mere' },
+  { id: 'design',       navn: 'Design et ophold (intro + kategorier + CTA)', key: 'vis_design' },
+  { id: 'fotostrip2',   navn: 'Billedstribe 2',                          key: 'vis_strip2' },
+  { id: 'ulfaq',        navn: 'FAQ',                                     key: 'vis_ulfaq' },
+  { id: 'kontakt',      navn: 'Kontakt & formular',                      key: 'vis_kontakt' },
+  { id: 'sikkerhed',    navn: 'Din sikkerhed (kun på udlejningssiden)',  key: 'vis_sikkerhed' }
+];
+let ulNavState = [];
+let ulOrdenState = []; // [{ id, vis }] i den rækkefølge sektionerne vises
+
+function ulAdmEsc(v) {
+  return String(v == null ? '' : v).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+const UL_PIL_BTN = 'background:#f3ede2;border:1px solid rgba(184,138,30,.35);color:#2c2318;width:24px;height:20px;line-height:1;font-size:.6rem;cursor:pointer;padding:0;';
+
+function renderUlNavEditor() {
+  const c = document.getElementById('ulNavEditor');
+  if (!c) return;
+  c.innerHTML = ulNavState.map((l, i) => `
+    <div style="display:flex;gap:.5rem;align-items:center;margin-bottom:.5rem;flex-wrap:wrap;">
+      <div style="display:flex;flex-direction:column;gap:2px;">
+        <button onclick="ulNavFlyt(${i},-1)" ${i === 0 ? 'disabled' : ''} style="${UL_PIL_BTN}" title="Flyt op">▲</button>
+        <button onclick="ulNavFlyt(${i},1)" ${i === ulNavState.length - 1 ? 'disabled' : ''} style="${UL_PIL_BTN}" title="Flyt ned">▼</button>
+      </div>
+      <input type="text" class="fc-input-da" style="flex:1.2;min-width:130px;" placeholder="Navn (DA)" value="${ulAdmEsc(l.tekst)}" oninput="ulNavState[${i}].tekst=this.value">
+      <input type="text" class="fc-input-en" style="flex:1.2;min-width:130px;" placeholder="Name (EN)" value="${ulAdmEsc(l.tekst_en)}" oninput="ulNavState[${i}].tekst_en=this.value">
+      <input type="text" class="fc-input-da" style="flex:1;min-width:110px;" placeholder="Link (fx #priser)" value="${ulAdmEsc(l.link)}" oninput="ulNavState[${i}].link=this.value">
+      <label style="display:flex;align-items:center;gap:.35rem;font-family:Manrope,sans-serif;font-size:.66rem;color:#2c2318;cursor:pointer;white-space:nowrap;"><input type="checkbox" ${l.vis !== '0' ? 'checked' : ''} onchange="ulNavState[${i}].vis=this.checked?'1':'0'" style="cursor:pointer;"> Synlig</label>
+      <button onclick="ulNavSlet(${i})" style="background:#a33;color:#fff;border:none;width:24px;height:24px;cursor:pointer;font-size:.7rem;line-height:1;" title="Fjern link">✕</button>
+    </div>`).join('') || '<p style="font-family:Manrope,sans-serif;font-size:.7rem;color:#7a6a52;">Ingen menu-links — klik "+ Tilføj menu-link".</p>';
+}
+
+function ulNavFlyt(i, retning) {
+  const j = i + retning;
+  if (j < 0 || j >= ulNavState.length) return;
+  [ulNavState[i], ulNavState[j]] = [ulNavState[j], ulNavState[i]];
+  renderUlNavEditor();
+}
+function ulNavTilfoej() {
+  ulNavState.push({ tekst: '', tekst_en: '', link: '', vis: '1' });
+  renderUlNavEditor();
+}
+function ulNavSlet(i) {
+  ulNavState.splice(i, 1);
+  renderUlNavEditor();
+}
+
+function renderUlOrdenEditor() {
+  const c = document.getElementById('ulOrdenEditor');
+  if (!c) return;
+  c.innerHTML = ulOrdenState.map((o, i) => {
+    const def = UL_SEKTION_DEFS.find(d => d.id === o.id) || { navn: o.id };
+    return `
+    <div style="display:flex;gap:.6rem;align-items:center;margin-bottom:.4rem;padding:.35rem .6rem;background:rgba(184,138,30,.05);border:1px solid rgba(184,138,30,.18);">
+      <div style="display:flex;flex-direction:column;gap:2px;">
+        <button onclick="ulOrdenFlyt(${i},-1)" ${i === 0 ? 'disabled' : ''} style="${UL_PIL_BTN}" title="Flyt op">▲</button>
+        <button onclick="ulOrdenFlyt(${i},1)" ${i === ulOrdenState.length - 1 ? 'disabled' : ''} style="${UL_PIL_BTN}" title="Flyt ned">▼</button>
+      </div>
+      <span style="flex:1;font-family:Manrope,sans-serif;font-size:.72rem;color:#2c2318;">${ulAdmEsc(def.navn)}</span>
+      <label style="display:flex;align-items:center;gap:.35rem;font-family:Manrope,sans-serif;font-size:.66rem;color:#2c2318;cursor:pointer;white-space:nowrap;"><input type="checkbox" ${o.vis !== '0' ? 'checked' : ''} onchange="ulOrdenState[${i}].vis=this.checked?'1':'0'" style="cursor:pointer;"> Synlig</label>
+    </div>`;
+  }).join('');
+}
+
+function ulOrdenFlyt(i, retning) {
+  const j = i + retning;
+  if (j < 0 || j >= ulOrdenState.length) return;
+  [ulOrdenState[i], ulOrdenState[j]] = [ulOrdenState[j], ulOrdenState[i]];
+  renderUlOrdenEditor();
+}
 const UL_IMG_DEFAULTS = {
   "hero_bg": "img/group-people-making-breathworks-castillo-del-alma.jpg",
   "intro_img1": "img/group-people-making-breathworks-castillo-del-alma.jpg",
@@ -8048,10 +8143,26 @@ async function loadUdlejningAdmin() {
       }
     });
 
-    UL_VIS_KEYS.forEach(k => {
-      const el = document.getElementById('ul_' + k);
-      if (el) el.checked = map[k] !== '0'; // Synlig som standard
+    // Navigation (menu) — fallback: dagens links, hvis DB er tom
+    try {
+      const parsedNav = JSON.parse(map.nav_links || '[]');
+      ulNavState = (Array.isArray(parsedNav) && parsedNav.length) ? parsedNav : JSON.parse(JSON.stringify(UL_NAV_ADM_DEFAULTS));
+    } catch(e) { ulNavState = JSON.parse(JSON.stringify(UL_NAV_ADM_DEFAULTS)); }
+
+    // Sektionsrækkefølge + synlighed — gemt rækkefølge først, nye sektioner tilføjes bagerst
+    let gemtOrden = [];
+    try { gemtOrden = JSON.parse(map.sektion_orden || '[]'); } catch(e) {}
+    ulOrdenState = [];
+    (Array.isArray(gemtOrden) ? gemtOrden : []).forEach(id => {
+      if (UL_SEKTION_DEFS.some(d => d.id === id) && !ulOrdenState.some(o => o.id === id)) ulOrdenState.push({ id });
     });
+    UL_SEKTION_DEFS.forEach(d => { if (!ulOrdenState.some(o => o.id === d.id)) ulOrdenState.push({ id: d.id }); });
+    ulOrdenState.forEach(o => {
+      const def = UL_SEKTION_DEFS.find(d => d.id === o.id);
+      o.vis = (def && map[def.key] === '0') ? '0' : '1'; // Synlig som standard
+    });
+    renderUlNavEditor();
+    renderUlOrdenEditor();
 
     try {
       const parsed = JSON.parse(map.design_kategorier || '[]');
@@ -8094,10 +8205,21 @@ async function gemUdlejning() {
     const el = document.getElementById(`ul_${key}_url`);
     if (el) upserts.push({ key, value: el.value });
   });
-  UL_VIS_KEYS.forEach(k => {
-    const el = document.getElementById('ul_' + k);
-    if (el) upserts.push({ key: k, value: el.checked ? '1' : '0' });
-  });
+  if (ulOrdenState.length) {
+    ulOrdenState.forEach(o => {
+      const def = UL_SEKTION_DEFS.find(d => d.id === o.id);
+      if (def) upserts.push({ key: def.key, value: o.vis === '0' ? '0' : '1' });
+    });
+    upserts.push({ key: 'sektion_orden', value: JSON.stringify(ulOrdenState.map(o => o.id)) });
+  }
+  if (ulNavState.length) {
+    upserts.push({ key: 'nav_links', value: JSON.stringify(ulNavState.map(l => ({
+      tekst: (l.tekst || '').trim(),
+      tekst_en: (l.tekst_en || '').trim(),
+      link: (l.link || '').trim(),
+      vis: l.vis === '0' ? '0' : '1'
+    }))) });
+  }
   upserts.push({ key: 'design_kategorier', value: JSON.stringify(ulKategorierState) });
   upserts.push({ key: 'opt_deltagere', value: JSON.stringify(ulDropdownState.deltagere) });
   upserts.push({ key: 'opt_varighed', value: JSON.stringify(ulDropdownState.varighed) });
