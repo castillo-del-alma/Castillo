@@ -6415,7 +6415,7 @@ function openNytRetreat() {
   document.getElementById('retreat_description_en').value = 'A retreat for those who need to slow down and reconnect with themselves.';
   document.getElementById('retreat_price').value = '1495';
   document.getElementById('retreat_deposit_pct').value = '30';
-  document.getElementById('retreat_active').value = 'true';
+  { const _ra = document.getElementById('retreat_active'); if (_ra) _ra.checked = true; }
   document.getElementById('retreat_hero_preview').innerHTML = '';
   document.getElementById('retreat_card_preview').innerHTML = '';
   document.getElementById('retreat_location').value = 'Mollina, Málaga, Andalusien';
@@ -6715,7 +6715,7 @@ function udfyldRetreatForm(r) {
   document.getElementById('retreat_description_en').value = r.description_en || '';
   document.getElementById('retreat_price').value = r.price || '';
   document.getElementById('retreat_deposit_pct').value = r.deposit_pct ? Math.round(r.deposit_pct * 100) : '30';
-  document.getElementById('retreat_active').value = r.active ? 'true' : 'false';
+  { const _ra = document.getElementById('retreat_active'); if (_ra) _ra.checked = r.active === true; }
   // Billed-URL-felter + thumbnails (previews er <img>-elementer — sæt src, ikke innerHTML)
   { const _hu = document.getElementById('retreat_hero_image'); if (_hu) _hu.value = r.hero_image || ''; }
   { const _cu = document.getElementById('retreat_card_image'); if (_cu) _cu.value = r.card_image || ''; }
@@ -7196,7 +7196,7 @@ async function gemRetreat() {
       arrival_soldout: !!(datesState[0] && datesState[0].soldout),
       price: parseFloat(document.getElementById('retreat_price').value) || 0,
       deposit_pct: (parseFloat(document.getElementById('retreat_deposit_pct').value) || 30) / 100,
-      active: document.getElementById('retreat_active').value === 'true',
+      active: document.getElementById('retreat_active')?.checked === true,
       location: document.getElementById('retreat_location').value.trim() || null,
       about_heading: document.getElementById('retreat_about_heading').value.trim() || null,
       about_heading_en: document.getElementById('retreat_about_heading_en').value.trim() || null,
