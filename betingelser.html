@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Salgs- og bookingbetingelser — Castillo del Alma</title>
+<meta name="robots" content="noindex,follow">
+<link rel="stylesheet" href="fonts/fonts.css">
+<style>
+:root {
+  --cream:      #faf6ee;
+  --beige:      #f0e8d5;
+  --sand:       #e0d0b0;
+  --stone:      #c8b898;
+  --charcoal:   #2c2318;
+  --text:       #2c2318;
+  --text-mid:   #5c4e3a;
+  --text-light: #9a8c7a;
+  --wine:       #7a1f35;
+  --wine-light: #a03048;
+  --terracotta: #c05c30;
+  --olive:      #6a7240;
+  --gold:       #b88a1e;
+  --gold-light: #d4a830;
+  --teal:       #3a6e6a;
+  --section-alt:#ede4d0;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{font-family:'Manrope',sans-serif;background:var(--cream);color:var(--text);overflow-x:hidden;}
+
+/* ── NAV ── */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:200;
+  padding:1.4rem 4rem;
+  display:flex;justify-content:space-between;align-items:center;
+  background:rgba(250,246,238,.96);
+  backdrop-filter:blur(16px);
+  border-bottom:1px solid rgba(184,138,30,.15);
+  box-shadow:0 2px 28px rgba(44,35,24,.06);
+}
+.nav-logo img{height:48px;width:auto;}
+.nav-right{display:flex;align-items:center;gap:1.6rem;}
+.lang-btn{border-radius:0;font-family:'Manrope',sans-serif;}
+.lang-btn.lang-btn-active{background:var(--wine);color:#fff !important;}
+.lang-btn.lang-btn-inactive{background:transparent;color:var(--wine) !important;}
+.lang-switcher{border-color:var(--wine);border-radius:0;}
+.nav-back{
+  font-size:.68rem;font-weight:500;letter-spacing:.15em;text-transform:uppercase;
+  color:var(--wine);text-decoration:none;display:flex;align-items:center;gap:.5rem;
+  transition:gap .3s;
+}
+.nav-back:hover{gap:.8rem;}
+
+/* ── HEADER ── */
+.legal-header{
+  background:var(--charcoal);
+  padding:11rem 4rem 4.5rem;
+  text-align:center;
+}
+.legal-header .eyebrow{
+  font-size:.62rem;letter-spacing:.34em;text-transform:uppercase;
+  color:var(--gold-light);margin-bottom:1.2rem;
+}
+.legal-header h1{
+  font-family:'Cinzel',serif;font-weight:400;
+  font-size:clamp(1.7rem,3.4vw,2.6rem);
+  color:var(--cream);letter-spacing:.06em;
+}
+.legal-header .subtitle{
+  font-family:'Cormorant Garamond',serif;font-style:italic;
+  font-size:1.05rem;color:rgba(250,246,238,.62);margin-top:1rem;
+}
+
+/* ── CONTENT ── */
+.legal-wrap{max-width:780px;margin:0 auto;padding:4.5rem 2rem 6rem;}
+.legal-section{margin-bottom:3.2rem;}
+.legal-section h2{
+  font-family:'Cinzel',serif;font-weight:400;
+  font-size:1.15rem;letter-spacing:.08em;color:var(--wine);
+  margin-bottom:1.1rem;
+  padding-bottom:.6rem;border-bottom:1px solid rgba(184,138,30,.25);
+}
+.legal-section p, .legal-section li{
+  font-family:'Cormorant Garamond',serif;
+  font-size:1.08rem;line-height:1.75;color:var(--text-mid);
+  margin-bottom:.9rem;
+}
+.legal-section ul{padding-left:1.4rem;margin-bottom:.9rem;}
+.legal-section a{color:var(--wine);text-decoration:none;border-bottom:1px solid rgba(122,31,53,.3);transition:border-color .3s;}
+.legal-section a:hover{border-color:var(--wine);}
+.id-block{
+  background:var(--beige);border-left:3px solid var(--gold);
+  padding:1.6rem 1.8rem;margin-bottom:.9rem;
+}
+.id-block p{margin-bottom:.35rem;}
+.id-block b{color:var(--text);font-weight:600;}
+.legal-updated{
+  font-family:'Manrope',sans-serif;font-size:.68rem;letter-spacing:.12em;
+  text-transform:uppercase;color:var(--text-light);margin-top:2.5rem;
+}
+
+/* ── SPROG ── */
+.lang-en{display:none;}
+body.en .lang-en{display:block;}
+body.en .lang-da{display:none;}
+body.en span.lang-en{display:inline;}
+
+/* ── FOOTER ── */
+footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:3rem 4rem;}
+.footer-bottom{max-width:1320px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;}
+.footer-bottom p{font-size:.68rem;color:rgba(255,255,255,.48);letter-spacing:.04em;}
+.footer-links{display:flex;gap:1.6rem;flex-wrap:wrap;}
+.footer-bottom a{font-size:.68rem;color:rgba(255,255,255,.62);text-decoration:none;transition:color .3s;}
+.footer-bottom a:hover{color:var(--gold);}
+
+@media(max-width:760px){
+  nav{padding:1.1rem 1.4rem;}
+  .legal-header{padding:9rem 1.6rem 3.5rem;}
+  .legal-wrap{padding:3.2rem 1.4rem 4.5rem;}
+  .footer-bottom{flex-direction:column;text-align:center;}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-logo">
+    <img src="img/taarne-hvid-trans.png" alt="Castillo del Alma">
+  </a>
+  <div class="nav-right">
+    <div class="lang-switcher" style="display:flex;border:1.5px solid;overflow:hidden;border-color:var(--wine);">
+      <button id="al-btn-da" class="lang-btn lang-btn-active" onclick="setLegalLang('da', true)" style="font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;padding:.3rem .6rem;border:none;cursor:pointer;font-family:'Manrope',sans-serif;">DA</button>
+      <button id="al-btn-en" class="lang-btn lang-btn-inactive" onclick="setLegalLang('en', true)" style="font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;padding:.3rem .6rem;border:none;cursor:pointer;font-family:'Manrope',sans-serif;">EN</button>
+    </div>
+    <a href="index.html" class="nav-back" id="al_nav_back">← Tilbage til forsiden</a>
+  </div>
+</nav>
+
+<header class="legal-header">
+  <div class="eyebrow">Castillo del Alma</div>
+  <h1><span class="lang-da">Salgs- og bookingbetingelser</span><span class="lang-en">Terms of Sale &amp; Booking</span></h1>
+  <div class="subtitle">Condiciones de venta y reserva</div>
+</header>
+
+<main class="legal-wrap">
+
+<!-- ═══════════ DANSK ═══════════ -->
+<div class="lang-da">
+
+  <div class="legal-section">
+    <h2>1. Udbyder</h2>
+    <div class="id-block">
+      <p><b>Virksomhed:</b> NEO Studio Mijas S.L. (herefter "Castillo del Alma" eller "vi")</p>
+      <p><b>NIF:</b> B67914515</p>
+      <p><b>Turismelicens:</b> CR/MA/0238</p>
+      <p><b>Adresse:</b> Parcela 57, Polígono 34, 29532 Mollina, Málaga, Spanien</p>
+      <p><b>E-mail:</b> <a href="mailto:hello@castillodelalma.es">hello@castillodelalma.es</a></p>
+    </div>
+    <p>Disse betingelser gælder for booking af retreats og ophold på Castillo del Alma via castillodelalma.es. Ved at afgive en booking bekræfter du, at du har læst og accepteret betingelserne.</p>
+  </div>
+
+  <div class="legal-section">
+    <h2>2. Booking og bekræftelse</h2>
+    <p>Du kan booke på to måder:</p>
+    <ul>
+      <li><b>Reserver din plads:</b> Du sender en uforpligtende reservation, og vi vender tilbage inden for 24 timer med bekræftelse og betalingsinformation. Din plads er først endeligt reserveret, når depositum er betalt.</li>
+      <li><b>Book og betal:</b> Du betaler depositum eller det fulde beløb med det samme via vores sikre betalingsløsning. Din plads er reserveret, så snart betalingen er gennemført.</li>
+    </ul>
+    <p>Aftalen er indgået, når du har modtaget en bookingbekræftelse pr. e-mail. Kontroller venligst, at oplysningerne i bekræftelsen er korrekte, og kontakt os straks ved fejl.</p>
+    <p>Du skal være mindst 18 år for at foretage en booking.</p>
+  </div>
+
+  <div class="legal-section">
+    <h2>3. Priser og betaling</h2>
+    <ul>
+      <li>Alle priser er angivet i euro (€) pr. person og inkluderer gældende spanske skatter og afgifter, medmindre andet er angivet.</li>
+      <li>Ved tilmelding forfalder et <b>depositum på 30 %</b> af den samlede pris. Depositummet reserverer din plads.</li>
+      <li><b>Restbeløbet forfalder senest 8 dage før retreatets start.</b> Modtager vi ikke restbeløbet rettidigt, forbeholder vi os ret til at annullere bookingen, og depositummet tilbagebetales ikke.</li>
+      <li>Betaling sker via vores sikre betalingsudbyder (Stripe). Vi opbevarer ikke selv dine kortoplysninger.</li>
+      <li>Tilvalg (fx ekstra overnatning eller massage) betales sammen med opholdet og er omfattet af samme betingelser.</li>
+    </ul>
+  </div>
+
+  <div class="legal-section">
+    <h2>4. Afbestilling fra din side</h2>
+    <p>Afbestilling skal ske skriftligt til <a href="mailto:hello@castillodelalma.es">hello@castillodelalma.es</a>. Følgende gælder, regnet fra retreatets startdato:</p>
+    <ul>
+      <li><b>Mere end 30 dage før start:</b> Fuld tilbagebetaling af eventuelt indbetalt restbeløb. Depositummet (30 %) tilbagebetales ikke.</li>
+      <li><b>30–8 dage før start:</b> 50 % af den samlede pris tilbagebetales.</li>
+      <li><b>Mindre end 8 dage før start eller ved udeblivelse:</b> Ingen tilbagebetaling.</li>
+    </ul>
+    <p>Du er altid velkommen til at <b>overdrage din plads</b> til en anden deltager uden ekstra omkostninger — giv os blot besked med den nye deltagers navn og kontaktoplysninger senest 3 dage før start.</p>
+    <p>Vi anbefaler, at du tegner en <b>rejse- og afbestillingsforsikring</b>, der dækker afbestilling ved sygdom og lignende.</p>
+  </div>
+
+  <div class="legal-section">
+    <h2>5. Fortrydelsesret</h2>
+    <p>Da der er tale om fritids- og indkvarteringsydelser med en fastsat dato eller periode, er købet <b>ikke omfattet af den almindelige 14-dages fortrydelsesret</b> ved fjernsalg, jf. artikel 103, litra l) i den spanske forbrugerlov (Real Decreto Legislativo 1/2007) og EU's forbrugerrettighedsdirektiv. I stedet gælder afbestillingsvilkårene i punkt 4.</p>
+  </div>
+
+  <div class="legal-section">
+    <h2>6. Aflysning eller ændring fra vores side</h2>
+    <ul>
+      <li>Skulle vi blive nødt til at aflyse et retreat (fx ved for få tilmeldinger, underviserens sygdom eller force majeure), får du besked hurtigst muligt. Du kan da vælge mellem <b>fuld tilbagebetaling</b> af alle indbetalte beløb eller <b>ombooking</b> til en anden dato.</li>
+      <li>Vi refunderer ikke udgifter, du selv har afholdt i forbindelse med opholdet, fx flybilletter eller transport. Vi anbefaler derfor at vente med at booke fly, til retreatets gennemførelse er bekræftet, samt at tegne rejseforsikring.</li>
+      <li>Vi forbeholder os ret til at foretage mindre ændringer i programmet, fx udskiftning af enkelte aktiviteter eller undervisere, uden at dette giver ret til kompensation, så længe retreatets samlede karakter bevares.</li>
+    </ul>
+  </div>
+
+  <div class="legal-section">
+    <h2>7. Dit ansvar og helbred</h2>
+    <ul>
+      <li>Vores retreats indeholder ofte fysiske og mentale aktiviteter som yoga, meditation, breathwork og udflugter. Deltagelse sker på eget ansvar, og du bør vurdere, om dit helbred tillader deltagelse — kontakt eventuelt din læge inden.</li>
+      <li>Oplys os venligst ved tilmelding om helbredsforhold, allergier eller særlige behov, som vi bør kende for at kunne tage hensyn til dig.</li>
+      <li>Vores retreats og aktiviteter er ikke medicinsk eller terapeutisk behandling og erstatter ikke lægehjælp.</li>
+      <li>Du er ansvarlig for at have gyldigt pas/ID, eventuelle visa og lovpligtig registrering under opholdet i Spanien.</li>
+      <li>Vi forbeholder os ret til at afvise eller hjemsende deltagere, der udviser adfærd til væsentlig gene eller fare for andre gæster, uden tilbagebetaling.</li>
+    </ul>
+  </div>
+
+  <div class="legal-section">
+    <h2>8. Ansvar</h2>
+    <p>Castillo del Alma er ansvarlig efter gældende spansk ret. Vi kan ikke holdes ansvarlige for skader eller tab, der skyldes forhold uden for vores kontrol, dine egne forhold eller tredjeparts ydelser (fx transport og udflugtsarrangører). Værdigenstande medbringes på eget ansvar. Din lovbestemte beskyttelse som forbruger begrænses ikke af disse betingelser.</p>
+  </div>
+
+  <div class="legal-section">
+    <h2>9. Force majeure</h2>
+    <p>Ingen af parterne er ansvarlige for manglende opfyldelse, der skyldes ekstraordinære omstændigheder uden for partens kontrol, fx naturkatastrofer, epidemier, myndighedspåbud, strejker eller lignende. I sådanne tilfælde finder punkt 6 tilsvarende anvendelse.</p>
+  </div>
+
+  <div class="legal-section">
+    <h2>10. Persondata</h2>
+    <p>Vi behandler dine personoplysninger i overensstemmelse med vores <a href="privacidad.html">persondatapolitik</a>, som beskriver hvilke oplysninger vi indsamler, hvorfor, og hvilke rettigheder du har.</p>
+  </div>
+
+  <div class="legal-section">
+    <h2>11. Klager, lovvalg og værneting</h2>
+    <p>Har du en klage, så kontakt os først på <a href="mailto:hello@castillodelalma.es">hello@castillodelalma.es</a> — vi finder næsten altid en løsning. Som forbruger i EU kan du desuden benytte EU-Kommissionens onlinetvistplatform: <a href="https://ec.europa.eu/consumers/odr" target="_blank" rel="noopener">ec.europa.eu/consumers/odr</a>. Der stilles officielle klageformularer (hojas de reclamaciones) til rådighed.</p>
+    <p>Disse betingelser er underlagt spansk ret. Ufravigelige forbrugerbeskyttelsesregler i dit bopælsland berøres ikke.</p>
+  </div>
+
+  <p class="legal-updated">Sidst opdateret: juli 2026</p>
+</div>
+
+<!-- ═══════════ ENGLISH ═══════════ -->
+<div class="lang-en">
+
+  <div class="legal-section">
+    <h2>1. Provider</h2>
+    <div class="id-block">
+      <p><b>Company:</b> NEO Studio Mijas S.L. (hereinafter "Castillo del Alma" or "we")</p>
+      <p><b>NIF:</b> B67914515</p>
+      <p><b>Tourism licence:</b> CR/MA/0238</p>
+      <p><b>Address:</b> Parcela 57, Polígono 34, 29532 Mollina, Málaga, Spain</p>
+      <p><b>Email:</b> <a href="mailto:hello@castillodelalma.es">hello@castillodelalma.es</a></p>
+    </div>
+    <p>These terms apply to bookings of retreats and stays at Castillo del Alma made via castillodelalma.es. By placing a booking you confirm that you have read and accepted these terms.</p>
+  </div>
+
+  <div class="legal-section">
+    <h2>2. Booking and confirmation</h2>
+    <p>You can book in two ways:</p>
+    <ul>
+      <li><b>Reserve your spot:</b> You send a non-binding reservation and we get back to you within 24 hours with confirmation and payment details. Your spot is only finally reserved once the deposit has been paid.</li>
+      <li><b>Book and pay:</b> You pay the deposit or the full amount immediately through our secure payment solution. Your spot is reserved as soon as the payment is completed.</li>
+    </ul>
+    <p>The agreement is concluded when you receive a booking confirmation by email. Please check that the details in the confirmation are correct and contact us immediately in case of errors.</p>
+    <p>You must be at least 18 years old to place a booking.</p>
+  </div>
+
+  <div class="legal-section">
+    <h2>3. Prices and payment</h2>
+    <ul>
+      <li>All prices are stated in euros (€) per person and include applicable Spanish taxes unless otherwise stated.</li>
+      <li>A <b>deposit of 30%</b> of the total price is due at sign-up. The deposit reserves your spot.</li>
+      <li><b>The remaining balance is due no later than 8 days before the retreat begins.</b> If we do not receive the balance on time, we reserve the right to cancel the booking, and the deposit will not be refunded.</li>
+      <li>Payment is processed through our secure payment provider (Stripe). We do not store your card details ourselves.</li>
+      <li>Add-ons (e.g. extra nights or massage) are paid together with the stay and are covered by the same terms.</li>
+    </ul>
+  </div>
+
+  <div class="legal-section">
+    <h2>4. Cancellation by you</h2>
+    <p>Cancellations must be made in writing to <a href="mailto:hello@castillodelalma.es">hello@castillodelalma.es</a>. The following applies, counted from the retreat start date:</p>
+    <ul>
+      <li><b>More than 30 days before start:</b> Full refund of any balance paid. The deposit (30%) is non-refundable.</li>
+      <li><b>30–8 days before start:</b> 50% of the total price is refunded.</li>
+      <li><b>Less than 8 days before start, or no-show:</b> No refund.</li>
+    </ul>
+    <p>You are always welcome to <b>transfer your spot</b> to another participant at no extra cost — simply notify us of the new participant's name and contact details no later than 3 days before start.</p>
+    <p>We recommend taking out <b>travel and cancellation insurance</b> covering cancellation due to illness and similar circumstances.</p>
+  </div>
+
+  <div class="legal-section">
+    <h2>5. Right of withdrawal</h2>
+    <p>As these are leisure and accommodation services with a specific date or period of performance, the purchase is <b>not covered by the standard 14-day right of withdrawal</b> for distance sales, cf. Article 103(l) of the Spanish Consumer Act (Real Decreto Legislativo 1/2007) and the EU Consumer Rights Directive. The cancellation terms in section 4 apply instead.</p>
+  </div>
+
+  <div class="legal-section">
+    <h2>6. Cancellation or changes by us</h2>
+    <ul>
+      <li>Should we need to cancel a retreat (e.g. due to insufficient sign-ups, instructor illness or force majeure), we will notify you as soon as possible. You may then choose between a <b>full refund</b> of all amounts paid or <b>rebooking</b> to another date.</li>
+      <li>We do not reimburse costs you have incurred yourself in connection with the stay, such as flights or transport. We therefore recommend waiting to book flights until the retreat has been confirmed, and taking out travel insurance.</li>
+      <li>We reserve the right to make minor changes to the programme, such as replacing individual activities or instructors, without this giving rise to compensation, as long as the overall character of the retreat is preserved.</li>
+    </ul>
+  </div>
+
+  <div class="legal-section">
+    <h2>7. Your responsibility and health</h2>
+    <ul>
+      <li>Our retreats often include physical and mental activities such as yoga, meditation, breathwork and excursions. Participation is at your own risk, and you should assess whether your health allows participation — consult your doctor if in doubt.</li>
+      <li>Please inform us at sign-up of any health conditions, allergies or special needs we should be aware of in order to accommodate you.</li>
+      <li>Our retreats and activities are not medical or therapeutic treatment and do not replace professional medical care.</li>
+      <li>You are responsible for holding a valid passport/ID, any required visas and completing the legally required guest registration during your stay in Spain.</li>
+      <li>We reserve the right to refuse or send home participants whose behaviour significantly disturbs or endangers other guests, without refund.</li>
+    </ul>
+  </div>
+
+  <div class="legal-section">
+    <h2>8. Liability</h2>
+    <p>Castillo del Alma is liable in accordance with applicable Spanish law. We cannot be held liable for damage or loss caused by circumstances beyond our control, your own circumstances or third-party services (e.g. transport and excursion providers). Valuables are brought at your own risk. Your statutory protection as a consumer is not limited by these terms.</p>
+  </div>
+
+  <div class="legal-section">
+    <h2>9. Force majeure</h2>
+    <p>Neither party is liable for non-performance caused by extraordinary circumstances beyond that party's control, such as natural disasters, epidemics, government orders, strikes or similar. In such cases, section 6 applies accordingly.</p>
+  </div>
+
+  <div class="legal-section">
+    <h2>10. Personal data</h2>
+    <p>We process your personal data in accordance with our <a href="privacidad.html">privacy policy</a>, which describes what data we collect, why, and what rights you have.</p>
+  </div>
+
+  <div class="legal-section">
+    <h2>11. Complaints, governing law and jurisdiction</h2>
+    <p>If you have a complaint, please contact us first at <a href="mailto:hello@castillodelalma.es">hello@castillodelalma.es</a> — we almost always find a solution. As an EU consumer you may also use the European Commission's online dispute resolution platform: <a href="https://ec.europa.eu/consumers/odr" target="_blank" rel="noopener">ec.europa.eu/consumers/odr</a>. Official complaint forms (hojas de reclamaciones) are available.</p>
+    <p>These terms are governed by Spanish law. Mandatory consumer protection rules in your country of residence remain unaffected.</p>
+  </div>
+
+  <p class="legal-updated">Last updated: July 2026</p>
+</div>
+
+</main>
+
+<footer>
+  <div class="footer-bottom">
+    <p>© 2026 Castillo del Alma · Mollina, Málaga · All rights reserved</p>
+    <div class="footer-links">
+      <a href="privacidad.html" id="al_footer_privacy">Persondatapolitik</a>
+      <a href="aviso-legal.html" id="al_footer_legal">Juridisk meddelelse</a>
+      <a href="index.html" id="al_footer_back">← Tilbage til forsiden</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+let legalLang = 'da';
+
+function detectLegalLang(){
+  try{
+    const langs = (navigator.languages && navigator.languages.length ? navigator.languages : [navigator.language])
+      .filter(Boolean).map(l => String(l).toLowerCase());
+    return langs.some(l => l.startsWith('da')) ? 'da' : 'en';
+  }catch(e){ return 'da'; }
+}
+
+let userChoseLegalLang = false;
+function setLegalLang(lang, manual){
+  if (manual) userChoseLegalLang = true;
+  legalLang = (lang === 'en') ? 'en' : 'da';
+  document.body.classList.toggle('en', legalLang === 'en');
+  document.documentElement.lang = legalLang;
+
+  const btnDa = document.getElementById('al-btn-da');
+  const btnEn = document.getElementById('al-btn-en');
+  if (btnDa) { btnDa.classList.toggle('lang-btn-active', legalLang === 'da'); btnDa.classList.toggle('lang-btn-inactive', legalLang !== 'da'); }
+  if (btnEn) { btnEn.classList.toggle('lang-btn-active', legalLang === 'en'); btnEn.classList.toggle('lang-btn-inactive', legalLang !== 'en'); }
+
+  const navBack = document.getElementById('al_nav_back');
+  if (navBack) navBack.textContent = legalLang === 'en' ? '← Back to the front page' : '← Tilbage til forsiden';
+  const footBack = document.getElementById('al_footer_back');
+  if (footBack) footBack.textContent = legalLang === 'en' ? '← Back to the front page' : '← Tilbage til forsiden';
+  const footPriv = document.getElementById('al_footer_privacy');
+  if (footPriv) footPriv.textContent = legalLang === 'en' ? 'Privacy Policy' : 'Persondatapolitik';
+  const footLegal = document.getElementById('al_footer_legal');
+  if (footLegal) footLegal.textContent = legalLang === 'en' ? 'Legal Notice' : 'Juridisk meddelelse';
+
+  document.title = legalLang === 'en'
+    ? 'Terms of Sale & Booking — Castillo del Alma'
+    : 'Salgs- og bookingbetingelser — Castillo del Alma';
+}
+
+setLegalLang(detectLegalLang());   // øjeblikkeligt bud fra browsersprog (undgår tomt/forkert flash)
+
+// Geo-baseret sprogvalg: Danmark → dansk, resten af verden → engelsk.
+// Bruger Netlifys geo-header via egen function (ingen ekstern IP-tjeneste → GDPR-venligt).
+async function applyGeoLegalLang(){
+  // Samme geo-svar genbruges på tværs af sider i samme besøg (hurtigere + konsistent sprog)
+  try{
+    const cached = sessionStorage.getItem('cda_geo_lang');
+    if ((cached === 'da' || cached === 'en')) {
+      if (!userChoseLegalLang) setLegalLang(cached);
+      return;
+    }
+  }catch(e){ /* sessionStorage utilgængelig → henter geo */ }
+  try{
+    const ctrl = new AbortController();
+    const t = setTimeout(() => ctrl.abort(), 4000);
+    const res = await fetch('/.netlify/functions/geo-lang', { signal: ctrl.signal });
+    clearTimeout(t);
+    if (res.ok){
+      const geo = await res.json();
+      if (geo && (geo.lang === 'da' || geo.lang === 'en')){
+        try { sessionStorage.setItem('cda_geo_lang', geo.lang); } catch(e) {}
+        if (!userChoseLegalLang) setLegalLang(geo.lang);
+      }
+    }
+  }catch(e){ /* geo utilgængelig → beholder browsersprog-valget */ }
+}
+applyGeoLegalLang();
+</script>
+
+</body>
+</html>
