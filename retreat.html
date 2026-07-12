@@ -803,6 +803,25 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:3rem
   .faq-a p{font-size:1.1rem;}
   .booking-section p{font-size:1.2rem;}
 }
+
+/* ── DIN SIKKERHED (fælles sektion — indhold fra site_content, redigeres under Udlejning i admin) ── */
+.sikkerhed{background:var(--section-alt);padding:8rem 0;}
+.sikkerhed .section-inner{max-width:1320px;margin:0 auto;padding:0 4rem;}
+.sikkerhed-grid{display:grid;grid-template-columns:1.4fr 1fr;gap:6rem;align-items:center;}
+.sik-label{font-size:.6rem;letter-spacing:.4em;text-transform:uppercase;color:var(--gold);margin-bottom:1.4rem;display:flex;align-items:center;gap:1rem;}
+.sik-label::before{content:'';width:28px;height:1px;background:var(--gold);flex-shrink:0;}
+.sikkerhed h2{font-family:'Cinzel',serif;font-weight:300;font-size:clamp(2rem,3.5vw,3rem);letter-spacing:.08em;color:var(--charcoal);margin-bottom:2rem;}
+.sikkerhed h2 em{color:var(--olive);font-style:normal;}
+.sikkerhed p{font-family:'Cormorant Garamond',serif;font-size:1.08rem;font-weight:300;line-height:1.95;color:var(--text-mid);margin-bottom:1.4rem;}
+.sikkerhed-imgs{position:relative;padding-bottom:3rem;}
+.sik-img-stor{width:50%;margin-left:auto;display:block;aspect-ratio:3/4;object-fit:cover;box-shadow:0 24px 60px rgba(44,35,24,.18);}
+.sik-img-lille{position:absolute;left:12%;bottom:0;width:34%;aspect-ratio:4/3;object-fit:cover;border:6px solid var(--cream);box-shadow:0 16px 40px rgba(44,35,24,.22);}
+@media (max-width:900px){
+  .sikkerhed{padding:4.5rem 0;}
+  .sikkerhed .section-inner{padding:0 1.6rem;}
+  .sikkerhed-grid{grid-template-columns:1fr;gap:3rem;}
+  .sikkerhed p{font-size:1.18rem;}
+}
 </style>
 </head>
 <body>
@@ -1297,6 +1316,27 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:3rem
 </section>
 
 <!-- FOOTER -->
+
+<!-- ── DIN SIKKERHED (fælles sektion — redigeres i admin under Udlejning) ── -->
+<section class="sikkerhed" id="sikkerhed">
+  <div class="section-inner">
+    <div class="sikkerhed-grid" id="sikGrid">
+      <div class="reveal-left">
+        <span class="sik-label" id="sikLabel">Din sikkerhed</span>
+        <h2 id="sikH2">Du er i <em>gode hænder</em></h2>
+        <div id="sikTextContainer">
+          <p>Castillo del Alma lever fuldt op til de spanske myndigheders krav til brandsikkerhed — med brandslukkere, tydeligt markerede flugtveje og løbende kontrol.</p>
+          <p>Og skulle uheldet alligevel være ude, er du i gode hænder: begge værter er uddannet i førstehjælp og i brug af hjertestarter. Hjertestarteren er placeret centralt i huset.</p>
+        </div>
+      </div>
+      <div class="sikkerhed-imgs reveal-right d1" id="sikImgs" style="display:none;">
+        <img id="sikImg1" class="sik-img-stor" src="" alt="Sikkerhed på Castillo del Alma">
+        <img id="sikImg2" class="sik-img-lille" src="" alt="Sikkerhed på Castillo del Alma">
+      </div>
+    </div>
+  </div>
+</section>
+
 <footer>
   <div class="footer-bottom">
     <p>© 2026 Castillo del Alma · Mollina, Málaga · All rights reserved</p>
@@ -1615,6 +1655,7 @@ function applyStaticLabels() {
 
 function setRetreatLang(lang) {
   retreatLang = lang;
+  if (window.applySikkerhed) window.applySikkerhed(lang);
   const btnDa = document.getElementById('retreat-btn-da');
   const btnEn = document.getElementById('retreat-btn-en');
   if (btnDa) { btnDa.classList.toggle('lang-btn-active', lang === 'da'); btnDa.classList.toggle('lang-btn-inactive', lang !== 'da'); }
@@ -2687,6 +2728,54 @@ function updatePriceDisplay() {
   document.querySelectorAll('.nav-links a, .nav-back').forEach(a => a.addEventListener('click', closeMenu));
   document.addEventListener('keydown', (e) => { if(e.key === 'Escape') closeMenu(); });
   window.addEventListener('resize', () => { if(!isMobile()) closeMenu(); });
+})();
+</script>
+
+<script>
+// ── DIN SIKKERHED — fælles indhold fra site_content (samme sektion på forside, ejendommen og udlejning) ──
+(function(){
+  const SIK_SEED = {
+    sikkerhed_label: 'Din sikkerhed', sikkerhed_label_en: 'Your safety',
+    sikkerhed_h2: 'Du er i <em>gode hænder</em>', sikkerhed_h2_en: 'You are in <em>good hands</em>',
+    sikkerhed_text: 'Castillo del Alma lever fuldt op til de spanske myndigheders krav til brandsikkerhed — med brandslukkere, tydeligt markerede flugtveje og løbende kontrol.\nOg skulle uheldet alligevel være ude, er du i gode hænder: begge værter er uddannet i førstehjælp og i brug af hjertestarter. Hjertestarteren er placeret centralt i huset.',
+    sikkerhed_text_en: 'Castillo del Alma fully complies with the Spanish authorities\' fire safety requirements — with fire extinguishers, clearly marked escape routes and regular inspections.\nAnd should an accident occur, you are in good hands: both hosts are trained in first aid and in the use of a defibrillator. The defibrillator is centrally located in the house.'
+  };
+  window.CDA_SIK = Object.assign({}, SIK_SEED);
+  window.applySikkerhed = function(lang){
+    const d = window.CDA_SIK || {};
+    const sec = document.getElementById('sikkerhed');
+    if (!sec) return;
+    if (d['sikkerhed_vis'] === '0') { sec.style.display = 'none'; return; }
+    sec.style.display = '';
+    const g = k => (lang === 'en' ? (d[k + '_en'] || d[k]) : d[k]) || '';
+    const set = (id, v) => { const el = document.getElementById(id); if (el && v) el.innerHTML = v; };
+    set('sikLabel', g('sikkerhed_label'));
+    set('sikH2', g('sikkerhed_h2'));
+    const tc = document.getElementById('sikTextContainer');
+    const tv = g('sikkerhed_text');
+    if (tc && tv) tc.innerHTML = tv.split('\n').filter(Boolean).map(p => `<p>${p}</p>`).join('');
+    const i1 = document.getElementById('sikImg1');
+    const i2 = document.getElementById('sikImg2');
+    const wrap = document.getElementById('sikImgs');
+    const grid = document.getElementById('sikGrid');
+    if (d['sikkerhed_img1']) {
+      if (i1) i1.src = d['sikkerhed_img1'];
+      if (i2) { if (d['sikkerhed_img2']) { i2.src = d['sikkerhed_img2']; i2.style.display = ''; } else { i2.style.display = 'none'; } }
+      if (wrap) wrap.style.display = '';
+      if (grid) grid.style.gridTemplateColumns = '';
+    } else {
+      if (wrap) wrap.style.display = 'none';
+      if (grid) grid.style.gridTemplateColumns = '1fr';
+    }
+  };
+  (async function(){
+    try {
+      const { data, error } = await sbR.from('site_content').select('key,value').like('key', 'sikkerhed_%');
+      if (error) throw error;
+      (data || []).forEach(r => { if (r.value !== null && r.value !== '') window.CDA_SIK[r.key] = r.value; });
+    } catch(e) { console.warn('sikkerhed indhold:', e.message); }
+    window.applySikkerhed(retreatLang);
+  })();
 })();
 </script>
 </body>
