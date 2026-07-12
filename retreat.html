@@ -1305,6 +1305,11 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:3rem
             <textarea id="f-kommentar" placeholder="Skriv dine særlige ønsker eller behov"></textarea>
           </div>
           <div id="form-error" style="display:none;font-size:.78rem;color:#c05c30;margin-top:.2rem;"></div>
+          <label class="addon-item" style="align-items:flex-start;margin-top:.2rem;">
+            <input type="checkbox" id="f-betingelser">
+            <span class="addon-box" style="margin-top:.15rem;"></span>
+            <span class="addon-text" id="betingelserTekst" style="line-height:1.5;">Jeg har læst og accepterer <a href="betingelser.html" target="_blank" rel="noopener" style="color:var(--wine);text-decoration:underline;">salgs- og bookingbetingelserne</a> *</span>
+          </label>
           <div class="form-btns">
             <button type="button" class="form-submit form-submit-secondary" onclick="sendForespørgsel()" id="btnReserverPlads">Reserver din plads</button>
             <button type="button" class="form-submit" id="btn-depositum" onclick="visBetalingsvalg()">Book og betal</button>
@@ -1342,6 +1347,7 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:3rem
     <p>© 2026 Castillo del Alma · Mollina, Málaga · All rights reserved</p>
     <div style="display:flex;gap:1.6rem;flex-wrap:wrap;align-items:center;">
       <a href="kontakt.html" id="rt_footer_kontakt">Kontakt</a>
+      <a href="betingelser.html" id="rt_footer_terms">Salgsbetingelser</a>
       <a href="privacidad.html" id="rt_footer_privacy">Persondatapolitik</a>
       <a href="aviso-legal.html" id="rt_footer_legal">Juridisk meddelelse</a>
       <a href="index.html" id="rt_footer_back">← Tilbage til forsiden</a>
@@ -1590,6 +1596,7 @@ function SI18N(key) {
 
 function applyStaticLabels() {
   setText('rt_footer_kontakt', retreatLang === 'en' ? 'Contact' : 'Kontakt');
+  setText('rt_footer_terms', retreatLang === 'en' ? 'Terms of Sale & Booking' : 'Salgsbetingelser');
   setText('rt_footer_privacy', retreatLang === 'en' ? 'Privacy Policy' : 'Persondatapolitik');
   setText('rt_footer_legal', retreatLang === 'en' ? 'Legal Notice' : 'Juridisk meddelelse');
   setText('rt_footer_back', retreatLang === 'en' ? '← Back to the front page' : '← Tilbage til forsiden');
@@ -1636,6 +1643,10 @@ function applyStaticLabels() {
   const bh = document.getElementById('bookHeading'); if (bh) bh.textContent = rSC('ui_book_heading', retreatLang === 'en' ? 'Take the first step' : 'Tag det første skridt');
   const bi1 = document.getElementById('bookIntro1'); if (bi1) bi1.textContent = rSC('ui_book_intro', retreatLang === 'en' ? 'Fill out the form and we will get back to you within 24 hours with confirmation and information about next steps.' : 'Udfyld formularen og vi vender tilbage inden for 24 timer med bekræftelse og information om næste trin.');
   const bp = document.getElementById('bookPolicyNote'); if (bp) bp.textContent = rSC('ui_policy_note', retreatLang === 'en' ? 'By signing up you accept our payment and cancellation terms. A 30% deposit is due at sign-up and reserves your spot. The remaining balance is due 8 days before the retreat begins.' : 'Ved tilmelding accepterer du vores betalings- og afbestillingsbetingelser. Depositum på 30% forfalder ved tilmelding og reserverer din plads. Restbeløbet forfalder 8 dage før retreatstart.');
+  const bt = document.getElementById('betingelserTekst');
+  if (bt) bt.innerHTML = retreatLang === 'en'
+    ? 'I have read and accept the <a href="betingelser.html" target="_blank" rel="noopener" style="color:var(--wine);text-decoration:underline;">terms of sale &amp; booking</a> *'
+    : 'Jeg har læst og accepterer <a href="betingelser.html" target="_blank" rel="noopener" style="color:var(--wine);text-decoration:underline;">salgs- og bookingbetingelserne</a> *';
 
   // Hurtig-info bar (booking-bar) — Varighed/Ankomst/Afrejse har rigtige admin-felter
   setText('barDurationLabel', rSC('ui_label_duration', SI18N('barDurationLabel')));
@@ -2488,6 +2499,7 @@ async function sendForespørgsel() {
   const _telefon1 = document.getElementById('f-telefon')?.value.trim();
   const _land1 = document.getElementById('f-land')?.value;
   if (!fornavn || !email || !_telefon1 || !_land1) { showFormError('Udfyld fornavn, e-mail, telefon og land.'); return; }
+  if (!document.getElementById('f-betingelser')?.checked) { showFormError(retreatLang === 'en' ? 'Please accept the terms of sale & booking to continue.' : 'Sæt venligst flueben ved salgs- og bookingbetingelserne for at fortsætte.'); return; }
   showFormError('');
 
   const btn = document.querySelector('.form-submit-secondary');
@@ -2520,7 +2532,8 @@ async function sendForespørgsel() {
         addon_massage: document.getElementById('addon-massage') ? document.getElementById('addon-massage').checked : false,
         nationalitet: document.getElementById('f-land') ? document.getElementById('f-land').value : '',
         kommentar: document.getElementById('f-kommentar') ? document.getElementById('f-kommentar').value : '',
-        ekstra_gaester: ekstraGaesterListe
+        ekstra_gaester: ekstraGaesterListe,
+        betingelser_accepteret: true
       })
     });
     const data = await res.json();
@@ -2546,6 +2559,7 @@ function visBetalingsvalg() {
   const telefon = document.getElementById('f-telefon').value;
   const _land2 = document.getElementById('f-land')?.value;
   if (!fornavn || !email || !telefon || !_land2) { showFormError('Udfyld fornavn, e-mail, telefon og land.'); return; }
+  if (!document.getElementById('f-betingelser')?.checked) { showFormError(retreatLang === 'en' ? 'Please accept the terms of sale & booking to continue.' : 'Sæt venligst flueben ved salgs- og bookingbetingelserne for at fortsætte.'); return; }
   showFormError('');
   const ekstraGaesterListe = Array.from(document.querySelectorAll('.guest-row')).map(row => ({
     navn: row.querySelector('input[placeholder="Fornavn"]') ? row.querySelector('input[placeholder="Fornavn"]').value + ' ' + row.querySelector('input[placeholder="Efternavn"]').value : '',
@@ -2621,7 +2635,8 @@ async function betalDepositum(overrideAmount = null, paymentType = 'deposit') {
         departure_date: window.SELECTED_DEPARTURE || CURRENT_RETREAT?.departure_date || '',
         price_per_guest: RETREAT_PRICE,
         deposit_pct: DEPOSIT_PCT,
-        direct_payment: true
+        direct_payment: true,
+        betingelser_accepteret: true
       }),
     });
     const bookingData = await bookingRes.json();

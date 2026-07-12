@@ -10,7 +10,7 @@ exports.handler = async (event) => {
   const RESEND_KEY = process.env.RESEND_API_KEY;
 
   try {
-    const { fornavn, efternavn, email, telefon, nationalitet, gaester, vaerelse, addon_foer, addon_efter, addon_massage, selected_addons, kommentar, ekstra_gaester, retreat_id, retreat_name, arrival_date, departure_date, price_per_guest, deposit_pct, direct_payment } = JSON.parse(event.body);
+    const { fornavn, efternavn, email, telefon, nationalitet, gaester, vaerelse, addon_foer, addon_efter, addon_massage, selected_addons, kommentar, ekstra_gaester, retreat_id, retreat_name, arrival_date, departure_date, price_per_guest, deposit_pct, direct_payment, betingelser_accepteret } = JSON.parse(event.body);
 
     if (!fornavn || !email) {
       return { statusCode: 400, body: JSON.stringify({ error: 'Fornavn og email er påkrævet' }) };
@@ -85,6 +85,19 @@ exports.handler = async (event) => {
     const booking = Array.isArray(bookingData) ? bookingData[0] : bookingData;
     console.log('Booking data:', JSON.stringify(bookingData));
     if (!booking || !booking.id) throw new Error('Booking fejlede: ' + JSON.stringify(bookingData));
+
+    // Dokumentér accept af salgs- og bookingbetingelser (betingelser.html).
+    // Kører som separat PATCH der må fejle stille, så bookingen aldrig blokeres,
+    // hvis kolonnen terms_accepted_at endnu ikke er oprettet (sql/2026-07-12-terms-accepted.sql).
+    if (betingelser_accepteret) {
+      try {
+        await fetch(`${SUPABASE_URL}/rest/v1/bookings?id=eq.${booking.id}`, {
+          method: 'PATCH',
+          headers: { ...headers, 'Prefer': 'return=minimal' },
+          body: JSON.stringify({ terms_accepted_at: new Date().toISOString() })
+        });
+      } catch(e) { console.warn('terms_accepted_at kunne ikke gemmes:', e.message); }
+    }
 
     // Opret betaling
     await fetch(`${SUPABASE_URL}/rest/v1/payments`, {
