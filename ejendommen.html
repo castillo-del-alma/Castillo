@@ -1115,6 +1115,7 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:3rem
       <div class="cta-btns">
         <a href="index.html#retreats" class="btn-wine" id="ej_cta_btn1">Se Retreats</a>
         <a href="index.html#contact" class="btn-outline-light" id="ej_cta_btn2">Kontakt os</a>
+        <a href="kontakt.html" class="btn-outline-light" id="ej_cta_btn3" style="display:none;"></a>
       </div>
     </div>
   </div>
@@ -1401,6 +1402,23 @@ function applyEjContent() {
   setText('ej_cta_text', ejSC('cta_text'));
   setText('ej_cta_btn1', ejSC('cta_btn1'));
   setText('ej_cta_btn2', ejSC('cta_btn2'));
+  // CTA-links kan ændres i admin — tomt felt = standardlinket
+  { const _b1 = document.getElementById('ej_cta_btn1'); if (_b1 && ejData['cta_btn1_url']) _b1.href = ejData['cta_btn1_url']; }
+  { const _b2 = document.getElementById('ej_cta_btn2'); if (_b2 && ejData['cta_btn2_url']) _b2.href = ejData['cta_btn2_url']; }
+  // Knap 3 — vises kun når teksten er udfyldt i admin
+  {
+    const _b3 = document.getElementById('ej_cta_btn3');
+    if (_b3) {
+      const t3 = (ejSC('cta_btn3') || '').trim();
+      if (t3) {
+        _b3.innerHTML = t3;
+        _b3.href = ejData['cta_btn3_url'] || 'kontakt.html';
+        _b3.style.display = '';
+      } else {
+        _b3.style.display = 'none';
+      }
+    }
+  }
 
   // FOOTER
   setText('ej_footer_copy', ejSC('footer_copy'));

@@ -2693,8 +2693,21 @@ feeling more calm – and coming home to yourself again."</textarea></div>
           <div><label class="fc-label fc-label-en">Button 1 (EN)</label><input type="text" id="ej_cta_btn1_en" class="fc-input-en" value="View Retreats"></div>
         </div>
         <div class="fc-row">
+          <div style="grid-column:1/-1;"><label class="fc-label">Knap 1 — link (samme på begge sprog — tomt felt = index.html#retreats)</label><input type="text" id="ej_cta_btn1_url_da" class="fc-input-da" placeholder="index.html#retreats"></div>
+        </div>
+        <div class="fc-row">
           <div><label class="fc-label fc-label-da">Knap 2 (DA)</label><input type="text" id="ej_cta_btn2_da" class="fc-input-da" value="Kontakt os"></div>
           <div><label class="fc-label fc-label-en">Button 2 (EN)</label><input type="text" id="ej_cta_btn2_en" class="fc-input-en" value="Contact us"></div>
+        </div>
+        <div class="fc-row">
+          <div style="grid-column:1/-1;"><label class="fc-label">Knap 2 — link (tomt felt = index.html#contact)</label><input type="text" id="ej_cta_btn2_url_da" class="fc-input-da" placeholder="index.html#contact"></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Knap 3 (DA) — lad feltet stå TOMT for at skjule knappen</label><input type="text" id="ej_cta_btn3_da" class="fc-input-da" placeholder="fx: Se udlejning"></div>
+          <div><label class="fc-label fc-label-en">Button 3 (EN)</label><input type="text" id="ej_cta_btn3_en" class="fc-input-en" placeholder="e.g.: View rentals"></div>
+        </div>
+        <div class="fc-row">
+          <div style="grid-column:1/-1;"><label class="fc-label">Knap 3 — link (tomt felt = kontakt.html)</label><input type="text" id="ej_cta_btn3_url_da" class="fc-input-da" placeholder="fx: udlejning.html"></div>
         </div>
         <div style="text-align:right;margin-top:.8rem;"><button onclick="gemEjendommen()" style="background:#2a7a74;color:#fff;border:none;padding:.5rem 1.4rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;">💾 Gem</button></div>
       </div>
@@ -7622,7 +7635,7 @@ const EJ_CONTENT_KEYS = [
   // vineyard
   'vineyard_label','vineyard_h2','vineyard_p1','vineyard_p2','vineyard_p3','vineyard_p4','vineyard_img',
   // cta + footer
-  'cta_h2','cta_text','cta_btn1','cta_btn2','footer_copy','footer_link',
+  'cta_h2','cta_text','cta_btn1','cta_btn1_url','cta_btn2','cta_btn2_url','cta_btn3','cta_btn3_url','footer_copy','footer_link',
 ];
 
 async function loadEjendommensAdmin() {
