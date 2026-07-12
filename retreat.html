@@ -1169,7 +1169,7 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:3rem
         <h2 id="bookHeading">Tag det første skridt</h2>
         <p id="bookIntro1">Udfyld formularen og vi vender tilbage inden for 24 timer med bekræftelse og information om næste trin.</p>
         <p id="bookIntro2">Har du spørgsmål inden du tilmelder dig, er du altid velkommen til at skrive eller ringe.</p>
-        <p class="policy-note" id="bookPolicyNote">Ved tilmelding accepterer du vores betalings- og afbestillingsbetingelser. Depositum på 30% forfalder ved tilmelding og reserverer din plads. Restbeløbet forfalder 8 dage før retreatstart.</p>
+        <p class="policy-note" id="bookPolicyNote">Ved tilmelding accepterer du vores betalings- og afbestillingsbetingelser. Depositum på 30% forfalder ved tilmelding og reserverer din plads. Restbeløbet forfalder senest 6 uger før ankomst.</p>
       </div>
       <div class="reveal-right d2">
         <div class="booking-form">
@@ -1642,7 +1642,7 @@ function applyStaticLabels() {
   // Book-heading/intro/policy fra admin (falder tilbage til statisk DA/EN hvis ikke sat)
   const bh = document.getElementById('bookHeading'); if (bh) bh.textContent = rSC('ui_book_heading', retreatLang === 'en' ? 'Take the first step' : 'Tag det første skridt');
   const bi1 = document.getElementById('bookIntro1'); if (bi1) bi1.textContent = rSC('ui_book_intro', retreatLang === 'en' ? 'Fill out the form and we will get back to you within 24 hours with confirmation and information about next steps.' : 'Udfyld formularen og vi vender tilbage inden for 24 timer med bekræftelse og information om næste trin.');
-  const bp = document.getElementById('bookPolicyNote'); if (bp) bp.textContent = rSC('ui_policy_note', retreatLang === 'en' ? 'By signing up you accept our payment and cancellation terms. A 30% deposit is due at sign-up and reserves your spot. The remaining balance is due 8 days before the retreat begins.' : 'Ved tilmelding accepterer du vores betalings- og afbestillingsbetingelser. Depositum på 30% forfalder ved tilmelding og reserverer din plads. Restbeløbet forfalder 8 dage før retreatstart.');
+  const bp = document.getElementById('bookPolicyNote'); if (bp) bp.textContent = rSC('ui_policy_note', retreatLang === 'en' ? 'By signing up you accept our payment and cancellation terms. A 30% deposit is due at sign-up and reserves your spot. The remaining balance is due no later than 6 weeks before arrival.' : 'Ved tilmelding accepterer du vores betalings- og afbestillingsbetingelser. Depositum på 30% forfalder ved tilmelding og reserverer din plads. Restbeløbet forfalder senest 6 uger før ankomst.');
   const bt = document.getElementById('betingelserTekst');
   if (bt) bt.innerHTML = retreatLang === 'en'
     ? 'I have read and accept the <a href="betingelser.html" target="_blank" rel="noopener" style="color:var(--wine);text-decoration:underline;">terms of sale &amp; booking</a> *'
