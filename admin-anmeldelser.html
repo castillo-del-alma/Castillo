@@ -2043,33 +2043,15 @@ feeling more calm – and coming home to yourself again."</textarea></div>
 
     <!-- 0 · NAVIGATION -->
     <div class="fc-block" id="ej_adm_nav" style="margin-bottom:1.5rem;">
-      <div class="fc-block-header"><span class="fc-block-title">0 · Navigation (menupunkter)</span></div>
+      <div class="fc-block-header"><span class="fc-block-title">0 · Navigation (menu) &amp; sektionsrækkefølge</span></div>
       <div class="fc-block-body">
-        <div class="fc-row">
-          <div><label class="fc-label fc-label-da">Ejendommen</label><input type="text" id="ej_nav_intro_da" class="fc-input-da" value="Ejendommen"></div>
-          <div><label class="fc-label fc-label-en">The property</label><input type="text" id="ej_nav_intro_en" class="fc-input-en" value="The Property"></div>
-        </div>
-        <div class="fc-row">
-          <div><label class="fc-label fc-label-da">Tårnene</label><input type="text" id="ej_nav_towers_da" class="fc-input-da" value="Tårnene"></div>
-          <div><label class="fc-label fc-label-en">The Towers</label><input type="text" id="ej_nav_towers_en" class="fc-input-en" value="The Towers"></div>
-        </div>
-        <div class="fc-row">
-          <div><label class="fc-label fc-label-da">Indkvartering</label><input type="text" id="ej_nav_rooms_da" class="fc-input-da" value="Indkvartering"></div>
-          <div><label class="fc-label fc-label-en">Accommodation</label><input type="text" id="ej_nav_rooms_en" class="fc-input-en" value="Accommodation"></div>
-        </div>
-        <div class="fc-row">
-          <div><label class="fc-label fc-label-da">Faciliteter</label><input type="text" id="ej_nav_fac_da" class="fc-input-da" value="Faciliteter"></div>
-          <div><label class="fc-label fc-label-en">Facilities</label><input type="text" id="ej_nav_fac_en" class="fc-input-en" value="Facilities"></div>
-        </div>
-        <div class="fc-row">
-          <div><label class="fc-label fc-label-da">Bæredygtighed</label><input type="text" id="ej_nav_sustain_da" class="fc-input-da" value="Bæredygtighed"></div>
-          <div><label class="fc-label fc-label-en">Sustainability</label><input type="text" id="ej_nav_sustain_en" class="fc-input-en" value="Sustainability"></div>
-        </div>
-        <div class="fc-row">
-          <div><label class="fc-label fc-label-da">Vingården</label><input type="text" id="ej_nav_vineyard_da" class="fc-input-da" value="Vingården"></div>
-          <div><label class="fc-label fc-label-en">The Vineyard</label><input type="text" id="ej_nav_vineyard_en" class="fc-input-en" value="The Vineyard"></div>
-        </div>
-        <div class="fc-row">
+        <p style="font-family:Manrope,sans-serif;font-size:.72rem;color:#7a6a52;margin-bottom:.8rem;">Menu-links på ejendomssiden: navn (DA/EN), link (vælg et ankerpunkt fra listen eller <b>Egen URL</b>), synlighed og rækkefølge med pilene. Ankerpunkterne følger altid sektionernes ID'er nedenfor.</p>
+        <div id="ejNavEditor"></div>
+        <button onclick="ejNavTilfoej()" style="background:#2a7a74;color:#fff;border:none;padding:.45rem 1.1rem;font-family:Manrope,sans-serif;font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;margin-top:.4rem;">+ Tilføj menu-link</button>
+        <hr style="border:none;border-top:1px solid rgba(184,138,30,.25);margin:1.4rem 0;">
+        <p style="font-family:Manrope,sans-serif;font-size:.72rem;color:#7a6a52;margin-bottom:.8rem;">Sektionernes rækkefølge på siden — flyt med pilene, og slå sektioner til/fra med <b>Synlig</b>. Ankeret i parentes er sektionens faste ID.</p>
+        <div id="ejOrdenEditor"></div>
+        <div class="fc-row" style="margin-top:1.2rem;">
           <div><label class="fc-label fc-label-da">← Tilbage til forsiden</label><input type="text" id="ej_nav_back_da" class="fc-input-da" value="← Tilbage til forsiden"></div>
           <div><label class="fc-label fc-label-en">← Back to front page</label><input type="text" id="ej_nav_back_en" class="fc-input-en" value="← Back to front page"></div>
         </div>
@@ -7687,6 +7669,37 @@ async function loadEjendommensAdmin() {
       });
     });
 
+    // Navigation (menu) — fallback: gamle enkeltnøgler eller standardpunkter, hvis DB er tom
+    try {
+      const parsedNav = JSON.parse(map.nav_links || '[]');
+      ejNavState = (Array.isArray(parsedNav) && parsedNav.length) ? parsedNav : [];
+    } catch(e) { ejNavState = []; }
+    if (!ejNavState.length) {
+      const gamleNoegler = ['nav_intro','nav_towers','nav_rooms','nav_fac','nav_sustain','nav_vineyard'];
+      ejNavState = EJ_NAV_ADM_DEFAULTS.map((l, i) => ({
+        tekst: map[gamleNoegler[i]] || l.tekst,
+        tekst_en: map[gamleNoegler[i] + '_en'] || l.tekst_en,
+        link: l.link, vis: '1'
+      }));
+    }
+    // Gamle engelske ankre i gemte links oversættes til de danske ID'er
+    ejNavState.forEach(l => { const ny = EJ_LEGACY_ANKRE_ADM[(l.link || '').trim()]; if (ny) l.link = ny; });
+    renderEjNavEditor();
+
+    // Sektionsrækkefølge + synlighed — gemt rækkefølge først, nye sektioner tilføjes bagerst
+    let gemtOrden = [];
+    try { gemtOrden = JSON.parse(map.sektion_orden || '[]'); } catch(e) {}
+    ejOrdenState = [];
+    gemtOrden.forEach(id => {
+      if (EJ_SEKTION_DEFS.some(d => d.id === id) && !ejOrdenState.some(o => o.id === id)) ejOrdenState.push({ id });
+    });
+    EJ_SEKTION_DEFS.forEach(d => { if (!ejOrdenState.some(o => o.id === d.id)) ejOrdenState.push({ id: d.id }); });
+    ejOrdenState.forEach(o => {
+      const def = EJ_SEKTION_DEFS.find(d => d.id === o.id);
+      o.vis = (def && map[def.key] === '0') ? '0' : '1';
+    });
+    renderEjOrdenEditor();
+
     // Load rum-liste
     await loadEjRomsListe();
   } catch(e) {
@@ -7713,6 +7726,22 @@ async function gemEjendommen() {
       upserts.push({ key: dbKey, value: el.value });
     });
   });
+
+  if (ejOrdenState.length) {
+    ejOrdenState.forEach(o => {
+      const def = EJ_SEKTION_DEFS.find(d => d.id === o.id);
+      if (def) upserts.push({ key: def.key, value: o.vis === '0' ? '0' : '1' });
+    });
+    upserts.push({ key: 'sektion_orden', value: JSON.stringify(ejOrdenState.map(o => o.id)) });
+  }
+  if (ejNavState.length) {
+    upserts.push({ key: 'nav_links', value: JSON.stringify(ejNavState.map(l => ({
+      tekst: (l.tekst || '').trim(),
+      tekst_en: (l.tekst_en || '').trim(),
+      link: (l.link || '').trim(),
+      vis: l.vis === '0' ? '0' : '1'
+    }))) });
+  }
 
   try {
     const { error } = await sb.from('ejendommen_content').upsert(upserts, { onConflict: 'key' });
@@ -7952,6 +7981,108 @@ function ulOrdenFlyt(i, retning) {
   [ulOrdenState[i], ulOrdenState[j]] = [ulOrdenState[j], ulOrdenState[i]];
   renderUlOrdenEditor();
 }
+// ── EJENDOMMEN: Navigation (menu) & sektionsrækkefølge — redigeres i blok 0 ──
+// Ankerlinks har ALTID samme navn som sektionens ID — vælges i dropdown, eller "Egen URL" til alt andet
+const EJ_SEKTION_DEFS = [
+  { id: 'intro',          navn: 'Intro — "Ejendommen"',        key: 'vis_intro' },
+  { id: 'taarnene',       navn: 'Tårnene',                     key: 'vis_taarnene' },
+  { id: 'indkvartering',  navn: 'Indkvartering (værelserne)',  key: 'vis_indkvartering' },
+  { id: 'faciliteter',    navn: 'Faciliteter',                 key: 'vis_faciliteter' },
+  { id: 'baeredygtighed', navn: 'Bæredygtighed',               key: 'vis_baeredygtighed' },
+  { id: 'vingaarden',     navn: 'Vingården',                   key: 'vis_vingaarden' },
+  { id: 'cta',            navn: 'Call-to-action (nederst)',    key: 'vis_cta' }
+];
+const EJ_NAV_ADM_DEFAULTS = [
+  { tekst: 'Ejendommen', tekst_en: 'The Property', link: '#intro', vis: '1' },
+  { tekst: 'Tårnene', tekst_en: 'The Towers', link: '#taarnene', vis: '1' },
+  { tekst: 'Indkvartering', tekst_en: 'Accommodation', link: '#indkvartering', vis: '1' },
+  { tekst: 'Faciliteter', tekst_en: 'Facilities', link: '#faciliteter', vis: '1' },
+  { tekst: 'Bæredygtighed', tekst_en: 'Sustainability', link: '#baeredygtighed', vis: '1' },
+  { tekst: 'Vingården', tekst_en: 'The Vineyard', link: '#vingaarden', vis: '1' }
+];
+// Gamle engelske ankre oversættes til de nye danske ID'er ved indlæsning
+const EJ_LEGACY_ANKRE_ADM = { '#towers':'#taarnene', '#rooms':'#indkvartering', '#facilities':'#faciliteter', '#sustainability':'#baeredygtighed', '#vineyard':'#vingaarden' };
+let ejNavState = [];
+let ejOrdenState = []; // [{ id, vis }] i den rækkefølge sektionerne vises
+
+function renderEjNavEditor() {
+  const c = document.getElementById('ejNavEditor');
+  if (!c) return;
+  c.innerHTML = ejNavState.map((l, i) => {
+    const erAnker = EJ_SEKTION_DEFS.some(d => '#' + d.id === (l.link || '').trim());
+    const egen = !erAnker && (l.link || '').trim() !== '';
+    const nyRaekke = !erAnker && !egen; // nyt tomt punkt → start på anker-valg
+    const valgt = erAnker ? (l.link || '').trim() : (egen ? '__egen__' : '');
+    const options =
+      '<option value="" disabled ' + (valgt === '' ? 'selected' : '') + '>Vælg ankerpunkt…</option>' +
+      EJ_SEKTION_DEFS.map(d => `<option value="#${d.id}" ${valgt === '#' + d.id ? 'selected' : ''}>${ulAdmEsc(d.navn)} (#${d.id})</option>`).join('') +
+      `<option value="__egen__" ${valgt === '__egen__' ? 'selected' : ''}>Egen URL…</option>`;
+    return `
+    <div style="display:flex;gap:.5rem;align-items:center;margin-bottom:.5rem;flex-wrap:wrap;">
+      <div style="display:flex;flex-direction:column;gap:2px;">
+        <button onclick="ejNavFlyt(${i},-1)" ${i === 0 ? 'disabled' : ''} style="${UL_PIL_BTN}" title="Flyt op">▲</button>
+        <button onclick="ejNavFlyt(${i},1)" ${i === ejNavState.length - 1 ? 'disabled' : ''} style="${UL_PIL_BTN}" title="Flyt ned">▼</button>
+      </div>
+      <input type="text" class="fc-input-da" style="flex:1.2;min-width:130px;" placeholder="Navn (DA)" value="${ulAdmEsc(l.tekst)}" oninput="ejNavState[${i}].tekst=this.value">
+      <input type="text" class="fc-input-en" style="flex:1.2;min-width:130px;" placeholder="Name (EN)" value="${ulAdmEsc(l.tekst_en)}" oninput="ejNavState[${i}].tekst_en=this.value">
+      <select class="fc-input-da" style="flex:1;min-width:150px;cursor:pointer;" onchange="ejNavLinkValg(${i}, this)">${options}</select>
+      <input type="text" class="fc-input-da" id="ejNavEgenUrl${i}" style="flex:1;min-width:130px;${egen ? '' : 'display:none;'}" placeholder="fx udlejning.html eller https://…" value="${egen ? ulAdmEsc(l.link) : ''}" oninput="ejNavState[${i}].link=this.value">
+      <label style="display:flex;align-items:center;gap:.35rem;font-family:Manrope,sans-serif;font-size:.66rem;color:#2c2318;cursor:pointer;white-space:nowrap;"><input type="checkbox" ${l.vis !== '0' ? 'checked' : ''} onchange="ejNavState[${i}].vis=this.checked?'1':'0'" style="cursor:pointer;"> Synlig</label>
+      <button onclick="ejNavSlet(${i})" style="background:#a33;color:#fff;border:none;width:24px;height:24px;cursor:pointer;font-size:.7rem;line-height:1;" title="Fjern link">✕</button>
+    </div>`;
+  }).join('') || '<p style="font-family:Manrope,sans-serif;font-size:.7rem;color:#7a6a52;">Ingen menu-links — klik "+ Tilføj menu-link".</p>';
+}
+
+function ejNavLinkValg(i, sel) {
+  const egenFelt = document.getElementById('ejNavEgenUrl' + i);
+  if (sel.value === '__egen__') {
+    ejNavState[i].link = '';
+    if (egenFelt) { egenFelt.style.display = ''; egenFelt.value = ''; egenFelt.focus(); }
+  } else {
+    ejNavState[i].link = sel.value;
+    if (egenFelt) { egenFelt.style.display = 'none'; egenFelt.value = ''; }
+  }
+}
+
+function ejNavFlyt(i, retning) {
+  const j = i + retning;
+  if (j < 0 || j >= ejNavState.length) return;
+  [ejNavState[i], ejNavState[j]] = [ejNavState[j], ejNavState[i]];
+  renderEjNavEditor();
+}
+function ejNavTilfoej() {
+  ejNavState.push({ tekst: '', tekst_en: '', link: '', vis: '1' });
+  renderEjNavEditor();
+}
+function ejNavSlet(i) {
+  ejNavState.splice(i, 1);
+  renderEjNavEditor();
+}
+
+function renderEjOrdenEditor() {
+  const c = document.getElementById('ejOrdenEditor');
+  if (!c) return;
+  c.innerHTML = ejOrdenState.map((o, i) => {
+    const def = EJ_SEKTION_DEFS.find(d => d.id === o.id) || { navn: o.id };
+    return `
+    <div style="display:flex;gap:.6rem;align-items:center;margin-bottom:.4rem;padding:.35rem .6rem;background:rgba(184,138,30,.05);border:1px solid rgba(184,138,30,.18);">
+      <div style="display:flex;flex-direction:column;gap:2px;">
+        <button onclick="ejOrdenFlyt(${i},-1)" ${i === 0 ? 'disabled' : ''} style="${UL_PIL_BTN}" title="Flyt op">▲</button>
+        <button onclick="ejOrdenFlyt(${i},1)" ${i === ejOrdenState.length - 1 ? 'disabled' : ''} style="${UL_PIL_BTN}" title="Flyt ned">▼</button>
+      </div>
+      <span style="flex:1;font-family:Manrope,sans-serif;font-size:.72rem;color:#2c2318;">${ulAdmEsc(def.navn)} <span style="color:#7a6a52;">(#${ulAdmEsc(o.id)})</span></span>
+      <label style="display:flex;align-items:center;gap:.35rem;font-family:Manrope,sans-serif;font-size:.66rem;color:#2c2318;cursor:pointer;white-space:nowrap;"><input type="checkbox" ${o.vis !== '0' ? 'checked' : ''} onchange="ejOrdenState[${i}].vis=this.checked?'1':'0'" style="cursor:pointer;"> Synlig</label>
+    </div>`;
+  }).join('');
+}
+
+function ejOrdenFlyt(i, retning) {
+  const j = i + retning;
+  if (j < 0 || j >= ejOrdenState.length) return;
+  [ejOrdenState[i], ejOrdenState[j]] = [ejOrdenState[j], ejOrdenState[i]];
+  renderEjOrdenEditor();
+}
+
 const UL_IMG_DEFAULTS = {
   "hero_bg": "img/group-people-making-breathworks-castillo-del-alma.jpg",
   "intro_img1": "img/group-people-making-breathworks-castillo-del-alma.jpg",
