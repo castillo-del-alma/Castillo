@@ -238,9 +238,10 @@ body.menu-open .nav-burger span:nth-child(3){ transform:translateY(-9px) rotate(
 }
 .btn-inquire:hover{background:rgba(122,31,53,.06);}
 
-/* ── CTA-BÅND (Reserver / Book nu) — tændes og placeres i admin blok 0 ── */
-.cta-band{background:var(--cream);padding:3.5rem 0;text-align:center;}
+/* ── CTA-BÅND (Reserver / Book nu) — tændes og placeres i admin blok 0; samme udtryk som de gamle bånd ── */
 .cta-band-inner{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;padding:0 2rem;}
+.retreat-cta-band--sage .btn-inquire{color:var(--charcoal);border-color:rgba(44,35,24,.45);}
+.retreat-cta-band--sage .btn-inquire:hover{background:rgba(255,255,255,.25);}
 
 /* ── OVERVIEW ── */
 .retreat-overview{background:var(--cream);padding:7rem 0 6rem;}
@@ -1334,26 +1335,35 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:3rem
 
 
 <!-- CTA-BÅND 1 — skjult som standard; tændes og flyttes i admin blok 0 -->
-<section class="cta-band" id="cta1" style="display:none;">
-  <div class="cta-band-inner">
-    <button class="btn-inquire ctaBandReserver" onclick="document.getElementById('booking').scrollIntoView({behavior:'smooth'})">Reserver</button>
-    <button class="btn-book ctaBandBook" onclick="document.getElementById('booking').scrollIntoView({behavior:'smooth'})">Book nu</button>
+<section class="retreat-cta-band retreat-cta-band--sage" id="cta1" style="display:none;">
+  <div class="section-inner">
+    <p class="retreat-cta-heading">Klar til at give dig selv denne oplevelse?</p>
+    <div class="cta-band-inner">
+      <button class="btn-inquire ctaBandReserver" onclick="document.getElementById('booking').scrollIntoView({behavior:'smooth'})">Reserver</button>
+      <button class="btn-book ctaBandBook" onclick="document.getElementById('booking').scrollIntoView({behavior:'smooth'})">Book nu</button>
+    </div>
   </div>
 </section>
 
 <!-- CTA-BÅND 2 — skjult som standard; tændes og flyttes i admin blok 0 -->
-<section class="cta-band" id="cta2" style="display:none;">
-  <div class="cta-band-inner">
-    <button class="btn-inquire ctaBandReserver" onclick="document.getElementById('booking').scrollIntoView({behavior:'smooth'})">Reserver</button>
-    <button class="btn-book ctaBandBook" onclick="document.getElementById('booking').scrollIntoView({behavior:'smooth'})">Book nu</button>
+<section class="retreat-cta-band" id="cta2" style="display:none;">
+  <div class="section-inner">
+    <p class="retreat-cta-heading">Klar til at give dig selv denne oplevelse?</p>
+    <div class="cta-band-inner">
+      <button class="btn-inquire ctaBandReserver" onclick="document.getElementById('booking').scrollIntoView({behavior:'smooth'})">Reserver</button>
+      <button class="btn-book ctaBandBook" onclick="document.getElementById('booking').scrollIntoView({behavior:'smooth'})">Book nu</button>
+    </div>
   </div>
 </section>
 
 <!-- CTA-BÅND 3 — skjult som standard; tændes og flyttes i admin blok 0 -->
-<section class="cta-band" id="cta3" style="display:none;">
-  <div class="cta-band-inner">
-    <button class="btn-inquire ctaBandReserver" onclick="document.getElementById('booking').scrollIntoView({behavior:'smooth'})">Reserver</button>
-    <button class="btn-book ctaBandBook" onclick="document.getElementById('booking').scrollIntoView({behavior:'smooth'})">Book nu</button>
+<section class="retreat-cta-band retreat-cta-band--sage" id="cta3" style="display:none;">
+  <div class="section-inner">
+    <p class="retreat-cta-heading">Klar til at give dig selv denne oplevelse?</p>
+    <div class="cta-band-inner">
+      <button class="btn-inquire ctaBandReserver" onclick="document.getElementById('booking').scrollIntoView({behavior:'smooth'})">Reserver</button>
+      <button class="btn-book ctaBandBook" onclick="document.getElementById('booking').scrollIntoView({behavior:'smooth'})">Book nu</button>
+    </div>
   </div>
 </section>
 
