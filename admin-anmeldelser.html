@@ -3818,13 +3818,13 @@ feeling more calm – and coming home to yourself again."</textarea></div>
     <div style="background:rgba(184,138,30,.06);border:1px solid rgba(184,138,30,.2);padding:1rem 1.2rem;margin-bottom:2rem;">
       <span style="font-size:.62rem;letter-spacing:.15em;text-transform:uppercase;color:rgba(44,35,24,.5);display:block;margin-bottom:.6rem;">Hop til sektion</span>
       <div style="display:flex;flex-wrap:wrap;gap:.5rem;">
+        <a href="#ra_navigation" style="font-size:.72rem;color:#7a5c14;background:#fffef8;border:1px solid rgba(184,138,30,.3);padding:.35rem .8rem;text-decoration:none;">0 · Navigation</a>
         <a href="#ra_grundoplysninger" style="font-size:.72rem;color:#7a5c14;background:#fffef8;border:1px solid rgba(184,138,30,.3);padding:.35rem .8rem;text-decoration:none;">1 · Grundoplysninger</a>
         <a href="#ra_datoer" style="font-size:.72rem;color:#7a5c14;background:#fffef8;border:1px solid rgba(184,138,30,.3);padding:.35rem .8rem;text-decoration:none;">2 · Datoer & pris</a>
         <a href="#ra_billeder" style="font-size:.72rem;color:#7a5c14;background:#fffef8;border:1px solid rgba(184,138,30,.3);padding:.35rem .8rem;text-decoration:none;">3 · Billeder</a>
         <a href="#ra_om" style="font-size:.72rem;color:#7a5c14;background:#fffef8;border:1px solid rgba(184,138,30,.3);padding:.35rem .8rem;text-decoration:none;">4 · Om retreatet</a>
         <a href="#ra_billeder5" style="font-size:.72rem;color:#7a5c14;background:#fffef8;border:1px solid rgba(184,138,30,.3);padding:.35rem .8rem;text-decoration:none;">4.5 · 5 billeder</a>
         <a href="#ra_highlights" style="font-size:.72rem;color:#7a5c14;background:#fffef8;border:1px solid rgba(184,138,30,.3);padding:.35rem .8rem;text-decoration:none;">4.1 · Highlights</a>
-        <a href="#ra_navigation" style="font-size:.72rem;color:#7a5c14;background:#fffef8;border:1px solid rgba(184,138,30,.3);padding:.35rem .8rem;text-decoration:none;">5 · Navigation</a>
         <a href="#ra_hurtiginfo" style="font-size:.72rem;color:#7a5c14;background:#fffef8;border:1px solid rgba(184,138,30,.3);padding:.35rem .8rem;text-decoration:none;">6 · Hurtig-info</a>
         <a href="#ra_program" style="font-size:.72rem;color:#7a5c14;background:#fffef8;border:1px solid rgba(184,138,30,.3);padding:.35rem .8rem;text-decoration:none;">7 · Program</a>
         <a href="#ra_fritekst" style="font-size:.72rem;color:#7a5c14;background:#fffef8;border:1px solid rgba(184,138,30,.3);padding:.35rem .8rem;text-decoration:none;">7b · Fritekst</a>
@@ -3836,6 +3836,30 @@ feeling more calm – and coming home to yourself again."</textarea></div>
         <a href="#ra_faq" style="font-size:.72rem;color:#7a5c14;background:#fffef8;border:1px solid rgba(184,138,30,.3);padding:.35rem .8rem;text-decoration:none;">14 · FAQ</a>
         <a href="#ra_tilvalg" style="font-size:.72rem;color:#7a5c14;background:#fffef8;border:1px solid rgba(184,138,30,.3);padding:.35rem .8rem;text-decoration:none;">15 · Tilvalg</a>
         <a href="#ra_labels" style="font-size:.72rem;color:#7a5c14;background:#fffef8;border:1px solid rgba(184,138,30,.3);padding:.35rem .8rem;text-decoration:none;">16 · Labels</a>
+      </div>
+    </div>
+
+    <!-- 0 · NAVIGATION & SEKTIONSRÆKKEFØLGE -->
+    <div class="fc-block" id="ra_navigation" style="margin-bottom:1.5rem;">
+      <div class="fc-block-header"><span class="fc-block-title">0 · Navigation (menu) &amp; sektionsrækkefølge</span></div>
+      <div class="fc-block-body">
+        <p style="font-family:Manrope,sans-serif;font-size:.72rem;color:#7a6a52;margin-bottom:.8rem;">Menu-links på dette retreats side: navn (DA/EN), link (vælg et ankerpunkt fra listen eller <b>Egen URL</b>), synlighed og rækkefølge med pilene. Ankerpunkterne følger altid sektionernes ID'er nedenfor. Gælder KUN dette retreat.</p>
+        <div id="rtNavEditor"></div>
+        <button type="button" onclick="rtNavTilfoej()" style="background:#2a7a74;color:#fff;border:none;padding:.45rem 1.1rem;font-family:Manrope,sans-serif;font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;margin-top:.4rem;">+ Tilføj menu-link</button>
+        <hr style="border:none;border-top:1px solid rgba(184,138,30,.25);margin:1.4rem 0;">
+        <p style="font-family:Manrope,sans-serif;font-size:.72rem;color:#7a6a52;margin-bottom:.8rem;">Sektionernes rækkefølge på siden — flyt med pilene, og slå sektioner til/fra med <b>Synlig</b>. Ankeret i parentes er sektionens faste ID. Bemærk: nogle sektioner skjules automatisk, hvis de ikke har indhold (fx Fotostribe og Fritekst).</p>
+        <div id="rtOrdenEditor"></div>
+        <!-- Skjulte felter: gamle pr.-retreat nav-tekster (bruges som fallback på retreat-siden, hvis menuen aldrig er gemt) -->
+        <input type="hidden" id="ui_nav_about"><input type="hidden" id="ui_nav_about_en">
+        <input type="hidden" id="ui_nav_highlights"><input type="hidden" id="ui_nav_highlights_en">
+        <input type="hidden" id="ui_nav_program"><input type="hidden" id="ui_nav_program_en">
+        <input type="hidden" id="ui_nav_included"><input type="hidden" id="ui_nav_included_en">
+        <input type="hidden" id="ui_nav_rooms"><input type="hidden" id="ui_nav_rooms_en">
+        <input type="hidden" id="ui_nav_reviews"><input type="hidden" id="ui_nav_reviews_en">
+        <input type="hidden" id="ui_nav_book"><input type="hidden" id="ui_nav_book_en">
+        <div style="text-align:right;margin-top:1rem;padding-top:.8rem;border-top:1px solid rgba(184,138,30,.12);">
+          <button type="button" onclick="gemRetreat()" style="background:var(--wine);color:#fff;border:none;padding:.5rem 1.4rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;">💾 Gem retreat</button>
+        </div>
       </div>
     </div>
 
@@ -3999,30 +4023,6 @@ feeling more calm – and coming home to yourself again."</textarea></div>
     </div>
 
 
-
-    <!-- 5 · NAVIGATION -->
-    <div class="fc-block" id="ra_navigation" style="margin-bottom:1.5rem;">
-      <div class="fc-block-header"><span class="fc-block-title">5 · Navigation (menu) &amp; sektionsrækkefølge</span></div>
-      <div class="fc-block-body">
-        <p style="font-family:Manrope,sans-serif;font-size:.72rem;color:#7a6a52;margin-bottom:.8rem;">Menu-links på dette retreats side: navn (DA/EN), link (vælg et ankerpunkt fra listen eller <b>Egen URL</b>), synlighed og rækkefølge med pilene. Ankerpunkterne følger altid sektionernes ID'er nedenfor. Gælder KUN dette retreat.</p>
-        <div id="rtNavEditor"></div>
-        <button type="button" onclick="rtNavTilfoej()" style="background:#2a7a74;color:#fff;border:none;padding:.45rem 1.1rem;font-family:Manrope,sans-serif;font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;margin-top:.4rem;">+ Tilføj menu-link</button>
-        <hr style="border:none;border-top:1px solid rgba(184,138,30,.25);margin:1.4rem 0;">
-        <p style="font-family:Manrope,sans-serif;font-size:.72rem;color:#7a6a52;margin-bottom:.8rem;">Sektionernes rækkefølge på siden — flyt med pilene, og slå sektioner til/fra med <b>Synlig</b>. Ankeret i parentes er sektionens faste ID. Bemærk: nogle sektioner skjules automatisk, hvis de ikke har indhold (fx Fotostribe og Fritekst).</p>
-        <div id="rtOrdenEditor"></div>
-        <!-- Skjulte felter: gamle pr.-retreat nav-tekster (bruges som fallback på retreat-siden, hvis menuen aldrig er gemt) -->
-        <input type="hidden" id="ui_nav_about"><input type="hidden" id="ui_nav_about_en">
-        <input type="hidden" id="ui_nav_highlights"><input type="hidden" id="ui_nav_highlights_en">
-        <input type="hidden" id="ui_nav_program"><input type="hidden" id="ui_nav_program_en">
-        <input type="hidden" id="ui_nav_included"><input type="hidden" id="ui_nav_included_en">
-        <input type="hidden" id="ui_nav_rooms"><input type="hidden" id="ui_nav_rooms_en">
-        <input type="hidden" id="ui_nav_reviews"><input type="hidden" id="ui_nav_reviews_en">
-        <input type="hidden" id="ui_nav_book"><input type="hidden" id="ui_nav_book_en">
-        <div style="text-align:right;margin-top:1rem;padding-top:.8rem;border-top:1px solid rgba(184,138,30,.12);">
-          <button type="button" onclick="gemRetreat()" style="background:var(--wine);color:#fff;border:none;padding:.5rem 1.4rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;">💾 Gem retreat</button>
-        </div>
-      </div>
-    </div>
 
     <!-- 6 · HURTIG-INFO -->
     <div class="fc-block" id="ra_hurtiginfo" style="margin-bottom:1.5rem;">
