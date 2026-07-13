@@ -4002,37 +4002,22 @@ feeling more calm – and coming home to yourself again."</textarea></div>
 
     <!-- 5 · NAVIGATION -->
     <div class="fc-block" id="ra_navigation" style="margin-bottom:1.5rem;">
-      <div class="fc-block-header"><span class="fc-block-title">5 · Navigation (menupunkter på retreat-siden)</span></div>
+      <div class="fc-block-header"><span class="fc-block-title">5 · Navigation (menu) &amp; sektionsrækkefølge</span></div>
       <div class="fc-block-body">
-        <p style="font-size:.7rem;color:rgba(44,35,24,.4);margin-bottom:1rem;">Disse labels vises i topmenuen på selve retreat-siden.</p>
-        <div class="fc-row">
-          <div><label class="fc-label fc-label-da">Om (DA)</label><input type="text" id="ui_nav_about" class="fc-input-da" placeholder="Om retreatet"></div>
-          <div><label class="fc-label fc-label-en">About (EN)</label><input type="text" id="ui_nav_about_en" class="fc-input-en" placeholder="About the Retreat"></div>
-        </div>
-        <div class="fc-row">
-          <div><label class="fc-label fc-label-da">Highlights (DA)</label><input type="text" id="ui_nav_highlights" class="fc-input-da" placeholder="Highlights"></div>
-          <div><label class="fc-label fc-label-en">Highlights (EN)</label><input type="text" id="ui_nav_highlights_en" class="fc-input-en" placeholder="Highlights"></div>
-        </div>
-        <div class="fc-row">
-          <div><label class="fc-label fc-label-da">Program (DA)</label><input type="text" id="ui_nav_program" class="fc-input-da" placeholder="Program"></div>
-          <div><label class="fc-label fc-label-en">Programme (EN)</label><input type="text" id="ui_nav_program_en" class="fc-input-en" placeholder="Programme"></div>
-        </div>
-        <div class="fc-row">
-          <div><label class="fc-label fc-label-da">Inkluderet (DA)</label><input type="text" id="ui_nav_included" class="fc-input-da" placeholder="Inkluderet"></div>
-          <div><label class="fc-label fc-label-en">Included (EN)</label><input type="text" id="ui_nav_included_en" class="fc-input-en" placeholder="Included"></div>
-        </div>
-        <div class="fc-row">
-          <div><label class="fc-label fc-label-da">Rum (DA)</label><input type="text" id="ui_nav_rooms" class="fc-input-da" placeholder="Rum"></div>
-          <div><label class="fc-label fc-label-en">Rooms (EN)</label><input type="text" id="ui_nav_rooms_en" class="fc-input-en" placeholder="Rooms"></div>
-        </div>
-        <div class="fc-row">
-          <div><label class="fc-label fc-label-da">Anmeldelser (DA)</label><input type="text" id="ui_nav_reviews" class="fc-input-da" placeholder="Anmeldelser"></div>
-          <div><label class="fc-label fc-label-en">Reviews (EN)</label><input type="text" id="ui_nav_reviews_en" class="fc-input-en" placeholder="Reviews"></div>
-        </div>
-        <div class="fc-row">
-          <div><label class="fc-label fc-label-da">Book (DA)</label><input type="text" id="ui_nav_book" class="fc-input-da" placeholder="Book"></div>
-          <div><label class="fc-label fc-label-en">Book (EN)</label><input type="text" id="ui_nav_book_en" class="fc-input-en" placeholder="Book"></div>
-        </div>
+        <p style="font-family:Manrope,sans-serif;font-size:.72rem;color:#7a6a52;margin-bottom:.8rem;">Menu-links på dette retreats side: navn (DA/EN), link (vælg et ankerpunkt fra listen eller <b>Egen URL</b>), synlighed og rækkefølge med pilene. Ankerpunkterne følger altid sektionernes ID'er nedenfor. Gælder KUN dette retreat.</p>
+        <div id="rtNavEditor"></div>
+        <button type="button" onclick="rtNavTilfoej()" style="background:#2a7a74;color:#fff;border:none;padding:.45rem 1.1rem;font-family:Manrope,sans-serif;font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;margin-top:.4rem;">+ Tilføj menu-link</button>
+        <hr style="border:none;border-top:1px solid rgba(184,138,30,.25);margin:1.4rem 0;">
+        <p style="font-family:Manrope,sans-serif;font-size:.72rem;color:#7a6a52;margin-bottom:.8rem;">Sektionernes rækkefølge på siden — flyt med pilene, og slå sektioner til/fra med <b>Synlig</b>. Ankeret i parentes er sektionens faste ID. Bemærk: nogle sektioner skjules automatisk, hvis de ikke har indhold (fx Fotostribe og Fritekst).</p>
+        <div id="rtOrdenEditor"></div>
+        <!-- Skjulte felter: gamle pr.-retreat nav-tekster (bruges som fallback på retreat-siden, hvis menuen aldrig er gemt) -->
+        <input type="hidden" id="ui_nav_about"><input type="hidden" id="ui_nav_about_en">
+        <input type="hidden" id="ui_nav_highlights"><input type="hidden" id="ui_nav_highlights_en">
+        <input type="hidden" id="ui_nav_program"><input type="hidden" id="ui_nav_program_en">
+        <input type="hidden" id="ui_nav_included"><input type="hidden" id="ui_nav_included_en">
+        <input type="hidden" id="ui_nav_rooms"><input type="hidden" id="ui_nav_rooms_en">
+        <input type="hidden" id="ui_nav_reviews"><input type="hidden" id="ui_nav_reviews_en">
+        <input type="hidden" id="ui_nav_book"><input type="hidden" id="ui_nav_book_en">
         <div style="text-align:right;margin-top:1rem;padding-top:.8rem;border-top:1px solid rgba(184,138,30,.12);">
           <button type="button" onclick="gemRetreat()" style="background:var(--wine);color:#fff;border:none;padding:.5rem 1.4rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;">💾 Gem retreat</button>
         </div>
@@ -6677,6 +6662,7 @@ function openNytRetreat() {
   document.getElementById('retreat_teacher_bio').value = 'En erfaren wellness-facilitator med speciale i nervesystemsregulering, breathwork og somatic therapy. Med mange års erfaring fra retreats i Skandinavien og Sydeuropa skabes et trygt og professionelt rum for transformation.';
   document.getElementById('retreat_teacher_bio_en').value = 'An experienced wellness facilitator specialising in nervous system regulation, breathwork and somatic therapy. With many years of experience from retreats across Scandinavia and Southern Europe.';
   document.getElementById('retreatSaveBtn').textContent = 'Opret retreat';
+  rtNavOrdenLoad(null); // Navigation & sektionsrækkefølge nulstilles til standard
   document.getElementById('modalRetreat').classList.add('open');
   setupRetreatTranslateButtons();
   } catch(e) {
@@ -6695,6 +6681,7 @@ function redigerRetreat(id) {
 
 function udfyldRetreatForm(r) {
   document.getElementById('retreat_id').value = r.id;
+  rtNavOrdenLoad(r); // Navigation & sektionsrækkefølge (blok 5)
   const vis = r.visible_sections || {};
   const visProgramEl = document.getElementById('ui_visible_program');
   if (visProgramEl) visProgramEl.checked = vis.program !== false;
@@ -7416,7 +7403,14 @@ async function gemRetreat() {
         facilitator: document.getElementById('ui_visible_facilitator')?.checked !== false,
         faq: document.getElementById('ui_visible_faq')?.checked !== false,
         freetext: document.getElementById('ui_visible_freetext')?.checked !== false
-      }
+      },
+      nav_links: rtNavState.length ? JSON.stringify(rtNavState.map(l => ({
+        tekst: (l.tekst || '').trim(),
+        tekst_en: (l.tekst_en || '').trim(),
+        link: (l.link || '').trim(),
+        vis: l.vis === '0' ? '0' : '1'
+      }))) : null,
+      sektion_orden: rtOrdenState.length ? JSON.stringify(rtOrdenState.map(o => ({ id: o.id, vis: o.vis === '0' ? '0' : '1' }))) : null
     };
 
     // Hent billeder — enten fra fil-upload eller fra URL-feltet (sat af uploadRetreatBillede)
@@ -7437,10 +7431,21 @@ async function gemRetreat() {
     }
 
     if (id) {
-      const { error } = await sb.from('retreats').update(payload).eq('id', id);
+      let { error } = await sb.from('retreats').update(payload).eq('id', id);
+      if (error && /nav_links|sektion_orden/.test(error.message || '')) {
+        // Kolonnerne findes ikke endnu (SQL ikke kørt) — gem resten og advar
+        delete payload.nav_links; delete payload.sektion_orden;
+        ({ error } = await sb.from('retreats').update(payload).eq('id', id));
+        if (!error) showToast('⚠ Gemt, men menu/rækkefølge kræver at SQL-opdateringen køres først', true);
+      }
       if (error) throw error;
     } else {
-      const { error } = await sb.from('retreats').insert(payload);
+      let { error } = await sb.from('retreats').insert(payload);
+      if (error && /nav_links|sektion_orden/.test(error.message || '')) {
+        delete payload.nav_links; delete payload.sektion_orden;
+        ({ error } = await sb.from('retreats').insert(payload));
+        if (!error) showToast('⚠ Gemt, men menu/rækkefølge kræver at SQL-opdateringen køres først', true);
+      }
       if (error) throw error;
     }
 
@@ -8081,6 +8086,149 @@ function ejOrdenFlyt(i, retning) {
   if (j < 0 || j >= ejOrdenState.length) return;
   [ejOrdenState[i], ejOrdenState[j]] = [ejOrdenState[j], ejOrdenState[i]];
   renderEjOrdenEditor();
+}
+
+// ── RETREAT: Navigation (menu) & sektionsrækkefølge — pr. retreat, redigeres i blok 5 ──
+// Gemmes i retreats.nav_links og retreats.sektion_orden (JSON)
+const RT_SEKTION_DEFS = [
+  { id: 'om',           navn: 'Om retreatet (oversigt)' },
+  { id: 'fotostribe',   navn: 'Fotostribe' },
+  { id: 'highlights',   navn: 'Highlights' },
+  { id: 'program',      navn: 'Program',      legacyVis: 'program' },
+  { id: 'fritekst',     navn: 'Fritekst-sektion', legacyVis: 'freetext' },
+  { id: 'inkluderet',   navn: 'Inkluderet / ikke inkluderet' },
+  { id: 'vaerelser',    navn: 'Værelser & priser' },
+  { id: 'forplejning',  navn: 'Mad & køkken' },
+  { id: 'underviser',   navn: 'Underviser',   legacyVis: 'facilitator' },
+  { id: 'anmeldelser',  navn: 'Anmeldelser' },
+  { id: 'faq',          navn: 'FAQ',          legacyVis: 'faq' },
+  { id: 'booking',      navn: 'Booking-sektion' },
+  { id: 'sikkerhed',    navn: 'Din sikkerhed' }
+];
+const RT_LEGACY_ANKRE_ADM = { '#overview':'#om', '#included':'#inkluderet', '#rooms':'#vaerelser', '#reviews':'#anmeldelser', '#food':'#forplejning', '#facilitator':'#underviser', '#freetext':'#fritekst' };
+let rtNavState = [];
+let rtOrdenState = []; // [{ id, vis }]
+
+function rtNavDefaults(r) {
+  r = r || {};
+  return [
+    { tekst: r.ui_nav_about || 'Om retreatet', tekst_en: r.ui_nav_about_en || 'About the Retreat', link: '#om', vis: '1' },
+    { tekst: r.ui_nav_highlights || 'Highlights', tekst_en: r.ui_nav_highlights_en || 'Highlights', link: '#highlights', vis: '1' },
+    { tekst: r.ui_nav_program || 'Program', tekst_en: r.ui_nav_program_en || 'Programme', link: '#program', vis: '1' },
+    { tekst: r.ui_nav_included || 'Inkluderet', tekst_en: r.ui_nav_included_en || "What's Included", link: '#inkluderet', vis: '1' },
+    { tekst: r.ui_nav_rooms || 'Værelser', tekst_en: r.ui_nav_rooms_en || 'Rooms', link: '#vaerelser', vis: '1' },
+    { tekst: r.ui_nav_reviews || 'Anmeldelser', tekst_en: r.ui_nav_reviews_en || 'Reviews', link: '#anmeldelser', vis: '1' },
+    { tekst: r.ui_nav_book || 'Book', tekst_en: r.ui_nav_book_en || 'Book', link: '#booking', vis: '1' }
+  ];
+}
+
+function rtAdmParseJson(v) {
+  if (!v) return null;
+  if (Array.isArray(v)) return v;
+  try { const p = JSON.parse(v); return Array.isArray(p) ? p : null; } catch(e) { return null; }
+}
+
+// Indlæser nav + orden fra et retreat-objekt (kaldes fra udfyldRetreatForm og nulstil)
+function rtNavOrdenLoad(r) {
+  r = r || {};
+  const gemteNav = rtAdmParseJson(r.nav_links);
+  rtNavState = (gemteNav && gemteNav.length) ? gemteNav : rtNavDefaults(r);
+  rtNavState.forEach(l => { const ny = RT_LEGACY_ANKRE_ADM[(l.link || '').trim()]; if (ny) l.link = ny; });
+
+  const gemtOrden = (rtAdmParseJson(r.sektion_orden) || []).map(o => typeof o === 'string' ? { id: o } : o);
+  const legacyVis = r.visible_sections || {};
+  rtOrdenState = [];
+  gemtOrden.forEach(o => {
+    if (RT_SEKTION_DEFS.some(d => d.id === o.id) && !rtOrdenState.some(x => x.id === o.id)) rtOrdenState.push({ id: o.id, vis: o.vis === '0' ? '0' : '1' });
+  });
+  RT_SEKTION_DEFS.forEach(d => {
+    if (!rtOrdenState.some(o => o.id === d.id)) {
+      // Ingen gemt plads — synlighed hentes fra det gamle visible_sections-flag, hvis sektionen har ét
+      const vis = (d.legacyVis && legacyVis[d.legacyVis] === false) ? '0' : '1';
+      rtOrdenState.push({ id: d.id, vis });
+    }
+  });
+  renderRtNavEditor();
+  renderRtOrdenEditor();
+}
+
+function renderRtNavEditor() {
+  const c = document.getElementById('rtNavEditor');
+  if (!c) return;
+  c.innerHTML = rtNavState.map((l, i) => {
+    const erAnker = RT_SEKTION_DEFS.some(d => '#' + d.id === (l.link || '').trim());
+    const egen = !erAnker && (l.link || '').trim() !== '';
+    const valgt = erAnker ? (l.link || '').trim() : (egen ? '__egen__' : '');
+    const options =
+      '<option value="" disabled ' + (valgt === '' ? 'selected' : '') + '>Vælg ankerpunkt…</option>' +
+      RT_SEKTION_DEFS.map(d => `<option value="#${d.id}" ${valgt === '#' + d.id ? 'selected' : ''}>${ulAdmEsc(d.navn)} (#${d.id})</option>`).join('') +
+      `<option value="__egen__" ${valgt === '__egen__' ? 'selected' : ''}>Egen URL…</option>`;
+    return `
+    <div style="display:flex;gap:.5rem;align-items:center;margin-bottom:.5rem;flex-wrap:wrap;">
+      <div style="display:flex;flex-direction:column;gap:2px;">
+        <button type="button" onclick="rtNavFlyt(${i},-1)" ${i === 0 ? 'disabled' : ''} style="${UL_PIL_BTN}" title="Flyt op">▲</button>
+        <button type="button" onclick="rtNavFlyt(${i},1)" ${i === rtNavState.length - 1 ? 'disabled' : ''} style="${UL_PIL_BTN}" title="Flyt ned">▼</button>
+      </div>
+      <input type="text" class="fc-input-da" style="flex:1.2;min-width:130px;" placeholder="Navn (DA)" value="${ulAdmEsc(l.tekst)}" oninput="rtNavState[${i}].tekst=this.value">
+      <input type="text" class="fc-input-en" style="flex:1.2;min-width:130px;" placeholder="Name (EN)" value="${ulAdmEsc(l.tekst_en)}" oninput="rtNavState[${i}].tekst_en=this.value">
+      <select class="fc-input-da" style="flex:1;min-width:150px;cursor:pointer;" onchange="rtNavLinkValg(${i}, this)">${options}</select>
+      <input type="text" class="fc-input-da" id="rtNavEgenUrl${i}" style="flex:1;min-width:130px;${egen ? '' : 'display:none;'}" placeholder="fx udlejning.html eller https://…" value="${egen ? ulAdmEsc(l.link) : ''}" oninput="rtNavState[${i}].link=this.value">
+      <label style="display:flex;align-items:center;gap:.35rem;font-family:Manrope,sans-serif;font-size:.66rem;color:#2c2318;cursor:pointer;white-space:nowrap;"><input type="checkbox" ${l.vis !== '0' ? 'checked' : ''} onchange="rtNavState[${i}].vis=this.checked?'1':'0'" style="cursor:pointer;"> Synlig</label>
+      <button type="button" onclick="rtNavSlet(${i})" style="background:#a33;color:#fff;border:none;width:24px;height:24px;cursor:pointer;font-size:.7rem;line-height:1;" title="Fjern link">✕</button>
+    </div>`;
+  }).join('') || '<p style="font-family:Manrope,sans-serif;font-size:.7rem;color:#7a6a52;">Ingen menu-links — klik "+ Tilføj menu-link".</p>';
+}
+
+function rtNavLinkValg(i, sel) {
+  const egenFelt = document.getElementById('rtNavEgenUrl' + i);
+  if (sel.value === '__egen__') {
+    rtNavState[i].link = '';
+    if (egenFelt) { egenFelt.style.display = ''; egenFelt.value = ''; egenFelt.focus(); }
+  } else {
+    rtNavState[i].link = sel.value;
+    if (egenFelt) { egenFelt.style.display = 'none'; egenFelt.value = ''; }
+  }
+}
+function rtNavFlyt(i, retning) {
+  const j = i + retning;
+  if (j < 0 || j >= rtNavState.length) return;
+  [rtNavState[i], rtNavState[j]] = [rtNavState[j], rtNavState[i]];
+  renderRtNavEditor();
+}
+function rtNavTilfoej() { rtNavState.push({ tekst: '', tekst_en: '', link: '', vis: '1' }); renderRtNavEditor(); }
+function rtNavSlet(i) { rtNavState.splice(i, 1); renderRtNavEditor(); }
+
+function renderRtOrdenEditor() {
+  const c = document.getElementById('rtOrdenEditor');
+  if (!c) return;
+  c.innerHTML = rtOrdenState.map((o, i) => {
+    const def = RT_SEKTION_DEFS.find(d => d.id === o.id) || { navn: o.id };
+    return `
+    <div style="display:flex;gap:.6rem;align-items:center;margin-bottom:.4rem;padding:.35rem .6rem;background:rgba(184,138,30,.05);border:1px solid rgba(184,138,30,.18);">
+      <div style="display:flex;flex-direction:column;gap:2px;">
+        <button type="button" onclick="rtOrdenFlyt(${i},-1)" ${i === 0 ? 'disabled' : ''} style="${UL_PIL_BTN}" title="Flyt op">▲</button>
+        <button type="button" onclick="rtOrdenFlyt(${i},1)" ${i === rtOrdenState.length - 1 ? 'disabled' : ''} style="${UL_PIL_BTN}" title="Flyt ned">▼</button>
+      </div>
+      <span style="flex:1;font-family:Manrope,sans-serif;font-size:.72rem;color:#2c2318;">${ulAdmEsc(def.navn)} <span style="color:#7a6a52;">(#${ulAdmEsc(o.id)})</span></span>
+      <label style="display:flex;align-items:center;gap:.35rem;font-family:Manrope,sans-serif;font-size:.66rem;color:#2c2318;cursor:pointer;white-space:nowrap;"><input type="checkbox" ${o.vis !== '0' ? 'checked' : ''} onchange="rtOrdenVisToggle(${i}, this.checked)" style="cursor:pointer;"> Synlig</label>
+    </div>`;
+  }).join('');
+}
+
+function rtOrdenVisToggle(i, checked) {
+  rtOrdenState[i].vis = checked ? '1' : '0';
+  // Synkronisér de gamle visible_sections-flueben (Program, Fritekst, Underviser, FAQ), så alt følges ad
+  const def = RT_SEKTION_DEFS.find(d => d.id === rtOrdenState[i].id);
+  if (def && def.legacyVis) {
+    const cb = document.getElementById('ui_visible_' + def.legacyVis);
+    if (cb) cb.checked = checked;
+  }
+}
+function rtOrdenFlyt(i, retning) {
+  const j = i + retning;
+  if (j < 0 || j >= rtOrdenState.length) return;
+  [rtOrdenState[i], rtOrdenState[j]] = [rtOrdenState[j], rtOrdenState[i]];
+  renderRtOrdenEditor();
 }
 
 const UL_IMG_DEFAULTS = {

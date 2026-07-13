@@ -835,14 +835,14 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:3rem
     <span></span><span></span><span></span>
   </button>
   <ul class="nav-links" id="navLinks">
-    <li><a href="#overview" id="navAbout">Om retreatet</a></li>
-    <li><a href="#highlights" id="navHighlights">Highlights</a></li>
-    <li><a href="#program" id="navProgram">Program</a></li>
-    <li><a href="#included" id="navIncluded">Inkluderet</a></li>
-    <li><a href="#rooms" id="navRooms">Værelser</a></li>
-    <li><a href="#reviews" id="navReviews">Anmeldelser</a></li>
-    <li><a href="#booking" id="navBook">Book</a></li>
-    <li style="display:flex;align-items:center;gap:.4rem;margin-left:.8rem;">
+    <li class="nav-item"><a href="#om" id="navAbout">Om retreatet</a></li>
+    <li class="nav-item"><a href="#highlights" id="navHighlights">Highlights</a></li>
+    <li class="nav-item"><a href="#program" id="navProgram">Program</a></li>
+    <li class="nav-item"><a href="#inkluderet" id="navIncluded">Inkluderet</a></li>
+    <li class="nav-item"><a href="#vaerelser" id="navRooms">Værelser</a></li>
+    <li class="nav-item"><a href="#anmeldelser" id="navReviews">Anmeldelser</a></li>
+    <li class="nav-item"><a href="#booking" id="navBook">Book</a></li>
+    <li class="nav-lang-li" style="display:flex;align-items:center;gap:.4rem;margin-left:.8rem;">
       <div class="lang-switcher" style="display:flex;border:1.5px solid;overflow:hidden;border-color:var(--wine);">
         <button id="retreat-btn-da" class="lang-btn lang-btn-active" onclick="setRetreatLang('da')" style="font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;padding:.3rem .6rem;border:none;cursor:pointer;font-family:'Manrope',sans-serif;">DA</button>
         <button id="retreat-btn-en" class="lang-btn lang-btn-inactive" onclick="setRetreatLang('en')" style="font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;padding:.3rem .6rem;border:none;cursor:pointer;font-family:'Manrope',sans-serif;">EN</button>
@@ -907,7 +907,7 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:3rem
 </div>
 
 <!-- OVERVIEW -->
-<section class="retreat-overview" id="overview">
+<section class="retreat-overview" id="om">
   <div class="section-inner">
     <div class="overview-grid">
       <div class="overview-text reveal-left">
@@ -931,7 +931,7 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:3rem
 
 
 <!-- RETREAT BILLEDER (retreat_images5) -->
-<section id="retreatImages5Section" style="display:none;padding:2rem 0;">
+<section id="fotostribe" style="display:none;padding:2rem 0;">
   <div class="section-inner">
     <div id="retreatImages5Grid" style="display:grid;grid-template-columns:repeat(5,1fr);gap:.6rem;"></div>
   </div>
@@ -965,7 +965,7 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:3rem
 <div class="section-inner"><div class="divider"></div></div>
 
 <!-- FRITEKST -->
-<section class="freetext has-canvas" id="freetext" style="display:none;">
+<section class="freetext has-canvas" id="fritekst" style="display:none;">
   <canvas class="section-canvas" data-palette="warm"></canvas>
   <div class="section-inner">
     <div class="reveal">
@@ -985,7 +985,7 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:3rem
 </div>
 
 <!-- INCLUDED -->
-<section class="included" id="included">
+<section class="included" id="inkluderet">
   <div class="section-inner">
     <div class="reveal">
       <span class="section-label" id="includedLabel">Hvad er inkluderet</span>
@@ -1005,7 +1005,7 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:3rem
 </section>
 
 <!-- ROOMS & PRICES -->
-<section class="retreat-rooms has-canvas" id="rooms">
+<section class="retreat-rooms has-canvas" id="vaerelser">
   <canvas class="section-canvas" data-palette="brown"></canvas>
   <div class="section-inner">
     <div class="reveal">
@@ -1018,7 +1018,7 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:3rem
 </section>
 
 <!-- FOOD -->
-<section class="retreat-food" id="food">
+<section class="retreat-food" id="forplejning">
   <div class="section-inner">
     <div class="food-grid">
       <div class="reveal-left">
@@ -1038,7 +1038,7 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:3rem
 </section>
 
 <!-- FACILITATOR -->
-<section class="facilitator" id="facilitator">
+<section class="facilitator" id="underviser">
   <div class="section-inner">
     <div class="reveal">
       <span class="section-label" id="facilitatorLabel">Facilitator</span>
@@ -1096,7 +1096,7 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:3rem
 </div>
 
 <!-- ══════ ANMELDELSER ══════ -->
-<section class="reviews-section" id="reviews">
+<section class="reviews-section" id="anmeldelser">
   <div class="section-inner">
     <div class="reveal">
       <span class="section-label" id="reviewsLabel">Gæsternes oplevelser</span>
@@ -1679,6 +1679,7 @@ function setRetreatLang(lang) {
     buildDateOptions(CURRENT_RETREAT);
     updatePriceDisplay();
     applySectionVisibility(CURRENT_RETREAT);
+    applyRetreatSektionSynlighed();
   }
 }
 
@@ -1939,8 +1940,10 @@ async function loadRetreatData() {
   updatePriceDisplay();
   fetchAndRenderEjRooms();
 
-  // Sektion-synlighed (styret fra admin) — kør sidst så den ikke bliver overskrevet
+  // Sektion-synlighed og rækkefølge (styret fra admin) — kør sidst så de ikke bliver overskrevet
   applySectionVisibility(data);
+  applyRetreatSektionOrden();
+  applyRetreatSektionSynlighed();
 }
 
 function applyRetreatContent() {
@@ -1963,14 +1966,8 @@ function applyRetreatContent() {
 
   setHeroImage(data.hero_image);
 
-  // Nav-labels
-  setText('navAbout', rSC('ui_nav_about', 'Om retreatet'));
-  setText('navHighlights', rSC('ui_nav_highlights', 'Highlights'));
-  setText('navProgram', rSC('ui_nav_program', 'Program'));
-  setText('navIncluded', rSC('ui_nav_included', 'Inkluderet'));
-  setText('navRooms', rSC('ui_nav_rooms', 'Værelser'));
-  setText('navReviews', rSC('ui_nav_reviews', 'Anmeldelser'));
-  setText('navBook', rSC('ui_nav_book', 'Book'));
+  // Nav-labels — menuen renderes fra nav_links (redigeres i admin blok 5), fallback til ui_nav-felterne
+  renderRetreatNav();
   const allRetreatsLink = document.getElementById('navAllRetreats');
   if (allRetreatsLink) allRetreatsLink.innerHTML = '← ' + rSC('ui_all_retreats_link', retreatLang === 'en' ? 'All retreats' : 'Alle retreats');
 
@@ -2034,7 +2031,7 @@ function applyRetreatContent() {
     const ftLabel = retreatLang === 'en' ? (data.freetext_label_en || data.freetext_label) : data.freetext_label;
     const ftHeading = retreatLang === 'en' ? (data.freetext_heading_en || data.freetext_heading) : data.freetext_heading;
     const ftBody = retreatLang === 'en' ? (data.freetext_body_en || data.freetext_body) : data.freetext_body;
-    const ftSection = document.getElementById('freetext');
+    const ftSection = document.getElementById('fritekst');
     if (ftSection) {
       if (ftVis && ftBody && ftBody.trim()) {
         document.getElementById('freetextLabel').textContent = ftLabel || '';
@@ -2076,7 +2073,7 @@ function applyRetreatContent() {
   renderEjRoomsCopy();
 
   // 5 retreat-specifikke billeder
-  const imgs5Section = document.getElementById('retreatImages5Section');
+  const imgs5Section = document.getElementById('fotostribe');
   const imgs5Grid = document.getElementById('retreatImages5Grid');
   if (imgs5Section && imgs5Grid) {
     let imgs5 = data.retreat_images5;
@@ -2225,9 +2222,93 @@ function cycleEjRoomImg(card) {
   if (counter) counter.textContent = `${idx + 1} / ${gallery.length}`;
 }
 
+// ── GAMLE ENGELSKE ANKRE — omdirigeres til de nye danske sektions-ID'er ──
+const RT_LEGACY_ANKRE = { overview:'om', included:'inkluderet', rooms:'vaerelser', reviews:'anmeldelser', food:'forplejning', facilitator:'underviser', freetext:'fritekst', retreatImages5Section:'fotostribe' };
+(function(){
+  const h = (location.hash || '').replace('#','');
+  if (RT_LEGACY_ANKRE[h]) history.replaceState(null, '', location.pathname + location.search + '#' + RT_LEGACY_ANKRE[h]);
+})();
+
+// ── NAVIGATION (menu) — pr. retreat, gemmes som JSON i retreats.nav_links ──
+// Ankerlinks har ALTID samme navn som sektionens ID (#om, #highlights, #program, ...)
+function rtNavSeed() {
+  return [
+    { tekst: rSC('ui_nav_about', 'Om retreatet'), tekst_en: CURRENT_RETREAT?.ui_nav_about_en || 'About the Retreat', link: '#om', vis: '1' },
+    { tekst: rSC('ui_nav_highlights', 'Highlights'), tekst_en: CURRENT_RETREAT?.ui_nav_highlights_en || 'Highlights', link: '#highlights', vis: '1' },
+    { tekst: rSC('ui_nav_program', 'Program'), tekst_en: CURRENT_RETREAT?.ui_nav_program_en || 'Programme', link: '#program', vis: '1' },
+    { tekst: rSC('ui_nav_included', 'Inkluderet'), tekst_en: CURRENT_RETREAT?.ui_nav_included_en || "What's Included", link: '#inkluderet', vis: '1' },
+    { tekst: rSC('ui_nav_rooms', 'Værelser'), tekst_en: CURRENT_RETREAT?.ui_nav_rooms_en || 'Rooms', link: '#vaerelser', vis: '1' },
+    { tekst: rSC('ui_nav_reviews', 'Anmeldelser'), tekst_en: CURRENT_RETREAT?.ui_nav_reviews_en || 'Reviews', link: '#anmeldelser', vis: '1' },
+    { tekst: rSC('ui_nav_book', 'Book'), tekst_en: CURRENT_RETREAT?.ui_nav_book_en || 'Book', link: '#booking', vis: '1' }
+  ];
+}
+// Seed-teksterne er allerede sprogopløste via rSC — brug tekst direkte på DA, tekst_en på EN
+function rtParseJson(v) {
+  if (!v) return null;
+  if (Array.isArray(v)) return v;
+  try { const p = JSON.parse(v); return Array.isArray(p) ? p : null; } catch(e) { return null; }
+}
+
+function renderRetreatNav() {
+  const ul = document.getElementById('navLinks');
+  if (!ul || !CURRENT_RETREAT) return;
+  const gemte = rtParseJson(CURRENT_RETREAT.nav_links);
+  const links = (gemte && gemte.length) ? gemte : rtNavSeed();
+  ul.querySelectorAll('li.nav-item').forEach(li => li.remove());
+  const anker = ul.querySelector('li.nav-lang-li'); // sprogvælgeren bliver altid sidst
+  const frag = document.createDocumentFragment();
+  links
+    .filter(l => l && l.vis !== '0' && ((l.tekst || '').trim() || (l.tekst_en || '').trim()) && (l.link || '').trim())
+    .forEach(l => {
+      const li = document.createElement('li');
+      li.className = 'nav-item';
+      const a = document.createElement('a');
+      let href = (l.link || '').trim();
+      const noegen = href.replace('#','');
+      if (href.startsWith('#') && RT_LEGACY_ANKRE[noegen]) href = '#' + RT_LEGACY_ANKRE[noegen];
+      a.href = href;
+      a.innerHTML = retreatLang === 'en' ? ((l.tekst_en || '').trim() || l.tekst) : ((l.tekst || '').trim() || l.tekst_en);
+      li.appendChild(a);
+      frag.appendChild(li);
+    });
+  ul.insertBefore(frag, anker);
+}
+
+// ── SEKTIONSRÆKKEFØLGE — pr. retreat, gemmes som JSON i retreats.sektion_orden ([{id, vis}]) ──
+const RT_SEKTION_STANDARD_ORDEN = ['om','fotostribe','highlights','program','fritekst','inkluderet','vaerelser','forplejning','underviser','anmeldelser','faq','booking','sikkerhed'];
+let rtOrdenAnvendt = false;
+function applyRetreatSektionOrden() {
+  if (rtOrdenAnvendt || !CURRENT_RETREAT) return;
+  let orden = rtParseJson(CURRENT_RETREAT.sektion_orden);
+  if (!orden || !orden.length) return;
+  orden = orden.map(o => typeof o === 'string' ? { id: o } : o).filter(o => RT_SEKTION_STANDARD_ORDEN.includes(o.id));
+  RT_SEKTION_STANDARD_ORDEN.forEach(id => { if (!orden.some(o => o.id === id)) orden.push({ id }); });
+  const footer = document.querySelector('footer');
+  if (!footer || !footer.parentNode) return;
+  orden.forEach(o => {
+    const sec = document.getElementById(o.id);
+    if (!sec) return;
+    footer.parentNode.insertBefore(sec, footer);
+  });
+  rtOrdenAnvendt = true;
+}
+
+// ── SEKTIONSSYNLIGHED — skjuler KUN (vis='0') og rører aldrig sektioner, som indholdslogikken selv styrer ──
+function applyRetreatSektionSynlighed() {
+  if (!CURRENT_RETREAT) return;
+  const orden = rtParseJson(CURRENT_RETREAT.sektion_orden) || [];
+  orden.forEach(o => {
+    if (typeof o === 'string' || o.vis !== '0') return;
+    const el = document.getElementById(o.id);
+    if (el) el.style.display = 'none';
+    const navLink = document.querySelector(`.nav-links a[href="#${o.id}"]`);
+    if (navLink) { const li = navLink.closest('li'); if (li) li.style.display = 'none'; }
+  });
+}
+
 function applySectionVisibility(data) {
   const vis = data.visible_sections || {};
-  const sectionMap = { program: 'program', facilitator: 'facilitator', faq: 'faq', freetext: 'freetext' };
+  const sectionMap = { program: 'program', facilitator: 'underviser', faq: 'faq', freetext: 'fritekst' };
 
   Object.keys(sectionMap).forEach(key => {
     if (vis[key] === false) {
@@ -2740,7 +2821,9 @@ function updatePriceDisplay() {
   function toggleMenu(){ document.body.classList.contains('menu-open') ? closeMenu() : openMenu(); }
   burger.addEventListener('click', toggleMenu);
   if(backdrop) backdrop.addEventListener('click', closeMenu);
-  document.querySelectorAll('.nav-links a, .nav-back').forEach(a => a.addEventListener('click', closeMenu));
+  document.addEventListener('click', (e) => {
+    if (e.target.closest('.nav-links a') || e.target.closest('.nav-back')) closeMenu();
+  });
   document.addEventListener('keydown', (e) => { if(e.key === 'Escape') closeMenu(); });
   window.addEventListener('resize', () => { if(!isMobile()) closeMenu(); });
 })();
