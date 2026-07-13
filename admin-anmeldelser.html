@@ -8103,7 +8103,10 @@ const RT_SEKTION_DEFS = [
   { id: 'anmeldelser',  navn: 'Anmeldelser' },
   { id: 'faq',          navn: 'FAQ',          legacyVis: 'faq' },
   { id: 'booking',      navn: 'Booking-sektion' },
-  { id: 'sikkerhed',    navn: 'Din sikkerhed' }
+  { id: 'sikkerhed',    navn: 'Din sikkerhed' },
+  { id: 'cta1',         navn: 'CTA-knapper 1 (Reserver / Book nu)', defaultVis: '0' },
+  { id: 'cta2',         navn: 'CTA-knapper 2 (Reserver / Book nu)', defaultVis: '0' },
+  { id: 'cta3',         navn: 'CTA-knapper 3 (Reserver / Book nu)', defaultVis: '0' }
 ];
 const RT_LEGACY_ANKRE_ADM = { '#overview':'#om', '#included':'#inkluderet', '#rooms':'#vaerelser', '#reviews':'#anmeldelser', '#food':'#forplejning', '#facilitator':'#underviser', '#freetext':'#fritekst' };
 let rtNavState = [];
@@ -8143,8 +8146,9 @@ function rtNavOrdenLoad(r) {
   });
   RT_SEKTION_DEFS.forEach(d => {
     if (!rtOrdenState.some(o => o.id === d.id)) {
-      // Ingen gemt plads — synlighed hentes fra det gamle visible_sections-flag, hvis sektionen har ét
-      const vis = (d.legacyVis && legacyVis[d.legacyVis] === false) ? '0' : '1';
+      // Ingen gemt plads — synlighed hentes fra det gamle visible_sections-flag eller sektionens standard (CTA-bånd er skjult fra start)
+      let vis = d.defaultVis || '1';
+      if (d.legacyVis && legacyVis[d.legacyVis] === false) vis = '0';
       rtOrdenState.push({ id: d.id, vis });
     }
   });

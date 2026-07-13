@@ -238,6 +238,10 @@ body.menu-open .nav-burger span:nth-child(3){ transform:translateY(-9px) rotate(
 }
 .btn-inquire:hover{background:rgba(122,31,53,.06);}
 
+/* ── CTA-BÅND (Reserver / Book nu) — tændes og placeres i admin blok 0 ── */
+.cta-band{background:var(--cream);padding:3.5rem 0;text-align:center;}
+.cta-band-inner{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;padding:0 2rem;}
+
 /* ── OVERVIEW ── */
 .retreat-overview{background:var(--cream);padding:7rem 0 6rem;}
 .overview-grid{display:grid;grid-template-columns:minmax(0,1fr) 380px;gap:4rem;align-items:start;}
@@ -1342,6 +1346,31 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:3rem
   </div>
 </section>
 
+
+<!-- CTA-BÅND 1 — skjult som standard; tændes og flyttes i admin blok 0 -->
+<section class="cta-band" id="cta1" style="display:none;">
+  <div class="cta-band-inner">
+    <button class="btn-inquire ctaBandReserver" onclick="document.getElementById('booking').scrollIntoView({behavior:'smooth'})">Reserver</button>
+    <button class="btn-book ctaBandBook" onclick="document.getElementById('booking').scrollIntoView({behavior:'smooth'})">Book nu</button>
+  </div>
+</section>
+
+<!-- CTA-BÅND 2 — skjult som standard; tændes og flyttes i admin blok 0 -->
+<section class="cta-band" id="cta2" style="display:none;">
+  <div class="cta-band-inner">
+    <button class="btn-inquire ctaBandReserver" onclick="document.getElementById('booking').scrollIntoView({behavior:'smooth'})">Reserver</button>
+    <button class="btn-book ctaBandBook" onclick="document.getElementById('booking').scrollIntoView({behavior:'smooth'})">Book nu</button>
+  </div>
+</section>
+
+<!-- CTA-BÅND 3 — skjult som standard; tændes og flyttes i admin blok 0 -->
+<section class="cta-band" id="cta3" style="display:none;">
+  <div class="cta-band-inner">
+    <button class="btn-inquire ctaBandReserver" onclick="document.getElementById('booking').scrollIntoView({behavior:'smooth'})">Reserver</button>
+    <button class="btn-book ctaBandBook" onclick="document.getElementById('booking').scrollIntoView({behavior:'smooth'})">Book nu</button>
+  </div>
+</section>
+
 <footer>
   <div class="footer-bottom">
     <p>© 2026 Castillo del Alma · Mollina, Málaga · All rights reserved</p>
@@ -1630,6 +1659,8 @@ function applyStaticLabels() {
   setText('btnReserverPlads', SI18N('btnReserverPlads'));
   setText('btnHeroReserver', SI18N('btnHeroReserver'));
   setText('btnHeroBook', SI18N('btnHeroBook'));
+  document.querySelectorAll('.ctaBandReserver').forEach(b => b.textContent = SI18N('btnHeroReserver'));
+  document.querySelectorAll('.ctaBandBook').forEach(b => b.textContent = SI18N('btnHeroBook'));
   setText('bvTitle', SI18N('bvTitle'));
   setText('bvSub', SI18N('bvSub'));
   setText('bvDepositLabel', SI18N('bvDepositLabel'));
@@ -2275,7 +2306,8 @@ function renderRetreatNav() {
 }
 
 // ── SEKTIONSRÆKKEFØLGE — pr. retreat, gemmes som JSON i retreats.sektion_orden ([{id, vis}]) ──
-const RT_SEKTION_STANDARD_ORDEN = ['om','fotostribe','highlights','program','fritekst','inkluderet','vaerelser','forplejning','underviser','anmeldelser','faq','booking','sikkerhed'];
+const RT_SEKTION_STANDARD_ORDEN = ['om','fotostribe','highlights','program','fritekst','inkluderet','vaerelser','forplejning','underviser','anmeldelser','faq','booking','sikkerhed','cta1','cta2','cta3'];
+const RT_CTA_IDS = ['cta1','cta2','cta3']; // skjult i HTML som standard — vises kun ved vis='1' i sektion_orden
 let rtOrdenAnvendt = false;
 function applyRetreatSektionOrden() {
   if (rtOrdenAnvendt || !CURRENT_RETREAT) return;
@@ -2298,7 +2330,18 @@ function applyRetreatSektionSynlighed() {
   if (!CURRENT_RETREAT) return;
   const orden = rtParseJson(CURRENT_RETREAT.sektion_orden) || [];
   orden.forEach(o => {
-    if (typeof o === 'string' || o.vis !== '0') return;
+    if (typeof o === 'string') return;
+    // CTA-bånd styres begge veje af Synlig-fluebenet; øvrige sektioner kan kun skjules
+    if (RT_CTA_IDS.includes(o.id)) {
+      const el = document.getElementById(o.id);
+      if (el) el.style.display = (o.vis === '1') ? '' : 'none';
+      if (o.vis !== '1') {
+        const navLink = document.querySelector(`.nav-links a[href="#${o.id}"]`);
+        if (navLink) { const li = navLink.closest('li'); if (li) li.style.display = 'none'; }
+      }
+      return;
+    }
+    if (o.vis !== '0') return;
     const el = document.getElementById(o.id);
     if (el) el.style.display = 'none';
     const navLink = document.querySelector(`.nav-links a[href="#${o.id}"]`);
