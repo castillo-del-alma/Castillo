@@ -42,6 +42,56 @@ nav{
 .nav-links{display:flex;gap:2rem;list-style:none;align-items:center;}
 .nav-links a{font-size:.68rem;font-weight:400;letter-spacing:.14em;text-transform:uppercase;color:var(--text-mid);text-decoration:none;transition:color .3s;}
 .nav-links a:hover{color:var(--wine);}
+
+/* ── DROPDOWN i nav ── */
+.nav-dd{position:relative;}
+.nav-dd-toggle{
+  display:flex;align-items:center;gap:.45rem;
+  background:none;border:none;cursor:pointer;padding:0;
+  font-family:'Manrope',sans-serif;
+  font-size:.68rem;font-weight:400;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--text-mid);transition:color .3s;
+}
+.nav-dd-toggle:hover{color:var(--wine);}
+.nav-dd-toggle .dd-pil{
+  width:9px;height:9px;flex-shrink:0;
+  border-right:1.5px solid currentColor;border-bottom:1.5px solid currentColor;
+  transform:rotate(45deg) translateY(-2px);
+  transition:transform .3s;
+}
+.nav-dd.open .nav-dd-toggle .dd-pil{transform:rotate(-135deg) translateY(-2px);}
+.nav-dd-menu{
+  list-style:none;
+  position:absolute;top:100%;left:50%;transform:translate(-50%,8px);
+  min-width:240px;padding:.9rem 0;margin-top:.9rem;
+  background:rgba(250,246,238,.99);
+  -webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);
+  border:1px solid rgba(184,138,30,.22);
+  box-shadow:0 18px 48px rgba(44,35,24,.16);
+  opacity:0;visibility:hidden;pointer-events:none;
+  transition:opacity .3s ease,transform .3s ease,visibility .3s;
+}
+/* usynlig bro så hover ikke slipper mellem knap og menu */
+.nav-dd-menu::before{content:'';position:absolute;left:0;right:0;top:-1rem;height:1rem;}
+.nav-dd.open .nav-dd-menu{
+  opacity:1;visibility:visible;pointer-events:auto;
+  transform:translate(-50%,0);
+}
+@media (hover:hover) and (min-width:901px){
+  .nav-dd:hover .nav-dd-menu{
+    opacity:1;visibility:visible;pointer-events:auto;
+    transform:translate(-50%,0);
+  }
+  .nav-dd:hover .nav-dd-toggle{color:var(--wine);}
+}
+.nav-dd-menu li{border-bottom:1px solid rgba(184,138,30,.1);}
+.nav-dd-menu li:last-child{border-bottom:none;}
+.nav-dd-menu a{
+  display:block;padding:.75rem 1.6rem;white-space:nowrap;
+  font-size:.66rem;letter-spacing:.14em;
+}
+.nav-dd-menu a:hover{background:rgba(184,138,30,.08);}
+
 .lang-btn{border-radius:0;font-family:'Manrope',sans-serif;}
 .lang-btn.lang-btn-active{background:var(--wine);color:#fff !important;}
 .lang-btn.lang-btn-inactive{background:transparent;color:var(--wine) !important;}
@@ -110,6 +160,31 @@ body.menu-open .nav-burger span:nth-child(3){ transform:translateY(-9px) rotate(
   .nav-links > li:last-child{ border-bottom:none; }
   .nav-links a{ display:block; padding:1rem 0; font-size:.8rem; letter-spacing:.16em; }
   .nav-links > li[style]{ margin-left:0 !important; margin-top:1.4rem !important; }
+
+  /* Dropdowns → accordions i panelet */
+  .nav-dd-toggle{
+    width:100%; justify-content:space-between;
+    padding:1rem 0; font-size:.8rem; letter-spacing:.16em;
+    color:var(--charcoal); font-weight:500;
+  }
+  .nav-dd-menu{
+    position:static; transform:none;
+    min-width:0; margin:0; padding:0;
+    background:transparent; border:none; box-shadow:none;
+    -webkit-backdrop-filter:none; backdrop-filter:none;
+    opacity:1; visibility:visible; pointer-events:auto;
+    max-height:0; overflow:hidden;
+    transition:max-height .45s cubic-bezier(.4,0,.2,1);
+  }
+  .nav-dd-menu::before{display:none;}
+  .nav-dd.open .nav-dd-menu{ max-height:600px; transform:none; }
+  .nav-dd-menu li{ border-bottom:none; }
+  .nav-dd-menu a{
+    padding:.7rem 0 .7rem 1.2rem; white-space:normal;
+    font-size:.74rem; color:var(--text-mid);
+    border-left:1px solid rgba(184,138,30,.35);
+  }
+  .nav-dd-menu a:hover{ background:transparent; }
 
   /* Tilbage-knap glider med ind som bund-footer i panelet */
   .nav-back{
@@ -630,12 +705,32 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:3rem
     <span></span><span></span><span></span>
   </button>
   <ul class="nav-links" id="navLinks">
-    <li><a href="#intro" id="ej_nav_intro">Ejendommen</a></li>
-    <li><a href="#towers" id="ej_nav_towers">Tårnene</a></li>
-    <li><a href="#rooms" id="ej_nav_rooms">Indkvartering</a></li>
-    <li><a href="#facilities" id="ej_nav_fac">Faciliteter</a></li>
-    <li><a href="#sustainability" id="ej_nav_sustain">Bæredygtighed</a></li>
-    <li><a href="#vineyard" id="ej_nav_vineyard">Vingården</a></li>
+    <li class="nav-dd" id="ddEjendommen">
+      <button type="button" class="nav-dd-toggle" aria-expanded="false" aria-controls="ddEjendommenMenu">
+        <span id="ej_dd_page_label">Ejendommen</span><span class="dd-pil"></span>
+      </button>
+      <ul class="nav-dd-menu" id="ddEjendommenMenu">
+        <li><a href="#intro" id="ej_nav_intro">Ejendommen</a></li>
+        <li><a href="#towers" id="ej_nav_towers">Tårnene</a></li>
+        <li><a href="#rooms" id="ej_nav_rooms">Indkvartering</a></li>
+        <li><a href="#facilities" id="ej_nav_fac">Faciliteter</a></li>
+        <li><a href="#sustainability" id="ej_nav_sustain">Bæredygtighed</a></li>
+        <li><a href="#vineyard" id="ej_nav_vineyard">Vingården</a></li>
+      </ul>
+    </li>
+    <li class="nav-dd" id="ddUdlejning">
+      <button type="button" class="nav-dd-toggle" aria-expanded="false" aria-controls="ddUdlejningMenu">
+        <span id="ej_dd_ul_label">Afhold dit retreat</span><span class="dd-pil"></span>
+      </button>
+      <ul class="nav-dd-menu" id="ddUdlejningMenu">
+        <li><a href="udlejning.html#intro">Om stedet</a></li>
+        <li><a href="udlejning.html#faciliteter">Vi tilbyder</a></li>
+        <li><a href="udlejning.html#priser">Priser</a></li>
+        <li><a href="udlejning.html#design">Design et ophold</a></li>
+        <li><a href="udlejning.html#mere">Mere end et kursussted</a></li>
+        <li><a href="udlejning.html#kontakt">Kontakt</a></li>
+      </ul>
+    </li>
     <li style="display:flex;align-items:center;gap:.4rem;margin-left:.8rem;">
       <div class="lang-switcher" style="display:flex;border:1.5px solid;overflow:hidden;border-color:var(--wine);">
         <button id="ej-btn-da" class="lang-btn lang-btn-active" onclick="setEjLang('da')" style="font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;padding:.3rem .6rem;border:none;cursor:pointer;font-family:'Manrope',sans-serif;">DA</button>
@@ -1221,13 +1316,48 @@ const EJ_FAC_SVG = {
 
 const EJ_FAC_KEYS = ['pool','sauna_finsk','sauna_infra','faellesrum','retreat_rum','terasser','koekken','spisebord','wifi','parkering','aflaaset','vindyrkning'];
 
+// ── UDLEJNING-DROPDOWN — punkterne hentes fra udlejning_content.nav_links (samme kilde som udlejning.html) ──
+const EJ_UL_NAV_SEED = [
+  { tekst: 'Om stedet', tekst_en: 'About the place', link: '#intro', vis: '1' },
+  { tekst: 'Vi tilbyder', tekst_en: 'What we offer', link: '#faciliteter', vis: '1' },
+  { tekst: 'Priser', tekst_en: 'Pricing', link: '#priser', vis: '1' },
+  { tekst: 'Design et ophold', tekst_en: 'Design a stay', link: '#design', vis: '1' },
+  { tekst: 'Mere end et kursussted', tekst_en: 'More than a venue', link: '#mere', vis: '1' },
+  { tekst: 'Kontakt', tekst_en: 'Contact', link: '#kontakt', vis: '1' }
+];
+let ejUlNavLinks = null;
+
+function renderEjUlDropdown() {
+  const menu = document.getElementById('ddUdlejningMenu');
+  if (!menu) return;
+  const links = (Array.isArray(ejUlNavLinks) && ejUlNavLinks.length) ? ejUlNavLinks : EJ_UL_NAV_SEED;
+  menu.innerHTML = '';
+  links
+    .filter(l => l && l.vis !== '0' && ((l.tekst || '').trim() || (l.tekst_en || '').trim()) && (l.link || '').trim())
+    .forEach(l => {
+      const li = document.createElement('li');
+      const a = document.createElement('a');
+      let href = (l.link || '').trim();
+      if (href.startsWith('#')) href = 'udlejning.html' + href; // ankre peger på udlejningssiden
+      a.href = href;
+      a.innerHTML = ejLang === 'en' ? ((l.tekst_en || '').trim() || l.tekst) : ((l.tekst || '').trim() || l.tekst_en);
+      li.appendChild(a);
+      menu.appendChild(li);
+    });
+}
+
 async function loadEjendommensContent() {
   try {
-    const [{ data: content }, { data: rooms }, startLang] = await Promise.all([
+    const [{ data: content }, { data: rooms }, startLang, ulNavRes] = await Promise.all([
       ejSb.from('ejendommen_content').select('key,value'),
       ejSb.from('ejendommen_rooms').select('*').eq('active', true).order('sort_order'),
-      determineStartLangEj()
+      determineStartLangEj(),
+      ejSb.from('udlejning_content').select('value').eq('key', 'nav_links').maybeSingle()
     ]);
+    try {
+      const parsed = JSON.parse((ulNavRes && ulNavRes.data && ulNavRes.data.value) || '[]');
+      if (Array.isArray(parsed) && parsed.length) ejUlNavLinks = parsed;
+    } catch(e) {}
     ejLang = startLang;
     document.documentElement.lang = ejLang;
     const btnDa = document.getElementById('ej-btn-da');
@@ -1267,6 +1397,9 @@ function applyEjContent() {
   const l = ejLang;
 
   // NAVIGATION
+  setText('ej_dd_page_label', ejSC('dd_page_label', l === 'en' ? 'The Estate' : 'Ejendommen'));
+  setText('ej_dd_ul_label', ejSC('dd_ul_label', l === 'en' ? 'Host your retreat' : 'Afhold dit retreat'));
+  renderEjUlDropdown();
   setText('ej_nav_intro', ejSC('nav_intro'));
   setText('ej_nav_towers', ejSC('nav_towers'));
   setText('ej_nav_rooms', ejSC('nav_rooms'));
@@ -1547,9 +1680,36 @@ sectionAnimators.forEach(({canvas})=>canvasObs.observe(canvas));
   function toggleMenu(){ document.body.classList.contains('menu-open') ? closeMenu() : openMenu(); }
   burger.addEventListener('click', toggleMenu);
   if(backdrop) backdrop.addEventListener('click', closeMenu);
-  document.querySelectorAll('.nav-links a, .nav-back').forEach(a => a.addEventListener('click', closeMenu));
-  document.addEventListener('keydown', (e) => { if(e.key === 'Escape') closeMenu(); });
-  window.addEventListener('resize', () => { if(!isMobile()) closeMenu(); });
+  // Delegation, så også dynamisk renderede dropdown-links lukker menuen
+  document.addEventListener('click', (e) => {
+    if (e.target.closest('.nav-links a') || e.target.closest('.nav-back')) { closeMenu(); closeAllDd(); }
+  });
+  document.addEventListener('keydown', (e) => { if(e.key === 'Escape'){ closeMenu(); closeAllDd(); } });
+  window.addEventListener('resize', () => { if(!isMobile()){ closeMenu(); } });
+
+  // ── DROPDOWNS ──
+  function closeAllDd(except){
+    document.querySelectorAll('.nav-dd.open').forEach(dd => {
+      if (dd !== except){
+        dd.classList.remove('open');
+        const t = dd.querySelector('.nav-dd-toggle');
+        if (t) t.setAttribute('aria-expanded','false');
+      }
+    });
+  }
+  document.querySelectorAll('.nav-dd-toggle').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const dd = btn.closest('.nav-dd');
+      const open = dd.classList.toggle('open');
+      btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+      closeAllDd(dd);
+    });
+  });
+  // Klik udenfor lukker åbne dropdowns (desktop)
+  document.addEventListener('click', (e) => {
+    if (!e.target.closest('.nav-dd')) closeAllDd();
+  });
 })();
 </script>
 </body>
