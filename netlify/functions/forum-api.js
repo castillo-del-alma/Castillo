@@ -134,9 +134,14 @@ exports.handler = async (event) => {
       `forum_messages?channel_id=eq.${ch.id}&deleted=eq.true` +
       `&select=id,member_id,body,image_path,deleted,deleted_by,created_at&order=created_at.desc&limit=50`
     );
+    // Medlemslisten sendes med, så nye deltagere vises korrekt hos dem,
+    // der allerede har siden åben (ellers stod der bare "—")
+    const roster = await sbGet(`forum_members?channel_id=eq.${ch.id}&select=id,display_name,avatar_url,role&order=display_name`);
+
     return json(200, {
       messages: await shapeMessages(rows, cache),
       deleted_ids: edited.map(m => m.id),
+      members: roster,
       status: ch.status
     });
   }

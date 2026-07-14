@@ -8,7 +8,7 @@
 <title>Forum — Castillo del Alma</title>
 <link rel="stylesheet" href="fonts/fonts.css">
 <style>
-:root{--cream:#faf6ee;--beige:#f0e8d5;--sand:#e0d0b0;--charcoal:#2c2318;--text-mid:#5c4e3a;--text-light:#9a8c7a;--wine:#7a1f35;--gold:#b88a1e;}
+:root{--cream:#faf6ee;--beige:#f0e8d5;--sand:#d8c49c;--charcoal:#241c12;--text-mid:#4a3d2a;--text-light:#6b5c47;--wine:#7a1f35;--gold:#8f6a12;}
 *{margin:0;padding:0;box-sizing:border-box;}
 html,body{height:100%;}
 body{font-family:'Manrope',sans-serif;background:var(--cream);color:var(--charcoal);overflow:hidden;}
@@ -19,49 +19,52 @@ body{font-family:'Manrope',sans-serif;background:var(--cream);color:var(--charco
 .f-header{flex:0 0 auto;background:#fff;border-bottom:1px solid var(--sand);padding:.9rem 1.2rem;display:flex;align-items:center;gap:.9rem;}
 .f-header img{height:30px;width:auto;flex:0 0 auto;}
 .f-head-txt{min-width:0;flex:1;}
-.f-title{font-family:'Cinzel',serif;font-weight:300;font-size:.92rem;letter-spacing:.06em;color:var(--charcoal);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.f-sub{font-size:.58rem;letter-spacing:.15em;text-transform:uppercase;color:var(--text-light);margin-top:.2rem;}
-.f-sub.aktiv{color:#6a7240;}
+.f-title{font-family:'Cinzel',serif;font-weight:500;font-size:1.02rem;letter-spacing:.06em;color:var(--charcoal);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.f-sub{font-size:.64rem;font-weight:600;letter-spacing:.15em;text-transform:uppercase;color:var(--text-mid);margin-top:.2rem;}
+.f-sub.aktiv{color:#4f5a24;}
 .f-sub.arkiveret{color:var(--gold);}
 
 /* ---------- Beskeder ---------- */
 .f-stream{flex:1 1 auto;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:1.2rem 1rem 1.5rem;}
 
 .f-welcome{background:rgba(184,138,30,.08);border:1px solid rgba(184,138,30,.22);padding:1rem 1.1rem;margin-bottom:1.5rem;}
-.f-welcome .lbl{font-size:.55rem;letter-spacing:.25em;text-transform:uppercase;color:var(--gold);margin-bottom:.5rem;}
-.f-welcome .txt{font-family:'Cormorant Garamond',serif;font-size:1.02rem;line-height:1.65;color:var(--text-mid);}
+.f-welcome .lbl{font-size:.62rem;font-weight:700;letter-spacing:.25em;text-transform:uppercase;color:var(--gold);margin-bottom:.5rem;}
+.f-welcome .txt{font-family:'Cormorant Garamond',serif;font-size:1.2rem;line-height:1.6;color:var(--charcoal);}
 .f-welcome .txt b{font-weight:700;color:var(--charcoal);}
 
 .f-day{text-align:center;margin:1.4rem 0 1rem;}
-.f-day span{font-size:.55rem;letter-spacing:.2em;text-transform:uppercase;color:var(--text-light);background:var(--beige);padding:.25rem .8rem;}
+.f-day span{font-size:.62rem;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--text-mid);background:var(--beige);padding:.3rem .9rem;}
 
 .f-msg{display:flex;gap:.6rem;margin-bottom:.9rem;align-items:flex-end;}
 .f-msg.mine{flex-direction:row-reverse;}
 
-.f-avatar{flex:0 0 auto;width:32px;height:32px;border-radius:50%;overflow:hidden;background:var(--sand);display:flex;align-items:center;justify-content:center;font-size:.62rem;font-weight:600;letter-spacing:.02em;color:#fff;text-transform:uppercase;}
+.f-avatar{flex:0 0 auto;width:36px;height:36px;border-radius:50%;overflow:hidden;background:var(--sand);display:flex;align-items:center;justify-content:center;font-size:.7rem;font-weight:700;letter-spacing:.02em;color:#fff;text-transform:uppercase;}
 .f-avatar img{width:100%;height:100%;object-fit:cover;}
 .f-avatar.hidden{visibility:hidden;}
 
 .f-bubble-wrap{max-width:76%;min-width:0;}
-.f-name{font-size:.58rem;letter-spacing:.12em;text-transform:uppercase;color:var(--text-light);margin:0 0 .25rem .2rem;}
+.f-name{font-size:.68rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--text-mid);margin:0 0 .3rem .2rem;}
 .f-msg.mine .f-name{text-align:right;margin:0 .2rem .25rem 0;}
 .f-name .mod{color:var(--gold);}
 
-.f-bubble{background:#fff;border:1px solid var(--sand);padding:.65rem .85rem;position:relative;}
-.f-msg.mine .f-bubble{background:var(--wine);border-color:var(--wine);color:#fff;}
-.f-msg.mod .f-bubble{background:rgba(184,138,30,.1);border-color:rgba(184,138,30,.3);}
-.f-body{font-family:'Cormorant Garamond',serif;font-size:1.05rem;line-height:1.5;white-space:pre-wrap;word-break:break-word;}
+.f-bubble{background:#fff;border:1px solid var(--sand);padding:.7rem .9rem;position:relative;}
+/* Moderator (kun når det IKKE er min egen besked): gylden baggrund, mørk tekst */
+.f-msg.mod:not(.mine) .f-bubble{background:rgba(184,138,30,.16);border-color:rgba(143,106,18,.45);}
+/* Egne beskeder vinder altid — også når jeg selv er moderator */
+.f-msg.mine .f-bubble{background:var(--wine);border-color:var(--wine);}
+.f-msg.mine .f-body{color:#fff;}
+.f-body{font-family:'Cormorant Garamond',serif;font-weight:500;font-size:1.25rem;line-height:1.5;color:var(--charcoal);white-space:pre-wrap;word-break:break-word;}
 .f-bubble a{color:inherit;text-decoration:underline;}
 .f-img{display:block;max-width:100%;margin-top:.4rem;cursor:pointer;border:1px solid rgba(0,0,0,.06);}
 .f-msg .f-body:empty{display:none;}
-.f-time{font-size:.55rem;color:var(--text-light);margin-top:.3rem;text-align:right;}
-.f-msg.mine .f-time{color:rgba(255,255,255,.6);}
-.f-del{background:none;border:none;font-size:.55rem;letter-spacing:.1em;text-transform:uppercase;color:var(--text-light);cursor:pointer;padding:.2rem 0 0;}
-.f-msg.mine .f-del{color:rgba(255,255,255,.6);}
+.f-time{font-size:.64rem;color:var(--text-light);margin-top:.35rem;text-align:right;}
+.f-msg.mine .f-time{color:rgba(255,255,255,.75);}
+.f-del{background:none;border:none;font-size:.62rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--text-light);cursor:pointer;padding:.25rem 0 0;}
+.f-msg.mine .f-del{color:rgba(255,255,255,.75);}
 .f-del:hover{color:var(--wine);}
 .f-msg.mine .f-del:hover{color:#fff;}
 .f-deleted .f-bubble{background:transparent!important;border-style:dashed;color:var(--text-light)!important;}
-.f-deleted .f-body{font-style:italic;font-size:.92rem;color:var(--text-light);}
+.f-deleted .f-body{font-style:italic;font-size:1.05rem;color:var(--text-light)!important;}
 
 /* ---------- Inputbjælke ---------- */
 .f-input{flex:0 0 auto;background:#fff;border-top:1px solid var(--sand);padding:.7rem .8rem calc(.7rem + env(safe-area-inset-bottom));}
@@ -74,21 +77,21 @@ body{font-family:'Manrope',sans-serif;background:var(--cream);color:var(--charco
 .f-row{display:flex;align-items:flex-end;gap:.5rem;}
 .f-pic{flex:0 0 auto;width:40px;height:40px;border:1px solid var(--sand);background:var(--cream);color:var(--text-mid);font-size:1.05rem;cursor:pointer;display:flex;align-items:center;justify-content:center;}
 .f-pic:hover{border-color:var(--gold);color:var(--gold);}
-#f-text{flex:1;min-width:0;resize:none;max-height:120px;padding:.7rem .8rem;background:var(--cream);border:1px solid var(--sand);color:var(--charcoal);font-family:'Manrope',sans-serif;font-size:.88rem;line-height:1.4;outline:none;}
+#f-text{flex:1;min-width:0;resize:none;max-height:120px;padding:.75rem .85rem;background:#fff;border:1px solid var(--sand);color:var(--charcoal);font-family:'Manrope',sans-serif;font-size:.95rem;line-height:1.4;outline:none;}
 #f-text:focus{border-color:var(--gold);}
 .f-send{flex:0 0 auto;padding:.7rem 1.1rem;background:var(--wine);color:#fff;border:none;font-size:.62rem;font-weight:500;letter-spacing:.18em;text-transform:uppercase;cursor:pointer;height:40px;}
 .f-send:hover{background:#a03048;}
 .f-send:disabled{opacity:.5;cursor:default;}
 
-.f-closed{padding:1.1rem;text-align:center;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1rem;color:var(--text-light);}
-.f-err{font-size:.68rem;color:var(--wine);padding:.4rem .2rem 0;min-height:1rem;}
+.f-closed{padding:1.2rem;text-align:center;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.12rem;color:var(--text-mid);}
+.f-err{font-size:.75rem;font-weight:500;color:var(--wine);padding:.4rem .2rem 0;min-height:1rem;}
 
 /* ---------- Tilstande ---------- */
 .f-state{flex:1;display:flex;align-items:center;justify-content:center;padding:2rem;}
 .f-state-box{text-align:center;max-width:380px;}
 .f-state-box .eyebrow{font-size:.6rem;letter-spacing:.3em;text-transform:uppercase;color:var(--gold);margin-bottom:.9rem;}
 .f-state-box h2{font-family:'Cinzel',serif;font-weight:300;font-size:1.35rem;letter-spacing:.06em;margin-bottom:.7rem;}
-.f-state-box p{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.02rem;line-height:1.7;color:var(--text-light);}
+.f-state-box p{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.15rem;line-height:1.7;color:var(--text-mid);}
 
 /* ---------- Lightbox ---------- */
 .f-light{display:none;position:fixed;inset:0;background:rgba(20,16,10,.94);z-index:99;align-items:center;justify-content:center;padding:1rem;}
@@ -102,7 +105,7 @@ body{font-family:'Manrope',sans-serif;background:var(--cream);color:var(--charco
   .f-title{font-size:.82rem;}
   .f-stream{padding:1rem .8rem 1.2rem;}
   .f-bubble-wrap{max-width:80%;}
-  .f-body{font-size:1rem;}
+  .f-body{font-size:1.2rem;}
   .f-send{padding:.7rem .9rem;}
 }
 </style>
@@ -307,6 +310,7 @@ body{font-family:'Manrope',sans-serif;background:var(--cream);color:var(--charco
     var row = document.createElement('div');
     row.className = 'f-msg' + (mine ? ' mine' : '') + (isMod ? ' mod' : '') + (m.deleted ? ' f-deleted' : '');
     row.dataset.id = m.id;
+    row.dataset.member = m.member_id || '';
 
     var av = document.createElement('div');
     av.className = 'f-avatar';
@@ -361,6 +365,42 @@ body{font-family:'Manrope',sans-serif;background:var(--cream);color:var(--charco
     stream.appendChild(row);
 
     state.last = m.created_at;
+  }
+
+  // Nye medlemmer kan dukke op, efter siden er indlæst. Når vi lærer dem at
+  // kende, retter vi de bobler, der stod med "—".
+  function opdaterRoster(liste) {
+    if (!Array.isArray(liste) || !liste.length) return;
+    var nye = [];
+    liste.forEach(function (m) {
+      if (!state.members[m.id]) nye.push(m.id);
+      state.members[m.id] = m;
+    });
+    if (!nye.length) return;
+
+    nye.forEach(function (id) {
+      var mem = state.members[id];
+      var rows = $('stream').querySelectorAll('[data-member="' + id + '"]');
+      Array.prototype.forEach.call(rows, function (row) {
+        var isMod = mem.role === 'moderator';
+        if (isMod) row.classList.add('mod');
+
+        var nm = row.querySelector('.f-name');
+        if (nm) nm.innerHTML = esc(mem.display_name) + (isMod ? ' <span class="mod">&#9670;</span>' : '');
+
+        var av = row.querySelector('.f-avatar');
+        if (av) {
+          if (mem.avatar_url) {
+            av.style.background = '';
+            av.innerHTML = '<img src="' + esc(mem.avatar_url) + '" alt="">';
+          } else {
+            av.innerHTML = '';
+            av.style.background = tint(mem.display_name);
+            av.textContent = initials(mem.display_name);
+          }
+        }
+      });
+    });
   }
 
   function markDeleted(id) {
@@ -496,6 +536,7 @@ body{font-family:'Manrope',sans-serif;background:var(--cream);color:var(--charco
     if (!r.ok) return;
 
     var stick = atBottom();
+    opdaterRoster(r.data.members);
     (r.data.messages || []).forEach(bubble);
     (r.data.deleted_ids || []).forEach(markDeleted);
     if (stick) toBottom();
