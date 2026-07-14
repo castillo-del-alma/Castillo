@@ -2627,10 +2627,7 @@ async function sendForespørgsel() {
   btn.disabled = true;
   btn.textContent = 'Sender…';
 
-  const ekstraGaesterListe = Array.from(document.querySelectorAll('.guest-row')).map(row => ({
-    navn: row.querySelector('input[placeholder="Fornavn"]') ? row.querySelector('input[placeholder="Fornavn"]').value + ' ' + row.querySelector('input[placeholder="Efternavn"]').value : '',
-    email: row.querySelector('input[type="email"]') ? row.querySelector('input[type="email"]').value : ''
-  })).filter(g => g.navn.trim());
+  const ekstraGaesterListe = laesEkstraGaester();
 
   try {
     const res = await fetch('/.netlify/functions/create-booking', {
@@ -2682,10 +2679,7 @@ function visBetalingsvalg() {
   if (!fornavn || !email || !telefon || !_land2) { showFormError('Udfyld fornavn, e-mail, telefon og land.'); return; }
   if (!document.getElementById('f-betingelser')?.checked) { showFormError(retreatLang === 'en' ? 'Please accept the terms of sale & booking to continue.' : 'Sæt venligst flueben ved salgs- og bookingbetingelserne for at fortsætte.'); return; }
   showFormError('');
-  const ekstraGaesterListe = Array.from(document.querySelectorAll('.guest-row')).map(row => ({
-    navn: row.querySelector('input[placeholder="Fornavn"]') ? row.querySelector('input[placeholder="Fornavn"]').value + ' ' + row.querySelector('input[placeholder="Efternavn"]').value : '',
-    email: row.querySelector('input[type="email"]') ? row.querySelector('input[type="email"]').value : ''
-  })).filter(g => g.navn.trim());
+  const ekstraGaesterListe = laesEkstraGaester();
   _bvAntalGaester = 1 + ekstraGaesterListe.length;
   _bvDepositum = Math.round(RETREAT_PRICE * DEPOSIT_PCT * _bvAntalGaester);
   _bvFuldt = Math.round(RETREAT_PRICE * _bvAntalGaester);
@@ -2731,10 +2725,7 @@ async function betalDepositum(overrideAmount = null, paymentType = 'deposit') {
       text: cb.dataset.text, price: parseFloat(cb.dataset.price) || 0
     }));
 
-    const ekstraGaesterListe = Array.from(document.querySelectorAll('.guest-row')).map(row => ({
-      navn: row.querySelector('input[placeholder="Fornavn"]') ? row.querySelector('input[placeholder="Fornavn"]').value + ' ' + row.querySelector('input[placeholder="Efternavn"]').value : '',
-      email: row.querySelector('input[type="email"]') ? row.querySelector('input[type="email"]').value : ''
-    })).filter(g => g.navn.trim());
+    const ekstraGaesterListe = laesEkstraGaester();
 
     const antalGaester = overrideAmount !== null ? _bvAntalGaester : 1 + ekstraGaesterListe.length;
     const depositum = overrideAmount !== null ? overrideAmount : Math.round(RETREAT_PRICE * DEPOSIT_PCT * antalGaester);
@@ -2796,6 +2787,21 @@ function updateRoomLabel() {
   opt.textContent = hasGuests ? SI18N('optDobbelt') : SI18N('optDeltDobbelt');
 }
 
+// Læs de ekstra gæster fra formularen.
+//
+// VIGTIGT: felterne findes på KLASSE, ikke på placeholder. Placeholderen er
+// oversat (Fornavn / First name), så en engelsk booking fandt ingen felter —
+// gæsten blev tavst filtreret fra og forsvandt helt ud af bookingen.
+function laesEkstraGaester() {
+  return Array.from(document.querySelectorAll('.guest-row')).map(row => {
+    const f = row.querySelector('.guest-fornavn');
+    const e = row.querySelector('.guest-efternavn');
+    const m = row.querySelector('.guest-email');
+    const navn = `${f ? f.value.trim() : ''} ${e ? e.value.trim() : ''}`.trim();
+    return { navn, email: m ? m.value.trim() : '' };
+  }).filter(g => g.navn);
+}
+
 function addGuest() {
   guestCount++;
   const container = document.getElementById('extra-guests');
@@ -2808,10 +2814,10 @@ function addGuest() {
       <button type="button" class="remove-guest" onclick="removeGuest(${guestCount})">${SI18N('guestRemove')}</button>
     </div>
     <div class="form-row">
-      <div class="form-field"><label>${SI18N('guestFornavn')}</label><input type="text" placeholder="${SI18N('guestFornavn')}"></div>
-      <div class="form-field"><label>${SI18N('guestEfternavn')}</label><input type="text" placeholder="${SI18N('guestEfternavn')}"></div>
+      <div class="form-field"><label>${SI18N('guestFornavn')}</label><input type="text" class="guest-fornavn" placeholder="${SI18N('guestFornavn')}"></div>
+      <div class="form-field"><label>${SI18N('guestEfternavn')}</label><input type="text" class="guest-efternavn" placeholder="${SI18N('guestEfternavn')}"></div>
     </div>
-    <div class="form-field"><label>${SI18N('guestEmail')}</label><input type="email" placeholder="${SI18N('guestEmailPlaceholder')}"></div>`;
+    <div class="form-field"><label>${SI18N('guestEmail')}</label><input type="email" class="guest-email" placeholder="${SI18N('guestEmailPlaceholder')}"></div>`;
   container.appendChild(row);
   updateRoomLabel();
   updatePriceDisplay();
