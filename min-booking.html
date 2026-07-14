@@ -218,11 +218,40 @@ function logOut() {
   location.reload();
 }
 
+// 'booker' = den der har bestilt og betaler. 'gaest' = medrejsende.
+// Gæsten ser opholdet, forummet og sine egne oplysninger — men ikke bookerens
+// betalinger, fakturaer eller mailhistorik.
+let portalRolle = 'booker';
+let gaestData = null;
+
 async function loadPortal(email) {
   userEmail = email;
   document.getElementById('loginWrap').style.display = 'none';
   document.getElementById('portalHeader').style.display = 'flex';
   document.getElementById('portalWrap').style.display = 'block';
+
+  // Hvem er den indloggede?
+  const session = localStorage.getItem('cda_session');
+  if (session) {
+    try {
+      const res = await fetch('/.netlify/functions/portal-me', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ session })
+      });
+      if (res.ok) {
+        const me = await res.json();
+        portalRolle = me.role || 'booker';
+        if (portalRolle === 'gaest') {
+          gaestData = me;
+          return loadGaestPortal(me);
+        }
+      }
+    } catch (e) { /* falder tilbage til booker-visningen */ }
+  }
+
+  portalRolle = 'booker';
+  saetFanerEfterRolle();
 
   const { data: kunde } = await sb.from('customers')
     .select('*, bookings(*, payments(*), charges(*))')
@@ -338,6 +367,8 @@ function renderPasForm() {
             <input type="date" class="pas-udlob" data-no="${i}" value="${pasEsc(saved.passport_expiry || '')}" style="${inpStyle}"></label>
           <label style="${lblStyle}grid-column:1/-1;">Udstedt i (land)
             <input type="text" class="pas-land" data-no="${i}" value="${pasEsc(saved.passport_issued || '')}" style="${inpStyle}" autocomplete="off"></label>
+          <label style="${lblStyle}grid-column:1/-1;">E-mail${i === 1 ? '' : ' <span style="text-transform:none;letter-spacing:0;color:var(--gold);">— giver gæsten adgang til Min booking og forummet</span>'}
+            <input type="email" class="pas-email" data-no="${i}" value="${pasEsc(i === 1 ? (saved.email || userEmail || '') : (saved.email || ''))}" style="${inpStyle}" autocomplete="off" ${i === 1 ? 'readonly' : 'placeholder="valgfri"'}></label>
         </div>
       </div>`);
   }
@@ -354,6 +385,10 @@ function renderPasForm() {
       Spansk lov kræver, at vi registrerer alle overnattende gæster hos de spanske myndigheder.
       Udfyld venligst pasoplysninger for hver gæst på bookingen inden ankomst.
     </p>
+    <p style="font-size:.82rem;color:rgba(44,35,24,.72);line-height:1.6;margin:0 0 .5rem;">
+      Skriver du en <b>e-mail</b> på en medrejsende, sender vi dem deres egen adgang til Min booking —
+      så kan de selv se opholdet, lægge et profilbillede op og skrive i jeres forum.
+    </p>
     <div style="font-size:.75rem;margin-bottom:1rem;font-family:'Manrope',sans-serif;">${status}</div>
     ${rows.join('')}
     <button onclick="gemPasRegistrering()" style="background:#b88a1e;border:none;color:#fff;padding:.65rem 1.5rem;font-size:.62rem;letter-spacing:.18em;text-transform:uppercase;cursor:pointer;font-family:'Manrope',sans-serif;">Gem registrering</button>
@@ -369,7 +404,12 @@ async function gemPasRegistrering() {
 
   for (let i = 1; i <= antal; i++) {
     const val = cls => { const el = document.querySelector('.' + cls + '[data-no="' + i + '"]'); return el ? el.value.trim() : ''; };
-    const g = { guest_no: i, full_name: val('pas-navn'), passport_number: val('pas-nr'), passport_expiry: val('pas-udlob'), passport_issued: val('pas-land') };
+    const g = { guest_no: i, full_name: val('pas-navn'), passport_number: val('pas-nr'), passport_expiry: val('pas-udlob'), passport_issued: val('pas-land'), email: val('pas-email') };
+    if (g.email && !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(g.email)) {
+      msg.style.color = '#7a1f35';
+      msg.textContent = 'Ugyldig e-mail for gæst ' + i;
+      return;
+    }
     if (!g.full_name || !g.passport_number || !g.passport_expiry || !g.passport_issued) {
       msg.style.color = '#7a1f35';
       msg.textContent = 'Udfyld venligst alle felter for gæst ' + i;
@@ -803,7 +843,9 @@ function byggTabDropdown() {
   const sel = document.getElementById('tabSelect');
   if (!sel) return;
 
-  const knapper = Array.from(document.querySelectorAll('.tab-btn'));
+  // Skjulte faner (fx betalinger for en gæst) må heller ikke være i dropdown'en
+  const knapper = Array.from(document.querySelectorAll('.tab-btn'))
+    .filter(b => b.style.display !== 'none');
   sel.innerHTML = knapper.map(b => {
     const tab = (b.getAttribute('onclick') || '').match(/'([^']+)'/);
     if (!tab) return '';
@@ -838,6 +880,222 @@ function opdaterTabBadge() {
 
 document.addEventListener('DOMContentLoaded', byggTabDropdown);
 if (document.readyState !== 'loading') byggTabDropdown();
+
+
+/* ==========================================================
+   GÆSTE-PORTALEN
+   Den medrejsende gæst får samme udseende som bookeren, men uden
+   betalinger, faktura og bookerens mailhistorik. Til gengæld får de
+   deres eget pas-felt og deres eget profilbillede.
+   ========================================================== */
+
+// Skjul de faner, gæsten ikke må se — og byg dropdown'en igen
+function saetFanerEfterRolle() {
+  const skjul = portalRolle === 'gaest' ? ['betalinger', 'faktura', 'emails'] : [];
+
+  document.querySelectorAll('.tab-btn').forEach(b => {
+    const m = (b.getAttribute('onclick') || '').match(/'([^']+)'/);
+    if (!m) return;
+    b.style.display = skjul.includes(m[1]) ? 'none' : '';
+  });
+
+  if (typeof byggTabDropdown === 'function') byggTabDropdown();
+}
+
+function gDato(iso) {
+  if (!iso) return '—';
+  return new Date(iso).toLocaleDateString('da-DK', { day: 'numeric', month: 'long', year: 'numeric' });
+}
+
+async function loadGaestPortal(me) {
+  saetFanerEfterRolle();
+
+  portalKundeNavn = me.full_name;
+  document.getElementById('portalNavn').textContent = me.full_name;
+
+  const b = me.booking;
+  bookingData = b ? { id: b.id, retreat_id: b.retreat_id, guests: b.guests,
+                      arrival_date: b.arrival_date, departure_date: b.departure_date } : null;
+
+  const kort = document.getElementById('bookingCard');
+  if (!b) {
+    kort.innerHTML = '<div class="empty-state">Ingen aktiv booking fundet</div>';
+  } else {
+    kort.innerHTML = `
+      <div class="booking-card-header">
+        <div class="booking-retreat">${mbEsc(b.retreat_name || 'Dit ophold')}</div>
+        <div class="booking-status">Medrejsende</div>
+      </div>
+      <div class="booking-info-grid">
+        <div class="booking-info-item"><div class="label">Ankomst</div><div class="value">${gDato(b.arrival_date)}</div></div>
+        <div class="booking-info-item"><div class="label">Afrejse</div><div class="value">${gDato(b.departure_date)}</div></div>
+        <div class="booking-info-item"><div class="label">Booket af</div><div class="value">${mbEsc(b.booker || '—')}</div></div>
+        <div class="booking-info-item"><div class="label">Antal gæster</div><div class="value">${mbEsc(String(b.guests || 1))}</div></div>
+      </div>
+      <p style="font-size:.82rem;color:var(--text-mid);line-height:1.7;margin-top:1.2rem;">
+        Betaling og faktura håndteres af ${mbEsc(b.booker || 'bookeren')}. Har du spørgsmål til opholdet,
+        er du meget velkommen til at skrive til os under Beskeder.
+      </p>`;
+  }
+
+  renderMinProfil();
+  checkUnread();
+  startRealtimeBeskeder();
+}
+
+/* ---------- Gæstens egne oplysninger: pas + profilbillede ---------- */
+function renderMinProfil() {
+  const card = document.getElementById('pasCard');
+  if (!card || !gaestData) return;
+  card.style.display = 'block';
+
+  const p = gaestData.passport || {};
+  const lbl = "display:block;font-size:.6rem;letter-spacing:.15em;text-transform:uppercase;color:var(--text-mid);font-family:'Manrope',sans-serif;";
+  const inp = "width:100%;box-sizing:border-box;margin-top:.35rem;padding:.55rem .7rem;border:1px solid var(--sand);background:#fff;font-size:.85rem;color:var(--charcoal);font-family:'Manrope',sans-serif;";
+
+  const avatar = gaestData.avatar_url
+    ? `<img src="${mbEsc(gaestData.avatar_url)}" alt="" style="width:88px;height:88px;border-radius:50%;object-fit:cover;border:1px solid var(--sand);">`
+    : `<div style="width:88px;height:88px;border-radius:50%;background:var(--sand);display:flex;align-items:center;justify-content:center;font-size:1.5rem;color:#fff;font-family:'Manrope',sans-serif;">${mbEsc(initialer(gaestData.full_name))}</div>`;
+
+  card.innerHTML = `
+    <div class="booking-card-header">
+      <div class="booking-retreat" style="font-size:1.1rem;">Mine oplysninger</div>
+    </div>
+
+    <div style="display:flex;align-items:center;gap:1.2rem;margin:1rem 0 1.6rem;">
+      ${avatar}
+      <div>
+        <div style="font-size:.8rem;color:var(--text-mid);line-height:1.6;margin-bottom:.5rem;">
+          Dit profilbillede vises ved dine beskeder i forummet.
+        </div>
+        <input type="file" id="avatarFil" accept="image/*" hidden>
+        <button onclick="document.getElementById('avatarFil').click()" style="background:none;border:1px solid var(--sand);color:var(--text-mid);padding:.5rem 1rem;font-size:.62rem;letter-spacing:.15em;text-transform:uppercase;cursor:pointer;font-family:'Manrope',sans-serif;">Vælg billede</button>
+        <div id="avatarMsg" style="font-size:.75rem;margin-top:.5rem;min-height:1rem;color:var(--text-mid);"></div>
+      </div>
+    </div>
+
+    <div style="border:1px solid var(--sand);padding:1rem 1.1rem;">
+      <div style="font-size:.62rem;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);margin-bottom:.5rem;font-family:'Manrope',sans-serif;">Pasoplysninger</div>
+      <p style="font-size:.8rem;color:var(--text-mid);line-height:1.6;margin-bottom:.9rem;">
+        Spansk lov kræver, at vi registrerer alle overnattende gæster hos myndighederne.
+      </p>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:.7rem;">
+        <label style="${lbl}grid-column:1/-1;">Fulde navn (som i passet)
+          <input type="text" id="gpNavn" value="${mbEsc(gaestData.full_name || '')}" style="${inp}"></label>
+        <label style="${lbl}">Pasnummer
+          <input type="text" id="gpNr" value="${mbEsc(p.passport_number || '')}" style="${inp}"></label>
+        <label style="${lbl}">Udløbsdato
+          <input type="date" id="gpUdlob" value="${mbEsc(p.passport_expiry || '')}" style="${inp}"></label>
+        <label style="${lbl}grid-column:1/-1;">Udstedt i (land)
+          <input type="text" id="gpLand" value="${mbEsc(p.passport_issued || '')}" style="${inp}"></label>
+      </div>
+      <button onclick="gemMitPas()" style="margin-top:1rem;background:#b88a1e;border:none;color:#fff;padding:.65rem 1.5rem;font-size:.62rem;letter-spacing:.18em;text-transform:uppercase;cursor:pointer;font-family:'Manrope',sans-serif;">Gem</button>
+      <div id="gpMsg" style="font-size:.75rem;margin-top:.5rem;min-height:1rem;"></div>
+    </div>`;
+
+  const fil = document.getElementById('avatarFil');
+  if (fil) fil.addEventListener('change', uploadAvatar);
+}
+
+function initialer(navn) {
+  const p = String(navn || '').trim().split(/\s+/).filter(Boolean);
+  if (!p.length) return '?';
+  return (p[0][0] + (p.length > 1 ? p[p.length - 1][0] : '')).toUpperCase();
+}
+
+async function gemMitPas() {
+  const msg = document.getElementById('gpMsg');
+  const v = id => (document.getElementById(id)?.value || '').trim();
+  const idag = new Date().toISOString().slice(0, 10);
+  const udlob = v('gpUdlob');
+
+  if (!v('gpNavn') || !v('gpNr') || !udlob || !v('gpLand')) {
+    msg.style.color = '#7a1f35'; msg.textContent = 'Udfyld venligst alle felter'; return;
+  }
+  if (udlob <= idag) {
+    msg.style.color = '#7a1f35'; msg.textContent = 'Passet er udløbet — kontakt os venligst'; return;
+  }
+
+  msg.style.color = 'var(--text-mid)';
+  msg.textContent = 'Gemmer…';
+  try {
+    const res = await fetch('/.netlify/functions/portal-profile', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        session: localStorage.getItem('cda_session'),
+        action: 'save_passport',
+        full_name: v('gpNavn'), passport_number: v('gpNr'),
+        passport_expiry: udlob, passport_issued: v('gpLand')
+      })
+    });
+    const d = await res.json();
+    if (!res.ok) throw new Error(d.error || 'Kunne ikke gemme');
+    msg.style.color = '#6a7240';
+    msg.textContent = '✓ Gemt — tak!';
+  } catch (e) {
+    msg.style.color = '#7a1f35';
+    msg.textContent = e.message;
+  }
+}
+
+// Profilbilledet komprimeres i browseren, så uploaden er lille
+async function uploadAvatar(e) {
+  const fil = e.target.files && e.target.files[0];
+  e.target.value = '';
+  if (!fil) return;
+
+  const msg = document.getElementById('avatarMsg');
+  msg.style.color = 'var(--text-mid)';
+  msg.textContent = 'Uploader…';
+
+  try {
+    const b64 = await komprimerBillede(fil, 512);
+    const res = await fetch('/.netlify/functions/portal-profile', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        session: localStorage.getItem('cda_session'),
+        action: 'save_avatar',
+        content_type: 'image/jpeg',
+        data: b64
+      })
+    });
+    const d = await res.json();
+    if (!res.ok) throw new Error(d.error || 'Kunne ikke uploade');
+
+    if (gaestData) gaestData.avatar_url = d.avatar_url;
+    msg.style.color = '#6a7240';
+    msg.textContent = '✓ Profilbillede opdateret';
+    renderMinProfil();
+  } catch (err) {
+    msg.style.color = '#7a1f35';
+    msg.textContent = err.message;
+  }
+}
+
+function komprimerBillede(fil, maxDim) {
+  return new Promise((res, rej) => {
+    const r = new FileReader();
+    r.onerror = () => rej(new Error('Kunne ikke læse billedet'));
+    r.onload = () => {
+      const img = new Image();
+      img.onerror = () => rej(new Error('Kunne ikke læse billedet'));
+      img.onload = () => {
+        // Kvadratisk beskæring — profilbilleder vises som cirkler
+        const side = Math.min(img.width, img.height);
+        const sx = (img.width - side) / 2;
+        const sy = (img.height - side) / 2;
+        const cv = document.createElement('canvas');
+        cv.width = cv.height = Math.min(maxDim, side);
+        cv.getContext('2d').drawImage(img, sx, sy, side, side, 0, 0, cv.width, cv.height);
+        res(cv.toDataURL('image/jpeg', 0.85).split(',')[1]);
+      };
+      img.src = r.result;
+    };
+    r.readAsDataURL(fil);
+  });
+}
 
 </script>
 <style>

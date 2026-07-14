@@ -4,7 +4,8 @@ exports.handler = async (event) => {
   if (event.httpMethod !== 'POST') return { statusCode: 405, body: 'Method Not Allowed' };
 
   const SUPABASE_URL = process.env.SUPABASE_URL;
-  const SUPABASE_KEY = process.env.SUPABASE_ANON_KEY;
+  // Service-nøglen: booking_guests har RLS til og kan ikke læses med anon
+  const SUPABASE_KEY = process.env.SUPABASE_SERVICE_KEY || process.env.SUPABASE_ANON_KEY;
   const RESEND_KEY = process.env.RESEND_API_KEY;
 
   const { email } = JSON.parse(event.body);
@@ -15,11 +16,30 @@ exports.handler = async (event) => {
     'Authorization': `Bearer ${SUPABASE_KEY}`
   };
 
-  // Tjek om email findes i customers
+  // Login gælder både bookere (customers) og medrejsende gæster (booking_guests).
+  // Gæsterne får samme portal, blot uden betalinger, faktura og mailhistorik.
   const checkRes = await fetch(`${SUPABASE_URL}/rest/v1/customers?email=eq.${encodeURIComponent(email)}&select=id,full_name,nationality`, { headers });
   const customers = await checkRes.json();
 
-  if (!customers || customers.length === 0) {
+  let person = Array.isArray(customers) ? customers[0] : null;
+
+  if (!person) {
+    const gRes = await fetch(
+      `${SUPABASE_URL}/rest/v1/booking_guests?email=eq.${encodeURIComponent(email)}&select=full_name,bookings(customers(nationality))&limit=1`,
+      { headers }
+    );
+    const gaester = await gRes.json();
+    const g = Array.isArray(gaester) ? gaester[0] : null;
+    if (g) {
+      person = {
+        full_name: g.full_name,
+        // Gæsten har ikke eget nationalitetsfelt — brug bookerens til sprogvalg
+        nationality: g.bookings?.customers?.nationality || null
+      };
+    }
+  }
+
+  if (!person) {
     return { statusCode: 404, body: JSON.stringify({ error: 'Ingen booking fundet med denne email' }) };
   }
 
@@ -35,7 +55,7 @@ exports.handler = async (event) => {
   });
 
   // Sprog: Danmark → dansk, resten → engelsk
-  const lang = getLang(customers[0].nationality);
+  const lang = getLang(person.nationality);
   const lc = lang === 'da'
     ? { subject: 'Din login-kode — Castillo del Alma', title: 'Din login-kode', greet: 'Kære', intro: 'Her er din engangskode til Min Booking:', expires: 'Koden er gyldig i 1 time.' }
     : { subject: 'Your login code — Castillo del Alma', title: 'Your login code', greet: 'Dear', intro: 'Here is your one-time code for My Booking:', expires: 'The code is valid for 1 hour.' };
@@ -56,7 +76,7 @@ exports.handler = async (event) => {
 <tr><td style="padding:40px 48px;text-align:center;">
   <p style="margin:0 0 8px;font-size:10px;letter-spacing:.4em;text-transform:uppercase;color:rgba(184,138,30,.6);">CASTILLO DEL ALMA</p>
   <h2 style="margin:0 0 24px;font-weight:normal;font-size:22px;color:#2c2318;">${lc.title}</h2>
-  <p style="margin:0 0 24px;font-size:14px;color:rgba(44,35,24,.65);">${lc.greet} ${customers[0].full_name},<br><br>${lc.intro}</p>
+  <p style="margin:0 0 24px;font-size:14px;color:rgba(44,35,24,.65);">${lc.greet} ${person.full_name},<br><br>${lc.intro}</p>
   <div style="background:rgba(184,138,30,.1);border:1px solid rgba(184,138,30,.3);padding:20px;margin:24px 0;font-size:32px;letter-spacing:.4em;color:#b88a1e;font-family:monospace;">${code}</div>
   <p style="font-size:12px;color:rgba(44,35,24,.5);">${lc.expires}</p>
 </td></tr>
