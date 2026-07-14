@@ -7,7 +7,7 @@
 <link rel="stylesheet" href="fonts/fonts.css">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
-:root{--cream:#faf6ee;--beige:#f0e8d5;--sand:#e0d0b0;--charcoal:#2c2318;--text-mid:#5c4e3a;--text-light:#9a8c7a;--wine:#7a1f35;--gold:#b88a1e;}
+:root{--cream:#faf6ee;--beige:#f0e8d5;--sand:#d8c49c;--charcoal:#241c12;--text-mid:#4a3d2a;--text-light:#6b5c47;--wine:#7a1f35;--gold:#8f6a12;}
 *{margin:0;padding:0;box-sizing:border-box;}
 body{font-family:'Manrope',sans-serif;background:var(--cream);color:var(--charcoal);min-height:100vh;}
 .header{background:#fff;border-bottom:1px solid var(--sand);padding:1.2rem 2rem;display:flex;justify-content:space-between;align-items:center;}
@@ -789,6 +789,75 @@ async function mbSendForumLink() {
 #mb-betal-overlay{display:none;position:fixed;inset:0;background:rgba(44,35,24,.78);z-index:2000;align-items:center;justify-content:center;}
 .mb-bv-box{background:#faf6ee;border:1px solid rgba(184,138,30,.25);padding:2.2rem 1.8rem;max-width:400px;width:92%;text-align:center;}
 .mb-bv-btn{display:block;width:100%;padding:.8rem 1rem;margin:.5rem 0;border:none;cursor:pointer;font-size:.68rem;letter-spacing:.18em;text-transform:uppercase;font-family:'Manrope',sans-serif;}
+
+/* ==========================================================
+   MOBIL — alt mobil-specifikt ligger udelukkende her.
+   Basis-CSS ovenfor er urørt, så desktop er uændret.
+   ========================================================== */
+@media (max-width:700px){
+  html{overflow-x:hidden;}
+  body{overflow-x:hidden;}
+
+  /* Header */
+  .header{padding:1rem 1.1rem;}
+  .header-logo{font-size:.78rem;letter-spacing:.14em;}
+  .logout-btn{font-size:.66rem;padding:.45rem .8rem;}
+
+  /* Login */
+  .login-wrap{padding:1.5rem 1.1rem;min-height:auto;padding-top:3rem;}
+  .login-box{padding:2rem 1.4rem;}
+  .login-box h2{font-size:1.5rem;}
+  .login-box p{font-size:1.08rem;color:var(--text-mid);}
+  .login-box input{font-size:1rem;padding:.9rem 1rem;}
+  .btn{font-size:.78rem;padding:1rem;letter-spacing:.16em;}
+  .login-msg{font-size:.85rem;color:var(--text-mid);}
+  .otp-input{font-size:1.6rem!important;}
+
+  /* Portal */
+  .portal{padding:1.6rem 1.1rem 3rem;}
+  .portal-welcome{margin-bottom:1.6rem;}
+  .portal-welcome h1{font-size:1.5rem;line-height:1.3;}
+
+  /* Faner: vandret rulning i stedet for at klemme dem sammen */
+  .tabs{
+    display:flex;
+    flex-wrap:nowrap;
+    overflow-x:auto;
+    -webkit-overflow-scrolling:touch;
+    scrollbar-width:none;
+    margin-bottom:1.6rem;
+  }
+  .tabs::-webkit-scrollbar{display:none;}
+  .tab-btn{
+    flex:0 0 auto;
+    font-size:.88rem;
+    letter-spacing:.08em;
+    padding:.9rem 1.1rem;
+    color:var(--text-mid);
+  }
+  .tab-btn.active{color:var(--gold);}
+
+  /* Kort */
+  .booking-card{padding:1.4rem 1.2rem;}
+  .booking-card-header{flex-direction:column;align-items:flex-start;gap:.7rem;}
+  .booking-retreat{font-size:1.15rem;line-height:1.35;}
+  .booking-status{font-size:.66rem;padding:.35rem .8rem;}
+  .booking-info-grid{grid-template-columns:1fr;gap:1rem;}
+  .booking-info-item .label{font-size:.66rem;color:var(--text-mid);}
+  .booking-info-item .value{font-size:1.02rem;}
+
+  /* Betalinger */
+  .betaling-oversigt{padding:1.3rem 1.2rem;}
+  .betaling-label{font-size:.76rem;color:var(--text-mid);}
+  .betaling-value{font-size:.98rem;}
+  .payment-item{flex-direction:column;align-items:flex-start;gap:.35rem;padding:.9rem 1rem;}
+  .payment-item .type{font-size:.78rem;}
+  .payment-item .dato{font-size:.7rem;color:var(--text-mid);}
+  .payment-item .beloeb{font-size:.98rem;}
+
+  /* Beskeder */
+  .besked-liste{min-height:auto;}
+}
 </style>
 <div id="mb-betal-overlay" style="display:none;position:fixed;inset:0;background:rgba(44,35,24,.78);z-index:2000;align-items:center;justify-content:center;">
   <div class="mb-bv-box">

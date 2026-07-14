@@ -25,7 +25,7 @@ body{font-family:'Manrope',sans-serif;background:var(--cream);color:var(--charco
 .f-sub.arkiveret{color:var(--gold);}
 
 /* ---------- Beskeder ---------- */
-.f-stream{flex:1 1 auto;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:1.2rem 1rem 1.5rem;}
+.f-stream{flex:1 1 auto;overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;padding:1.2rem 1rem 1.5rem;}
 
 .f-welcome{background:rgba(184,138,30,.08);border:1px solid rgba(184,138,30,.22);padding:1rem 1.1rem;margin-bottom:1.5rem;}
 .f-welcome .lbl{font-size:.62rem;font-weight:700;letter-spacing:.25em;text-transform:uppercase;color:var(--gold);margin-bottom:.5rem;}
@@ -114,7 +114,12 @@ body{font-family:'Manrope',sans-serif;background:var(--cream);color:var(--charco
 .f-light .x{position:absolute;top:1rem;right:1.2rem;background:none;border:none;color:#fff;font-size:1.8rem;cursor:pointer;line-height:1;}
 
 @media (max-width:600px){
-  html{overflow-x:hidden;}
+  /* Lås siden fast: kun .f-stream må scrolle. position:fixed på body er det
+     eneste, der stopper iOS' gummiband-scroll af hele dokumentet. */
+  html{overflow:hidden;overflow-x:hidden;height:100%;}
+  body{position:fixed;top:0;left:0;right:0;bottom:0;width:100%;height:100%;overflow:hidden;overscroll-behavior:none;}
+  .app{height:100%;max-width:none;}
+  .f-stream{overscroll-behavior:contain;}
   .f-header{padding:.75rem 1rem;}
   .f-title{font-size:.82rem;}
   .f-stream{padding:1rem .8rem 1.2rem;}
