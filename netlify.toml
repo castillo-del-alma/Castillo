@@ -11,6 +11,10 @@
 [functions."forum-lifecycle"]
   schedule = "0 8 * * *"
 
+# Ugentlig holdstatus til jer selv: mandag kl. 06:00 UTC (08:00 spansk tid)
+[functions."holdstatus"]
+  schedule = "0 6 * * 1"
+
 # HTML må ALDRIG caches i browseren. Uden dette genbruger browseren den gamle
 # fil efter et deploy, og man skal trykke hard refresh for at se ændringer.
 # Billeder, fonte, video osv. caches stadig som normalt.
@@ -31,4 +35,4 @@
     Cache-Control = "no-store"
 
 [build.environment]
-  SECRETS_SCAN_OMIT_KEYS = "SUPABASE_URL,SUPABASE_ANON_KEY,SUPABASE_SERVICE_KEY,RESEND_API_KEY,STRIPE_SECRET_KEY,STRIPE_PUBLISHABLE_KEY,STRIPE_WEBHOOK_SECRET,FORUM_ADMIN_KEY"
+  SECRETS_SCAN_OMIT_KEYS = "SUPABASE_URL,SUPABASE_ANON_KEY,SUPABASE_SERVICE_KEY,RESEND_API_KEY,STRIPE_SECRET_KEY,STRIPE_PUBLISHABLE_KEY,STRIPE_WEBHOOK_SECRET,FORUM_ADMIN_KEY,VAPID_PUBLIC_KEY,VAPID_PRIVATE_KEY,ADMIN_EMAIL"
