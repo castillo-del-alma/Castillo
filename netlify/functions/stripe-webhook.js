@@ -64,6 +64,16 @@ exports.handler = async (event) => {
         console.error('stripe-webhook: invitation af gæster fejlede:', e.message);
       }
 
+      // Tag deltagerne med i holdets forum med det samme. Er forummet allerede
+      // åbent (sen booking), får de deres personlige link med i samme omgang.
+      try {
+        const { synkroniserBooking } = require('./forum-sync');
+        const nye = await synkroniserBooking(bookingId);
+        if (nye) console.log(`${nye} deltager(e) tilføjet forummet`);
+      } catch (e) {
+        console.error('stripe-webhook: forum-synkronisering fejlede:', e.message);
+      }
+
       // Hent booking- og kundeinfo til bekræftelsesmail
       const bookingInfoRes = await fetch(`${SUPABASE_URL}/rest/v1/bookings?id=eq.${bookingId}&select=retreat_name,arrival_date,customer_id`, { headers });
       const bookingInfoArr = await bookingInfoRes.json();
