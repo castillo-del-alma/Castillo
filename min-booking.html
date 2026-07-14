@@ -105,6 +105,11 @@ body{font-family:'Manrope',sans-serif;background:var(--cream);color:var(--charco
       <div class="eyebrow">Velkommen tilbage</div>
       <h1 id="portalNavn">—</h1>
     </div>
+    <!-- Mobil: fanerne som dropdown (bygges automatisk ud fra knapperne nedenfor) -->
+    <div class="tabs-mobile" id="tabsMobile">
+      <select id="tabSelect" aria-label="Vælg side"></select>
+    </div>
+
     <div class="tabs">
       <button class="tab-btn active" onclick="switchTab('booking',this)">Min booking</button>
       <button class="tab-btn" onclick="switchTab('betalinger',this)">Betalinger</button>
@@ -667,6 +672,9 @@ async function downloadFaktura(bookingId) {
 function switchTab(tab, btn) {
   document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
   document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+  // Hold mobil-dropdown'en i sync, uanset hvordan fanen blev skiftet
+  const _sel = document.getElementById('tabSelect');
+  if (_sel && _sel.value !== tab) _sel.value = tab;
   if (tab === 'emails') loadKundeEmails();
   if (tab === 'faktura') loadFakturaTab();
   if (tab === 'forum') loadMineForaer();
@@ -784,11 +792,61 @@ async function mbSendForumLink() {
   }
 }
 
+
+/* ==========================================================
+   MOBIL-FANER
+   Dropdown'en bygges ud fra .tab-btn-knapperne, så nye faner automatisk
+   kommer med. Ulæste beskeder vises som (3) i teksten, da <option> ikke
+   kan indeholde HTML.
+   ========================================================== */
+function byggTabDropdown() {
+  const sel = document.getElementById('tabSelect');
+  if (!sel) return;
+
+  const knapper = Array.from(document.querySelectorAll('.tab-btn'));
+  sel.innerHTML = knapper.map(b => {
+    const tab = (b.getAttribute('onclick') || '').match(/'([^']+)'/);
+    if (!tab) return '';
+    // Kun knappens egen tekst — badge-tallet håndteres separat
+    const navn = Array.from(b.childNodes)
+      .filter(n => n.nodeType === 3)
+      .map(n => n.textContent)
+      .join('')
+      .trim();
+    const valgt = b.classList.contains('active') ? ' selected' : '';
+    return `<option value="${tab[1]}"${valgt}>${navn}</option>`;
+  }).join('');
+
+  sel.onchange = () => {
+    const knap = knapper.find(b => (b.getAttribute('onclick') || '').includes("'" + sel.value + "'"));
+    if (knap) switchTab(sel.value, knap);
+  };
+
+  opdaterTabBadge();
+}
+
+// Ulæste beskeder vises i dropdown-teksten: "Beskeder (2)"
+function opdaterTabBadge() {
+  const sel = document.getElementById('tabSelect');
+  const badge = document.getElementById('kundeUnreadBadge');
+  if (!sel) return;
+
+  const antal = (badge && badge.style.display !== 'none') ? parseInt(badge.textContent, 10) || 0 : 0;
+  const opt = sel.querySelector('option[value="beskeder"]');
+  if (opt) opt.textContent = antal > 0 ? `Beskeder (${antal})` : 'Beskeder';
+}
+
+document.addEventListener('DOMContentLoaded', byggTabDropdown);
+if (document.readyState !== 'loading') byggTabDropdown();
+
 </script>
 <style>
 #mb-betal-overlay{display:none;position:fixed;inset:0;background:rgba(44,35,24,.78);z-index:2000;align-items:center;justify-content:center;}
 .mb-bv-box{background:#faf6ee;border:1px solid rgba(184,138,30,.25);padding:2.2rem 1.8rem;max-width:400px;width:92%;text-align:center;}
 .mb-bv-btn{display:block;width:100%;padding:.8rem 1rem;margin:.5rem 0;border:none;cursor:pointer;font-size:.68rem;letter-spacing:.18em;text-transform:uppercase;font-family:'Manrope',sans-serif;}
+
+/* Fane-dropdown: skjult på desktop, vises kun på mobil */
+.tabs-mobile{display:none;}
 
 /* ==========================================================
    MOBIL — alt mobil-specifikt ligger udelukkende her.
@@ -818,24 +876,36 @@ async function mbSendForumLink() {
   .portal-welcome{margin-bottom:1.6rem;}
   .portal-welcome h1{font-size:1.5rem;line-height:1.3;}
 
-  /* Faner: vandret rulning i stedet for at klemme dem sammen */
-  .tabs{
-    display:flex;
-    flex-wrap:nowrap;
-    overflow-x:auto;
-    -webkit-overflow-scrolling:touch;
-    scrollbar-width:none;
-    margin-bottom:1.6rem;
+  /* Faner bliver til en dropdown — ingen vandret scrolling */
+  .tabs{display:none;}
+  .tabs-mobile{display:block;margin-bottom:1.6rem;position:relative;}
+  .tabs-mobile::after{
+    content:'';
+    position:absolute;
+    right:1.1rem;
+    top:50%;
+    width:8px;height:8px;
+    border-right:2px solid var(--gold);
+    border-bottom:2px solid var(--gold);
+    transform:translateY(-70%) rotate(45deg);
+    pointer-events:none;
   }
-  .tabs::-webkit-scrollbar{display:none;}
-  .tab-btn{
-    flex:0 0 auto;
-    font-size:.88rem;
-    letter-spacing:.08em;
-    padding:.9rem 1.1rem;
-    color:var(--text-mid);
+  #tabSelect{
+    -webkit-appearance:none;
+    appearance:none;
+    width:100%;
+    padding:1rem 2.6rem 1rem 1.1rem;
+    background:#fff;
+    border:1px solid var(--sand);
+    border-radius:0;
+    color:var(--charcoal);
+    font-family:'Cinzel',serif;
+    font-weight:500;
+    font-size:1rem;
+    letter-spacing:.06em;
+    outline:none;
   }
-  .tab-btn.active{color:var(--gold);}
+  #tabSelect:focus{border-color:var(--gold);}
 
   /* Kort */
   .booking-card{padding:1.4rem 1.2rem;}
