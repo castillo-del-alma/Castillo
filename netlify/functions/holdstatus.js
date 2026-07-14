@@ -14,7 +14,7 @@ const SUPABASE_URL = process.env.SUPABASE_URL;
 const SUPABASE_KEY = process.env.SUPABASE_SERVICE_KEY || process.env.SUPABASE_ANON_KEY;
 const SITE = process.env.SITE_URL || 'https://castillodelalma.es';
 const FROM = 'Castillo del Alma <booking@castillodelalma.es>';
-const TIL = process.env.ADMIN_EMAIL || 'erik@rybtke.dk';
+const TIL = process.env.ADMIN_EMAIL || 'hello@castillodelalma.es';
 
 const DAGE_FREM = 90;
 
