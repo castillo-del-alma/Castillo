@@ -202,6 +202,26 @@ nav.scrolled .nav-book{color:#fff!important;}
   padding:.9rem 2.4rem;text-decoration:none;transition:all .4s;
 }
 .btn-outline:hover{border-color:var(--gold-light);color:var(--gold-light);}
+
+/* ── CTA-BÅND (Se vores retreats / Afhold dit retreat) — tændes og placeres i admin blok 0 ── */
+.fs-cta-band{padding:4rem 0;text-align:center;}
+.fs-cta-band--white{background:#fff;border-top:1px solid rgba(184,138,30,.18);border-bottom:1px solid rgba(184,138,30,.18);}
+.fs-cta-band--sage{background:#ACB5A8;}
+.fs-cta-heading{
+  font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:300;
+  font-size:clamp(1.5rem,3vw,2.1rem);color:var(--charcoal);margin-bottom:1.8rem;
+}
+.fs-cta-btns{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;padding:0 2rem;}
+.fs-cta-btns .btn-wine{display:inline-block;}
+.fs-cta-btns .btn-cta-outline{
+  display:inline-block;
+  font-size:.7rem;font-weight:500;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--wine);border:1px solid var(--wine);
+  padding:.9rem 2.4rem;text-decoration:none;transition:all .3s;
+}
+.fs-cta-btns .btn-cta-outline:hover{background:var(--wine);color:#fff;}
+.fs-cta-band--sage .btn-cta-outline{color:var(--charcoal);border-color:rgba(44,35,24,.5);}
+.fs-cta-band--sage .btn-cta-outline:hover{background:rgba(255,255,255,.3);color:var(--charcoal);}
 .btn-wine {
   font-size:.7rem;font-weight:500;letter-spacing:.2em;text-transform:uppercase;
   color:#fff;background:var(--wine);
@@ -1812,6 +1832,29 @@ body.menu-open .nav-burger span:nth-child(3){ transform:translateY(-9px) rotate(
 
 
 <!-- ══════ FOOTER ══════ -->
+
+<!-- CTA-BÅND 1 — skjult som standard; tændes og flyttes i admin (Forside → blok 0) -->
+<section class="fs-cta-band fs-cta-band--white" id="cta1" style="display:none;">
+  <div class="section-inner">
+    <p class="fs-cta-heading" id="fsCtaHeading1">Klar til at give dig selv denne oplevelse?</p>
+    <div class="fs-cta-btns">
+      <a href="#retreats" class="btn-wine fsCtaRetreats">Se vores retreats</a>
+      <a href="udlejning.html" class="btn-cta-outline fsCtaHost">Afhold dit retreat</a>
+    </div>
+  </div>
+</section>
+
+<!-- CTA-BÅND 2 — skjult som standard; tændes og flyttes i admin (Forside → blok 0) -->
+<section class="fs-cta-band fs-cta-band--sage" id="cta2" style="display:none;">
+  <div class="section-inner">
+    <p class="fs-cta-heading" id="fsCtaHeading2">Klar til at give dig selv denne oplevelse?</p>
+    <div class="fs-cta-btns">
+      <a href="#retreats" class="btn-wine fsCtaRetreats">Se vores retreats</a>
+      <a href="udlejning.html" class="btn-cta-outline fsCtaHost">Afhold dit retreat</a>
+    </div>
+  </div>
+</section>
+
 <footer class="has-canvas" style="position:relative;">
   <canvas class="section-canvas" data-palette="dark"></canvas>
   <div class="footer-grid">
@@ -2690,7 +2733,8 @@ function renderSiteNav() {
 }
 
 // ── SEKTIONSRÆKKEFØLGE & SYNLIGHED — gemmes som JSON i site_content.sektion_orden ([{id,vis}]) ──
-const SITE_SEKTIONER = ['hero','about','retreats','reviews','estate','vineyard','experiences','gallery','wellness','om-os','testimonial','contact'];
+const SITE_SEKTIONER = ['hero','about','retreats','reviews','estate','vineyard','experiences','gallery','wellness','om-os','testimonial','contact','cta1','cta2'];
+const SITE_CTA_IDS = ['cta1','cta2']; // skjult i HTML som standard — vises kun ved vis='1' i sektion_orden
 let siteOrdenAnvendt = false;
 function applySiteSektionOrden() {
   if (siteOrdenAnvendt) return;
@@ -2713,6 +2757,22 @@ function applySiteSektionSynlighed() {
     const el = document.getElementById(o.id);
     if (el) el.style.display = (o.vis === '0') ? 'none' : '';
   });
+  renderSiteCta();
+}
+
+// ── CTA-BÅND — tekster redigeres i admin (blok 0); knapperne er faste ──
+function renderSiteCta() {
+  const isEN = currentSiteLang === 'en';
+  const sc = (k, fb) => (siteContentData[isEN ? k + '_en' : k + '_da'] || '').trim() || fb;
+  const overskrift = sc('cta_heading', isEN ? 'Ready to give yourself this experience?' : 'Klar til at give dig selv denne oplevelse?');
+  const tRetreats = sc('cta_btn_retreats', isEN ? 'See our retreats' : 'Se vores retreats');
+  const tHost = sc('cta_btn_host', isEN ? 'Host your own retreat' : 'Afhold dit retreat');
+  SITE_CTA_IDS.forEach(id => {
+    const h = document.getElementById('fsCtaHeading' + id.replace('cta',''));
+    if (h) h.textContent = overskrift;
+  });
+  document.querySelectorAll('.fsCtaRetreats').forEach(a => a.textContent = tRetreats);
+  document.querySelectorAll('.fsCtaHost').forEach(a => a.textContent = tHost);
 }
 
 let siteContentData = {};

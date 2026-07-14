@@ -438,6 +438,20 @@ body{font-family:'Manrope',sans-serif;background:#f0e8d5;color:#2c2318;min-heigh
         <hr style="border:none;border-top:1px solid rgba(184,138,30,.25);margin:1.4rem 0;">
         <p style="font-family:Manrope,sans-serif;font-size:.72rem;color:#7a6a52;margin-bottom:.8rem;">Forsidens sektioner — flyt med pilene, og slå til/fra med <b>Synlig</b>. Ankeret i parentes er sektionens faste ID.</p>
         <div id="fsOrdenEditor"></div>
+        <hr style="border:none;border-top:1px solid rgba(184,138,30,.25);margin:1.4rem 0;">
+        <p style="font-family:Manrope,sans-serif;font-size:.72rem;color:#7a6a52;margin-bottom:.8rem;">Tekster på <b>CTA-knapper 1 og 2</b> (begge bånd bruger samme tekst). Tænd og placér båndene i listen ovenfor.</p>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Overskrift (DA)</label><input type="text" id="cta_heading_da" class="fc-input-da" value="Klar til at give dig selv denne oplevelse?"></div>
+          <div><label class="fc-label fc-label-en">Heading (EN)</label><input type="text" id="cta_heading_en" class="fc-input-en" value="Ready to give yourself this experience?"></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Knap 1 — vinrød (DA)</label><input type="text" id="cta_btn_retreats_da" class="fc-input-da" value="Se vores retreats"></div>
+          <div><label class="fc-label fc-label-en">Button 1 (EN)</label><input type="text" id="cta_btn_retreats_en" class="fc-input-en" value="See our retreats"></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Knap 2 — kontur (DA)</label><input type="text" id="cta_btn_host_da" class="fc-input-da" value="Afhold dit retreat"></div>
+          <div><label class="fc-label fc-label-en">Button 2 (EN)</label><input type="text" id="cta_btn_host_en" class="fc-input-en" value="Host your own retreat"></div>
+        </div>
         <div style="text-align:right;margin-top:1rem;">
           <button onclick="gemForside()" style="background:#2a7a74;color:#fff;border:none;padding:.55rem 1.6rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;">💾 Gem hele forsiden</button>
         </div>
@@ -8066,7 +8080,9 @@ const FS_SEKTION_DEFS = [
   { id: 'wellness',    navn: 'Wellness' },
   { id: 'om-os',       navn: 'Om os' },
   { id: 'testimonial', navn: 'Testimonial (citat)' },
-  { id: 'contact',     navn: 'Nyhedsbrev / kontakt' }
+  { id: 'contact',     navn: 'Nyhedsbrev / kontakt' },
+  { id: 'cta1',        navn: 'CTA-knapper 1 — hvid baggrund', defaultVis: '0' },
+  { id: 'cta2',        navn: 'CTA-knapper 2 — grøn baggrund', defaultVis: '0' }
 ];
 // Links man kan vælge: forsidens sektioner + de andre siders faste ankre
 const FS_LINK_GRUPPER = [
@@ -8136,7 +8152,7 @@ function fsNavOrdenLoad(map) {
   gemtOrden.forEach(o => {
     if (FS_SEKTION_DEFS.some(d => d.id === o.id) && !fsOrdenState.some(x => x.id === o.id)) fsOrdenState.push({ id: o.id, vis: o.vis === '0' ? '0' : '1' });
   });
-  FS_SEKTION_DEFS.forEach(d => { if (!fsOrdenState.some(o => o.id === d.id)) fsOrdenState.push({ id: d.id, vis: '1' }); });
+  FS_SEKTION_DEFS.forEach(d => { if (!fsOrdenState.some(o => o.id === d.id)) fsOrdenState.push({ id: d.id, vis: d.defaultVis || '1' }); });
   renderFsNavEditor();
   renderFsOrdenEditor();
 }
