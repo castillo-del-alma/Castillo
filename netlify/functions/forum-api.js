@@ -6,6 +6,7 @@
 // Handlinger: init | poll | send | delete | read
 
 const crypto = require('crypto');
+const { gemTilmelding, sendTilKanal } = require('./forum-push');
 
 const SUPABASE_URL = process.env.SUPABASE_URL;
 const SUPABASE_KEY = process.env.SUPABASE_SERVICE_KEY || process.env.SUPABASE_ANON_KEY;
@@ -117,7 +118,9 @@ exports.handler = async (event) => {
       me: { id: me.id, display_name: me.display_name, avatar_url: me.avatar_url, role: me.role, muted: !!me.muted },
       members: roster,
       messages,
-      can_write: canWrite
+      can_write: canWrite,
+      // Offentlig nøgle til push — uden den kan enheden ikke tilmelde sig
+      vapid_public: process.env.VAPID_PUBLIC_KEY || ''
     });
   }
 
@@ -172,6 +175,20 @@ exports.handler = async (event) => {
       return json(500, { error: 'Beskeden kunne ikke sendes' });
     }
     const shaped = await shapeMessages(Array.isArray(out) ? out : [out], cache);
+
+    // Skub notifikationen ud til de andre. Fejler push, skal beskeden
+    // stadig være sendt — derfor fanges alt her.
+    try {
+      await sendTilKanal(
+        ch.id,
+        me.id,
+        me.display_name,
+        body ? body.slice(0, 140) : '\uD83D\uDCF7'   // 📷 hvis beskeden kun er et billede
+      );
+    } catch (e) {
+      console.error('forum-api: push fejlede', e.message);
+    }
+
     return json(200, { success: true, message: shaped[0] });
   }
 
@@ -199,7 +216,14 @@ exports.handler = async (event) => {
     return json(200, { success: true, id });
   }
 
-  // 6) READ — markér som læst (bruges af digest-mails)
+  // 6) PUSH_SUBSCRIBE — enheden tilmelder sig notifikationer
+  if (action === 'push_subscribe') {
+    const ok = await gemTilmelding(me.id, data?.subscription);
+    return ok ? json(200, { success: true })
+              : json(400, { error: 'Kunne ikke tilmelde enheden' });
+  }
+
+  // 7) READ — markér som læst (bruges af digest-mails)
   if (action === 'read') {
     await fetch(`${SUPABASE_URL}/rest/v1/forum_members?id=eq.${me.id}`, {
       method: 'PATCH',

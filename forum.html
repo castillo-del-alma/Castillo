@@ -234,8 +234,10 @@ body{font-family:'Manrope',sans-serif;background:var(--cream);color:var(--charco
       lostBad: 'Skriv en gyldig e-mailadresse.',
       bellOn: 'Lyd og notifikationer er slået til',
       bellOff: 'Lyd og notifikationer er slået fra',
-      bellBlocked: 'Notifikationer er blokeret i browserens indstillinger — lyden virker stadig',
-      newMsg: 'Ny besked i forummet'
+      bellBlocked: 'Notifikationer er blokeret i browsersindstillingerne — lyden virker stadig',
+      newMsg: 'Ny besked i forummet',
+      bellPush: 'Du får nu besked, også når forummet er lukket',
+      bellIos: 'Læg forummet på hjemmeskærmen for at få notifikationer, når app\'en er lukket'
     },
     en: {
       placeholder: 'Write a message…', send: 'Send', remove: 'Remove', del: 'Delete',
@@ -259,7 +261,9 @@ body{font-family:'Manrope',sans-serif;background:var(--cream);color:var(--charco
       bellOn: 'Sound and notifications are on',
       bellOff: 'Sound and notifications are off',
       bellBlocked: 'Notifications are blocked in your browser settings — sound still works',
-      newMsg: 'New message in the forum'
+      newMsg: 'New message in the forum',
+      bellPush: 'You will now be notified even when the forum is closed',
+      bellIos: 'Add the forum to your Home Screen to get notifications when the app is closed'
     }
   };
   var lang = 'en';
@@ -577,6 +581,47 @@ body{font-family:'Manrope',sans-serif;background:var(--cream);color:var(--charco
     } catch (e) { /* ignorér */ }
   }
 
+  /* ---------- PUSH: besked selv når app'en er lukket ----------
+     Service workeren lever udenfor siden og bliver vækket af serveren.
+     Det er den eneste måde at nå en iPhone, hvor Safari fryser al kode i
+     baggrunden. På iOS kræver Apple, at siden ligger på hjemmeskærmen. */
+  function base64TilUint8(b64) {
+    var pad = '='.repeat((4 - (b64.length % 4)) % 4);
+    var raw = atob((b64 + pad).replace(/-/g, '+').replace(/_/g, '/'));
+    var arr = new Uint8Array(raw.length);
+    for (var i = 0; i < raw.length; i++) arr[i] = raw.charCodeAt(i);
+    return arr;
+  }
+
+  function erApp() {
+    return window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
+  }
+
+  async function tilmeldPush() {
+    if (!state.vapid) return false;
+    if (!('serviceWorker' in navigator) || !('PushManager' in window)) return false;
+    if (!('Notification' in window) || Notification.permission !== 'granted') return false;
+
+    try {
+      var reg = await navigator.serviceWorker.register('/forum-sw.js', { scope: '/' });
+      await navigator.serviceWorker.ready;
+
+      var sub = await reg.pushManager.getSubscription();
+      if (!sub) {
+        sub = await reg.pushManager.subscribe({
+          userVisibleOnly: true,
+          applicationServerKey: base64TilUint8(state.vapid)
+        });
+      }
+
+      var r = await call({ action: 'push_subscribe', subscription: sub.toJSON() });
+      return r.ok;
+    } catch (e) {
+      console.warn('push-tilmelding fejlede:', e.message);
+      return false;
+    }
+  }
+
   function opdaterKlokke() {
     var b = $('bell');
     b.classList.toggle('on', lyd.til);
@@ -594,13 +639,27 @@ body{font-family:'Manrope',sans-serif;background:var(--cream);color:var(--charco
       if ('Notification' in window && Notification.permission === 'default') {
         try { await Notification.requestPermission(); } catch (e) {}
       }
+
       if ('Notification' in window && Notification.permission === 'denied') {
-        $('err').textContent = t.bellBlocked;
-        setTimeout(function () { $('err').textContent = ''; }, 5000);
+        besked(t.bellBlocked);
+      } else {
+        var ios = /iPhone|iPad|iPod/i.test(navigator.userAgent || '');
+        // Apple tillader kun push, når siden ligger på hjemmeskærmen
+        if (ios && !erApp()) {
+          besked(t.bellIos);
+        } else {
+          var ok = await tilmeldPush();
+          besked(ok ? t.bellPush : t.bellOn);
+        }
       }
     }
     opdaterKlokke();
   });
+
+  function besked(txt) {
+    $('err').textContent = txt;
+    setTimeout(function () { if ($('err').textContent === txt) $('err').textContent = ''; }, 6000);
+  }
 
   // Første berøring hvor som helst låser lyden op (browserens krav)
   ['pointerdown', 'keydown'].forEach(function (ev) {
@@ -777,6 +836,7 @@ body{font-family:'Manrope',sans-serif;background:var(--cream);color:var(--charco
 
     state.channel = r.data.channel;
     state.me = r.data.me;
+    state.vapid = r.data.vapid_public || '';
     (r.data.members || []).forEach(function (m) { state.members[m.id] = m; });
 
     $('ch-title').textContent = state.channel.title;
@@ -813,6 +873,12 @@ body{font-family:'Manrope',sans-serif;background:var(--cream);color:var(--charco
     toBottom();
     opdaterKlokke();
     visHint();
+
+    // Har gæsten allerede givet lov, sikrer vi stille og roligt, at enheden
+    // stadig er tilmeldt (fx efter at app'en er lagt på hjemmeskærmen)
+    if (lyd.til && 'Notification' in window && Notification.permission === 'granted') {
+      tilmeldPush();
+    }
     call({ action: 'read' });
     setInterval(poll, POLL_MS);
     document.addEventListener('visibilitychange', function () {
