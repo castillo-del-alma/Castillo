@@ -3077,9 +3077,14 @@ feeling more calm – and coming home to yourself again."</textarea></div>
           <div><label class="fc-label fc-label-da">Overskrift (DA)</label><input type="text" id="ul_ulfaq_h2_da" class="fc-input-da" placeholder=""></div>
           <div><label class="fc-label fc-label-en">Overskrift (EN)</label><input type="text" id="ul_ulfaq_h2_en" class="fc-input-en" placeholder=""></div>
         </div>
-        <div class="fc-row">
-          <div><label class="fc-label fc-label-da">Spørgsmål & svar (DA) — Spørgsmål|Svar per linje</label><textarea id="ul_ulfaq_liste_da" class="fc-input-da" rows="8" style="resize:vertical;"></textarea></div>
-          <div><label class="fc-label fc-label-en">Q&A (EN)</label><textarea id="ul_ulfaq_liste_en" class="fc-input-en" rows="8" style="resize:vertical;"></textarea></div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:.8rem;margin:1rem 0 .5rem;">
+          <div style="font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;color:#b88a1e;font-weight:600;">🇩🇰 SPØRGSMÅL / SVAR</div>
+          <div style="font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;color:#2a7a74;font-weight:600;">🇬🇧 QUESTION / ANSWER</div>
+        </div>
+        <div id="ulFaqListe" style="display:flex;flex-direction:column;gap:1rem;"></div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:.8rem;margin-top:1rem;">
+          <button type="button" onclick="ulFaqTilfoej()" style="background:rgba(184,138,30,.1);border:1px solid rgba(184,138,30,.3);color:#7a5c14;padding:.7rem;font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;">+ Tilføj spørgsmål</button>
+          <button type="button" onclick="oversaetAlleUlFaq(this)" style="background:rgba(58,110,106,.1);border:1px solid rgba(58,110,106,.35);color:#2a7a74;padding:.7rem;font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;">⇄ Oversæt alle til engelsk</button>
         </div>
         <div style="text-align:right;margin-top:.8rem;"><button onclick="gemUdlejning()" style="background:#2a7a74;color:#fff;border:none;padding:.5rem 1.4rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;">💾 Gem</button></div>
       </div>
@@ -8373,6 +8378,125 @@ function rtOrdenFlyt(i, retning) {
   renderRtOrdenEditor();
 }
 
+// ── UDLEJNING: FAQ-editor (blok 15) — DA + EN, gemmes som JSON i udlejning_content.faq_items / faq_items_en ──
+const UL_FAQ_SEED_ADM = [
+  { q: 'Hvor mange deltagere er der plads til?', a: 'Der er plads til op til 14 kursister og 2 undervisere. Alle værelser er dobbeltværelser med enkeltsenge og eget badeværelse.' },
+  { q: 'Hvordan fungerer prisen?', a: 'I får ét samlet tilbud baseret på antal deltagere, varighed og jeres ønsker til forplejning og program. Skriv til os, så vender vi tilbage med et uforpligtende tilbud inden for 24 timer.' },
+  { q: 'Hvor langt er der til lufthavnen?', a: 'Ejendommen ligger i Mollina, ca. 50 minutters kørsel fra Málaga lufthavn. Vi tilbyder transfer til og fra lufthavnen.' },
+  { q: 'Kan I tage hensyn til særlige diæter?', a: 'Ja. Vores køkken laver sund, hjemmelavet mad med fokus på anti-inflammatorisk kost, og vi tilpasser gerne menuen til allergier og særlige ønsker.' },
+  { q: 'Hjælper I med markedsføringen af vores retreat?', a: 'Ja, vi tilbyder mulighed for at markedsføre jeres retreat via vores kanaler. Spørg os om mulighederne, når vi taler sammen.' },
+  { q: 'Kan vi leje stedet uden værterne?', a: 'Nej — Castillo del Alma lejes altid med værtsparret, som står for driften under opholdet. Hvilken rolle vi derudover skal spille, er helt op til jer.' }
+];
+let ulFaqState = [];
+let ulFaqStateEN = [];
+
+// Indlæser FAQ fra DB. Fallback: det gamle "Spørgsmål|Svar per linje"-format, ellers standardspørgsmålene
+function ulFaqLoad(map) {
+  map = map || {};
+  const parse = (v) => { try { const p = JSON.parse(v || '[]'); return Array.isArray(p) ? p : []; } catch(e) { return []; } };
+  const linjer = (txt) => String(txt || '').split('\n').map(l => l.trim()).filter(Boolean).map(l => {
+    const i = l.indexOf('|');
+    return i === -1 ? { q: l, a: '' } : { q: l.slice(0, i).trim(), a: l.slice(i + 1).trim() };
+  });
+  ulFaqState = parse(map.faq_items);
+  if (!ulFaqState.length) ulFaqState = linjer(map.ulfaq_liste);
+  if (!ulFaqState.length) ulFaqState = UL_FAQ_SEED_ADM.map(f => ({ ...f }));
+  ulFaqStateEN = parse(map.faq_items_en);
+  if (!ulFaqStateEN.length) ulFaqStateEN = linjer(map.ulfaq_liste_en);
+  while (ulFaqStateEN.length < ulFaqState.length) ulFaqStateEN.push({ q: '', a: '' });
+  renderUlFaqListe();
+}
+
+function renderUlFaqListe() {
+  const c = document.getElementById('ulFaqListe');
+  if (!c) return;
+  const DA = 'width:100%;padding:.5rem .7rem;border:1px solid rgba(184,138,30,.3);background:#fffef8;font-family:Manrope,sans-serif;font-size:.76rem;color:#2c2318;margin-bottom:.4rem;';
+  const EN = 'width:100%;padding:.5rem .7rem;border:1px solid rgba(42,122,116,.3);background:#f7fbfa;font-family:Manrope,sans-serif;font-size:.76rem;color:#2c2318;margin-bottom:.4rem;';
+  c.innerHTML = ulFaqState.map((f, i) => {
+    const e = ulFaqStateEN[i] || { q: '', a: '' };
+    return `
+    <div style="border:1px solid rgba(184,138,30,.2);padding:.8rem;background:rgba(184,138,30,.03);">
+      <div style="display:flex;align-items:center;gap:.5rem;margin-bottom:.5rem;">
+        <div style="display:flex;flex-direction:column;gap:2px;">
+          <button type="button" onclick="ulFaqFlyt(${i},-1)" ${i === 0 ? 'disabled' : ''} style="${UL_PIL_BTN}" title="Flyt op">▲</button>
+          <button type="button" onclick="ulFaqFlyt(${i},1)" ${i === ulFaqState.length - 1 ? 'disabled' : ''} style="${UL_PIL_BTN}" title="Flyt ned">▼</button>
+        </div>
+        <span style="flex:1;font-family:Manrope,sans-serif;font-size:.66rem;color:#7a6a52;">Spørgsmål ${i + 1}</span>
+        <button type="button" onclick="oversaetUlFaq(${i}, this)" style="background:rgba(58,110,106,.1);border:1px solid rgba(58,110,106,.35);color:#2a7a74;padding:.3rem .7rem;font-size:.6rem;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;" title="Oversæt dette spørgsmål til engelsk">⇄ Oversæt</button>
+        <button type="button" onclick="ulFaqSlet(${i})" style="background:#a33;color:#fff;border:none;width:24px;height:24px;cursor:pointer;font-size:.7rem;line-height:1;" title="Fjern spørgsmål">✕</button>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:.8rem;">
+        <div>
+          <input type="text" placeholder="Spørgsmål 🇩🇰" value="${ulAdmEsc(f.q)}" oninput="ulFaqState[${i}].q=this.value" style="${DA}">
+          <textarea placeholder="Svar 🇩🇰…" oninput="ulFaqState[${i}].a=this.value" style="${DA}min-height:80px;resize:vertical;">${ulAdmEsc(f.a)}</textarea>
+        </div>
+        <div>
+          <input type="text" placeholder="Question 🇬🇧" value="${ulAdmEsc(e.q)}" oninput="ulFaqStateEN[${i}].q=this.value" style="${EN}">
+          <textarea placeholder="Answer 🇬🇧…" oninput="ulFaqStateEN[${i}].a=this.value" style="${EN}min-height:80px;resize:vertical;">${ulAdmEsc(e.a)}</textarea>
+        </div>
+      </div>
+    </div>`;
+  }).join('') || '<p style="font-family:Manrope,sans-serif;font-size:.7rem;color:#7a6a52;">Ingen spørgsmål — klik "+ Tilføj spørgsmål".</p>';
+}
+
+function ulFaqTilfoej() { ulFaqState.push({ q:'', a:'' }); ulFaqStateEN.push({ q:'', a:'' }); renderUlFaqListe(); }
+function ulFaqSlet(i) { ulFaqState.splice(i,1); ulFaqStateEN.splice(i,1); renderUlFaqListe(); }
+function ulFaqFlyt(i, retning) {
+  const j = i + retning;
+  if (j < 0 || j >= ulFaqState.length) return;
+  [ulFaqState[i], ulFaqState[j]] = [ulFaqState[j], ulFaqState[i]];
+  [ulFaqStateEN[i], ulFaqStateEN[j]] = [ulFaqStateEN[j], ulFaqStateEN[i]];
+  renderUlFaqListe();
+}
+
+async function oversaetUlFaq(i, btn) {
+  const f = ulFaqState[i] || {};
+  if (!String(f.q || '').trim() && !String(f.a || '').trim()) { showToast('Udfyld det danske spørgsmål først', true); return; }
+  if (!ulFaqStateEN[i]) ulFaqStateEN[i] = { q:'', a:'' };
+  const orig = btn.textContent;
+  btn.disabled = true; btn.textContent = 'Oversætter…';
+  try {
+    if (String(f.q || '').trim()) ulFaqStateEN[i].q = await translateText(f.q);
+    if (String(f.a || '').trim()) ulFaqStateEN[i].a = await translateText(f.a);
+    renderUlFaqListe();
+    showToast('✓ Oversat — husk 💾 Gem');
+  } catch (e) {
+    showToast('Oversættelse fejlede: ' + e.message, true);
+    btn.disabled = false; btn.textContent = orig;
+  }
+}
+
+async function oversaetAlleUlFaq(btn) {
+  if (!ulFaqState.length) { showToast('Ingen spørgsmål at oversætte'); return; }
+  const orig = btn.textContent;
+  btn.disabled = true;
+  let done = 0, skipped = 0, failed = 0;
+  try {
+    for (let i = 0; i < ulFaqState.length; i++) {
+      btn.textContent = `Oversætter ${i + 1} af ${ulFaqState.length}…`;
+      const f = ulFaqState[i];
+      if (!ulFaqStateEN[i]) ulFaqStateEN[i] = { q:'', a:'' };
+      const en = ulFaqStateEN[i];
+      const needQ = String(f.q || '').trim() && !String(en.q || '').trim();
+      const needA = String(f.a || '').trim() && !String(en.a || '').trim();
+      if (!needQ && !needA) { skipped++; continue; }
+      try {
+        if (needQ) en.q = await translateText(f.q);
+        if (needA) en.a = await translateText(f.a);
+        done++;
+      } catch (e) { console.error('UL-FAQ ' + (i + 1) + ' fejlede:', e); failed++; }
+    }
+    renderUlFaqListe();
+    let msg = `${done} oversat`;
+    if (skipped) msg += `, ${skipped} sprunget over (havde allerede EN)`;
+    if (failed) msg += `, ${failed} fejlede`;
+    showToast(msg + ' — husk 💾 Gem');
+  } finally {
+    btn.textContent = orig;
+    btn.disabled = false;
+  }
+}
+
 const UL_IMG_DEFAULTS = {
   "hero_bg": "img/group-people-making-breathworks-castillo-del-alma.jpg",
   "intro_img1": "img/group-people-making-breathworks-castillo-del-alma.jpg",
@@ -8542,6 +8666,7 @@ async function loadUdlejningAdmin() {
   } catch(e) {
     console.warn('loadUdlejningAdmin: kunne ikke hente udlejning_content (er tabellen oprettet?):', e.message);
   }
+  ulFaqLoad(map); // FAQ-editor (blok 15)
   try {
     UL_TEXT_KEYS.forEach(key => {
       ['da','en'].forEach(lang => {
@@ -8614,6 +8739,13 @@ function renderUlKategorierPreview() {
 async function gemUdlejning() {
   if (!sb) return;
   const upserts = [];
+  // FAQ (blok 15) — gemmes som JSON
+  const faqRen = ulFaqState.filter(f => String(f.q || '').trim());
+  upserts.push({ key: 'faq_items', value: JSON.stringify(faqRen.map(f => ({ q: (f.q || '').trim(), a: (f.a || '').trim() }))) });
+  upserts.push({ key: 'faq_items_en', value: JSON.stringify(ulFaqState.map((f, i) => {
+    const e = ulFaqStateEN[i] || {};
+    return String(f.q || '').trim() ? { q: (e.q || '').trim(), a: (e.a || '').trim() } : null;
+  }).filter(Boolean)) });
   UL_TEXT_KEYS.forEach(key => {
     ['da','en'].forEach(lang => {
       const el = document.getElementById(`ul_${key}_${lang}`);

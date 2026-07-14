@@ -1308,32 +1308,7 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:3rem
       <div class="section-label" id="ulfaqLabel">Ofte stillede spørgsmål</div>
       <h2 id="ulfaqH2">FAQ</h2>
     </div>
-    <div class="faq-list reveal d1" id="ulfaqList">
-      <div class="faq-item open">
-        <div class="faq-q" onclick="toggleFaq(this)"><span>Hvor mange deltagere er der plads til?</span><i>▼</i></div>
-        <div class="faq-a"><p>Der er plads til op til 14 kursister og 2 undervisere. Alle værelser er dobbeltværelser med enkeltsenge og eget badeværelse.</p></div>
-      </div>
-      <div class="faq-item">
-        <div class="faq-q" onclick="toggleFaq(this)"><span>Hvordan fungerer prisen?</span><i>▼</i></div>
-        <div class="faq-a"><p>I får ét samlet tilbud baseret på antal deltagere, varighed og jeres ønsker til forplejning og program. Skriv til os, så vender vi tilbage med et uforpligtende tilbud inden for 24 timer.</p></div>
-      </div>
-      <div class="faq-item">
-        <div class="faq-q" onclick="toggleFaq(this)"><span>Hvor langt er der til lufthavnen?</span><i>▼</i></div>
-        <div class="faq-a"><p>Ejendommen ligger i Mollina, ca. 50 minutters kørsel fra Málaga lufthavn. Vi tilbyder transfer til og fra lufthavnen.</p></div>
-      </div>
-      <div class="faq-item">
-        <div class="faq-q" onclick="toggleFaq(this)"><span>Kan I tage hensyn til særlige diæter?</span><i>▼</i></div>
-        <div class="faq-a"><p>Ja. Vores køkken laver sund, hjemmelavet mad med fokus på anti-inflammatorisk kost, og vi tilpasser gerne menuen til allergier og særlige ønsker.</p></div>
-      </div>
-      <div class="faq-item">
-        <div class="faq-q" onclick="toggleFaq(this)"><span>Hjælper I med markedsføringen af vores retreat?</span><i>▼</i></div>
-        <div class="faq-a"><p>Ja, vi tilbyder mulighed for at markedsføre jeres retreat via vores kanaler. Spørg os om mulighederne, når vi taler sammen.</p></div>
-      </div>
-      <div class="faq-item">
-        <div class="faq-q" onclick="toggleFaq(this)"><span>Kan vi leje stedet uden værterne?</span><i>▼</i></div>
-        <div class="faq-a"><p>Nej — Castillo del Alma lejes altid med værtsparret, som står for driften under opholdet. Hvilken rolle vi derudover skal spille, er helt op til jer.</p></div>
-      </div>
-    </div>
+    <div class="faq-list reveal d1" id="ulfaqList"></div>
   </div>
 </section>
 
@@ -1785,12 +1760,37 @@ function applyUlSektionOrden() {
   ulOrdenAnvendt = true;
 }
 
+
+// ── FAQ — hentes fra udlejning_content (faq_items / faq_items_en), redigeres i admin ──
+const UL_FAQ_SEED = [{"q": "Hvor mange deltagere er der plads til?", "a": "Der er plads til op til 14 kursister og 2 undervisere. Alle værelser er dobbeltværelser med enkeltsenge og eget badeværelse."}, {"q": "Hvordan fungerer prisen?", "a": "I får ét samlet tilbud baseret på antal deltagere, varighed og jeres ønsker til forplejning og program. Skriv til os, så vender vi tilbage med et uforpligtende tilbud inden for 24 timer."}, {"q": "Hvor langt er der til lufthavnen?", "a": "Ejendommen ligger i Mollina, ca. 50 minutters kørsel fra Málaga lufthavn. Vi tilbyder transfer til og fra lufthavnen."}, {"q": "Kan I tage hensyn til særlige diæter?", "a": "Ja. Vores køkken laver sund, hjemmelavet mad med fokus på anti-inflammatorisk kost, og vi tilpasser gerne menuen til allergier og særlige ønsker."}, {"q": "Hjælper I med markedsføringen af vores retreat?", "a": "Ja, vi tilbyder mulighed for at markedsføre jeres retreat via vores kanaler. Spørg os om mulighederne, når vi taler sammen."}, {"q": "Kan vi leje stedet uden værterne?", "a": "Nej — Castillo del Alma lejes altid med værtsparret, som står for driften under opholdet. Hvilken rolle vi derudover skal spille, er helt op til jer."}];
+function ulEscHtml(t){ const d = document.createElement('div'); d.textContent = t == null ? '' : String(t); return d.innerHTML; }
+function renderUlFaq() {
+  const liste = document.getElementById('ulfaqList');
+  if (!liste) return;
+  let da = [], en = [];
+  try { da = JSON.parse(ulData.faq_items || '[]'); } catch(e) {}
+  try { en = JSON.parse(ulData.faq_items_en || '[]'); } catch(e) {}
+  if (!Array.isArray(da) || !da.length) da = UL_FAQ_SEED;
+  const erEN = ulLang === 'en';
+  liste.innerHTML = da.map((f, i) => {
+    const e = (Array.isArray(en) && en[i]) ? en[i] : {};
+    const q = erEN ? ((e.q || '').trim() || f.q) : f.q;
+    const a = erEN ? ((e.a || '').trim() || f.a) : f.a;
+    if (!String(q || '').trim()) return '';
+    return `<div class="faq-item${i === 0 ? ' open' : ''}">
+      <div class="faq-q" onclick="toggleFaq(this)"><span>${ulEscHtml(q)}</span><i>▼</i></div>
+      <div class="faq-a"><p>${ulEscHtml(a)}</p></div>
+    </div>`;
+  }).join('');
+}
+
 function applyUlContent() {
   setText('heroEyebrow', ulSC('hero_eyebrow'));
   setHTML('heroH1', ulSC('hero_h1'));
   ulSetHeroImage(ulSC('hero_bg'));
 
   renderUlNav();
+  renderUlFaq();
   const navBackTxt = '← ' + (ulLang === 'en' ? 'Back to homepage' : 'Tilbage til forsiden');
   setText('navBack', navBackTxt);
   setText('footerBack', navBackTxt);
