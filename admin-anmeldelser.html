@@ -406,6 +406,7 @@ body{font-family:'Manrope',sans-serif;background:#f0e8d5;color:#2c2318;min-heigh
       <span>✓ Forside gemt!</span>
     </div>
     <button onclick="gemForside()" style="background:var(--wine);color:#fff;border:none;padding:.7rem 2rem;font-family:Manrope,sans-serif;font-size:.68rem;font-weight:500;letter-spacing:.18em;text-transform:uppercase;cursor:pointer;margin-bottom:1.5rem;">💾 Gem hele forsiden</button>
+    <button type="button" onclick="oversaetHeleSiden(this,'tab-forside')" style="background:rgba(58,110,106,.1);border:1px solid rgba(58,110,106,.4);color:#2a7a74;padding:.7rem 1.6rem;font-family:Manrope,sans-serif;font-size:.68rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;margin-bottom:1.5rem;margin-left:.8rem;" title="Oversætter alle tomme engelske felter på forsiden">⇄ Oversæt hele forsiden til engelsk</button>
 
     <div style="background:rgba(184,138,30,.06);border:1px solid rgba(184,138,30,.2);padding:1rem 1.2rem;margin-bottom:2rem;">
       <span style="font-size:.62rem;letter-spacing:.15em;text-transform:uppercase;color:rgba(44,35,24,.5);display:block;margin-bottom:.6rem;">Hop til sektion</span>
@@ -428,9 +429,9 @@ body{font-family:'Manrope',sans-serif;background:#f0e8d5;color:#2c2318;min-heigh
 
     <!-- TOP NAVIGATION -->
     <div class="fc-block" data-section="navigation" id="anchor_navigation">
-      <div class="fc-block-header">
+      <div class="fc-block-header" style="display:flex;align-items:center;gap:.8rem;">
         <span class="fc-block-title">0 · Navigation (menu) &amp; sektionsrækkefølge</span>
-      </div>
+      <button type="button" onclick="oversaetBlok(this)" style="background:rgba(58,110,106,.1);border:1px solid rgba(58,110,106,.35);color:#2a7a74;padding:.3rem .8rem;font-family:Manrope,sans-serif;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;margin-left:auto;" title="Oversæt tomme engelske felter i denne sektion">⇄ Oversæt</button></div>
       <div class="fc-block-body">
         <p style="font-family:Manrope,sans-serif;font-size:.72rem;color:#7a6a52;margin-bottom:.8rem;">Menu-links øverst på forsiden: navn (DA/EN), link (vælg et ankerpunkt/side fra listen eller <b>Egen URL</b>), niveau, synlighed og rækkefølge med pilene.<br><b>Niveau:</b> "Hovedpunkt" står i menulinjen — "Underpunkt" lægges i en dropdown under det nærmeste hovedpunkt ovenfor (sådan fungerer fx "The Estate").<br><b>Stil:</b> Normal, Fremhævet (vinrød/fed) eller Knap (Book Retreat-stilen).</p>
         <div id="fsNavEditor"></div>
@@ -459,10 +460,10 @@ body{font-family:'Manrope',sans-serif;background:#f0e8d5;color:#2c2318;min-heigh
     </div>
 
     <div class="fc-block" data-section="hero" id="anchor_hero">
-      <div class="fc-block-header">
+      <div class="fc-block-header" style="display:flex;align-items:center;gap:.8rem;">
         <span class="fc-block-title">1 · Hero</span>
         <label class="fc-toggle"><input type="checkbox" id="active_hero" checked><span>Vis på hjemmesiden</span></label>
-      </div>
+      <button type="button" onclick="oversaetBlok(this)" style="background:rgba(58,110,106,.1);border:1px solid rgba(58,110,106,.35);color:#2a7a74;padding:.3rem .8rem;font-family:Manrope,sans-serif;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;margin-left:auto;" title="Oversæt tomme engelske felter i denne sektion">⇄ Oversæt</button></div>
       <div class="fc-block-body">
         <div style="margin-bottom:1.2rem;padding:.9rem;background:rgba(42,122,116,.06);border:1px solid rgba(42,122,116,.2);">
           <label class="fc-label" style="color:#2a7a74;">📁 Hero-video (nuværende: intro-film-hero.mp4 — serveres gratis via Netlify; upload her KUN hvis videoen skal skiftes)</label>
@@ -505,10 +506,10 @@ body{font-family:'Manrope',sans-serif;background:#f0e8d5;color:#2c2318;min-heigh
 
     <!-- FILOSOFI -->
     <div class="fc-block" data-section="filosofi" id="anchor_filosofi">
-      <div class="fc-block-header">
+      <div class="fc-block-header" style="display:flex;align-items:center;gap:.8rem;">
         <span class="fc-block-title">2 · Filosofi</span>
         <label class="fc-toggle"><input type="checkbox" id="active_filosofi" checked><span>Vis på hjemmesiden</span></label>
-      </div>
+      <button type="button" onclick="oversaetBlok(this)" style="background:rgba(58,110,106,.1);border:1px solid rgba(58,110,106,.35);color:#2a7a74;padding:.3rem .8rem;font-family:Manrope,sans-serif;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;margin-left:auto;" title="Oversæt tomme engelske felter i denne sektion">⇄ Oversæt</button></div>
       <div class="fc-block-body">
         <div style="margin-bottom:1.2rem;padding:.9rem;background:rgba(42,122,116,.06);border:1px solid rgba(42,122,116,.2);">
           <label class="fc-label" style="color:#2a7a74;">📁 Filosofi-billede</label>
@@ -551,10 +552,10 @@ body{font-family:'Manrope',sans-serif;background:#f0e8d5;color:#2c2318;min-heigh
 
     <!-- RETREATS TEKST -->
     <div class="fc-block" data-section="retreats" id="anchor_retreats">
-      <div class="fc-block-header">
+      <div class="fc-block-header" style="display:flex;align-items:center;gap:.8rem;">
         <span class="fc-block-title">3 · Retreats (sektion-tekst)</span>
         <label class="fc-toggle"><input type="checkbox" id="active_retreats" checked><span>Vis på hjemmesiden</span></label>
-      </div>
+      <button type="button" onclick="oversaetBlok(this)" style="background:rgba(58,110,106,.1);border:1px solid rgba(58,110,106,.35);color:#2a7a74;padding:.3rem .8rem;font-family:Manrope,sans-serif;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;margin-left:auto;" title="Oversæt tomme engelske felter i denne sektion">⇄ Oversæt</button></div>
       <div class="fc-block-body">
         <p style="font-size:.7rem;color:rgba(44,35,24,.4);margin-bottom:1rem;">Selve retreat-kortene redigeres under fanen "Retreats". Her redigeres kun sektionens omsluttende tekst.</p>
         <div class="fc-row">
@@ -630,10 +631,10 @@ and companies will find the perfect setting for seminars, team building and stra
 
     <!-- THE ESTATE -->
     <div class="fc-block" data-section="estate" id="anchor_estate">
-      <div class="fc-block-header">
+      <div class="fc-block-header" style="display:flex;align-items:center;gap:.8rem;">
         <span class="fc-block-title">4 · The Estate</span>
         <label class="fc-toggle"><input type="checkbox" id="active_estate" checked><span>Vis på hjemmesiden</span></label>
-      </div>
+      <button type="button" onclick="oversaetBlok(this)" style="background:rgba(58,110,106,.1);border:1px solid rgba(58,110,106,.35);color:#2a7a74;padding:.3rem .8rem;font-family:Manrope,sans-serif;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;margin-left:auto;" title="Oversæt tomme engelske felter i denne sektion">⇄ Oversæt</button></div>
       <div class="fc-block-body">
         <div style="margin-bottom:1.2rem;padding:.9rem;background:rgba(42,122,116,.06);border:1px solid rgba(42,122,116,.2);">
           <label class="fc-label" style="color:#2a7a74;">📁 Billeder (3 stk)</label>
@@ -690,10 +691,10 @@ and companies will find the perfect setting for seminars, team building and stra
 
     <!-- VINGÅRDEN -->
     <div class="fc-block" data-section="vingaard" id="anchor_vingaard">
-      <div class="fc-block-header">
+      <div class="fc-block-header" style="display:flex;align-items:center;gap:.8rem;">
         <span class="fc-block-title">5 · Vingården</span>
         <label class="fc-toggle"><input type="checkbox" id="active_vingaard" checked><span>Vis på hjemmesiden</span></label>
-      </div>
+      <button type="button" onclick="oversaetBlok(this)" style="background:rgba(58,110,106,.1);border:1px solid rgba(58,110,106,.35);color:#2a7a74;padding:.3rem .8rem;font-family:Manrope,sans-serif;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;margin-left:auto;" title="Oversæt tomme engelske felter i denne sektion">⇄ Oversæt</button></div>
       <div class="fc-block-body">
         <div style="margin-bottom:1.2rem;padding:.9rem;background:rgba(42,122,116,.06);border:1px solid rgba(42,122,116,.2);">
           <label class="fc-label" style="color:#2a7a74;">📁 Vingård-billede</label>
@@ -761,10 +762,10 @@ and companies will find the perfect setting for seminars, team building and stra
 
     <!-- OPLEVELSER & LIVSNYDELSE -->
     <div class="fc-block" data-section="oplevelser" id="anchor_oplevelser">
-      <div class="fc-block-header">
+      <div class="fc-block-header" style="display:flex;align-items:center;gap:.8rem;">
         <span class="fc-block-title">7 · Oplevelser &amp; Livsnydelse</span>
         <label class="fc-toggle"><input type="checkbox" id="active_oplevelser" checked><span>Vis på hjemmesiden</span></label>
-      </div>
+      <button type="button" onclick="oversaetBlok(this)" style="background:rgba(58,110,106,.1);border:1px solid rgba(58,110,106,.35);color:#2a7a74;padding:.3rem .8rem;font-family:Manrope,sans-serif;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;margin-left:auto;" title="Oversæt tomme engelske felter i denne sektion">⇄ Oversæt</button></div>
       <div class="fc-block-body">
         <div class="fc-row">
           <div><label class="fc-label fc-label-da">Section-label</label><input type="text" id="oplevelser_label_da" class="fc-input-da" value="Oplevelser &amp; Livsnydelse"></div>
@@ -781,10 +782,10 @@ and companies will find the perfect setting for seminars, team building and stra
         <p style="font-size:.7rem;color:rgba(44,35,24,.4);margin:1.2rem 0 .6rem;">11 oplevelses-kort — klik hver kort-titel for at folde ud:</p>
 
     <div class="fc-block fc-sub" data-section="opl_vin">
-      <div class="fc-block-header" style="cursor:pointer;" onclick="this.parentElement.classList.toggle('fc-collapsed')">
+      <div class="fc-block-header" style="display:flex;align-items:center;gap:.8rem;cursor:pointer;" onclick="this.parentElement.classList.toggle('fc-collapsed')">
         <span class="fc-block-title">7.1 · Vinsmagning</span>
         <span style="font-size:.65rem;color:rgba(44,35,24,.4);">klik for at folde ud/sammen ▾</span>
-      </div>
+      <button type="button" onclick="event.stopPropagation(); oversaetBlok(this)" style="background:rgba(58,110,106,.1);border:1px solid rgba(58,110,106,.35);color:#2a7a74;padding:.3rem .8rem;font-family:Manrope,sans-serif;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;margin-left:auto;flex-shrink:0;" title="Oversæt tomme engelske felter i denne sektion">⇄ Oversæt</button></div>
       <div class="fc-block-body fc-collapsible">
         <div class="fc-row">
           <div><label class="fc-label fc-label-da">Titel</label><input type="text" id="opl_vin_titel_da" class="fc-input-da" value="Vinsmagning"></div>
@@ -814,10 +815,10 @@ and companies will find the perfect setting for seminars, team building and stra
     </div>
 
     <div class="fc-block fc-sub" data-section="opl_olie">
-      <div class="fc-block-header" style="cursor:pointer;" onclick="this.parentElement.classList.toggle('fc-collapsed')">
+      <div class="fc-block-header" style="display:flex;align-items:center;gap:.8rem;cursor:pointer;" onclick="this.parentElement.classList.toggle('fc-collapsed')">
         <span class="fc-block-title">7.2 · Olivenolie Smagning</span>
         <span style="font-size:.65rem;color:rgba(44,35,24,.4);">klik for at folde ud/sammen ▾</span>
-      </div>
+      <button type="button" onclick="event.stopPropagation(); oversaetBlok(this)" style="background:rgba(58,110,106,.1);border:1px solid rgba(58,110,106,.35);color:#2a7a74;padding:.3rem .8rem;font-family:Manrope,sans-serif;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;margin-left:auto;flex-shrink:0;" title="Oversæt tomme engelske felter i denne sektion">⇄ Oversæt</button></div>
       <div class="fc-block-body fc-collapsible">
         <div class="fc-row">
           <div><label class="fc-label fc-label-da">Titel</label><input type="text" id="opl_olie_titel_da" class="fc-input-da" value="Olivenolie Smagning"></div>
@@ -844,10 +845,10 @@ and companies will find the perfect setting for seminars, team building and stra
     </div>
 
     <div class="fc-block fc-sub" data-section="opl_vandre">
-      <div class="fc-block-header" style="cursor:pointer;" onclick="this.parentElement.classList.toggle('fc-collapsed')">
+      <div class="fc-block-header" style="display:flex;align-items:center;gap:.8rem;cursor:pointer;" onclick="this.parentElement.classList.toggle('fc-collapsed')">
         <span class="fc-block-title">7.3 · Vandreture i naturen</span>
         <span style="font-size:.65rem;color:rgba(44,35,24,.4);">klik for at folde ud/sammen ▾</span>
-      </div>
+      <button type="button" onclick="event.stopPropagation(); oversaetBlok(this)" style="background:rgba(58,110,106,.1);border:1px solid rgba(58,110,106,.35);color:#2a7a74;padding:.3rem .8rem;font-family:Manrope,sans-serif;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;margin-left:auto;flex-shrink:0;" title="Oversæt tomme engelske felter i denne sektion">⇄ Oversæt</button></div>
       <div class="fc-block-body fc-collapsible">
         <div class="fc-row">
           <div><label class="fc-label fc-label-da">Titel</label><input type="text" id="opl_vandre_titel_da" class="fc-input-da" value="Vandreture i naturen"></div>
@@ -874,10 +875,10 @@ and companies will find the perfect setting for seminars, team building and stra
     </div>
 
     <div class="fc-block fc-sub" data-section="opl_mad">
-      <div class="fc-block-header" style="cursor:pointer;" onclick="this.parentElement.classList.toggle('fc-collapsed')">
+      <div class="fc-block-header" style="display:flex;align-items:center;gap:.8rem;cursor:pointer;" onclick="this.parentElement.classList.toggle('fc-collapsed')">
         <span class="fc-block-title">7.4 · Madlavningskurser</span>
         <span style="font-size:.65rem;color:rgba(44,35,24,.4);">klik for at folde ud/sammen ▾</span>
-      </div>
+      <button type="button" onclick="event.stopPropagation(); oversaetBlok(this)" style="background:rgba(58,110,106,.1);border:1px solid rgba(58,110,106,.35);color:#2a7a74;padding:.3rem .8rem;font-family:Manrope,sans-serif;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;margin-left:auto;flex-shrink:0;" title="Oversæt tomme engelske felter i denne sektion">⇄ Oversæt</button></div>
       <div class="fc-block-body fc-collapsible">
         <div class="fc-row">
           <div><label class="fc-label fc-label-da">Titel</label><input type="text" id="opl_mad_titel_da" class="fc-input-da" value="Madlavningskurser"></div>
@@ -904,10 +905,10 @@ and companies will find the perfect setting for seminars, team building and stra
     </div>
 
     <div class="fc-block fc-sub" data-section="opl_ride">
-      <div class="fc-block-header" style="cursor:pointer;" onclick="this.parentElement.classList.toggle('fc-collapsed')">
+      <div class="fc-block-header" style="display:flex;align-items:center;gap:.8rem;cursor:pointer;" onclick="this.parentElement.classList.toggle('fc-collapsed')">
         <span class="fc-block-title">7.5 · Rideture i Andalusien</span>
         <span style="font-size:.65rem;color:rgba(44,35,24,.4);">klik for at folde ud/sammen ▾</span>
-      </div>
+      <button type="button" onclick="event.stopPropagation(); oversaetBlok(this)" style="background:rgba(58,110,106,.1);border:1px solid rgba(58,110,106,.35);color:#2a7a74;padding:.3rem .8rem;font-family:Manrope,sans-serif;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;margin-left:auto;flex-shrink:0;" title="Oversæt tomme engelske felter i denne sektion">⇄ Oversæt</button></div>
       <div class="fc-block-body fc-collapsible">
         <div class="fc-row">
           <div><label class="fc-label fc-label-da">Titel</label><input type="text" id="opl_ride_titel_da" class="fc-input-da" value="Rideture i Andalusien"></div>
@@ -934,10 +935,10 @@ and companies will find the perfect setting for seminars, team building and stra
     </div>
 
     <div class="fc-block fc-sub" data-section="opl_caminito">
-      <div class="fc-block-header" style="cursor:pointer;" onclick="this.parentElement.classList.toggle('fc-collapsed')">
+      <div class="fc-block-header" style="display:flex;align-items:center;gap:.8rem;cursor:pointer;" onclick="this.parentElement.classList.toggle('fc-collapsed')">
         <span class="fc-block-title">7.6 · Caminito del Rey</span>
         <span style="font-size:.65rem;color:rgba(44,35,24,.4);">klik for at folde ud/sammen ▾</span>
-      </div>
+      <button type="button" onclick="event.stopPropagation(); oversaetBlok(this)" style="background:rgba(58,110,106,.1);border:1px solid rgba(58,110,106,.35);color:#2a7a74;padding:.3rem .8rem;font-family:Manrope,sans-serif;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;margin-left:auto;flex-shrink:0;" title="Oversæt tomme engelske felter i denne sektion">⇄ Oversæt</button></div>
       <div class="fc-block-body fc-collapsible">
         <div class="fc-row">
           <div><label class="fc-label fc-label-da">Titel</label><input type="text" id="opl_caminito_titel_da" class="fc-input-da" value="Caminito del Rey"></div>
@@ -964,10 +965,10 @@ and companies will find the perfect setting for seminars, team building and stra
     </div>
 
     <div class="fc-block fc-sub" data-section="opl_malaga">
-      <div class="fc-block-header" style="cursor:pointer;" onclick="this.parentElement.classList.toggle('fc-collapsed')">
+      <div class="fc-block-header" style="display:flex;align-items:center;gap:.8rem;cursor:pointer;" onclick="this.parentElement.classList.toggle('fc-collapsed')">
         <span class="fc-block-title">7.7 · Málaga — Kultur & Gastronomi</span>
         <span style="font-size:.65rem;color:rgba(44,35,24,.4);">klik for at folde ud/sammen ▾</span>
-      </div>
+      <button type="button" onclick="event.stopPropagation(); oversaetBlok(this)" style="background:rgba(58,110,106,.1);border:1px solid rgba(58,110,106,.35);color:#2a7a74;padding:.3rem .8rem;font-family:Manrope,sans-serif;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;margin-left:auto;flex-shrink:0;" title="Oversæt tomme engelske felter i denne sektion">⇄ Oversæt</button></div>
       <div class="fc-block-body fc-collapsible">
         <div class="fc-row">
           <div><label class="fc-label fc-label-da">Titel</label><input type="text" id="opl_malaga_titel_da" class="fc-input-da" value="Málaga — Kultur & Gastronomi"></div>
@@ -994,10 +995,10 @@ and companies will find the perfect setting for seminars, team building and stra
     </div>
 
     <div class="fc-block fc-sub" data-section="opl_cordoba">
-      <div class="fc-block-header" style="cursor:pointer;" onclick="this.parentElement.classList.toggle('fc-collapsed')">
+      <div class="fc-block-header" style="display:flex;align-items:center;gap:.8rem;cursor:pointer;" onclick="this.parentElement.classList.toggle('fc-collapsed')">
         <span class="fc-block-title">7.8 · Córdoba</span>
         <span style="font-size:.65rem;color:rgba(44,35,24,.4);">klik for at folde ud/sammen ▾</span>
-      </div>
+      <button type="button" onclick="event.stopPropagation(); oversaetBlok(this)" style="background:rgba(58,110,106,.1);border:1px solid rgba(58,110,106,.35);color:#2a7a74;padding:.3rem .8rem;font-family:Manrope,sans-serif;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;margin-left:auto;flex-shrink:0;" title="Oversæt tomme engelske felter i denne sektion">⇄ Oversæt</button></div>
       <div class="fc-block-body fc-collapsible">
         <div class="fc-row">
           <div><label class="fc-label fc-label-da">Titel</label><input type="text" id="opl_cordoba_titel_da" class="fc-input-da" value="Córdoba"></div>
@@ -1028,10 +1029,10 @@ A visit to Córdoba is just an hour's drive from Castillo del Alma.</textarea></
     </div>
 
     <div class="fc-block fc-sub" data-section="opl_antequera">
-      <div class="fc-block-header" style="cursor:pointer;" onclick="this.parentElement.classList.toggle('fc-collapsed')">
+      <div class="fc-block-header" style="display:flex;align-items:center;gap:.8rem;cursor:pointer;" onclick="this.parentElement.classList.toggle('fc-collapsed')">
         <span class="fc-block-title">7.9 · Antequera</span>
         <span style="font-size:.65rem;color:rgba(44,35,24,.4);">klik for at folde ud/sammen ▾</span>
-      </div>
+      <button type="button" onclick="event.stopPropagation(); oversaetBlok(this)" style="background:rgba(58,110,106,.1);border:1px solid rgba(58,110,106,.35);color:#2a7a74;padding:.3rem .8rem;font-family:Manrope,sans-serif;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;margin-left:auto;flex-shrink:0;" title="Oversæt tomme engelske felter i denne sektion">⇄ Oversæt</button></div>
       <div class="fc-block-body fc-collapsible">
         <div class="fc-row">
           <div><label class="fc-label fc-label-da">Titel</label><input type="text" id="opl_antequera_titel_da" class="fc-input-da" value="Antequera"></div>
@@ -1058,10 +1059,10 @@ A visit to Córdoba is just an hour's drive from Castillo del Alma.</textarea></
     </div>
 
     <div class="fc-block fc-sub" data-section="opl_stjerner">
-      <div class="fc-block-header" style="cursor:pointer;" onclick="this.parentElement.classList.toggle('fc-collapsed')">
+      <div class="fc-block-header" style="display:flex;align-items:center;gap:.8rem;cursor:pointer;" onclick="this.parentElement.classList.toggle('fc-collapsed')">
         <span class="fc-block-title">7.10 · Stjernekiggeri</span>
         <span style="font-size:.65rem;color:rgba(44,35,24,.4);">klik for at folde ud/sammen ▾</span>
-      </div>
+      <button type="button" onclick="event.stopPropagation(); oversaetBlok(this)" style="background:rgba(58,110,106,.1);border:1px solid rgba(58,110,106,.35);color:#2a7a74;padding:.3rem .8rem;font-family:Manrope,sans-serif;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;margin-left:auto;flex-shrink:0;" title="Oversæt tomme engelske felter i denne sektion">⇄ Oversæt</button></div>
       <div class="fc-block-body fc-collapsible">
         <div class="fc-row">
           <div><label class="fc-label fc-label-da">Titel</label><input type="text" id="opl_stjerner_titel_da" class="fc-input-da" value="Stjernekiggeri"></div>
@@ -1088,10 +1089,10 @@ A visit to Córdoba is just an hour's drive from Castillo del Alma.</textarea></
     </div>
 
     <div class="fc-block fc-sub" data-section="opl_flamingo">
-      <div class="fc-block-header" style="cursor:pointer;" onclick="this.parentElement.classList.toggle('fc-collapsed')">
+      <div class="fc-block-header" style="display:flex;align-items:center;gap:.8rem;cursor:pointer;" onclick="this.parentElement.classList.toggle('fc-collapsed')">
         <span class="fc-block-title">7.11 · Flamingosøen — Fuente de Piedra</span>
         <span style="font-size:.65rem;color:rgba(44,35,24,.4);">klik for at folde ud/sammen ▾</span>
-      </div>
+      <button type="button" onclick="event.stopPropagation(); oversaetBlok(this)" style="background:rgba(58,110,106,.1);border:1px solid rgba(58,110,106,.35);color:#2a7a74;padding:.3rem .8rem;font-family:Manrope,sans-serif;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;margin-left:auto;flex-shrink:0;" title="Oversæt tomme engelske felter i denne sektion">⇄ Oversæt</button></div>
       <div class="fc-block-body fc-collapsible">
         <div class="fc-row">
           <div><label class="fc-label fc-label-da">Titel</label><input type="text" id="opl_flamingo_titel_da" class="fc-input-da" value="Flamingosøen — Fuente de Piedra"></div>
@@ -1118,10 +1119,10 @@ A visit to Córdoba is just an hour's drive from Castillo del Alma.</textarea></
     </div>
 
     <div class="fc-block fc-sub" data-section="opl_eltorcal">
-      <div class="fc-block-header" style="cursor:pointer;" onclick="this.parentElement.classList.toggle('fc-collapsed')">
+      <div class="fc-block-header" style="display:flex;align-items:center;gap:.8rem;cursor:pointer;" onclick="this.parentElement.classList.toggle('fc-collapsed')">
         <span class="fc-block-title">7.12 · El Torcal de Antequera</span>
         <span style="font-size:.65rem;color:rgba(44,35,24,.4);">klik for at folde ud/sammen ▾</span>
-      </div>
+      <button type="button" onclick="event.stopPropagation(); oversaetBlok(this)" style="background:rgba(58,110,106,.1);border:1px solid rgba(58,110,106,.35);color:#2a7a74;padding:.3rem .8rem;font-family:Manrope,sans-serif;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;margin-left:auto;flex-shrink:0;" title="Oversæt tomme engelske felter i denne sektion">⇄ Oversæt</button></div>
       <div class="fc-block-body fc-collapsible">
         <div class="fc-row">
           <div><label class="fc-label fc-label-da">Titel</label><input type="text" id="opl_eltorcal_titel_da" class="fc-input-da" value="El Torcal de Antequera"></div>
@@ -1148,10 +1149,10 @@ A visit to Córdoba is just an hour's drive from Castillo del Alma.</textarea></
     </div>
 
     <div class="fc-block fc-sub" data-section="opl_camorra">
-      <div class="fc-block-header" style="cursor:pointer;" onclick="this.parentElement.classList.toggle('fc-collapsed')">
+      <div class="fc-block-header" style="display:flex;align-items:center;gap:.8rem;cursor:pointer;" onclick="this.parentElement.classList.toggle('fc-collapsed')">
         <span class="fc-block-title">7.13 · Sierra de la Camorra</span>
         <span style="font-size:.65rem;color:rgba(44,35,24,.4);">klik for at folde ud/sammen ▾</span>
-      </div>
+      <button type="button" onclick="event.stopPropagation(); oversaetBlok(this)" style="background:rgba(58,110,106,.1);border:1px solid rgba(58,110,106,.35);color:#2a7a74;padding:.3rem .8rem;font-family:Manrope,sans-serif;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;margin-left:auto;flex-shrink:0;" title="Oversæt tomme engelske felter i denne sektion">⇄ Oversæt</button></div>
       <div class="fc-block-body fc-collapsible">
         <div class="fc-row">
           <div><label class="fc-label fc-label-da">Titel</label><input type="text" id="opl_camorra_titel_da" class="fc-input-da" value="Sierra de la Camorra"></div>
@@ -1178,10 +1179,10 @@ A visit to Córdoba is just an hour's drive from Castillo del Alma.</textarea></
     </div>
 
     <div class="fc-block fc-sub" data-section="opl_ardales">
-      <div class="fc-block-header" style="cursor:pointer;" onclick="this.parentElement.classList.toggle('fc-collapsed')">
+      <div class="fc-block-header" style="display:flex;align-items:center;gap:.8rem;cursor:pointer;" onclick="this.parentElement.classList.toggle('fc-collapsed')">
         <span class="fc-block-title">7.14 · Cueva de Ardales</span>
         <span style="font-size:.65rem;color:rgba(44,35,24,.4);">klik for at folde ud/sammen ▾</span>
-      </div>
+      <button type="button" onclick="event.stopPropagation(); oversaetBlok(this)" style="background:rgba(58,110,106,.1);border:1px solid rgba(58,110,106,.35);color:#2a7a74;padding:.3rem .8rem;font-family:Manrope,sans-serif;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;margin-left:auto;flex-shrink:0;" title="Oversæt tomme engelske felter i denne sektion">⇄ Oversæt</button></div>
       <div class="fc-block-body fc-collapsible">
         <div class="fc-row">
           <div><label class="fc-label fc-label-da">Titel</label><input type="text" id="opl_ardales_titel_da" class="fc-input-da" value="Cueva de Ardales"></div>
@@ -1208,10 +1209,10 @@ A visit to Córdoba is just an hour's drive from Castillo del Alma.</textarea></
     </div>
 
     <div class="fc-block fc-sub" data-section="opl_dolmener">
-      <div class="fc-block-header" style="cursor:pointer;" onclick="this.parentElement.classList.toggle('fc-collapsed')">
+      <div class="fc-block-header" style="display:flex;align-items:center;gap:.8rem;cursor:pointer;" onclick="this.parentElement.classList.toggle('fc-collapsed')">
         <span class="fc-block-title">7.15 · Dolmenerne i Antequera</span>
         <span style="font-size:.65rem;color:rgba(44,35,24,.4);">klik for at folde ud/sammen ▾</span>
-      </div>
+      <button type="button" onclick="event.stopPropagation(); oversaetBlok(this)" style="background:rgba(58,110,106,.1);border:1px solid rgba(58,110,106,.35);color:#2a7a74;padding:.3rem .8rem;font-family:Manrope,sans-serif;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;margin-left:auto;flex-shrink:0;" title="Oversæt tomme engelske felter i denne sektion">⇄ Oversæt</button></div>
       <div class="fc-block-body fc-collapsible">
         <div class="fc-row">
           <div><label class="fc-label fc-label-da">Titel</label><input type="text" id="opl_dolmener_titel_da" class="fc-input-da" value="Dolmenerne i Antequera"></div>
@@ -1238,10 +1239,10 @@ A visit to Córdoba is just an hour's drive from Castillo del Alma.</textarea></
     </div>
 
     <div class="fc-block fc-sub" data-section="opl_pena">
-      <div class="fc-block-header" style="cursor:pointer;" onclick="this.parentElement.classList.toggle('fc-collapsed')">
+      <div class="fc-block-header" style="display:flex;align-items:center;gap:.8rem;cursor:pointer;" onclick="this.parentElement.classList.toggle('fc-collapsed')">
         <span class="fc-block-title">7.16 · Peña de los Enamorados</span>
         <span style="font-size:.65rem;color:rgba(44,35,24,.4);">klik for at folde ud/sammen ▾</span>
-      </div>
+      <button type="button" onclick="event.stopPropagation(); oversaetBlok(this)" style="background:rgba(58,110,106,.1);border:1px solid rgba(58,110,106,.35);color:#2a7a74;padding:.3rem .8rem;font-family:Manrope,sans-serif;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;margin-left:auto;flex-shrink:0;" title="Oversæt tomme engelske felter i denne sektion">⇄ Oversæt</button></div>
       <div class="fc-block-body fc-collapsible">
         <div class="fc-row">
           <div><label class="fc-label fc-label-da">Titel</label><input type="text" id="opl_pena_titel_da" class="fc-input-da" value="Peña de los Enamorados"></div>
@@ -1268,10 +1269,10 @@ A visit to Córdoba is just an hour's drive from Castillo del Alma.</textarea></
     </div>
 
     <div class="fc-block fc-sub" data-section="opl_alhambra">
-      <div class="fc-block-header" style="cursor:pointer;" onclick="this.parentElement.classList.toggle('fc-collapsed')">
+      <div class="fc-block-header" style="display:flex;align-items:center;gap:.8rem;cursor:pointer;" onclick="this.parentElement.classList.toggle('fc-collapsed')">
         <span class="fc-block-title">7.17 · Alhambra · Granada</span>
         <span style="font-size:.65rem;color:rgba(44,35,24,.4);">klik for at folde ud/sammen ▾</span>
-      </div>
+      <button type="button" onclick="event.stopPropagation(); oversaetBlok(this)" style="background:rgba(58,110,106,.1);border:1px solid rgba(58,110,106,.35);color:#2a7a74;padding:.3rem .8rem;font-family:Manrope,sans-serif;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;margin-left:auto;flex-shrink:0;" title="Oversæt tomme engelske felter i denne sektion">⇄ Oversæt</button></div>
       <div class="fc-block-body fc-collapsible">
         <div class="fc-row">
           <div><label class="fc-label fc-label-da">Titel</label><input type="text" id="opl_alhambra_titel_da" class="fc-input-da" value="Alhambra · Granada"></div>
@@ -1298,10 +1299,10 @@ A visit to Córdoba is just an hour's drive from Castillo del Alma.</textarea></
     </div>
 
     <div class="fc-block fc-sub" data-section="opl_sevilla">
-      <div class="fc-block-header" style="cursor:pointer;" onclick="this.parentElement.classList.toggle('fc-collapsed')">
+      <div class="fc-block-header" style="display:flex;align-items:center;gap:.8rem;cursor:pointer;" onclick="this.parentElement.classList.toggle('fc-collapsed')">
         <span class="fc-block-title">7.18 · Sevilla</span>
         <span style="font-size:.65rem;color:rgba(44,35,24,.4);">klik for at folde ud/sammen ▾</span>
-      </div>
+      <button type="button" onclick="event.stopPropagation(); oversaetBlok(this)" style="background:rgba(58,110,106,.1);border:1px solid rgba(58,110,106,.35);color:#2a7a74;padding:.3rem .8rem;font-family:Manrope,sans-serif;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;margin-left:auto;flex-shrink:0;" title="Oversæt tomme engelske felter i denne sektion">⇄ Oversæt</button></div>
       <div class="fc-block-body fc-collapsible">
         <div class="fc-row">
           <div><label class="fc-label fc-label-da">Titel</label><input type="text" id="opl_sevilla_titel_da" class="fc-input-da" value="Sevilla"></div>
@@ -1328,10 +1329,10 @@ A visit to Córdoba is just an hour's drive from Castillo del Alma.</textarea></
     </div>
 
     <div class="fc-block fc-sub" data-section="opl_picasso">
-      <div class="fc-block-header" style="cursor:pointer;" onclick="this.parentElement.classList.toggle('fc-collapsed')">
+      <div class="fc-block-header" style="display:flex;align-items:center;gap:.8rem;cursor:pointer;" onclick="this.parentElement.classList.toggle('fc-collapsed')">
         <span class="fc-block-title">7.19 · Picasso-museet · Málaga</span>
         <span style="font-size:.65rem;color:rgba(44,35,24,.4);">klik for at folde ud/sammen ▾</span>
-      </div>
+      <button type="button" onclick="event.stopPropagation(); oversaetBlok(this)" style="background:rgba(58,110,106,.1);border:1px solid rgba(58,110,106,.35);color:#2a7a74;padding:.3rem .8rem;font-family:Manrope,sans-serif;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;margin-left:auto;flex-shrink:0;" title="Oversæt tomme engelske felter i denne sektion">⇄ Oversæt</button></div>
       <div class="fc-block-body fc-collapsible">
         <div class="fc-row">
           <div><label class="fc-label fc-label-da">Titel</label><input type="text" id="opl_picasso_titel_da" class="fc-input-da" value="Picasso-museet · Málaga"></div>
@@ -1362,10 +1363,10 @@ A visit to Córdoba is just an hour's drive from Castillo del Alma.</textarea></
 
     <!-- GALLERI -->
     <div class="fc-block" data-section="galleri" id="anchor_galleri">
-      <div class="fc-block-header">
+      <div class="fc-block-header" style="display:flex;align-items:center;gap:.8rem;">
         <span class="fc-block-title">8 · Galleri</span>
         <label class="fc-toggle"><input type="checkbox" id="active_galleri" checked><span>Vis på hjemmesiden</span></label>
-      </div>
+      <button type="button" onclick="oversaetBlok(this)" style="background:rgba(58,110,106,.1);border:1px solid rgba(58,110,106,.35);color:#2a7a74;padding:.3rem .8rem;font-family:Manrope,sans-serif;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;margin-left:auto;" title="Oversæt tomme engelske felter i denne sektion">⇄ Oversæt</button></div>
       <div class="fc-block-body">
         <div class="fc-row">
           <div><label class="fc-label fc-label-da">Section-label</label><input type="text" id="galleri_label_da" class="fc-input-da" value="Galleri"></div>
@@ -1399,10 +1400,10 @@ A visit to Córdoba is just an hour's drive from Castillo del Alma.</textarea></
 
     <!-- WELLNESS & HEALING -->
     <div class="fc-block" data-section="wellness" id="anchor_wellness">
-      <div class="fc-block-header">
+      <div class="fc-block-header" style="display:flex;align-items:center;gap:.8rem;">
         <span class="fc-block-title">9 · Wellness &amp; Healing</span>
         <label class="fc-toggle"><input type="checkbox" id="active_wellness" checked><span>Vis på hjemmesiden</span></label>
-      </div>
+      <button type="button" onclick="oversaetBlok(this)" style="background:rgba(58,110,106,.1);border:1px solid rgba(58,110,106,.35);color:#2a7a74;padding:.3rem .8rem;font-family:Manrope,sans-serif;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;margin-left:auto;" title="Oversæt tomme engelske felter i denne sektion">⇄ Oversæt</button></div>
       <div class="fc-block-body">
         <div style="margin-bottom:1.2rem;padding:.9rem;background:rgba(42,122,116,.06);border:1px solid rgba(42,122,116,.2);">
           <label class="fc-label" style="color:#2a7a74;">📁 Wellness-billede</label>
@@ -1445,10 +1446,10 @@ A visit to Córdoba is just an hour's drive from Castillo del Alma.</textarea></
         <p style="font-size:.7rem;color:rgba(44,35,24,.4);margin:1.2rem 0 .6rem;">6 wellness-kort — klik hver kort-titel for at folde ud:</p>
 
     <div class="fc-block fc-sub" data-section="well_breathwork">
-      <div class="fc-block-header" style="cursor:pointer;" onclick="this.parentElement.classList.toggle('fc-collapsed')">
+      <div class="fc-block-header" style="display:flex;align-items:center;gap:.8rem;cursor:pointer;" onclick="this.parentElement.classList.toggle('fc-collapsed')">
         <span class="fc-block-title">9.1 · Breathwork</span>
         <span style="font-size:.65rem;color:rgba(44,35,24,.4);">klik for at folde ud/sammen ▾</span>
-      </div>
+      <button type="button" onclick="event.stopPropagation(); oversaetBlok(this)" style="background:rgba(58,110,106,.1);border:1px solid rgba(58,110,106,.35);color:#2a7a74;padding:.3rem .8rem;font-family:Manrope,sans-serif;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;margin-left:auto;flex-shrink:0;" title="Oversæt tomme engelske felter i denne sektion">⇄ Oversæt</button></div>
       <div class="fc-block-body fc-collapsible">
         <div class="fc-row">
           <div><label class="fc-label fc-label-da">Titel</label><input type="text" id="well_breathwork_titel_da" class="fc-input-da" value="Breathwork"></div>
@@ -1480,10 +1481,10 @@ The breath is the body's most direct access to the nervous system. When we work 
     </div>
 
     <div class="fc-block fc-sub" data-section="well_meditation">
-      <div class="fc-block-header" style="cursor:pointer;" onclick="this.parentElement.classList.toggle('fc-collapsed')">
+      <div class="fc-block-header" style="display:flex;align-items:center;gap:.8rem;cursor:pointer;" onclick="this.parentElement.classList.toggle('fc-collapsed')">
         <span class="fc-block-title">9.2 · Meditation & Stilhed</span>
         <span style="font-size:.65rem;color:rgba(44,35,24,.4);">klik for at folde ud/sammen ▾</span>
-      </div>
+      <button type="button" onclick="event.stopPropagation(); oversaetBlok(this)" style="background:rgba(58,110,106,.1);border:1px solid rgba(58,110,106,.35);color:#2a7a74;padding:.3rem .8rem;font-family:Manrope,sans-serif;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;margin-left:auto;flex-shrink:0;" title="Oversæt tomme engelske felter i denne sektion">⇄ Oversæt</button></div>
       <div class="fc-block-body fc-collapsible">
         <div class="fc-row">
           <div><label class="fc-label fc-label-da">Titel</label><input type="text" id="well_meditation_titel_da" class="fc-input-da" value="Meditation & Stilhed"></div>
@@ -1512,10 +1513,10 @@ We offer guided meditations suited to all levels — from beginner to experience
     </div>
 
     <div class="fc-block fc-sub" data-section="well_somatic">
-      <div class="fc-block-header" style="cursor:pointer;" onclick="this.parentElement.classList.toggle('fc-collapsed')">
+      <div class="fc-block-header" style="display:flex;align-items:center;gap:.8rem;cursor:pointer;" onclick="this.parentElement.classList.toggle('fc-collapsed')">
         <span class="fc-block-title">9.3 · Somatic Therapy</span>
         <span style="font-size:.65rem;color:rgba(44,35,24,.4);">klik for at folde ud/sammen ▾</span>
-      </div>
+      <button type="button" onclick="event.stopPropagation(); oversaetBlok(this)" style="background:rgba(58,110,106,.1);border:1px solid rgba(58,110,106,.35);color:#2a7a74;padding:.3rem .8rem;font-family:Manrope,sans-serif;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;margin-left:auto;flex-shrink:0;" title="Oversæt tomme engelske felter i denne sektion">⇄ Oversæt</button></div>
       <div class="fc-block-body fc-collapsible">
         <div class="fc-row">
           <div><label class="fc-label fc-label-da">Titel</label><input type="text" id="well_somatic_titel_da" class="fc-input-da" value="Somatic Therapy"></div>
@@ -1544,10 +1545,10 @@ Through body awareness, grounding and gentle therapeutic techniques, space is cr
     </div>
 
     <div class="fc-block fc-sub" data-section="well_healing">
-      <div class="fc-block-header" style="cursor:pointer;" onclick="this.parentElement.classList.toggle('fc-collapsed')">
+      <div class="fc-block-header" style="display:flex;align-items:center;gap:.8rem;cursor:pointer;" onclick="this.parentElement.classList.toggle('fc-collapsed')">
         <span class="fc-block-title">9.4 · Healing</span>
         <span style="font-size:.65rem;color:rgba(44,35,24,.4);">klik for at folde ud/sammen ▾</span>
-      </div>
+      <button type="button" onclick="event.stopPropagation(); oversaetBlok(this)" style="background:rgba(58,110,106,.1);border:1px solid rgba(58,110,106,.35);color:#2a7a74;padding:.3rem .8rem;font-family:Manrope,sans-serif;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;margin-left:auto;flex-shrink:0;" title="Oversæt tomme engelske felter i denne sektion">⇄ Oversæt</button></div>
       <div class="fc-block-body fc-collapsible">
         <div class="fc-row">
           <div><label class="fc-label fc-label-da">Titel</label><input type="text" id="well_healing_titel_da" class="fc-input-da" value="Healing"></div>
@@ -1576,10 +1577,10 @@ Through presence, care, energy and human contact, many experience a deeper sense
     </div>
 
     <div class="fc-block fc-sub" data-section="well_massage">
-      <div class="fc-block-header" style="cursor:pointer;" onclick="this.parentElement.classList.toggle('fc-collapsed')">
+      <div class="fc-block-header" style="display:flex;align-items:center;gap:.8rem;cursor:pointer;" onclick="this.parentElement.classList.toggle('fc-collapsed')">
         <span class="fc-block-title">9.5 · Massage & Bodywork</span>
         <span style="font-size:.65rem;color:rgba(44,35,24,.4);">klik for at folde ud/sammen ▾</span>
-      </div>
+      <button type="button" onclick="event.stopPropagation(); oversaetBlok(this)" style="background:rgba(58,110,106,.1);border:1px solid rgba(58,110,106,.35);color:#2a7a74;padding:.3rem .8rem;font-family:Manrope,sans-serif;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;margin-left:auto;flex-shrink:0;" title="Oversæt tomme engelske felter i denne sektion">⇄ Oversæt</button></div>
       <div class="fc-block-body fc-collapsible">
         <div class="fc-row">
           <div><label class="fc-label fc-label-da">Titel</label><input type="text" id="well_massage_titel_da" class="fc-input-da" value="Massage & Bodywork"></div>
@@ -1608,10 +1609,10 @@ We offer various forms of massage and bodywork — tailored to each guest's need
     </div>
 
     <div class="fc-block fc-sub" data-section="well_pool">
-      <div class="fc-block-header" style="cursor:pointer;" onclick="this.parentElement.classList.toggle('fc-collapsed')">
+      <div class="fc-block-header" style="display:flex;align-items:center;gap:.8rem;cursor:pointer;" onclick="this.parentElement.classList.toggle('fc-collapsed')">
         <span class="fc-block-title">9.6 · Pool & Afslapning</span>
         <span style="font-size:.65rem;color:rgba(44,35,24,.4);">klik for at folde ud/sammen ▾</span>
-      </div>
+      <button type="button" onclick="event.stopPropagation(); oversaetBlok(this)" style="background:rgba(58,110,106,.1);border:1px solid rgba(58,110,106,.35);color:#2a7a74;padding:.3rem .8rem;font-family:Manrope,sans-serif;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;margin-left:auto;flex-shrink:0;" title="Oversæt tomme engelske felter i denne sektion">⇄ Oversæt</button></div>
       <div class="fc-block-body fc-collapsible">
         <div class="fc-row">
           <div><label class="fc-label fc-label-da">Titel</label><input type="text" id="well_pool_titel_da" class="fc-input-da" value="Pool & Afslapning"></div>
@@ -1654,10 +1655,10 @@ feeling more calm – and coming home to yourself again."</textarea></div>
 
     <!-- OM OS -->
     <div class="fc-block" data-section="om_os" id="anchor_om_os">
-      <div class="fc-block-header">
+      <div class="fc-block-header" style="display:flex;align-items:center;gap:.8rem;">
         <span class="fc-block-title">10 · Om os</span>
         <label class="fc-toggle"><input type="checkbox" id="active_om_os" checked><span>Vis på hjemmesiden</span></label>
-      </div>
+      <button type="button" onclick="oversaetBlok(this)" style="background:rgba(58,110,106,.1);border:1px solid rgba(58,110,106,.35);color:#2a7a74;padding:.3rem .8rem;font-family:Manrope,sans-serif;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;margin-left:auto;" title="Oversæt tomme engelske felter i denne sektion">⇄ Oversæt</button></div>
       <div class="fc-block-body">
         <div style="margin-bottom:1.2rem;padding:.9rem;background:rgba(42,122,116,.06);border:1px solid rgba(42,122,116,.2);">
           <label class="fc-label" style="color:#2a7a74;">📁 Om os-billede</label>
@@ -1708,10 +1709,10 @@ feeling more calm – and coming home to yourself again."</textarea></div>
 
     <!-- TESTIMONIAL -->
     <div class="fc-block" data-section="testimonial" id="anchor_testimonial">
-      <div class="fc-block-header">
+      <div class="fc-block-header" style="display:flex;align-items:center;gap:.8rem;">
         <span class="fc-block-title">11 · Testimonial (citat-bånd)</span>
         <label class="fc-toggle"><input type="checkbox" id="active_testimonial" checked><span>Vis på hjemmesiden</span></label>
-      </div>
+      <button type="button" onclick="oversaetBlok(this)" style="background:rgba(58,110,106,.1);border:1px solid rgba(58,110,106,.35);color:#2a7a74;padding:.3rem .8rem;font-family:Manrope,sans-serif;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;margin-left:auto;" title="Oversæt tomme engelske felter i denne sektion">⇄ Oversæt</button></div>
       <div class="fc-block-body">
         <div class="fc-row">
           <div><label class="fc-label fc-label-da">Citat</label><textarea id="testimonial_citat_da" class="fc-input-da fc-textarea">Castillo del Alma er ikke bare et sted — det er en tilstand. Jeg kom for at hvile og rejste hjem forandret.</textarea></div>
@@ -1729,10 +1730,10 @@ feeling more calm – and coming home to yourself again."</textarea></div>
 
     <!-- NYHEDSBREV -->
     <div class="fc-block" data-section="nyhedsbrev" id="anchor_nyhedsbrev">
-      <div class="fc-block-header">
+      <div class="fc-block-header" style="display:flex;align-items:center;gap:.8rem;">
         <span class="fc-block-title">12 · Nyhedsbrev (Stay Connected)</span>
         <label class="fc-toggle"><input type="checkbox" id="active_nyhedsbrev" checked><span>Vis på hjemmesiden</span></label>
-      </div>
+      <button type="button" onclick="oversaetBlok(this)" style="background:rgba(58,110,106,.1);border:1px solid rgba(58,110,106,.35);color:#2a7a74;padding:.3rem .8rem;font-family:Manrope,sans-serif;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;margin-left:auto;" title="Oversæt tomme engelske felter i denne sektion">⇄ Oversæt</button></div>
       <div class="fc-block-body">
         <div class="fc-row">
           <div><label class="fc-label fc-label-da">Section-label</label><input type="text" id="nl_label_da" class="fc-input-da" value="Stay Connected"></div>
@@ -1832,10 +1833,10 @@ feeling more calm – and coming home to yourself again."</textarea></div>
 
     <!-- FOOTER -->
     <div class="fc-block" data-section="footer" id="anchor_footer">
-      <div class="fc-block-header">
+      <div class="fc-block-header" style="display:flex;align-items:center;gap:.8rem;">
         <span class="fc-block-title">13 · Footer</span>
         <label class="fc-toggle"><input type="checkbox" id="active_footer" checked><span>Vis på hjemmesiden</span></label>
-      </div>
+      <button type="button" onclick="oversaetBlok(this)" style="background:rgba(58,110,106,.1);border:1px solid rgba(58,110,106,.35);color:#2a7a74;padding:.3rem .8rem;font-family:Manrope,sans-serif;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;margin-left:auto;" title="Oversæt tomme engelske felter i denne sektion">⇄ Oversæt</button></div>
       <div class="fc-block-body">
         <div class="fc-row">
           <div><label class="fc-label fc-label-da">Adresse</label><textarea id="footer_adresse_da" class="fc-input-da fc-textarea" style="min-height:50px;">Mollina · Antequera · Málaga, Andalusia&lt;br&gt;&lt;br&gt;info@castillodelalma.com</textarea></div>
@@ -1973,6 +1974,7 @@ feeling more calm – and coming home to yourself again."</textarea></div>
         <p style="font-size:.7rem;color:rgba(44,35,24,.5);margin:0;">🇩🇰 Dansk i venstre kolonne &nbsp;·&nbsp; 🇬🇧 Engelsk i højre kolonne</p>
       </div>
       <button onclick="gemEjendommen()" style="background:var(--wine);color:#fff;border:none;padding:.7rem 2rem;font-family:Manrope,sans-serif;font-size:.68rem;font-weight:500;letter-spacing:.18em;text-transform:uppercase;cursor:pointer;">💾 Gem ejendommen</button>
+      <button type="button" onclick="oversaetHeleSiden(this,'tab-ejendommen')" style="background:rgba(58,110,106,.1);border:1px solid rgba(58,110,106,.4);color:#2a7a74;padding:.7rem 1.6rem;font-family:Manrope,sans-serif;font-size:.68rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;margin-left:.8rem;" title="Oversætter alle tomme engelske felter">⇄ Oversæt hele siden til engelsk</button>
     </div>
 
     <!-- HOP TIL SEKTION -->
@@ -1994,7 +1996,7 @@ feeling more calm – and coming home to yourself again."</textarea></div>
 
     <!-- 0 · NAVIGATION -->
     <div class="fc-block" id="ej_adm_nav" style="margin-bottom:1.5rem;">
-      <div class="fc-block-header"><span class="fc-block-title">0 · Navigation (menu) &amp; sektionsrækkefølge</span></div>
+      <div class="fc-block-header" style="display:flex;align-items:center;gap:.8rem;"><span class="fc-block-title">0 · Navigation (menu) &amp; sektionsrækkefølge</span><button type="button" onclick="oversaetBlok(this)" style="background:rgba(58,110,106,.1);border:1px solid rgba(58,110,106,.35);color:#2a7a74;padding:.3rem .8rem;font-family:Manrope,sans-serif;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;margin-left:auto;" title="Oversæt tomme engelske felter i denne sektion">⇄ Oversæt</button></div>
       <div class="fc-block-body">
         <p style="font-family:Manrope,sans-serif;font-size:.72rem;color:#7a6a52;margin-bottom:.8rem;">Menu-links på ejendomssiden: navn (DA/EN), link (vælg et ankerpunkt fra listen eller <b>Egen URL</b>), synlighed og rækkefølge med pilene. Ankerpunkterne følger altid sektionernes ID'er nedenfor.</p>
         <div id="ejNavEditor"></div>
@@ -2012,7 +2014,7 @@ feeling more calm – and coming home to yourself again."</textarea></div>
 
     <!-- 1 · HERO -->
     <div class="fc-block" id="ej_adm_hero" style="margin-bottom:1.5rem;">
-      <div class="fc-block-header"><span class="fc-block-title">1 · Hero</span></div>
+      <div class="fc-block-header" style="display:flex;align-items:center;gap:.8rem;"><span class="fc-block-title">1 · Hero</span><button type="button" onclick="oversaetBlok(this)" style="background:rgba(58,110,106,.1);border:1px solid rgba(58,110,106,.35);color:#2a7a74;padding:.3rem .8rem;font-family:Manrope,sans-serif;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;margin-left:auto;" title="Oversæt tomme engelske felter i denne sektion">⇄ Oversæt</button></div>
       <div class="fc-block-body">
         <div class="fc-row">
           <div><label class="fc-label fc-label-da">Eyebrow tekst (DA)</label><input type="text" id="ej_hero_eyebrow_da" class="fc-input-da" value="Mollina · Antequera · Málaga"></div>
@@ -2037,7 +2039,7 @@ feeling more calm – and coming home to yourself again."</textarea></div>
 
     <!-- 2 · INTRO -->
     <div class="fc-block" id="ej_adm_intro" style="margin-bottom:1.5rem;">
-      <div class="fc-block-header"><span class="fc-block-title">2 · Intro-sektion</span></div>
+      <div class="fc-block-header" style="display:flex;align-items:center;gap:.8rem;"><span class="fc-block-title">2 · Intro-sektion</span><button type="button" onclick="oversaetBlok(this)" style="background:rgba(58,110,106,.1);border:1px solid rgba(58,110,106,.35);color:#2a7a74;padding:.3rem .8rem;font-family:Manrope,sans-serif;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;margin-left:auto;" title="Oversæt tomme engelske felter i denne sektion">⇄ Oversæt</button></div>
       <div class="fc-block-body">
         <div class="fc-row">
           <div><label class="fc-label fc-label-da">Label (DA)</label><input type="text" id="ej_intro_label_da" class="fc-input-da" value="Ejendommen"></div>
@@ -2131,7 +2133,7 @@ feeling more calm – and coming home to yourself again."</textarea></div>
 
     <!-- 3 · TÅRNENE -->
     <div class="fc-block" id="ej_adm_towers" style="margin-bottom:1.5rem;">
-      <div class="fc-block-header"><span class="fc-block-title">3 · Tårnene</span></div>
+      <div class="fc-block-header" style="display:flex;align-items:center;gap:.8rem;"><span class="fc-block-title">3 · Tårnene</span><button type="button" onclick="oversaetBlok(this)" style="background:rgba(58,110,106,.1);border:1px solid rgba(58,110,106,.35);color:#2a7a74;padding:.3rem .8rem;font-family:Manrope,sans-serif;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;margin-left:auto;" title="Oversæt tomme engelske felter i denne sektion">⇄ Oversæt</button></div>
       <div class="fc-block-body">
         <div class="fc-row">
           <div><label class="fc-label fc-label-da">Label (DA)</label><input type="text" id="ej_towers_label_da" class="fc-input-da" value="Tårnene"></div>
@@ -2172,7 +2174,7 @@ feeling more calm – and coming home to yourself again."</textarea></div>
 
     <!-- 4 · VÆRELSERNE -->
     <div class="fc-block" id="ej_adm_rooms" style="margin-bottom:1.5rem;">
-      <div class="fc-block-header"><span class="fc-block-title">4 · Værelserne (7 rum)</span></div>
+      <div class="fc-block-header" style="display:flex;align-items:center;gap:.8rem;"><span class="fc-block-title">4 · Værelserne (7 rum)</span><button type="button" onclick="oversaetBlok(this)" style="background:rgba(58,110,106,.1);border:1px solid rgba(58,110,106,.35);color:#2a7a74;padding:.3rem .8rem;font-family:Manrope,sans-serif;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;margin-left:auto;" title="Oversæt tomme engelske felter i denne sektion">⇄ Oversæt</button></div>
       <div class="fc-block-body">
         <div class="fc-row">
           <div><label class="fc-label fc-label-da">Section-label (DA)</label><input type="text" id="ej_rooms_label_da" class="fc-input-da" value="Indkvartering"></div>
@@ -2194,7 +2196,7 @@ feeling more calm – and coming home to yourself again."</textarea></div>
 
     <!-- 5 · FACILITETER -->
     <div class="fc-block" id="ej_adm_fac" style="margin-bottom:1.5rem;">
-      <div class="fc-block-header"><span class="fc-block-title">5 · Faciliteter</span></div>
+      <div class="fc-block-header" style="display:flex;align-items:center;gap:.8rem;"><span class="fc-block-title">5 · Faciliteter</span><button type="button" onclick="oversaetBlok(this)" style="background:rgba(58,110,106,.1);border:1px solid rgba(58,110,106,.35);color:#2a7a74;padding:.3rem .8rem;font-family:Manrope,sans-serif;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;margin-left:auto;" title="Oversæt tomme engelske felter i denne sektion">⇄ Oversæt</button></div>
       <div class="fc-block-body">
         <div class="fc-row">
           <div><label class="fc-label fc-label-da">Label (DA)</label><input type="text" id="ej_fac_label_da" class="fc-input-da" value="Faciliteter"></div>
@@ -2422,7 +2424,7 @@ feeling more calm – and coming home to yourself again."</textarea></div>
 
     <!-- 6 · BÆREDYGTIGHED -->
     <div class="fc-block" id="ej_adm_sustain" style="margin-bottom:1.5rem;">
-      <div class="fc-block-header"><span class="fc-block-title">6 · Bæredygtighed</span></div>
+      <div class="fc-block-header" style="display:flex;align-items:center;gap:.8rem;"><span class="fc-block-title">6 · Bæredygtighed</span><button type="button" onclick="oversaetBlok(this)" style="background:rgba(58,110,106,.1);border:1px solid rgba(58,110,106,.35);color:#2a7a74;padding:.3rem .8rem;font-family:Manrope,sans-serif;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;margin-left:auto;" title="Oversæt tomme engelske felter i denne sektion">⇄ Oversæt</button></div>
       <div class="fc-block-body">
         <div class="fc-row">
           <div><label class="fc-label fc-label-da">Label (DA)</label><input type="text" id="ej_sustain_label_da" class="fc-input-da" value="Bæredygtighed"></div>
@@ -2532,7 +2534,7 @@ feeling more calm – and coming home to yourself again."</textarea></div>
 
     <!-- 7 · VINGÅRDEN -->
     <div class="fc-block" id="ej_adm_vineyard" style="margin-bottom:1.5rem;">
-      <div class="fc-block-header"><span class="fc-block-title">7 · Vingården</span></div>
+      <div class="fc-block-header" style="display:flex;align-items:center;gap:.8rem;"><span class="fc-block-title">7 · Vingården</span><button type="button" onclick="oversaetBlok(this)" style="background:rgba(58,110,106,.1);border:1px solid rgba(58,110,106,.35);color:#2a7a74;padding:.3rem .8rem;font-family:Manrope,sans-serif;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;margin-left:auto;" title="Oversæt tomme engelske felter i denne sektion">⇄ Oversæt</button></div>
       <div class="fc-block-body">
         <div class="fc-row">
           <div><label class="fc-label fc-label-da">Label (DA)</label><input type="text" id="ej_vineyard_label_da" class="fc-input-da" value="Vingården"></div>
@@ -2573,7 +2575,7 @@ feeling more calm – and coming home to yourself again."</textarea></div>
 
     <!-- 8 · CTA -->
     <div class="fc-block" id="ej_adm_cta" style="margin-bottom:1.5rem;">
-      <div class="fc-block-header"><span class="fc-block-title">8 · Call-to-action sektion</span></div>
+      <div class="fc-block-header" style="display:flex;align-items:center;gap:.8rem;"><span class="fc-block-title">8 · Call-to-action sektion</span><button type="button" onclick="oversaetBlok(this)" style="background:rgba(58,110,106,.1);border:1px solid rgba(58,110,106,.35);color:#2a7a74;padding:.3rem .8rem;font-family:Manrope,sans-serif;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;margin-left:auto;" title="Oversæt tomme engelske felter i denne sektion">⇄ Oversæt</button></div>
       <div class="fc-block-body">
         <div class="fc-row">
           <div><label class="fc-label fc-label-da">Overskrift (DA)</label><input type="text" id="ej_cta_h2_da" class="fc-input-da" value="Klar til at opleve Castillo del Alma?"></div>
@@ -2610,7 +2612,7 @@ feeling more calm – and coming home to yourself again."</textarea></div>
 
     <!-- 9 · FOOTER -->
     <div class="fc-block" id="ej_adm_footer" style="margin-bottom:1.5rem;">
-      <div class="fc-block-header"><span class="fc-block-title">9 · Footer</span></div>
+      <div class="fc-block-header" style="display:flex;align-items:center;gap:.8rem;"><span class="fc-block-title">9 · Footer</span><button type="button" onclick="oversaetBlok(this)" style="background:rgba(58,110,106,.1);border:1px solid rgba(58,110,106,.35);color:#2a7a74;padding:.3rem .8rem;font-family:Manrope,sans-serif;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;margin-left:auto;" title="Oversæt tomme engelske felter i denne sektion">⇄ Oversæt</button></div>
       <div class="fc-block-body">
         <div class="fc-row">
           <div><label class="fc-label fc-label-da">Copyright-tekst (DA)</label><input type="text" id="ej_footer_copy_da" class="fc-input-da" value="© 2026 Castillo del Alma · Mollina, Málaga · All rights reserved"></div>
@@ -2630,8 +2632,12 @@ feeling more calm – and coming home to yourself again."</textarea></div>
   <div class="subtab-content" id="tab-udlejning" style="padding:2rem 3rem;max-width:1100px;">
     <h2 style="font-family:Cinzel,serif;font-weight:300;font-size:1.4rem;letter-spacing:.08em;color:#2c2318;margin-bottom:.4rem;">Udlejning (udlejning.html)</h2>
     <p style="font-size:.75rem;color:rgba(44,35,24,.5);margin-bottom:2rem;">Alt indhold på "Afhold dit eget retreat"-siden. DA/EN side om side, ligesom Ejendommen-fanen.</p>
+    <div style="margin-bottom:1.5rem;">
+      <button onclick="gemUdlejning()" style="background:var(--wine);color:#fff;border:none;padding:.7rem 2rem;font-family:Manrope,sans-serif;font-size:.68rem;font-weight:500;letter-spacing:.18em;text-transform:uppercase;cursor:pointer;">💾 Gem udlejningssiden</button>
+      <button type="button" onclick="oversaetHeleSiden(this,'tab-udlejning')" style="background:rgba(58,110,106,.1);border:1px solid rgba(58,110,106,.4);color:#2a7a74;padding:.7rem 1.6rem;font-family:Manrope,sans-serif;font-size:.68rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;margin-left:.8rem;" title="Oversætter alle tomme engelske felter">⇄ Oversæt hele siden til engelsk</button>
+    </div>
     <div class="fc-block" data-section="ul_0 · navigation & rækkefølge">
-      <div class="fc-block-header"><span class="fc-block-title">0 · Navigation (menu) &amp; sektionsrækkefølge</span></div>
+      <div class="fc-block-header" style="display:flex;align-items:center;gap:.8rem;"><span class="fc-block-title">0 · Navigation (menu) &amp; sektionsrækkefølge</span><button type="button" onclick="oversaetBlok(this)" style="background:rgba(58,110,106,.1);border:1px solid rgba(58,110,106,.35);color:#2a7a74;padding:.3rem .8rem;font-family:Manrope,sans-serif;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;margin-left:auto;" title="Oversæt tomme engelske felter i denne sektion">⇄ Oversæt</button></div>
       <div class="fc-block-body">
         <p style="font-family:Manrope,sans-serif;font-size:.72rem;color:#7a6a52;margin-bottom:.8rem;">Menu-links på udlejningssiden: navn (DA/EN), link (vælg et ankerpunkt fra listen eller <b>Egen URL</b>), synlighed og rækkefølge med pilene. Ankerpunkterne følger altid sektionernes ID'er nedenfor.</p>
         <div id="ulNavEditor"></div>
@@ -2644,7 +2650,7 @@ feeling more calm – and coming home to yourself again."</textarea></div>
     </div>
 
     <div class="fc-block" data-section="ul_1 · hero">
-      <div class="fc-block-header"><span class="fc-block-title">1 · Hero</span></div>
+      <div class="fc-block-header" style="display:flex;align-items:center;gap:.8rem;"><span class="fc-block-title">1 · Hero</span><button type="button" onclick="oversaetBlok(this)" style="background:rgba(58,110,106,.1);border:1px solid rgba(58,110,106,.35);color:#2a7a74;padding:.3rem .8rem;font-family:Manrope,sans-serif;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;margin-left:auto;" title="Oversæt tomme engelske felter i denne sektion">⇄ Oversæt</button></div>
       <div class="fc-block-body">
         <div class="fc-row">
           <div><label class="fc-label fc-label-da">Eyebrow-tekst (DA)</label><input type="text" id="ul_hero_eyebrow_da" class="fc-input-da" placeholder=""></div>
@@ -2668,7 +2674,7 @@ feeling more calm – and coming home to yourself again."</textarea></div>
     </div>
 
     <div class="fc-block" data-section="ul_2 · intro ("vi skaber rammerne")">
-      <div class="fc-block-header"><span class="fc-block-title">2 · Intro ("Vi skaber rammerne")</span></div>
+      <div class="fc-block-header" style="display:flex;align-items:center;gap:.8rem;"><span class="fc-block-title">2 · Intro ("Vi skaber rammerne")</span><button type="button" onclick="oversaetBlok(this)" style="background:rgba(58,110,106,.1);border:1px solid rgba(58,110,106,.35);color:#2a7a74;padding:.3rem .8rem;font-family:Manrope,sans-serif;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;margin-left:auto;" title="Oversæt tomme engelske felter i denne sektion">⇄ Oversæt</button></div>
       <div class="fc-block-body">
         <div class="fc-row">
           <div><label class="fc-label fc-label-da">Label (DA)</label><input type="text" id="ul_intro_label_da" class="fc-input-da" placeholder=""></div>
@@ -2710,7 +2716,7 @@ feeling more calm – and coming home to yourself again."</textarea></div>
     </div>
 
     <div class="fc-block" data-section="ul_3 · billedstribe 1">
-      <div class="fc-block-header"><span class="fc-block-title">3 · Billedstribe 1</span></div>
+      <div class="fc-block-header" style="display:flex;align-items:center;gap:.8rem;"><span class="fc-block-title">3 · Billedstribe 1</span><button type="button" onclick="oversaetBlok(this)" style="background:rgba(58,110,106,.1);border:1px solid rgba(58,110,106,.35);color:#2a7a74;padding:.3rem .8rem;font-family:Manrope,sans-serif;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;margin-left:auto;" title="Oversæt tomme engelske felter i denne sektion">⇄ Oversæt</button></div>
       <div class="fc-block-body">
         <div style="margin-top:.8rem;padding:.9rem;background:rgba(42,122,116,.06);border:1px solid rgba(42,122,116,.2);">
           <label class="fc-label" style="color:#2a7a74;">📁 Billede 1</label>
@@ -2753,7 +2759,7 @@ feeling more calm – and coming home to yourself again."</textarea></div>
     </div>
 
     <div class="fc-block" data-section="ul_undervisning">
-      <div class="fc-block-header"><span class="fc-block-title">4 · Undervisningsfaciliteter (NY)</span></div>
+      <div class="fc-block-header" style="display:flex;align-items:center;gap:.8rem;"><span class="fc-block-title">4 · Undervisningsfaciliteter (NY)</span><button type="button" onclick="oversaetBlok(this)" style="background:rgba(58,110,106,.1);border:1px solid rgba(58,110,106,.35);color:#2a7a74;padding:.3rem .8rem;font-family:Manrope,sans-serif;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;margin-left:auto;" title="Oversæt tomme engelske felter i denne sektion">⇄ Oversæt</button></div>
       <div class="fc-block-body">
         <div class="fc-row">
           <div><label class="fc-label fc-label-da">Label (DA)</label><input type="text" id="ul_undervisning_label_da" class="fc-input-da" placeholder=""></div>
@@ -2794,7 +2800,7 @@ feeling more calm – and coming home to yourself again."</textarea></div>
     </div>
 
     <div class="fc-block" data-section="ul_5">
-      <div class="fc-block-header"><span class="fc-block-title">5 · Priser (NY)</span></div>
+      <div class="fc-block-header" style="display:flex;align-items:center;gap:.8rem;"><span class="fc-block-title">5 · Priser (NY)</span><button type="button" onclick="oversaetBlok(this)" style="background:rgba(58,110,106,.1);border:1px solid rgba(58,110,106,.35);color:#2a7a74;padding:.3rem .8rem;font-family:Manrope,sans-serif;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;margin-left:auto;" title="Oversæt tomme engelske felter i denne sektion">⇄ Oversæt</button></div>
       <div class="fc-block-body">
         <div class="fc-row">
           <div><label class="fc-label fc-label-da">Label (DA)</label><input type="text" id="ul_pris_label_da" class="fc-input-da" placeholder=""></div>
@@ -2846,7 +2852,7 @@ feeling more calm – and coming home to yourself again."</textarea></div>
     </div>
 
     <div class="fc-block" data-section="ul_6 · faciliteter ("vi stiller rammerne til rådighed")">
-      <div class="fc-block-header"><span class="fc-block-title">6 · Faciliteter ("Vi stiller rammerne til rådighed")</span></div>
+      <div class="fc-block-header" style="display:flex;align-items:center;gap:.8rem;"><span class="fc-block-title">6 · Faciliteter ("Vi stiller rammerne til rådighed")</span><button type="button" onclick="oversaetBlok(this)" style="background:rgba(58,110,106,.1);border:1px solid rgba(58,110,106,.35);color:#2a7a74;padding:.3rem .8rem;font-family:Manrope,sans-serif;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;margin-left:auto;" title="Oversæt tomme engelske felter i denne sektion">⇄ Oversæt</button></div>
       <div class="fc-block-body">
         <div class="fc-row">
           <div><label class="fc-label fc-label-da">Label (DA)</label><input type="text" id="ul_fac_label_da" class="fc-input-da" placeholder=""></div>
@@ -2897,7 +2903,7 @@ feeling more calm – and coming home to yourself again."</textarea></div>
     </div>
 
     <div class="fc-block" data-section="ul_fungerer">
-      <div class="fc-block-header"><span class="fc-block-title">7 · Sådan fungerer det (NY)</span></div>
+      <div class="fc-block-header" style="display:flex;align-items:center;gap:.8rem;"><span class="fc-block-title">7 · Sådan fungerer det (NY)</span><button type="button" onclick="oversaetBlok(this)" style="background:rgba(58,110,106,.1);border:1px solid rgba(58,110,106,.35);color:#2a7a74;padding:.3rem .8rem;font-family:Manrope,sans-serif;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;margin-left:auto;" title="Oversæt tomme engelske felter i denne sektion">⇄ Oversæt</button></div>
       <div class="fc-block-body">
         <div class="fc-row">
           <div><label class="fc-label fc-label-da">Label (DA)</label><input type="text" id="ul_fungerer_label_da" class="fc-input-da" placeholder=""></div>
@@ -2928,7 +2934,7 @@ feeling more calm – and coming home to yourself again."</textarea></div>
     </div>
 
     <div class="fc-block" data-section="ul_stemmer">
-      <div class="fc-block-header"><span class="fc-block-title">8 · Anmeldelser fra arrangører (NY)</span></div>
+      <div class="fc-block-header" style="display:flex;align-items:center;gap:.8rem;"><span class="fc-block-title">8 · Anmeldelser fra arrangører (NY)</span><button type="button" onclick="oversaetBlok(this)" style="background:rgba(58,110,106,.1);border:1px solid rgba(58,110,106,.35);color:#2a7a74;padding:.3rem .8rem;font-family:Manrope,sans-serif;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;margin-left:auto;" title="Oversæt tomme engelske felter i denne sektion">⇄ Oversæt</button></div>
       <div class="fc-block-body">
         <p style="font-size:.7rem;color:rgba(44,35,24,.5);margin:.2rem 0 1rem;">⚠️ Sektionen vises FØRST på siden, når der er mindst ét citat herunder. Brug kun rigtige citater fra tidligere arrangører/deltagere. Format: <b>Citat|Navn|Rolle</b> — ét citat per linje.</p><div class="fc-row">
           <div><label class="fc-label fc-label-da">Label (DA)</label><input type="text" id="ul_stemmer_label_da" class="fc-input-da" placeholder=""></div>
@@ -2947,7 +2953,7 @@ feeling more calm – and coming home to yourself again."</textarea></div>
     </div>
 
     <div class="fc-block" data-section="ul_vaerter">
-      <div class="fc-block-header"><span class="fc-block-title">9 · Mød værterne (NY)</span></div>
+      <div class="fc-block-header" style="display:flex;align-items:center;gap:.8rem;"><span class="fc-block-title">9 · Mød værterne (NY)</span><button type="button" onclick="oversaetBlok(this)" style="background:rgba(58,110,106,.1);border:1px solid rgba(58,110,106,.35);color:#2a7a74;padding:.3rem .8rem;font-family:Manrope,sans-serif;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;margin-left:auto;" title="Oversæt tomme engelske felter i denne sektion">⇄ Oversæt</button></div>
       <div class="fc-block-body">
         <div class="fc-row">
           <div><label class="fc-label fc-label-da">Label (DA)</label><input type="text" id="ul_vaerter_label_da" class="fc-input-da" placeholder=""></div>
@@ -2975,7 +2981,7 @@ feeling more calm – and coming home to yourself again."</textarea></div>
     </div>
 
     <div class="fc-block" data-section="ul_10 · "mere end et kursussted"">
-      <div class="fc-block-header"><span class="fc-block-title">10 · "Mere end et kursussted"</span></div>
+      <div class="fc-block-header" style="display:flex;align-items:center;gap:.8rem;"><span class="fc-block-title">10 · "Mere end et kursussted"</span><button type="button" onclick="oversaetBlok(this)" style="background:rgba(58,110,106,.1);border:1px solid rgba(58,110,106,.35);color:#2a7a74;padding:.3rem .8rem;font-family:Manrope,sans-serif;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;margin-left:auto;" title="Oversæt tomme engelske felter i denne sektion">⇄ Oversæt</button></div>
       <div class="fc-block-body">
         <div class="fc-row">
           <div><label class="fc-label fc-label-da">Label (DA)</label><input type="text" id="ul_mere_label_da" class="fc-input-da" placeholder=""></div>
@@ -2999,7 +3005,7 @@ feeling more calm – and coming home to yourself again."</textarea></div>
     </div>
 
     <div class="fc-block" data-section="ul_11 · design et ophold — intro">
-      <div class="fc-block-header"><span class="fc-block-title">11 · Design et ophold — Intro</span></div>
+      <div class="fc-block-header" style="display:flex;align-items:center;gap:.8rem;"><span class="fc-block-title">11 · Design et ophold — Intro</span><button type="button" onclick="oversaetBlok(this)" style="background:rgba(58,110,106,.1);border:1px solid rgba(58,110,106,.35);color:#2a7a74;padding:.3rem .8rem;font-family:Manrope,sans-serif;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;margin-left:auto;" title="Oversæt tomme engelske felter i denne sektion">⇄ Oversæt</button></div>
       <div class="fc-block-body">
         <div class="fc-row">
           <div><label class="fc-label fc-label-da">Label (DA)</label><input type="text" id="ul_design_label_da" class="fc-input-da" placeholder=""></div>
@@ -3019,7 +3025,7 @@ feeling more calm – and coming home to yourself again."</textarea></div>
     </div>
 
     <div class="fc-block" data-section="ul_kategorier">
-      <div class="fc-block-header"><span class="fc-block-title">12 · Design-kategorier (11 kort)</span></div>
+      <div class="fc-block-header" style="display:flex;align-items:center;gap:.8rem;"><span class="fc-block-title">12 · Design-kategorier (11 kort)</span><button type="button" onclick="oversaetBlok(this)" style="background:rgba(58,110,106,.1);border:1px solid rgba(58,110,106,.35);color:#2a7a74;padding:.3rem .8rem;font-family:Manrope,sans-serif;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;margin-left:auto;" title="Oversæt tomme engelske felter i denne sektion">⇄ Oversæt</button></div>
       <div class="fc-block-body">
         <p style="font-size:.72rem;color:rgba(44,35,24,.5);margin-bottom:1rem;">De 11 kategori-kort (Gastronomi, Vinoplevelser, osv.) — titel + liste, DA+EN. Videoerne mellem kortene redigeres ikke her.</p>
         <div id="ulKategorierPreview" style="font-size:.72rem;color:rgba(44,35,24,.6);margin-bottom:.8rem;"></div>
@@ -3028,7 +3034,7 @@ feeling more calm – and coming home to yourself again."</textarea></div>
     </div>
 
     <div class="fc-block" data-section="ul_13 · design et ophold — cta-tekst">
-      <div class="fc-block-header"><span class="fc-block-title">13 · Design et ophold — CTA-tekst</span></div>
+      <div class="fc-block-header" style="display:flex;align-items:center;gap:.8rem;"><span class="fc-block-title">13 · Design et ophold — CTA-tekst</span><button type="button" onclick="oversaetBlok(this)" style="background:rgba(58,110,106,.1);border:1px solid rgba(58,110,106,.35);color:#2a7a74;padding:.3rem .8rem;font-family:Manrope,sans-serif;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;margin-left:auto;" title="Oversæt tomme engelske felter i denne sektion">⇄ Oversæt</button></div>
       <div class="fc-block-body">
         <div class="fc-row">
           <div><label class="fc-label fc-label-da">Første linje (DA)</label><input type="text" id="ul_design_cta_p1_da" class="fc-input-da" placeholder=""></div>
@@ -3047,7 +3053,7 @@ feeling more calm – and coming home to yourself again."</textarea></div>
     </div>
 
     <div class="fc-block" data-section="ul_14 · billedstribe 2">
-      <div class="fc-block-header"><span class="fc-block-title">14 · Billedstribe 2</span></div>
+      <div class="fc-block-header" style="display:flex;align-items:center;gap:.8rem;"><span class="fc-block-title">14 · Billedstribe 2</span><button type="button" onclick="oversaetBlok(this)" style="background:rgba(58,110,106,.1);border:1px solid rgba(58,110,106,.35);color:#2a7a74;padding:.3rem .8rem;font-family:Manrope,sans-serif;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;margin-left:auto;" title="Oversæt tomme engelske felter i denne sektion">⇄ Oversæt</button></div>
       <div class="fc-block-body">
         <div style="margin-top:.8rem;padding:.9rem;background:rgba(42,122,116,.06);border:1px solid rgba(42,122,116,.2);">
           <label class="fc-label" style="color:#2a7a74;">📁 Billede 1</label>
@@ -3081,7 +3087,7 @@ feeling more calm – and coming home to yourself again."</textarea></div>
     </div>
 
     <div class="fc-block" data-section="ul_faq">
-      <div class="fc-block-header"><span class="fc-block-title">15 · FAQ (NY)</span></div>
+      <div class="fc-block-header" style="display:flex;align-items:center;gap:.8rem;"><span class="fc-block-title">15 · FAQ (NY)</span><button type="button" onclick="oversaetBlok(this)" style="background:rgba(58,110,106,.1);border:1px solid rgba(58,110,106,.35);color:#2a7a74;padding:.3rem .8rem;font-family:Manrope,sans-serif;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;margin-left:auto;" title="Oversæt tomme engelske felter i denne sektion">⇄ Oversæt</button></div>
       <div class="fc-block-body">
         <p style="font-size:.7rem;color:rgba(44,35,24,.5);margin:.2rem 0 1rem;">Format: <b>Spørgsmål|Svar</b> — ét spørgsmål per linje (adskilt af lodret streg).</p><div class="fc-row">
           <div><label class="fc-label fc-label-da">Label (DA)</label><input type="text" id="ul_ulfaq_label_da" class="fc-input-da" placeholder=""></div>
@@ -3105,7 +3111,7 @@ feeling more calm – and coming home to yourself again."</textarea></div>
     </div>
 
     <div class="fc-block" data-section="ul_16 · kontakt — intro">
-      <div class="fc-block-header"><span class="fc-block-title">16 · Kontakt — Intro</span></div>
+      <div class="fc-block-header" style="display:flex;align-items:center;gap:.8rem;"><span class="fc-block-title">16 · Kontakt — Intro</span><button type="button" onclick="oversaetBlok(this)" style="background:rgba(58,110,106,.1);border:1px solid rgba(58,110,106,.35);color:#2a7a74;padding:.3rem .8rem;font-family:Manrope,sans-serif;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;margin-left:auto;" title="Oversæt tomme engelske felter i denne sektion">⇄ Oversæt</button></div>
       <div class="fc-block-body">
         <div class="fc-row">
           <div><label class="fc-label fc-label-da">Label (DA)</label><input type="text" id="ul_kontakt_label_da" class="fc-input-da" placeholder=""></div>
@@ -3129,7 +3135,7 @@ feeling more calm – and coming home to yourself again."</textarea></div>
     </div>
 
     <div class="fc-block" data-section="ul_17 · kontaktformular — feltnavne">
-      <div class="fc-block-header"><span class="fc-block-title">17 · Kontaktformular — feltnavne</span></div>
+      <div class="fc-block-header" style="display:flex;align-items:center;gap:.8rem;"><span class="fc-block-title">17 · Kontaktformular — feltnavne</span><button type="button" onclick="oversaetBlok(this)" style="background:rgba(58,110,106,.1);border:1px solid rgba(58,110,106,.35);color:#2a7a74;padding:.3rem .8rem;font-family:Manrope,sans-serif;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;margin-left:auto;" title="Oversæt tomme engelske felter i denne sektion">⇄ Oversæt</button></div>
       <div class="fc-block-body">
         <div class="fc-row">
           <div><label class="fc-label fc-label-da">Navn-label (DA)</label><input type="text" id="ul_form_navn_da" class="fc-input-da" placeholder=""></div>
@@ -3220,7 +3226,7 @@ feeling more calm – and coming home to yourself again."</textarea></div>
     </div>
 
     <div class="fc-block" data-section="ul_dropdowns">
-      <div class="fc-block-header"><span class="fc-block-title">18 · Dropdown-valgmuligheder</span></div>
+      <div class="fc-block-header" style="display:flex;align-items:center;gap:.8rem;"><span class="fc-block-title">18 · Dropdown-valgmuligheder</span><button type="button" onclick="oversaetBlok(this)" style="background:rgba(58,110,106,.1);border:1px solid rgba(58,110,106,.35);color:#2a7a74;padding:.3rem .8rem;font-family:Manrope,sans-serif;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;margin-left:auto;" title="Oversæt tomme engelske felter i denne sektion">⇄ Oversæt</button></div>
       <div class="fc-block-body">
         <p style="font-size:.72rem;color:rgba(44,35,24,.5);margin-bottom:1rem;">Redigér selve valgmulighederne i "Antal deltagere", "Varighed", "Formål" og "Hvordan hørte du om os".</p>
         <button type="button" onclick="openUlDropdownEditor()" style="background:#7a1f35;color:#fff;border:none;padding:.6rem 1.4rem;font-family:Manrope,sans-serif;font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;">✎ Redigér valgmuligheder</button>
@@ -3228,7 +3234,7 @@ feeling more calm – and coming home to yourself again."</textarea></div>
     </div>
 
     <div class="fc-block" data-section="ul_19 · bekræftelses-besked">
-      <div class="fc-block-header"><span class="fc-block-title">19 · Bekræftelses-besked</span></div>
+      <div class="fc-block-header" style="display:flex;align-items:center;gap:.8rem;"><span class="fc-block-title">19 · Bekræftelses-besked</span><button type="button" onclick="oversaetBlok(this)" style="background:rgba(58,110,106,.1);border:1px solid rgba(58,110,106,.35);color:#2a7a74;padding:.3rem .8rem;font-family:Manrope,sans-serif;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;margin-left:auto;" title="Oversæt tomme engelske felter i denne sektion">⇄ Oversæt</button></div>
       <div class="fc-block-body">
         <div class="fc-row">
           <div><label class="fc-label fc-label-da">Label (DA)</label><input type="text" id="ul_success_label_da" class="fc-input-da" placeholder=""></div>
@@ -3248,7 +3254,7 @@ feeling more calm – and coming home to yourself again."</textarea></div>
     </div>
   
     <div class="fc-block" id="sik_adm_blok" data-section="din sikkerhed">
-      <div class="fc-block-header"><span class="fc-block-title">🧯 Din sikkerhed (vises nederst på Udlejning og ALLE retreat-sider)</span></div>
+      <div class="fc-block-header" style="display:flex;align-items:center;gap:.8rem;"><span class="fc-block-title">🧯 Din sikkerhed (vises nederst på Udlejning og ALLE retreat-sider)</span><button type="button" onclick="oversaetBlok(this)" style="background:rgba(58,110,106,.1);border:1px solid rgba(58,110,106,.35);color:#2a7a74;padding:.3rem .8rem;font-family:Manrope,sans-serif;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;margin-left:auto;" title="Oversæt tomme engelske felter i denne sektion">⇄ Oversæt</button></div>
       <div class="fc-block-body">
         <label style="display:flex;align-items:center;gap:.5rem;font-family:Manrope,sans-serif;font-size:.72rem;color:#2c2318;margin-bottom:1.2rem;cursor:pointer;background:rgba(184,138,30,.07);border:1px solid rgba(184,138,30,.2);padding:.6rem .9rem;"><input type="checkbox" id="sik_vis" checked style="cursor:pointer;"> Synlig — fjern fluebenet for at skjule sektionen på begge sider</label>
         <div class="fc-row">
@@ -3296,7 +3302,7 @@ feeling more calm – and coming home to yourself again."</textarea></div>
     <p style="font-size:.75rem;color:rgba(44,35,24,.5);margin-bottom:2rem;">Alt indhold på kontaktsiden. DA/EN side om side. Husk 💾 Gem — tekst i felterne er ikke gemt før da.</p>
 
     <div class="fc-block" data-section="kt_1 · hero">
-      <div class="fc-block-header"><span class="fc-block-title">1 · Hero</span></div>
+      <div class="fc-block-header" style="display:flex;align-items:center;gap:.8rem;"><span class="fc-block-title">1 · Hero</span><button type="button" onclick="oversaetBlok(this)" style="background:rgba(58,110,106,.1);border:1px solid rgba(58,110,106,.35);color:#2a7a74;padding:.3rem .8rem;font-family:Manrope,sans-serif;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;margin-left:auto;" title="Oversæt tomme engelske felter i denne sektion">⇄ Oversæt</button></div>
       <div class="fc-block-body">
         <div class="fc-row">
           <div><label class="fc-label fc-label-da">Eyebrow-tekst (DA)</label><input type="text" id="kt_hero_eyebrow_da" class="fc-input-da" placeholder=""></div>
@@ -3320,7 +3326,7 @@ feeling more calm – and coming home to yourself again."</textarea></div>
     </div>
 
     <div class="fc-block" data-section="kt_2 · kontakt-intro">
-      <div class="fc-block-header"><span class="fc-block-title">2 · Kontakt-sektion (intro + e-mail)</span></div>
+      <div class="fc-block-header" style="display:flex;align-items:center;gap:.8rem;"><span class="fc-block-title">2 · Kontakt-sektion (intro + e-mail)</span><button type="button" onclick="oversaetBlok(this)" style="background:rgba(58,110,106,.1);border:1px solid rgba(58,110,106,.35);color:#2a7a74;padding:.3rem .8rem;font-family:Manrope,sans-serif;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;margin-left:auto;" title="Oversæt tomme engelske felter i denne sektion">⇄ Oversæt</button></div>
       <div class="fc-block-body">
         <div class="fc-row">
           <div><label class="fc-label fc-label-da">Label (DA)</label><input type="text" id="kt_kontakt_label_da" class="fc-input-da" placeholder=""></div>
@@ -3347,7 +3353,7 @@ feeling more calm – and coming home to yourself again."</textarea></div>
     </div>
 
     <div class="fc-block" data-section="kt_3 · formular">
-      <div class="fc-block-header"><span class="fc-block-title">3 · Formular (labels + succes-besked)</span></div>
+      <div class="fc-block-header" style="display:flex;align-items:center;gap:.8rem;"><span class="fc-block-title">3 · Formular (labels + succes-besked)</span><button type="button" onclick="oversaetBlok(this)" style="background:rgba(58,110,106,.1);border:1px solid rgba(58,110,106,.35);color:#2a7a74;padding:.3rem .8rem;font-family:Manrope,sans-serif;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;margin-left:auto;" title="Oversæt tomme engelske felter i denne sektion">⇄ Oversæt</button></div>
       <div class="fc-block-body">
         <div class="fc-row">
           <div><label class="fc-label fc-label-da">Felt: Navn (DA)</label><input type="text" id="kt_form_navn_da" class="fc-input-da" placeholder=""></div>
@@ -3391,7 +3397,7 @@ feeling more calm – and coming home to yourself again."</textarea></div>
     </div>
 
     <div class="fc-block" id="kt_adm_location" data-section="kt_4 · beliggenhed">
-      <div class="fc-block-header"><span class="fc-block-title">4 · Beliggenhed (flyttet fra Ejendommen)</span></div>
+      <div class="fc-block-header" style="display:flex;align-items:center;gap:.8rem;"><span class="fc-block-title">4 · Beliggenhed (flyttet fra Ejendommen)</span><button type="button" onclick="oversaetBlok(this)" style="background:rgba(58,110,106,.1);border:1px solid rgba(58,110,106,.35);color:#2a7a74;padding:.3rem .8rem;font-family:Manrope,sans-serif;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;margin-left:auto;" title="Oversæt tomme engelske felter i denne sektion">⇄ Oversæt</button></div>
       <div class="fc-block-body">
         <label style="display:flex;align-items:center;gap:.5rem;font-family:Manrope,sans-serif;font-size:.72rem;color:#2c2318;margin-bottom:1.2rem;cursor:pointer;background:rgba(184,138,30,.07);border:1px solid rgba(184,138,30,.2);padding:.6rem .9rem;"><input type="checkbox" id="kt_vis_location" checked style="cursor:pointer;"> Synlig på siden — fjern fluebenet for at udelade sektionen fra kontakt.html</label>
         <div class="fc-row">
@@ -3468,7 +3474,7 @@ feeling more calm – and coming home to yourself again."</textarea></div>
     </div>
 
     <div class="fc-block" data-section="kt_5 · nav og footer">
-      <div class="fc-block-header"><span class="fc-block-title">5 · Navigation &amp; footer</span></div>
+      <div class="fc-block-header" style="display:flex;align-items:center;gap:.8rem;"><span class="fc-block-title">5 · Navigation &amp; footer</span><button type="button" onclick="oversaetBlok(this)" style="background:rgba(58,110,106,.1);border:1px solid rgba(58,110,106,.35);color:#2a7a74;padding:.3rem .8rem;font-family:Manrope,sans-serif;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;margin-left:auto;" title="Oversæt tomme engelske felter i denne sektion">⇄ Oversæt</button></div>
       <div class="fc-block-body">
         <div class="fc-row">
           <div><label class="fc-label fc-label-da">Nav-link: Kontakt (DA)</label><input type="text" id="kt_nav_kontakt_da" class="fc-input-da" placeholder=""></div>
@@ -3492,9 +3498,9 @@ feeling more calm – and coming home to yourself again."</textarea></div>
     <h2 style="font-family:Cinzel,serif;font-weight:300;font-size:1.4rem;letter-spacing:.08em;color:#2c2318;margin-bottom:2rem;">Globale indstillinger</h2>
 
     <div class="fc-block" data-section="globale_ui_tekster">
-      <div class="fc-block-header">
+      <div class="fc-block-header" style="display:flex;align-items:center;gap:.8rem;">
         <span class="fc-block-title">Globale UI-tekster</span>
-      </div>
+      <button type="button" onclick="oversaetBlok(this)" style="background:rgba(58,110,106,.1);border:1px solid rgba(58,110,106,.35);color:#2a7a74;padding:.3rem .8rem;font-family:Manrope,sans-serif;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;margin-left:auto;" title="Oversæt tomme engelske felter i denne sektion">⇄ Oversæt</button></div>
       <div class="fc-block-body">
         <p style="font-size:.72rem;color:rgba(44,35,24,.5);margin-bottom:1.2rem;">Bruges flere steder på hjemmesiden — fx på alle Oplevelser- og Wellness-kort.</p>
         <div class="fc-row">
@@ -3508,9 +3514,9 @@ feeling more calm – and coming home to yourself again."</textarea></div>
     </div>
 
     <div class="fc-block" data-section="forside_anmeldelser">
-      <div class="fc-block-header">
+      <div class="fc-block-header" style="display:flex;align-items:center;gap:.8rem;">
         <span class="fc-block-title">Forside · Anmeldelser-sektion</span>
-      </div>
+      <button type="button" onclick="oversaetBlok(this)" style="background:rgba(58,110,106,.1);border:1px solid rgba(58,110,106,.35);color:#2a7a74;padding:.3rem .8rem;font-family:Manrope,sans-serif;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;margin-left:auto;" title="Oversæt tomme engelske felter i denne sektion">⇄ Oversæt</button></div>
       <div class="fc-block-body">
         <p style="font-size:.72rem;color:rgba(44,35,24,.5);margin-bottom:1.2rem;">Section-label og overskrift for Anmeldelser-sektionen på forsiden (index.html).</p>
         <div class="fc-row">
@@ -3634,6 +3640,7 @@ feeling more calm – and coming home to yourself again."</textarea></div>
         <p style="font-size:.7rem;color:rgba(44,35,24,.5);margin:0;">🇩🇰 Dansk i venstre kolonne &nbsp;·&nbsp; 🇬🇧 Engelsk i højre kolonne</p>
       </div>
       <button type="button" id="retreatSaveBtn" onclick="gemRetreat()" style="background:var(--wine);color:#fff;border:none;padding:.7rem 2rem;font-family:Manrope,sans-serif;font-size:.68rem;font-weight:500;letter-spacing:.18em;text-transform:uppercase;cursor:pointer;">💾 Gem retreat</button>
+      <button type="button" onclick="oversaetHeleSiden(this,'modalRetreat')" style="background:rgba(58,110,106,.1);border:1px solid rgba(58,110,106,.4);color:#2a7a74;padding:.7rem 1.6rem;font-family:Manrope,sans-serif;font-size:.68rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;margin-left:.8rem;" title="Oversætter alle tomme engelske felter i dette retreat">⇄ Oversæt til engelsk</button>
     </div>
 
     <input type="hidden" id="retreat_id">
@@ -3797,7 +3804,7 @@ feeling more calm – and coming home to yourself again."</textarea></div>
 
     <!-- 0 · NAVIGATION & SEKTIONSRÆKKEFØLGE -->
     <div class="fc-block" id="ra_navigation" style="margin-bottom:1.5rem;">
-      <div class="fc-block-header"><span class="fc-block-title">0 · Navigation (menu) &amp; sektionsrækkefølge</span></div>
+      <div class="fc-block-header" style="display:flex;align-items:center;gap:.8rem;"><span class="fc-block-title">0 · Navigation (menu) &amp; sektionsrækkefølge</span><button type="button" onclick="oversaetBlok(this)" style="background:rgba(58,110,106,.1);border:1px solid rgba(58,110,106,.35);color:#2a7a74;padding:.3rem .8rem;font-family:Manrope,sans-serif;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;margin-left:auto;" title="Oversæt tomme engelske felter i denne sektion">⇄ Oversæt</button></div>
       <div class="fc-block-body">
         <p style="font-family:Manrope,sans-serif;font-size:.72rem;color:#7a6a52;margin-bottom:.8rem;">Menu-links på dette retreats side: navn (DA/EN), link (vælg et ankerpunkt fra listen eller <b>Egen URL</b>), synlighed og rækkefølge med pilene. Ankerpunkterne følger altid sektionernes ID'er nedenfor. Gælder KUN dette retreat.</p>
         <div id="rtNavEditor"></div>
@@ -3821,7 +3828,7 @@ feeling more calm – and coming home to yourself again."</textarea></div>
 
     <!-- 1 · GRUNDOPLYSNINGER -->
     <div class="fc-block" id="ra_grundoplysninger" style="margin-bottom:1.5rem;">
-      <div class="fc-block-header"><span class="fc-block-title">1 · Grundoplysninger</span></div>
+      <div class="fc-block-header" style="display:flex;align-items:center;gap:.8rem;"><span class="fc-block-title">1 · Grundoplysninger</span><button type="button" onclick="oversaetBlok(this)" style="background:rgba(58,110,106,.1);border:1px solid rgba(58,110,106,.35);color:#2a7a74;padding:.3rem .8rem;font-family:Manrope,sans-serif;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;margin-left:auto;" title="Oversæt tomme engelske felter i denne sektion">⇄ Oversæt</button></div>
       <div class="fc-block-body">
         <div style="margin-bottom:1rem;padding:.7rem 1rem;border:1px solid rgba(184,138,30,.25);border-left:4px solid #750787;background:linear-gradient(90deg,rgba(228,3,3,.05),rgba(255,140,0,.05),rgba(255,237,0,.05),rgba(0,128,38,.05),rgba(0,77,255,.05),rgba(117,7,135,.05));">
           <label style="display:flex;align-items:center;gap:.6rem;font-size:.82rem;cursor:pointer;font-weight:500;">
@@ -3871,7 +3878,7 @@ feeling more calm – and coming home to yourself again."</textarea></div>
 
     <!-- 2 · DATOER & PRIS -->
     <div class="fc-block" id="ra_datoer" style="margin-bottom:1.5rem;">
-      <div class="fc-block-header"><span class="fc-block-title">2 · Datoer, deltagere & pris</span></div>
+      <div class="fc-block-header" style="display:flex;align-items:center;gap:.8rem;"><span class="fc-block-title">2 · Datoer, deltagere & pris</span><button type="button" onclick="oversaetBlok(this)" style="background:rgba(58,110,106,.1);border:1px solid rgba(58,110,106,.35);color:#2a7a74;padding:.3rem .8rem;font-family:Manrope,sans-serif;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;margin-left:auto;" title="Oversæt tomme engelske felter i denne sektion">⇄ Oversæt</button></div>
       <div class="fc-block-body">
         <div style="margin-bottom:1rem;">
           <label class="fc-label">Datoer <span style="font-weight:400;text-transform:none;letter-spacing:0;color:rgba(44,35,24,.55);">— øverste dato vises på forsidekortet og er forudvalgt på retreat-siden. Brug ▲▼ til at ændre rækkefølgen.</span></label>
@@ -3896,7 +3903,7 @@ feeling more calm – and coming home to yourself again."</textarea></div>
 
     <!-- 3 · BILLEDER -->
     <div class="fc-block" id="ra_billeder" style="margin-bottom:1.5rem;">
-      <div class="fc-block-header"><span class="fc-block-title">3 · Billeder</span></div>
+      <div class="fc-block-header" style="display:flex;align-items:center;gap:.8rem;"><span class="fc-block-title">3 · Billeder</span><button type="button" onclick="oversaetBlok(this)" style="background:rgba(58,110,106,.1);border:1px solid rgba(58,110,106,.35);color:#2a7a74;padding:.3rem .8rem;font-family:Manrope,sans-serif;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;margin-left:auto;" title="Oversæt tomme engelske felter i denne sektion">⇄ Oversæt</button></div>
       <div class="fc-block-body">
         <div class="fc-row">
           <div>
@@ -3928,7 +3935,7 @@ feeling more calm – and coming home to yourself again."</textarea></div>
 
     <!-- 4 · OM RETREATET -->
     <div class="fc-block" id="ra_om" style="margin-bottom:1.5rem;">
-      <div class="fc-block-header"><span class="fc-block-title">4 · Om retreatet</span></div>
+      <div class="fc-block-header" style="display:flex;align-items:center;gap:.8rem;"><span class="fc-block-title">4 · Om retreatet</span><button type="button" onclick="oversaetBlok(this)" style="background:rgba(58,110,106,.1);border:1px solid rgba(58,110,106,.35);color:#2a7a74;padding:.3rem .8rem;font-family:Manrope,sans-serif;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;margin-left:auto;" title="Oversæt tomme engelske felter i denne sektion">⇄ Oversæt</button></div>
       <div class="fc-block-body">
         <div class="fc-row">
           <div><label class="fc-label fc-label-da">Overskrift (DA)</label><input type="text" id="retreat_about_heading" class="fc-input-da" placeholder="Kunsten at sænke tempoet"></div>
@@ -3950,7 +3957,7 @@ feeling more calm – and coming home to yourself again."</textarea></div>
 
     <!-- 4.5 · 5 RETREAT-BILLEDER -->
     <div class="fc-block" id="ra_billeder5" style="margin-bottom:1.5rem;">
-      <div class="fc-block-header"><span class="fc-block-title">4.5 · 5 billeder (vises under "Lej hele huset" — unikke per retreat)</span></div>
+      <div class="fc-block-header" style="display:flex;align-items:center;gap:.8rem;"><span class="fc-block-title">4.5 · 5 billeder (vises under "Lej hele huset" — unikke per retreat)</span><button type="button" onclick="oversaetBlok(this)" style="background:rgba(58,110,106,.1);border:1px solid rgba(58,110,106,.35);color:#2a7a74;padding:.3rem .8rem;font-family:Manrope,sans-serif;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;margin-left:auto;" title="Oversæt tomme engelske felter i denne sektion">⇄ Oversæt</button></div>
       <div class="fc-block-body">
         <p style="font-size:.7rem;color:rgba(44,35,24,.4);margin-bottom:1rem;">Upload op til 5 billeder med mouseover-effekt. Brug pilene til at ændre rækkefølgen.</p>
         <div id="retreatBilleder5Liste" style="display:flex;flex-direction:column;gap:.7rem;"></div>
@@ -3962,7 +3969,7 @@ feeling more calm – and coming home to yourself again."</textarea></div>
     </div>
 
     <div class="fc-block" id="ra_highlights" style="margin-bottom:1.5rem;">
-      <div class="fc-block-header"><span class="fc-block-title">4.1 · Highlights (6 kort med ikon + tekst)</span></div>
+      <div class="fc-block-header" style="display:flex;align-items:center;gap:.8rem;"><span class="fc-block-title">4.1 · Highlights (6 kort med ikon + tekst)</span><button type="button" onclick="oversaetBlok(this)" style="background:rgba(58,110,106,.1);border:1px solid rgba(58,110,106,.35);color:#2a7a74;padding:.3rem .8rem;font-family:Manrope,sans-serif;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;margin-left:auto;" title="Oversæt tomme engelske felter i denne sektion">⇄ Oversæt</button></div>
       <div class="fc-block-body">
         <div class="fc-row">
           <div><label class="fc-label fc-label-da">Highlights-overskrift (DA)</label><input type="text" id="ui_highlights_heading" class="fc-input-da" value="Hvad gør dette retreat særligt?"></div>
@@ -3982,7 +3989,7 @@ feeling more calm – and coming home to yourself again."</textarea></div>
 
     <!-- 6 · HURTIG-INFO -->
     <div class="fc-block" id="ra_hurtiginfo" style="margin-bottom:1.5rem;">
-      <div class="fc-block-header"><span class="fc-block-title">6 · Hurtig-info bar (Varighed / Ankomst / Afrejse)</span></div>
+      <div class="fc-block-header" style="display:flex;align-items:center;gap:.8rem;"><span class="fc-block-title">6 · Hurtig-info bar (Varighed / Ankomst / Afrejse)</span><button type="button" onclick="oversaetBlok(this)" style="background:rgba(58,110,106,.1);border:1px solid rgba(58,110,106,.35);color:#2a7a74;padding:.3rem .8rem;font-family:Manrope,sans-serif;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;margin-left:auto;" title="Oversæt tomme engelske felter i denne sektion">⇄ Oversæt</button></div>
       <div class="fc-block-body">
         <p style="font-size:.7rem;color:rgba(44,35,24,.4);margin-bottom:1rem;">Labels i den farvet info-bar øverst på retreat-siden.</p>
         <div class="fc-row">
@@ -4018,7 +4025,7 @@ feeling more calm – and coming home to yourself again."</textarea></div>
         <label style="display:flex;align-items:center;gap:.4rem;font-size:.65rem;color:rgba(44,35,24,.7);cursor:pointer;">
           <input type="checkbox" id="ui_visible_program" checked style="cursor:pointer;"> Synlig på siden
         </label>
-      </div>
+      <button type="button" onclick="event.stopPropagation(); oversaetBlok(this)" style="background:rgba(58,110,106,.1);border:1px solid rgba(58,110,106,.35);color:#2a7a74;padding:.3rem .8rem;font-family:Manrope,sans-serif;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;margin-left:auto;flex-shrink:0;" title="Oversæt tomme engelske felter i denne sektion">⇄ Oversæt</button></div>
       <div class="fc-block-body">
         <div class="fc-row">
           <div><label class="fc-label fc-label-da">Program-overskrift (DA)</label><input type="text" id="ui_program_heading" class="fc-input-da" placeholder="En uge for dig selv"></div>
@@ -4048,7 +4055,7 @@ feeling more calm – and coming home to yourself again."</textarea></div>
         <label style="display:flex;align-items:center;gap:.4rem;font-size:.65rem;color:rgba(44,35,24,.7);cursor:pointer;">
           <input type="checkbox" id="ui_visible_freetext" checked style="cursor:pointer;"> Synlig på siden
         </label>
-      </div>
+      <button type="button" onclick="event.stopPropagation(); oversaetBlok(this)" style="background:rgba(58,110,106,.1);border:1px solid rgba(58,110,106,.35);color:#2a7a74;padding:.3rem .8rem;font-family:Manrope,sans-serif;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;margin-left:auto;flex-shrink:0;" title="Oversæt tomme engelske felter i denne sektion">⇄ Oversæt</button></div>
       <div class="fc-block-body">
         <p style="font-size:.68rem;color:rgba(44,35,24,.55);margin:0 0 1rem;">Fuld bredde tekst-sektion. Vises kun, når brødteksten er udfyldt og togglen er tændt. Tom linje = nyt afsnit. Inline HTML (&lt;b&gt;, &lt;em&gt;, &lt;br&gt;) virker.</p>
         <div class="fc-row">
@@ -4067,7 +4074,7 @@ feeling more calm – and coming home to yourself again."</textarea></div>
     </div>
 
     <div class="fc-block" id="ra_inkluderet" style="margin-bottom:1.5rem;">
-      <div class="fc-block-header"><span class="fc-block-title">8 · Inkluderet / Ikke inkluderet</span></div>
+      <div class="fc-block-header" style="display:flex;align-items:center;gap:.8rem;"><span class="fc-block-title">8 · Inkluderet / Ikke inkluderet</span><button type="button" onclick="oversaetBlok(this)" style="background:rgba(58,110,106,.1);border:1px solid rgba(58,110,106,.35);color:#2a7a74;padding:.3rem .8rem;font-family:Manrope,sans-serif;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;margin-left:auto;" title="Oversæt tomme engelske felter i denne sektion">⇄ Oversæt</button></div>
       <div class="fc-block-body">
         <div class="fc-row">
           <div><label class="fc-label fc-label-da">Inkluderet-overskrift (DA)</label><input type="text" id="ui_included_heading" class="fc-input-da" placeholder="✓ Inkluderet i prisen"></div>
@@ -4089,7 +4096,7 @@ feeling more calm – and coming home to yourself again."</textarea></div>
 
     <!-- 9 · VÆRELSER -->
     <div class="fc-block" id="ra_vaerelser" style="margin-bottom:1.5rem;">
-      <div class="fc-block-header"><span class="fc-block-title">9 · Værelser & priser</span></div>
+      <div class="fc-block-header" style="display:flex;align-items:center;gap:.8rem;"><span class="fc-block-title">9 · Værelser & priser</span><button type="button" onclick="oversaetBlok(this)" style="background:rgba(58,110,106,.1);border:1px solid rgba(58,110,106,.35);color:#2a7a74;padding:.3rem .8rem;font-family:Manrope,sans-serif;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;margin-left:auto;" title="Oversæt tomme engelske felter i denne sektion">⇄ Oversæt</button></div>
       <div class="fc-block-body">
         <div class="fc-row">
           <div><label class="fc-label fc-label-da">Rum-intro tekst (DA)</label><textarea id="ui_rooms_intro" class="fc-input-da fc-textarea" rows="2" placeholder="Alle værelser har eget badeværelse og er fuldt inkluderet i retreatprisen."></textarea></div>
@@ -4107,7 +4114,7 @@ feeling more calm – and coming home to yourself again."</textarea></div>
 
     <!-- 10 · MAD -->
     <div class="fc-block" id="ra_mad" style="margin-bottom:1.5rem;">
-      <div class="fc-block-header"><span class="fc-block-title">10 · Mad & køkken</span></div>
+      <div class="fc-block-header" style="display:flex;align-items:center;gap:.8rem;"><span class="fc-block-title">10 · Mad & køkken</span><button type="button" onclick="oversaetBlok(this)" style="background:rgba(58,110,106,.1);border:1px solid rgba(58,110,106,.35);color:#2a7a74;padding:.3rem .8rem;font-family:Manrope,sans-serif;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;margin-left:auto;" title="Oversæt tomme engelske felter i denne sektion">⇄ Oversæt</button></div>
       <div class="fc-block-body">
         <div class="fc-row">
           <div><label class="fc-label fc-label-da">Mad-overskrift (DA)</label><input type="text" id="ui_food_heading" class="fc-input-da" placeholder="Mad & køkken"></div>
@@ -4140,7 +4147,7 @@ feeling more calm – and coming home to yourself again."</textarea></div>
         <label style="display:flex;align-items:center;gap:.4rem;font-size:.65rem;color:rgba(44,35,24,.7);cursor:pointer;">
           <input type="checkbox" id="ui_visible_facilitator" checked style="cursor:pointer;"> Synlig på siden
         </label>
-      </div>
+      <button type="button" onclick="event.stopPropagation(); oversaetBlok(this)" style="background:rgba(58,110,106,.1);border:1px solid rgba(58,110,106,.35);color:#2a7a74;padding:.3rem .8rem;font-family:Manrope,sans-serif;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;margin-left:auto;flex-shrink:0;" title="Oversæt tomme engelske felter i denne sektion">⇄ Oversæt</button></div>
       <div class="fc-block-body">
         <div class="fc-row">
           <div><label class="fc-label fc-label-da">Titel/rolle (DA)</label><input type="text" id="ui_facilitator_role" class="fc-input-da" placeholder="Wellness Facilitator · Breathwork Practitioner"></div>
@@ -4203,7 +4210,7 @@ feeling more calm – and coming home to yourself again."</textarea></div>
 
     <!-- 13 · BOOKING-SEKTION -->
     <div class="fc-block" id="ra_booking" style="margin-bottom:1.5rem;">
-      <div class="fc-block-header"><span class="fc-block-title">13 · Booking-sektion</span></div>
+      <div class="fc-block-header" style="display:flex;align-items:center;gap:.8rem;"><span class="fc-block-title">13 · Booking-sektion</span><button type="button" onclick="oversaetBlok(this)" style="background:rgba(58,110,106,.1);border:1px solid rgba(58,110,106,.35);color:#2a7a74;padding:.3rem .8rem;font-family:Manrope,sans-serif;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;margin-left:auto;" title="Oversæt tomme engelske felter i denne sektion">⇄ Oversæt</button></div>
       <div class="fc-block-body">
         <div class="fc-row">
           <div><label class="fc-label fc-label-da">Overskrift (DA)</label><input type="text" id="ui_book_heading" class="fc-input-da" placeholder="Tag det første skridt"></div>
@@ -4242,7 +4249,7 @@ feeling more calm – and coming home to yourself again."</textarea></div>
         <label style="display:flex;align-items:center;gap:.4rem;font-size:.65rem;color:rgba(44,35,24,.7);cursor:pointer;">
           <input type="checkbox" id="ui_visible_faq" checked style="cursor:pointer;"> Synlig på siden
         </label>
-      </div>
+      <button type="button" onclick="event.stopPropagation(); oversaetBlok(this)" style="background:rgba(58,110,106,.1);border:1px solid rgba(58,110,106,.35);color:#2a7a74;padding:.3rem .8rem;font-family:Manrope,sans-serif;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;margin-left:auto;flex-shrink:0;" title="Oversæt tomme engelske felter i denne sektion">⇄ Oversæt</button></div>
       <div class="fc-block-body">
         <div class="fc-row">
           <div><label class="fc-label fc-label-da">FAQ-overskrift (DA)</label><input type="text" id="ui_faq_heading" class="fc-input-da" placeholder="Ofte stillede spørgsmål"></div>
@@ -4257,7 +4264,7 @@ feeling more calm – and coming home to yourself again."</textarea></div>
 
     <!-- 15 · TILVALG -->
     <div class="fc-block" id="ra_tilvalg" style="margin-bottom:1.5rem;">
-      <div class="fc-block-header"><span class="fc-block-title">15 · Tilvalg (add-ons)</span></div>
+      <div class="fc-block-header" style="display:flex;align-items:center;gap:.8rem;"><span class="fc-block-title">15 · Tilvalg (add-ons)</span><button type="button" onclick="oversaetBlok(this)" style="background:rgba(58,110,106,.1);border:1px solid rgba(58,110,106,.35);color:#2a7a74;padding:.3rem .8rem;font-family:Manrope,sans-serif;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;margin-left:auto;" title="Oversæt tomme engelske felter i denne sektion">⇄ Oversæt</button></div>
       <div class="fc-block-body">
         <div id="addonListe" style="display:flex;flex-direction:column;gap:.5rem;margin-bottom:.8rem;"></div>
         <button type="button" onclick="tilfoejAddon()" style="background:rgba(42,122,116,.08);border:1px solid rgba(42,122,116,.2);color:#2a7a74;padding:.5rem 1rem;font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;width:100%;">+ Tilføj tilvalg</button>
@@ -4270,7 +4277,7 @@ feeling more calm – and coming home to yourself again."</textarea></div>
 
     <!-- 16 · SECTION-LABELS -->
     <div class="fc-block" id="ra_labels" style="margin-bottom:1.5rem;">
-      <div class="fc-block-header"><span class="fc-block-title">16 · Section-labels (lille tekst over overskrifter)</span></div>
+      <div class="fc-block-header" style="display:flex;align-items:center;gap:.8rem;"><span class="fc-block-title">16 · Section-labels (lille tekst over overskrifter)</span><button type="button" onclick="oversaetBlok(this)" style="background:rgba(58,110,106,.1);border:1px solid rgba(58,110,106,.35);color:#2a7a74;padding:.3rem .8rem;font-family:Manrope,sans-serif;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;margin-left:auto;" title="Oversæt tomme engelske felter i denne sektion">⇄ Oversæt</button></div>
       <div class="fc-block-body">
         <p style="font-size:.7rem;color:rgba(44,35,24,.4);margin-bottom:1rem;">Den lille label-tekst der vises over hver sektions overskrift på retreat-siden.</p>
         <div class="fc-row">
@@ -9166,10 +9173,10 @@ function renderEjRomsListe() {
     }).join('');
 
     return `<div class="fc-block fc-sub" style="margin-bottom:.8rem;">
-      <div class="fc-block-header" style="cursor:pointer;background:rgba(184,138,30,.05);" onclick="this.parentElement.classList.toggle('fc-collapsed')">
+      <div class="fc-block-header" style="display:flex;align-items:center;gap:.8rem;cursor:pointer;background:rgba(184,138,30,.05);" onclick="this.parentElement.classList.toggle('fc-collapsed')">
         <span class="fc-block-title" style="font-size:.82rem;">${String(i+1).padStart(2,'0')} · ${r.name_da || 'Nyt værelse'}</span>
         <span style="font-size:.65rem;color:rgba(44,35,24,.4);">▾</span>
-      </div>
+      <button type="button" onclick="event.stopPropagation(); oversaetBlok(this)" style="background:rgba(58,110,106,.1);border:1px solid rgba(58,110,106,.35);color:#2a7a74;padding:.3rem .8rem;font-family:Manrope,sans-serif;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;margin-left:auto;flex-shrink:0;" title="Oversæt tomme engelske felter i denne sektion">⇄ Oversæt</button></div>
       <div class="fc-block-body fc-collapsible">
         <div class="fc-row">
           <div><label class="fc-label fc-label-da">Navn (DA)</label><input type="text" id="ejr_${r.id}_name_da" class="fc-input-da" value="${r.name_da || ''}" placeholder="Suite del Alma"></div>
@@ -10077,6 +10084,66 @@ async function sletGalleriFil(filename) {
 // ── SEKTIONS-MEDIE UPLOAD (Hero-video, Filosofi/Estate/Vingård/Wellness/Om os billeder) ──
 const MEDIA_BUCKET = 'retreat-images';
 const MEDIA_PREFIX = 'forside-medier/';
+
+// ── OVERSÆT DA → EN — virker i alle faner (forside, ejendommen, udlejning, retreats) ──
+// Parrer felter automatisk: <id>_da ↔ <id>_en, og <id> ↔ <id>_en (retreat-felterne).
+// Springer felter over, hvor der allerede står engelsk tekst — så egne rettelser aldrig overskrives.
+function findDaEnPar(container) {
+  const par = [];
+  container.querySelectorAll('input[type="text"], textarea').forEach(da => {
+    const id = da.id || '';
+    if (!id || id.endsWith('_en')) return;
+    if (da.closest('#fsNavEditor, #fsOrdenEditor, #ulNavEditor, #ulOrdenEditor, #rtNavEditor, #rtOrdenEditor, #ulFaqListe')) return;
+    const enId = id.endsWith('_da') ? id.slice(0, -3) + '_en' : id + '_en';
+    const en = document.getElementById(enId);
+    if (en && en !== da) par.push({ da, en });
+  });
+  return par;
+}
+
+async function oversaetFelter(par, btn, hvad) {
+  const relevante = par.filter(p => String(p.da.value || '').trim());
+  if (!relevante.length) { showToast('Ingen danske tekster at oversætte i ' + hvad, true); return; }
+  const orig = btn.textContent;
+  btn.disabled = true;
+  let done = 0, skipped = 0, failed = 0;
+  try {
+    for (let i = 0; i < relevante.length; i++) {
+      const p = relevante[i];
+      if (String(p.en.value || '').trim()) { skipped++; continue; } // har allerede EN — rør den ikke
+      btn.textContent = `Oversætter ${done + failed + 1} af ${relevante.length - skipped}…`;
+      try {
+        p.en.value = await translateText(p.da.value);
+        done++;
+      } catch (e) { console.error('Oversættelse fejlede for ' + p.da.id + ':', e); failed++; }
+    }
+    let msg = `${done} felt(er) oversat`;
+    if (skipped) msg += `, ${skipped} sprunget over (havde allerede engelsk)`;
+    if (failed) msg += `, ${failed} fejlede`;
+    showToast(msg + ' — husk 💾 Gem');
+  } finally {
+    btn.textContent = orig;
+    btn.disabled = false;
+  }
+}
+
+// Oversætter én blok (knappen sidder i blokkens header)
+async function oversaetBlok(btn) {
+  const blok = btn.closest('.fc-block');
+  if (!blok) return;
+  await oversaetFelter(findDaEnPar(blok), btn, 'denne sektion');
+}
+
+// Oversætter hele fanen/modalen
+async function oversaetHeleSiden(btn, containerId) {
+  const c = document.getElementById(containerId);
+  if (!c) return;
+  const par = findDaEnPar(c);
+  const tomme = par.filter(p => String(p.da.value || '').trim() && !String(p.en.value || '').trim()).length;
+  if (!tomme) { showToast('Alle felter har allerede engelsk tekst ✓'); return; }
+  if (!confirm(`Oversæt ${tomme} tomme engelske felter? Felter med eksisterende engelsk tekst røres ikke.`)) return;
+  await oversaetFelter(par, btn, 'siden');
+}
 
 // ── FJERN BILLEDE/VIDEO — tømmer feltet, så billedet forsvinder helt fra siden ──
 // Filen bliver liggende i Storage og kan ryddes op med "Find ubrugte billeder".
