@@ -76,24 +76,24 @@ body{font-family:'Manrope',sans-serif;background:var(--cream);color:var(--charco
 
 <div class="header" id="portalHeader" style="display:none;">
   <a href="index.html" class="header-logo">Castillo del Alma</a>
-  <button class="logout-btn" onclick="logOut()">Log ud</button>
+  <button class="logout-btn" id="mbLogUd" onclick="logOut()">Log ud</button>
 </div>
 
 <div class="login-wrap" id="loginWrap">
   <div class="login-box">
     <div class="eyebrow">Castillo del Alma</div>
-    <h2>Min Booking</h2>
-    <p>Skriv din email for at modtage et login-link</p>
+    <h2 id="mbLoginTitel">Min Booking</h2>
+    <p id="mbLoginIntro">Skriv din email for at modtage et login-link</p>
     <div id="step1">
       <input type="email" id="loginEmail" placeholder="din@email.com" onkeydown="if(event.key==='Enter')sendOTP()">
-      <button class="btn" onclick="sendOTP()">Send login-kode</button>
+      <button class="btn" id="mbLoginSend" onclick="sendOTP()">Send login-kode</button>
       <div class="login-msg" id="loginMsg"></div>
     </div>
     <div id="step2" style="display:none;">
-      <p style="margin-bottom:1.5rem;font-size:.82rem;color:var(--text-light);">Vi har sendt en 8-cifret kode til <strong id="sentToEmail"></strong></p>
+      <p style="margin-bottom:1.5rem;font-size:.82rem;color:var(--text-light);"><span id="mbKodeSendt">Vi har sendt en 8-cifret kode til</span> <strong id="sentToEmail"></strong></p>
       <input type="text" class="otp-input" id="otpInput" placeholder="--------" maxlength="8" onkeydown="if(event.key==='Enter')verifyOTP()">
-      <button class="btn" onclick="verifyOTP()" style="margin-top:.8rem;">Bekræft kode</button>
-      <button class="btn btn-outline" onclick="backToEmail()">Skift email</button>
+      <button class="btn" id="mbOtpBekraeft" onclick="verifyOTP()" style="margin-top:.8rem;">Bekræft kode</button>
+      <button class="btn btn-outline" id="mbOtpSkift" onclick="backToEmail()">Skift email</button>
       <div class="login-msg" id="otpMsg"></div>
     </div>
   </div>
@@ -102,7 +102,7 @@ body{font-family:'Manrope',sans-serif;background:var(--cream);color:var(--charco
 <div id="portalWrap" style="display:none;">
   <div class="portal">
     <div class="portal-welcome">
-      <div class="eyebrow">Velkommen tilbage</div>
+      <div class="eyebrow" id="mbVelkommen">Velkommen tilbage</div>
       <h1 id="portalNavn">—</h1>
     </div>
     <!-- Mobil: fanerne som dropdown (bygges automatisk ud fra knapperne nedenfor) -->
@@ -119,7 +119,7 @@ body{font-family:'Manrope',sans-serif;background:var(--cream);color:var(--charco
       <button class="tab-btn" onclick="switchTab('forum',this)">Forum</button>
     </div>
     <div class="tab-content active" id="tab-booking">
-      <div class="booking-card" id="bookingCard"><div class="empty-state">Henter booking...</div></div>
+      <div class="booking-card" id="bookingCard"><div class="empty-state" id="mbHenterBooking">Henter booking...</div></div>
       <div class="booking-card" id="profilCard" style="display:none;margin-top:1.5rem;"></div>
       <div class="booking-card" id="pasCard" style="display:none;margin-top:1.5rem;"></div>
     </div>
@@ -128,7 +128,7 @@ body{font-family:'Manrope',sans-serif;background:var(--cream);color:var(--charco
     </div>
 
     <div class="tab-content" id="tab-betalinger">
-      <div id="betalingerIndhold"><div class="empty-state">Henter betalinger...</div></div>
+      <div id="betalingerIndhold"><div class="empty-state" id="mbHenterBetalinger">Henter betalinger...</div></div>
     </div>
     <div class="tab-content" id="tab-emails">
       <div id="kundeEmailListe" style="padding:.5rem 0;display:flex;flex-direction:column;gap:.8rem;"></div>
@@ -137,7 +137,7 @@ body{font-family:'Manrope',sans-serif;background:var(--cream);color:var(--charco
       <div id="fakturaTabContent" style="padding:1rem 0;"></div>
     </div>
     <div class="tab-content" id="tab-beskeder">
-      <div class="besked-liste" id="kundeBeskedListe"><div class="empty-state">Henter beskeder...</div></div>
+      <div class="besked-liste" id="kundeBeskedListe"><div class="empty-state" id="mbHenterBeskeder">Henter beskeder...</div></div>
       <div class="besked-input-wrap">
         <input type="text" class="besked-input" id="kundeBeskedInput" placeholder="Skriv en besked til Castillo del Alma..." onkeydown="if(event.key==='Enter')sendKundeBesked()">
         <button class="besked-send" onclick="sendKundeBesked()">Send</button>
@@ -162,8 +162,8 @@ if (savedEmail) loadPortal(savedEmail);
 
 async function sendOTP() {
   const email = document.getElementById('loginEmail').value.trim();
-  if (!email) { document.getElementById('loginMsg').textContent = 'Indtast din email'; return; }
-  document.getElementById('loginMsg').textContent = 'Sender kode...';
+  if (!email) { document.getElementById('loginMsg').textContent = T('loginIndtastEmail'); return; }
+  document.getElementById('loginMsg').textContent = T('loginSender');
 
   const res = await fetch('/.netlify/functions/send-login-code', {
     method: 'POST',
@@ -185,8 +185,8 @@ async function sendOTP() {
 
 async function verifyOTP() {
   const code = document.getElementById('otpInput').value.trim();
-  if (!code) { document.getElementById('otpMsg').textContent = 'Indtast koden'; return; }
-  document.getElementById('otpMsg').textContent = 'Bekræfter...';
+  if (!code) { document.getElementById('otpMsg').textContent = T('loginIndtastKode'); return; }
+  document.getElementById('otpMsg').textContent = T('loginBekraefter');
 
   const res = await fetch('/.netlify/functions/verify-login-code', {
     method: 'POST',
@@ -195,7 +195,7 @@ async function verifyOTP() {
   });
 
   if (!res.ok) {
-    document.getElementById('otpMsg').textContent = 'Forkert eller udløbet kode.';
+    document.getElementById('otpMsg').textContent = T('loginForkert');
     return;
   }
 
@@ -212,6 +212,11 @@ function backToEmail() {
   document.getElementById('step1').style.display = 'block';
   document.getElementById('step2').style.display = 'none';
 }
+
+// Sproget sættes ved indlæsning (geo), og igen efter login (kundens land)
+(async () => {
+  saetSprog(await findStartSprog());
+})();
 
 function logOut() {
   localStorage.removeItem('cda_kunde_email');
@@ -244,6 +249,8 @@ async function loadPortal(email) {
       if (res.ok) {
         const me = await res.json();
         portalRolle = me.role || 'booker';
+        // Sproget følger nu kundens LAND, ikke browserens — samme regel som mailene
+        if (me.nationality !== undefined) saetSprog(sprogFraLand(me.nationality));
         if (portalRolle === 'gaest') {
           gaestData = me;
           return loadGaestPortal(me);
@@ -262,7 +269,8 @@ async function loadPortal(email) {
     .eq('email', email)
     .single();
 
-  if (!kunde) { document.getElementById('portalNavn').textContent = 'Ingen booking fundet'; return; }
+  if (!kunde) { document.getElementById('portalNavn').textContent = T('ingenBooking'); return; }
+  saetSprog(sprogFraLand(kunde.nationality));
 
   bookingData = (kunde.bookings || [])[0] || null;
   portalKundeNavn = kunde.full_name;
@@ -281,7 +289,7 @@ async function loadPortal(email) {
 }
 
 function renderBooking() {
-  if (!bookingData) { document.getElementById('bookingCard').innerHTML = '<div class="empty-state">Ingen aktiv booking fundet</div>'; return; }
+  if (!bookingData) { document.getElementById('bookingCard').innerHTML = `<div class="empty-state">${T('ingenBooking')}</div>`; return; }
   const b = bookingData;
   const statusMap = { 'forespørgsel': ['Forespørgsel', 'status-forespørgsel'], 'afventer_betaling': ['Afventer betaling', 'status-afventer'], 'bekræftet': ['Bekræftet', 'status-bekræftet'] };
   const [statusLabel, statusClass] = statusMap[b.status] || ['—', ''];
@@ -291,12 +299,12 @@ function renderBooking() {
       <span class="booking-status ${statusClass}">${statusLabel}</span>
     </div>
     <div class="booking-info-grid">
-      <div class="booking-info-item"><div class="label">Ankomst</div><div class="value">${fmt(b.arrival_date)}</div></div>
-      <div class="booking-info-item"><div class="label">Afrejse</div><div class="value">${fmt(b.departure_date)}</div></div>
-      <div class="booking-info-item"><div class="label">Gæster</div><div class="value">${b.guests}</div></div>
-      <div class="booking-info-item"><div class="label">Værelse</div><div class="value">${b.room || '—'}</div></div>
-      ${b.notes ? `<div class="booking-info-item" style="grid-column:1/-1"><div class="label">Særlige ønsker</div><div class="value">${b.notes}</div></div>` : ''}
-      ${b.deadline ? `<div class="booking-info-item" style="grid-column:1/-1"><div class="label" style="color:var(--wine)">Betalingsfrist</div><div class="value" style="color:var(--wine)">${new Date(b.deadline).toLocaleString('da-DK',{weekday:'long',day:'numeric',month:'long',hour:'2-digit',minute:'2-digit'})}</div></div>` : ''}
+      <div class="booking-info-item"><div class="label">${T('ankomst')}</div><div class="value">${fmt(b.arrival_date)}</div></div>
+      <div class="booking-info-item"><div class="label">${T('afrejse')}</div><div class="value">${fmt(b.departure_date)}</div></div>
+      <div class="booking-info-item"><div class="label">${T('gaester')}</div><div class="value">${b.guests}</div></div>
+      <div class="booking-info-item"><div class="label">${T('vaerelse')}</div><div class="value">${b.room || '—'}</div></div>
+      ${b.notes ? `<div class="booking-info-item" style="grid-column:1/-1"><div class="label">${T('saerlige')}</div><div class="value">${b.notes}</div></div>` : ''}
+      ${b.deadline ? `<div class="booking-info-item" style="grid-column:1/-1"><div class="label" style="color:var(--wine)">Betalingsfrist</div><div class="value" style="color:var(--wine)">${new Date(b.deadline).toLocaleString(LOC(),{weekday:'long',day:'numeric',month:'long',hour:'2-digit',minute:'2-digit'})}</div></div>` : ''}
     </div>
     ${(retreatData?.addon_items||[]).length ? `
     <div style="margin-top:1.5rem;border-top:1px solid var(--sand);padding-top:1.2rem;">
@@ -331,7 +339,7 @@ async function loadPasRegistrering() {
   if (!card) return;
   if (!bookingData) { card.style.display = 'none'; return; }
   card.style.display = 'block';
-  card.innerHTML = '<div class="empty-state">Henter rejseregistrering...</div>';
+  card.innerHTML = `<div class="empty-state">${T('henter')}</div>`;
   pasGuests = [];
   try {
     const res = await fetch('/.netlify/functions/booking-guests', {
@@ -362,41 +370,39 @@ function renderPasForm() {
     if (!navn) navn = i === 1 ? (portalKundeNavn || '') : (((bookingData.extra_guests || [])[i - 2] || {}).navn || '');
     rows.push(`
       <div style="border:1px solid var(--sand);padding:1rem 1.1rem;margin-bottom:.8rem;">
-        <div style="font-size:.62rem;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);margin-bottom:.7rem;font-family:'Manrope',sans-serif;">Gæst ${i}${i === 1 ? ' · booker' : ''}</div>
+        <div style="font-size:.62rem;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);margin-bottom:.7rem;font-family:'Manrope',sans-serif;">${T('pasGaest')} ${i}${i === 1 ? ' · ' + T('pasBooker') : ''}</div>
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:.7rem;">
-          <label style="${lblStyle}grid-column:1/-1;">Fulde navn (som i passet)
+          <label style="${lblStyle}grid-column:1/-1;">${T('pasNavn')}
             <input type="text" class="pas-navn" data-no="${i}" value="${pasEsc(navn)}" style="${inpStyle}" autocomplete="off"></label>
-          <label style="${lblStyle}">Pasnummer
+          <label style="${lblStyle}">${T('pasNr')}
             <input type="text" class="pas-nr" data-no="${i}" value="${pasEsc(saved.passport_number || '')}" style="${inpStyle}" autocomplete="off"></label>
-          <label style="${lblStyle}">Udløbsdato
+          <label style="${lblStyle}">${T('pasUdlob')}
             <input type="date" class="pas-udlob" data-no="${i}" value="${pasEsc(saved.passport_expiry || '')}" style="${inpStyle}"></label>
-          <label style="${lblStyle}grid-column:1/-1;">Udstedt i (land)
+          <label style="${lblStyle}grid-column:1/-1;">${T('pasLand')}
             <input type="text" class="pas-land" data-no="${i}" value="${pasEsc(saved.passport_issued || '')}" style="${inpStyle}" autocomplete="off"></label>
-          <label style="${lblStyle}grid-column:1/-1;">E-mail${i === 1 ? '' : ' <span style="text-transform:none;letter-spacing:0;color:var(--gold);">— giver gæsten adgang til Min booking og forummet</span>'}
-            <input type="email" class="pas-email" data-no="${i}" value="${pasEsc(i === 1 ? (saved.email || userEmail || '') : (saved.email || ''))}" style="${inpStyle}" autocomplete="off" ${i === 1 ? 'readonly' : 'placeholder="valgfri"'}></label>
+          <label style="${lblStyle}grid-column:1/-1;">${T('pasEmail')}${i === 1 ? '' : ' <span style="text-transform:none;letter-spacing:0;color:var(--gold);">' + T('pasEmailHint') + '</span>'}
+            <input type="email" class="pas-email" data-no="${i}" value="${pasEsc(i === 1 ? (saved.email || userEmail || '') : (saved.email || ''))}" style="${inpStyle}" autocomplete="off" ${i === 1 ? 'readonly' : 'placeholder="' + T('pasValgfri') + '"'}></label>
         </div>
       </div>`);
   }
 
   const status = udfyldt === antal
-    ? '<span style="color:#6a7240;">✓ Alle gæster er registreret</span>'
-    : `<span style="color:var(--wine);">${udfyldt} af ${antal} gæster registreret — udfyld venligst resten</span>`;
+    ? `<span style="color:#4f5a24;">${T('pasAlleOk')}</span>`
+    : `<span style="color:var(--wine);">${udfyldt} ${T('pasMangler1')} ${antal} ${T('pasMangler2')}</span>`;
 
   card.innerHTML = `
     <div class="booking-card-header">
-      <div class="booking-retreat" style="font-size:1.1rem;">Rejseregistrering</div>
+      <div class="booking-retreat" style="font-size:1.1rem;">${T('pasTitel')}</div>
     </div>
     <p style="font-size:.82rem;color:rgba(44,35,24,.72);line-height:1.6;margin:.3rem 0 .5rem;">
-      Spansk lov kræver, at vi registrerer alle overnattende gæster hos de spanske myndigheder.
-      Udfyld venligst pasoplysninger for hver gæst på bookingen inden ankomst.
+      ${T('pasLov')}
     </p>
     <p style="font-size:.82rem;color:rgba(44,35,24,.72);line-height:1.6;margin:0 0 .5rem;">
-      Skriver du en <b>e-mail</b> på en medrejsende, sender vi dem deres egen adgang til Min booking —
-      så kan de selv se opholdet, lægge et profilbillede op og skrive i jeres forum.
+      ${T('pasEmailInfo1')} <b>${T('pasEmailInfo2')}</b> ${T('pasEmailInfo3')}
     </p>
     <div style="font-size:.75rem;margin-bottom:1rem;font-family:'Manrope',sans-serif;">${status}</div>
     ${rows.join('')}
-    <button onclick="gemPasRegistrering()" style="background:#b88a1e;border:none;color:#fff;padding:.65rem 1.5rem;font-size:.62rem;letter-spacing:.18em;text-transform:uppercase;cursor:pointer;font-family:'Manrope',sans-serif;">Gem registrering</button>
+    <button onclick="gemPasRegistrering()" style="background:#b88a1e;border:none;color:#fff;padding:.65rem 1.5rem;font-size:.62rem;letter-spacing:.18em;text-transform:uppercase;cursor:pointer;font-family:'Manrope',sans-serif;">${T('pasGem')}</button>
     <div id="pasMsg" style="font-size:.72rem;margin-top:.5rem;min-height:1rem;"></div>`;
 }
 
@@ -412,29 +418,29 @@ async function gemPasRegistrering() {
     const g = { guest_no: i, full_name: val('pas-navn'), passport_number: val('pas-nr'), passport_expiry: val('pas-udlob'), passport_issued: val('pas-land'), email: val('pas-email') };
     if (g.email && !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(g.email)) {
       msg.style.color = '#7a1f35';
-      msg.textContent = 'Ugyldig e-mail for gæst ' + i;
+      msg.textContent = T('pasUgyldigEmail') + ' ' + i;
       return;
     }
     if (!g.full_name || !g.passport_number || !g.passport_expiry || !g.passport_issued) {
       msg.style.color = '#7a1f35';
-      msg.textContent = 'Udfyld venligst alle felter for gæst ' + i;
+      msg.textContent = T('pasUdfyld') + ' ' + i;
       return;
     }
     if (g.passport_expiry <= idag) {
       msg.style.color = '#7a1f35';
-      msg.textContent = 'Passet for gæst ' + i + ' er udløbet — kontakt os venligst';
+      msg.textContent = T('pasUdloebetGaest1') + ' ' + i + ' ' + T('pasUdloebetGaest2');
       return;
     }
     if (bookingData.departure_date && g.passport_expiry < bookingData.departure_date) {
       msg.style.color = '#7a1f35';
-      msg.textContent = 'Passet for gæst ' + i + ' udløber før afrejse — kontakt os venligst';
+      msg.textContent = T('pasUdloebetGaest1') + ' ' + i + ' ' + T('pasFoerAfrejse');
       return;
     }
     guests.push(g);
   }
 
   msg.style.color = 'rgba(44,35,24,.5)';
-  msg.textContent = 'Gemmer…';
+  msg.textContent = T('gemmer');
   try {
     const res = await fetch('/.netlify/functions/booking-guests', {
       method: 'POST',
@@ -461,7 +467,7 @@ async function gemTilvalg() {
   if (!bookingData) return;
   const msg = document.getElementById('tilvalgMsg');
   msg.style.color = 'rgba(44,35,24,.5)';
-  msg.textContent = 'Gemmer…';
+  msg.textContent = T('gemmer');
   try {
     await sb.from('charges').delete().eq('booking_id', bookingData.id).like('description', 'Tilvalg:%');
     const checkboxes = document.querySelectorAll('.dynamic-addon');
@@ -493,8 +499,8 @@ let _mbDepositum = 0;
 function visBetalMinBooking(skylder, depositum) {
   _mbSkylder = skylder;
   _mbDepositum = depositum > 0 && depositum <= skylder ? depositum : Math.round(skylder * 0.3);
-  document.getElementById('mb-dep-amt').textContent = _mbDepositum.toLocaleString('da-DK');
-  document.getElementById('mb-full-amt').textContent = Math.round(skylder).toLocaleString('da-DK');
+  document.getElementById('mb-dep-amt').textContent = _mbDepositum.toLocaleString(LOC());
+  document.getElementById('mb-full-amt').textContent = Math.round(skylder).toLocaleString(LOC());
   const ov = document.getElementById('mb-betal-overlay');
   ov.style.display = 'flex';
 }
@@ -572,7 +578,7 @@ async function loadKundeBeskeder() {
   if (!data || !data.length) { liste.innerHTML = '<div class="empty-state">Ingen beskeder endnu — skriv til os herunder</div>'; return; }
   liste.innerHTML = data.map(m => {
     const erAdmin = m.sender === 'admin';
-    const tid = new Date(m.created_at).toLocaleString('da-DK', { day:'numeric', month:'short', hour:'2-digit', minute:'2-digit' });
+    const tid = new Date(m.created_at).toLocaleString(LOC(), { day:'numeric', month:'short', hour:'2-digit', minute:'2-digit' });
     return `<div class="besked-item ${erAdmin?'besked-fra-admin':'besked-fra-kunde'}">
       <div class="besked-bubble">${m.message}</div>
       <div class="besked-meta">${erAdmin?'Castillo del Alma':'Dig'} · ${tid}</div>
@@ -648,7 +654,7 @@ async function loadKundeEmails() {
     'booking_confirmed': 'Tak for din booking'
   };
   el.innerHTML = data.map((m, idx) => {
-    const dato = new Date(m.sent_at).toLocaleString('da-DK', { day:'numeric', month:'short', year:'numeric', hour:'2-digit', minute:'2-digit' });
+    const dato = new Date(m.sent_at).toLocaleString(LOC(), { day:'numeric', month:'short', year:'numeric', hour:'2-digit', minute:'2-digit' });
     const label = typeLabels[m.type] || m.subject;
     return `<div style="background:var(--beige);border:1px solid var(--sand);padding:1rem 1.2rem;">
       <div style="display:flex;justify-content:space-between;align-items:flex-start;">
@@ -685,7 +691,7 @@ async function loadFakturaTab() {
     return;
   }
   const inv = invoices[0];
-  const sentDate = inv.sent_at ? new Date(inv.sent_at).toLocaleDateString('da-DK',{day:'numeric',month:'short',year:'numeric'}) : null;
+  const sentDate = inv.sent_at ? new Date(inv.sent_at).toLocaleDateString(LOC(),{day:'numeric',month:'short',year:'numeric'}) : null;
   el.innerHTML = `<div style="background:rgba(184,138,30,.06);border:1px solid rgba(184,138,30,.2);padding:1.2rem 1.5rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:.8rem;">
     <div>
       <div style="font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;color:#7a5c14;margin-bottom:.3rem;">Faktura</div>
@@ -737,7 +743,7 @@ function switchTab(tab, btn) {
 
 function fmt(d) {
   if (!d) return '—';
-  return new Date(d).toLocaleDateString('da-DK', { day:'numeric', month:'long', year:'numeric' });
+  return new Date(d).toLocaleDateString(LOC(), { day:'numeric', month:'long', year:'numeric' });
 }
 
 /* ==========================================================
@@ -753,13 +759,13 @@ function mbEsc(x) {
 
 function mbDato(iso) {
   if (!iso) return '';
-  return new Date(iso).toLocaleDateString('da-DK', { day: 'numeric', month: 'long', year: 'numeric' });
+  return new Date(iso).toLocaleDateString(LOC(), { day: 'numeric', month: 'long', year: 'numeric' });
 }
 
 async function loadMineForaer() {
   const box = document.getElementById('mbForum');
   if (!box) return;
-  box.innerHTML = '<div style="font-size:.85rem;color:var(--text-light);padding:1rem;">Henter…</div>';
+  box.innerHTML = `<div style="font-size:.85rem;color:var(--text-light);padding:1rem;">${T('henter')}</div>`;
 
   const session = localStorage.getItem('cda_session');
 
@@ -778,9 +784,9 @@ async function loadMineForaer() {
     if (!fora.length) {
       box.innerHTML = `
         <div class="booking-card" style="text-align:center;">
-          <div class="eyebrow">Forum</div>
+          <div class="eyebrow">${T('forumTitel')}</div>
           <p style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.05rem;color:var(--text-light);line-height:1.7;margin-top:.6rem;">
-            Du har ikke noget forum endnu. Vi åbner et lukket forum for jeres hold cirka en uge før ankomst — og du får en mail, når det er klart.
+            ${T('forumIntet')}
           </p>
         </div>`;
       return;
@@ -789,11 +795,11 @@ async function loadMineForaer() {
     box.innerHTML = fora.map(f => {
       const aktiv = f.status === 'aktiv';
       const arkiveret = f.status === 'arkiveret';
-      const status = aktiv ? 'Aktivt' : arkiveret ? 'Arkiveret' : 'Åbner ' + mbDato(f.opens_at);
+      const status = aktiv ? T('forumAktiv') : arkiveret ? T('forumArkiveret') : T('forumAabner') + ' ' + mbDato(f.opens_at);
       const farve = aktiv ? '#6a7240' : arkiveret ? 'var(--gold)' : 'var(--text-light)';
       const knap = (aktiv || arkiveret)
-        ? `<a href="${mbEsc(f.link)}" class="btn" style="display:inline-block;width:auto;padding:.7rem 1.6rem;text-decoration:none;margin-top:1rem;">${aktiv ? 'Åbn forum' : 'Læs forummet'}</a>`
-        : '<div style="font-size:.8rem;color:var(--text-light);margin-top:1rem;">Forummet åbner en uge før ankomst.</div>';
+        ? `<a href="${mbEsc(f.link)}" class="btn" style="display:inline-block;width:auto;padding:.7rem 1.6rem;text-decoration:none;margin-top:1rem;">${aktiv ? T('forumAaben') : T('forumLaes')}</a>`
+        : `<div style="font-size:.8rem;color:var(--text-light);margin-top:1rem;">${T('forumVent')}</div>`;
 
       return `
         <div class="booking-card" style="margin-bottom:1rem;">
@@ -806,18 +812,18 @@ async function loadMineForaer() {
         </div>`;
     }).join('');
   } catch (e) {
-    box.innerHTML = '<div style="font-size:.85rem;color:var(--wine);padding:1rem;">Kunne ikke hente dine fora. Prøv igen om lidt.</div>';
+    box.innerHTML = `<div style="font-size:.85rem;color:var(--wine);padding:1rem;">${T('forumFejl')}</div>`;
   }
 }
 
 function mbForumFallback(box) {
   box.innerHTML = `
     <div class="booking-card" style="text-align:center;">
-      <div class="eyebrow">Forum</div>
+      <div class="eyebrow">${T('forumTitel')}</div>
       <p style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.05rem;color:var(--text-light);line-height:1.7;margin:.6rem 0 1.4rem;">
-        For at åbne forummet herfra skal du logge ind på ny — eller få dit personlige link sendt på e-mail.
+        ${T('forumLogInd')}
       </p>
-      <button class="btn" style="width:auto;padding:.7rem 1.6rem;" onclick="mbSendForumLink()">Send mit forum-link på e-mail</button>
+      <button class="btn" style="width:auto;padding:.7rem 1.6rem;" onclick="mbSendForumLink()">${T('forumSendLink')}</button>
       <div id="mbForumMsg" style="font-size:.82rem;color:var(--text-light);margin-top:1rem;line-height:1.6;min-height:1.2rem;"></div>
     </div>`;
 }
@@ -831,9 +837,9 @@ async function mbSendForumLink() {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email: userEmail })
     });
-    if (msg) msg.textContent = 'Er du tilmeldt et forum, har vi netop sendt dit personlige link til ' + userEmail + '. Tjek også spam-mappen.';
+    if (msg) msg.textContent = T('forumSendt1') + ' ' + userEmail + '. ' + T('forumSendt2');
   } catch (e) {
-    if (msg) msg.textContent = 'Noget gik galt. Prøv igen om lidt.';
+    if (msg) msg.textContent = T('fejl');
   }
 }
 
@@ -909,7 +915,7 @@ function saetFanerEfterRolle() {
 
 function gDato(iso) {
   if (!iso) return '—';
-  return new Date(iso).toLocaleDateString('da-DK', { day: 'numeric', month: 'long', year: 'numeric' });
+  return new Date(iso).toLocaleDateString(LOC(), { day: 'numeric', month: 'long', year: 'numeric' });
 }
 
 async function loadGaestPortal(me) {
@@ -924,22 +930,21 @@ async function loadGaestPortal(me) {
 
   const kort = document.getElementById('bookingCard');
   if (!b) {
-    kort.innerHTML = '<div class="empty-state">Ingen aktiv booking fundet</div>';
+    kort.innerHTML = `<div class="empty-state">${T('ingenBooking')}</div>`;
   } else {
     kort.innerHTML = `
       <div class="booking-card-header">
-        <div class="booking-retreat">${mbEsc(b.retreat_name || 'Dit ophold')}</div>
-        <div class="booking-status">Medrejsende</div>
+        <div class="booking-retreat">${mbEsc(b.retreat_name || '')}</div>
+        <div class="booking-status">${T('medrejsende')}</div>
       </div>
       <div class="booking-info-grid">
-        <div class="booking-info-item"><div class="label">Ankomst</div><div class="value">${gDato(b.arrival_date)}</div></div>
-        <div class="booking-info-item"><div class="label">Afrejse</div><div class="value">${gDato(b.departure_date)}</div></div>
-        <div class="booking-info-item"><div class="label">Booket af</div><div class="value">${mbEsc(b.booker || '—')}</div></div>
-        <div class="booking-info-item"><div class="label">Antal gæster</div><div class="value">${mbEsc(String(b.guests || 1))}</div></div>
+        <div class="booking-info-item"><div class="label">${T('ankomst')}</div><div class="value">${gDato(b.arrival_date)}</div></div>
+        <div class="booking-info-item"><div class="label">${T('afrejse')}</div><div class="value">${gDato(b.departure_date)}</div></div>
+        <div class="booking-info-item"><div class="label">${T('booketAf')}</div><div class="value">${mbEsc(b.booker || '—')}</div></div>
+        <div class="booking-info-item"><div class="label">${T('gaester')}</div><div class="value">${mbEsc(String(b.guests || 1))}</div></div>
       </div>
       <p style="font-size:.82rem;color:var(--text-mid);line-height:1.7;margin-top:1.2rem;">
-        Betaling og faktura håndteres af ${mbEsc(b.booker || 'bookeren')}. Har du spørgsmål til opholdet,
-        er du meget velkommen til at skrive til os under Beskeder.
+        ${T('oekonomiNote')} ${mbEsc(b.booker || '')}. ${T('oekonomiNote2')}
       </p>`;
   }
 
@@ -964,20 +969,19 @@ function renderProfilBillede() {
 
   card.innerHTML = `
     <div class="booking-card-header">
-      <div class="booking-retreat" style="font-size:1.1rem;">Profilbillede</div>
+      <div class="booking-retreat" style="font-size:1.1rem;">${T('profilTitel')}</div>
     </div>
 
     <div style="display:flex;align-items:center;gap:1.4rem;margin-top:1.2rem;flex-wrap:wrap;">
       ${avatar}
       <div style="flex:1;min-width:220px;">
         <p style="font-size:.88rem;color:var(--text-mid);line-height:1.65;margin-bottom:.9rem;">
-          Her kan du uploade et profilbillede. Det vil være synligt i
-          <b style="color:var(--charcoal);">Castillo Forum</b>, hvor det vises ved dine beskeder,
-          så de andre deltagere kan se, hvem de skriver med.
+          ${T('profilTekst1')}
+          <b style="color:var(--charcoal);">${T('profilForum')}</b>${T('profilTekst2')}
         </p>
         <input type="file" id="avatarFil" accept="image/*" hidden>
         <button onclick="document.getElementById('avatarFil').click()" style="background:none;border:1px solid var(--sand);color:var(--text-mid);padding:.6rem 1.2rem;font-size:.62rem;letter-spacing:.15em;text-transform:uppercase;cursor:pointer;font-family:'Manrope',sans-serif;">
-          ${profilData.avatar_url ? 'Skift billede' : 'Vælg billede'}
+          ${profilData.avatar_url ? T('skiftBillede') : T('vaelgBillede')}
         </button>
         <div id="avatarMsg" style="font-size:.78rem;margin-top:.6rem;min-height:1rem;color:var(--text-mid);"></div>
       </div>
@@ -1003,22 +1007,22 @@ function renderMinProfil() {
 
   card.innerHTML = `
     <div class="booking-card-header">
-      <div class="booking-retreat" style="font-size:1.1rem;">Mine oplysninger</div>
+      <div class="booking-retreat" style="font-size:1.1rem;">${T('mineOplysninger')}</div>
     </div>
     <p style="font-size:.85rem;color:var(--text-mid);line-height:1.65;margin:.6rem 0 1.2rem;">
-      Spansk lov kræver, at vi registrerer alle overnattende gæster hos myndighederne.
+      ${T('pasLovKort')}
     </p>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:.7rem;">
-      <label style="${lbl}grid-column:1/-1;">Fulde navn (som i passet)
+      <label style="${lbl}grid-column:1/-1;">${T('pasNavn')}
         <input type="text" id="gpNavn" value="${mbEsc(gaestData.full_name || '')}" style="${inp}"></label>
-      <label style="${lbl}">Pasnummer
+      <label style="${lbl}">${T('pasNr')}
         <input type="text" id="gpNr" value="${mbEsc(p.passport_number || '')}" style="${inp}"></label>
-      <label style="${lbl}">Udløbsdato
+      <label style="${lbl}">${T('pasUdlob')}
         <input type="date" id="gpUdlob" value="${mbEsc(p.passport_expiry || '')}" style="${inp}"></label>
-      <label style="${lbl}grid-column:1/-1;">Udstedt i (land)
+      <label style="${lbl}grid-column:1/-1;">${T('pasLand')}
         <input type="text" id="gpLand" value="${mbEsc(p.passport_issued || '')}" style="${inp}"></label>
     </div>
-    <button onclick="gemMitPas()" style="margin-top:1rem;background:#b88a1e;border:none;color:#fff;padding:.65rem 1.5rem;font-size:.62rem;letter-spacing:.18em;text-transform:uppercase;cursor:pointer;font-family:'Manrope',sans-serif;">Gem</button>
+    <button onclick="gemMitPas()" style="margin-top:1rem;background:#b88a1e;border:none;color:#fff;padding:.65rem 1.5rem;font-size:.62rem;letter-spacing:.18em;text-transform:uppercase;cursor:pointer;font-family:'Manrope',sans-serif;">${T('gem')}</button>
     <div id="gpMsg" style="font-size:.75rem;margin-top:.5rem;min-height:1rem;"></div>`;
 }
 
@@ -1035,14 +1039,14 @@ async function gemMitPas() {
   const udlob = v('gpUdlob');
 
   if (!v('gpNavn') || !v('gpNr') || !udlob || !v('gpLand')) {
-    msg.style.color = '#7a1f35'; msg.textContent = 'Udfyld venligst alle felter'; return;
+    msg.style.color = '#7a1f35'; msg.textContent = T('pasUdfyldAlle'); return;
   }
   if (udlob <= idag) {
-    msg.style.color = '#7a1f35'; msg.textContent = 'Passet er udløbet — kontakt os venligst'; return;
+    msg.style.color = '#7a1f35'; msg.textContent = T('pasUdloebet'); return;
   }
 
   msg.style.color = 'var(--text-mid)';
-  msg.textContent = 'Gemmer…';
+  msg.textContent = T('gemmer');
   try {
     const res = await fetch('/.netlify/functions/portal-profile', {
       method: 'POST',
@@ -1057,7 +1061,7 @@ async function gemMitPas() {
     const d = await res.json();
     if (!res.ok) throw new Error(d.error || 'Kunne ikke gemme');
     msg.style.color = '#6a7240';
-    msg.textContent = '✓ Gemt — tak!';
+    msg.textContent = T('gemt');
   } catch (e) {
     msg.style.color = '#7a1f35';
     msg.textContent = e.message;
@@ -1072,7 +1076,7 @@ async function uploadAvatar(e) {
 
   const msg = document.getElementById('avatarMsg');
   msg.style.color = 'var(--text-mid)';
-  msg.textContent = 'Uploader…';
+  msg.textContent = T('uploader');
 
   try {
     const b64 = await komprimerBillede(fil, 512);
@@ -1092,7 +1096,7 @@ async function uploadAvatar(e) {
     if (gaestData) gaestData.avatar_url = d.avatar_url;
     if (profilData) profilData.avatar_url = d.avatar_url;
     msg.style.color = '#4f5a24';
-    msg.textContent = '✓ Profilbilledet er gemt og vises nu i Castillo Forum';
+    msg.textContent = T('profilGemt');
     renderProfilBillede();
   } catch (err) {
     msg.style.color = '#7a1f35';
@@ -1121,6 +1125,198 @@ function komprimerBillede(fil, maxDim) {
     };
     r.readAsDataURL(fil);
   });
+}
+
+
+/* ==========================================================
+   SPROG
+   Før login: geo/browser (samme som resten af sitet).
+   Efter login: kundens LAND — præcis samme regel som e-mailene
+   (Danmark → dansk, alt andet → engelsk). En amerikaner får derfor
+   engelsk, også selvom han sidder i Danmark.
+   ========================================================== */
+const MB_I18N = {
+  da: {
+    // Login
+    loginTitel: 'Min Booking', loginIntro: 'Skriv din email for at modtage et login-link',
+    loginEmail: 'din@email.dk', loginSend: 'Send kode',
+    loginKodeSendt: 'Vi har sendt en 8-cifret kode til',
+    loginBekraeft: 'Bekræft kode', loginSkift: 'Skift email',
+    loginIndtastEmail: 'Indtast din email', loginSender: 'Sender kode…',
+    loginIndtastKode: 'Indtast koden', loginBekraefter: 'Bekræfter…',
+    loginForkert: 'Forkert eller udløbet kode.',
+    // Portal
+    velkommen: 'Velkommen tilbage', vaelgSide: 'Vælg side', logUd: 'Log ud',
+    tabBooking: 'Min booking', tabBetalinger: 'Betalinger', tabBeskeder: 'Beskeder',
+    tabEmails: 'E-mails', tabFaktura: 'Faktura', tabForum: 'Forum',
+    henterBooking: 'Henter booking…', henterBetalinger: 'Henter betalinger…',
+    henterBeskeder: 'Henter beskeder…', ingenBooking: 'Ingen aktiv booking fundet',
+    // Bookingkort
+    ankomst: 'Ankomst', afrejse: 'Afrejse', gaester: 'Gæster', vaerelse: 'Værelse',
+    saerlige: 'Særlige ønsker', booketAf: 'Booket af', medrejsende: 'Medrejsende',
+    oekonomiNote: 'Betaling og faktura håndteres af',
+    oekonomiNote2: 'Har du spørgsmål til opholdet, er du meget velkommen til at skrive til os under Beskeder.',
+    // Profil
+    profilTitel: 'Profilbillede',
+    profilTekst1: 'Her kan du uploade et profilbillede. Det vil være synligt i',
+    profilForum: 'Castillo Forum',
+    profilTekst2: ', hvor det vises ved dine beskeder, så de andre deltagere kan se, hvem de skriver med.',
+    vaelgBillede: 'Vælg billede', skiftBillede: 'Skift billede',
+    uploader: 'Uploader…', profilGemt: '✓ Profilbilledet er gemt og vises nu i Castillo Forum',
+    // Pas
+    pasTitel: 'Rejseregistrering', mineOplysninger: 'Mine oplysninger',
+    pasLov: 'Spansk lov kræver, at vi registrerer alle overnattende gæster hos de spanske myndigheder. Udfyld venligst pasoplysninger for hver gæst på bookingen inden ankomst.',
+    pasLovKort: 'Spansk lov kræver, at vi registrerer alle overnattende gæster hos myndighederne.',
+    pasEmailInfo1: 'Skriver du en', pasEmailInfo2: 'e-mail', pasEmailInfo3: 'på en medrejsende, sender vi dem deres egen adgang til Min booking — så kan de selv se opholdet, lægge et profilbillede op og skrive i jeres forum.',
+    pasGaest: 'Gæst', pasBooker: 'booker',
+    pasNavn: 'Fulde navn (som i passet)', pasNr: 'Pasnummer',
+    pasUdlob: 'Udløbsdato', pasLand: 'Udstedt i (land)', pasEmail: 'E-mail',
+    pasEmailHint: '— giver gæsten adgang til Min booking og forummet',
+    pasValgfri: 'valgfri', pasGem: 'Gem registrering', gem: 'Gem',
+    pasAlleOk: '✓ Alle gæster er registreret',
+    pasMangler1: 'af', pasMangler2: 'gæster registreret — udfyld venligst resten',
+    pasUdfyld: 'Udfyld venligst alle felter for gæst', pasUdfyldAlle: 'Udfyld venligst alle felter',
+    pasUdloebet: 'Passet er udløbet — kontakt os venligst',
+    pasUdloebetGaest1: 'Passet for gæst', pasUdloebetGaest2: 'er udløbet — kontakt os venligst',
+    pasFoerAfrejse: 'udløber før afrejse — kontakt os venligst',
+    pasUgyldigEmail: 'Ugyldig e-mail for gæst',
+    gemmer: 'Gemmer…', gemt: '✓ Gemt — tak!',
+    // Forum
+    forumTitel: 'Forum',
+    forumIntet: 'Du har ikke noget forum endnu. Vi åbner et lukket forum for jeres hold cirka en uge før ankomst — og du får en mail, når det er klart.',
+    forumAktiv: 'Aktivt', forumArkiveret: 'Arkiveret', forumAabner: 'Åbner',
+    forumAaben: 'Åbn forum', forumLaes: 'Læs forummet',
+    forumVent: 'Forummet åbner en uge før ankomst.',
+    forumLogInd: 'For at åbne forummet herfra skal du logge ind på ny — eller få dit personlige link sendt på e-mail.',
+    forumSendLink: 'Send mit forum-link på e-mail',
+    forumSendt1: 'Er du tilmeldt et forum, har vi netop sendt dit personlige link til',
+    forumSendt2: 'Tjek også spam-mappen.',
+    forumFejl: 'Kunne ikke hente dine fora. Prøv igen om lidt.',
+    henter: 'Henter…', fejl: 'Noget gik galt. Prøv igen om lidt.'
+  },
+  en: {
+    loginTitel: 'My Booking', loginIntro: 'Enter your email to receive a login link',
+    loginEmail: 'your@email.com', loginSend: 'Send code',
+    loginKodeSendt: 'We have sent an 8-digit code to',
+    loginBekraeft: 'Confirm code', loginSkift: 'Change email',
+    loginIndtastEmail: 'Please enter your email', loginSender: 'Sending code…',
+    loginIndtastKode: 'Please enter the code', loginBekraefter: 'Confirming…',
+    loginForkert: 'Wrong or expired code.',
+    velkommen: 'Welcome back', vaelgSide: 'Choose page', logUd: 'Log out',
+    tabBooking: 'My booking', tabBetalinger: 'Payments', tabBeskeder: 'Messages',
+    tabEmails: 'Emails', tabFaktura: 'Invoice', tabForum: 'Forum',
+    henterBooking: 'Loading booking…', henterBetalinger: 'Loading payments…',
+    henterBeskeder: 'Loading messages…', ingenBooking: 'No active booking found',
+    ankomst: 'Arrival', afrejse: 'Departure', gaester: 'Guests', vaerelse: 'Room',
+    saerlige: 'Special requests', booketAf: 'Booked by', medrejsende: 'Fellow traveller',
+    oekonomiNote: 'Payment and invoicing are handled by',
+    oekonomiNote2: 'If you have any questions about the stay, you are very welcome to write to us under Messages.',
+    profilTitel: 'Profile picture',
+    profilTekst1: 'Here you can upload a profile picture. It will be visible in',
+    profilForum: 'Castillo Forum',
+    profilTekst2: ', where it appears next to your messages so the other participants can see who they are talking to.',
+    vaelgBillede: 'Choose image', skiftBillede: 'Change image',
+    uploader: 'Uploading…', profilGemt: '✓ Profile picture saved — it now appears in Castillo Forum',
+    pasTitel: 'Travel registration', mineOplysninger: 'My details',
+    pasLov: 'Spanish law requires us to register all overnight guests with the Spanish authorities. Please fill in passport details for every guest on the booking before arrival.',
+    pasLovKort: 'Spanish law requires us to register all overnight guests with the authorities.',
+    pasEmailInfo1: 'If you add an', pasEmailInfo2: 'email', pasEmailInfo3: 'for a fellow traveller, we send them their own access to My Booking — so they can see the stay, add a profile picture and write in your forum.',
+    pasGaest: 'Guest', pasBooker: 'booker',
+    pasNavn: 'Full name (as in passport)', pasNr: 'Passport number',
+    pasUdlob: 'Expiry date', pasLand: 'Issued in (country)', pasEmail: 'Email',
+    pasEmailHint: '— gives the guest access to My Booking and the forum',
+    pasValgfri: 'optional', pasGem: 'Save registration', gem: 'Save',
+    pasAlleOk: '✓ All guests are registered',
+    pasMangler1: 'of', pasMangler2: 'guests registered — please complete the rest',
+    pasUdfyld: 'Please fill in all fields for guest', pasUdfyldAlle: 'Please fill in all fields',
+    pasUdloebet: 'The passport has expired — please contact us',
+    pasUdloebetGaest1: 'The passport for guest', pasUdloebetGaest2: 'has expired — please contact us',
+    pasFoerAfrejse: 'expires before departure — please contact us',
+    pasUgyldigEmail: 'Invalid email for guest',
+    gemmer: 'Saving…', gemt: '✓ Saved — thank you!',
+    forumTitel: 'Forum',
+    forumIntet: 'You do not have a forum yet. We open a private forum for your group about a week before arrival — you will get an email as soon as it is ready.',
+    forumAktiv: 'Active', forumArkiveret: 'Archived', forumAabner: 'Opens',
+    forumAaben: 'Open forum', forumLaes: 'Read the forum',
+    forumVent: 'The forum opens one week before arrival.',
+    forumLogInd: 'To open the forum from here you need to log in again — or have your personal link sent by email.',
+    forumSendLink: 'Email me my forum link',
+    forumSendt1: 'If your email is signed up for a forum, we have just sent your personal link to',
+    forumSendt2: 'Please check your spam folder too.',
+    forumFejl: 'Could not load your forums. Please try again shortly.',
+    henter: 'Loading…', fejl: 'Something went wrong. Please try again shortly.'
+  }
+};
+
+let mbLang = 'da';
+function T(k) { return (MB_I18N[mbLang] && MB_I18N[mbLang][k]) || MB_I18N.da[k] || ''; }
+
+// Datoer og beløb skal følge sproget — ellers står der "18. juli" på en engelsk side
+function LOC() { return mbLang === 'en' ? 'en-GB' : 'da-DK'; }
+
+// Samme regel som e-mailene: Danmark → dansk, alt andet (og tomt) → engelsk
+function sprogFraLand(land) {
+  const l = String(land || '').trim().toLowerCase();
+  return (l === 'danmark' || l === 'denmark' || l === 'dk') ? 'da' : 'en';
+}
+
+async function findStartSprog() {
+  try {
+    const c = sessionStorage.getItem('cda_geo_lang');
+    if (c === 'da' || c === 'en') return c;
+  } catch (e) {}
+  try {
+    const ctrl = new AbortController();
+    const t = setTimeout(() => ctrl.abort(), 4000);
+    const res = await fetch('/.netlify/functions/geo-lang', { signal: ctrl.signal });
+    clearTimeout(t);
+    if (res.ok) {
+      const geo = await res.json();
+      if (geo && (geo.lang === 'da' || geo.lang === 'en')) {
+        try { sessionStorage.setItem('cda_geo_lang', geo.lang); } catch (e) {}
+        return geo.lang;
+      }
+    }
+  } catch (e) {}
+  const n = (navigator.language || '').toLowerCase();
+  return n.startsWith('da') ? 'da' : 'en';
+}
+
+// Sæt sproget og skriv alle faste tekster om
+function saetSprog(lang) {
+  mbLang = (lang === 'da' || lang === 'en') ? lang : 'da';
+  document.documentElement.lang = mbLang;
+
+  const s = (id, txt) => { const el = document.getElementById(id); if (el) el.textContent = txt; };
+  const p = (id, txt) => { const el = document.getElementById(id); if (el) el.placeholder = txt; };
+
+  s('mbLoginTitel', T('loginTitel'));
+  s('mbLoginIntro', T('loginIntro'));
+  s('mbKodeSendt', T('loginKodeSendt'));
+  p('loginEmail', T('loginEmail'));
+  s('mbLoginSend', T('loginSend'));
+  s('mbOtpBekraeft', T('loginBekraeft'));
+  s('mbOtpSkift', T('loginSkift'));
+  s('mbVelkommen', T('velkommen'));
+  s('mbHenterBooking', T('henterBooking'));
+  s('mbHenterBetalinger', T('henterBetalinger'));
+  s('mbHenterBeskeder', T('henterBeskeder'));
+  s('mbLogUd', T('logUd'));
+
+  const sel = document.getElementById('tabSelect');
+  if (sel) sel.setAttribute('aria-label', T('vaelgSide'));
+
+  const faner = { booking: 'tabBooking', betalinger: 'tabBetalinger', beskeder: 'tabBeskeder',
+                  emails: 'tabEmails', faktura: 'tabFaktura', forum: 'tabForum' };
+  document.querySelectorAll('.tab-btn').forEach(b => {
+    const m = (b.getAttribute('onclick') || '').match(/'([^']+)'/);
+    if (!m || !faner[m[1]]) return;
+    const badge = b.querySelector('span');
+    b.textContent = T(faner[m[1]]) + ' ';
+    if (badge) b.appendChild(badge);
+  });
+
+  if (typeof byggTabDropdown === 'function') byggTabDropdown();
 }
 
 </script>

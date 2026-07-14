@@ -20,9 +20,60 @@ p{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.05rem;col
 <div class="box">
   <div class="icon">✓</div>
   <div class="eyebrow">Castillo del Alma</div>
-  <h1>Betaling bekræftet</h1>
-  <p>Tak for din betaling. Din plads til retreatet er nu sikret. Du modtager en bekræftelse på email inden for kort tid.</p>
-  <a href="min-booking.html" class="btn">Se min booking</a>
+  <h1 id="bsTitel">Betaling bekræftet</h1>
+  <p id="bsTekst">Tak for din betaling. Din plads til retreatet er nu sikret. Du modtager en bekræftelse på email inden for kort tid.</p>
+  <a href="min-booking.html" class="btn" id="bsKnap">Se min booking</a>
 </div>
+
+<script>
+(function () {
+  'use strict';
+  var T = {
+    da: {
+      titel: 'Betaling bekræftet',
+      tekst: 'Tak for din betaling. Din plads til retreatet er nu sikret. Du modtager en bekræftelse på email inden for kort tid.',
+      knap: 'Se min booking',
+      sidetitel: 'Betaling bekræftet — Castillo del Alma'
+    },
+    en: {
+      titel: 'Payment confirmed',
+      tekst: 'Thank you for your payment. Your place on the retreat is now secured. You will receive a confirmation by email shortly.',
+      knap: 'See my booking',
+      sidetitel: 'Payment confirmed — Castillo del Alma'
+    }
+  };
+
+  // Samme sproglogik som resten af sitet: geo først, ellers browsersprog
+  async function findSprog() {
+    try {
+      var c = sessionStorage.getItem('cda_geo_lang');
+      if (c === 'da' || c === 'en') return c;
+    } catch (e) {}
+    try {
+      var ctrl = new AbortController();
+      var t = setTimeout(function () { ctrl.abort(); }, 4000);
+      var res = await fetch('/.netlify/functions/geo-lang', { signal: ctrl.signal });
+      clearTimeout(t);
+      if (res.ok) {
+        var geo = await res.json();
+        if (geo && (geo.lang === 'da' || geo.lang === 'en')) {
+          try { sessionStorage.setItem('cda_geo_lang', geo.lang); } catch (e) {}
+          return geo.lang;
+        }
+      }
+    } catch (e) {}
+    return (navigator.language || '').toLowerCase().indexOf('da') === 0 ? 'da' : 'en';
+  }
+
+  findSprog().then(function (lang) {
+    var t = T[lang] || T.da;
+    document.documentElement.lang = lang;
+    document.title = t.sidetitel;
+    document.getElementById('bsTitel').textContent = t.titel;
+    document.getElementById('bsTekst').textContent = t.tekst;
+    document.getElementById('bsKnap').textContent = t.knap;
+  });
+})();
+</script>
 </body>
 </html>

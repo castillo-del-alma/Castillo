@@ -25,7 +25,7 @@ exports.handler = async (event) => {
 
   // 1) Er det en booker?
   const kRes = await fetch(
-    `${SUPABASE_URL}/rest/v1/customers?email=eq.${encodeURIComponent(email)}&select=id,full_name,bookings(id)&limit=1`,
+    `${SUPABASE_URL}/rest/v1/customers?email=eq.${encodeURIComponent(email)}&select=id,full_name,nationality,bookings(id)&limit=1`,
     { headers: sbHeaders }
   );
   const kunder = await kRes.json();
@@ -49,6 +49,7 @@ exports.handler = async (event) => {
       role: 'booker',
       email,
       full_name: k.full_name,
+      nationality: k.nationality || '',
       customer_id: k.id,
       avatar_url
     });
@@ -58,7 +59,7 @@ exports.handler = async (event) => {
   const gRes = await fetch(
     `${SUPABASE_URL}/rest/v1/booking_guests?email=eq.${encodeURIComponent(email)}` +
     '&select=id,guest_no,full_name,avatar_url,passport_number,passport_expiry,passport_issued,booking_id,' +
-    'bookings(id,retreat_id,arrival_date,departure_date,guests,retreat_name,customers(full_name))' +
+    'bookings(id,retreat_id,arrival_date,departure_date,guests,retreat_name,customers(full_name,nationality))' +
     '&order=id.desc&limit=1',
     { headers: sbHeaders }
   );
@@ -71,6 +72,8 @@ exports.handler = async (event) => {
     role: 'gaest',
     email,
     full_name: g.full_name,
+    // Gæsten har ikke eget land — arver bookerens, præcis som i mailene
+    nationality: g.bookings?.customers?.nationality || '',
     guest_id: g.id,
     guest_no: g.guest_no,
     avatar_url: g.avatar_url || null,
