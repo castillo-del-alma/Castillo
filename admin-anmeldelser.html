@@ -2619,7 +2619,7 @@ feeling more calm – and coming home to yourself again."</textarea></div>
     <div class="fc-block" data-section="ul_0 · navigation & rækkefølge">
       <div class="fc-block-header"><span class="fc-block-title">0 · Navigation (menu) &amp; sektionsrækkefølge</span></div>
       <div class="fc-block-body">
-        <p style="font-family:Manrope,sans-serif;font-size:.72rem;color:#7a6a52;margin-bottom:.8rem;">Menu-links på udlejningssiden: navn (DA/EN), link (fx <b>#priser</b> eller en fuld URL), synlighed og rækkefølge med pilene.</p>
+        <p style="font-family:Manrope,sans-serif;font-size:.72rem;color:#7a6a52;margin-bottom:.8rem;">Menu-links på udlejningssiden: navn (DA/EN), link (vælg et ankerpunkt fra listen eller <b>Egen URL</b>), synlighed og rækkefølge med pilene. Ankerpunkterne følger altid sektionernes ID'er nedenfor.</p>
         <div id="ulNavEditor"></div>
         <button onclick="ulNavTilfoej()" style="background:#2a7a74;color:#fff;border:none;padding:.45rem 1.1rem;font-family:Manrope,sans-serif;font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;margin-top:.4rem;">+ Tilføj menu-link</button>
         <hr style="border:none;border-top:1px solid rgba(184,138,30,.25);margin:1.4rem 0;">
@@ -7871,18 +7871,40 @@ const UL_PIL_BTN = 'background:#f3ede2;border:1px solid rgba(184,138,30,.35);col
 function renderUlNavEditor() {
   const c = document.getElementById('ulNavEditor');
   if (!c) return;
-  c.innerHTML = ulNavState.map((l, i) => `
+  c.innerHTML = ulNavState.map((l, i) => {
+    const link = (l.link || '').trim();
+    const erAnker = UL_SEKTION_DEFS.some(d => '#' + d.id === link);
+    const egen = !erAnker && link !== '';
+    const valgt = erAnker ? link : (egen ? '__egen__' : '');
+    const options =
+      '<option value="" disabled ' + (valgt === '' ? 'selected' : '') + '>Vælg ankerpunkt…</option>' +
+      UL_SEKTION_DEFS.map(d => `<option value="#${d.id}" ${valgt === '#' + d.id ? 'selected' : ''}>${ulAdmEsc(d.navn)} (#${d.id})</option>`).join('') +
+      `<option value="__egen__" ${valgt === '__egen__' ? 'selected' : ''}>Egen URL…</option>`;
+    return `
     <div style="display:flex;gap:.5rem;align-items:center;margin-bottom:.5rem;flex-wrap:wrap;">
       <div style="display:flex;flex-direction:column;gap:2px;">
-        <button onclick="ulNavFlyt(${i},-1)" ${i === 0 ? 'disabled' : ''} style="${UL_PIL_BTN}" title="Flyt op">▲</button>
-        <button onclick="ulNavFlyt(${i},1)" ${i === ulNavState.length - 1 ? 'disabled' : ''} style="${UL_PIL_BTN}" title="Flyt ned">▼</button>
+        <button type="button" onclick="ulNavFlyt(${i},-1)" ${i === 0 ? 'disabled' : ''} style="${UL_PIL_BTN}" title="Flyt op">▲</button>
+        <button type="button" onclick="ulNavFlyt(${i},1)" ${i === ulNavState.length - 1 ? 'disabled' : ''} style="${UL_PIL_BTN}" title="Flyt ned">▼</button>
       </div>
       <input type="text" class="fc-input-da" style="flex:1.2;min-width:130px;" placeholder="Navn (DA)" value="${ulAdmEsc(l.tekst)}" oninput="ulNavState[${i}].tekst=this.value">
       <input type="text" class="fc-input-en" style="flex:1.2;min-width:130px;" placeholder="Name (EN)" value="${ulAdmEsc(l.tekst_en)}" oninput="ulNavState[${i}].tekst_en=this.value">
-      <input type="text" class="fc-input-da" style="flex:1;min-width:110px;" placeholder="Link (fx #priser)" value="${ulAdmEsc(l.link)}" oninput="ulNavState[${i}].link=this.value">
+      <select class="fc-input-da" style="flex:1;min-width:150px;cursor:pointer;" onchange="ulNavLinkValg(${i}, this)">${options}</select>
+      <input type="text" class="fc-input-da ulNavEgenUrl" data-idx="${i}" style="flex:1;min-width:120px;${egen ? '' : 'display:none;'}" placeholder="fx ejendommen.html eller https://…" value="${egen ? ulAdmEsc(link) : ''}" oninput="ulNavState[${i}].link=this.value">
       <label style="display:flex;align-items:center;gap:.35rem;font-family:Manrope,sans-serif;font-size:.66rem;color:#2c2318;cursor:pointer;white-space:nowrap;"><input type="checkbox" ${l.vis !== '0' ? 'checked' : ''} onchange="ulNavState[${i}].vis=this.checked?'1':'0'" style="cursor:pointer;"> Synlig</label>
-      <button onclick="ulNavSlet(${i})" style="background:#a33;color:#fff;border:none;width:24px;height:24px;cursor:pointer;font-size:.7rem;line-height:1;" title="Fjern link">✕</button>
-    </div>`).join('') || '<p style="font-family:Manrope,sans-serif;font-size:.7rem;color:#7a6a52;">Ingen menu-links — klik "+ Tilføj menu-link".</p>';
+      <button type="button" onclick="ulNavSlet(${i})" style="background:#a33;color:#fff;border:none;width:24px;height:24px;cursor:pointer;font-size:.7rem;line-height:1;" title="Fjern link">✕</button>
+    </div>`;
+  }).join('') || '<p style="font-family:Manrope,sans-serif;font-size:.7rem;color:#7a6a52;">Ingen menu-links — klik "+ Tilføj menu-link".</p>';
+}
+
+function ulNavLinkValg(i, sel) {
+  const felt = document.querySelector(`.ulNavEgenUrl[data-idx="${i}"]`);
+  if (sel.value === '__egen__') {
+    ulNavState[i].link = '';
+    if (felt) { felt.style.display = ''; felt.value = ''; felt.focus(); }
+  } else {
+    ulNavState[i].link = sel.value;
+    if (felt) { felt.style.display = 'none'; felt.value = ''; }
+  }
 }
 
 function ulNavFlyt(i, retning) {
