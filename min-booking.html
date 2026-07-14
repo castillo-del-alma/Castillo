@@ -120,6 +120,7 @@ body{font-family:'Manrope',sans-serif;background:var(--cream);color:var(--charco
     </div>
     <div class="tab-content active" id="tab-booking">
       <div class="booking-card" id="bookingCard"><div class="empty-state">Henter booking...</div></div>
+      <div class="booking-card" id="profilCard" style="display:none;margin-top:1.5rem;"></div>
       <div class="booking-card" id="pasCard" style="display:none;margin-top:1.5rem;"></div>
     </div>
     <div class="tab-content" id="tab-forum">
@@ -223,6 +224,7 @@ function logOut() {
 // betalinger, fakturaer eller mailhistorik.
 let portalRolle = 'booker';
 let gaestData = null;
+let profilData = null;   // { full_name, avatar_url } — deles af booker og gæst
 
 async function loadPortal(email) {
   userEmail = email;
@@ -246,6 +248,8 @@ async function loadPortal(email) {
           gaestData = me;
           return loadGaestPortal(me);
         }
+        // Bookeren har også et profilbillede — det bruges som avatar i forummet
+        profilData = { full_name: me.full_name, avatar_url: me.avatar_url || null };
       }
     } catch (e) { /* falder tilbage til booker-visningen */ }
   }
@@ -269,6 +273,7 @@ async function loadPortal(email) {
   }
   document.getElementById('portalNavn').textContent = kunde.full_name;
   renderBooking();
+  renderProfilBillede();
   loadPasRegistrering();
   renderBetalinger();
   checkUnread();
@@ -943,8 +948,51 @@ async function loadGaestPortal(me) {
   startRealtimeBeskeder();
 }
 
-/* ---------- Gæstens egne oplysninger: pas + profilbillede ---------- */
+/* ==========================================================
+   PROFILBILLEDE — fælles for booker og gæst
+   Billedet gemmes på personens række i booking_guests og skrives samtidig
+   ind som avatar i alle de fora, personen er medlem af.
+   ========================================================== */
+function renderProfilBillede() {
+  const card = document.getElementById('profilCard');
+  if (!card || !profilData) return;
+  card.style.display = 'block';
+
+  const avatar = profilData.avatar_url
+    ? `<img src="${mbEsc(profilData.avatar_url)}" alt="" style="width:88px;height:88px;border-radius:50%;object-fit:cover;border:1px solid var(--sand);flex:0 0 auto;">`
+    : `<div style="width:88px;height:88px;border-radius:50%;background:var(--sand);display:flex;align-items:center;justify-content:center;font-size:1.5rem;color:#fff;font-family:'Manrope',sans-serif;flex:0 0 auto;">${mbEsc(initialer(profilData.full_name))}</div>`;
+
+  card.innerHTML = `
+    <div class="booking-card-header">
+      <div class="booking-retreat" style="font-size:1.1rem;">Profilbillede</div>
+    </div>
+
+    <div style="display:flex;align-items:center;gap:1.4rem;margin-top:1.2rem;flex-wrap:wrap;">
+      ${avatar}
+      <div style="flex:1;min-width:220px;">
+        <p style="font-size:.88rem;color:var(--text-mid);line-height:1.65;margin-bottom:.9rem;">
+          Her kan du uploade et profilbillede. Det vil være synligt i
+          <b style="color:var(--charcoal);">Castillo Forum</b>, hvor det vises ved dine beskeder,
+          så de andre deltagere kan se, hvem de skriver med.
+        </p>
+        <input type="file" id="avatarFil" accept="image/*" hidden>
+        <button onclick="document.getElementById('avatarFil').click()" style="background:none;border:1px solid var(--sand);color:var(--text-mid);padding:.6rem 1.2rem;font-size:.62rem;letter-spacing:.15em;text-transform:uppercase;cursor:pointer;font-family:'Manrope',sans-serif;">
+          ${profilData.avatar_url ? 'Skift billede' : 'Vælg billede'}
+        </button>
+        <div id="avatarMsg" style="font-size:.78rem;margin-top:.6rem;min-height:1rem;color:var(--text-mid);"></div>
+      </div>
+    </div>`;
+
+  const fil = document.getElementById('avatarFil');
+  if (fil) fil.addEventListener('change', uploadAvatar);
+}
+
+/* ---------- Gæstens eget pas ---------- */
 function renderMinProfil() {
+  // Profilbilledet ligger i sit eget kort — fælles med bookeren
+  profilData = { full_name: gaestData.full_name, avatar_url: gaestData.avatar_url || null };
+  renderProfilBillede();
+
   const card = document.getElementById('pasCard');
   if (!card || !gaestData) return;
   card.style.display = 'block';
@@ -953,48 +1001,25 @@ function renderMinProfil() {
   const lbl = "display:block;font-size:.6rem;letter-spacing:.15em;text-transform:uppercase;color:var(--text-mid);font-family:'Manrope',sans-serif;";
   const inp = "width:100%;box-sizing:border-box;margin-top:.35rem;padding:.55rem .7rem;border:1px solid var(--sand);background:#fff;font-size:.85rem;color:var(--charcoal);font-family:'Manrope',sans-serif;";
 
-  const avatar = gaestData.avatar_url
-    ? `<img src="${mbEsc(gaestData.avatar_url)}" alt="" style="width:88px;height:88px;border-radius:50%;object-fit:cover;border:1px solid var(--sand);">`
-    : `<div style="width:88px;height:88px;border-radius:50%;background:var(--sand);display:flex;align-items:center;justify-content:center;font-size:1.5rem;color:#fff;font-family:'Manrope',sans-serif;">${mbEsc(initialer(gaestData.full_name))}</div>`;
-
   card.innerHTML = `
     <div class="booking-card-header">
       <div class="booking-retreat" style="font-size:1.1rem;">Mine oplysninger</div>
     </div>
-
-    <div style="display:flex;align-items:center;gap:1.2rem;margin:1rem 0 1.6rem;">
-      ${avatar}
-      <div>
-        <div style="font-size:.8rem;color:var(--text-mid);line-height:1.6;margin-bottom:.5rem;">
-          Dit profilbillede vises ved dine beskeder i forummet.
-        </div>
-        <input type="file" id="avatarFil" accept="image/*" hidden>
-        <button onclick="document.getElementById('avatarFil').click()" style="background:none;border:1px solid var(--sand);color:var(--text-mid);padding:.5rem 1rem;font-size:.62rem;letter-spacing:.15em;text-transform:uppercase;cursor:pointer;font-family:'Manrope',sans-serif;">Vælg billede</button>
-        <div id="avatarMsg" style="font-size:.75rem;margin-top:.5rem;min-height:1rem;color:var(--text-mid);"></div>
-      </div>
+    <p style="font-size:.85rem;color:var(--text-mid);line-height:1.65;margin:.6rem 0 1.2rem;">
+      Spansk lov kræver, at vi registrerer alle overnattende gæster hos myndighederne.
+    </p>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:.7rem;">
+      <label style="${lbl}grid-column:1/-1;">Fulde navn (som i passet)
+        <input type="text" id="gpNavn" value="${mbEsc(gaestData.full_name || '')}" style="${inp}"></label>
+      <label style="${lbl}">Pasnummer
+        <input type="text" id="gpNr" value="${mbEsc(p.passport_number || '')}" style="${inp}"></label>
+      <label style="${lbl}">Udløbsdato
+        <input type="date" id="gpUdlob" value="${mbEsc(p.passport_expiry || '')}" style="${inp}"></label>
+      <label style="${lbl}grid-column:1/-1;">Udstedt i (land)
+        <input type="text" id="gpLand" value="${mbEsc(p.passport_issued || '')}" style="${inp}"></label>
     </div>
-
-    <div style="border:1px solid var(--sand);padding:1rem 1.1rem;">
-      <div style="font-size:.62rem;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);margin-bottom:.5rem;font-family:'Manrope',sans-serif;">Pasoplysninger</div>
-      <p style="font-size:.8rem;color:var(--text-mid);line-height:1.6;margin-bottom:.9rem;">
-        Spansk lov kræver, at vi registrerer alle overnattende gæster hos myndighederne.
-      </p>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:.7rem;">
-        <label style="${lbl}grid-column:1/-1;">Fulde navn (som i passet)
-          <input type="text" id="gpNavn" value="${mbEsc(gaestData.full_name || '')}" style="${inp}"></label>
-        <label style="${lbl}">Pasnummer
-          <input type="text" id="gpNr" value="${mbEsc(p.passport_number || '')}" style="${inp}"></label>
-        <label style="${lbl}">Udløbsdato
-          <input type="date" id="gpUdlob" value="${mbEsc(p.passport_expiry || '')}" style="${inp}"></label>
-        <label style="${lbl}grid-column:1/-1;">Udstedt i (land)
-          <input type="text" id="gpLand" value="${mbEsc(p.passport_issued || '')}" style="${inp}"></label>
-      </div>
-      <button onclick="gemMitPas()" style="margin-top:1rem;background:#b88a1e;border:none;color:#fff;padding:.65rem 1.5rem;font-size:.62rem;letter-spacing:.18em;text-transform:uppercase;cursor:pointer;font-family:'Manrope',sans-serif;">Gem</button>
-      <div id="gpMsg" style="font-size:.75rem;margin-top:.5rem;min-height:1rem;"></div>
-    </div>`;
-
-  const fil = document.getElementById('avatarFil');
-  if (fil) fil.addEventListener('change', uploadAvatar);
+    <button onclick="gemMitPas()" style="margin-top:1rem;background:#b88a1e;border:none;color:#fff;padding:.65rem 1.5rem;font-size:.62rem;letter-spacing:.18em;text-transform:uppercase;cursor:pointer;font-family:'Manrope',sans-serif;">Gem</button>
+    <div id="gpMsg" style="font-size:.75rem;margin-top:.5rem;min-height:1rem;"></div>`;
 }
 
 function initialer(navn) {
@@ -1065,9 +1090,10 @@ async function uploadAvatar(e) {
     if (!res.ok) throw new Error(d.error || 'Kunne ikke uploade');
 
     if (gaestData) gaestData.avatar_url = d.avatar_url;
-    msg.style.color = '#6a7240';
-    msg.textContent = '✓ Profilbillede opdateret';
-    renderMinProfil();
+    if (profilData) profilData.avatar_url = d.avatar_url;
+    msg.style.color = '#4f5a24';
+    msg.textContent = '✓ Profilbilledet er gemt og vises nu i Castillo Forum';
+    renderProfilBillede();
   } catch (err) {
     msg.style.color = '#7a1f35';
     msg.textContent = err.message;

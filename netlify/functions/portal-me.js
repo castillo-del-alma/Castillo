@@ -25,16 +25,32 @@ exports.handler = async (event) => {
 
   // 1) Er det en booker?
   const kRes = await fetch(
-    `${SUPABASE_URL}/rest/v1/customers?email=eq.${encodeURIComponent(email)}&select=id,full_name&limit=1`,
+    `${SUPABASE_URL}/rest/v1/customers?email=eq.${encodeURIComponent(email)}&select=id,full_name,bookings(id)&limit=1`,
     { headers: sbHeaders }
   );
   const kunder = await kRes.json();
   if (Array.isArray(kunder) && kunder[0]) {
+    const k = kunder[0];
+
+    // Bookerens profilbillede ligger på gæsterække nr. 1 — samme sted som
+    // gæsternes, så forummet kan bruge det som avatar uanset rolle.
+    let avatar_url = null;
+    const bk = Array.isArray(k.bookings) ? k.bookings[0] : null;
+    if (bk) {
+      const bgRes = await fetch(
+        `${SUPABASE_URL}/rest/v1/booking_guests?booking_id=eq.${bk.id}&guest_no=eq.1&select=avatar_url&limit=1`,
+        { headers: sbHeaders }
+      );
+      const bg = await bgRes.json();
+      if (Array.isArray(bg) && bg[0]) avatar_url = bg[0].avatar_url || null;
+    }
+
     return json(200, {
       role: 'booker',
       email,
-      full_name: kunder[0].full_name,
-      customer_id: kunder[0].id
+      full_name: k.full_name,
+      customer_id: k.id,
+      avatar_url
     });
   }
 
