@@ -4,6 +4,7 @@
 // ikke i kildekoden på den offentlige admin-side.
 
 const crypto = require('crypto');
+const { synkroniserMedlemmer, kortNavn, nyToken } = require('./forum-sync');
 
 const SUPABASE_URL = process.env.SUPABASE_URL;
 const SUPABASE_KEY = process.env.SUPABASE_SERVICE_KEY || process.env.SUPABASE_ANON_KEY;
@@ -17,18 +18,6 @@ const sbHeaders = {
 
 function json(status, obj) {
   return { statusCode: status, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(obj) };
-}
-
-function newToken() {
-  return crypto.randomBytes(24).toString('base64url');
-}
-
-// "Erik Rybtke" -> "Erik R."
-function shortName(full) {
-  const parts = String(full || '').trim().split(/\s+/).filter(Boolean);
-  if (!parts.length) return 'Gæst';
-  if (parts.length === 1) return parts[0].slice(0, 40);
-  return `${parts[0]} ${parts[parts.length - 1][0].toUpperCase()}.`.slice(0, 60);
 }
 
 async function sbGet(path) {
@@ -148,66 +137,15 @@ exports.handler = async (event) => {
     return json(200, { members });
   }
 
-  // Importér alle gæster fra BETALTE bookinger på dette retreat + denne ankomstdato
+  // Importér alle gæster fra BETALTE bookinger på dette hold.
+  // Samme modul som den natlige kørsel bruger — så resultatet er altid ens.
   if (action === 'sync_members') {
     if (!chId) return json(400, { error: 'Manglende forum-id' });
     const chs = await sbGet(`forum_channels?id=eq.${chId}&select=id,retreat_id,arrival_date&limit=1`);
-    const ch = chs[0];
-    if (!ch) return json(404, { error: 'Forum findes ikke' });
+    if (!chs[0]) return json(404, { error: 'Forum findes ikke' });
 
-    const bookings = await sbGet(
-      `bookings?retreat_id=eq.${ch.retreat_id}&arrival_date=eq.${ch.arrival_date}` +
-      `&select=id,guests,customer_id,customers(full_name,email,nationality),payments(status),booking_guests(id,guest_no,full_name,email,avatar_url)`
-    );
-
-    const existing = await sbGet(`forum_members?channel_id=eq.${chId}&select=id,guest_id,booking_id,display_name`);
-    const haveGuest = new Set(existing.filter(m => m.guest_id).map(m => m.guest_id));
-    const haveName = new Set(existing.map(m => (m.display_name || '').toLowerCase()));
-
-    const rows = [];
-    for (const bk of bookings) {
-      const paid = Array.isArray(bk.payments) && bk.payments.some(p => p && p.status === 'paid');
-      if (!paid) continue;
-
-      const guests = Array.isArray(bk.booking_guests) ? bk.booking_guests : [];
-      if (guests.length) {
-        for (const g of guests) {
-          if (haveGuest.has(g.id)) continue;
-          rows.push({
-            channel_id: chId,
-            booking_id: bk.id,
-            guest_id: g.id,
-            email: g.email || (g.guest_no === 1 ? bk.customers?.email : null) || null,
-            nationality: bk.customers?.nationality || null,
-            display_name: shortName(g.full_name),
-            avatar_url: g.avatar_url || null,
-            role: 'deltager',
-            access_token: newToken()
-          });
-        }
-      } else if (bk.customers) {
-        // Ingen pas-registrering endnu: tag i det mindste bookeren med
-        const dn = shortName(bk.customers.full_name);
-        if (!haveName.has(dn.toLowerCase())) {
-          rows.push({
-            channel_id: chId,
-            booking_id: bk.id,
-            guest_id: null,
-            email: bk.customers.email || null,
-            nationality: bk.customers.nationality || null,
-            display_name: dn,
-            avatar_url: null,
-            role: 'deltager',
-            access_token: newToken()
-          });
-        }
-      }
-    }
-
-    if (!rows.length) return json(200, { success: true, added: 0 });
-    const res = await sbWrite('POST', 'forum_members', rows, 'return=minimal');
-    if (!res.ok) return json(500, { error: 'Kunne ikke tilføje medlemmer', detail: res.data });
-    return json(200, { success: true, added: rows.length });
+    const added = await synkroniserMedlemmer(chs[0]);
+    return json(200, { success: true, added });
   }
 
   if (action === 'add_member') {
@@ -220,7 +158,7 @@ exports.handler = async (event) => {
       email: data?.email ? String(data.email).trim().slice(0, 200) : null,
       nationality: data?.nationality ? String(data.nationality).slice(0, 100) : null,
       role: data?.role === 'moderator' ? 'moderator' : 'deltager',
-      access_token: newToken()
+      access_token: nyToken()
     };
     const res = await sbWrite('POST', 'forum_members', row);
     if (!res.ok) return json(500, { error: 'Kunne ikke tilføje medlem', detail: res.data });
@@ -246,7 +184,7 @@ exports.handler = async (event) => {
   if (action === 'regenerate_token') {
     const id = String(data?.member_id || '');
     if (!id) return json(400, { error: 'Manglende medlem-id' });
-    const token = newToken();
+    const token = nyToken();
     const res = await sbWrite('PATCH', `forum_members?id=eq.${id}`, { access_token: token }, 'return=minimal');
     if (!res.ok) return json(500, { error: 'Kunne ikke forny link' });
     return json(200, { success: true, access_token: token });

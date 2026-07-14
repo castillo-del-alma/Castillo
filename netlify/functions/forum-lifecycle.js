@@ -12,6 +12,7 @@
 const { Resend } = require('resend');
 const { buildEmail, getLang } = require('./email-template');
 const { inviterAlleManglende } = require('./invite-guests');
+const { opretManglendeFora, synkroniserAlle } = require('./forum-sync');
 
 const SUPABASE_URL = process.env.SUPABASE_URL;
 const SUPABASE_KEY = process.env.SUPABASE_SERVICE_KEY || process.env.SUPABASE_ANON_KEY;
@@ -120,9 +121,28 @@ async function purgeImages(channelId) {
 exports.handler = async () => {
   const resend = new Resend(process.env.RESEND_API_KEY);
   const now = new Date().toISOString();
-  const log = { opened: 0, open_mails: 0, digests: 0, purged: 0, invited: 0 };
+  const log = { created: 0, synced: 0, opened: 0, open_mails: 0, digests: 0, purged: 0, invited: 0 };
 
-  // ---------- 0) SIKKERHEDSNET: invitér gæster på betalte bookinger ----------
+  // ---------- 0a) OPRET FORA for hold, der ankommer inden for 14 dage ----------
+  // Status 'planlagt' — du kan nå at rette titel og skrive velkomstbeskeden,
+  // før forummet åbner af sig selv 7 dage før ankomst.
+  try {
+    log.created = await opretManglendeFora();
+  } catch (e) {
+    console.error('forum-lifecycle: oprettelse af fora fejlede', e.message);
+  }
+
+  // ---------- 0b) SYNKRONISÉR MEDLEMMER ----------
+  // Fanger gæster, der booker og betaler EFTER at forummet blev oprettet.
+  // Uden dette ville de aldrig få velkomstmailen med deres personlige link.
+  try {
+    log.synced = await synkroniserAlle();
+  } catch (e) {
+    console.error('forum-lifecycle: medlemssynkronisering fejlede', e.message);
+  }
+
+
+  // ---------- 0c) SIKKERHEDSNET: invitér gæster på betalte bookinger ----------
   // Stripe-betalinger inviterer med det samme. Dette fanger bankoverførsler og
   // betalinger, du markerer manuelt i admin.
   try {
