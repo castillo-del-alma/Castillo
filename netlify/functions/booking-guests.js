@@ -8,13 +8,10 @@
 // Tidligere blev de slettet og genskabt ved hver gemning — det nulstillede
 // gæstens forum-medlemskab, e-mail og profilbillede.
 
-const { Resend } = require('resend');
-const { buildEmail, getLang } = require('./email-template');
+const { inviterGaester } = require('./invite-guests');
 
 const SUPABASE_URL = process.env.SUPABASE_URL;
 const SUPABASE_KEY = process.env.SUPABASE_SERVICE_KEY || process.env.SUPABASE_ANON_KEY;
-const SITE = process.env.SITE_URL || 'https://castillodelalma.es';
-const FROM = 'Castillo del Alma <booking@castillodelalma.es>';
 
 const sbHeaders = {
   'Content-Type': 'application/json',
@@ -26,42 +23,6 @@ const MAX_GUESTS = 20;
 
 function badRequest(msg) {
   return { statusCode: 400, body: JSON.stringify({ error: msg }) };
-}
-
-// Velkomstmail til en gæst, der lige er blevet registreret med e-mail
-async function inviter(gaest, kundeNavn, nationality) {
-  const lang = getLang(nationality);
-  const fornavn = String(gaest.full_name || '').split(/\s+/)[0] || '';
-
-  const T = lang === 'da' ? {
-    subject: 'Du er tilmeldt — Castillo del Alma',
-    title: 'Velkommen til Castillo del Alma',
-    intro: `Kære ${fornavn}. ${kundeNavn} har tilmeldt dig et ophold hos os, og du har nu din egen adgang til Min booking. ` +
-      'Her kan du se opholdet, udfylde dine egne oplysninger, lægge et profilbillede op og — når vi nærmer os — ' +
-      'skrive med de andre deltagere i jeres lukkede forum.',
-    btn: 'Åbn Min booking',
-    note: 'Du logger ind med denne e-mailadresse. Vi sender dig en engangskode, så du behøver ikke huske en adgangskode.'
-  } : {
-    subject: 'You are registered — Castillo del Alma',
-    title: 'Welcome to Castillo del Alma',
-    intro: `Dear ${fornavn}. ${kundeNavn} has registered you for a stay with us, and you now have your own access to My Booking. ` +
-      'There you can see the stay, fill in your own details, add a profile picture and — as we get closer — ' +
-      'write with the other participants in your private forum.',
-    btn: 'Open My Booking',
-    note: 'You log in with this email address. We send you a one-time code, so there is no password to remember.'
-  };
-
-  const resend = new Resend(process.env.RESEND_API_KEY);
-  await resend.emails.send({
-    from: FROM,
-    to: gaest.email,
-    subject: T.subject,
-    html: buildEmail({
-      lang, title: T.title, intro: T.intro,
-      buttons: [{ label: T.btn, url: `${SITE}/min-booking.html` }],
-      note: T.note
-    })
-  });
 }
 
 exports.handler = async (event) => {
@@ -119,7 +80,6 @@ exports.handler = async (event) => {
 
     const rows = [];
     const seen = new Set();
-    const skalInviteres = [];
 
     for (const g of guests) {
       const no = parseInt(g?.guest_no, 10);
@@ -157,13 +117,11 @@ exports.handler = async (event) => {
         updated_at: new Date().toISOString()
       };
 
-      // Ny e-mail på en gæst, der ikke er inviteret før? Så skal de have velkomstmail.
-      // Gæst nr. 1 er bookeren selv — de har allerede adgang.
+      // Skifter e-mailen på en allerede inviteret gæst, skal den nye adresse
+      // inviteres på ny — nulstil invited_at, så invite-guests fanger den.
       const tidligere = kendt[no];
-      const erNy = gEmail && no > 1 && (!tidligere || !tidligere.invited_at || tidligere.email !== gEmail);
-      if (erNy) {
-        row.invited_at = new Date().toISOString();
-        skalInviteres.push({ full_name, email: gEmail });
+      if (no > 1 && tidligere && tidligere.invited_at && tidligere.email !== gEmail) {
+        row.invited_at = null;
       }
 
       rows.push(row);
@@ -190,15 +148,13 @@ exports.handler = async (event) => {
       { method: 'DELETE', headers: { ...sbHeaders, 'Prefer': 'return=minimal' } }
     );
 
-    // Invitér nye gæster. Fejler en mail, er registreringen stadig gemt.
+    // Invitér gæster, der endnu ikke er inviteret. Modulet sender KUN, hvis
+    // bookingen er betalt — så en ubetalt booking ikke mailer til tredjeparter.
     let inviteret = 0;
-    for (const g of skalInviteres) {
-      try {
-        await inviter(g, kunde.full_name, kunde.nationality);
-        inviteret++;
-      } catch (e) {
-        console.error('Kunne ikke invitere gæst:', g.email, e.message);
-      }
+    try {
+      inviteret = await inviterGaester(booking_id);
+    } catch (e) {
+      console.error('booking-guests: invitation fejlede:', e.message);
     }
 
     return {

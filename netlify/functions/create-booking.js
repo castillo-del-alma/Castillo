@@ -83,6 +83,49 @@ exports.handler = async (event) => {
     });
     const bookingData = await bookingRes.json();
     const booking = Array.isArray(bookingData) ? bookingData[0] : bookingData;
+
+    // Opret gæsterækkerne med det samme. Navn og e-mail har vi allerede fra
+    // formularen — så gæsterne er rigtige deltagere fra første færd og kan
+    // selv udfylde deres pasoplysninger.
+    // Invitationsmailen sendes FØRST, når bookingen er betalt (invite-guests.js).
+    if (booking?.id) {
+      try {
+        const gaesteRaekker = [{
+          booking_id: booking.id,
+          guest_no: 1,
+          full_name: `${fornavn} ${efternavn || ''}`.trim(),
+          email: String(email).trim().toLowerCase(),
+          invited_at: new Date().toISOString()   // bookeren har allerede adgang
+        }];
+
+        (ekstra_gaester || []).forEach((g, i) => {
+          const navn = String(g?.navn || '').trim();
+          if (!navn) return;
+          let gEmail = String(g?.email || '').trim().toLowerCase();
+          if (gEmail && !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(gEmail)) gEmail = '';
+          gaesteRaekker.push({
+            booking_id: booking.id,
+            guest_no: i + 2,
+            full_name: navn.slice(0, 200),
+            email: gEmail || null
+          });
+        });
+
+        await fetch(`${SUPABASE_URL}/rest/v1/booking_guests?on_conflict=booking_id,guest_no`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'apikey': SUPABASE_KEY,
+            'Authorization': `Bearer ${SUPABASE_KEY}`,
+            'Prefer': 'resolution=merge-duplicates,return=minimal'
+          },
+          body: JSON.stringify(gaesteRaekker)
+        });
+      } catch (e) {
+        // Bookingen skal oprettes uanset hvad — gæsterne kan tilføjes i admin
+        console.error('create-booking: kunne ikke oprette gæsterækker:', e.message);
+      }
+    }
     console.log('Booking data:', JSON.stringify(bookingData));
     if (!booking || !booking.id) throw new Error('Booking fejlede: ' + JSON.stringify(bookingData));
 

@@ -54,6 +54,16 @@ exports.handler = async (event) => {
 
       console.log('Booking opdateret og betaling registreret:', bookingId);
 
+      // Bookingen er betalt — nu må de medrejsende gæster inviteres til
+      // Min booking. Fejler det, må det ikke vælte betalingsbehandlingen.
+      try {
+        const { inviterGaester } = require('./invite-guests');
+        const antal = await inviterGaester(bookingId);
+        if (antal) console.log(`${antal} medrejsende gæst(er) inviteret`);
+      } catch (e) {
+        console.error('stripe-webhook: invitation af gæster fejlede:', e.message);
+      }
+
       // Hent booking- og kundeinfo til bekræftelsesmail
       const bookingInfoRes = await fetch(`${SUPABASE_URL}/rest/v1/bookings?id=eq.${bookingId}&select=retreat_name,arrival_date,customer_id`, { headers });
       const bookingInfoArr = await bookingInfoRes.json();

@@ -11,6 +11,7 @@
 
 const { Resend } = require('resend');
 const { buildEmail, getLang } = require('./email-template');
+const { inviterAlleManglende } = require('./invite-guests');
 
 const SUPABASE_URL = process.env.SUPABASE_URL;
 const SUPABASE_KEY = process.env.SUPABASE_SERVICE_KEY || process.env.SUPABASE_ANON_KEY;
@@ -119,7 +120,16 @@ async function purgeImages(channelId) {
 exports.handler = async () => {
   const resend = new Resend(process.env.RESEND_API_KEY);
   const now = new Date().toISOString();
-  const log = { opened: 0, open_mails: 0, digests: 0, purged: 0 };
+  const log = { opened: 0, open_mails: 0, digests: 0, purged: 0, invited: 0 };
+
+  // ---------- 0) SIKKERHEDSNET: invitér gæster på betalte bookinger ----------
+  // Stripe-betalinger inviterer med det samme. Dette fanger bankoverførsler og
+  // betalinger, du markerer manuelt i admin.
+  try {
+    log.invited = await inviterAlleManglende();
+  } catch (e) {
+    console.error('forum-lifecycle: gæsteinvitation fejlede', e.message);
+  }
 
   // ---------- 1) ÅBN FORA ----------
   const klar = await sbGet(
