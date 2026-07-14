@@ -93,6 +93,20 @@ body{font-family:'Manrope',sans-serif;background:var(--cream);color:var(--charco
 .f-state-box h2{font-family:'Cinzel',serif;font-weight:300;font-size:1.35rem;letter-spacing:.06em;margin-bottom:.7rem;}
 .f-state-box p{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.15rem;line-height:1.7;color:var(--text-mid);}
 
+/* ---------- Hjemmeskærm-hint ---------- */
+.f-hint{display:none;background:rgba(184,138,30,.12);border-bottom:1px solid rgba(143,106,18,.35);padding:.7rem 1rem;align-items:center;gap:.7rem;flex:0 0 auto;}
+.f-hint.on{display:flex;}
+.f-hint .t{flex:1;font-size:.78rem;line-height:1.45;color:var(--text-mid);}
+.f-hint .t b{color:var(--charcoal);font-weight:700;}
+.f-hint button{flex:0 0 auto;background:none;border:1px solid var(--sand);color:var(--text-mid);font-size:.62rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:.35rem .7rem;cursor:pointer;}
+
+/* ---------- Mistet link ---------- */
+.f-lost{margin-top:1.6rem;}
+.f-lost input{width:100%;padding:.75rem .9rem;background:#fff;border:1px solid var(--sand);color:var(--charcoal);font-family:'Manrope',sans-serif;font-size:.9rem;outline:none;text-align:center;}
+.f-lost input:focus{border-color:var(--gold);}
+.f-lost button{width:100%;margin-top:.6rem;padding:.75rem;background:var(--wine);color:#fff;border:none;font-size:.65rem;font-weight:600;letter-spacing:.18em;text-transform:uppercase;cursor:pointer;}
+.f-lost .msg{font-size:.82rem;color:var(--text-mid);margin-top:.8rem;line-height:1.6;min-height:1.2rem;}
+
 /* ---------- Lightbox ---------- */
 .f-light{display:none;position:fixed;inset:0;background:rgba(20,16,10,.94);z-index:99;align-items:center;justify-content:center;padding:1rem;}
 .f-light.on{display:flex;}
@@ -121,12 +135,25 @@ body{font-family:'Manrope',sans-serif;background:var(--cream);color:var(--charco
     </div>
   </header>
 
+  <!-- Føj til hjemmeskærm -->
+  <div class="f-hint" id="hint">
+    <div class="t" id="hint-txt"></div>
+    <button type="button" id="hint-x">OK</button>
+  </div>
+
   <!-- Fejl / venter-tilstand -->
   <div class="f-state" id="state" style="display:none;">
     <div class="f-state-box">
       <div class="eyebrow" id="state-eyebrow">Castillo del Alma</div>
       <h2 id="state-title"></h2>
       <p id="state-text"></p>
+
+      <!-- Mistet dit link? -->
+      <div class="f-lost" id="lost" style="display:none;">
+        <input type="email" id="lost-email" placeholder="din@email.dk" autocomplete="email">
+        <button type="button" id="lost-send"></button>
+        <div class="msg" id="lost-msg"></div>
+      </div>
     </div>
   </div>
 
@@ -182,7 +209,12 @@ body{font-family:'Manrope',sans-serif;background:var(--cream);color:var(--charco
       soonText: 'Vi åbner forummet en uge før jeres ankomst. Du får en mail, så snart det er klart.',
       empty: 'Ingen beskeder endnu — skriv den første.',
       tooBig: 'Billedet er for stort.', failed: 'Noget gik galt. Prøv igen.',
-      confirmDel: 'Slet denne besked?'
+      confirmDel: 'Slet denne besked?',
+      hintIos: 'Tip: tryk på <b>Del</b> nederst og vælg <b>Føj til hjemmeskærm</b> — så ligger forummet som en app på din telefon.',
+      hintAndroid: 'Tip: åbn menuen (⋮) og vælg <b>Føj til startskærm</b> — så ligger forummet som en app på din telefon.',
+      lostBtn: 'Send mit link',
+      lostSent: 'Hvis din e-mail er tilmeldt et forum, har vi netop sendt dit personlige link. Tjek også spam-mappen.',
+      lostBad: 'Skriv en gyldig e-mailadresse.'
     },
     en: {
       placeholder: 'Write a message…', send: 'Send', remove: 'Remove', del: 'Delete',
@@ -197,7 +229,12 @@ body{font-family:'Manrope',sans-serif;background:var(--cream);color:var(--charco
       soonText: 'We open the forum one week before your arrival. You will get an email as soon as it is ready.',
       empty: 'No messages yet — write the first one.',
       tooBig: 'The image is too large.', failed: 'Something went wrong. Please try again.',
-      confirmDel: 'Delete this message?'
+      confirmDel: 'Delete this message?',
+      hintIos: 'Tip: tap <b>Share</b> below and choose <b>Add to Home Screen</b> — the forum will sit on your phone like an app.',
+      hintAndroid: 'Tip: open the menu (⋮) and choose <b>Add to Home screen</b> — the forum will sit on your phone like an app.',
+      lostBtn: 'Send my link',
+      lostSent: 'If your email is signed up for a forum, we have just sent your personal link. Please check your spam folder too.',
+      lostBad: 'Please enter a valid email address.'
     }
   };
   var lang = 'en';
@@ -256,14 +293,68 @@ body{font-family:'Manrope',sans-serif;background:var(--cream);color:var(--charco
   }
   function toBottom() { var s = $('stream'); s.scrollTop = s.scrollHeight; }
 
-  function showState(title, text) {
+  function showState(title, text, visLost) {
     $('state').style.display = 'flex';
     $('stream').style.display = 'none';
     $('composer').style.display = 'none';
     $('closed').style.display = 'none';
+    $('hint').classList.remove('on');
     $('state-title').textContent = title;
     $('state-text').textContent = text;
+
+    // Ved ugyldigt/manglende link: tilbyd at få linket sendt igen
+    if (visLost) {
+      $('lost').style.display = 'block';
+      $('lost-send').textContent = t.lostBtn;
+    } else {
+      $('lost').style.display = 'none';
+    }
   }
+
+  // Selvbetjening: gæsten skriver sin e-mail og får sit personlige link tilsendt.
+  // Svaret er altid det samme — vi afslører aldrig, om e-mailen findes.
+  $('lost-send').addEventListener('click', async function () {
+    var mail = ($('lost-email').value || '').trim();
+    var msg = $('lost-msg');
+    if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(mail)) { msg.textContent = t.lostBad; return; }
+
+    $('lost-send').disabled = true;
+    msg.textContent = '…';
+    try {
+      await fetch('/.netlify/functions/forum-send-link', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: mail })
+      });
+      msg.textContent = t.lostSent;
+      $('lost-email').value = '';
+    } catch (e) {
+      msg.textContent = t.failed;
+    } finally {
+      $('lost-send').disabled = false;
+    }
+  });
+
+  // "Føj til hjemmeskærm" — vises kun på mobil, kun hvis siden ikke allerede
+  // kører som app, og kun én gang (gæsten kan lukke den for altid).
+  function visHint() {
+    var alleredeApp = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
+    if (alleredeApp) return;
+    try { if (localStorage.getItem('cda_forum_hint') === 'skjul') return; } catch (e) {}
+
+    var ua = navigator.userAgent || '';
+    var ios = /iPhone|iPad|iPod/i.test(ua);
+    var android = /Android/i.test(ua);
+    if (!ios && !android) return;
+
+    $('hint-txt').innerHTML = ios ? t.hintIos : t.hintAndroid;
+    $('hint').classList.add('on');
+  }
+
+  $('hint-x').addEventListener('click', function () {
+    $('hint').classList.remove('on');
+    try { localStorage.setItem('cda_forum_hint', 'skjul'); } catch (e) {}
+  });
 
   async function call(payload) {
     var res = await fetch(API, {
@@ -546,13 +637,13 @@ body{font-family:'Manrope',sans-serif;background:var(--cream);color:var(--charco
 
   /* ---------- Start ---------- */
   async function init() {
-    if (!token) { showState(t.badTitle, t.badText); return; }
+    if (!token) { showState(t.badTitle, t.badText, true); return; }
 
     var r = await call({ action: 'init' });
 
     if (!r.ok) {
-      if (r.status === 403) showState(t.soonTitle, t.soonText);
-      else showState(t.badTitle, t.badText);
+      if (r.status === 403) showState(t.soonTitle, t.soonText, false);
+      else showState(t.badTitle, t.badText, true);
       return;
     }
 
@@ -592,6 +683,7 @@ body{font-family:'Manrope',sans-serif;background:var(--cream);color:var(--charco
     }
 
     toBottom();
+    visHint();
     call({ action: 'read' });
     setInterval(poll, POLL_MS);
     document.addEventListener('visibilitychange', function () {

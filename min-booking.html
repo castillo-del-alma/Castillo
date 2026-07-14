@@ -111,11 +111,16 @@ body{font-family:'Manrope',sans-serif;background:var(--cream);color:var(--charco
       <button class="tab-btn" onclick="switchTab('beskeder',this)">Beskeder <span id="kundeUnreadBadge" style="display:none;background:var(--wine);color:#fff;font-size:.55rem;padding:.1rem .4rem;margin-left:.3rem;">0</span></button>
       <button class="tab-btn" onclick="switchTab('emails',this)">E-mails</button>
       <button class="tab-btn" onclick="switchTab('faktura',this)">Faktura</button>
+      <button class="tab-btn" onclick="switchTab('forum',this)">Forum</button>
     </div>
     <div class="tab-content active" id="tab-booking">
       <div class="booking-card" id="bookingCard"><div class="empty-state">Henter booking...</div></div>
       <div class="booking-card" id="pasCard" style="display:none;margin-top:1.5rem;"></div>
     </div>
+    <div class="tab-content" id="tab-forum">
+      <div id="mbForum"></div>
+    </div>
+
     <div class="tab-content" id="tab-betalinger">
       <div id="betalingerIndhold"><div class="empty-state">Henter betalinger...</div></div>
     </div>
@@ -188,8 +193,12 @@ async function verifyOTP() {
     return;
   }
 
-  // Gem session i localStorage
+  // Gem session i localStorage.
+  // Sessionsnøglen er beviset på et gennemført login og kræves for at hente
+  // personlige forum-links — en e-mail alene er ikke nok.
+  const vdata = await res.json().catch(() => ({}));
   localStorage.setItem('cda_kunde_email', userEmail);
+  if (vdata.session) localStorage.setItem('cda_session', vdata.session);
   await loadPortal(userEmail);
 }
 
@@ -200,6 +209,7 @@ function backToEmail() {
 
 function logOut() {
   localStorage.removeItem('cda_kunde_email');
+  localStorage.removeItem('cda_session');
   location.reload();
 }
 
@@ -659,6 +669,7 @@ function switchTab(tab, btn) {
   document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
   if (tab === 'emails') loadKundeEmails();
   if (tab === 'faktura') loadFakturaTab();
+  if (tab === 'forum') loadMineForaer();
   btn.classList.add('active');
   document.getElementById('tab-'+tab).classList.add('active');
   if (tab === 'beskeder') {
@@ -675,6 +686,104 @@ function fmt(d) {
   if (!d) return '—';
   return new Date(d).toLocaleDateString('da-DK', { day:'numeric', month:'long', year:'numeric' });
 }
+
+/* ==========================================================
+   FORUM — kundens egne fora
+   Kræver en gyldig login-session. Har kunden en gammel login uden session
+   (fra før sessioner blev indført), tilbydes de i stedet at få linket sendt
+   på e-mail — det er lige så trygt og kræver ikke, at de logger ind igen.
+   ========================================================== */
+function mbEsc(x) {
+  return String(x == null ? '' : x).replace(/&/g, '&amp;').replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+}
+
+function mbDato(iso) {
+  if (!iso) return '';
+  return new Date(iso).toLocaleDateString('da-DK', { day: 'numeric', month: 'long', year: 'numeric' });
+}
+
+async function loadMineForaer() {
+  const box = document.getElementById('mbForum');
+  if (!box) return;
+  box.innerHTML = '<div style="font-size:.85rem;color:var(--text-light);padding:1rem;">Henter…</div>';
+
+  const session = localStorage.getItem('cda_session');
+
+  if (!session) { mbForumFallback(box); return; }
+
+  try {
+    const res = await fetch('/.netlify/functions/forum-my', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ session })
+    });
+    if (res.status === 401) { mbForumFallback(box); return; }
+    const data = await res.json();
+    const fora = data.fora || [];
+
+    if (!fora.length) {
+      box.innerHTML = `
+        <div class="booking-card" style="text-align:center;">
+          <div class="eyebrow">Forum</div>
+          <p style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.05rem;color:var(--text-light);line-height:1.7;margin-top:.6rem;">
+            Du har ikke noget forum endnu. Vi åbner et lukket forum for jeres hold cirka en uge før ankomst — og du får en mail, når det er klart.
+          </p>
+        </div>`;
+      return;
+    }
+
+    box.innerHTML = fora.map(f => {
+      const aktiv = f.status === 'aktiv';
+      const arkiveret = f.status === 'arkiveret';
+      const status = aktiv ? 'Aktivt' : arkiveret ? 'Arkiveret' : 'Åbner ' + mbDato(f.opens_at);
+      const farve = aktiv ? '#6a7240' : arkiveret ? 'var(--gold)' : 'var(--text-light)';
+      const knap = (aktiv || arkiveret)
+        ? `<a href="${mbEsc(f.link)}" class="btn" style="display:inline-block;width:auto;padding:.7rem 1.6rem;text-decoration:none;margin-top:1rem;">${aktiv ? 'Åbn forum' : 'Læs forummet'}</a>`
+        : '<div style="font-size:.8rem;color:var(--text-light);margin-top:1rem;">Forummet åbner en uge før ankomst.</div>';
+
+      return `
+        <div class="booking-card" style="margin-bottom:1rem;">
+          <div class="booking-card-header" style="margin-bottom:1rem;padding-bottom:1rem;">
+            <div class="booking-retreat">${mbEsc(f.title)}</div>
+            <div class="booking-status" style="color:${farve};background:rgba(0,0,0,.03);border:1px solid ${farve}33;">${mbEsc(status)}</div>
+          </div>
+          <div style="font-size:.8rem;color:var(--text-light);">Ankomst ${mbDato(f.arrival_date)}</div>
+          ${knap}
+        </div>`;
+    }).join('');
+  } catch (e) {
+    box.innerHTML = '<div style="font-size:.85rem;color:var(--wine);padding:1rem;">Kunne ikke hente dine fora. Prøv igen om lidt.</div>';
+  }
+}
+
+function mbForumFallback(box) {
+  box.innerHTML = `
+    <div class="booking-card" style="text-align:center;">
+      <div class="eyebrow">Forum</div>
+      <p style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.05rem;color:var(--text-light);line-height:1.7;margin:.6rem 0 1.4rem;">
+        For at åbne forummet herfra skal du logge ind på ny — eller få dit personlige link sendt på e-mail.
+      </p>
+      <button class="btn" style="width:auto;padding:.7rem 1.6rem;" onclick="mbSendForumLink()">Send mit forum-link på e-mail</button>
+      <div id="mbForumMsg" style="font-size:.82rem;color:var(--text-light);margin-top:1rem;line-height:1.6;min-height:1.2rem;"></div>
+    </div>`;
+}
+
+async function mbSendForumLink() {
+  const msg = document.getElementById('mbForumMsg');
+  if (msg) msg.textContent = '…';
+  try {
+    await fetch('/.netlify/functions/forum-send-link', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email: userEmail })
+    });
+    if (msg) msg.textContent = 'Er du tilmeldt et forum, har vi netop sendt dit personlige link til ' + userEmail + '. Tjek også spam-mappen.';
+  } catch (e) {
+    if (msg) msg.textContent = 'Noget gik galt. Prøv igen om lidt.';
+  }
+}
+
 </script>
 <style>
 #mb-betal-overlay{display:none;position:fixed;inset:0;background:rgba(44,35,24,.78);z-index:2000;align-items:center;justify-content:center;}
