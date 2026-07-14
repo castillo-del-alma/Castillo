@@ -6,6 +6,12 @@
 <meta name="robots" content="noindex,nofollow">
 <meta name="theme-color" content="#faf6ee">
 <title>Forum — Castillo del Alma</title>
+<link rel="manifest" href="forum.webmanifest">
+<link rel="apple-touch-icon" href="img/forum-icon-192.png">
+<link rel="icon" href="img/forum-icon-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="CDA Forum">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
 <link rel="stylesheet" href="fonts/fonts.css">
 <style>
 :root{--cream:#faf6ee;--beige:#f0e8d5;--sand:#d8c49c;--charcoal:#241c12;--text-mid:#4a3d2a;--text-light:#6b5c47;--wine:#7a1f35;--gold:#8f6a12;}
@@ -23,6 +29,11 @@ body{font-family:'Manrope',sans-serif;background:var(--cream);color:var(--charco
 .f-sub{font-size:.64rem;font-weight:600;letter-spacing:.15em;text-transform:uppercase;color:var(--text-mid);margin-top:.2rem;}
 .f-sub.aktiv{color:#4f5a24;}
 .f-sub.arkiveret{color:var(--gold);}
+
+/* Klokke: lyd + notifikationer */
+.f-bell{flex:0 0 auto;background:none;border:1px solid var(--sand);width:38px;height:38px;font-size:1.05rem;line-height:1;cursor:pointer;color:var(--text-mid);display:flex;align-items:center;justify-content:center;padding:0;}
+.f-bell:hover{border-color:var(--gold);}
+.f-bell.on{border-color:var(--gold);background:rgba(184,138,30,.12);}
 
 /* ---------- Beskeder ---------- */
 .f-stream{flex:1 1 auto;overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;padding:1.2rem 1rem 1.5rem;}
@@ -138,6 +149,7 @@ body{font-family:'Manrope',sans-serif;background:var(--cream);color:var(--charco
       <div class="f-title" id="ch-title">Forum</div>
       <div class="f-sub" id="ch-status">…</div>
     </div>
+    <button class="f-bell" id="bell" type="button" title="Lyd og notifikationer">&#128276;</button>
   </header>
 
   <!-- Føj til hjemmeskærm -->
@@ -219,7 +231,11 @@ body{font-family:'Manrope',sans-serif;background:var(--cream);color:var(--charco
       hintAndroid: 'Tip: åbn menuen (⋮) og vælg <b>Føj til startskærm</b> — så ligger forummet som en app på din telefon.',
       lostBtn: 'Send mit link',
       lostSent: 'Hvis din e-mail er tilmeldt et forum, har vi netop sendt dit personlige link. Tjek også spam-mappen.',
-      lostBad: 'Skriv en gyldig e-mailadresse.'
+      lostBad: 'Skriv en gyldig e-mailadresse.',
+      bellOn: 'Lyd og notifikationer er slået til',
+      bellOff: 'Lyd og notifikationer er slået fra',
+      bellBlocked: 'Notifikationer er blokeret i browserens indstillinger — lyden virker stadig',
+      newMsg: 'Ny besked i forummet'
     },
     en: {
       placeholder: 'Write a message…', send: 'Send', remove: 'Remove', del: 'Delete',
@@ -239,7 +255,11 @@ body{font-family:'Manrope',sans-serif;background:var(--cream);color:var(--charco
       hintAndroid: 'Tip: open the menu (⋮) and choose <b>Add to Home screen</b> — the forum will sit on your phone like an app.',
       lostBtn: 'Send my link',
       lostSent: 'If your email is signed up for a forum, we have just sent your personal link. Please check your spam folder too.',
-      lostBad: 'Please enter a valid email address.'
+      lostBad: 'Please enter a valid email address.',
+      bellOn: 'Sound and notifications are on',
+      bellOff: 'Sound and notifications are off',
+      bellBlocked: 'Notifications are blocked in your browser settings — sound still works',
+      newMsg: 'New message in the forum'
     }
   };
   var lang = 'en';
@@ -499,6 +519,94 @@ body{font-family:'Manrope',sans-serif;background:var(--cream);color:var(--charco
     });
   }
 
+  /* ==========================================================
+     LYD + NOTIFIKATIONER
+     Lyden laves i browseren (WebAudio), så der ikke skal hentes en lydfil.
+     Browsere blokerer lyd, indtil brugeren har rørt siden — derfor "låses"
+     lyden op ved første tryk.
+     ========================================================== */
+  var lyd = { til: true, ctx: null, klar: false };
+  try { lyd.til = localStorage.getItem('cda_forum_lyd') !== 'fra'; } catch (e) {}
+
+  function laasLydOp() {
+    if (lyd.klar) return;
+    try {
+      var AC = window.AudioContext || window.webkitAudioContext;
+      if (!AC) return;
+      lyd.ctx = new AC();
+      if (lyd.ctx.state === 'suspended') lyd.ctx.resume();
+      lyd.klar = true;
+    } catch (e) { /* lyd er ikke tilgængelig */ }
+  }
+
+  // To bløde toner — en diskret "pling", ikke et alarmbip
+  function spilLyd() {
+    if (!lyd.til || !lyd.klar || !lyd.ctx) return;
+    try {
+      if (lyd.ctx.state === 'suspended') lyd.ctx.resume();
+      [[880, 0], [1174.7, 0.11]].forEach(function (par) {
+        var osc = lyd.ctx.createOscillator();
+        var gain = lyd.ctx.createGain();
+        var t0 = lyd.ctx.currentTime + par[1];
+        osc.type = 'sine';
+        osc.frequency.value = par[0];
+        gain.gain.setValueAtTime(0.0001, t0);
+        gain.gain.exponentialRampToValueAtTime(0.22, t0 + 0.02);
+        gain.gain.exponentialRampToValueAtTime(0.0001, t0 + 0.35);
+        osc.connect(gain);
+        gain.connect(lyd.ctx.destination);
+        osc.start(t0);
+        osc.stop(t0 + 0.4);
+      });
+    } catch (e) { /* ignorér */ }
+  }
+
+  function visNotifikation(navn, tekst) {
+    if (!lyd.til) return;
+    if (!('Notification' in window) || Notification.permission !== 'granted') return;
+    if (!document.hidden) return;   // kun når fanen ikke er fremme
+    try {
+      var n = new Notification(navn || t.newMsg, {
+        body: tekst || t.newMsg,
+        icon: '/img/forum-icon-192.png',
+        badge: '/img/forum-icon-192.png',
+        tag: 'cda-forum',           // erstatter forrige i stedet for at stable dem
+        renotify: true
+      });
+      n.onclick = function () { window.focus(); n.close(); };
+    } catch (e) { /* ignorér */ }
+  }
+
+  function opdaterKlokke() {
+    var b = $('bell');
+    b.classList.toggle('on', lyd.til);
+    b.innerHTML = lyd.til ? '&#128276;' : '&#128277;';   // 🔔 / 🔕
+    b.title = lyd.til ? t.bellOn : t.bellOff;
+  }
+
+  $('bell').addEventListener('click', async function () {
+    lyd.til = !lyd.til;
+    try { localStorage.setItem('cda_forum_lyd', lyd.til ? 'til' : 'fra'); } catch (e) {}
+
+    if (lyd.til) {
+      laasLydOp();
+      spilLyd();   // lille bekræftelse
+      if ('Notification' in window && Notification.permission === 'default') {
+        try { await Notification.requestPermission(); } catch (e) {}
+      }
+      if ('Notification' in window && Notification.permission === 'denied') {
+        $('err').textContent = t.bellBlocked;
+        setTimeout(function () { $('err').textContent = ''; }, 5000);
+      }
+    }
+    opdaterKlokke();
+  });
+
+  // Første berøring hvor som helst låser lyden op (browserens krav)
+  ['pointerdown', 'keydown'].forEach(function (ev) {
+    document.addEventListener(ev, laasLydOp, { once: true });
+  });
+
   function markDeleted(id) {
     var row = $('stream').querySelector('[data-id="' + id + '"]');
     if (!row || row.classList.contains('f-deleted')) return;
@@ -633,9 +741,24 @@ body{font-family:'Manrope',sans-serif;background:var(--cream);color:var(--charco
 
     var stick = atBottom();
     opdaterRoster(r.data.members);
-    (r.data.messages || []).forEach(bubble);
+
+    var nye = (r.data.messages || []);
+    // Kun beskeder fra andre skal give lyd — ikke ens egne
+    var fraAndre = nye.filter(function (m) { return !state.me || m.member_id !== state.me.id; });
+
+    nye.forEach(bubble);
     (r.data.deleted_ids || []).forEach(markDeleted);
     if (stick) toBottom();
+
+    if (fraAndre.length) {
+      spilLyd();
+      var sidste = fraAndre[fraAndre.length - 1];
+      var afs = state.members[sidste.member_id];
+      visNotifikation(
+        afs ? afs.display_name : t.newMsg,
+        sidste.body ? sidste.body.slice(0, 120) : '📷'
+      );
+    }
 
     if (r.data.status && r.data.status !== state.channel.status) location.reload();
   }
@@ -688,6 +811,7 @@ body{font-family:'Manrope',sans-serif;background:var(--cream);color:var(--charco
     }
 
     toBottom();
+    opdaterKlokke();
     visHint();
     call({ action: 'read' });
     setInterval(poll, POLL_MS);
