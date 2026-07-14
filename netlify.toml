@@ -6,10 +6,15 @@
 [functions."pas-reminder"]
   schedule = "0 7 * * *"
 
+# Forum-livscyklus: åbner fora 7 dage før ankomst, sender digest-mails og
+# sletter arkiverede fora 30 dage efter arkivering. Kører dagligt kl. 08:00 UTC.
+[functions."forum-lifecycle"]
+  schedule = "0 8 * * *"
+
 [[headers]]
   for = "/admin-anmeldelser.html"
   [headers.values]
     X-Frame-Options = "DENY"
 
 [build.environment]
-  SECRETS_SCAN_OMIT_KEYS = "SUPABASE_URL,SUPABASE_ANON_KEY,RESEND_API_KEY,STRIPE_SECRET_KEY,STRIPE_PUBLISHABLE_KEY,STRIPE_WEBHOOK_SECRET"
+  SECRETS_SCAN_OMIT_KEYS = "SUPABASE_URL,SUPABASE_ANON_KEY,SUPABASE_SERVICE_KEY,RESEND_API_KEY,STRIPE_SECRET_KEY,STRIPE_PUBLISHABLE_KEY,STRIPE_WEBHOOK_SECRET,FORUM_ADMIN_KEY"
