@@ -1317,26 +1317,7 @@ body.menu-open .nav-burger span:nth-child(3){ transform:translateY(-9px) rotate(
     <span></span><span></span><span></span>
   </button>
   <ul class="nav-links" id="navLinks">
-    <li class="nav-has-dd">
-      <a href="#estate" class="nav-dd-trigger" id="navMainEstate">The Estate <span class="nav-dd-arrow">›</span></a>
-      <ul class="nav-dd">
-        <li><a href="ejendommen.html#intro" id="navDdIntro">Ejendommen</a></li>
-        <li><a href="ejendommen.html#towers" id="navDdTowers">Tårnene</a></li>
-        <li><a href="ejendommen.html#rooms" id="navDdRooms">Indkvartering</a></li>
-        <li><a href="ejendommen.html#facilities" id="navDdFacilities">Faciliteter</a></li>
-        <li><a href="ejendommen.html#sustainability" id="navDdSustainability">Bæredygtighed</a></li>
-        <li><a href="ejendommen.html#vineyard" id="navDdVineyard">Vingården</a></li>
-        <li><a href="kontakt.html#location" id="navDdLocation">Beliggenhed</a></li>
-      </ul>
-    </li>
-    <li><a href="#retreats" style="font-weight:700;color:var(--wine);" id="navMainRetreats">Retreats</a></li>
-    <li><a href="udlejning.html" id="navMainUdlejning">Afhold dit retreat</a></li>
-    <li><a href="#vineyard" id="navMainVineyard">Vingården</a></li>
-    <li><a href="#experiences" id="navMainExperiences">Oplevelser</a></li>
-    <li><a href="#wellness" id="navMainWellness">Wellness</a></li>
-    <li><a href="#om-os" id="navMainOmOs">Om os</a></li>
-    <li><a href="#retreats" class="nav-book" id="navMainBook">Book Retreat</a></li>
-    <li class="lang-switcher-item" style="display:flex;align-items:center;gap:.6rem;margin-left:.6rem;">
+    <li class="lang-switcher-item nav-lang-li" style="display:flex;align-items:center;gap:.6rem;margin-left:.6rem;">
       <div class="lang-switcher" style="display:flex;border:1.5px solid;overflow:hidden;">
         <button id="btn-da" class="lang-btn lang-btn-active" onclick="setSiteLang('da')" style="font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;padding:.3rem .6rem;border:none;cursor:pointer;font-family:'Manrope',sans-serif;">DA</button>
         <button id="btn-en" class="lang-btn lang-btn-inactive" onclick="setSiteLang('en')" style="font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;padding:.3rem .6rem;border:none;cursor:pointer;font-family:'Manrope',sans-serif;">EN</button>
@@ -1349,7 +1330,7 @@ body.menu-open .nav-burger span:nth-child(3){ transform:translateY(-9px) rotate(
 <div class="nav-backdrop" id="navBackdrop"></div>
 
 <!-- ══════ HERO ══════ -->
-<section class="hero">
+<section class="hero" id="hero">
   <div class="hero-video-wrap">
     <video autoplay muted loop playsinline preload="auto">
       <source src="img/intro-film-hero.mp4" type="video/mp4" id="heroVideoSource">
@@ -1717,7 +1698,7 @@ body.menu-open .nav-burger span:nth-child(3){ transform:translateY(-9px) rotate(
 <div class="section-inner"><div class="divider"></div></div>
 
 <!-- ══════ TESTIMONIAL ══════ -->
-<section class="testimonial">
+<section class="testimonial" id="testimonial">
   <div class="section-inner">
     <div class="reveal">
       <blockquote>"Castillo del Alma er ikke bare et sted — det er en tilstand. Jeg kom for at hvile og rejste hjem forandret."</blockquote>
@@ -2617,6 +2598,123 @@ const SC_SUPABASE_URL = 'https://niniwgiytyqvdqejigxg.supabase.co';
 const SC_SUPABASE_ANON_KEY = 'sb_publishable_GwrNUpIuWzdg1oswOY5HzA_mKWqhd6y';
 const sbContent = supabase.createClient(SC_SUPABASE_URL, SC_SUPABASE_ANON_KEY);
 
+// ── NAVIGATION (menu) — redigeres i admin, Forside → blok 0. Gemmes som JSON i site_content.nav_links ──
+// Ankerlinks har ALTID samme navn som sektionens ID. Underpunkter (niveau='under') lægges i dropdown under nærmeste hovedpunkt.
+const SITE_LEGACY_ANKRE = { towers:'taarnene', rooms:'indkvartering', facilities:'faciliteter', sustainability:'baeredygtighed', vineyard:'vingaarden' };
+const SITE_NAV_SEED = [
+  { tekst:'The Estate', tekst_en:'The Estate', link:'#estate', vis:'1', niveau:'hoved' },
+  { tekst:'Ejendommen', tekst_en:'The Property', link:'ejendommen.html#intro', vis:'1', niveau:'under' },
+  { tekst:'Tårnene', tekst_en:'The Towers', link:'ejendommen.html#taarnene', vis:'1', niveau:'under' },
+  { tekst:'Indkvartering', tekst_en:'Accommodation', link:'ejendommen.html#indkvartering', vis:'1', niveau:'under' },
+  { tekst:'Faciliteter', tekst_en:'Facilities', link:'ejendommen.html#faciliteter', vis:'1', niveau:'under' },
+  { tekst:'Bæredygtighed', tekst_en:'Sustainability', link:'ejendommen.html#baeredygtighed', vis:'1', niveau:'under' },
+  { tekst:'Vingården', tekst_en:'The Vineyard', link:'ejendommen.html#vingaarden', vis:'1', niveau:'under' },
+  { tekst:'Beliggenhed', tekst_en:'Location', link:'kontakt.html#location', vis:'1', niveau:'under' },
+  { tekst:'Retreats', tekst_en:'Retreats', link:'#retreats', vis:'1', niveau:'hoved', fremhaev:'1' },
+  { tekst:'Afhold dit retreat', tekst_en:'Host your retreat', link:'udlejning.html', vis:'1', niveau:'hoved' },
+  { tekst:'Vingården', tekst_en:'The Vineyard', link:'#vineyard', vis:'1', niveau:'hoved' },
+  { tekst:'Oplevelser', tekst_en:'Experiences', link:'#experiences', vis:'1', niveau:'hoved' },
+  { tekst:'Wellness', tekst_en:'Wellness', link:'#wellness', vis:'1', niveau:'hoved' },
+  { tekst:'Om os', tekst_en:'About us', link:'#om-os', vis:'1', niveau:'hoved' },
+  { tekst:'Book Retreat', tekst_en:'Book Retreat', link:'#retreats', vis:'1', niveau:'hoved', knap:'1' }
+];
+
+function siteParseJson(v) {
+  if (!v) return null;
+  if (Array.isArray(v)) return v;
+  try { const p = JSON.parse(v); return Array.isArray(p) ? p : null; } catch(e) { return null; }
+}
+function siteFixLink(href) {
+  href = (href || '').trim();
+  // Gamle engelske ankre på ejendommen.html oversættes til de nye danske ID'er
+  const m = href.match(/^(ejendommen\.html)?#(.+)$/);
+  if (m && SITE_LEGACY_ANKRE[m[2]]) return (m[1] || '') + '#' + SITE_LEGACY_ANKRE[m[2]];
+  return href;
+}
+
+function renderSiteNav() {
+  const ul = document.getElementById('navLinks');
+  if (!ul) return;
+  const gemte = siteParseJson(siteContentData.nav_links);
+  const links = (gemte && gemte.length) ? gemte : SITE_NAV_SEED;
+  ul.querySelectorAll('li.nav-item').forEach(li => li.remove());
+  const langLi = ul.querySelector('li.nav-lang-li'); // sprogvælgeren bliver altid sidst
+  const frag = document.createDocumentFragment();
+  const isEN = currentSiteLang === 'en';
+  const synlige = links.filter(l => l && l.vis !== '0' && ((l.tekst || '').trim() || (l.tekst_en || '').trim()) && (l.link || '').trim());
+
+  let sidsteHovedLi = null;
+  synlige.forEach(l => {
+    const tekst = isEN ? ((l.tekst_en || '').trim() || l.tekst) : ((l.tekst || '').trim() || l.tekst_en);
+    const href = siteFixLink(l.link);
+
+    if (l.niveau === 'under' && sidsteHovedLi) {
+      // Underpunkt → i dropdown under nærmeste hovedpunkt
+      let dd = sidsteHovedLi.querySelector('ul.nav-dd');
+      if (!dd) {
+        sidsteHovedLi.classList.add('nav-has-dd');
+        const trigger = sidsteHovedLi.querySelector('a');
+        if (trigger && !trigger.querySelector('.nav-dd-arrow')) {
+          trigger.classList.add('nav-dd-trigger');
+          const pil = document.createElement('span');
+          pil.className = 'nav-dd-arrow';
+          pil.textContent = '›';
+          trigger.appendChild(document.createTextNode(' '));
+          trigger.appendChild(pil);
+        }
+        dd = document.createElement('ul');
+        dd.className = 'nav-dd';
+        sidsteHovedLi.appendChild(dd);
+      }
+      const li = document.createElement('li');
+      const a = document.createElement('a');
+      a.href = href;
+      a.textContent = tekst;
+      li.appendChild(a);
+      dd.appendChild(li);
+      return;
+    }
+
+    const li = document.createElement('li');
+    li.className = 'nav-item';
+    const a = document.createElement('a');
+    a.href = href;
+    a.textContent = tekst;
+    if (l.knap === '1') a.className = 'nav-book';
+    if (l.fremhaev === '1') { a.style.fontWeight = '700'; a.style.color = 'var(--wine)'; }
+    li.appendChild(a);
+    frag.appendChild(li);
+    sidsteHovedLi = li;
+  });
+  ul.insertBefore(frag, langLi);
+}
+
+// ── SEKTIONSRÆKKEFØLGE & SYNLIGHED — gemmes som JSON i site_content.sektion_orden ([{id,vis}]) ──
+const SITE_SEKTIONER = ['hero','about','retreats','reviews','estate','vineyard','experiences','gallery','wellness','om-os','testimonial','contact'];
+let siteOrdenAnvendt = false;
+function applySiteSektionOrden() {
+  if (siteOrdenAnvendt) return;
+  let orden = siteParseJson(siteContentData.sektion_orden);
+  if (!orden || !orden.length) return;
+  orden = orden.map(o => typeof o === 'string' ? { id:o } : o).filter(o => SITE_SEKTIONER.includes(o.id));
+  SITE_SEKTIONER.forEach(id => { if (!orden.some(o => o.id === id)) orden.push({ id }); });
+  const footer = document.querySelector('footer');
+  if (!footer || !footer.parentNode) return;
+  orden.forEach(o => {
+    const sec = document.getElementById(o.id);
+    if (sec) footer.parentNode.insertBefore(sec, footer);
+  });
+  siteOrdenAnvendt = true;
+}
+function applySiteSektionSynlighed() {
+  const orden = siteParseJson(siteContentData.sektion_orden) || [];
+  orden.forEach(o => {
+    if (typeof o === 'string') return;
+    const el = document.getElementById(o.id);
+    if (el) el.style.display = (o.vis === '0') ? 'none' : '';
+  });
+}
+
 let siteContentData = {};
 let currentSiteLang = 'da';
 
@@ -2757,21 +2855,10 @@ function applySiteLang() {
     el.textContent = SC(key, fallback !== undefined ? fallback : el.textContent);
     if (arrow) el.appendChild(arrow);
   };
-  navTextOnly('navMainEstate', 'nav_estate', 'The Estate');
-  navTextOnly('navMainRetreats', 'nav_retreats', 'Retreats');
-  navTextOnly('navMainUdlejning', 'nav_udlejning', currentSiteLang === 'en' ? 'Host your retreat' : 'Afhold dit retreat');
-  navTextOnly('navMainVineyard', 'nav_vineyard', 'Vingården');
-  navTextOnly('navMainExperiences', 'nav_experiences', 'Oplevelser');
-  navTextOnly('navMainWellness', 'nav_wellness', 'Wellness');
-  navTextOnly('navMainOmOs', 'nav_om_os', 'Om os');
-  navTextOnly('navMainBook', 'nav_book', 'Book Retreat');
-  navTextOnly('navDdIntro', 'nav_dd_intro', 'Ejendommen');
-  navTextOnly('navDdTowers', 'nav_dd_towers', 'Tårnene');
-  navTextOnly('navDdRooms', 'nav_dd_rooms', 'Indkvartering');
-  navTextOnly('navDdFacilities', 'nav_dd_facilities', 'Faciliteter');
-  navTextOnly('navDdSustainability', 'nav_dd_sustainability', 'Bæredygtighed');
-  navTextOnly('navDdVineyard', 'nav_dd_vineyard', 'Vingården');
-  navTextOnly('navDdLocation', 'nav_dd_location', 'Beliggenhed');
+  // Menuen renderes dynamisk fra nav_links (redigeres i admin, Forside → blok 0)
+  renderSiteNav();
+  applySiteSektionOrden();
+  applySiteSektionSynlighed();
 
   // FILOSOFI
   const filosofiLabel = document.querySelector('#about .section-label');
@@ -3167,16 +3254,16 @@ function applyUploadedMedia() {
   burger.addEventListener('click', toggleMenu);
   if(backdrop) backdrop.addEventListener('click', closeMenu);
   // Klik på links: dropdown-trigger folder ud på mobil; alle andre lukker menuen
-  document.querySelectorAll('.nav-links a').forEach(a => {
-    a.addEventListener('click', (e) => {
-      if(a.classList.contains('nav-dd-trigger') && isMobile()){
-        e.preventDefault();
-        const li = a.closest('.nav-has-dd');
-        if(li) li.classList.toggle('open');
-        return;
-      }
-      closeMenu();
-    });
+  document.addEventListener('click', (e) => {
+    const a = e.target.closest('.nav-links a');
+    if (!a) return;
+    if (a.classList.contains('nav-dd-trigger') && isMobile()) {
+      e.preventDefault();
+      const li = a.closest('.nav-has-dd');
+      if (li) li.classList.toggle('open');
+      return;
+    }
+    closeMenu();
   });
   document.addEventListener('keydown', (e) => { if(e.key === 'Escape') closeMenu(); });
   window.addEventListener('resize', () => { if(!isMobile()) closeMenu(); });
