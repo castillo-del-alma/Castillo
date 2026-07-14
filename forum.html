@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<meta name="theme-color" content="#faf6ee">
+<title>Forum — Castillo del Alma</title>
+<link rel="stylesheet" href="fonts/fonts.css">
+<style>
+:root{--cream:#faf6ee;--beige:#f0e8d5;--sand:#e0d0b0;--charcoal:#2c2318;--text-mid:#5c4e3a;--text-light:#9a8c7a;--wine:#7a1f35;--gold:#b88a1e;}
+*{margin:0;padding:0;box-sizing:border-box;}
+html,body{height:100%;}
+body{font-family:'Manrope',sans-serif;background:var(--cream);color:var(--charcoal);overflow:hidden;}
+
+/* ---------- Skelet ---------- */
+.app{display:flex;flex-direction:column;height:100dvh;max-width:780px;margin:0 auto;background:var(--cream);}
+
+.f-header{flex:0 0 auto;background:#fff;border-bottom:1px solid var(--sand);padding:.9rem 1.2rem;display:flex;align-items:center;gap:.9rem;}
+.f-header img{height:30px;width:auto;flex:0 0 auto;}
+.f-head-txt{min-width:0;flex:1;}
+.f-title{font-family:'Cinzel',serif;font-weight:300;font-size:.92rem;letter-spacing:.06em;color:var(--charcoal);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.f-sub{font-size:.58rem;letter-spacing:.15em;text-transform:uppercase;color:var(--text-light);margin-top:.2rem;}
+.f-sub.aktiv{color:#6a7240;}
+.f-sub.arkiveret{color:var(--gold);}
+
+/* ---------- Beskeder ---------- */
+.f-stream{flex:1 1 auto;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:1.2rem 1rem 1.5rem;}
+
+.f-welcome{background:rgba(184,138,30,.08);border:1px solid rgba(184,138,30,.22);padding:1rem 1.1rem;margin-bottom:1.5rem;}
+.f-welcome .lbl{font-size:.55rem;letter-spacing:.25em;text-transform:uppercase;color:var(--gold);margin-bottom:.5rem;}
+.f-welcome .txt{font-family:'Cormorant Garamond',serif;font-size:1.02rem;line-height:1.65;color:var(--text-mid);}
+.f-welcome .txt b{font-weight:700;color:var(--charcoal);}
+
+.f-day{text-align:center;margin:1.4rem 0 1rem;}
+.f-day span{font-size:.55rem;letter-spacing:.2em;text-transform:uppercase;color:var(--text-light);background:var(--beige);padding:.25rem .8rem;}
+
+.f-msg{display:flex;gap:.6rem;margin-bottom:.9rem;align-items:flex-end;}
+.f-msg.mine{flex-direction:row-reverse;}
+
+.f-avatar{flex:0 0 auto;width:32px;height:32px;border-radius:50%;overflow:hidden;background:var(--sand);display:flex;align-items:center;justify-content:center;font-size:.62rem;font-weight:600;letter-spacing:.02em;color:#fff;text-transform:uppercase;}
+.f-avatar img{width:100%;height:100%;object-fit:cover;}
+.f-avatar.hidden{visibility:hidden;}
+
+.f-bubble-wrap{max-width:76%;min-width:0;}
+.f-name{font-size:.58rem;letter-spacing:.12em;text-transform:uppercase;color:var(--text-light);margin:0 0 .25rem .2rem;}
+.f-msg.mine .f-name{text-align:right;margin:0 .2rem .25rem 0;}
+.f-name .mod{color:var(--gold);}
+
+.f-bubble{background:#fff;border:1px solid var(--sand);padding:.65rem .85rem;position:relative;}
+.f-msg.mine .f-bubble{background:var(--wine);border-color:var(--wine);color:#fff;}
+.f-msg.mod .f-bubble{background:rgba(184,138,30,.1);border-color:rgba(184,138,30,.3);}
+.f-body{font-family:'Cormorant Garamond',serif;font-size:1.05rem;line-height:1.5;white-space:pre-wrap;word-break:break-word;}
+.f-bubble a{color:inherit;text-decoration:underline;}
+.f-img{display:block;max-width:100%;margin-top:.4rem;cursor:pointer;border:1px solid rgba(0,0,0,.06);}
+.f-msg .f-body:empty{display:none;}
+.f-time{font-size:.55rem;color:var(--text-light);margin-top:.3rem;text-align:right;}
+.f-msg.mine .f-time{color:rgba(255,255,255,.6);}
+.f-del{background:none;border:none;font-size:.55rem;letter-spacing:.1em;text-transform:uppercase;color:var(--text-light);cursor:pointer;padding:.2rem 0 0;}
+.f-msg.mine .f-del{color:rgba(255,255,255,.6);}
+.f-del:hover{color:var(--wine);}
+.f-msg.mine .f-del:hover{color:#fff;}
+.f-deleted .f-bubble{background:transparent!important;border-style:dashed;color:var(--text-light)!important;}
+.f-deleted .f-body{font-style:italic;font-size:.92rem;color:var(--text-light);}
+
+/* ---------- Inputbjælke ---------- */
+.f-input{flex:0 0 auto;background:#fff;border-top:1px solid var(--sand);padding:.7rem .8rem calc(.7rem + env(safe-area-inset-bottom));}
+.f-preview{display:none;align-items:center;gap:.6rem;margin-bottom:.6rem;padding:.4rem;background:var(--cream);border:1px solid var(--beige);}
+.f-preview.on{display:flex;}
+.f-preview img{width:46px;height:46px;object-fit:cover;}
+.f-preview .nm{flex:1;font-size:.68rem;color:var(--text-mid);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.f-preview button{background:none;border:none;color:var(--wine);font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;}
+
+.f-row{display:flex;align-items:flex-end;gap:.5rem;}
+.f-pic{flex:0 0 auto;width:40px;height:40px;border:1px solid var(--sand);background:var(--cream);color:var(--text-mid);font-size:1.05rem;cursor:pointer;display:flex;align-items:center;justify-content:center;}
+.f-pic:hover{border-color:var(--gold);color:var(--gold);}
+#f-text{flex:1;min-width:0;resize:none;max-height:120px;padding:.7rem .8rem;background:var(--cream);border:1px solid var(--sand);color:var(--charcoal);font-family:'Manrope',sans-serif;font-size:.88rem;line-height:1.4;outline:none;}
+#f-text:focus{border-color:var(--gold);}
+.f-send{flex:0 0 auto;padding:.7rem 1.1rem;background:var(--wine);color:#fff;border:none;font-size:.62rem;font-weight:500;letter-spacing:.18em;text-transform:uppercase;cursor:pointer;height:40px;}
+.f-send:hover{background:#a03048;}
+.f-send:disabled{opacity:.5;cursor:default;}
+
+.f-closed{padding:1.1rem;text-align:center;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1rem;color:var(--text-light);}
+.f-err{font-size:.68rem;color:var(--wine);padding:.4rem .2rem 0;min-height:1rem;}
+
+/* ---------- Tilstande ---------- */
+.f-state{flex:1;display:flex;align-items:center;justify-content:center;padding:2rem;}
+.f-state-box{text-align:center;max-width:380px;}
+.f-state-box .eyebrow{font-size:.6rem;letter-spacing:.3em;text-transform:uppercase;color:var(--gold);margin-bottom:.9rem;}
+.f-state-box h2{font-family:'Cinzel',serif;font-weight:300;font-size:1.35rem;letter-spacing:.06em;margin-bottom:.7rem;}
+.f-state-box p{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.02rem;line-height:1.7;color:var(--text-light);}
+
+/* ---------- Lightbox ---------- */
+.f-light{display:none;position:fixed;inset:0;background:rgba(20,16,10,.94);z-index:99;align-items:center;justify-content:center;padding:1rem;}
+.f-light.on{display:flex;}
+.f-light img{max-width:100%;max-height:90vh;object-fit:contain;}
+.f-light .x{position:absolute;top:1rem;right:1.2rem;background:none;border:none;color:#fff;font-size:1.8rem;cursor:pointer;line-height:1;}
+
+@media (max-width:600px){
+  html{overflow-x:hidden;}
+  .f-header{padding:.75rem 1rem;}
+  .f-title{font-size:.82rem;}
+  .f-stream{padding:1rem .8rem 1.2rem;}
+  .f-bubble-wrap{max-width:80%;}
+  .f-body{font-size:1rem;}
+  .f-send{padding:.7rem .9rem;}
+}
+</style>
+</head>
+<body>
+
+<div class="app">
+  <header class="f-header">
+    <img src="img/taarne-hvid-trans.png" alt="Castillo del Alma">
+    <div class="f-head-txt">
+      <div class="f-title" id="ch-title">Forum</div>
+      <div class="f-sub" id="ch-status">…</div>
+    </div>
+  </header>
+
+  <!-- Fejl / venter-tilstand -->
+  <div class="f-state" id="state" style="display:none;">
+    <div class="f-state-box">
+      <div class="eyebrow" id="state-eyebrow">Castillo del Alma</div>
+      <h2 id="state-title"></h2>
+      <p id="state-text"></p>
+    </div>
+  </div>
+
+  <!-- Chat -->
+  <main class="f-stream" id="stream" style="display:none;"></main>
+
+  <div class="f-input" id="composer" style="display:none;">
+    <div class="f-preview" id="preview">
+      <img id="preview-img" alt="">
+      <div class="nm" id="preview-name"></div>
+      <button type="button" id="preview-x">Fjern</button>
+    </div>
+    <div class="f-row">
+      <button class="f-pic" id="pick" type="button" title="Send billede">&#128247;</button>
+      <input type="file" id="file" accept="image/*" hidden>
+      <textarea id="f-text" rows="1" placeholder="Skriv en besked…"></textarea>
+      <button class="f-send" id="send" type="button">Send</button>
+    </div>
+    <div class="f-err" id="err"></div>
+  </div>
+
+  <div class="f-closed" id="closed" style="display:none;"></div>
+</div>
+
+<div class="f-light" id="light">
+  <button class="x" id="light-x" type="button">&times;</button>
+  <img id="light-img" alt="">
+</div>
+
+<script>
+(function () {
+  'use strict';
+
+  var $ = function (id) { return document.getElementById(id); };
+  var API = '/.netlify/functions/forum-api';
+  var UPLOAD = '/.netlify/functions/forum-upload';
+  var POLL_MS = 5000;
+  var MAX_DIM = 1600;
+  var JPEG_Q = 0.82;
+
+  /* ---------- Sprog ---------- */
+  var T = {
+    da: {
+      placeholder: 'Skriv en besked…', send: 'Send', remove: 'Fjern', del: 'Slet',
+      deleted: 'Beskeden er slettet', deletedMod: 'Fjernet af Castillo del Alma',
+      today: 'I dag', yesterday: 'I går', welcome: 'Velkommen',
+      active: 'Aktivt forum', archived: 'Arkiveret', planned: 'Åbner snart',
+      closedTxt: 'Dette forum er arkiveret. I kan stadig læse alt, der er skrevet. 🌿',
+      mutedTxt: 'Du kan læse forummet, men ikke skrive i det.',
+      badTitle: 'Adgangslinket virker ikke',
+      badText: 'Linket er enten forkert eller ikke længere gyldigt. Åbn forummet via linket i din mail, eller under Min booking.',
+      soonTitle: 'Forummet er ikke åbnet endnu',
+      soonText: 'Vi åbner forummet en uge før jeres ankomst. Du får en mail, så snart det er klart.',
+      empty: 'Ingen beskeder endnu — skriv den første.',
+      tooBig: 'Billedet er for stort.', failed: 'Noget gik galt. Prøv igen.',
+      confirmDel: 'Slet denne besked?'
+    },
+    en: {
+      placeholder: 'Write a message…', send: 'Send', remove: 'Remove', del: 'Delete',
+      deleted: 'Message deleted', deletedMod: 'Removed by Castillo del Alma',
+      today: 'Today', yesterday: 'Yesterday', welcome: 'Welcome',
+      active: 'Active forum', archived: 'Archived', planned: 'Opening soon',
+      closedTxt: 'This forum is archived. You can still read everything written here. 🌿',
+      mutedTxt: 'You can read the forum, but not write in it.',
+      badTitle: 'This access link does not work',
+      badText: 'The link is either incorrect or no longer valid. Open the forum from the link in your email, or under My booking.',
+      soonTitle: 'The forum is not open yet',
+      soonText: 'We open the forum one week before your arrival. You will get an email as soon as it is ready.',
+      empty: 'No messages yet — write the first one.',
+      tooBig: 'The image is too large.', failed: 'Something went wrong. Please try again.',
+      confirmDel: 'Delete this message?'
+    }
+  };
+  var lang = 'en';
+  try {
+    var saved = sessionStorage.getItem('cda_geo_lang');
+    var nav = (navigator.language || '').toLowerCase();
+    lang = (saved === 'da' || (!saved && nav.indexOf('da') === 0)) ? 'da' : 'en';
+  } catch (e) { lang = 'en'; }
+  var t = T[lang];
+  document.documentElement.lang = lang;
+
+  /* ---------- Token ---------- */
+  var token = new URLSearchParams(location.search).get('t') || '';
+  try {
+    if (token) localStorage.setItem('cda_forum_token', token);
+    else token = localStorage.getItem('cda_forum_token') || '';
+  } catch (e) { /* privat browsing */ }
+
+  var state = { me: null, channel: null, members: {}, last: null, ids: {}, image: null, sending: false };
+
+  /* ---------- Hjælpere ---------- */
+  function esc(s) {
+    return String(s == null ? '' : s)
+      .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+  }
+  // Brugertekst escapes fuldstændigt; kun URLs gøres klikbare bagefter.
+  function linkify(raw) {
+    return esc(raw).replace(/(https?:\/\/[^\s<]+)/g, function (u) {
+      return '<a href="' + u + '" target="_blank" rel="noopener noreferrer">' + u + '</a>';
+    });
+  }
+  function initials(name) {
+    var p = String(name || '').trim().split(/\s+/).filter(Boolean);
+    if (!p.length) return '?';
+    return (p[0][0] + (p.length > 1 ? p[p.length - 1][0] : '')).toUpperCase();
+  }
+  // Stabil farve pr. navn — samme person får altid samme cirkel
+  function tint(name) {
+    var h = 0, s = String(name || '');
+    for (var i = 0; i < s.length; i++) h = (h * 31 + s.charCodeAt(i)) % 360;
+    return 'hsl(' + h + ',32%,42%)';
+  }
+  function dayLabel(d) {
+    var now = new Date(), y = new Date(now.getTime() - 86400000);
+    if (d.toDateString() === now.toDateString()) return t.today;
+    if (d.toDateString() === y.toDateString()) return t.yesterday;
+    return d.toLocaleDateString(lang === 'da' ? 'da-DK' : 'en-GB', { day: 'numeric', month: 'long' });
+  }
+  function clock(d) {
+    return d.toLocaleTimeString(lang === 'da' ? 'da-DK' : 'en-GB', { hour: '2-digit', minute: '2-digit' });
+  }
+  function atBottom() {
+    var s = $('stream');
+    return s.scrollHeight - s.scrollTop - s.clientHeight < 120;
+  }
+  function toBottom() { var s = $('stream'); s.scrollTop = s.scrollHeight; }
+
+  function showState(title, text) {
+    $('state').style.display = 'flex';
+    $('stream').style.display = 'none';
+    $('composer').style.display = 'none';
+    $('closed').style.display = 'none';
+    $('state-title').textContent = title;
+    $('state-text').textContent = text;
+  }
+
+  async function call(payload) {
+    var res = await fetch(API, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(Object.assign({ token: token }, payload))
+    });
+    var data = await res.json().catch(function () { return {}; });
+    return { ok: res.ok, status: res.status, data: data };
+  }
+
+  /* ---------- Render ---------- */
+  function renderWelcome() {
+    var txt = (lang === 'da' ? state.channel.welcome_da : state.channel.welcome_en) || '';
+    if (!txt.trim()) return;
+    var box = document.createElement('div');
+    box.className = 'f-welcome';
+    // Velkomstteksten er skrevet af jer i admin — inline HTML (<b>, <br>, <em>) er tilladt her
+    box.innerHTML = '<div class="lbl">' + esc(t.welcome) + '</div><div class="txt">' + txt + '</div>';
+    $('stream').appendChild(box);
+  }
+
+  function bubble(m) {
+    if (state.ids[m.id]) return;
+    state.ids[m.id] = true;
+
+    var stream = $('stream');
+    var when = new Date(m.created_at);
+
+    // Dato-skillelinje
+    var key = when.toDateString();
+    if (state.lastDay !== key) {
+      state.lastDay = key;
+      var d = document.createElement('div');
+      d.className = 'f-day';
+      d.innerHTML = '<span>' + esc(dayLabel(when)) + '</span>';
+      stream.appendChild(d);
+    }
+
+    var mem = state.members[m.member_id] || { display_name: '—', avatar_url: null, role: 'deltager' };
+    var mine = state.me && m.member_id === state.me.id;
+    var isMod = mem.role === 'moderator';
+
+    var row = document.createElement('div');
+    row.className = 'f-msg' + (mine ? ' mine' : '') + (isMod ? ' mod' : '') + (m.deleted ? ' f-deleted' : '');
+    row.dataset.id = m.id;
+
+    var av = document.createElement('div');
+    av.className = 'f-avatar';
+    if (mem.avatar_url) {
+      av.innerHTML = '<img src="' + esc(mem.avatar_url) + '" alt="">';
+    } else {
+      av.style.background = tint(mem.display_name);
+      av.textContent = initials(mem.display_name);
+    }
+
+    var wrap = document.createElement('div');
+    wrap.className = 'f-bubble-wrap';
+
+    var nm = document.createElement('div');
+    nm.className = 'f-name';
+    nm.innerHTML = esc(mem.display_name) + (isMod ? ' <span class="mod">&#9670;</span>' : '');
+
+    var bub = document.createElement('div');
+    bub.className = 'f-bubble';
+
+    if (m.deleted) {
+      bub.innerHTML = '<div class="f-body">' + esc(m.deleted_by === 'moderator' ? t.deletedMod : t.deleted) + '</div>';
+    } else {
+      var html = '<div class="f-body">' + linkify(m.body || '') + '</div>';
+      if (m.image_url) {
+        html += '<img class="f-img" src="' + esc(m.image_url) + '" alt="" loading="lazy">';
+      }
+      html += '<div class="f-time">' + esc(clock(when)) + '</div>';
+      bub.innerHTML = html;
+
+      var img = bub.querySelector('.f-img');
+      if (img) img.addEventListener('click', function () {
+        $('light-img').src = img.src;
+        $('light').classList.add('on');
+      });
+
+      // Egne beskeder (og moderator: alle) kan slettes
+      if (mine || (state.me && state.me.role === 'moderator')) {
+        var del = document.createElement('button');
+        del.className = 'f-del';
+        del.type = 'button';
+        del.textContent = t.del;
+        del.addEventListener('click', function () { removeMessage(m.id, row); });
+        bub.appendChild(del);
+      }
+    }
+
+    wrap.appendChild(nm);
+    wrap.appendChild(bub);
+    row.appendChild(av);
+    row.appendChild(wrap);
+    stream.appendChild(row);
+
+    state.last = m.created_at;
+  }
+
+  function markDeleted(id) {
+    var row = $('stream').querySelector('[data-id="' + id + '"]');
+    if (!row || row.classList.contains('f-deleted')) return;
+    row.classList.add('f-deleted');
+    var bub = row.querySelector('.f-bubble');
+    if (bub) bub.innerHTML = '<div class="f-body">' + esc(t.deleted) + '</div>';
+  }
+
+  async function removeMessage(id, row) {
+    if (!window.confirm(t.confirmDel)) return;
+    var r = await call({ action: 'delete', message_id: id });
+    if (r.ok) markDeleted(id);
+    else $('err').textContent = (r.data && r.data.error) || t.failed;
+  }
+
+  /* ---------- Billede: komprimering i browseren ---------- */
+  function compress(file) {
+    return new Promise(function (resolve, reject) {
+      var reader = new FileReader();
+      reader.onerror = function () { reject(new Error('read')); };
+      reader.onload = function () {
+        var img = new Image();
+        img.onerror = function () { reject(new Error('img')); };
+        img.onload = function () {
+          var w = img.width, h = img.height;
+          var scale = Math.min(1, MAX_DIM / Math.max(w, h));
+          var cv = document.createElement('canvas');
+          cv.width = Math.round(w * scale);
+          cv.height = Math.round(h * scale);
+          cv.getContext('2d').drawImage(img, 0, 0, cv.width, cv.height);
+          var url = cv.toDataURL('image/jpeg', JPEG_Q);
+          resolve({ dataUrl: url, base64: url.split(',')[1] });
+        };
+        img.src = reader.result;
+      };
+      reader.readAsDataURL(file);
+    });
+  }
+
+  $('pick').addEventListener('click', function () { $('file').click(); });
+
+  $('file').addEventListener('change', async function (e) {
+    var file = e.target.files && e.target.files[0];
+    $('file').value = '';
+    if (!file) return;
+    if (file.size > 20 * 1024 * 1024) { $('err').textContent = t.tooBig; return; }
+    $('err').textContent = '';
+    try {
+      var out = await compress(file);
+      state.image = { base64: out.base64, name: file.name };
+      $('preview-img').src = out.dataUrl;
+      $('preview-name').textContent = file.name;
+      $('preview').classList.add('on');
+    } catch (err) {
+      $('err').textContent = t.failed;
+    }
+  });
+
+  $('preview-x').addEventListener('click', function () {
+    state.image = null;
+    $('preview').classList.remove('on');
+    $('preview-img').src = '';
+  });
+
+  /* ---------- Send ---------- */
+  async function send() {
+    if (state.sending) return;
+    var body = $('f-text').value.trim();
+    if (!body && !state.image) return;
+
+    state.sending = true;
+    $('send').disabled = true;
+    $('err').textContent = '';
+
+    try {
+      var image_path = null;
+      if (state.image) {
+        var up = await fetch(UPLOAD, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            token: token, content_type: 'image/jpeg',
+            filename: state.image.name, data: state.image.base64
+          })
+        });
+        var updata = await up.json().catch(function () { return {}; });
+        if (!up.ok) throw new Error(updata.error || t.failed);
+        image_path = updata.image_path;
+      }
+
+      var r = await call({ action: 'send', body: body, image_path: image_path });
+      if (!r.ok) throw new Error((r.data && r.data.error) || t.failed);
+
+      $('f-text').value = '';
+      $('f-text').style.height = 'auto';
+      state.image = null;
+      $('preview').classList.remove('on');
+      if (r.data.message) { bubble(r.data.message); toBottom(); }
+    } catch (err) {
+      $('err').textContent = err.message || t.failed;
+    } finally {
+      state.sending = false;
+      $('send').disabled = false;
+    }
+  }
+
+  $('send').addEventListener('click', send);
+
+  var ta = $('f-text');
+  ta.addEventListener('input', function () {
+    ta.style.height = 'auto';
+    ta.style.height = Math.min(ta.scrollHeight, 120) + 'px';
+  });
+  ta.addEventListener('keydown', function (e) {
+    // Enter sender på computer; på mobil giver Enter linjeskift (tastaturet har sin egen send-knap)
+    if (e.key === 'Enter' && !e.shiftKey && window.matchMedia('(min-width:601px)').matches) {
+      e.preventDefault();
+      send();
+    }
+  });
+
+  $('light-x').addEventListener('click', function () { $('light').classList.remove('on'); });
+  $('light').addEventListener('click', function (e) {
+    if (e.target === $('light')) $('light').classList.remove('on');
+  });
+
+  /* ---------- Poll ---------- */
+  async function poll() {
+    if (document.hidden || !state.last) return;
+    var r = await call({ action: 'poll', since: state.last });
+    if (!r.ok) return;
+
+    var stick = atBottom();
+    (r.data.messages || []).forEach(bubble);
+    (r.data.deleted_ids || []).forEach(markDeleted);
+    if (stick) toBottom();
+
+    if (r.data.status && r.data.status !== state.channel.status) location.reload();
+  }
+
+  /* ---------- Start ---------- */
+  async function init() {
+    if (!token) { showState(t.badTitle, t.badText); return; }
+
+    var r = await call({ action: 'init' });
+
+    if (!r.ok) {
+      if (r.status === 403) showState(t.soonTitle, t.soonText);
+      else showState(t.badTitle, t.badText);
+      return;
+    }
+
+    state.channel = r.data.channel;
+    state.me = r.data.me;
+    (r.data.members || []).forEach(function (m) { state.members[m.id] = m; });
+
+    $('ch-title').textContent = state.channel.title;
+    var st = $('ch-status');
+    st.textContent = state.channel.status === 'aktiv' ? t.active
+      : state.channel.status === 'arkiveret' ? t.archived : t.planned;
+    st.className = 'f-sub ' + state.channel.status;
+
+    $('state').style.display = 'none';
+    $('stream').style.display = 'block';
+
+    renderWelcome();
+    var msgs = r.data.messages || [];
+    msgs.forEach(bubble);
+
+    if (!msgs.length) {
+      var e = document.createElement('div');
+      e.className = 'f-day';
+      e.innerHTML = '<span>' + esc(t.empty) + '</span>';
+      $('stream').appendChild(e);
+      state.last = new Date(Date.now() - 86400000).toISOString();
+    }
+
+    if (r.data.can_write) {
+      $('composer').style.display = 'block';
+      ta.placeholder = t.placeholder;
+      $('send').textContent = t.send;
+      $('preview-x').textContent = t.remove;
+    } else {
+      $('closed').style.display = 'block';
+      $('closed').textContent = state.me.muted ? t.mutedTxt : t.closedTxt;
+    }
+
+    toBottom();
+    call({ action: 'read' });
+    setInterval(poll, POLL_MS);
+    document.addEventListener('visibilitychange', function () {
+      if (!document.hidden) { poll(); call({ action: 'read' }); }
+    });
+  }
+
+  init();
+})();
+</script>
+</body>
+</html>
