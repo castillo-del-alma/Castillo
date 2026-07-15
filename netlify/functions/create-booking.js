@@ -111,19 +111,29 @@ exports.handler = async (event) => {
           });
         });
 
-        await fetch(`${SUPABASE_URL}/rest/v1/booking_guests?on_conflict=booking_id,guest_no`, {
+        const gRes = await fetch(`${SUPABASE_URL}/rest/v1/booking_guests?on_conflict=booking_id,guest_no`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
             'apikey': SUPABASE_KEY,
             'Authorization': `Bearer ${SUPABASE_KEY}`,
-            'Prefer': 'resolution=merge-duplicates,return=minimal'
+            'Prefer': 'resolution=merge-duplicates,return=representation'
           },
           body: JSON.stringify(gaesteRaekker)
         });
+
+        // Fejl her må IKKE være usynlig. Log status OG svar, så vi kan se årsagen
+        // (fx RLS-afvisning hvis service-nøglen mangler).
+        if (!gRes.ok) {
+          const fejltekst = await gRes.text();
+          console.error('create-booking: booking_guests-indsættelse afvist', gRes.status, fejltekst);
+        } else {
+          const skrevet = await gRes.json().catch(() => []);
+          console.log(`create-booking: ${Array.isArray(skrevet) ? skrevet.length : 0} gæsterække(r) oprettet for booking ${booking.id}`);
+        }
       } catch (e) {
         // Bookingen skal oprettes uanset hvad — gæsterne kan tilføjes i admin
-        console.error('create-booking: kunne ikke oprette gæsterækker:', e.message);
+        console.error('create-booking: kunne ikke oprette gæsterækker:', e.message, e.stack);
       }
     }
     console.log('Booking data:', JSON.stringify(bookingData));

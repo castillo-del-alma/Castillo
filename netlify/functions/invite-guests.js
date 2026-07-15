@@ -56,12 +56,56 @@ function mail(lang, fornavn, bookerNavn, retreat) {
   };
 }
 
+// Genskab manglende booking_guests-rækker fra extra_guests + bookeren
+async function sikreGaesteraekker(bk) {
+  const findes = await fetch(
+    `${SUPABASE_URL}/rest/v1/booking_guests?booking_id=eq.${bk.id}&select=guest_no`,
+    { headers: sbHeaders }
+  );
+  const raekker = await findes.json();
+  const harNumre = new Set((Array.isArray(raekker) ? raekker : []).map(r => r.guest_no));
+
+  const nye = [];
+
+  // Bookeren = gæst nr. 1
+  if (!harNumre.has(1) && bk.customers) {
+    nye.push({
+      booking_id: bk.id, guest_no: 1,
+      full_name: bk.customers.full_name || '',
+      email: (bk.customers.email || '').toLowerCase() || null,
+      invited_at: new Date().toISOString()   // bookeren har allerede adgang
+    });
+  }
+
+  // Ekstra gæster fra extra_guests-JSON
+  let ekstra = bk.extra_guests;
+  if (typeof ekstra === 'string') { try { ekstra = JSON.parse(ekstra); } catch (e) { ekstra = []; } }
+  (Array.isArray(ekstra) ? ekstra : []).forEach((g, i) => {
+    const no = i + 2;
+    const navn = String(g?.navn || '').trim();
+    if (!navn || harNumre.has(no)) return;
+    let email = String(g?.email || '').trim().toLowerCase();
+    if (email && !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) email = '';
+    nye.push({ booking_id: bk.id, guest_no: no, full_name: navn.slice(0, 200), email: email || null });
+  });
+
+  if (!nye.length) return;
+
+  const res = await fetch(`${SUPABASE_URL}/rest/v1/booking_guests?on_conflict=booking_id,guest_no`, {
+    method: 'POST',
+    headers: { ...sbHeaders, 'Prefer': 'resolution=merge-duplicates,return=minimal' },
+    body: JSON.stringify(nye)
+  });
+  if (!res.ok) console.error('invite-guests: kunne ikke genskabe gæsterækker', await res.text());
+  else console.log(`invite-guests: genskabte ${nye.length} manglende gæsterække(r) for booking ${bk.id}`);
+}
+
 // Inviterer alle endnu ikke-inviterede gæster på ÉN booking.
 // Gæst nr. 1 er bookeren selv og springes over.
 async function inviterGaester(booking_id) {
   const bkRes = await fetch(
     `${SUPABASE_URL}/rest/v1/bookings?id=eq.${booking_id}` +
-    '&select=id,retreat_name,payments(status),customers(full_name,nationality)',
+    '&select=id,retreat_name,extra_guests,payments(status),customers(full_name,email,nationality)',
     { headers: sbHeaders }
   );
   const bks = await bkRes.json();
@@ -71,6 +115,11 @@ async function inviterGaester(booking_id) {
   // Kun betalte bookinger
   const betalt = Array.isArray(bk.payments) && bk.payments.some(p => p && p.status === 'paid');
   if (!betalt) return 0;
+
+  // SIKKERHEDSNET: mangler gæsterækkerne (fx hvis create-booking fejlede at
+  // oprette dem), genskabes de fra extra_guests-feltet. Så kan en gæst aldrig
+  // forsvinde helt — de dukker op senest ved betaling eller ved nattens kørsel.
+  await sikreGaesteraekker(bk);
 
   const gRes = await fetch(
     `${SUPABASE_URL}/rest/v1/booking_guests?booking_id=eq.${booking_id}` +
