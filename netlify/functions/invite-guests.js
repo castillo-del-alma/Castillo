@@ -11,7 +11,6 @@
 //
 // Den er idempotent: gæster med invited_at sat springes over.
 
-const { Resend } = require('resend');
 const { buildEmail, getLang } = require('./email-template');
 
 const SUPABASE_URL = process.env.SUPABASE_URL;
@@ -131,14 +130,28 @@ async function inviterGaester(booking_id) {
 
   const lang = getLang(bk.customers?.nationality);
   const bookerNavn = bk.customers?.full_name || 'Bookeren';
-  const resend = new Resend(process.env.RESEND_API_KEY);
+  const RESEND_KEY = process.env.RESEND_API_KEY;
 
   let sendt = 0;
   for (const g of gaester) {
     const fornavn = String(g.full_name || '').split(/\s+/)[0] || '';
     const m = mail(lang, fornavn, bookerNavn, bk.retreat_name);
     try {
-      await resend.emails.send({ from: FROM, to: g.email, subject: m.subject, html: m.html });
+      // Samme rå-fetch-metode som booker-mailene (den beviseligt virker).
+      const sendRes = await fetch('https://api.resend.com/emails', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${RESEND_KEY}` },
+        body: JSON.stringify({ from: FROM, to: g.email, subject: m.subject, html: m.html })
+      });
+      const sendBody = await sendRes.json().catch(() => ({}));
+
+      // Resend afviste? Så må invited_at IKKE sættes — ellers står gæsten som
+      // inviteret uden at have fået mailen, og nattens net springer den over.
+      if (!sendRes.ok || sendBody.error) {
+        console.error('invite-guests: Resend afviste', g.email, sendRes.status, JSON.stringify(sendBody));
+        continue;
+      }
+
       await fetch(`${SUPABASE_URL}/rest/v1/booking_guests?id=eq.${g.id}`, {
         method: 'PATCH',
         headers: { ...sbHeaders, 'Prefer': 'return=minimal' },
