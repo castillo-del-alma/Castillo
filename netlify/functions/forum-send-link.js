@@ -50,17 +50,22 @@ exports.handler = async (event) => {
     const navn = aktive[0].display_name || '';
     const lang = getLang(aktive[0].nationality);
 
+    const fornavn = String(navn || '').split(/\s+/)[0] || navn;
     const T = lang === 'da' ? {
       subject: 'Dit forum-link — Castillo del Alma',
       title: 'Her er dit forum-link',
-      intro: `Kære ${navn}. Du har bedt om at få tilsendt dit personlige link til forummet. ` +
-        'Linket er kun til dig — del det ikke med andre.',
+      intro: [
+        'Du har bedt om at få tilsendt dit personlige link til forummet.',
+        'Linket er kun til dig — del det ikke med andre.'
+      ],
       note: 'Har du ikke bedt om denne mail, kan du roligt slette den. Ingen har fået adgang til noget.'
     } : {
       subject: 'Your forum link — Castillo del Alma',
       title: 'Here is your forum link',
-      intro: `Dear ${navn}. You asked us to resend your personal link to the forum. ` +
-        'The link is yours alone — please do not share it.',
+      intro: [
+        'You asked us to resend your personal link to the forum.',
+        'The link is yours alone — please do not share it.'
+      ],
       note: 'If you did not request this email, you can safely delete it. No one has gained access to anything.'
     };
 
@@ -74,7 +79,7 @@ exports.handler = async (event) => {
       from: FROM,
       to: email,
       subject: T.subject,
-      html: buildEmail({ lang, title: T.title, intro: T.intro, buttons, note: T.note })
+      html: buildEmail({ lang, title: T.title, greetingName: fornavn, intro: T.intro, buttons, note: T.note })
     });
   } catch (e) {
     console.error('forum-send-link fejl:', e.message);

@@ -118,8 +118,19 @@ function fmtDate(iso, lang) {
   });
 }
 
-function buildEmail({ lang = 'da', title, intro, sections = [], buttons = [], note = null }) {
+function buildEmail({ lang = 'da', title, intro, greetingName = null, sections = [], buttons = [], note = null }) {
   const t = texts[lang] || texts.da;
+
+  // Hilsen på egen linje: "Kære Steve," / "Dear Steve,"
+  const greetingHtml = greetingName
+    ? `<p class="email-intro" style="font-size:15px;line-height:1.9;color:rgba(44,35,24,.85);margin:0 0 18px;">${t.greeting} ${greetingName},</p>`
+    : '';
+
+  // intro må være ét afsnit (string) eller flere (array) — hvert afsnit får luft under sig
+  const introParagraphs = (Array.isArray(intro) ? intro : [intro])
+    .filter(Boolean)
+    .map(p => `<p class="email-intro" style="font-size:15px;line-height:1.9;color:rgba(44,35,24,.85);margin:0 0 16px;">${p}</p>`)
+    .join('');
   const sectionHtml = sections.map(s => `
     <table width="100%" cellpadding="0" cellspacing="0" style="background:rgba(184,138,30,.08);border:1px solid rgba(184,138,30,.2);margin:24px 0;">
       <tr><td style="padding:20px 24px;">
@@ -176,8 +187,9 @@ function buildEmail({ lang = 'da', title, intro, sections = [], buttons = [], no
 
       <!-- CONTENT -->
       <tr><td style="padding:28px 40px;" class="email-inner">
-        <h1 class="email-title" style="font-family:Georgia,serif;font-size:22px;font-weight:normal;color:#2c2318;margin:0 0 16px;letter-spacing:.02em;">${title}</h1>
-        <p class="email-intro" style="font-size:15px;line-height:1.9;color:rgba(44,35,24,.85);margin:0 0 8px;">${intro}</p>
+        <h1 class="email-title" style="font-family:Georgia,serif;font-size:22px;font-weight:normal;color:#2c2318;margin:0 0 20px;letter-spacing:.02em;">${title}</h1>
+        ${greetingHtml}
+        ${introParagraphs}
         ${sectionHtml}
         ${buttonHtml}
         ${note ? `<p style="font-size:13px;line-height:1.8;color:rgba(44,35,24,.6);margin:16px 0 0;">${note}</p>` : ''}

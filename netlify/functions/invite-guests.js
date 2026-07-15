@@ -29,19 +29,19 @@ function mail(lang, fornavn, bookerNavn, retreat) {
   const T = lang === 'da' ? {
     subject: 'Du er tilmeldt — Castillo del Alma',
     title: 'Velkommen til Castillo del Alma',
-    intro: `Kære ${fornavn}. ${bookerNavn} har tilmeldt dig ${retreat ? '“' + retreat + '”' : 'et ophold'} hos os. ` +
-      'Du har nu din egen adgang til Min booking, hvor du kan se opholdet, udfylde dine pasoplysninger ' +
-      '(det kræver de spanske myndigheder), lægge et profilbillede op og — når vi nærmer os — skrive med ' +
-      'de andre deltagere i jeres lukkede forum.',
+    intro: [
+      `${bookerNavn} har tilmeldt dig ${retreat ? '“' + retreat + '”' : 'et ophold'} hos os.`,
+      'Du har nu din egen adgang til Min booking, hvor du kan se opholdet, udfylde dine pasoplysninger (det kræver de spanske myndigheder), lægge et profilbillede op og — når vi nærmer os — skrive med de andre deltagere i jeres lukkede forum.'
+    ],
     btn: 'Åbn Min booking',
     note: 'Du logger ind med denne e-mailadresse og får tilsendt en engangskode. Ingen adgangskode at huske.'
   } : {
     subject: 'You are registered — Castillo del Alma',
     title: 'Welcome to Castillo del Alma',
-    intro: `Dear ${fornavn}. ${bookerNavn} has registered you for ${retreat ? '“' + retreat + '”' : 'a stay'} with us. ` +
-      'You now have your own access to My Booking, where you can see the stay, fill in your passport details ' +
-      '(required by the Spanish authorities), add a profile picture and — as we get closer — write with the ' +
-      'other participants in your private forum.',
+    intro: [
+      `${bookerNavn} has registered you for ${retreat ? '“' + retreat + '”' : 'a stay'} with us.`,
+      'You now have your own access to My Booking, where you can see the stay, fill in your passport details (required by the Spanish authorities), add a profile picture and — as we get closer — write with the other participants in your private forum.'
+    ],
     btn: 'Open My Booking',
     note: 'You log in with this email address and receive a one-time code. No password to remember.'
   };
@@ -49,7 +49,7 @@ function mail(lang, fornavn, bookerNavn, retreat) {
   return {
     subject: T.subject,
     html: buildEmail({
-      lang, title: T.title, intro: T.intro,
+      lang, title: T.title, greetingName: fornavn, intro: T.intro,
       buttons: [{ label: T.btn, url: `${SITE}/min-booking.html` }],
       note: T.note
     })

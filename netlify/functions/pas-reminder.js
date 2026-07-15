@@ -82,28 +82,32 @@ exports.handler = async () => {
     const R = lang === 'da' ? {
       subject: 'Husk jeres rejseregistrering — Castillo del Alma',
       title: 'Husk jeres rejseregistrering',
-      intro: `Kære ${navn}. Vi glæder os til at byde jer velkommen til Castillo del Alma om en uge. ` +
-        `Spansk lov kræver, at vi registrerer alle overnattende gæster hos de spanske myndigheder, og vi mangler stadig ` +
-        `pasoplysninger for ${mangler === antal ? 'alle gæster' : mangler + ' af ' + antal + ' gæster'} på jeres booking. ` +
-        `Det tager kun et par minutter at udfylde via Min booking.`,
+      intro: [
+        'Vi glæder os til at byde jer velkommen til Castillo del Alma om en uge.',
+        `Spansk lov kræver, at vi registrerer alle overnattende gæster hos de spanske myndigheder, og vi mangler stadig pasoplysninger for ${mangler === antal ? 'alle gæster' : mangler + ' af ' + antal + ' gæster'} på jeres booking.`,
+        'Det tager kun et par minutter at udfylde via Min booking.'
+      ],
       secLabel: 'Jeres ophold', lRetreat: 'Retreat', lArrival: 'Ankomst', lGuests: 'Gæster', lReg: 'Registreret',
       regVal: `${komplette} af ${antal}`, btn: 'Udfyld rejseregistrering',
       note: 'Har I spørgsmål eller problemer med registreringen, så svar blot på denne mail.'
     } : {
       subject: 'Travel registration reminder — Castillo del Alma',
       title: 'Please complete your travel registration',
-      intro: `Dear ${navn}. We look forward to welcoming you to Castillo del Alma in a week. ` +
-        `Spanish law requires us to register all overnight guests with the Spanish authorities, and we are still missing ` +
-        `passport details for ${mangler === antal ? 'all guests' : mangler + ' of ' + antal + ' guests'} on your booking. ` +
-        `It only takes a couple of minutes via My booking.`,
+      intro: [
+        'We look forward to welcoming you to Castillo del Alma in a week.',
+        `Spanish law requires us to register all overnight guests with the Spanish authorities, and we are still missing passport details for ${mangler === antal ? 'all guests' : mangler + ' of ' + antal + ' guests'} on your booking.`,
+        'It only takes a couple of minutes via My booking.'
+      ],
       secLabel: 'Your stay', lRetreat: 'Retreat', lArrival: 'Arrival', lGuests: 'Guests', lReg: 'Registered',
       regVal: `${komplette} of ${antal}`, btn: 'Complete travel registration',
       note: 'If you have any questions or issues with the registration, simply reply to this email.'
     };
 
+    const fornavn = String(navn || '').split(/\s+/)[0] || navn;
     const html = buildEmail({
       lang,
       title: R.title,
+      greetingName: fornavn,
       intro: R.intro,
       sections: [{
         label: R.secLabel,

@@ -46,27 +46,32 @@ function forumLink(token) {
 
 // ---------- Mails ----------
 function openMail(lang, name, title, link) {
+  const fornavn = String(name || '').split(/\s+/)[0] || name;
   const T = lang === 'da' ? {
     subject: `Jeres forum er åbent — ${title}`,
     title: 'Jeres retreat-forum er åbent',
-    intro: `Kære ${name}. Om en uge ses vi på Castillo del Alma. Vi har åbnet et lukket forum for jeres hold, ` +
-      'hvor I kan hilse på hinanden, dele praktiske detaljer og stille spørgsmål. Vi følger selv med og svarer undervejs. ' +
-      'Linket nedenfor er personligt — det er din adgang til forummet, så behold det for dig selv.',
+    intro: [
+      'Om en uge ses vi på Castillo del Alma — og indtil da har vi åbnet et lukket forum for jeres hold.',
+      'Her kan I hilse på hinanden, dele praktiske detaljer og stille de spørgsmål, I måtte have inden ankomst. Vi følger selv med og svarer undervejs.',
+      'Linket nedenfor er personligt. Det er din egen adgang til forummet, så behold det for dig selv.'
+    ],
     btn: 'Åbn forummet',
     note: 'Du kan også finde forummet under Min booking. Forummet lukker cirka en måned efter jeres ophold.'
   } : {
     subject: `Your forum is open — ${title}`,
     title: 'Your retreat forum is open',
-    intro: `Dear ${name}. In one week we welcome you to Castillo del Alma. We have opened a private forum for your group, ` +
-      'where you can say hello, share practical details and ask questions. We follow along and answer as we go. ' +
-      'The link below is personal — it is your key to the forum, so please keep it to yourself.',
+    intro: [
+      'In one week we welcome you to Castillo del Alma — and until then, we have opened a private forum for your group.',
+      'Here you can say hello to one another, share practical details and ask any questions you may have before arrival. We follow along and answer as we go.',
+      'The link below is personal. It is your own key to the forum, so please keep it to yourself.'
+    ],
     btn: 'Open the forum',
     note: 'You can also find the forum under My booking. The forum closes about a month after your stay.'
   };
   return {
     subject: T.subject,
     html: buildEmail({
-      lang, title: T.title, intro: T.intro,
+      lang, title: T.title, greetingName: fornavn, intro: T.intro,
       buttons: [{ label: T.btn, url: link }],
       note: T.note
     })
@@ -74,25 +79,28 @@ function openMail(lang, name, title, link) {
 }
 
 function digestMail(lang, name, title, count, link) {
+  const fornavn = String(name || '').split(/\s+/)[0] || name;
   const T = lang === 'da' ? {
     subject: `${count} ${count === 1 ? 'ny besked' : 'nye beskeder'} i jeres forum`,
     title: 'Der er sket noget i forummet',
-    intro: `Kære ${name}. Der ${count === 1 ? 'er kommet én ny besked' : 'er kommet ' + count + ' nye beskeder'} ` +
-      `i forummet for ${title}, siden du sidst var inde.`,
+    intro: [
+      `Der ${count === 1 ? 'er kommet én ny besked' : 'er kommet ' + count + ' nye beskeder'} i forummet for ${title}, siden du sidst var inde.`
+    ],
     btn: 'Læs beskederne',
     note: 'Du får højst én sådan mail om dagen.'
   } : {
     subject: `${count} new ${count === 1 ? 'message' : 'messages'} in your forum`,
     title: 'Something happened in the forum',
-    intro: `Dear ${name}. There ${count === 1 ? 'is one new message' : 'are ' + count + ' new messages'} ` +
-      `in the forum for ${title} since you last visited.`,
+    intro: [
+      `There ${count === 1 ? 'is one new message' : 'are ' + count + ' new messages'} in the forum for ${title} since you last visited.`
+    ],
     btn: 'Read the messages',
     note: 'You will receive at most one such email per day.'
   };
   return {
     subject: T.subject,
     html: buildEmail({
-      lang, title: T.title, intro: T.intro,
+      lang, title: T.title, greetingName: fornavn, intro: T.intro,
       buttons: [{ label: T.btn, url: link }],
       note: T.note
     })

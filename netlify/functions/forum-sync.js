@@ -60,22 +60,25 @@ async function sendLinkTilNy(medlem, kanalTitel) {
   const lang = getLang(medlem.nationality);
   const link = `${SITE}/forum.html?t=${encodeURIComponent(medlem.access_token)}`;
 
+  const fornavn = String(medlem.display_name || '').split(/\s+/)[0] || medlem.display_name;
   const T = lang === 'da' ? {
     subject: `Jeres forum er åbent — ${kanalTitel}`,
     title: 'Jeres retreat-forum er åbent',
-    intro: `Kære ${medlem.display_name}. Vi glæder os til at se dig på Castillo del Alma. ` +
-      'De andre deltagere er allerede i gang i jeres lukkede forum — her kan I hilse på hinanden, ' +
-      'dele praktiske detaljer og stille spørgsmål. Vi følger selv med og svarer undervejs. ' +
-      'Linket nedenfor er personligt, så behold det for dig selv.',
+    intro: [
+      'Vi glæder os til at se dig på Castillo del Alma — og dit hold er allerede i gang i jeres lukkede forum.',
+      'Her kan I hilse på hinanden, dele praktiske detaljer og stille de spørgsmål, I måtte have inden ankomst. Vi følger selv med og svarer undervejs.',
+      'Linket nedenfor er personligt, så behold det for dig selv.'
+    ],
     btn: 'Åbn forummet',
     note: 'Du kan også finde forummet under Min booking. Forummet lukker cirka en måned efter jeres ophold.'
   } : {
     subject: `Your forum is open — ${kanalTitel}`,
     title: 'Your retreat forum is open',
-    intro: `Dear ${medlem.display_name}. We look forward to welcoming you to Castillo del Alma. ` +
-      'The other participants are already talking in your private forum — a place to say hello, ' +
-      'share practical details and ask questions. We follow along and answer as we go. ' +
-      'The link below is personal, so please keep it to yourself.',
+    intro: [
+      'We look forward to welcoming you to Castillo del Alma — and your group is already talking in your private forum.',
+      'Here you can say hello, share practical details and ask any questions you may have before arrival. We follow along and answer as we go.',
+      'The link below is personal, so please keep it to yourself.'
+    ],
     btn: 'Open the forum',
     note: 'You can also find the forum under My booking. The forum closes about a month after your stay.'
   };
@@ -87,7 +90,7 @@ async function sendLinkTilNy(medlem, kanalTitel) {
       to: medlem.email,
       subject: T.subject,
       html: buildEmail({
-        lang, title: T.title, intro: T.intro,
+        lang, title: T.title, greetingName: fornavn, intro: T.intro,
         buttons: [{ label: T.btn, url: link }],
         note: T.note
       })
