@@ -87,7 +87,7 @@ exports.handler = async (event) => {
           body: JSON.stringify({
             customer_id: bookingInfo?.customer_id || null,
             booking_id: bookingId || null,
-            subject: 'Din plads er reserveret — betal depositum inden 48 timer',
+            subject: 'Din plads er reserveret — betal depositum inden 24 timer',
             type: 'payment_request',
             status: 'sent',
             body: savedHtml
