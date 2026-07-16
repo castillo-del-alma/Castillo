@@ -81,21 +81,23 @@ exports.handler = async (event) => {
 
     let emailed = false;
     try {
+      console.log('send-booking-message: sender mail — til booking@ + hello@, reply_to:', custEmail || '(ingen)');
       const mailRes = await fetch('https://api.resend.com/emails', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${RESEND_KEY}` },
         body: JSON.stringify({
           from: 'Castillo del Alma <booking@castillodelalma.es>',
-          to: ADMIN_EMAIL,
+          to: ['booking@castillodelalma.es', 'hello@castillodelalma.es'],
           ...(custEmail ? { reply_to: custEmail } : {}),
           subject,
           html
         })
       });
+      const bodyText = await mailRes.text();
       emailed = mailRes.ok;
-      if (!mailRes.ok) console.log('send-booking-message: Resend-fejl:', await mailRes.text());
+      console.log('send-booking-message: Resend status', mailRes.status, '— svar:', bodyText);
     } catch (e) {
-      console.log('send-booking-message: e-mail fejlede:', e.message);
+      console.log('send-booking-message: e-mail exception:', e.message);
     }
 
     return { statusCode: 200, body: JSON.stringify({ success: true, emailed }) };
