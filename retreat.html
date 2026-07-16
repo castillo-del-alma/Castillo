@@ -2615,6 +2615,12 @@ function showFormError(msg) {
   el.style.display = msg ? 'block' : 'none';
 }
 
+function udsolgtBesked() {
+  return retreatLang === 'en'
+    ? 'This date is now fully booked. Please choose another date, or contact us to hear about other options.'
+    : 'Denne dato er desværre fuldt booket. Vælg venligst en anden dato, eller kontakt os for at høre om andre muligheder.';
+}
+
 async function sendForespørgsel() {
   const { fornavn, efternavn, email } = getFormData();
   const _telefon1 = document.getElementById('f-telefon')?.value.trim();
@@ -2655,8 +2661,16 @@ async function sendForespørgsel() {
       })
     });
     const data = await res.json();
-    if (!res.ok) throw new Error(data.error || 'Ukendt fejl');
-
+    if (!res.ok) {
+      if (data && data.code === 'sold_out') {
+        btn.disabled = false;
+        btn.textContent = 'Reserver din plads';
+        document.getElementById('form-error').style.color = '#c05c30';
+        showFormError(udsolgtBesked());
+        return;
+      }
+      throw new Error(data.error || 'Ukendt fejl');
+    }
     btn.textContent = '✓ Reservation sendt';
     btn.style.background = 'rgba(106,114,64,.3)';
     document.getElementById('form-error').style.color = '#a0c880';
@@ -2752,7 +2766,16 @@ async function betalDepositum(overrideAmount = null, paymentType = 'deposit') {
       }),
     });
     const bookingData = await bookingRes.json();
-    if (!bookingRes.ok || bookingData.error) throw new Error(bookingData.error || 'Kunne ikke oprette booking');
+    if (!bookingRes.ok || bookingData.error) {
+      if (bookingData && bookingData.code === 'sold_out') {
+        document.getElementById('form-error').style.color = '#c05c30';
+        showFormError(udsolgtBesked());
+        btn.disabled = false;
+        updatePriceDisplay();
+        return;
+      }
+      throw new Error(bookingData.error || 'Kunne ikke oprette booking');
+    }
 
     btn.innerHTML = '<span style="display:inline-block;width:12px;height:12px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .6s linear infinite;vertical-align:middle;margin-right:.4rem;"></span>Åbner betaling…';
 

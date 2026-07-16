@@ -33,6 +33,60 @@ exports.handler = async (event) => {
       'Prefer': 'return=representation'
     };
 
+    // ── KAPACITETSSPÆRRING (forhindrer overbooking) ──
+    // En plads regnes optaget hvis bookingen: er betalt, afventer betaling med
+    // aktiv 24t-frist, eller er midt i direkte betaling (pending-betaling < 24t gammel).
+    // Løse forespørgsler og annullerede bookinger tæller IKKE med.
+    // Gælder kun NYE bookinger — restbetaling af eksisterende bookinger går udenom.
+    if (retreat_id && arrival_date) {
+      try {
+        const maxRes = await fetch(`${SUPABASE_URL}/rest/v1/retreats?id=eq.${retreat_id}&select=max_guests`, {
+          headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
+        });
+        const maxArr = await maxRes.json();
+        const maxGuests = parseInt(maxArr && maxArr[0] && maxArr[0].max_guests, 10);
+
+        if (maxGuests && maxGuests > 0) {
+          const dato = String(arrival_date).slice(0, 10);
+          const bRes = await fetch(`${SUPABASE_URL}/rest/v1/bookings?retreat_id=eq.${retreat_id}&arrival_date=eq.${dato}&select=guests,status,deadline,created_at,payments(status)`, {
+            headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
+          });
+          const bRows = await bRes.json();
+          const naa = Date.now();
+          const HOLD_MS = 24 * 60 * 60 * 1000;
+          let optaget = 0;
+          for (const b of Array.isArray(bRows) ? bRows : []) {
+            if (b.status === 'annulleret') continue;
+            const antal = parseInt(b.guests, 10) || 0;
+            const betalt = Array.isArray(b.payments) && b.payments.some(p => p && p.status === 'paid');
+            const pending = Array.isArray(b.payments) && b.payments.some(p => p && p.status === 'pending');
+            const nyligOprettet = b.created_at && (naa - new Date(b.created_at).getTime()) < HOLD_MS;
+            const deadlineAktiv = b.deadline && new Date(b.deadline).getTime() > naa;
+            const holderPlads = betalt
+              || (b.status === 'afventer_betaling' && deadlineAktiv)
+              || (pending && nyligOprettet);
+            if (holderPlads) optaget += antal;
+          }
+
+          const nyeGaester = parseInt(gaester, 10) || 1;
+          if (optaget + nyeGaester > maxGuests) {
+            return {
+              statusCode: 409,
+              body: JSON.stringify({
+                error: 'Der er desværre ikke plads nok på den valgte dato.',
+                code: 'sold_out',
+                remaining: Math.max(0, maxGuests - optaget)
+              })
+            };
+          }
+        }
+      } catch (capErr) {
+        // Et teknisk fejlet kapacitetstjek må ikke i sig selv blokere en gyldig booking,
+        // men det skal være tydeligt i loggen (fail-open, bevidst valg).
+        console.error('create-booking: kapacitetstjek fejlede (fortsætter):', capErr.message);
+      }
+    }
+
     // Tjek om kunde eksisterer
     const checkRes = await fetch(`${SUPABASE_URL}/rest/v1/customers?email=eq.${encodeURIComponent(email)}&select=id,full_name,email`, {
       headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
