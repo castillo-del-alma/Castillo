@@ -17,13 +17,6 @@ exports.handler = async (event) => {
     hour: '2-digit', minute: '2-digit'
   });
 
-  function fmtDateDK(iso) {
-    if (!iso) return '—';
-    const months = ['januar','februar','marts','april','maj','juni','juli','august','september','oktober','november','december'];
-    const d = new Date(iso);
-    return `${d.getDate()}. ${months[d.getMonth()]} ${d.getFullYear()}`;
-  }
-
   let retreatName = 'dit retreat';
   let arrivalStr = '—';
   let departureStr = '—';
@@ -41,8 +34,8 @@ exports.handler = async (event) => {
       lang = getLang(bookingInfo.customers && bookingInfo.customers.nationality);
       t = texts[lang];
       retreatName = bookingInfo.retreat_name || retreatName;
-      arrivalStr = fmtDateDK(bookingInfo.arrival_date);
-      departureStr = fmtDateDK(bookingInfo.departure_date);
+      arrivalStr = fmtDate(bookingInfo.arrival_date, lang);
+      departureStr = fmtDate(bookingInfo.departure_date, lang);
       depositAmount = bookingInfo.deposit_amount || 0;
     }
   } catch (e) {
@@ -69,9 +62,9 @@ exports.handler = async (event) => {
             label: t.reservation_details,
             rows: [
               [t.label_retreat, retreatName],
-              [t.label_arrival, fmtDate(booking.arrival_date, lang)],
-              [t.label_departure, fmtDate(booking.departure_date, lang)],
-              [t.label_deposit, '€' + (booking.deposit_amount || 0)]
+              [t.label_arrival, arrivalStr],
+              [t.label_departure, departureStr],
+              [t.label_deposit, '€' + depositAmount]
             ]
           }],
           buttons: [
