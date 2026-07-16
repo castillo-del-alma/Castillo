@@ -2385,6 +2385,36 @@ function buildDateOptions(data) {
     return;
   }
 
+  _renderDates(allDates);
+
+  // Markér datoer UDSOLGT automatisk når de er fyldt (betalte pladser ≥ max_guests),
+  // og lad dem synke nederst så næste ledige dato kommer øverst. Visnings-drevet —
+  // den manuelle soldout-markering i admin virker stadig og synker på samme måde.
+  const maxG = parseInt(data.max_guests, 10);
+  if (maxG && maxG > 0 && data.id) {
+    fetch('/.netlify/functions/retreat-availability')
+      .then(r => (r.ok ? r.json() : null))
+      .then(j => {
+        if (!j) return;
+        const byDate = (j.bookedByDate && j.bookedByDate[data.id]) || {};
+        let changed = false;
+        allDates.forEach(d => {
+          const key = String(d.arrival).slice(0, 10);
+          if (!d.soldout && (byDate[key] || 0) >= maxG) { d.soldout = true; changed = true; }
+        });
+        if (changed) _renderDates(allDates);
+      })
+      .catch(() => {});
+  }
+}
+
+function _renderDates(allDates) {
+  const select = document.getElementById('dateSelect');
+  const formSelect = document.getElementById('formDateSelect');
+
+  // Udsolgte datoer nederst (stabil sortering bevarer rækkefølgen blandt ledige).
+  allDates.sort((a, b) => (a.soldout ? 1 : 0) - (b.soldout ? 1 : 0));
+
   const soldoutText = retreatLang === 'en' ? ' — SOLD OUT' : ' — UDSOLGT';
   const optionsHtml = allDates.map((d, i) => {
     const label = `${fmtDateDK(d.arrival)} – ${fmtDateDK(d.departure)}${d.soldout ? soldoutText : ''}`;
@@ -2396,7 +2426,7 @@ function buildDateOptions(data) {
 
   window.ALL_RETREAT_DATES = allDates;
 
-  // Vælg første ledige dato (springer udsolgte over — normalt er den primære altid ledig)
+  // Vælg første ledige dato (udsolgte er nu sorteret nederst).
   let firstOpen = allDates.findIndex(d => !d.soldout);
   if (firstOpen < 0) firstOpen = 0;
   select.value = String(firstOpen);
