@@ -85,7 +85,7 @@ async function sikreGaesteraekker(bk) {
     if (!navn || harNumre.has(no)) return;
     let email = String(g?.email || '').trim().toLowerCase();
     if (email && !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) email = '';
-    nye.push({ booking_id: bk.id, guest_no: no, full_name: navn.slice(0, 200), email: email || null });
+    nye.push({ booking_id: bk.id, guest_no: no, full_name: navn.slice(0, 200), email: email || null, invited_at: null });
   });
 
   if (!nye.length) return;

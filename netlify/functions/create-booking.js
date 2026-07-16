@@ -107,7 +107,8 @@ exports.handler = async (event) => {
             booking_id: booking.id,
             guest_no: i + 2,
             full_name: navn.slice(0, 200),
-            email: gEmail || null
+            email: gEmail || null,
+            invited_at: null   // samme nøglesæt som bookeren — ellers afviser PostgREST hele bulk-insert'en
           });
         });
 
