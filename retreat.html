@@ -4,6 +4,19 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title id="pageTitle">Castillo del Alma</title>
+<meta name="description" content="Eksklusive retreats på Castillo del Alma — wellness, ro og fordybelse i et andalusisk wine estate nær Málaga i hjertet af Andalusien.">
+<link rel="canonical" href="https://castillodelalma.es/retreat">
+<meta property="og:site_name" content="Castillo del Alma">
+<meta property="og:title" content="Retreats — Castillo del Alma">
+<meta property="og:description" content="Eksklusive retreats på Castillo del Alma — wellness, ro og fordybelse i et andalusisk wine estate nær Málaga i hjertet af Andalusien.">
+<meta property="og:image" content="https://castillodelalma.es/img/IMG_0603.JPG">
+<meta property="og:url" content="https://castillodelalma.es/retreat">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="da_DK">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Retreats — Castillo del Alma">
+<meta name="twitter:description" content="Eksklusive retreats på Castillo del Alma — wellness, ro og fordybelse i et andalusisk wine estate nær Málaga i hjertet af Andalusien.">
+<meta name="twitter:image" content="https://castillodelalma.es/img/IMG_0603.JPG">
 <link rel="stylesheet" href="fonts/fonts.css">
 <style>
 :root {
@@ -2001,6 +2014,25 @@ function applyRetreatContent() {
 
   // Titel og hero
   document.getElementById('pageTitle').textContent = `${rSC('title')} — Castillo del Alma`;
+  // SEO: opdatér meta dynamisk pr. retreat (slug)
+  (function(){
+    var d = (rSC('description') || 'Eksklusivt retreat på Castillo del Alma i Andalusien.').replace(/<[^>]*>/g,'').slice(0,300);
+    var slug = (data && data.slug) ? data.slug : '';
+    var url = 'https://castillodelalma.es/retreat' + (slug ? ('?slug=' + encodeURIComponent(slug)) : '');
+    var title = document.getElementById('pageTitle').textContent;
+    function setMeta(attr, key, val){
+      var el = document.head.querySelector('meta['+attr+'="'+key+'"]');
+      if(!el){ el = document.createElement('meta'); el.setAttribute(attr, key); document.head.appendChild(el); }
+      el.setAttribute('content', val);
+    }
+    setMeta('name','description', d);
+    setMeta('property','og:title', title);
+    setMeta('property','og:description', d);
+    setMeta('property','og:url', url);
+    var link = document.head.querySelector('link[rel="canonical"]');
+    if(!link){ link = document.createElement('link'); link.setAttribute('rel','canonical'); document.head.appendChild(link); }
+    link.setAttribute('href', url);
+  })();
   document.getElementById('retreatTitle').innerHTML = (rSC('title') || '').replace(' & ', '<br>&amp; ');
   document.getElementById('retreatCategory').textContent = rSC('subtitle');
   document.getElementById('retreatSubtitle').textContent = rSC('description');

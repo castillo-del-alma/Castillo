@@ -1,0 +1,16 @@
+User-agent: *
+Allow: /
+
+# Admin, kundeportal og transaktionssider skal ikke indekseres
+Disallow: /admin-anmeldelser.html
+Disallow: /admin-newsletter.html
+Disallow: /admin-betaling.html
+Disallow: /video-tekster.html
+Disallow: /min-booking.html
+Disallow: /anmeldelse.html
+Disallow: /betal.html
+Disallow: /betal-success.html
+Disallow: /betaling-tak.html
+Disallow: /forum.html
+
+Sitemap: https://castillodelalma.es/sitemap.xml
