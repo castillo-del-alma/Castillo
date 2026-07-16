@@ -589,11 +589,25 @@ async function loadKundeBeskeder() {
 
 async function sendKundeBesked() {
   const input = document.getElementById('kundeBeskedInput');
+  const btn = document.querySelector('.besked-send');
   const msg = input.value.trim();
   if (!msg || !bookingData) return;
-  await sb.from('messages').insert({ booking_id: bookingData.id, sender: 'kunde', message: msg });
-  input.value = '';
-  loadKundeBeskeder();
+  if (btn) btn.disabled = true;
+  try {
+    const res = await fetch('/.netlify/functions/send-booking-message', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ bookingId: bookingData.id, message: msg })
+    });
+    if (!res.ok) throw new Error('send fejlede');
+    input.value = '';
+    loadKundeBeskeder();
+  } catch (e) {
+    console.error('Besked kunne ikke sendes:', e);
+    alert('Beskeden kunne ikke sendes lige nu — prøv igen om lidt.');
+  } finally {
+    if (btn) btn.disabled = false;
+  }
 }
 
 // ── REAL-TIME BESKEDER ──
