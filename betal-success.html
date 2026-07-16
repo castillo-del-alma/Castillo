@@ -45,6 +45,11 @@ p{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.05rem;col
 
   // Samme sproglogik som resten af sitet: geo først, ellers browsersprog
   async function findSprog() {
+    // Kundens sprog kommer med i URL'en fra Stripe success_url — det vinder over geo.
+    try {
+      var urlLang = new URLSearchParams(location.search).get('lang');
+      if (urlLang === 'da' || urlLang === 'en') return urlLang;
+    } catch (e) {}
     try {
       var c = sessionStorage.getItem('cda_geo_lang');
       if (c === 'da' || c === 'en') return c;
