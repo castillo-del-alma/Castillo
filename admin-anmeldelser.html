@@ -4080,6 +4080,32 @@ feeling more calm – and coming home to yourself again."</textarea></div>
       </div>
     </div>
 
+    <!-- 4.6 · FOTOSTRIBE 2 -->
+    <div class="fc-block" id="ra_billeder5_2" style="margin-bottom:1.5rem;">
+      <div class="fc-block-header" style="display:flex;align-items:center;gap:.8rem;"><span class="fc-block-title">4.6 · Fotostribe 2 (5 billeder — unikke per retreat)</span></div>
+      <div class="fc-block-body">
+        <p style="font-size:.7rem;color:rgba(44,35,24,.4);margin-bottom:1rem;">Upload op til 5 billeder. Brug pilene til at ændre rækkefølgen. Placér striben med pilene i blok 0 (sektionsrækkefølge).</p>
+        <div id="retreatBilleder5Liste2" style="display:flex;flex-direction:column;gap:.7rem;"></div>
+        <button type="button" onclick="tilfoejEkstraStribe(2)" style="margin-top:.8rem;background:rgba(42,122,116,.08);border:1px solid rgba(42,122,116,.2);color:#2a7a74;padding:.6rem 1.2rem;font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;width:100%;">+ Tilføj billede (max 5)</button>
+        <div style="text-align:right;margin-top:1rem;padding-top:.8rem;border-top:1px solid rgba(184,138,30,.12);">
+          <button type="button" onclick="gemRetreat()" style="background:var(--wine);color:#fff;border:none;padding:.5rem 1.4rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;">💾 Gem retreat</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4.7 · FOTOSTRIBE 3 -->
+    <div class="fc-block" id="ra_billeder5_3" style="margin-bottom:1.5rem;">
+      <div class="fc-block-header" style="display:flex;align-items:center;gap:.8rem;"><span class="fc-block-title">4.7 · Fotostribe 3 (5 billeder — unikke per retreat)</span></div>
+      <div class="fc-block-body">
+        <p style="font-size:.7rem;color:rgba(44,35,24,.4);margin-bottom:1rem;">Upload op til 5 billeder. Brug pilene til at ændre rækkefølgen. Placér striben med pilene i blok 0 (sektionsrækkefølge).</p>
+        <div id="retreatBilleder5Liste3" style="display:flex;flex-direction:column;gap:.7rem;"></div>
+        <button type="button" onclick="tilfoejEkstraStribe(3)" style="margin-top:.8rem;background:rgba(42,122,116,.08);border:1px solid rgba(42,122,116,.2);color:#2a7a74;padding:.6rem 1.2rem;font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;width:100%;">+ Tilføj billede (max 5)</button>
+        <div style="text-align:right;margin-top:1rem;padding-top:.8rem;border-top:1px solid rgba(184,138,30,.12);">
+          <button type="button" onclick="gemRetreat()" style="background:var(--wine);color:#fff;border:none;padding:.5rem 1.4rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;">💾 Gem retreat</button>
+        </div>
+      </div>
+    </div>
+
     <div class="fc-block" id="ra_highlights" style="margin-bottom:1.5rem;">
       <div class="fc-block-header" style="display:flex;align-items:center;gap:.8rem;"><span class="fc-block-title">4.1 · Highlights (6 kort med ikon + tekst)</span><button type="button" onclick="oversaetBlok(this)" style="background:rgba(58,110,106,.1);border:1px solid rgba(58,110,106,.35);color:#2a7a74;padding:.3rem .8rem;font-family:Manrope,sans-serif;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;margin-left:auto;" title="Oversæt tomme engelske felter i denne sektion">⇄ Oversæt</button></div>
       <div class="fc-block-body">
@@ -6688,6 +6714,7 @@ function openNytRetreat() {
   datesState = [{ arrival: '', departure: '' }];
   retreatBilleder5State = [];
   renderRetreatBilleder5();
+  [2, 3].forEach(n => { RT_EKSTRA_STRIBER[n].state = []; renderEkstraStribe(n); });
   teacherImgsState = [{url:'',name:''},{url:'',name:''},{url:'',name:''}];
   loadTeacherImgs({});
   loadHighlightsIntoSection({});
@@ -6972,6 +6999,12 @@ function udfyldRetreatForm(r) {
   if (typeof imgs5 === 'string') { try { imgs5 = JSON.parse(imgs5); } catch(e) { imgs5 = []; } }
   retreatBilleder5State = Array.isArray(imgs5) ? imgs5.map(url => ({ url })) : [];
   renderRetreatBilleder5();
+  [2, 3].forEach(n => {
+    let arr = r['retreat_images5_' + n];
+    if (typeof arr === 'string') { try { arr = JSON.parse(arr); } catch(e) { arr = []; } }
+    RT_EKSTRA_STRIBER[n].state = Array.isArray(arr) ? arr.map(url => ({ url })) : [];
+    renderEkstraStribe(n);
+  });
   loadTeacherImgs(r);
   loadRoomPricing(r);
   // Sæt ikon-felter fra DB inden highlights renderes
@@ -7462,6 +7495,8 @@ async function gemRetreat() {
       max_guests: parseInt(document.getElementById('retreat_max_guests').value) || null,
       extra_dates: datesState.slice(1).filter(d => d.arrival && d.departure).map(d => d.soldout ? { arrival: d.arrival, departure: d.departure, soldout: true } : { arrival: d.arrival, departure: d.departure }),
       retreat_images5: retreatBilleder5State.filter(b => b.url).map(b => b.url),
+      retreat_images5_2: RT_EKSTRA_STRIBER[2].state.filter(b => b.url).map(b => b.url),
+      retreat_images5_3: RT_EKSTRA_STRIBER[3].state.filter(b => b.url).map(b => b.url),
       ...getTeacherImgsPayload(),
       languages: document.getElementById('retreat_languages').value.trim() || null,
       languages_en: document.getElementById('retreat_languages_en').value.trim() || null,
@@ -7508,19 +7543,21 @@ async function gemRetreat() {
 
     if (id) {
       let { error } = await sb.from('retreats').update(payload).eq('id', id);
-      if (error && /nav_links|sektion_orden/.test(error.message || '')) {
+      if (error && /nav_links|sektion_orden|retreat_images5_2|retreat_images5_3/.test(error.message || '')) {
         // Kolonnerne findes ikke endnu (SQL ikke kørt) — gem resten og advar
         delete payload.nav_links; delete payload.sektion_orden;
+        delete payload.retreat_images5_2; delete payload.retreat_images5_3;
         ({ error } = await sb.from('retreats').update(payload).eq('id', id));
-        if (!error) showToast('⚠ Gemt, men menu/rækkefølge kræver at SQL-opdateringen køres først', true);
+        if (!error) showToast('⚠ Gemt, men menu/rækkefølge/fotostriber kræver at SQL-opdateringen køres først', true);
       }
       if (error) throw error;
     } else {
       let { error } = await sb.from('retreats').insert(payload);
-      if (error && /nav_links|sektion_orden/.test(error.message || '')) {
+      if (error && /nav_links|sektion_orden|retreat_images5_2|retreat_images5_3/.test(error.message || '')) {
         delete payload.nav_links; delete payload.sektion_orden;
+        delete payload.retreat_images5_2; delete payload.retreat_images5_3;
         ({ error } = await sb.from('retreats').insert(payload));
-        if (!error) showToast('⚠ Gemt, men menu/rækkefølge kræver at SQL-opdateringen køres først', true);
+        if (!error) showToast('⚠ Gemt, men menu/rækkefølge/fotostriber kræver at SQL-opdateringen køres først', true);
       }
       if (error) throw error;
     }
@@ -8372,6 +8409,8 @@ function fsOrdenFlyt(i, retning) {
 const RT_SEKTION_DEFS = [
   { id: 'om',           navn: 'Om retreatet (oversigt)' },
   { id: 'fotostribe',   navn: 'Fotostribe' },
+  { id: 'fotostribe2',  navn: 'Fotostribe 2' },
+  { id: 'fotostribe3',  navn: 'Fotostribe 3' },
   { id: 'highlights',   navn: 'Highlights' },
   { id: 'program',      navn: 'Program',      legacyVis: 'program' },
   { id: 'fritekst',     navn: 'Fritekst-sektion', legacyVis: 'freetext' },
@@ -9619,6 +9658,70 @@ async function uploadRetreatBillede5(i) {
     retreatBilleder5State[i].url = url;
     if (status) status.textContent = '✓';
     renderRetreatBilleder5();
+  } catch(e) {
+    if (status) status.textContent = 'Fejl';
+    showToast('Upload fejl: ' + e.message, true);
+  }
+}
+
+// ── EKSTRA FOTOSTRIBER (2 og 3) — generisk håndtering, samme mønster som fotostribe 1 ──
+const RT_EKSTRA_STRIBER = {
+  2: { state: [], listId: 'retreatBilleder5Liste2', filePrefix: 'rb5b' },
+  3: { state: [], listId: 'retreatBilleder5Liste3', filePrefix: 'rb5c' }
+};
+
+function renderEkstraStribe(n) {
+  const cfg = RT_EKSTRA_STRIBER[n];
+  const container = document.getElementById(cfg.listId);
+  if (!container) return;
+  if (!cfg.state.length) {
+    container.innerHTML = '<p style="font-size:.75rem;color:rgba(44,35,24,.4);font-style:italic;">Ingen billeder endnu — klik + Tilføj billede</p>';
+    return;
+  }
+  container.innerHTML = cfg.state.map((b, i) => `
+    <div style="display:flex;align-items:center;gap:.8rem;padding:.6rem .8rem;background:rgba(44,35,24,.03);border:1px solid rgba(184,138,30,.15);">
+      <div style="display:flex;flex-direction:column;gap:.15rem;">
+        <button onclick="flytEkstraStribe(${n},${i},-1)" ${i===0?'disabled':''} style="background:none;border:1px solid rgba(184,138,30,.3);color:#7a5c14;width:22px;height:18px;font-size:.6rem;cursor:pointer;padding:0;${i===0?'opacity:.3;':''}">▲</button>
+        <button onclick="flytEkstraStribe(${n},${i},1)" ${i===cfg.state.length-1?'disabled':''} style="background:none;border:1px solid rgba(184,138,30,.3);color:#7a5c14;width:22px;height:18px;font-size:.6rem;cursor:pointer;padding:0;${i===cfg.state.length-1?'opacity:.3;':''}">▼</button>
+      </div>
+      ${b.url ? `<img src="${b.url}" style="width:56px;height:56px;object-fit:cover;border-radius:3px;border:1px solid rgba(184,138,30,.3);flex-shrink:0;">` : '<div style="width:56px;height:56px;background:rgba(44,35,24,.06);border:1px dashed rgba(184,138,30,.3);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:1.2rem;">🖼️</div>'}
+      <input type="file" id="${cfg.filePrefix}_file_${i}" accept="image/*" onchange="uploadEkstraStribe(${n},${i})" style="font-size:.76rem;flex:1;">
+      <span id="${cfg.filePrefix}_status_${i}" style="font-size:.68rem;color:#2a7a74;"></span>
+      <button onclick="fjernEkstraStribe(${n},${i})" style="background:rgba(192,92,48,.1);border:1px solid rgba(192,92,48,.3);color:#c05c30;padding:.3rem .6rem;font-size:.65rem;cursor:pointer;">✕</button>
+    </div>`).join('');
+}
+
+function tilfoejEkstraStribe(n) {
+  const cfg = RT_EKSTRA_STRIBER[n];
+  if (cfg.state.length >= 5) { showToast('Max 5 billeder', true); return; }
+  cfg.state.push({ url: '' });
+  renderEkstraStribe(n);
+}
+
+function fjernEkstraStribe(n, i) {
+  RT_EKSTRA_STRIBER[n].state.splice(i, 1);
+  renderEkstraStribe(n);
+}
+
+function flytEkstraStribe(n, i, dir) {
+  const s = RT_EKSTRA_STRIBER[n].state;
+  const j = i + dir;
+  if (j < 0 || j >= s.length) return;
+  [s[i], s[j]] = [s[j], s[i]];
+  renderEkstraStribe(n);
+}
+
+async function uploadEkstraStribe(n, i) {
+  const cfg = RT_EKSTRA_STRIBER[n];
+  const input = document.getElementById(`${cfg.filePrefix}_file_${i}`);
+  const status = document.getElementById(`${cfg.filePrefix}_status_${i}`);
+  if (!input || !input.files.length) return;
+  if (status) status.textContent = 'Uploader...';
+  try {
+    const url = await uploadRetreatImage(input.files[0]);
+    cfg.state[i].url = url;
+    if (status) status.textContent = '✓';
+    renderEkstraStribe(n);
   } catch(e) {
     if (status) status.textContent = 'Fejl';
     showToast('Upload fejl: ' + e.message, true);

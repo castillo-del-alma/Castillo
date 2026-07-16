@@ -755,7 +755,7 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:3rem
   .rooms-options{grid-template-columns:1fr;}
   .ejrm-grid{grid-template-columns:1fr;}
   .reviews-grid{grid-template-columns:1fr;}
-  #retreatImages5Grid{grid-template-columns:repeat(2,1fr)!important;}
+  #retreatImages5Grid, #retreatImages5Grid2, #retreatImages5Grid3{grid-template-columns:repeat(2,1fr)!important;}
   /* Formularfelter: 16px så iOS ikke zoomer ind ved tastning */
   .form-field input,.form-field select,.form-field textarea{font-size:16px;letter-spacing:.04em;}
   .form-field input::placeholder{font-size:16px;}
@@ -940,6 +940,20 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:3rem
 <section id="fotostribe" style="display:none;padding:2rem 0;">
   <div class="section-inner">
     <div id="retreatImages5Grid" style="display:grid;grid-template-columns:repeat(5,1fr);gap:.6rem;"></div>
+  </div>
+</section>
+
+<!-- RETREAT BILLEDER 2 (retreat_images5_2) -->
+<section id="fotostribe2" style="display:none;padding:2rem 0;">
+  <div class="section-inner">
+    <div id="retreatImages5Grid2" style="display:grid;grid-template-columns:repeat(5,1fr);gap:.6rem;"></div>
+  </div>
+</section>
+
+<!-- RETREAT BILLEDER 3 (retreat_images5_3) -->
+<section id="fotostribe3" style="display:none;padding:2rem 0;">
+  <div class="section-inner">
+    <div id="retreatImages5Grid3" style="display:grid;grid-template-columns:repeat(5,1fr);gap:.6rem;"></div>
   </div>
 </section>
 
@@ -2116,6 +2130,24 @@ function applyRetreatContent() {
     }
   }
 
+  // Ekstra fotostriber 2 og 3 (retreat_images5_2 / _3) — samme visning som den første
+  [['fotostribe2', 'retreatImages5Grid2', data.retreat_images5_2],
+   ['fotostribe3', 'retreatImages5Grid3', data.retreat_images5_3]].forEach(function(cfg) {
+    const sec = document.getElementById(cfg[0]);
+    const grid = document.getElementById(cfg[1]);
+    if (!sec || !grid) return;
+    let arr = cfg[2];
+    if (typeof arr === 'string') { try { arr = JSON.parse(arr); } catch(e) { arr = []; } }
+    if (Array.isArray(arr) && arr.length) {
+      grid.innerHTML = arr.map(url =>
+        `<div class="retreat-img5-item" style="background-image:url('${url}');"></div>`
+      ).join('');
+      sec.style.display = 'block';
+    } else {
+      sec.style.display = 'none';
+    }
+  });
+
   // Mad & Drikke
   setText('foodLabel', rSC('ui_label_food', 'Mad & Drikke'));
   const foodHeadingEl = document.getElementById('foodHeading');
@@ -2303,7 +2335,7 @@ function renderRetreatNav() {
 }
 
 // ── SEKTIONSRÆKKEFØLGE — pr. retreat, gemmes som JSON i retreats.sektion_orden ([{id, vis}]) ──
-const RT_SEKTION_STANDARD_ORDEN = ['om','fotostribe','highlights','program','fritekst','inkluderet','vaerelser','forplejning','underviser','anmeldelser','faq','booking','sikkerhed','cta1','cta2','cta3'];
+const RT_SEKTION_STANDARD_ORDEN = ['om','fotostribe','fotostribe2','fotostribe3','highlights','program','fritekst','inkluderet','vaerelser','forplejning','underviser','anmeldelser','faq','booking','sikkerhed','cta1','cta2','cta3'];
 const RT_CTA_IDS = ['cta1','cta2','cta3']; // skjult i HTML som standard — vises kun ved vis='1' i sektion_orden
 let rtOrdenAnvendt = false;
 function applyRetreatSektionOrden() {
