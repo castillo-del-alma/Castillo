@@ -282,6 +282,15 @@ body{font-family:'Manrope',sans-serif;background:var(--cream);color:var(--charco
     else token = localStorage.getItem('cda_forum_token') || '';
   } catch (e) { /* privat browsing */ }
 
+  // Sørg for at tokenet ligger i URL'en, når man er logget ind — så en
+  // "gem til hjemmeskærm"-genvej altid fanger det (ellers starter PWA'en
+  // uden token og kan ikke tilgå forummet på grund af isoleret storage).
+  try {
+    if (token && !new URLSearchParams(location.search).get('t')) {
+      history.replaceState(null, '', location.pathname + '?t=' + encodeURIComponent(token) + location.hash);
+    }
+  } catch (e) {}
+
   var state = { me: null, channel: null, members: {}, last: null, ids: {}, image: null, sending: false };
 
   /* ---------- Hjælpere ---------- */
