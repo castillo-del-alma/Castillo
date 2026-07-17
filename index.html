@@ -7,6 +7,9 @@
 <title>Castillo del Alma — Wellness & Wine Estate i Andalusien</title>
 <meta name="description" content="Vi tilbyder eksklusive retreats i Málaga, Spanien med fokus på ro, personlig udvikling og autentiske oplevelser.">
 <link rel="canonical" href="https://castillodelalma.es/">
+<link rel="alternate" hreflang="da" href="https://castillodelalma.es/">
+<link rel="alternate" hreflang="en" href="https://castillodelalma.es/en/">
+<link rel="alternate" hreflang="x-default" href="https://castillodelalma.es/">
 <meta property="og:site_name" content="Castillo del Alma">
 <meta property="og:title" content="Castillo del Alma — Wellness & Wine Estate i Andalusien">
 <meta property="og:description" content="Vi tilbyder eksklusive retreats i Málaga, Spanien med fokus på ro, personlig udvikling og autentiske oplevelser.">
@@ -20,6 +23,30 @@
 <meta name="twitter:title" content="Castillo del Alma — Wellness & Wine Estate i Andalusien">
 <meta name="twitter:description" content="Vi tilbyder eksklusive retreats i Málaga, Spanien med fokus på ro, personlig udvikling og autentiske oplevelser.">
 <meta name="twitter:image" content="https://castillodelalma.es/img/SEO-castillo-del-alma.jpg">
+<script>
+// SEO (Bølge 2): på /en/-stien får siden engelsk titel, beskrivelse og canonical.
+// Kører synkront i <head> så Google ser engelsk metadata ved rendering.
+(function(){
+  if (!/^\/en(\/|$)/.test(location.pathname)) return;
+  document.documentElement.lang = 'en';
+  var t = 'Castillo del Alma — Wellness & Wine Estate in Andalusia';
+  var d = 'We offer exclusive retreats in Málaga, Spain focused on tranquility, personal growth and authentic experiences.';
+  document.title = t;
+  function setMeta(attr, key, val){
+    var el = document.head.querySelector('meta['+attr+'="'+key+'"]');
+    if (el) el.setAttribute('content', val);
+  }
+  setMeta('name','description', d);
+  setMeta('property','og:title', t);
+  setMeta('property','og:description', d);
+  setMeta('property','og:url', 'https://castillodelalma.es/en/');
+  setMeta('property','og:locale', 'en_US');
+  setMeta('name','twitter:title', t);
+  setMeta('name','twitter:description', d);
+  var c = document.head.querySelector('link[rel="canonical"]');
+  if (c) c.setAttribute('href', 'https://castillodelalma.es/en/');
+})();
+</script>
 <link rel="stylesheet" href="fonts/fonts.css">
 <style>
 :root {
@@ -2867,6 +2894,8 @@ async function loadSiteContent() {
 // Geo-baseret sprogvalg: Danmark → dansk, resten af verden → engelsk.
 // Bruger Netlifys geo-header via egen function (ingen ekstern IP-tjeneste → GDPR-venligt).
 async function determineStartLang() {
+  // SEO (Bølge 2): /en/-adresser starter ALTID på engelsk — uanset geo og cache
+  if (/^\/en(\/|$)/.test(location.pathname)) return 'en';
   // Samme geo-svar genbruges på tværs af sider i samme besøg (hurtigere + konsistent sprog)
   try {
     const cached = sessionStorage.getItem('cda_geo_lang');
@@ -2897,6 +2926,12 @@ async function determineStartLang() {
 
 function setSiteLang(lang) {
   currentSiteLang = lang;
+  // SEO (Bølge 2): hold adressen i sync med sproget (/ ↔ /en/) uden side-reload
+  try {
+    const onEn = /^\/en(\/|$)/.test(location.pathname);
+    if (lang === 'en' && !onEn) history.replaceState(null, '', '/en/' + location.search + location.hash);
+    else if (lang === 'da' && onEn) history.replaceState(null, '', '/' + location.search + location.hash);
+  } catch(e) { /* replaceState utilgængelig → sproget skifter stadig, kun adressen står uændret */ }
   const btnDa = document.getElementById('btn-da');
   const btnEn = document.getElementById('btn-en');
   btnDa.classList.toggle('lang-btn-active', lang === 'da');

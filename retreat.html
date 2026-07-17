@@ -19,6 +19,26 @@
 <meta name="twitter:title" content="Retreats — Castillo del Alma">
 <meta name="twitter:description" content="Vi tilbyder eksklusive retreats i Málaga, Spanien med fokus på ro, personlig udvikling og autentiske oplevelser.">
 <meta name="twitter:image" content="https://castillodelalma.es/img/SEO-castillo-del-alma.jpg">
+<script>
+// SEO (Bølge 2): på /en/-stien får siden engelsk beskrivelse og canonical med det samme.
+// Overskrives senere pr. retreat (slug) når data er hentet fra Supabase.
+(function(){
+  if (!/^\/en(\/|$)/.test(location.pathname)) return;
+  document.documentElement.lang = 'en';
+  var d = 'We offer exclusive retreats in Málaga, Spain focused on tranquility, personal growth and authentic experiences.';
+  function setMeta(attr, key, val){
+    var el = document.head.querySelector('meta['+attr+'="'+key+'"]');
+    if (el) el.setAttribute('content', val);
+  }
+  setMeta('name','description', d);
+  setMeta('property','og:description', d);
+  setMeta('property','og:url', 'https://castillodelalma.es/en/retreat' + location.search);
+  setMeta('property','og:locale', 'en_US');
+  setMeta('name','twitter:description', d);
+  var c = document.head.querySelector('link[rel="canonical"]');
+  if (c) c.setAttribute('href', 'https://castillodelalma.es/en/retreat' + location.search);
+})();
+</script>
 <link rel="stylesheet" href="fonts/fonts.css">
 <style>
 :root {
@@ -1556,6 +1576,8 @@ let retreatLang = 'da';
 // Geo-baseret sprogvalg: Danmark → dansk, resten af verden → engelsk.
 // Bruger Netlifys geo-header via egen function (ingen ekstern IP-tjeneste → GDPR-venligt).
 async function determineStartLang() {
+  // SEO (Bølge 2): /en/-adresser starter ALTID på engelsk — uanset geo og cache
+  if (/^\/en(\/|$)/.test(location.pathname)) return 'en';
   // Samme geo-svar genbruges på tværs af sider i samme besøg (hurtigere + konsistent sprog)
   try {
     const cached = sessionStorage.getItem('cda_geo_lang');
@@ -1723,6 +1745,12 @@ function applyStaticLabels() {
 
 function setRetreatLang(lang) {
   retreatLang = lang;
+  // SEO (Bølge 2): hold adressen i sync med sproget (/retreat ↔ /en/retreat) uden reload
+  try {
+    const onEn = /^\/en(\/|$)/.test(location.pathname);
+    if (lang === 'en' && !onEn) history.replaceState(null, '', '/en/retreat' + location.search + location.hash);
+    else if (lang === 'da' && onEn) history.replaceState(null, '', '/retreat' + location.search + location.hash);
+  } catch(e) { /* replaceState utilgængelig → sproget skifter stadig, kun adressen står uændret */ }
   if (window.applySikkerhed) window.applySikkerhed(lang);
   const btnDa = document.getElementById('retreat-btn-da');
   const btnEn = document.getElementById('retreat-btn-en');
@@ -2018,9 +2046,14 @@ function applyRetreatContent() {
   document.getElementById('pageTitle').textContent = `${rSC('title')} — Castillo del Alma`;
   // SEO: opdatér meta dynamisk pr. retreat (slug)
   (function(){
-    var d = (rSC('description') || 'Eksklusivt retreat på Castillo del Alma i Andalusien.').replace(/<[^>]*>/g,'').slice(0,300);
+    var d = (rSC('description') || (retreatLang === 'en' ? 'Exclusive retreat at Castillo del Alma in Andalusia.' : 'Eksklusivt retreat på Castillo del Alma i Andalusien.')).replace(/<[^>]*>/g,'').slice(0,300);
     var slug = (data && data.slug) ? data.slug : '';
-    var url = 'https://castillodelalma.es/retreat' + (slug ? ('?slug=' + encodeURIComponent(slug)) : '');
+    var q = slug ? ('?slug=' + encodeURIComponent(slug)) : '';
+    // SEO (Bølge 2): på /en/-stien peger canonical på den engelske adresse
+    var onEn = /^\/en(\/|$)/.test(location.pathname);
+    var daUrl = 'https://castillodelalma.es/retreat' + q;
+    var enUrl = 'https://castillodelalma.es/en/retreat' + q;
+    var url = onEn ? enUrl : daUrl;
     var title = document.getElementById('pageTitle').textContent;
     function setMeta(attr, key, val){
       var el = document.head.querySelector('meta['+attr+'="'+key+'"]');
@@ -2031,9 +2064,21 @@ function applyRetreatContent() {
     setMeta('property','og:title', title);
     setMeta('property','og:description', d);
     setMeta('property','og:url', url);
+    setMeta('property','og:locale', onEn ? 'en_US' : 'da_DK');
+    setMeta('name','twitter:title', title);
+    setMeta('name','twitter:description', d);
     var link = document.head.querySelector('link[rel="canonical"]');
     if(!link){ link = document.createElement('link'); link.setAttribute('rel','canonical'); document.head.appendChild(link); }
     link.setAttribute('href', url);
+    // hreflang DA↔EN pr. slug — fortæller Google at de to adresser er samme side på to sprog
+    function setAlt(hl, href){
+      var el = document.head.querySelector('link[rel="alternate"][hreflang="'+hl+'"]');
+      if(!el){ el = document.createElement('link'); el.setAttribute('rel','alternate'); el.setAttribute('hreflang', hl); document.head.appendChild(el); }
+      el.setAttribute('href', href);
+    }
+    setAlt('da', daUrl);
+    setAlt('en', enUrl);
+    setAlt('x-default', daUrl);
   })();
   document.getElementById('retreatTitle').innerHTML = (rSC('title') || '').replace(' & ', '<br>&amp; ');
   document.getElementById('retreatCategory').textContent = rSC('subtitle');
