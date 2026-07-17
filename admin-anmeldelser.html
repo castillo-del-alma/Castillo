@@ -6518,10 +6518,10 @@ function plRender(){
     const aktiv = plPairRid === r.id;
     return '<span draggable="true" ondragstart="plPaletDrag(event,\'' + r.id + '\')" onclick="plStartPar(\'' + r.id + '\')" ' +
       'title="Træk chippen ned på en dag — eller klik her og derefter på dagen" ' +
-      'style="display:inline-flex;align-items:center;gap:.4rem;font-size:.68rem;color:' + f.text + ';background:' + f.bg + ';border:1px solid ' + f.border + ';padding:.3rem .6rem;cursor:grab;user-select:none;' + (aktiv ? 'outline:2px dashed #2a7a74;' : '') + '">' +
+      'style="display:inline-flex;align-items:center;gap:.4rem;font-size:.7rem;font-weight:500;color:#fff;background:' + f.text + ';border:1px solid ' + f.border + ';padding:.35rem .65rem;cursor:grab;user-select:none;' + (aktiv ? 'outline:2px dashed #2a7a74;' : '') + '">' +
       plEsc(r.title) +
-      (antal ? ' <span style="opacity:.6;">(' + antal + (antal === 1 ? ' dato' : ' datoer') + ')</span>'
-             : ' <span style="font-size:.58rem;letter-spacing:.06em;text-transform:uppercase;color:#c05c30;border:1px solid rgba(192,92,48,.4);padding:.05rem .35rem;">ikke planlagt</span>') +
+      (antal ? ' <span style="opacity:.75;">(' + antal + (antal === 1 ? ' dato' : ' datoer') + ')</span>'
+             : ' <span style="font-size:.58rem;letter-spacing:.06em;text-transform:uppercase;color:#fff;background:#c05c30;padding:.1rem .4rem;">ikke planlagt</span>') +
       '</span>';
   }).join('');
 
@@ -6544,10 +6544,10 @@ function plRender(){
     const offset = (first.getDay() - 6 + 7) % 7; // 0 = måneden starter på en lørdag
     const dim = new Date(plYear, m + 1, 0).getDate();
 
-    html += '<div style="font-family:Manrope,sans-serif;font-weight:500;font-size:.68rem;letter-spacing:.15em;text-transform:uppercase;color:#7a5c14;margin:' + (m ? '1.6rem' : '0') + ' 0 .35rem;">' + mdr[m] + ' ' + plYear + '</div>';
+    html += '<div style="font-family:Manrope,sans-serif;font-weight:600;font-size:.74rem;letter-spacing:.15em;text-transform:uppercase;color:#5c4407;margin:' + (m ? '1.6rem' : '0') + ' 0 .35rem;">' + mdr[m] + ' ' + plYear + '</div>';
     html += '<div style="display:grid;grid-template-columns:repeat(7,1fr);gap:2px;">';
     kolonner.forEach((k, i) => {
-      html += '<div style="font-size:.56rem;letter-spacing:.08em;text-transform:uppercase;text-align:center;padding:.15rem 0;color:' + (i === 0 ? '#7a5c14;font-weight:600' : 'rgba(44,35,24,.45)') + ';">' + k + '</div>';
+      html += '<div style="font-size:.6rem;letter-spacing:.08em;text-transform:uppercase;text-align:center;padding:.15rem 0;color:' + (i === 0 ? '#5c4407;font-weight:700' : 'rgba(44,35,24,.65);font-weight:500') + ';">' + k + '</div>';
     });
     for (let i = 0; i < offset; i++) html += '<div></div>';
 
@@ -6568,14 +6568,14 @@ function plRender(){
           bars += '<div ' + (laast || erFortid ? '' : 'draggable="true" ondragstart="plDragStart(event,\'' + r.id + '\',' + idx + ')" ') +
             'onclick="plVaelgBlok(\'' + r.id + '\',' + idx + ');event.stopPropagation();" ' +
             'title="' + plEsc(r.title) + ' · ' + plFmt(d.arrival) + ' – ' + plFmt(til) + (d.soldout ? ' · UDSOLGT' : '') + (laast ? ' · 🔒 betalte tilmeldinger' : '') + '" ' +
-            'style="height:16px;background:' + f.bg + ';border-left:3px solid ' + f.border + ';font-size:.56rem;line-height:16px;color:' + f.text + ';overflow:hidden;white-space:nowrap;cursor:pointer;' + (d.soldout ? 'opacity:.55;' : '') + (valgt ? 'outline:2px solid #2a7a74;outline-offset:-1px;' : '') + '">' +
+            'style="height:19px;background:' + f.text + ';border-left:3px solid ' + f.border + ';font-size:.64rem;font-weight:500;line-height:19px;color:#fff;overflow:hidden;white-space:nowrap;cursor:pointer;' + (d.soldout ? 'opacity:.55;text-decoration:line-through;' : '') + (valgt ? 'outline:2px solid #2a7a74;outline-offset:-1px;' : '') + '">' +
             (start ? '&nbsp;' + (laast ? '🔒' : '') + plEsc(r.title) : '') + '</div>';
         }
       }));
 
       html += '<div ' + (!erFortid ? 'onclick="plDagKlik(\'' + iso + '\')" ondragover="event.preventDefault()" ondrop="plDrop(event,\'' + iso + '\')" ' : '') +
         'style="min-height:58px;border:1px solid rgba(184,138,30,.14);padding:2px;background:' + (erLoer ? 'rgba(184,138,30,.05)' : '#fffef8') + ';' + (erFortid ? 'opacity:.4;' : 'cursor:pointer;') + '">' +
-        '<div style="font-size:.58rem;color:rgba(44,35,24,.5);padding:1px 2px;">' + dag + '</div>' +
+        '<div style="font-size:.62rem;font-weight:500;color:rgba(44,35,24,.75);padding:1px 2px;">' + dag + '</div>' +
         '<div style="display:flex;flex-direction:column;gap:1px;">' + bars + '</div></div>';
     }
     html += '</div>';
