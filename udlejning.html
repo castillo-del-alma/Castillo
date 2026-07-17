@@ -1690,14 +1690,7 @@ function renderUlStemmer() {
   }
 }
 
-function renderUlFaq() {
-  const list = document.getElementById('ulfaqList');
-  if (!list) return;
-  const raw = ulSC('ulfaq_liste');
-  const rows = ulParseRows(raw);
-  if (!rows.length) return;
-  list.innerHTML = rows.map((r, i) => `<div class="faq-item${i === 0 ? ' open' : ''}"><div class="faq-q" onclick="toggleFaq(this)"><span>${(r[0]||'').trim()}</span><i>\u25BC</i></div><div class="faq-a"><p>${(r[1]||'').trim()}</p></div></div>`).join('');
-}
+// renderUlFaq er defineret længere nede (JSON-format med fallback til gammelt linje-format)
 
 // "Udelad fra siden": sektioner skjules hvis vis_<id> = '0' i udlejning_content
 // Gælder ALLE sektioner — en divider lige efter en skjult sektion skjules med
@@ -1782,10 +1775,20 @@ function ulEscHtml(t){ const d = document.createElement('div'); d.textContent = 
 function renderUlFaq() {
   const liste = document.getElementById('ulfaqList');
   if (!liste) return;
+  // Gammelt format: "Spørgsmål|Svar" per linje (ulfaq_liste / ulfaq_liste_en).
+  // Bruges som fallback når JSON-felterne (faq_items / faq_items_en) endnu ikke
+  // er gemt fra admin — ellers vises hardkodede danske standard-tekster.
+  const parseLinjer = (txt) => String(txt || '').split('\n').map(l => l.trim()).filter(Boolean).map(l => {
+    const i = l.indexOf('|');
+    return i === -1 ? { q: l, a: '' } : { q: l.slice(0, i).trim(), a: l.slice(i + 1).trim() };
+  });
+  const harIndhold = (arr) => Array.isArray(arr) && arr.some(x => x && (String(x.q || '').trim() || String(x.a || '').trim()));
   let da = [], en = [];
   try { da = JSON.parse(ulData.faq_items || '[]'); } catch(e) {}
   try { en = JSON.parse(ulData.faq_items_en || '[]'); } catch(e) {}
-  if (!Array.isArray(da) || !da.length) da = UL_FAQ_SEED;
+  if (!harIndhold(da)) da = parseLinjer(ulData.ulfaq_liste);
+  if (!harIndhold(da)) da = UL_FAQ_SEED;
+  if (!harIndhold(en)) en = parseLinjer(ulData.ulfaq_liste_en);
   const erEN = ulLang === 'en';
   liste.innerHTML = da.map((f, i) => {
     const e = (Array.isArray(en) && en[i]) ? en[i] : {};
