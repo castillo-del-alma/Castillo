@@ -3715,7 +3715,7 @@ feeling more calm – and coming home to yourself again."</textarea></div>
         <button type="button" id="plGemBtn" onclick="plGem()" class="btn-primary" style="margin-left:auto;display:none;">💾 Gem planlægning</button>
       </div>
       <div style="font-size:.7rem;color:rgba(44,35,24,.55);line-height:1.6;margin-bottom:1rem;">
-        Månedskalender med alle dage — <b>lørdag står først</b> i kolonnerne, så en standarduge (lør → fre) ligger på én række.
+        Månedskalender med alle dage — ugerne starter <b>mandag</b>, og lørdag (standard-ankomstdag) er fremhævet.
         <b>Træk et retreat fra paletten</b> ned på ankomstdagen (eller klik på chippen og derefter på dagen) — standard er 7 dage, men datoerne kan rettes frit bagefter.
         Klik på en dag for at tildele med valgfrie datoer, eller klik på en farvet bjælke for at rette datoer, markere udsolgt, flytte eller fjerne.
         Ved gem sorteres kronologisk med den først kommende dato øverst — rækkefølgen kan stadig justeres med ▲▼ i retreat-editoren.
@@ -6529,7 +6529,7 @@ function plRender(){
 
   const idag = plDatoStr(new Date());
   const mdr = ['Januar','Februar','Marts','April','Maj','Juni','Juli','August','September','Oktober','November','December'];
-  const kolonner = ['Lør','Søn','Man','Tir','Ons','Tor','Fre'];
+  const kolonner = ['Man','Tir','Ons','Tor','Fre','Lør','Søn'];
   let html = '';
 
   if (plMoveCtx){
@@ -6541,20 +6541,20 @@ function plRender(){
 
   for (let m = 0; m < 12; m++){
     const first = new Date(plYear, m, 1);
-    const offset = (first.getDay() - 6 + 7) % 7; // 0 = måneden starter på en lørdag
+    const offset = (first.getDay() - 1 + 7) % 7; // 0 = måneden starter på en mandag
     const dim = new Date(plYear, m + 1, 0).getDate();
 
     html += '<div style="font-family:Manrope,sans-serif;font-weight:600;font-size:.74rem;letter-spacing:.15em;text-transform:uppercase;color:#5c4407;margin:' + (m ? '1.6rem' : '0') + ' 0 .35rem;">' + mdr[m] + ' ' + plYear + '</div>';
     html += '<div style="display:grid;grid-template-columns:repeat(7,1fr);gap:2px;">';
     kolonner.forEach((k, i) => {
-      html += '<div style="font-size:.6rem;letter-spacing:.08em;text-transform:uppercase;text-align:center;padding:.15rem 0;color:' + (i === 0 ? '#5c4407;font-weight:700' : 'rgba(44,35,24,.65);font-weight:500') + ';">' + k + '</div>';
+      html += '<div style="font-size:.6rem;letter-spacing:.08em;text-transform:uppercase;text-align:center;padding:.15rem 0;color:' + (i === 5 ? '#5c4407;font-weight:700' : 'rgba(44,35,24,.65);font-weight:500') + ';">' + k + '</div>';
     });
     for (let i = 0; i < offset; i++) html += '<div></div>';
 
     for (let dag = 1; dag <= dim; dag++){
       const iso = plYear + '-' + String(m + 1).padStart(2, '0') + '-' + String(dag).padStart(2, '0');
       const erFortid = iso < idag;
-      const erLoer = (offset + dag - 1) % 7 === 0;
+      const erLoer = (offset + dag - 1) % 7 === 5;
 
       let bars = '';
       allRetreats.forEach(r => (plState[r.id] || []).forEach((d, idx) => {
