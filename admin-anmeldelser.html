@@ -6547,7 +6547,7 @@ function plRender(){
     html += '<div style="font-family:Manrope,sans-serif;font-weight:700;font-size:.78rem;letter-spacing:.15em;text-transform:uppercase;color:#2c2318;margin:' + (m ? '1.6rem' : '0') + ' 0 .35rem;">' + mdr[m] + ' ' + plYear + '</div>';
     html += '<div style="display:grid;grid-template-columns:repeat(7,1fr);gap:2px;">';
     kolonner.forEach((k, i) => {
-      html += '<div style="font-size:.62rem;letter-spacing:.08em;text-transform:uppercase;text-align:center;padding:.15rem 0;color:#2c2318;font-weight:' + (i === 5 ? '700' : '600') + ';">' + k + '</div>';
+      html += '<div style="font-size:1.24rem;letter-spacing:.08em;text-transform:uppercase;text-align:center;padding:.15rem 0;color:#2c2318;font-weight:' + (i === 5 ? '700' : '600') + ';">' + k + '</div>';
     });
     for (let i = 0; i < offset; i++) html += '<div></div>';
 
@@ -6575,7 +6575,7 @@ function plRender(){
 
       html += '<div ' + (!erFortid ? 'onclick="plDagKlik(\'' + iso + '\')" ondragover="event.preventDefault()" ondrop="plDrop(event,\'' + iso + '\')" ' : '') +
         'style="min-height:58px;border:1px solid rgba(184,138,30,.14);padding:2px;background:' + (erLoer ? 'rgba(184,138,30,.05)' : '#fffef8') + ';' + (erFortid ? 'opacity:.55;' : 'cursor:pointer;') + '">' +
-        '<div style="font-size:.66rem;font-weight:600;color:#2c2318;padding:1px 2px;">' + dag + '</div>' +
+        '<div style="font-size:1.32rem;font-weight:600;color:#2c2318;padding:1px 3px;">' + dag + '</div>' +
         '<div style="display:flex;flex-direction:column;gap:1px;">' + bars + '</div></div>';
     }
     html += '</div>';
