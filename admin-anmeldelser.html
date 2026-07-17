@@ -3715,12 +3715,14 @@ feeling more calm – and coming home to yourself again."</textarea></div>
         <button type="button" id="plGemBtn" onclick="plGem()" class="btn-primary" style="margin-left:auto;display:none;">💾 Gem planlægning</button>
       </div>
       <div style="font-size:.7rem;color:rgba(44,35,24,.55);line-height:1.6;margin-bottom:1rem;">
-        Alle uger er som udgangspunkt <b>lørdag → fredag</b>. <b>Træk et retreat fra paletten herunder</b> ned på en uge (eller klik på chippen og derefter på ugen) — eller brug <b>+ Tildel retreat</b> på ugen.
-        Brug ✎ på en blok til at rette ankomst/afrejse manuelt, hvis retreatet ikke er en hel uge. Træk en blok til en anden uge for at flytte den (længden bevares).
+        Månedskalender med alle dage — <b>lørdag står først</b> i kolonnerne, så en standarduge (lør → fre) ligger på én række.
+        <b>Træk et retreat fra paletten</b> ned på ankomstdagen (eller klik på chippen og derefter på dagen) — standard er 7 dage, men datoerne kan rettes frit bagefter.
+        Klik på en dag for at tildele med valgfrie datoer, eller klik på en farvet bjælke for at rette datoer, markere udsolgt, flytte eller fjerne.
         Ved gem sorteres kronologisk med den først kommende dato øverst — rækkefølgen kan stadig justeres med ▲▼ i retreat-editoren.
-        🔒 = betalte tilmeldinger på datoen (kan ikke flyttes, rettes eller slettes herfra).
+        🔒 = betalte tilmeldinger (kan ikke flyttes, rettes eller slettes herfra). Selve retreatet oprettes med <b>+ Nyt retreat</b> (uden datoer) — alle datoer sættes her.
       </div>
       <div id="plLegend" style="display:flex;flex-wrap:wrap;gap:.5rem 1.1rem;margin-bottom:1.1rem;"></div>
+      <div id="plDetail"></div>
       <div id="plKalender" style="max-height:560px;overflow-y:auto;border:1px solid rgba(184,138,30,.15);padding:.8rem 1rem;background:#fdfaf2;"><div class="loading">Henter…</div></div>
     </div>
 
@@ -6427,9 +6429,11 @@ async function beregnTilmeldte() {
   });
 }
 
-// ── PLANLÆGNING (ugekalender, lørdag → fredag) ─────────────────────────────
+// ── PLANLÆGNING (månedskalender) ────────────────────────────────────────────
 // Læser og skriver de SAMME felter som retreat-editoren: arrival_date,
 // departure_date, arrival_soldout og extra_dates. Ingen ny tabel.
+// Visning: alle 12 måneder som gitre med alle dage — lørdag først i
+// kolonnerne, så en standarduge (lør→fre) ligger på præcis én række.
 const PL_FARVER = [
   { bg:'#E1F5EE', border:'#1D9E75', text:'#085041' },
   { bg:'#EEEDFE', border:'#7F77DD', text:'#3C3489' },
@@ -6443,32 +6447,15 @@ const PL_FARVER = [
 let plYear = new Date().getFullYear();
 let plState = null;        // { [retreatId]: [{arrival,departure,soldout}] }
 let plDirty = new Set();   // retreat-id'er med ugemte ændringer
-let plAddWeek = null;      // lørdags-dato (YYYY-MM-DD) hvor tildel-menuen er åben
-let plMoveCtx = null;      // { rid, idx } når klik-flyt er aktiv
+let plSel = null;          // { rid, idx } — valgt blok (detaljepanel åbent)
+let plAddDay = null;       // 'YYYY-MM-DD' — tildel-panel åbent for denne dag
 let plPairRid = null;      // retreat-id når parring fra paletten er aktiv
-let plEditCtx = null;      // { rid, idx } når dato-redigering er åben
+let plMoveCtx = null;      // { rid, idx } når klik-flyt er aktiv
 
 const plEsc = s => String(s == null ? '' : s).replace(/&/g,'&amp;').replace(/</g,'&lt;');
 function plDatoStr(d){ const p = n => String(n).padStart(2,'0'); return d.getFullYear()+'-'+p(d.getMonth()+1)+'-'+p(d.getDate()); }
 function plFmt(iso){ return iso ? new Date(iso + 'T00:00:00').toLocaleDateString('da-DK',{day:'numeric',month:'short'}) : ''; }
 function plPlusDage(iso, n){ const d = new Date(iso + 'T00:00:00'); d.setDate(d.getDate()+n); return plDatoStr(d); }
-
-// ISO-ugenummer for mandagen i blokken (lørdag + 2 dage) — det er den uge, retreatet reelt ligger i
-function plUgeNr(satIso){
-  const m = new Date(satIso + 'T00:00:00'); m.setDate(m.getDate()+2);
-  const d = new Date(Date.UTC(m.getFullYear(), m.getMonth(), m.getDate()));
-  const dayNum = (d.getUTCDay()+6)%7; d.setUTCDate(d.getUTCDate()-dayNum+3);
-  const firstThu = new Date(Date.UTC(d.getUTCFullYear(),0,4));
-  const fNum = (firstThu.getUTCDay()+6)%7; firstThu.setUTCDate(firstThu.getUTCDate()-fNum+3);
-  return 1 + Math.round((d - firstThu) / (7*86400000));
-}
-
-function plLoerdage(year){
-  const ud = []; const d = new Date(year,0,1);
-  while (d.getDay() !== 6) d.setDate(d.getDate()+1);
-  while (d.getFullYear() === year){ ud.push(plDatoStr(d)); d.setDate(d.getDate()+7); }
-  return ud;
-}
 
 function plByg(){
   plState = {};
@@ -6482,7 +6469,7 @@ function plByg(){
     });
     plState[r.id] = ds;
   });
-  plDirty = new Set(); plAddWeek = null; plMoveCtx = null;
+  plDirty = new Set(); plSel = null; plAddDay = null; plPairRid = null; plMoveCtx = null;
 }
 
 function plFarve(rid){
@@ -6495,13 +6482,22 @@ function plLaast(rid, arrival){
   return !!(t && t.byDate && t.byDate[arrival] > 0);
 }
 
+function plOverlap(rid, ank, afr, ignoreIdx){
+  // Samme retreat må ikke have to datoer, der overlapper hinanden
+  return (plState[rid] || []).some((x, i) => {
+    if (i === ignoreIdx || !x.arrival) return false;
+    const xTil = x.departure || x.arrival;
+    return xTil >= ank && x.arrival <= afr;
+  });
+}
+
 function plMarkDirty(rid){
   plDirty.add(rid);
-  plAddWeek = null;
+  plAddDay = null;
   plRender();
 }
 
-function plSkiftAar(delta){ plYear += delta; plAddWeek = null; plRender(); }
+function plSkiftAar(delta){ plYear += delta; plSel = null; plAddDay = null; plMoveCtx = null; plPairRid = null; plRender(); }
 
 function plRender(){
   const kal = document.getElementById('plKalender');
@@ -6509,20 +6505,19 @@ function plRender(){
   if (!plState) plByg();
   const _aar = document.getElementById('plAar'); if (_aar) _aar.textContent = plYear;
 
-  // Statuslinje + gem-knap
   const _status = document.getElementById('plStatus');
   const _gem = document.getElementById('plGemBtn');
   if (_status) _status.textContent = plDirty.size ? ('● ' + plDirty.size + (plDirty.size === 1 ? ' retreat' : ' retreats') + ' ændret — husk 💾 Gem') : '';
   if (_gem) _gem.style.display = plDirty.size ? '' : 'none';
 
-  // Palette: alle retreats som chips — træk ned på en uge, eller klik + vælg uge
+  // Palette: alle retreats som chips — træk ned på en dag, eller klik + vælg dag
   const _leg = document.getElementById('plLegend');
   if (_leg) _leg.innerHTML = allRetreats.map(r => {
     const f = plFarve(r.id);
     const antal = (plState[r.id] || []).length;
     const aktiv = plPairRid === r.id;
     return '<span draggable="true" ondragstart="plPaletDrag(event,\'' + r.id + '\')" onclick="plStartPar(\'' + r.id + '\')" ' +
-      'title="Træk chippen ned på en uge — eller klik her og derefter på ugen" ' +
+      'title="Træk chippen ned på en dag — eller klik her og derefter på dagen" ' +
       'style="display:inline-flex;align-items:center;gap:.4rem;font-size:.68rem;color:' + f.text + ';background:' + f.bg + ';border:1px solid ' + f.border + ';padding:.3rem .6rem;cursor:grab;user-select:none;' + (aktiv ? 'outline:2px dashed #2a7a74;' : '') + '">' +
       plEsc(r.title) +
       (antal ? ' <span style="opacity:.6;">(' + antal + (antal === 1 ? ' dato' : ' datoer') + ')</span>'
@@ -6530,142 +6525,156 @@ function plRender(){
       '</span>';
   }).join('');
 
+  plRenderDetail();
+
   const idag = plDatoStr(new Date());
   const mdr = ['Januar','Februar','Marts','April','Maj','Juni','Juli','August','September','Oktober','November','December'];
-  let html = ''; let sidsteMd = -1;
-
-  plLoerdage(plYear).forEach(sat => {
-    const fri = plPlusDage(sat, 6);
-    const md = new Date(sat + 'T00:00:00').getMonth();
-    if (md !== sidsteMd){
-      html += '<div style="font-family:Manrope,sans-serif;font-weight:500;font-size:.62rem;letter-spacing:.15em;text-transform:uppercase;color:#7a5c14;margin:' + (sidsteMd < 0 ? '0' : '1.1rem') + ' 0 .4rem;">' + mdr[md] + '</div>';
-      sidsteMd = md;
-    }
-    const erFortid = fri < idag;
-
-    // Blokke i denne uge: alle retreat-datoer med ankomst inden for lør–fre
-    const blokke = [];
-    const fortsat = [];
-    allRetreats.forEach(r => (plState[r.id] || []).forEach((d, idx) => {
-      if (d.arrival >= sat && d.arrival <= fri) blokke.push({ r, d, idx });
-      else if (d.arrival < sat && d.departure && d.departure >= sat) fortsat.push({ r, d });
-    }));
-
-    const vaelgAktiv = !!plMoveCtx || !!plPairRid;
-    const rowStyle = 'display:flex;align-items:flex-start;gap:.8rem;padding:.25rem 0;' + (erFortid ? 'opacity:.45;' : '') + (vaelgAktiv && !erFortid ? 'background:rgba(42,122,116,.05);cursor:pointer;' : '');
-    html += '<div style="' + rowStyle + '"' + (!erFortid ? ' ondragover="event.preventDefault()" ondrop="plDrop(event,\'' + sat + '\')"' + (vaelgAktiv ? ' onclick="plVaelgUge(\'' + sat + '\')"' : '') : '') + '>';
-    html += '<span style="flex:0 0 148px;font-size:.7rem;color:rgba(44,35,24,.55);padding-top:.45rem;">Uge ' + plUgeNr(sat) + ' · ' + plFmt(sat) + ' – ' + plFmt(fri) + '</span>';
-    html += '<div style="flex:1;display:flex;flex-direction:column;gap:.3rem;">';
-
-    // Fortsat-markering: retreats der startede en tidligere uge og stadig løber
-    fortsat.forEach(b => {
-      const f = plFarve(b.r.id);
-      html += '<div style="border:1px dashed ' + f.border + ';background:none;padding:.3rem .7rem;font-size:.68rem;color:' + f.text + ';opacity:.65;font-style:italic;">↳ ' + plEsc(b.r.title) + ' · fortsat til ' + plFmt(b.d.departure) + '</div>';
-    });
-
-    blokke.forEach(b => {
-      const f = plFarve(b.r.id);
-      const laast = plLaast(b.r.id, b.d.arrival);
-      const t = window.retreatTilmeldte && window.retreatTilmeldte[b.r.id];
-      const antal = (t && t.byDate && t.byDate[b.d.arrival]) || 0;
-      const ejStandard = b.d.arrival !== sat || (b.d.departure && b.d.departure !== fri);
-      const erKilde = plMoveCtx && plMoveCtx.rid === b.r.id && plMoveCtx.idx === b.idx;
-      const redigerer = plEditCtx && plEditCtx.rid === b.r.id && plEditCtx.idx === b.idx;
-
-      if (redigerer){
-        html += '<div style="background:' + f.bg + ';border:1px solid ' + f.border + ';padding:.45rem .7rem;display:flex;align-items:center;gap:.6rem;font-size:.75rem;flex-wrap:wrap;">' +
-          '<span style="font-weight:500;color:' + f.text + ';">' + plEsc(b.r.title) + '</span>' +
-          '<label style="font-size:.62rem;color:' + f.text + ';">Ankomst <input type="date" id="plEditAnk" value="' + b.d.arrival + '" style="padding:.25rem;border:1px solid ' + f.border + ';background:#fff;font-size:.7rem;"></label>' +
-          '<label style="font-size:.62rem;color:' + f.text + ';">Afrejse <input type="date" id="plEditAfr" value="' + (b.d.departure || '') + '" style="padding:.25rem;border:1px solid ' + f.border + ';background:#fff;font-size:.7rem;"></label>' +
-          '<button type="button" onclick="plGemEdit(\'' + b.r.id + '\',' + b.idx + ');event.stopPropagation();" style="border:1px solid rgba(42,122,116,.4);background:rgba(42,122,116,.1);color:#2a7a74;font-size:.62rem;padding:.3rem .7rem;cursor:pointer;">OK</button>' +
-          '<button type="button" onclick="plEditCtx=null;plRender();event.stopPropagation();" style="border:none;background:none;color:rgba(44,35,24,.5);font-size:.62rem;cursor:pointer;">Annuller</button>' +
-          '</div>';
-        return;
-      }
-
-      html += '<div ' + (laast || erFortid ? '' : 'draggable="true" ondragstart="plDragStart(event,\'' + b.r.id + '\',' + b.idx + ')" ') +
-        'style="background:' + f.bg + ';border:1px solid ' + f.border + ';padding:.45rem .7rem;display:flex;align-items:center;gap:.6rem;font-size:.75rem;' + (laast || erFortid ? '' : 'cursor:grab;') + (erKilde ? 'outline:2px dashed #2a7a74;' : '') + '">' +
-        '<span style="font-weight:500;color:' + f.text + ';">' + plEsc(b.r.title) + '</span>' +
-        (ejStandard ? '<span title="Afviger fra standard-ugen lørdag–fredag" style="font-size:.62rem;color:' + f.text + ';opacity:.7;">' + plFmt(b.d.arrival) + ' – ' + plFmt(b.d.departure || '') + '</span>' : '') +
-        (b.d.soldout ? '<span style="font-size:.58rem;letter-spacing:.08em;text-transform:uppercase;color:#c05c30;border:1px solid rgba(192,92,48,.4);padding:.1rem .4rem;">Udsolgt</span>' : '') +
-        (laast ? '<span title="Betalte tilmeldinger — kan ikke flyttes/rettes/slettes herfra" style="font-size:.68rem;">🔒 ' + antal + '</span>' : (antal ? '<span style="font-size:.68rem;color:' + f.text + ';opacity:.75;">' + antal + ' tilmeldte</span>' : '')) +
-        '<span style="margin-left:auto;display:flex;gap:.35rem;">' +
-        '<button type="button" onclick="plToggleUdsolgt(\'' + b.r.id + '\',' + b.idx + ');event.stopPropagation();" title="Skift udsolgt til/fra" style="border:1px solid rgba(44,35,24,.2);background:rgba(255,255,255,.5);color:' + f.text + ';font-size:.58rem;padding:.15rem .4rem;cursor:pointer;">U</button>' +
-        (laast || erFortid ? '' :
-          '<button type="button" onclick="plStartEdit(\'' + b.r.id + '\',' + b.idx + ');event.stopPropagation();" title="Ret ankomst/afrejse manuelt (variable datoer)" style="border:1px solid rgba(44,35,24,.2);background:rgba(255,255,255,.5);color:' + f.text + ';font-size:.58rem;padding:.15rem .4rem;cursor:pointer;">✎</button>' +
-          '<button type="button" onclick="plStartFlyt(\'' + b.r.id + '\',' + b.idx + ');event.stopPropagation();" title="Flyt til en anden uge (klik derefter på ugen)" style="border:1px solid rgba(44,35,24,.2);background:rgba(255,255,255,.5);color:' + f.text + ';font-size:.58rem;padding:.15rem .4rem;cursor:pointer;">⇄</button>' +
-          '<button type="button" onclick="plFjern(\'' + b.r.id + '\',' + b.idx + ');event.stopPropagation();" title="Fjern datoen fra dette retreat" style="border:1px solid rgba(192,92,48,.4);background:rgba(255,255,255,.5);color:#c05c30;font-size:.58rem;padding:.15rem .4rem;cursor:pointer;">✕</button>') +
-        '</span></div>';
-    });
-
-    if (!erFortid && !vaelgAktiv){
-      if (plAddWeek === sat){
-        const opts = allRetreats.map(r => '<option value="' + r.id + '">' + plEsc(r.title) + '</option>').join('');
-        html += '<div style="display:flex;gap:.5rem;align-items:center;">' +
-          '<select id="plAddSelect" style="flex:1;max-width:320px;padding:.45rem;border:1px solid #e0d0b0;background:#faf6ee;font-family:Manrope,sans-serif;font-size:.75rem;"><option value="">— vælg retreat —</option>' + opts + '</select>' +
-          '<button type="button" onclick="plTildel(\'' + sat + '\')" style="border:1px solid rgba(42,122,116,.4);background:rgba(42,122,116,.08);color:#2a7a74;font-size:.65rem;padding:.4rem .8rem;cursor:pointer;">Tildel</button>' +
-          '<button type="button" onclick="plAddWeek=null;plRender();" style="border:none;background:none;color:rgba(44,35,24,.5);font-size:.65rem;cursor:pointer;">Annuller</button></div>';
-      } else if (!blokke.length){
-        html += '<div onclick="plAddWeek=\'' + sat + '\';plRender();" style="border:1px dashed rgba(44,35,24,.25);padding:.45rem .7rem;font-size:.7rem;color:rgba(44,35,24,.4);cursor:pointer;">+ Tildel retreat</div>';
-      } else {
-        html += '<div onclick="plAddWeek=\'' + sat + '\';plRender();" style="font-size:.62rem;color:rgba(44,35,24,.35);cursor:pointer;padding:.1rem 0;">+ Tilføj endnu et retreat i denne uge</div>';
-      }
-    }
-    html += '</div></div>';
-  });
+  const kolonner = ['Lør','Søn','Man','Tir','Ons','Tor','Fre'];
+  let html = '';
 
   if (plMoveCtx){
-    html = '<div style="position:sticky;top:0;background:#fdf3e3;border:1px solid rgba(184,138,30,.4);padding:.5rem .8rem;font-size:.72rem;color:#7a5c14;margin-bottom:.6rem;z-index:2;">Klik på den uge, blokken skal flyttes til — <button type="button" onclick="plMoveCtx=null;plRender();" style="border:none;background:none;color:#c05c30;font-size:.72rem;cursor:pointer;text-decoration:underline;">annuller</button></div>' + html;
+    html += '<div style="position:sticky;top:0;background:#fdf3e3;border:1px solid rgba(184,138,30,.4);padding:.5rem .8rem;font-size:.72rem;color:#7a5c14;margin-bottom:.6rem;z-index:2;">Klik på den dag, blokken skal flyttes til (ny ankomstdag — længden bevares) — <button type="button" onclick="plMoveCtx=null;plRender();" style="border:none;background:none;color:#c05c30;font-size:.72rem;cursor:pointer;text-decoration:underline;">annuller</button></div>';
   } else if (plPairRid){
     const pr = allRetreats.find(r => r.id === plPairRid);
-    html = '<div style="position:sticky;top:0;background:#fdf3e3;border:1px solid rgba(184,138,30,.4);padding:.5rem .8rem;font-size:.72rem;color:#7a5c14;margin-bottom:.6rem;z-index:2;">Klik på den uge, hvor <b>' + plEsc(pr ? pr.title : '') + '</b> skal placeres — <button type="button" onclick="plPairRid=null;plRender();" style="border:none;background:none;color:#c05c30;font-size:.72rem;cursor:pointer;text-decoration:underline;">annuller</button></div>' + html;
+    html += '<div style="position:sticky;top:0;background:#fdf3e3;border:1px solid rgba(184,138,30,.4);padding:.5rem .8rem;font-size:.72rem;color:#7a5c14;margin-bottom:.6rem;z-index:2;">Klik på ankomstdagen for <b>' + plEsc(pr ? pr.title : '') + '</b> (standard: 7 dage, kan rettes bagefter) — <button type="button" onclick="plPairRid=null;plRender();" style="border:none;background:none;color:#c05c30;font-size:.72rem;cursor:pointer;text-decoration:underline;">annuller</button></div>';
+  }
+
+  for (let m = 0; m < 12; m++){
+    const first = new Date(plYear, m, 1);
+    const offset = (first.getDay() - 6 + 7) % 7; // 0 = måneden starter på en lørdag
+    const dim = new Date(plYear, m + 1, 0).getDate();
+
+    html += '<div style="font-family:Manrope,sans-serif;font-weight:500;font-size:.68rem;letter-spacing:.15em;text-transform:uppercase;color:#7a5c14;margin:' + (m ? '1.6rem' : '0') + ' 0 .35rem;">' + mdr[m] + ' ' + plYear + '</div>';
+    html += '<div style="display:grid;grid-template-columns:repeat(7,1fr);gap:2px;">';
+    kolonner.forEach((k, i) => {
+      html += '<div style="font-size:.56rem;letter-spacing:.08em;text-transform:uppercase;text-align:center;padding:.15rem 0;color:' + (i === 0 ? '#7a5c14;font-weight:600' : 'rgba(44,35,24,.45)') + ';">' + k + '</div>';
+    });
+    for (let i = 0; i < offset; i++) html += '<div></div>';
+
+    for (let dag = 1; dag <= dim; dag++){
+      const iso = plYear + '-' + String(m + 1).padStart(2, '0') + '-' + String(dag).padStart(2, '0');
+      const erFortid = iso < idag;
+      const erLoer = (offset + dag - 1) % 7 === 0;
+
+      let bars = '';
+      allRetreats.forEach(r => (plState[r.id] || []).forEach((d, idx) => {
+        if (!d.arrival) return;
+        const til = d.departure || d.arrival;
+        if (d.arrival <= iso && iso <= til){
+          const f = plFarve(r.id);
+          const laast = plLaast(r.id, d.arrival);
+          const start = d.arrival === iso;
+          const valgt = plSel && plSel.rid === r.id && plSel.idx === idx;
+          bars += '<div ' + (laast || erFortid ? '' : 'draggable="true" ondragstart="plDragStart(event,\'' + r.id + '\',' + idx + ')" ') +
+            'onclick="plVaelgBlok(\'' + r.id + '\',' + idx + ');event.stopPropagation();" ' +
+            'title="' + plEsc(r.title) + ' · ' + plFmt(d.arrival) + ' – ' + plFmt(til) + (d.soldout ? ' · UDSOLGT' : '') + (laast ? ' · 🔒 betalte tilmeldinger' : '') + '" ' +
+            'style="height:16px;background:' + f.bg + ';border-left:3px solid ' + f.border + ';font-size:.56rem;line-height:16px;color:' + f.text + ';overflow:hidden;white-space:nowrap;cursor:pointer;' + (d.soldout ? 'opacity:.55;' : '') + (valgt ? 'outline:2px solid #2a7a74;outline-offset:-1px;' : '') + '">' +
+            (start ? '&nbsp;' + (laast ? '🔒' : '') + plEsc(r.title) : '') + '</div>';
+        }
+      }));
+
+      html += '<div ' + (!erFortid ? 'onclick="plDagKlik(\'' + iso + '\')" ondragover="event.preventDefault()" ondrop="plDrop(event,\'' + iso + '\')" ' : '') +
+        'style="min-height:58px;border:1px solid rgba(184,138,30,.14);padding:2px;background:' + (erLoer ? 'rgba(184,138,30,.05)' : '#fffef8') + ';' + (erFortid ? 'opacity:.4;' : 'cursor:pointer;') + '">' +
+        '<div style="font-size:.58rem;color:rgba(44,35,24,.5);padding:1px 2px;">' + dag + '</div>' +
+        '<div style="display:flex;flex-direction:column;gap:1px;">' + bars + '</div></div>';
+    }
+    html += '</div>';
   }
 
   kal.innerHTML = html;
-  const sel = document.getElementById('plAddSelect');
-  if (sel) sel.focus();
 }
 
-function plTildelRid(rid, sat){
-  if (!rid) return;
-  const fri = plPlusDage(sat, 6);
-  const findes = (plState[rid] || []).some(d => d.arrival >= sat && d.arrival <= fri);
-  if (findes){ showToast('Retreatet har allerede en dato i den uge', true); plRender(); return; }
-  if (!plState[rid]) plState[rid] = [];
-  plState[rid].push({ arrival: sat, departure: fri, soldout: false });
-  plMarkDirty(rid);
+// Detaljepanel: valgt blok (rediger/udsolgt/flyt/fjern) eller tildel-panel for en dag
+function plRenderDetail(){
+  const det = document.getElementById('plDetail');
+  if (!det) return;
+
+  if (plSel){
+    const r = allRetreats.find(x => x.id === plSel.rid);
+    const d = r && plState[plSel.rid] && plState[plSel.rid][plSel.idx];
+    if (!r || !d){ plSel = null; det.innerHTML = ''; return; }
+    const f = plFarve(r.id);
+    const laast = plLaast(r.id, d.arrival);
+    const t = window.retreatTilmeldte && window.retreatTilmeldte[r.id];
+    const antal = (t && t.byDate && t.byDate[d.arrival]) || 0;
+    det.innerHTML = '<div style="background:' + f.bg + ';border:1px solid ' + f.border + ';padding:.7rem .9rem;display:flex;align-items:center;gap:.8rem;flex-wrap:wrap;margin-bottom:1rem;font-size:.75rem;">' +
+      '<span style="font-weight:600;color:' + f.text + ';">' + plEsc(r.title) + '</span>' +
+      (d.soldout ? '<span style="font-size:.58rem;letter-spacing:.08em;text-transform:uppercase;color:#c05c30;border:1px solid rgba(192,92,48,.4);padding:.1rem .4rem;">Udsolgt</span>' : '') +
+      (laast
+        ? '<span style="font-size:.68rem;color:' + f.text + ';">🔒 ' + antal + ' betalte tilmeldinger — datoerne kan ikke ændres herfra · ' + plFmt(d.arrival) + ' – ' + plFmt(d.departure || d.arrival) + '</span>'
+        : '<label style="font-size:.62rem;color:' + f.text + ';">Ankomst <input type="date" id="plEditAnk" value="' + d.arrival + '" style="padding:.3rem;border:1px solid ' + f.border + ';background:#fff;font-size:.72rem;"></label>' +
+          '<label style="font-size:.62rem;color:' + f.text + ';">Afrejse <input type="date" id="plEditAfr" value="' + (d.departure || '') + '" style="padding:.3rem;border:1px solid ' + f.border + ';background:#fff;font-size:.72rem;"></label>' +
+          '<button type="button" onclick="plGemEdit(\'' + r.id + '\',' + plSel.idx + ')" style="border:1px solid rgba(42,122,116,.4);background:rgba(42,122,116,.1);color:#2a7a74;font-size:.62rem;padding:.35rem .8rem;cursor:pointer;">OK</button>') +
+      '<span style="margin-left:auto;display:flex;gap:.45rem;">' +
+      '<button type="button" onclick="plToggleUdsolgt(\'' + r.id + '\',' + plSel.idx + ')" title="Skift udsolgt til/fra" style="border:1px solid rgba(44,35,24,.25);background:rgba(255,255,255,.6);color:' + f.text + ';font-size:.62rem;padding:.3rem .6rem;cursor:pointer;">Udsolgt til/fra</button>' +
+      (laast ? '' :
+        '<button type="button" onclick="plStartFlyt(\'' + r.id + '\',' + plSel.idx + ')" title="Klik derefter på den nye ankomstdag" style="border:1px solid rgba(44,35,24,.25);background:rgba(255,255,255,.6);color:' + f.text + ';font-size:.62rem;padding:.3rem .6rem;cursor:pointer;">⇄ Flyt</button>' +
+        '<button type="button" onclick="plFjern(\'' + r.id + '\',' + plSel.idx + ')" style="border:1px solid rgba(192,92,48,.4);background:rgba(255,255,255,.6);color:#c05c30;font-size:.62rem;padding:.3rem .6rem;cursor:pointer;">✕ Fjern</button>') +
+      '<button type="button" onclick="plSel=null;plRender();" style="border:none;background:none;color:rgba(44,35,24,.5);font-size:.62rem;cursor:pointer;">Luk</button>' +
+      '</span></div>';
+    return;
+  }
+
+  if (plAddDay){
+    const opts = allRetreats.map(r => '<option value="' + r.id + '">' + plEsc(r.title) + '</option>').join('');
+    det.innerHTML = '<div style="background:#fdf3e3;border:1px solid rgba(184,138,30,.4);padding:.7rem .9rem;display:flex;align-items:center;gap:.8rem;flex-wrap:wrap;margin-bottom:1rem;font-size:.75rem;color:#7a5c14;">' +
+      '<b>Tildel retreat:</b>' +
+      '<select id="plAddSelect" style="padding:.35rem;border:1px solid #e0d0b0;background:#faf6ee;font-family:Manrope,sans-serif;font-size:.72rem;min-width:180px;"><option value="">— vælg retreat —</option>' + opts + '</select>' +
+      '<label style="font-size:.62rem;">Ankomst <input type="date" id="plAddAnk" value="' + plAddDay + '" style="padding:.3rem;border:1px solid #e0d0b0;background:#fff;font-size:.72rem;"></label>' +
+      '<label style="font-size:.62rem;">Afrejse <input type="date" id="plAddAfr" value="' + plPlusDage(plAddDay, 6) + '" style="padding:.3rem;border:1px solid #e0d0b0;background:#fff;font-size:.72rem;"></label>' +
+      '<button type="button" onclick="plTildelFraPanel()" style="border:1px solid rgba(42,122,116,.4);background:rgba(42,122,116,.1);color:#2a7a74;font-size:.62rem;padding:.35rem .8rem;cursor:pointer;">Tildel</button>' +
+      '<button type="button" onclick="plAddDay=null;plRender();" style="border:none;background:none;color:rgba(44,35,24,.5);font-size:.62rem;cursor:pointer;">Annuller</button>' +
+      '</div>';
+    const sel = document.getElementById('plAddSelect');
+    if (sel) setTimeout(() => sel.focus(), 0);
+    return;
+  }
+
+  det.innerHTML = '';
 }
 
-function plTildel(sat){
-  const sel = document.getElementById('plAddSelect');
-  plTildelRid(sel && sel.value, sat);
-}
-
-// Parring fra paletten: klik på chip → klik på uge
-function plStartPar(rid){ plPairRid = rid; plMoveCtx = null; plEditCtx = null; plRender(); }
-
-// Fælles uge-klik i vælg-tilstand (flyt eller parring)
-function plVaelgUge(sat){
+function plDagKlik(iso){
   if (plMoveCtx){
     const { rid, idx } = plMoveCtx;
     plMoveCtx = null;
-    plUdfoerFlyt(rid, idx, sat);
+    plUdfoerFlyt(rid, idx, iso);
   } else if (plPairRid){
     const rid = plPairRid;
     plPairRid = null;
-    plTildelRid(rid, sat);
+    plTildelRid(rid, iso, plPlusDage(iso, 6));
+  } else {
+    plAddDay = iso; plSel = null;
+    plRender();
   }
 }
 
-// Manuel dato-redigering (variable datoer — retreats er ikke altid en hel uge)
-function plStartEdit(rid, idx){
-  const d = plState[rid] && plState[rid][idx];
-  if (!d) return;
-  if (plLaast(rid, d.arrival)){ showToast('Datoen har betalte tilmeldinger og kan ikke rettes herfra', true); return; }
-  plEditCtx = { rid, idx }; plMoveCtx = null; plPairRid = null; plAddWeek = null;
+function plVaelgBlok(rid, idx){
+  plSel = { rid, idx }; plAddDay = null; plMoveCtx = null; plPairRid = null;
   plRender();
 }
 
+function plTildelRid(rid, ank, afr){
+  if (!rid || !ank) return;
+  if (afr && afr < ank){ showToast('Afrejse kan ikke ligge før ankomst', true); return; }
+  if (plOverlap(rid, ank, afr || ank, -1)){ showToast('Retreatet har allerede en dato, der overlapper', true); plRender(); return; }
+  if (!plState[rid]) plState[rid] = [];
+  plState[rid].push({ arrival: ank, departure: afr || ank, soldout: false });
+  plMarkDirty(rid);
+}
+
+function plTildelFraPanel(){
+  const rid = document.getElementById('plAddSelect')?.value;
+  const ank = document.getElementById('plAddAnk')?.value;
+  const afr = document.getElementById('plAddAfr')?.value;
+  if (!rid){ showToast('Vælg et retreat', true); return; }
+  if (!ank || !afr){ showToast('Udfyld både ankomst og afrejse', true); return; }
+  plTildelRid(rid, ank, afr);
+}
+
+// Parring fra paletten: klik på chip → klik på ankomstdag
+function plStartPar(rid){ plPairRid = rid; plMoveCtx = null; plSel = null; plAddDay = null; plRender(); }
+
+// Manuel dato-redigering fra detaljepanelet (variable datoer)
 function plGemEdit(rid, idx){
   const d = plState[rid] && plState[rid][idx];
   if (!d) return;
@@ -6673,9 +6682,9 @@ function plGemEdit(rid, idx){
   const afr = document.getElementById('plEditAfr')?.value;
   if (!ank || !afr){ showToast('Udfyld både ankomst og afrejse', true); return; }
   if (afr < ank){ showToast('Afrejse kan ikke ligge før ankomst', true); return; }
+  if (plOverlap(rid, ank, afr, idx)){ showToast('Retreatet har allerede en dato, der overlapper', true); return; }
   d.arrival = ank;
   d.departure = afr;
-  plEditCtx = null;
   plMarkDirty(rid);
 }
 
@@ -6683,8 +6692,9 @@ function plFjern(rid, idx){
   const d = plState[rid] && plState[rid][idx];
   if (!d) return;
   if (plLaast(rid, d.arrival)){ showToast('Datoen har betalte tilmeldinger og kan ikke fjernes herfra', true); return; }
-  if (!confirm('Fjern datoen ' + plFmt(d.arrival) + ' – ' + plFmt(d.departure || '') + ' fra dette retreat?')) return;
+  if (!confirm('Fjern datoen ' + plFmt(d.arrival) + ' – ' + plFmt(d.departure || d.arrival) + ' fra dette retreat?')) return;
   plState[rid].splice(idx, 1);
+  plSel = null;
   plMarkDirty(rid);
 }
 
@@ -6695,7 +6705,7 @@ function plToggleUdsolgt(rid, idx){
   plMarkDirty(rid);
 }
 
-function plStartFlyt(rid, idx){ plMoveCtx = { rid, idx }; plPairRid = null; plEditCtx = null; plRender(); }
+function plStartFlyt(rid, idx){ plMoveCtx = { rid, idx }; plSel = null; plPairRid = null; plRender(); }
 
 function plDragStart(ev, rid, idx){
   ev.dataTransfer.setData('text/plain', 'mv|' + rid + '|' + idx);
@@ -6707,29 +6717,29 @@ function plPaletDrag(ev, rid){
   ev.dataTransfer.effectAllowed = 'copy';
 }
 
-function plDrop(ev, sat){
+function plDrop(ev, iso){
   ev.preventDefault();
+  ev.stopPropagation();
   const raw = ev.dataTransfer.getData('text/plain');
   if (!raw) return;
   const parts = raw.split('|');
-  if (parts[0] === 'ny' && parts[1]) plTildelRid(parts[1], sat);
-  else if (parts[0] === 'mv' && parts[1]) plUdfoerFlyt(parts[1], parseInt(parts[2], 10), sat);
+  if (parts[0] === 'ny' && parts[1]) plTildelRid(parts[1], iso, plPlusDage(iso, 6));
+  else if (parts[0] === 'mv' && parts[1]) plUdfoerFlyt(parts[1], parseInt(parts[2], 10), iso);
 }
 
-function plUdfoerFlyt(rid, idx, sat){
+function plUdfoerFlyt(rid, idx, iso){
   const d = plState[rid] && plState[rid][idx];
   if (!d) return;
   if (plLaast(rid, d.arrival)){ showToast('Datoen har betalte tilmeldinger og kan ikke flyttes', true); return; }
-  const fri = plPlusDage(sat, 6);
-  if (d.arrival >= sat && d.arrival <= fri){ plRender(); return; }
-  const findes = (plState[rid] || []).some((x, i) => i !== idx && x.arrival >= sat && x.arrival <= fri);
-  if (findes){ showToast('Retreatet har allerede en dato i den uge', true); plRender(); return; }
-  // Bevar blokkens længde: variable datoer skal ikke nulstilles til lør–fre ved flyt
+  if (d.arrival === iso){ plRender(); return; }
+  // Bevar blokkens længde: variable datoer skal ikke nulstilles ved flyt
   const laengde = d.departure
     ? Math.round((new Date(d.departure + 'T00:00:00') - new Date(d.arrival + 'T00:00:00')) / 86400000)
     : 6;
-  d.arrival = sat;
-  d.departure = plPlusDage(sat, laengde > 0 ? laengde : 6);
+  const nyAfr = plPlusDage(iso, laengde > 0 ? laengde : 6);
+  if (plOverlap(rid, iso, nyAfr, idx)){ showToast('Retreatet har allerede en dato, der overlapper', true); plRender(); return; }
+  d.arrival = iso;
+  d.departure = nyAfr;
   plMarkDirty(rid);
 }
 
