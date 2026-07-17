@@ -6451,6 +6451,7 @@ let plSel = null;          // { rid, idx } — valgt blok (detaljepanel åbent)
 let plAddDay = null;       // 'YYYY-MM-DD' — tildel-panel åbent for denne dag
 let plPairRid = null;      // retreat-id når parring fra paletten er aktiv
 let plMoveCtx = null;      // { rid, idx } når klik-flyt er aktiv
+let plCopyCtx = null;      // { rid, idx } når kopiér-dato er aktiv
 
 const plEsc = s => String(s == null ? '' : s).replace(/&/g,'&amp;').replace(/</g,'&lt;');
 function plDatoStr(d){ const p = n => String(n).padStart(2,'0'); return d.getFullYear()+'-'+p(d.getMonth()+1)+'-'+p(d.getDate()); }
@@ -6469,7 +6470,7 @@ function plByg(){
     });
     plState[r.id] = ds;
   });
-  plDirty = new Set(); plSel = null; plAddDay = null; plPairRid = null; plMoveCtx = null;
+  plDirty = new Set(); plSel = null; plAddDay = null; plPairRid = null; plMoveCtx = null; plCopyCtx = null;
 }
 
 function plFarve(rid){
@@ -6497,7 +6498,7 @@ function plMarkDirty(rid){
   plRender();
 }
 
-function plSkiftAar(delta){ plYear += delta; plSel = null; plAddDay = null; plMoveCtx = null; plPairRid = null; plRender(); }
+function plSkiftAar(delta){ plYear += delta; plSel = null; plAddDay = null; plMoveCtx = null; plPairRid = null; plCopyCtx = null; plRender(); }
 
 function plRender(){
   const kal = document.getElementById('plKalender');
@@ -6534,6 +6535,11 @@ function plRender(){
 
   if (plMoveCtx){
     html += '<div style="position:sticky;top:0;background:#fdf3e3;border:1px solid rgba(184,138,30,.4);padding:.5rem .8rem;font-size:.72rem;color:#7a5c14;margin-bottom:.6rem;z-index:2;">Klik på den dag, blokken skal flyttes til (ny ankomstdag — længden bevares) — <button type="button" onclick="plMoveCtx=null;plRender();" style="border:none;background:none;color:#c05c30;font-size:.72rem;cursor:pointer;text-decoration:underline;">annuller</button></div>';
+  } else if (plCopyCtx){
+    const kr = allRetreats.find(r => r.id === plCopyCtx.rid);
+    const kd = kr && plState[plCopyCtx.rid] && plState[plCopyCtx.rid][plCopyCtx.idx];
+    const kLaengde = kd && kd.departure ? Math.round((new Date(kd.departure + 'T00:00:00') - new Date(kd.arrival + 'T00:00:00')) / 86400000) : 6;
+    html += '<div style="position:sticky;top:0;background:#fdf3e3;border:1px solid rgba(184,138,30,.4);padding:.5rem .8rem;font-size:.72rem;color:#7a5c14;margin-bottom:.6rem;z-index:2;">Klik på ankomstdagen for <b>kopien</b> af <b>' + plEsc(kr ? kr.title : '') + '</b> (' + (kLaengde + 1) + ' dage — samme længde som originalen) — <button type="button" onclick="plCopyCtx=null;plRender();" style="border:none;background:none;color:#c05c30;font-size:.72rem;cursor:pointer;text-decoration:underline;">annuller</button></div>';
   } else if (plPairRid){
     const pr = allRetreats.find(r => r.id === plPairRid);
     html += '<div style="position:sticky;top:0;background:#fdf3e3;border:1px solid rgba(184,138,30,.4);padding:.5rem .8rem;font-size:.72rem;color:#7a5c14;margin-bottom:.6rem;z-index:2;">Klik på ankomstdagen for <b>' + plEsc(pr ? pr.title : '') + '</b> (standard: 7 dage, kan rettes bagefter) — <button type="button" onclick="plPairRid=null;plRender();" style="border:none;background:none;color:#c05c30;font-size:.72rem;cursor:pointer;text-decoration:underline;">annuller</button></div>';
@@ -6607,6 +6613,7 @@ function plRenderDetail(){
           '<button type="button" onclick="plGemEdit(\'' + r.id + '\',' + plSel.idx + ')" style="border:1px solid rgba(42,122,116,.4);background:rgba(42,122,116,.1);color:#2a7a74;font-size:.62rem;padding:.35rem .8rem;cursor:pointer;">OK</button>') +
       '<span style="margin-left:auto;display:flex;gap:.45rem;">' +
       '<button type="button" onclick="plToggleUdsolgt(\'' + r.id + '\',' + plSel.idx + ')" title="Skift udsolgt til/fra" style="border:1px solid rgba(44,35,24,.25);background:rgba(255,255,255,.6);color:' + f.text + ';font-size:.62rem;padding:.3rem .6rem;cursor:pointer;">Udsolgt til/fra</button>' +
+      '<button type="button" onclick="plStartKopi(\'' + r.id + '\',' + plSel.idx + ')" title="Opret en kopi med samme længde — klik derefter på den nye ankomstdag" style="border:1px solid rgba(44,35,24,.25);background:rgba(255,255,255,.6);color:' + f.text + ';font-size:.62rem;padding:.3rem .6rem;cursor:pointer;">⧉ Kopiér</button>' +
       (laast ? '' :
         '<button type="button" onclick="plStartFlyt(\'' + r.id + '\',' + plSel.idx + ')" title="Klik derefter på den nye ankomstdag" style="border:1px solid rgba(44,35,24,.25);background:rgba(255,255,255,.6);color:' + f.text + ';font-size:.62rem;padding:.3rem .6rem;cursor:pointer;">⇄ Flyt</button>' +
         '<button type="button" onclick="plFjern(\'' + r.id + '\',' + plSel.idx + ')" style="border:1px solid rgba(192,92,48,.4);background:rgba(255,255,255,.6);color:#c05c30;font-size:.62rem;padding:.3rem .6rem;cursor:pointer;">✕ Fjern</button>') +
@@ -6638,6 +6645,15 @@ function plDagKlik(iso){
     const { rid, idx } = plMoveCtx;
     plMoveCtx = null;
     plUdfoerFlyt(rid, idx, iso);
+  } else if (plCopyCtx){
+    const { rid, idx } = plCopyCtx;
+    plCopyCtx = null;
+    const kilde = plState[rid] && plState[rid][idx];
+    if (!kilde){ plRender(); return; }
+    const laengde = kilde.departure
+      ? Math.round((new Date(kilde.departure + 'T00:00:00') - new Date(kilde.arrival + 'T00:00:00')) / 86400000)
+      : 6;
+    plTildelRid(rid, iso, plPlusDage(iso, laengde > 0 ? laengde : 6));
   } else if (plPairRid){
     const rid = plPairRid;
     plPairRid = null;
@@ -6649,7 +6665,7 @@ function plDagKlik(iso){
 }
 
 function plVaelgBlok(rid, idx){
-  plSel = { rid, idx }; plAddDay = null; plMoveCtx = null; plPairRid = null;
+  plSel = { rid, idx }; plAddDay = null; plMoveCtx = null; plPairRid = null; plCopyCtx = null;
   plRender();
 }
 
@@ -6672,7 +6688,7 @@ function plTildelFraPanel(){
 }
 
 // Parring fra paletten: klik på chip → klik på ankomstdag
-function plStartPar(rid){ plPairRid = rid; plMoveCtx = null; plSel = null; plAddDay = null; plRender(); }
+function plStartPar(rid){ plPairRid = rid; plMoveCtx = null; plSel = null; plAddDay = null; plCopyCtx = null; plRender(); }
 
 // Manuel dato-redigering fra detaljepanelet (variable datoer)
 function plGemEdit(rid, idx){
@@ -6705,7 +6721,9 @@ function plToggleUdsolgt(rid, idx){
   plMarkDirty(rid);
 }
 
-function plStartFlyt(rid, idx){ plMoveCtx = { rid, idx }; plSel = null; plPairRid = null; plRender(); }
+function plStartFlyt(rid, idx){ plMoveCtx = { rid, idx }; plSel = null; plPairRid = null; plCopyCtx = null; plRender(); }
+
+function plStartKopi(rid, idx){ plCopyCtx = { rid, idx }; plSel = null; plPairRid = null; plMoveCtx = null; plRender(); }
 
 function plDragStart(ev, rid, idx){
   ev.dataTransfer.setData('text/plain', 'mv|' + rid + '|' + idx);
