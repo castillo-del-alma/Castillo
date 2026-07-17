@@ -15,6 +15,14 @@
 [functions."holdstatus"]
   schedule = "0 6 * * 1"
 
+# ── Dynamisk sitemap: /sitemap.xml genereres af Netlify-funktion, som
+# automatisk medtager alle aktive retreats (DA + EN) fra Supabase
+[[redirects]]
+  from = "/sitemap.xml"
+  to = "/.netlify/functions/sitemap"
+  status = 200
+  force = true
+
 # ── Engelske SEO-adresser (/en/) ─────────────────────────────────────────
 # Samme HTML-filer serveres på /en/-stier; siderne opdager selv /en/ i
 # adressen og starter på engelsk med engelsk titel/meta/canonical.
