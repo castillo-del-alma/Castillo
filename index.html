@@ -2699,7 +2699,17 @@ async function tilmeldNyhedsbrev(btn) {
   }
 }
 
-document.addEventListener('DOMContentLoaded', () => { loadRetreatsGrid(); loadReviews(); });
+// ── RE-ANKER: hop til #anker igen efter async indhold har flyttet layoutet ──
+// Links som /en/#retreats hopper ved indlæsning, men Supabase-indhold ændrer
+// bagefter sidens højde — derfor gentages hoppet, når indholdet er på plads.
+function reanchorHash() {
+  if (!location.hash || location.hash === '#') return;
+  let t = null;
+  try { t = document.getElementById(location.hash.slice(1)); } catch (e) {}
+  if (t) t.scrollIntoView();
+}
+
+document.addEventListener('DOMContentLoaded', () => { loadRetreatsGrid().then(() => setTimeout(reanchorHash, 120)); loadReviews(); });
 </script>
 
 <!-- ══════ SPROG & FORSIDE-INDHOLD (TEST) ══════ -->
@@ -3327,6 +3337,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   await loadUploadedGalleryItems();
   initGalleryClicks();
   applyUploadedMedia();
+  setTimeout(reanchorHash, 150);
 });
 
 // ── ERSTAT BILLEDER/VIDEO MED UPLOADEDE FILER ──
