@@ -7528,13 +7528,18 @@ async function oversaetAddon(i, btn) {
 function cdaFilename(originalName) {
   const dot = originalName.lastIndexOf('.');
   const ext = dot > -1 ? originalName.slice(dot + 1).toLowerCase() : 'jpg';
-  const base = (dot > -1 ? originalName.slice(0, dot) : originalName)
+  let base = (dot > -1 ? originalName.slice(0, dot) : originalName)
     .toLowerCase()
     .replace(/æ/g, 'ae').replace(/ø/g, 'oe').replace(/å/g, 'aa')
     .replace(/[^a-z0-9]+/g, '-')
     .replace(/^-+|-+$/g, '')
-    .replace(/^castillo-del-alma-?/, '')
-    .slice(0, 60);
+    .replace(/^castillo-del-alma-?/, '');
+  if (base.length > 60) {
+    base = base.slice(0, 60);
+    // Klip ved hel ord-grænse — aldrig midt i et ord
+    const sidsteBindestreg = base.lastIndexOf('-');
+    if (sidsteBindestreg > 20) base = base.slice(0, sidsteBindestreg);
+  }
   return `castillo-del-alma-${base || 'billede'}-${Date.now()}.${ext}`;
 }
 

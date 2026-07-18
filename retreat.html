@@ -2211,6 +2211,19 @@ function applyRetreatContent() {
   renderEjRoomsHeader();
   renderEjRoomsCopy();
 
+function cdaAltFraUrl(url){
+  // Udleder en læsbar alt-tekst af filnavnet: fjerner sti, endelse, tidsstempel og præfiks
+  try {
+    let navn = decodeURIComponent(String(url).split('/').pop() || '');
+    navn = navn.replace(/\.[a-z0-9]+$/i, '');          // filendelse
+    navn = navn.replace(/[-_]?\d{10,}$/g, '');          // tidsstempel til sidst
+    navn = navn.replace(/castillo[-_]?del[-_]?alma/gi, ' '); // brandnavn (tilføjes selv til sidst)
+    navn = navn.replace(/[-_]+/g, ' ').trim();
+    if (!navn) return 'Castillo del Alma';
+    return navn.charAt(0).toUpperCase() + navn.slice(1) + ' \u2014 Castillo del Alma';
+  } catch(e){ return 'Castillo del Alma'; }
+}
+
   // 5 retreat-specifikke billeder
   const imgs5Section = document.getElementById('fotostribe');
   const imgs5Grid = document.getElementById('retreatImages5Grid');
@@ -2219,7 +2232,7 @@ function applyRetreatContent() {
     if (typeof imgs5 === 'string') { try { imgs5 = JSON.parse(imgs5); } catch(e) { imgs5 = []; } }
     if (Array.isArray(imgs5) && imgs5.length) {
       imgs5Grid.innerHTML = imgs5.map(url =>
-        `<div class="retreat-img5-item" style="background-image:url('${url}');"></div>`
+        `<div class="retreat-img5-item"><img src="${url}" alt="${cdaAltFraUrl(url)}" loading="lazy" style="width:100%;height:100%;object-fit:cover;display:block;"></div>`
       ).join('');
       imgs5Section.style.display = 'block';
     } else {
@@ -2237,7 +2250,7 @@ function applyRetreatContent() {
     if (typeof arr === 'string') { try { arr = JSON.parse(arr); } catch(e) { arr = []; } }
     if (Array.isArray(arr) && arr.length) {
       grid.innerHTML = arr.map(url =>
-        `<div class="retreat-img5-item" style="background-image:url('${url}');"></div>`
+        `<div class="retreat-img5-item"><img src="${url}" alt="${cdaAltFraUrl(url)}" loading="lazy" style="width:100%;height:100%;object-fit:cover;display:block;"></div>`
       ).join('');
       sec.style.display = 'block';
     } else {
