@@ -1364,6 +1364,20 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:3rem
   </div>
 </section>
 
+<!-- DEL DETTE RETREAT -->
+<section id="delRetreat" style="background:var(--section-alt);padding:4rem 0;">
+  <div class="section-inner" style="text-align:center;">
+    <span class="section-label" id="shareLabel" style="color:rgba(184,138,30,.7);">Del dette retreat</span>
+    <h2 id="shareHeading" style="margin:.6rem 0 1.6rem;">Kender du én, der skal med?</h2>
+    <div style="display:flex;justify-content:center;gap:.8rem;flex-wrap:wrap;">
+      <a id="shareWhatsapp" target="_blank" rel="noopener" style="display:inline-block;border:1px solid rgba(184,138,30,.45);color:var(--wine);padding:.75rem 1.6rem;font-family:'Manrope',sans-serif;font-size:.68rem;font-weight:500;letter-spacing:.18em;text-transform:uppercase;text-decoration:none;background:transparent;cursor:pointer;">WhatsApp</a>
+      <a id="shareFacebook" target="_blank" rel="noopener" style="display:inline-block;border:1px solid rgba(184,138,30,.45);color:var(--wine);padding:.75rem 1.6rem;font-family:'Manrope',sans-serif;font-size:.68rem;font-weight:500;letter-spacing:.18em;text-transform:uppercase;text-decoration:none;background:transparent;cursor:pointer;">Facebook</a>
+      <a id="shareEmail" style="display:inline-block;border:1px solid rgba(184,138,30,.45);color:var(--wine);padding:.75rem 1.6rem;font-family:'Manrope',sans-serif;font-size:.68rem;font-weight:500;letter-spacing:.18em;text-transform:uppercase;text-decoration:none;background:transparent;cursor:pointer;">E-mail</a>
+      <a id="shareCopy" href="#" style="display:inline-block;border:1px solid rgba(184,138,30,.45);color:var(--wine);padding:.75rem 1.6rem;font-family:'Manrope',sans-serif;font-size:.68rem;font-weight:500;letter-spacing:.18em;text-transform:uppercase;text-decoration:none;background:transparent;cursor:pointer;">Kopiér link</a>
+    </div>
+  </div>
+</section>
+
 <!-- FOOTER -->
 
 <!-- ── DIN SIKKERHED (fælles sektion — redigeres i admin under Udlejning) ── -->
@@ -2230,6 +2244,9 @@ function applyRetreatContent() {
     }
   });
 
+  // Dele-sektion (sprog + slug-URL)
+  delInitShare();
+
   // Mad & Drikke
   setText('foodLabel', rSC('ui_label_food', 'Mad & Drikke'));
   const foodHeadingEl = document.getElementById('foodHeading');
@@ -2458,6 +2475,41 @@ function applyRetreatSektionSynlighed() {
     const navLink = document.querySelector(`.nav-links a[href="#${o.id}"]`);
     if (navLink) { const li = navLink.closest('li'); if (li) li.style.display = 'none'; }
   });
+}
+
+// ── DEL DETTE RETREAT — rene dele-links uden tracking-scripts ──
+function delInitShare(){
+  const sec = document.getElementById('delRetreat');
+  if (!sec || !CURRENT_RETREAT) return;
+  const isEN = retreatLang === 'en';
+  const titel = (isEN ? (CURRENT_RETREAT.title_en || CURRENT_RETREAT.title) : CURRENT_RETREAT.title) || 'Castillo del Alma';
+  const url = location.origin + location.pathname + '?slug=' + encodeURIComponent(CURRENT_RETREAT.slug || '');
+  const lbl = document.getElementById('shareLabel');
+  const hed = document.getElementById('shareHeading');
+  if (lbl) lbl.textContent = isEN ? 'Share this retreat' : 'Del dette retreat';
+  if (hed) hed.textContent = isEN ? 'Know someone who should join?' : 'Kender du én, der skal med?';
+  const wa = document.getElementById('shareWhatsapp');
+  const fb = document.getElementById('shareFacebook');
+  const em = document.getElementById('shareEmail');
+  const cp = document.getElementById('shareCopy');
+  if (wa) wa.href = 'https://wa.me/?text=' + encodeURIComponent(titel + ' \u2013 ' + url);
+  if (fb) fb.href = 'https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(url);
+  if (em) {
+    em.textContent = isEN ? 'Email' : 'E-mail';
+    em.href = 'mailto:?subject=' + encodeURIComponent(titel) + '&body=' + encodeURIComponent((isEN ? 'Have a look at this retreat: ' : 'Se lige dette retreat: ') + url);
+  }
+  if (cp) {
+    const cpTekst = isEN ? 'Copy link' : 'Kopiér link';
+    cp.textContent = cpTekst;
+    cp.onclick = function(e){
+      e.preventDefault();
+      if (!navigator.clipboard) return;
+      navigator.clipboard.writeText(url).then(function(){
+        cp.textContent = isEN ? 'Copied \u2713' : 'Kopieret \u2713';
+        setTimeout(function(){ cp.textContent = cpTekst; }, 2000);
+      }).catch(function(){ /* clipboard kræver https — fejler stille */ });
+    };
+  }
 }
 
 function applySectionVisibility(data) {
