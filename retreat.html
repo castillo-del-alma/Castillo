@@ -1362,8 +1362,12 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:3rem
       </div>
     </div>
   </div>
-  <!-- DEL DETTE RETREAT (inde i booking, så den følger sektionsrækkefølgen) -->
-  <div id="delRetreat" style="max-width:1100px;margin:4rem auto 0;padding:3.5rem 2rem;background:var(--wine);text-align:center;">
+
+</section>
+
+<!-- DEL DETTE RETREAT — fuld bredde; forankres efter booking i delInitShare() -->
+<section id="delRetreat" style="background:var(--wine);padding:4.5rem 0;">
+  <div class="section-inner" style="text-align:center;">
     <span class="section-label" id="shareLabel" style="color:var(--gold-light);">Del dette retreat</span>
     <h2 id="shareHeading" style="font-family:'Cinzel',serif;font-weight:400;font-size:clamp(1.4rem,3vw,1.9rem);letter-spacing:.04em;color:#faf6ee;margin:.6rem 0 1.6rem;">Kender du én, der skal med?</h2>
     <div style="display:flex;justify-content:center;gap:.8rem;flex-wrap:wrap;">
@@ -2478,6 +2482,9 @@ function applyRetreatSektionSynlighed() {
 function delInitShare(){
   const sec = document.getElementById('delRetreat');
   if (!sec || !CURRENT_RETREAT) return;
+  // Forankr altid lige efter booking — sektionsomrokeringen kender ikke denne sektion
+  const booking = document.getElementById('booking');
+  if (booking && booking.nextElementSibling !== sec) booking.after(sec);
   const isEN = retreatLang === 'en';
   const titel = (isEN ? (CURRENT_RETREAT.title_en || CURRENT_RETREAT.title) : CURRENT_RETREAT.title) || 'Castillo del Alma';
   const url = location.origin + location.pathname + '?slug=' + encodeURIComponent(CURRENT_RETREAT.slug || '');
