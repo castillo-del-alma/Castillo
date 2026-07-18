@@ -427,8 +427,8 @@
       </div>
       <div class="row" style="margin-top:14px">
         <div style="flex:2; min-width:220px">
-          <label>Slug-tekst (højrestillet i øverste bånd)</label>
-          <input type="text" id="frSlug" placeholder="fx VINSMAGNING I MOLLINA">
+          <label>Slug-tekst (højrestillet i øverste bånd — op til 3 linjer)</label>
+          <textarea id="frSlug" rows="3" placeholder="fx VINSMAGNING I MOLLINA&#10;evt. linje 2&#10;evt. linje 3"></textarea>
         </div>
         <div>
           <label>Størrelse (px)</label>
@@ -825,6 +825,8 @@ async function renderFrameCanvas() {
 
   const text = $('frSlug').value.trim();
   if (text) {
+    // Op til 3 linjer — hver linje tegnes for sig, højrestillet
+    const linjer = text.split('\n').map(l => l.trim()).filter(Boolean).slice(0, 3);
     const font = FR_FONTS[$('frFont').value] || FR_FONTS.cinzel;
     // Størrelsen angives i 1920-skala og omregnes til videoens faktiske højde
     const px = Math.max(6, Math.round((parseFloat($('frSize').value) || 40) * H / 1920));
@@ -835,16 +837,20 @@ async function renderFrameCanvas() {
     ctx.textAlign = 'right';
     ctx.textBaseline = 'middle';
     const x = Math.round(W * 0.955);
-    const y = Math.round(H * (parseFloat($('frY').value) || 3.4) / 100);
+    const yStart = Math.round(H * (parseFloat($('frY').value) || 3.4) / 100);
+    const linjeAfstand = Math.round(px * 1.25);
     const of = parseFloat($('frOutSize').value) || 0;
-    if (of > 0) {
-      ctx.lineJoin = 'round';
-      ctx.lineWidth = Math.max(1, px * of * 2); // canvas-stroke er centreret, derfor × 2
-      ctx.strokeStyle = $('frOutColor').value;
-      ctx.strokeText(text, x, y);
-    }
-    ctx.fillStyle = $('frColor').value;
-    ctx.fillText(text, x, y);
+    linjer.forEach((linje, i) => {
+      const y = yStart + i * linjeAfstand;
+      if (of > 0) {
+        ctx.lineJoin = 'round';
+        ctx.lineWidth = Math.max(1, px * of * 2); // canvas-stroke er centreret, derfor × 2
+        ctx.strokeStyle = $('frOutColor').value;
+        ctx.strokeText(linje, x, y);
+      }
+      ctx.fillStyle = $('frColor').value;
+      ctx.fillText(linje, x, y);
+    });
   }
   return canvas;
 }
