@@ -3721,16 +3721,19 @@ feeling more calm – and coming home to yourself again."</textarea></div>
         <span id="plStatus" style="font-size:.7rem;color:#c05c30;"></span>
         <button type="button" id="plGemBtn" onclick="plGem()" class="btn-primary" style="margin-left:auto;display:none;">💾 Gem planlægning</button>
       </div>
-      <div style="font-size:.7rem;color:rgba(44,35,24,.55);line-height:1.6;margin-bottom:1rem;">
+      <details style="margin-bottom:.8rem;">
+        <summary style="font-size:.7rem;color:rgba(44,35,24,.6);cursor:pointer;user-select:none;">ℹ️ Sådan bruger du kalenderen</summary>
+        <div style="font-size:.7rem;color:rgba(44,35,24,.55);line-height:1.6;margin-top:.4rem;">
         Månedskalender med alle dage — ugerne starter <b>mandag</b>, og lørdag (standard-ankomstdag) er fremhævet.
         <b>Træk et retreat fra paletten</b> ned på ankomstdagen (eller klik på chippen og derefter på dagen) — standard er 7 dage, men datoerne kan rettes frit bagefter.
-        Klik på en dag for at tildele med valgfrie datoer, eller klik på en farvet bjælke for at rette datoer, markere udsolgt, flytte eller fjerne.
+        Klik på en dag for at tildele med valgfrie datoer, eller klik på en farvet bjælke for at rette datoer, markere udsolgt, kopiere, flytte eller fjerne.
         Ved gem sorteres kronologisk med den først kommende dato øverst — rækkefølgen kan stadig justeres med ▲▼ i retreat-editoren.
         🔒 = betalte tilmeldinger (kan ikke flyttes, rettes eller slettes herfra). Selve retreatet oprettes med <b>+ Nyt retreat</b> (uden datoer) — alle datoer sættes her.
-      </div>
+        </div>
+      </details>
       <div id="plLegend" style="display:flex;flex-wrap:wrap;gap:.5rem 1.1rem;margin-bottom:1.1rem;"></div>
       <div id="plDetail"></div>
-      <div id="plKalender" style="height:calc(100vh - 340px);min-height:420px;overflow-y:auto;border:1px solid rgba(184,138,30,.15);padding:.8rem 1rem;background:#fdfaf2;"><div class="loading">Henter…</div></div>
+      <div id="plKalender" style="height:calc(100vh - 210px);min-height:480px;overflow-y:auto;border:1px solid rgba(184,138,30,.15);padding:.8rem 1rem;background:#fdfaf2;"><div class="loading">Henter…</div></div>
     </div>
 
   </div>
