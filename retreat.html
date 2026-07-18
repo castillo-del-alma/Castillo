@@ -2062,6 +2062,45 @@ function applyRetreatContent() {
 
   // Titel og hero
   document.getElementById('pageTitle').textContent = `${rSC('title')} — Castillo del Alma`;
+
+  // ── STRUKTURERET DATA: Event-schema pr. retreat (dato, pris, sted) til rich results ──
+  try {
+    const skemaUrl = location.origin + '/retreat?slug=' + encodeURIComponent(data.slug || '');
+    const beskrivelse = String(rSC('description') || rSC('subtitle') || '').replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim().slice(0, 300);
+    const skema = {
+      '@context': 'https://schema.org',
+      '@type': 'Event',
+      'name': rSC('title') || 'Retreat — Castillo del Alma',
+      'description': beskrivelse || undefined,
+      'image': data.hero_image || 'https://castillodelalma.es/img/SEO-castillo-del-alma.jpg',
+      'url': skemaUrl,
+      'eventAttendanceMode': 'https://schema.org/OfflineEventAttendanceMode',
+      'eventStatus': 'https://schema.org/EventScheduled',
+      'location': {
+        '@type': 'Place',
+        'name': 'Castillo del Alma',
+        'address': { '@type': 'PostalAddress', 'addressLocality': 'Mollina', 'addressRegion': 'Málaga', 'addressCountry': 'ES' }
+      },
+      'organizer': { '@type': 'Organization', 'name': 'Castillo del Alma', 'url': 'https://castillodelalma.es', '@id': 'https://castillodelalma.es/#business' }
+    };
+    if (data.arrival_date) skema.startDate = String(data.arrival_date).slice(0, 10);
+    if (data.departure_date) skema.endDate = String(data.departure_date).slice(0, 10);
+    if (data.price) skema.offers = {
+      '@type': 'Offer',
+      'price': String(data.price),
+      'priceCurrency': 'EUR',
+      'url': skemaUrl,
+      'availability': data.arrival_soldout ? 'https://schema.org/SoldOut' : 'https://schema.org/InStock'
+    };
+    let skemaEl = document.getElementById('retreatEventSchema');
+    if (!skemaEl) {
+      skemaEl = document.createElement('script');
+      skemaEl.type = 'application/ld+json';
+      skemaEl.id = 'retreatEventSchema';
+      document.head.appendChild(skemaEl);
+    }
+    skemaEl.textContent = JSON.stringify(skema);
+  } catch(e) { /* schema er en bonus — må aldrig vælte renderingen */ }
   // SEO: opdatér meta dynamisk pr. retreat (slug)
   (function(){
     var d = (rSC('description') || (retreatLang === 'en' ? 'Exclusive retreat at Castillo del Alma in Andalusia.' : 'Eksklusivt retreat på Castillo del Alma i Andalusien.')).replace(/<[^>]*>/g,'').slice(0,300);
