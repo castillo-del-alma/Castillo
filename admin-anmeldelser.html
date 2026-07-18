@@ -3702,6 +3702,13 @@ feeling more calm – and coming home to yourself again."</textarea></div>
 
   <div class="tab-content" id="tab-retreats">
 
+    <div style="display:flex;justify-content:flex-end;margin-bottom:1.5rem;">
+      <button class="btn-primary" onclick="openNytRetreat()">+ Nyt retreat</button>
+    </div>
+    <div class="kunder-grid" id="retreatsGrid">
+      <div class="loading">Henter retreats...</div>
+    </div>
+
     <!-- PLANLÆGNING: ugekalender (lørdag → fredag). Skriver direkte i retreats.arrival_date/extra_dates -->
     <div style="background:#fffef8;border:1px solid rgba(184,138,30,.25);padding:1.4rem 1.8rem;margin-bottom:2rem;">
       <div style="display:flex;align-items:center;gap:1.2rem;flex-wrap:wrap;margin-bottom:.5rem;">
@@ -3726,12 +3733,6 @@ feeling more calm – and coming home to yourself again."</textarea></div>
       <div id="plKalender" style="max-height:560px;overflow-y:auto;border:1px solid rgba(184,138,30,.15);padding:.8rem 1rem;background:#fdfaf2;"><div class="loading">Henter…</div></div>
     </div>
 
-    <div style="display:flex;justify-content:flex-end;margin-bottom:1.5rem;">
-      <button class="btn-primary" onclick="openNytRetreat()">+ Nyt retreat</button>
-    </div>
-    <div class="kunder-grid" id="retreatsGrid">
-      <div class="loading">Henter retreats...</div>
-    </div>
   </div>
 </div>
 
