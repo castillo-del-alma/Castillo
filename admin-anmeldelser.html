@@ -6576,11 +6576,15 @@ function plRender(){
           const laast = plLaast(r.id, d.arrival);
           const start = d.arrival === iso;
           const valgt = plSel && plSel.rid === r.id && plSel.idx === idx;
+          const tm = window.retreatTilmeldte && window.retreatTilmeldte[r.id];
+          const solgt = (tm && tm.byDate && tm.byDate[d.arrival]) || 0;
+          const maxG = parseInt(r.max_guests, 10);
+          const belaegning = maxG ? (solgt + '/' + maxG) : (solgt ? String(solgt) : '');
           bars += '<div ' + (laast || erFortid ? '' : 'draggable="true" ondragstart="plDragStart(event,\'' + r.id + '\',' + idx + ')" ') +
             'onclick="plVaelgBlok(\'' + r.id + '\',' + idx + ');event.stopPropagation();" ' +
-            'title="' + plEsc(r.title) + ' · ' + plFmt(d.arrival) + ' – ' + plFmt(til) + (d.soldout ? ' · UDSOLGT' : '') + (laast ? ' · 🔒 betalte tilmeldinger' : '') + '" ' +
+            'title="' + plEsc(r.title) + ' · ' + plFmt(d.arrival) + ' – ' + plFmt(til) + (belaegning ? ' · ' + belaegning + ' tilmeldte' : '') + (d.soldout ? ' · UDSOLGT' : '') + (laast ? ' · 🔒 betalte tilmeldinger' : '') + '" ' +
             'style="height:38px;background:' + f.text + ';border-left:3px solid ' + f.border + ';font-size:.72rem;font-weight:500;line-height:38px;color:#fff;overflow:hidden;white-space:nowrap;cursor:pointer;' + (d.soldout ? 'opacity:.55;text-decoration:line-through;' : '') + (valgt ? 'outline:2px solid #2a7a74;outline-offset:-1px;' : '') + '">' +
-            (start ? '&nbsp;' + (laast ? '🔒' : '') + plEsc(r.title) : '') + '</div>';
+            (start ? '&nbsp;' + (laast ? '🔒' : '') + plEsc(r.title) + (belaegning ? ' <span style="opacity:.8;font-weight:400;">· ' + belaegning + '</span>' : '') : '') + '</div>';
         }
       }));
 
