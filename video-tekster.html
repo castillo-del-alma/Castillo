@@ -838,7 +838,7 @@ async function renderFrameCanvas() {
     ctx.textBaseline = 'middle';
     const x = Math.round(W * 0.955);
     const yStart = Math.round(H * (parseFloat($('frY').value) || 3.4) / 100);
-    const linjeAfstand = Math.round(px * 1.25);
+    const linjeAfstand = Math.round(px * 1.1);
     const of = parseFloat($('frOutSize').value) || 0;
     linjer.forEach((linje, i) => {
       const y = yStart + i * linjeAfstand;
