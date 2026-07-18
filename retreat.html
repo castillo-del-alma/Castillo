@@ -2435,7 +2435,7 @@ function renderRetreatNav() {
 }
 
 // ── SEKTIONSRÆKKEFØLGE — pr. retreat, gemmes som JSON i retreats.sektion_orden ([{id, vis}]) ──
-const RT_SEKTION_STANDARD_ORDEN = ['om','fotostribe','fotostribe2','fotostribe3','highlights','program','fritekst','inkluderet','vaerelser','forplejning','underviser','anmeldelser','faq','booking','sikkerhed','cta1','cta2','cta3'];
+const RT_SEKTION_STANDARD_ORDEN = ['om','fotostribe','fotostribe2','fotostribe3','highlights','program','fritekst','inkluderet','vaerelser','forplejning','underviser','anmeldelser','faq','booking','delRetreat','sikkerhed','cta1','cta2','cta3'];
 const RT_CTA_IDS = ['cta1','cta2','cta3']; // skjult i HTML som standard — vises kun ved vis='1' i sektion_orden
 let rtOrdenAnvendt = false;
 function applyRetreatSektionOrden() {
@@ -2443,7 +2443,17 @@ function applyRetreatSektionOrden() {
   let orden = rtParseJson(CURRENT_RETREAT.sektion_orden);
   if (!orden || !orden.length) return;
   orden = orden.map(o => typeof o === 'string' ? { id: o } : o).filter(o => RT_SEKTION_STANDARD_ORDEN.includes(o.id));
-  RT_SEKTION_STANDARD_ORDEN.forEach(id => { if (!orden.some(o => o.id === id)) orden.push({ id }); });
+  // Sektioner der mangler i den gemte rækkefølge (fx nye sektioner som delRetreat)
+  // indsættes på deres standard-plads — lige efter nærmeste foregående kendte sektion
+  RT_SEKTION_STANDARD_ORDEN.forEach((id, i) => {
+    if (orden.some(o => o.id === id)) return;
+    let indsatsIdx = orden.length;
+    for (let j = i - 1; j >= 0; j--) {
+      const k = orden.findIndex(o => o.id === RT_SEKTION_STANDARD_ORDEN[j]);
+      if (k >= 0) { indsatsIdx = k + 1; break; }
+    }
+    orden.splice(indsatsIdx, 0, { id });
+  });
   const footer = document.querySelector('footer');
   if (!footer || !footer.parentNode) return;
   orden.forEach(o => {
@@ -2482,9 +2492,6 @@ function applyRetreatSektionSynlighed() {
 function delInitShare(){
   const sec = document.getElementById('delRetreat');
   if (!sec || !CURRENT_RETREAT) return;
-  // Forankr altid lige efter booking — sektionsomrokeringen kender ikke denne sektion
-  const booking = document.getElementById('booking');
-  if (booking && booking.nextElementSibling !== sec) booking.after(sec);
   const isEN = retreatLang === 'en';
   const titel = (isEN ? (CURRENT_RETREAT.title_en || CURRENT_RETREAT.title) : CURRENT_RETREAT.title) || 'Castillo del Alma';
   const url = location.origin + location.pathname + '?slug=' + encodeURIComponent(CURRENT_RETREAT.slug || '');

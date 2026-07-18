@@ -8826,6 +8826,7 @@ const RT_SEKTION_DEFS = [
   { id: 'anmeldelser',  navn: 'Anmeldelser' },
   { id: 'faq',          navn: 'FAQ',          legacyVis: 'faq' },
   { id: 'booking',      navn: 'Booking-sektion' },
+  { id: 'delRetreat',   navn: 'Del dette retreat (delknapper)' },
   { id: 'sikkerhed',    navn: 'Din sikkerhed' },
   { id: 'cta1',         navn: 'CTA-knapper 1 (Reserver / Book nu)', defaultVis: '0' },
   { id: 'cta2',         navn: 'CTA-knapper 2 (Reserver / Book nu)', defaultVis: '0' },
@@ -8867,12 +8868,18 @@ function rtNavOrdenLoad(r) {
   gemtOrden.forEach(o => {
     if (RT_SEKTION_DEFS.some(d => d.id === o.id) && !rtOrdenState.some(x => x.id === o.id)) rtOrdenState.push({ id: o.id, vis: o.vis === '0' ? '0' : '1' });
   });
-  RT_SEKTION_DEFS.forEach(d => {
+  RT_SEKTION_DEFS.forEach((d, i) => {
     if (!rtOrdenState.some(o => o.id === d.id)) {
       // Ingen gemt plads — synlighed hentes fra det gamle visible_sections-flag eller sektionens standard (CTA-bånd er skjult fra start)
       let vis = d.defaultVis || '1';
       if (d.legacyVis && legacyVis[d.legacyVis] === false) vis = '0';
-      rtOrdenState.push({ id: d.id, vis });
+      // Indsæt på standard-plads: lige efter nærmeste foregående kendte sektion (fx delRetreat efter booking)
+      let indsatsIdx = rtOrdenState.length;
+      for (let j = i - 1; j >= 0; j--) {
+        const k = rtOrdenState.findIndex(o => o.id === RT_SEKTION_DEFS[j].id);
+        if (k >= 0) { indsatsIdx = k + 1; break; }
+      }
+      rtOrdenState.splice(indsatsIdx, 0, { id: d.id, vis });
     }
   });
   renderRtNavEditor();
