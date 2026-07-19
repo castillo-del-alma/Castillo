@@ -74,3 +74,26 @@
 
 [build.environment]
   SECRETS_SCAN_OMIT_KEYS = "SUPABASE_URL,SUPABASE_ANON_KEY,SUPABASE_SERVICE_KEY,RESEND_API_KEY,STRIPE_SECRET_KEY,STRIPE_PUBLISHABLE_KEY,STRIPE_WEBHOOK_SECRET,FORUM_ADMIN_KEY,VAPID_PUBLIC_KEY,VAPID_PRIVATE_KEY,ADMIN_EMAIL"
+
+# ── SOCIAL META (Edge Function) ──
+# Social-robotter (Facebook, WhatsApp, LinkedIn …) kører ikke JS og ser kun
+# fallback-meta. Edge-funktionen indsætter retreat-specifikke og engelske
+# meta-tags for robotter; almindelige besøgende passerer uberørt igennem.
+[[edge_functions]]
+  path = "/retreat"
+  function = "social-meta"
+[[edge_functions]]
+  path = "/retreat.html"
+  function = "social-meta"
+[[edge_functions]]
+  path = "/en/retreat"
+  function = "social-meta"
+[[edge_functions]]
+  path = "/en/retreat.html"
+  function = "social-meta"
+[[edge_functions]]
+  path = "/en"
+  function = "social-meta"
+[[edge_functions]]
+  path = "/en/"
+  function = "social-meta"
