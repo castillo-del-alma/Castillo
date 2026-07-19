@@ -23,12 +23,14 @@ const stripHtml = s => String(s || '').replace(/<[^>]*>/g, ' ').replace(/\s+/g, 
 
 // Ren transformations-funktion — testes isoleret i Node
 export function transformHtml(html, { title, desc, img, canonical, fjernImgDim }) {
-  let ud = html
+  let ud = html;
+  if (title) ud = ud
     .replace(/<title[^>]*>[\s\S]*?<\/title>/, `<title id="pageTitle">${escAttr(title)}</title>`)
-    .replace(/(<meta name="description" content=")[^"]*(")/, `$1${escAttr(desc)}$2`)
     .replace(/(<meta property="og:title" content=")[^"]*(")/, `$1${escAttr(title)}$2`)
+    .replace(/(<meta name="twitter:title" content=")[^"]*(")/, `$1${escAttr(title)}$2`);
+  if (desc) ud = ud
+    .replace(/(<meta name="description" content=")[^"]*(")/, `$1${escAttr(desc)}$2`)
     .replace(/(<meta property="og:description" content=")[^"]*(")/, `$1${escAttr(desc)}$2`)
-    .replace(/(<meta name="twitter:title" content=")[^"]*(")/, `$1${escAttr(title)}$2`)
     .replace(/(<meta name="twitter:description" content=")[^"]*(")/, `$1${escAttr(desc)}$2`);
   if (img) ud = ud
     .replace(/(<meta property="og:image" content=")[^"]*(")/, `$1${escAttr(img)}$2`)
@@ -86,9 +88,28 @@ export default async (request, context) => {
         haandteret = true;
       }
     }
-    if (!haandteret && isEN) {
-      // /en uden (fundet) retreat: engelske meta-tekster — også når slug-opslag fejler
-      html = transformHtml(html, { title: EN_HOME.title, desc: EN_HOME.desc });
+    if (!haandteret) {
+      // Forsiden (/ og /en) samt retreat uden fundet slug: dele-felter fra admin (site_content)
+      const sc = {};
+      try {
+        const r2 = await fetch(SUPABASE_URL + '/rest/v1/site_content?select=key,value&key=in.(forside_social_image,forside_social_text,forside_social_text_en)',
+          { headers: { apikey: ANON_KEY, authorization: 'Bearer ' + ANON_KEY } });
+        (r2.ok ? await r2.json() : []).forEach(x => { sc[x.key] = x.value; });
+      } catch (e) { /* fallback til statiske tekster */ }
+      if (isEN) {
+        html = transformHtml(html, {
+          title: EN_HOME.title,
+          desc: sc.forside_social_text_en || EN_HOME.desc,
+          img: sc.forside_social_image || null,
+          fjernImgDim: !!sc.forside_social_image
+        });
+      } else if (sc.forside_social_text || sc.forside_social_image) {
+        html = transformHtml(html, {
+          desc: sc.forside_social_text || null,
+          img: sc.forside_social_image || null,
+          fjernImgDim: !!sc.forside_social_image
+        });
+      }
     }
   } catch (e) { /* fallback: uændret HTML — må aldrig vælte serveringen */ }
 

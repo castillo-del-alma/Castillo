@@ -97,3 +97,9 @@
 [[edge_functions]]
   path = "/en/"
   function = "social-meta"
+[[edge_functions]]
+  path = "/"
+  function = "social-meta"
+[[edge_functions]]
+  path = "/index.html"
+  function = "social-meta"

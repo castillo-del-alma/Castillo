@@ -616,6 +616,30 @@ body{font-family:'Manrope',sans-serif;background:#f0e8d5;color:#2c2318;min-heigh
       </div>
     </div>
 
+    <!-- 1.1 · SOCIAL DELING (forsidens dele-billede + tekster) -->
+    <div class="fc-block" id="fs_social">
+      <div class="fc-block-header" style="display:flex;align-items:center;gap:.8rem;"><span class="fc-block-title">1.1 · Social deling (Facebook/WhatsApp)</span><button type="button" onclick="oversaetBlok(this)" style="background:rgba(58,110,106,.1);border:1px solid rgba(58,110,106,.35);color:#2a7a74;padding:.3rem .8rem;font-family:Manrope,sans-serif;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;margin-left:auto;" title="Oversæt tomme engelske felter i denne sektion">⇄ Oversæt</button></div>
+      <div class="fc-block-body">
+        <div style="font-size:.68rem;color:rgba(44,35,24,.55);line-height:1.5;margin-bottom:.8rem;">Vises når castillodelalma.es deles som link. Billede: <b>1200 × 630 px</b> anbefales. Tomme felter → standardbillede og -tekster.</div>
+        <div class="fc-row">
+          <div>
+            <label class="fc-label fc-label-da">Dele-billede URL (1200×630)</label>
+            <input type="text" id="forside_social_image" class="fc-input-da" placeholder="URL indsættes automatisk ved upload">
+            <label class="fc-label" style="color:#2a7a74;margin-top:.6rem;">📁 Upload dele-billede</label>
+            <div style="display:flex;align-items:center;gap:.6rem;margin-top:.3rem;">
+              <img id="forside_social_preview" src="" style="display:none;width:56px;height:56px;object-fit:cover;border-radius:3px;border:1px solid rgba(184,138,30,.3);">
+              <input type="file" id="forside_social_file" accept="image/*" style="font-size:.76rem;flex:1;">
+              <button type="button" onclick="uploadRetreatBillede('forside_social_file','forside_social_image','forside_social_preview')" style="background:#2a7a74;color:#fff;border:none;padding:.45rem 1.1rem;font-family:Manrope,sans-serif;font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;white-space:nowrap;">⬆ Upload</button><button type="button" onclick="fjernBilledeFelt('forside_social_image','forside_social_preview')" style="background:rgba(163,51,51,.08);color:#a33;border:1px solid rgba(163,51,51,.35);padding:.45rem .9rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;white-space:nowrap;" title="Fjern billedet helt">🗑 Fjern</button>
+            </div>
+          </div>
+        </div>
+        <div class="fc-row" style="margin-top:1rem;">
+          <div><label class="fc-label fc-label-da">Dele-tekst (DA) — vises under titlen i previewet</label><textarea id="forside_social_text" class="fc-input-da fc-textarea" placeholder="Kort og fristende — maks. ca. 200 tegn vises"></textarea></div>
+          <div><label class="fc-label fc-label-en">Share text (EN) — shown below the title in the preview</label><textarea id="forside_social_text_en" class="fc-input-en fc-textarea" placeholder="Short and enticing — approx. 200 characters shown"></textarea></div>
+        </div>
+      </div>
+    </div>
+
     <!-- FILOSOFI -->
     <div class="fc-block" data-section="filosofi" id="anchor_filosofi">
       <div class="fc-block-header" style="display:flex;align-items:center;gap:.8rem;">
@@ -10647,6 +10671,7 @@ async function loadForside() {
       }
     });
     // Vis thumbnails for allerede uploadede billeder/video
+    saetBilledPreview('forside_social_preview', map['forside_social_image'] || '');
     Object.keys(map).filter(k => k.startsWith('media_')).forEach(key => {
       if (!map[key]) return;
       const inputId = key.replace('media_', 'upload_');
