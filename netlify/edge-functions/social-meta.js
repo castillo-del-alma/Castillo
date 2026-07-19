@@ -59,6 +59,7 @@ export default async (request, context) => {
   try { html = await res.text(); } catch (e) { return res; }
 
   try {
+    let haandteret = false;
     if (erRetreatSide && slug) {
       // Slå retreatet op og indsæt dets egne tekster
       const api = SUPABASE_URL + '/rest/v1/retreats'
@@ -69,9 +70,10 @@ export default async (request, context) => {
       const d = Array.isArray(rows) ? rows[0] : null;
       if (d) {
         const titel = ((isEN ? d.title_en : d.title) || d.title || 'Retreat') + ' \u2014 Castillo del Alma';
-        const beskriv = stripHtml(
-          (isEN ? (d.description_en || d.subtitle_en) : (d.description || d.subtitle)) || d.description || d.subtitle
-        ).slice(0, 200) || (isEN ? EN_HOME.desc : 'Eksklusive retreats i M\u00e1laga, Spanien med fokus p\u00e5 ro, personlig udvikling og autentiske oplevelser.');
+        // På /en må der ALDRIG falde dansk tekst igennem — engelske felter eller engelsk fallback
+        const beskriv = isEN
+          ? (stripHtml(d.description_en || d.subtitle_en).slice(0, 200) || EN_HOME.desc)
+          : (stripHtml(d.description || d.subtitle).slice(0, 200) || 'Eksklusive retreats i M\u00e1laga, Spanien med fokus p\u00e5 ro, personlig udvikling og autentiske oplevelser.');
         const canonical = 'https://castillodelalma.es' + (isEN ? '/en' : '') + '/retreat?slug=' + encodeURIComponent(slug);
         html = transformHtml(html, {
           title: titel,
@@ -80,9 +82,11 @@ export default async (request, context) => {
           canonical,
           fjernImgDim: !!d.hero_image // hero-billedets dimensioner kendes ikke — lad platformen selv måle
         });
+        haandteret = true;
       }
-    } else if (isEN) {
-      // /en-forsiden (og øvrige /en-sider uden slug): engelske meta-tekster
+    }
+    if (!haandteret && isEN) {
+      // /en uden (fundet) retreat: engelske meta-tekster — også når slug-opslag fejler
       html = transformHtml(html, { title: EN_HOME.title, desc: EN_HOME.desc });
     }
   } catch (e) { /* fallback: uændret HTML — må aldrig vælte serveringen */ }
