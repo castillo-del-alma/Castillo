@@ -4075,6 +4075,30 @@ feeling more calm – and coming home to yourself again."</textarea></div>
       </div>
     </div>
 
+    <!-- 3.1 · SOCIAL DELING (billede + tekster til Facebook/WhatsApp/LinkedIn) -->
+    <div class="fc-block" id="ra_social" style="margin-bottom:1.5rem;">
+      <div class="fc-block-header" style="display:flex;align-items:center;gap:.8rem;"><span class="fc-block-title">3.1 · Social deling (Facebook/WhatsApp)</span><button type="button" onclick="oversaetBlok(this)" style="background:rgba(58,110,106,.1);border:1px solid rgba(58,110,106,.35);color:#2a7a74;padding:.3rem .8rem;font-family:Manrope,sans-serif;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;margin-left:auto;" title="Oversæt tomme engelske felter i denne sektion">⇄ Oversæt</button></div>
+      <div class="fc-block-body">
+        <div style="font-size:.68rem;color:rgba(44,35,24,.55);line-height:1.5;margin-bottom:.8rem;">Vises når retreatet deles som link. Billede: <b>1200 × 630 px</b> anbefales. Er felterne tomme, bruges hero-billedet og retreatets beskrivelse i stedet.</div>
+        <div class="fc-row">
+          <div>
+            <label class="fc-label fc-label-da">Dele-billede URL (1200×630)</label>
+            <input type="text" id="retreat_social_image" class="fc-input-da" placeholder="URL indsættes automatisk ved upload">
+            <label class="fc-label" style="color:#2a7a74;margin-top:.6rem;">📁 Upload dele-billede</label>
+            <div style="display:flex;align-items:center;gap:.6rem;margin-top:.3rem;">
+              <img id="retreat_social_preview" src="" style="display:none;width:56px;height:56px;object-fit:cover;border-radius:3px;border:1px solid rgba(184,138,30,.3);">
+              <input type="file" id="retreat_social_file" accept="image/*" style="font-size:.76rem;flex:1;">
+              <button type="button" onclick="uploadRetreatBillede('retreat_social_file','retreat_social_image','retreat_social_preview')" style="background:#2a7a74;color:#fff;border:none;padding:.45rem 1.1rem;font-family:Manrope,sans-serif;font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;white-space:nowrap;">⬆ Upload</button><button type="button" onclick="fjernBilledeFelt('retreat_social_image','retreat_social_preview')" style="background:rgba(163,51,51,.08);color:#a33;border:1px solid rgba(163,51,51,.35);padding:.45rem .9rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;white-space:nowrap;" title="Fjern billedet helt">🗑 Fjern</button>
+            </div>
+          </div>
+        </div>
+        <div class="fc-row" style="margin-top:1rem;">
+          <div><label class="fc-label fc-label-da">Dele-tekst (DA) — vises under titlen i previewet</label><textarea id="retreat_social_text" class="fc-input-da fc-textarea" placeholder="Kort og fristende — maks. ca. 200 tegn vises"></textarea></div>
+          <div><label class="fc-label fc-label-en">Share text (EN) — shown below the title in the preview</label><textarea id="retreat_social_text_en" class="fc-input-en fc-textarea" placeholder="Short and enticing — approx. 200 characters shown"></textarea></div>
+        </div>
+      </div>
+    </div>
+
     <!-- 4 · OM RETREATET -->
     <div class="fc-block" id="ra_om" style="margin-bottom:1.5rem;">
       <div class="fc-block-header" style="display:flex;align-items:center;gap:.8rem;"><span class="fc-block-title">4 · Om retreatet</span><button type="button" onclick="oversaetBlok(this)" style="background:rgba(58,110,106,.1);border:1px solid rgba(58,110,106,.35);color:#2a7a74;padding:.3rem .8rem;font-family:Manrope,sans-serif;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;margin-left:auto;" title="Oversæt tomme engelske felter i denne sektion">⇄ Oversæt</button></div>
@@ -7151,8 +7175,13 @@ function openNytRetreat() {
   // Billeder/datoer
   document.getElementById('retreat_hero_image').value = '';
   document.getElementById('retreat_card_image').value = '';
+  { const _si = document.getElementById('retreat_social_image'); if (_si) _si.value = ''; }
+  { const _st = document.getElementById('retreat_social_text'); if (_st) _st.value = ''; }
+  { const _ste = document.getElementById('retreat_social_text_en'); if (_ste) _ste.value = ''; }
   saetBilledPreview('retreat_hero_preview', '');
   saetBilledPreview('retreat_card_preview', '');
+  saetBilledPreview('retreat_social_preview', '');
+  { const _sf = document.getElementById('retreat_social_file'); if (_sf) _sf.value = ''; }
   { const _hf = document.getElementById('retreat_hero_file'); if (_hf) _hf.value = ''; }
   { const _cf = document.getElementById('retreat_card_file'); if (_cf) _cf.value = ''; }
   { const _fu = document.getElementById('ra_food_img_url'); if (_fu) _fu.value = ''; }
@@ -7211,12 +7240,17 @@ function udfyldRetreatForm(r) {
   { const _ra = document.getElementById('retreat_active'); if (_ra) _ra.checked = r.active === true; }
   // Billed-URL-felter + thumbnails (previews er <img>-elementer — sæt src, ikke innerHTML)
   { const _hu = document.getElementById('retreat_hero_image'); if (_hu) _hu.value = r.hero_image || ''; }
+  { const _si = document.getElementById('retreat_social_image'); if (_si) _si.value = r.social_image || ''; }
+  { const _st = document.getElementById('retreat_social_text'); if (_st) _st.value = r.social_text || ''; }
+  { const _ste = document.getElementById('retreat_social_text_en'); if (_ste) _ste.value = r.social_text_en || ''; }
+  saetBilledPreview('retreat_social_preview', r.social_image);
+  { const _sf = document.getElementById('retreat_social_file'); if (_sf) _sf.value = ''; }
   { const _cu = document.getElementById('retreat_card_image'); if (_cu) _cu.value = r.card_image || ''; }
   saetBilledPreview('retreat_hero_preview', r.hero_image);
   saetBilledPreview('retreat_card_preview', r.card_image);
   { const _hf = document.getElementById('retreat_hero_file'); if (_hf) _hf.value = ''; }
   { const _cf = document.getElementById('retreat_card_file'); if (_cf) _cf.value = ''; }
-  retreatOrigImages = { hero: r.hero_image || '', card: r.card_image || '', food: r.ui_food_img || '' };
+  retreatOrigImages = { hero: r.hero_image || '', card: r.card_image || '', food: r.ui_food_img || '', social: r.social_image || '' };
   document.getElementById('retreat_location').value = r.location || '';
   document.getElementById('retreat_languages_en').value = r.languages_en || '';
   document.getElementById('retreat_level_en').value = r.level_en || '';
@@ -7928,6 +7962,15 @@ async function gemRetreat() {
     };
 
     // Hent billeder — enten fra fil-upload eller fra URL-feltet (sat af uploadRetreatBillede)
+    payload.social_text = document.getElementById('retreat_social_text')?.value.trim() || null;
+    payload.social_text_en = document.getElementById('retreat_social_text_en')?.value.trim() || null;
+    const socialFile = document.getElementById('retreat_social_file')?.files[0];
+    if (socialFile) {
+      payload.social_image = await uploadRetreatImage(socialFile);
+    } else {
+      payload.social_image = document.getElementById('retreat_social_image')?.value.trim() || null;
+    }
+
     const heroFile = document.getElementById('retreat_hero_file').files[0];
     if (heroFile) {
       payload.hero_image = await uploadRetreatImage(heroFile);
@@ -7971,15 +8014,16 @@ async function gemRetreat() {
       const nyHero = ('hero_image' in payload) ? payload.hero_image : retreatOrigImages.hero;
       const nyCard = ('card_image' in payload) ? payload.card_image : retreatOrigImages.card;
       const nyFood = ('ui_food_img' in payload) ? payload.ui_food_img : retreatOrigImages.food;
-      const iBrugNu = [nyHero, nyCard, nyFood].filter(Boolean);
+      const nySocial = ('social_image' in payload) ? payload.social_image : retreatOrigImages.social;
+      const iBrugNu = [nyHero, nyCard, nyFood, nySocial].filter(Boolean);
       const andreJson = JSON.stringify((allRetreats || []).filter(x => String(x.id) !== String(id || '')));
-      for (const gammel of [retreatOrigImages.hero, retreatOrigImages.card, retreatOrigImages.food]) {
+      for (const gammel of [retreatOrigImages.hero, retreatOrigImages.card, retreatOrigImages.food, retreatOrigImages.social]) {
         if (!gammel) continue;
         if (iBrugNu.includes(gammel)) continue;
         if (andreJson.includes(gammel)) continue;
         await cdaSletStorageFil(gammel);
       }
-      retreatOrigImages = { hero: nyHero || '', card: nyCard || '', food: nyFood || '' };
+      retreatOrigImages = { hero: nyHero || '', card: nyCard || '', food: nyFood || '', social: nySocial || '' };
     } catch(_) { /* oprydning er best-effort */ }
 
     // Bliv på siden — vis gem-bekræftelse øverst

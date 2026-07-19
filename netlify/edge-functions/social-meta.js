@@ -63,7 +63,7 @@ export default async (request, context) => {
     if (erRetreatSide && slug) {
       // Slå retreatet op og indsæt dets egne tekster
       const api = SUPABASE_URL + '/rest/v1/retreats'
-        + '?select=title,title_en,subtitle,subtitle_en,description,description_en,hero_image'
+        + '?select=title,title_en,subtitle,subtitle_en,description,description_en,hero_image,social_image,social_text,social_text_en'
         + '&slug=eq.' + encodeURIComponent(slug) + '&limit=1';
       const r = await fetch(api, { headers: { apikey: ANON_KEY, authorization: 'Bearer ' + ANON_KEY } });
       const rows = r.ok ? await r.json() : [];
@@ -71,16 +71,17 @@ export default async (request, context) => {
       if (d) {
         const titel = ((isEN ? d.title_en : d.title) || d.title || 'Retreat') + ' \u2014 Castillo del Alma';
         // På /en må der ALDRIG falde dansk tekst igennem — engelske felter eller engelsk fallback
+        // Dele-tekster fra admin har forrang; ellers beskrivelse/underrubrik
         const beskriv = isEN
-          ? (stripHtml(d.description_en || d.subtitle_en).slice(0, 200) || EN_HOME.desc)
-          : (stripHtml(d.description || d.subtitle).slice(0, 200) || 'Eksklusive retreats i M\u00e1laga, Spanien med fokus p\u00e5 ro, personlig udvikling og autentiske oplevelser.');
+          ? (stripHtml(d.social_text_en || d.description_en || d.subtitle_en).slice(0, 200) || EN_HOME.desc)
+          : (stripHtml(d.social_text || d.description || d.subtitle).slice(0, 200) || 'Eksklusive retreats i M\u00e1laga, Spanien med fokus p\u00e5 ro, personlig udvikling og autentiske oplevelser.');
         const canonical = 'https://castillodelalma.es' + (isEN ? '/en' : '') + '/retreat?slug=' + encodeURIComponent(slug);
         html = transformHtml(html, {
           title: titel,
           desc: beskriv,
-          img: d.hero_image || FALLBACK_IMG,
+          img: d.social_image || d.hero_image || FALLBACK_IMG,
           canonical,
-          fjernImgDim: !!d.hero_image // hero-billedets dimensioner kendes ikke — lad platformen selv måle
+          fjernImgDim: !!(d.social_image || d.hero_image) // billedets dimensioner kendes ikke — lad platformen selv måle
         });
         haandteret = true;
       }
