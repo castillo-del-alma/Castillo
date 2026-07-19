@@ -31,9 +31,8 @@
 # /en → /en/ (én kanonisk engelsk forside-adresse)
 [[redirects]]
   from = "/en"
-  to = "/en/"
-  status = 301
-  force = true
+  to = "/index.html"
+  status = 200
 
 # /en/ viser forsiden (index.html)
 [[redirects]]
