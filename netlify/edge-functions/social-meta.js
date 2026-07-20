@@ -11,7 +11,11 @@ const SUPABASE_URL = 'https://niniwgiytyqvdqejigxg.supabase.co';
 const ANON_KEY = 'sb_publishable_GwrNUpIuWzdg1oswOY5HzA_mKWqhd6y';
 const FALLBACK_IMG = 'https://castillodelalma.es/img/castillo-del-alma-social-1200.jpg';
 
-const BOT_RE = /facebookexternalhit|facebot|twitterbot|linkedinbot|whatsapp|slackbot|telegrambot|discordbot|pinterest|embedly|quora link preview|skypeuripreview|vkshare|redditbot|applebot/i;
+// SEO (Bølge 3): SØGEROBOTTER er med i listen. Uden dem så Googlebot den rå
+// danske HTML på /en/ (inkl. canonical → /), tolkede /en/ som dublet af
+// forsiden og indekserede den aldrig. Nu får Google/Bing m.fl. engelsk
+// titel, beskrivelse, canonical og lang="en" direkte i den rå HTML.
+const BOT_RE = /facebookexternalhit|facebot|twitterbot|linkedinbot|whatsapp|slackbot|telegrambot|discordbot|pinterest|embedly|quora link preview|skypeuripreview|vkshare|redditbot|applebot|googlebot|bingbot|duckduckbot|yandex|baiduspider/i;
 
 const EN_HOME = {
   title: 'Castillo del Alma \u2014 Wellness & Wine Estate in Andalusia',
@@ -22,8 +26,11 @@ const escAttr = s => String(s).replace(/&/g, '&amp;').replace(/"/g, '&quot;').re
 const stripHtml = s => String(s || '').replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
 
 // Ren transformations-funktion — testes isoleret i Node
-export function transformHtml(html, { title, desc, img, canonical, fjernImgDim }) {
+export function transformHtml(html, { title, desc, img, canonical, fjernImgDim, langEn }) {
   let ud = html;
+  if (langEn) ud = ud
+    .replace(/<html lang="da">/, '<html lang="en">')
+    .replace(/(<meta property="og:locale" content=")[^"]*(")/, '$1en_US$2');
   if (title) ud = ud
     .replace(/<title[^>]*>[\s\S]*?<\/title>/, `<title id="pageTitle">${escAttr(title)}</title>`)
     .replace(/(<meta property="og:title" content=")[^"]*(")/, `$1${escAttr(title)}$2`)
@@ -83,7 +90,8 @@ export default async (request, context) => {
           desc: beskriv,
           img: d.social_image || d.hero_image || FALLBACK_IMG,
           canonical,
-          fjernImgDim: !!(d.social_image || d.hero_image) // billedets dimensioner kendes ikke — lad platformen selv måle
+          fjernImgDim: !!(d.social_image || d.hero_image), // billedets dimensioner kendes ikke — lad platformen selv måle
+          langEn: isEN
         });
         haandteret = true;
       }
@@ -97,11 +105,14 @@ export default async (request, context) => {
         (r2.ok ? await r2.json() : []).forEach(x => { sc[x.key] = x.value; });
       } catch (e) { /* fallback til statiske tekster */ }
       if (isEN) {
+        // canonical SKAL pege på /en/ — ellers ser Google /en/ som dublet af /
         html = transformHtml(html, {
           title: EN_HOME.title,
           desc: sc.forside_social_text_en || EN_HOME.desc,
           img: sc.forside_social_image || null,
-          fjernImgDim: !!sc.forside_social_image
+          canonical: 'https://castillodelalma.es/en/',
+          fjernImgDim: !!sc.forside_social_image,
+          langEn: true
         });
       } else if (sc.forside_social_text || sc.forside_social_image) {
         html = transformHtml(html, {
