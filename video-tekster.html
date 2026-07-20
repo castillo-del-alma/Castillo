@@ -366,6 +366,10 @@
           <option value="top">Top</option>
         </select>
       </div>
+      <div>
+        <label>Lodret justering (%)</label>
+        <input type="number" id="stShift" value="0" min="-40" max="40" step="1" title="Minus rykker teksten op, plus rykker den ned">
+      </div>
     </div>
     <div class="row" style="margin-top:16px">
       <div>
@@ -826,7 +830,7 @@ document.querySelector('.presets').addEventListener('click', (e) => {
   $('stOutSize').value = p.outSize;
   updatePreviewStyle();
 });
-['stFont', 'stSize', 'stColor', 'stBg', 'stPos', 'stFlow', 'stCaps', 'stAnim', 'stOutSize', 'stOutColor', 'wmType', 'wmText', 'wmPos'].forEach(id =>
+['stFont', 'stSize', 'stColor', 'stBg', 'stPos', 'stShift', 'stFlow', 'stCaps', 'stAnim', 'stOutSize', 'stOutColor', 'wmType', 'wmText', 'wmPos'].forEach(id =>
   $(id).addEventListener('input', updatePreviewStyle));
 
 $('wmType').addEventListener('change', () => {
@@ -1041,8 +1045,15 @@ function updatePreviewStyle() {
   ov.style.fontFamily = currentFont().css;
   ov.style.letterSpacing = '0.05em';
   const pos = $('stPos').value;
-  ov.style.top = pos === 'top' ? '6%' : pos === 'middle' ? '45%' : 'auto';
-  ov.style.bottom = pos === 'bottom' ? '8%' : 'auto';
+  const shift = Math.max(-40, Math.min(40, parseFloat($('stShift')?.value) || 0));
+  if (pos === 'bottom') {
+    ov.style.top = 'auto';
+    ov.style.bottom = Math.max(0, Math.min(90, 8 - shift)) + '%';
+  } else {
+    const base = pos === 'top' ? 6 : 45;
+    ov.style.top = Math.max(0, Math.min(90, base + shift)) + '%';
+    ov.style.bottom = 'auto';
+  }
 
   // Kant og boks i forhåndsvisningen
   const boxMode = $('stBg').value === 'box';
@@ -1216,8 +1227,13 @@ function buildAss() {
   const color = hexToAss($('stColor').value);
   const boxMode = $('stBg').value === 'box';
   const pos = $('stPos').value;
-  const align = pos === 'top' ? 8 : pos === 'middle' ? 5 : 2;
-  const marginV = Math.round(videoH * (pos === 'bottom' ? 0.08 : pos === 'top' ? 0.06 : 0));
+  const shift = Math.max(-40, Math.min(40, parseFloat($('stShift')?.value) || 0)) / 100;
+  // Midt bruger top-forankring (an8), så justeringen matcher forhåndsvisningen 1:1
+  const align = pos === 'top' ? 8 : pos === 'middle' ? 8 : 2;
+  const marginFrac = pos === 'bottom'
+    ? Math.max(0, Math.min(0.9, 0.08 - shift))          // plus = ned = mindre bundmargin
+    : Math.max(0, Math.min(0.9, (pos === 'top' ? 0.06 : 0.45) + shift));
+  const marginV = Math.round(videoH * marginFrac);
   const borderStyle = boxMode ? 3 : 1;
   const of = outlineFactor();
   const outline = boxMode ? Math.round(fs * 0.28) : Math.round(fs * of);
