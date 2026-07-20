@@ -286,16 +286,21 @@ body{font-family:'Manrope',sans-serif;background:#f0e8d5;color:#2c2318;min-heigh
 
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.8rem;">
         <div>
-          <h3 style="font-family:'Cinzel',serif;font-weight:300;font-size:1.2rem;color:#2c2318;margin:0 0 .3rem;">Retreat-fora</h3>
+          <h3 style="font-family:'Cinzel',serif;font-weight:300;font-size:1.2rem;color:#2c2318;margin:0 0 .3rem;">Fora</h3>
           <div id="fo-count" style="font-size:.72rem;color:rgba(44,35,24,.6);">Henter…</div>
         </div>
-        <button class="btn-primary" onclick="foNytForum()">+ Nyt forum</button>
+        <div style="display:flex;gap:.5rem;">
+          <button class="btn-primary" onclick="foNytForum()">+ Nyt retreat-forum</button>
+          <button class="btn-primary" onclick="foNyGruppe()">+ Ny gruppe</button>
+        </div>
       </div>
 
       <div style="background:rgba(184,138,30,.08);border:1px solid rgba(143,106,18,.25);padding:.9rem 1.1rem;margin-bottom:1.5rem;font-size:.78rem;color:rgba(44,35,24,.75);line-height:1.6;">
-        Fora oprettes <b>automatisk</b> 14 dage før ankomst for hold med mindst én betalt booking, og deltagerne
+        <b>Retreat-fora</b> oprettes <b>automatisk</b> 14 dage før ankomst for hold med mindst én betalt booking, og deltagerne
         importeres hver nat — også dem der booker senere. Forummet åbner af sig selv 7 dage før ankomst.
-        <b>Du skal blot skrive velkomstbeskeden</b> og til sidst arkivere forummet, når I er færdige.
+        <b>Du skal blot skrive velkomstbeskeden</b> og til sidst arkivere forummet, når I er færdige.<br>
+        <b>Grupper</b> er fora uden retreat — fx undervisere eller lejere. De er aktive med det samme;
+        du tilføjer selv medlemmerne og sender dem deres personlige link pr. mail. Ingen fælles adgangskode — linket er adgangen.
       </div>
 
       <!-- Opret -->
@@ -319,6 +324,21 @@ body{font-family:'Manrope',sans-serif;background:#f0e8d5;color:#2c2318;min-heigh
         </div>
         <button class="btn-primary" onclick="foOpret()">Opret forum</button>
         <button class="kunde-btn" style="margin-left:.5rem;" onclick="document.getElementById('fo-ny').style.display='none'">Fortryd</button>
+      </div>
+
+      <!-- Opret gruppe (uden retreat) -->
+      <div id="fo-ny-gruppe" style="display:none;background:#fff;border:1px solid #e0d0b0;padding:1.5rem;margin-bottom:1.5rem;">
+        <div style="margin-bottom:1rem;">
+          <label class="fc-label">Gruppens navn (vises for medlemmerne)</label>
+          <input type="text" id="fo-gruppe-titel" placeholder="Fx: Undervisere · Efterår 2026" style="width:100%;padding:.6rem;border:1px solid #e0d0b0;background:#faf6ee;font-family:'Manrope',sans-serif;font-size:.82rem;">
+        </div>
+        <div style="font-size:.75rem;color:rgba(44,35,24,.6);line-height:1.6;margin-bottom:1rem;">
+          Gruppen er <strong>aktiv med det samme</strong>. Bagefter åbner du den, tilføjer medlemmer med
+          "+ Tilføj manuelt" og klikker <strong>Send link pr. mail</strong> ud for hver person.
+          Hvert medlem får sit eget unikke link — der er ingen fælles adgangskode.
+        </div>
+        <button class="btn-primary" onclick="foOpretGruppe()">Opret gruppe</button>
+        <button class="kunde-btn" style="margin-left:.5rem;" onclick="document.getElementById('fo-ny-gruppe').style.display='none'">Fortryd</button>
       </div>
 
       <div id="fo-liste"></div>
@@ -358,7 +378,7 @@ body{font-family:'Manrope',sans-serif;background:#f0e8d5;color:#2c2318;min-heigh
             <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.8rem;">
               <div style="font-size:.7rem;letter-spacing:.15em;text-transform:uppercase;color:#b88a1e;">Medlemmer</div>
               <div>
-                <button class="kunde-btn" onclick="foSync()">↻ Hent deltagere fra betalte bookinger</button>
+                <button class="kunde-btn" id="fo-d-sync-btn" onclick="foSync()">↻ Hent deltagere fra betalte bookinger</button>
                 <button class="kunde-btn" style="margin-left:.4rem;" onclick="foTilfoej()">+ Tilføj manuelt</button>
               </div>
             </div>
@@ -11439,9 +11459,12 @@ async function foLoad() {
             <div style="display:flex;align-items:center;gap:.7rem;margin-bottom:.35rem;">
               <div style="font-family:'Cinzel',serif;font-weight:300;font-size:1rem;color:#2c2318;">${foEsc(c.title)}</div>
               ${foStatusBadge(c.status)}
+              ${c.kind === 'gruppe' ? '<span style="font-size:.58rem;letter-spacing:.12em;text-transform:uppercase;padding:.25rem .6rem;color:#7a1f35;background:rgba(122,31,53,.08);border:1px solid rgba(122,31,53,.25);">Gruppe</span>' : ''}
             </div>
             <div style="font-size:.75rem;color:rgba(44,35,24,.6);">
-              ${c.retreats ? foEsc(c.retreats.title) + ' · ' : ''}Ankomst ${foDato(c.arrival_date)} · Åbner ${foDato(c.opens_at)}
+              ${c.kind === 'gruppe'
+                ? 'Uden retreat · Oprettet ' + foDato(c.created_at)
+                : (c.retreats ? foEsc(c.retreats.title) + ' · ' : '') + 'Ankomst ' + foDato(c.arrival_date) + ' · Åbner ' + foDato(c.opens_at)}
             </div>
             <div style="font-size:.75rem;color:rgba(44,35,24,.6);margin-top:.25rem;">
               ${c.member_count} ${c.member_count === 1 ? 'medlem' : 'medlemmer'} · ${c.message_count} ${c.message_count === 1 ? 'besked' : 'beskeder'}
@@ -11540,6 +11563,30 @@ async function foOpret() {
   }
 }
 
+/* ---------- Opret gruppe (uden retreat) ---------- */
+function foNyGruppe() {
+  const box = document.getElementById('fo-ny-gruppe');
+  if (!box) return;
+  const aaben = box.style.display !== 'block';
+  box.style.display = aaben ? 'block' : 'none';
+  const anden = document.getElementById('fo-ny');
+  if (aaben && anden) anden.style.display = 'none';
+  if (aaben) document.getElementById('fo-gruppe-titel')?.focus();
+}
+
+async function foOpretGruppe() {
+  const inp = document.getElementById('fo-gruppe-titel');
+  const title = inp?.value.trim();
+  if (!title) { toast('Giv gruppen et navn', true); return; }
+  try {
+    await foKald({ action: 'create_group', title });
+    document.getElementById('fo-ny-gruppe').style.display = 'none';
+    if (inp) inp.value = '';
+    toast('Gruppe oprettet — åbn den og tilføj medlemmer');
+    foLoad();
+  } catch (e) { toast(e.message, true); }
+}
+
 /* ---------- Status ---------- */
 async function foStatus(id, status) {
   const tekst = status === 'arkiveret'
@@ -11561,7 +11608,11 @@ function foAaben(id) {
 
   document.getElementById('fo-d-titel').textContent = foAktiv.title;
   document.getElementById('fo-d-sub').textContent =
-    'Ankomst ' + foDato(foAktiv.arrival_date) + ' · ' + foAktiv.member_count + ' medlemmer';
+    (foAktiv.kind === 'gruppe'
+      ? 'Gruppe uden retreat'
+      : 'Ankomst ' + foDato(foAktiv.arrival_date)) + ' · ' + foAktiv.member_count + ' medlemmer';
+  const syncBtn = document.getElementById('fo-d-sync-btn');
+  if (syncBtn) syncBtn.style.display = foAktiv.kind === 'gruppe' ? 'none' : '';
   document.getElementById('fo-d-welcome-da').value = foAktiv.welcome_da || '';
   document.getElementById('fo-d-welcome-en').value = foAktiv.welcome_en || '';
   document.getElementById('fo-detalje').style.display = 'block';
@@ -11605,7 +11656,8 @@ async function foMedlemmer() {
             <div style="font-size:.85rem;color:#2c2318;">${foEsc(m.display_name)}${mod}${mute}</div>
             <div style="font-size:.7rem;color:rgba(44,35,24,.5);">${foEsc(m.email || 'ingen e-mail — send linket manuelt')}</div>
           </div>
-          <div style="flex:0 0 auto;display:flex;gap:.3rem;">
+          <div style="flex:0 0 auto;display:flex;gap:.3rem;flex-wrap:wrap;justify-content:flex-end;">
+            ${m.email ? `<button class="kunde-btn" onclick="foSendLink('${m.id}','${foEsc(m.email)}')">Send link pr. mail</button>` : ''}
             <button class="kunde-btn" onclick="foKopierLink('${foEsc(link)}')">Kopiér link</button>
             <button class="kunde-btn" onclick="foMute('${m.id}',${!m.muted})">${m.muted ? 'Giv skriveadgang' : 'Bloker skrivning'}</button>
             <button class="kunde-btn" onclick="foFjern('${m.id}','${foEsc(m.display_name)}')">Fjern</button>
@@ -11615,6 +11667,14 @@ async function foMedlemmer() {
   } catch (e) {
     box.innerHTML = `<div style="font-size:.8rem;color:#7a1f35;">${foEsc(e.message)}</div>`;
   }
+}
+
+async function foSendLink(memberId, email) {
+  if (!confirm('Send det personlige forum-link til ' + email + '?')) return;
+  try {
+    await foKald({ action: 'send_member_link', member_id: memberId });
+    toast('Link sendt til ' + email);
+  } catch (e) { toast(e.message, true); }
 }
 
 function foKopierLink(link) {
@@ -11639,11 +11699,12 @@ async function foTilfoej() {
   if (!navn) return;
   const email = prompt('E-mail (valgfrit — bruges til mails)') || '';
   const mod = confirm('Skal denne person være MODERATOR (Castillo del Alma)?\n\nOK = moderator · Annullér = almindelig deltager');
+  const dansk = confirm('Skal mails til personen være på DANSK?\n\nOK = dansk · Annullér = engelsk');
   try {
     await foKald({
       action: 'add_member', channel_id: foAktiv.id,
       display_name: navn, email: email.trim(),
-      nationality: 'Danmark', role: mod ? 'moderator' : 'deltager'
+      nationality: dansk ? 'Danmark' : 'United Kingdom', role: mod ? 'moderator' : 'deltager'
     });
     toast('Medlem tilføjet');
     foMedlemmer();

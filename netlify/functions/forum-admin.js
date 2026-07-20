@@ -4,11 +4,15 @@
 // ikke i kildekoden på den offentlige admin-side.
 
 const crypto = require('crypto');
+const { Resend } = require('resend');
+const { buildEmail, getLang } = require('./email-template');
 const { synkroniserMedlemmer, kortNavn, nyToken } = require('./forum-sync');
 
 const SUPABASE_URL = process.env.SUPABASE_URL;
 const SUPABASE_KEY = process.env.SUPABASE_SERVICE_KEY || process.env.SUPABASE_ANON_KEY;
 const ADMIN_KEY = process.env.FORUM_ADMIN_KEY || '';
+const SITE = process.env.SITE_URL || 'https://castillodelalma.es';
+const FROM = 'Castillo del Alma <booking@castillodelalma.es>';
 
 const sbHeaders = {
   'Content-Type': 'application/json',
@@ -102,6 +106,30 @@ exports.handler = async (event) => {
     return json(200, { success: true, channel: Array.isArray(res.data) ? res.data[0] : res.data });
   }
 
+  // Gruppe-forum UDEN retreat (fx undervisere eller lejere).
+  // Oprettes direkte som 'aktiv' — ingen automatisk åbning eller sync.
+  // Medlemmer tilføjes manuelt og får deres personlige link pr. mail.
+  if (action === 'create_group') {
+    const title = String(data?.title || '').trim().slice(0, 200);
+    if (!title) return json(400, { error: 'Giv gruppen en titel' });
+
+    const row = {
+      kind: 'gruppe',
+      retreat_id: null,
+      arrival_date: null,
+      departure_date: null,
+      title,
+      status: 'aktiv',
+      opens_at: new Date().toISOString(),
+      suggest_archive_at: null,
+      welcome_da: String(data?.welcome_da || ''),
+      welcome_en: String(data?.welcome_en || '')
+    };
+    const res = await sbWrite('POST', 'forum_channels', row);
+    if (!res.ok) return json(500, { error: 'Kunne ikke oprette gruppen', detail: res.data });
+    return json(200, { success: true, channel: Array.isArray(res.data) ? res.data[0] : res.data });
+  }
+
   if (action === 'update_channel') {
     if (!chId) return json(400, { error: 'Manglende forum-id' });
     const patch = {};
@@ -143,6 +171,9 @@ exports.handler = async (event) => {
     if (!chId) return json(400, { error: 'Manglende forum-id' });
     const chs = await sbGet(`forum_channels?id=eq.${chId}&select=id,retreat_id,arrival_date&limit=1`);
     if (!chs[0]) return json(404, { error: 'Forum findes ikke' });
+    if (!chs[0].retreat_id) {
+      return json(400, { error: 'Denne gruppe er ikke koblet til et retreat — tilføj medlemmer manuelt' });
+    }
 
     const added = await synkroniserMedlemmer(chs[0]);
     return json(200, { success: true, added });
@@ -179,6 +210,66 @@ exports.handler = async (event) => {
     const res = await sbWrite('PATCH', `forum_members?id=eq.${id}`, { muted: !!data.muted }, 'return=minimal');
     if (!res.ok) return json(500, { error: 'Kunne ikke ændre skrive-adgang' });
     return json(200, { success: true, muted: !!data.muted });
+  }
+
+  // Send medlemmets personlige forum-link pr. mail (kræver at medlemmet
+  // har en e-mail). Bruges især til grupper, hvor Erik selv inviterer.
+  if (action === 'send_member_link') {
+    const id = String(data?.member_id || '');
+    if (!id) return json(400, { error: 'Manglende medlem-id' });
+
+    const ms = await sbGet(
+      `forum_members?id=eq.${id}` +
+      '&select=id,display_name,email,nationality,access_token,forum_channels(title,status)&limit=1'
+    );
+    const m = ms[0];
+    if (!m) return json(404, { error: 'Medlem findes ikke' });
+    if (!m.email) return json(400, { error: 'Medlemmet har ingen e-mail — kopiér linket i stedet' });
+    if (!m.forum_channels || m.forum_channels.status === 'arkiveret') {
+      return json(400, { error: 'Forummet er arkiveret — deltagere kan ikke længere inviteres' });
+    }
+
+    const lang = getLang(m.nationality);
+    const fornavn = String(m.display_name || '').split(/\s+/)[0] || m.display_name;
+    const link = `${SITE}/forum.html?t=${encodeURIComponent(m.access_token)}`;
+    const titel = m.forum_channels.title || 'Forum';
+
+    const T = lang === 'da' ? {
+      subject: `Du er inviteret: ${titel} — Castillo del Alma`,
+      title: 'Velkommen i forummet',
+      intro: [
+        `Du er inviteret til det lukkede forum “${titel}” hos Castillo del Alma.`,
+        'Klik på knappen for at åbne forummet. Linket er personligt og kun til dig — del det ikke med andre. Der er ingen adgangskode at huske: linket er din adgang.'
+      ],
+      btn: titel,
+      note: 'Gem denne mail, så du altid kan finde dit link igen. Mister du det, kan du få det tilsendt på forsiden af forummet.'
+    } : {
+      subject: `You are invited: ${titel} — Castillo del Alma`,
+      title: 'Welcome to the forum',
+      intro: [
+        `You have been invited to the private forum “${titel}” at Castillo del Alma.`,
+        'Click the button to open the forum. The link is personal and yours alone — please do not share it. There is no password to remember: the link is your access.'
+      ],
+      btn: titel,
+      note: 'Keep this email so you can always find your link again. If you lose it, you can have it resent from the forum front page.'
+    };
+
+    try {
+      const resend = new Resend(process.env.RESEND_API_KEY);
+      await resend.emails.send({
+        from: FROM,
+        to: m.email,
+        subject: T.subject,
+        html: buildEmail({
+          lang, title: T.title, greetingName: fornavn, intro: T.intro,
+          buttons: [{ label: T.btn, url: link }], note: T.note
+        })
+      });
+    } catch (e) {
+      console.error('forum-admin send_member_link fejl:', e.message);
+      return json(500, { error: 'Mailen kunne ikke sendes: ' + e.message });
+    }
+    return json(200, { success: true, sent_to: m.email });
   }
 
   if (action === 'regenerate_token') {
