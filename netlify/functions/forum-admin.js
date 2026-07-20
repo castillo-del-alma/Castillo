@@ -7,6 +7,7 @@ const crypto = require('crypto');
 const { Resend } = require('resend');
 const { buildEmail, getLang } = require('./email-template');
 const { synkroniserMedlemmer, kortNavn, nyToken } = require('./forum-sync');
+const { sendTilKanal } = require('./forum-push');
 
 const SUPABASE_URL = process.env.SUPABASE_URL;
 const SUPABASE_KEY = process.env.SUPABASE_SERVICE_KEY || process.env.SUPABASE_ANON_KEY;
@@ -289,6 +290,61 @@ exports.handler = async (event) => {
       '&order=created_at.desc&limit=200'
     );
     return json(200, { messages });
+  }
+
+  // Skriv en besked direkte fra admin — afsenderen er Castillo del Alma.
+  // Der bruges en fast moderator-profil pr. kanal; findes den ikke, oprettes
+  // den automatisk (uden e-mail, så den aldrig får invitations- eller
+  // digest-mails). Beskeden ser ud som enhver anden moderator-besked.
+  if (action === 'post_message') {
+    if (!chId) return json(400, { error: 'Manglende forum-id' });
+
+    const body = String(data?.body || '').trim().slice(0, 4000);
+    if (!body) return json(400, { error: 'Skriv en besked først' });
+
+    const chs = await sbGet(`forum_channels?id=eq.${chId}&select=id,status&limit=1`);
+    if (!chs[0]) return json(404, { error: 'Forum findes ikke' });
+    if (chs[0].status === 'arkiveret') {
+      return json(400, { error: 'Forummet er arkiveret — genåbn det for at skrive' });
+    }
+
+    const AFSENDER = 'Castillo del Alma';
+
+    // Find eller opret husets moderator-profil i denne kanal
+    let mods = await sbGet(
+      `forum_members?channel_id=eq.${chId}&role=eq.moderator&display_name=eq.${encodeURIComponent(AFSENDER)}` +
+      '&select=id,muted&limit=1'
+    );
+    let mod = mods[0];
+    if (!mod) {
+      const created = await sbWrite('POST', 'forum_members', {
+        channel_id: chId,
+        display_name: AFSENDER,
+        email: null,
+        nationality: null,
+        role: 'moderator',
+        access_token: nyToken()
+      });
+      if (!created.ok) return json(500, { error: 'Kunne ikke oprette afsenderprofil', detail: created.data });
+      mod = Array.isArray(created.data) ? created.data[0] : created.data;
+    }
+    if (!mod || !mod.id) return json(500, { error: 'Kunne ikke finde afsenderprofil' });
+
+    const res = await sbWrite('POST', 'forum_messages', {
+      channel_id: chId,
+      member_id: mod.id,
+      body
+    });
+    if (!res.ok) return json(500, { error: 'Beskeden kunne ikke sendes', detail: res.data });
+
+    // Push-notifikation til de andre — fejler den, er beskeden stadig sendt
+    try {
+      await sendTilKanal(chId, mod.id, AFSENDER, body.slice(0, 140));
+    } catch (e) {
+      console.error('forum-admin post_message: push fejlede', e.message);
+    }
+
+    return json(200, { success: true, message: Array.isArray(res.data) ? res.data[0] : res.data });
   }
 
   if (action === 'delete_message') {

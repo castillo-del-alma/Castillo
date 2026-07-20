@@ -387,6 +387,15 @@ body{font-family:'Manrope',sans-serif;background:#f0e8d5;color:#2c2318;min-heigh
 
           <!-- Beskeder -->
           <div>
+            <div style="font-size:.7rem;letter-spacing:.15em;text-transform:uppercase;color:#b88a1e;margin-bottom:.8rem;">Skriv i forummet</div>
+            <div style="background:#fff;border:1px solid #e0d0b0;padding:1rem;margin-bottom:1.5rem;">
+              <textarea id="fo-d-skriv" rows="3" placeholder="Skriv en besked som Castillo del Alma…" style="width:100%;padding:.6rem;border:1px solid #e0d0b0;background:#faf6ee;font-family:'Manrope',sans-serif;font-size:.82rem;line-height:1.5;resize:vertical;"></textarea>
+              <div style="display:flex;justify-content:space-between;align-items:center;gap:1rem;margin-top:.7rem;">
+                <div style="font-size:.7rem;color:rgba(44,35,24,.5);line-height:1.5;">Sendes som <b>Castillo del Alma</b> (moderator) og vises straks hos deltagerne.</div>
+                <button class="btn-primary" style="flex:0 0 auto;" onclick="foSkriv()">Send besked</button>
+              </div>
+            </div>
+
             <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.8rem;">
               <div style="font-size:.7rem;letter-spacing:.15em;text-transform:uppercase;color:#b88a1e;">Beskeder</div>
               <button class="kunde-btn" onclick="foBeskeder()">↻ Opdatér</button>
@@ -11615,6 +11624,8 @@ function foAaben(id) {
   if (syncBtn) syncBtn.style.display = foAktiv.kind === 'gruppe' ? 'none' : '';
   document.getElementById('fo-d-welcome-da').value = foAktiv.welcome_da || '';
   document.getElementById('fo-d-welcome-en').value = foAktiv.welcome_en || '';
+  const skriv = document.getElementById('fo-d-skriv');
+  if (skriv) skriv.value = '';
   document.getElementById('fo-detalje').style.display = 'block';
 
   foMedlemmer();
@@ -11761,6 +11772,20 @@ async function foBeskeder() {
   } catch (e) {
     box.innerHTML = `<div style="font-size:.8rem;color:#7a1f35;">${foEsc(e.message)}</div>`;
   }
+}
+
+async function foSkriv() {
+  if (!foAktiv) return;
+  const ta = document.getElementById('fo-d-skriv');
+  const body = ta?.value.trim();
+  if (!body) { toast('Skriv en besked først', true); return; }
+  try {
+    await foKald({ action: 'post_message', channel_id: foAktiv.id, body });
+    if (ta) ta.value = '';
+    toast('Besked sendt');
+    foBeskeder();
+    foLoad();
+  } catch (e) { toast(e.message, true); }
 }
 
 async function foSletBesked(id) {
