@@ -430,6 +430,64 @@ body.menu-open .nav-burger span:nth-child(3){ transform:translateY(-9px) rotate(
 .fungerer-facts span{font-family:'Cormorant Garamond',serif;font-size:.98rem;color:var(--text-mid);background:var(--cream);border:1px solid rgba(184,138,30,.25);padding:.55rem 1.1rem;display:inline-flex;align-items:center;gap:.5rem;}
 .fungerer-facts span::before{content:'✓';color:var(--olive);font-size:.85rem;}
 
+/* ── VÆRELSERNE (hentet fra Ejendommen) ── */
+.rooms{background:var(--section-alt);padding:8rem 0;}
+.rooms-header{text-align:center;margin-bottom:5rem;}
+.rooms-header h2{
+  font-family:'Cinzel',serif;font-weight:300;
+  font-size:clamp(2rem,4vw,3.2rem);letter-spacing:.1em;
+  color:var(--charcoal);margin-bottom:.8rem;
+}
+.rooms-header p{
+  font-family:'Cormorant Garamond',serif;font-style:italic;
+  font-size:1.2rem;font-weight:300;color:var(--text-mid);
+}
+.rooms-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;}
+.room-card{
+  background:var(--cream);
+  position:relative;overflow:hidden;
+}
+.room-card-img{
+  width:100%;aspect-ratio:4/3;overflow:hidden;
+}
+.room-card-img img{
+  width:100%;height:100%;object-fit:cover;
+  transition:transform .8s cubic-bezier(.23,1,.32,1);
+  display:block;
+}
+.room-card:hover .room-card-img img{transform:scale(1.05);}
+.room-card-img-ph{
+  width:100%;height:100%;
+  display:flex;align-items:center;justify-content:center;
+}
+.room-card-body{padding:2rem 2rem 2.5rem;}
+.room-card-num{
+  font-size:.58rem;letter-spacing:.3em;text-transform:uppercase;
+  color:var(--gold);display:block;margin-bottom:.5rem;
+}
+.room-card h3{
+  font-family:'Cinzel',serif;font-weight:300;
+  font-size:1.1rem;letter-spacing:.06em;
+  color:var(--charcoal);margin-bottom:.8rem;
+}
+.room-card p{
+  font-family:'Cormorant Garamond',serif;font-size:1rem;
+  font-weight:300;line-height:1.85;color:var(--text-mid);
+  margin-bottom:1.2rem;
+}
+.room-amenities{display:flex;flex-wrap:wrap;gap:.4rem;}
+.room-amenity{
+  font-size:.58rem;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--text-light);border:1px solid var(--sand);
+  padding:.25rem .7rem;
+}
+.room-card-accent{height:2px;background:var(--gold);}
+.room-card:nth-child(2) .room-card-accent{background:var(--wine);}
+.room-card:nth-child(3) .room-card-accent{background:var(--teal);}
+.room-card:nth-child(4) .room-card-accent{background:var(--terracotta);}
+.room-card:nth-child(5) .room-card-accent{background:var(--olive);}
+.room-card:nth-child(6) .room-card-accent{background:linear-gradient(90deg,var(--gold),var(--wine));}
+
 /* ── STEMMER / SOCIAL PROOF ── */
 .stemmer{background:var(--cream);padding:8rem 0;}
 .stemmer-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1.5rem;margin-top:3rem;}
@@ -662,6 +720,9 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:3rem
   /* Mindre lodret luft i alle sektioner */
   .intro{padding:4.5rem 0 4rem;}
   .undervisning,.pris,.faciliteter,.fungerer,.stemmer,.vaerter,.mere,.design,.kontakt,.faq{padding:4.5rem 0;}
+  .rooms{padding:4.5rem 0;}
+  .rooms-header{margin-bottom:2.6rem;}
+  .rooms-grid{grid-template-columns:1fr 1fr;}
 
   /* Mindre vandret margin */
   .section-inner{padding:0 1.4rem;}
@@ -716,6 +777,9 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:3rem
   .ul-p p{font-size:1.18rem;}
   .step-kort p{font-size:1.1rem;}
   .fungerer-facts span{font-size:1.08rem;}
+  .rooms-header p{font-size:1.3rem;}
+  .room-card p{font-size:1.1rem;}
+  .rooms-grid{grid-template-columns:1fr;}
   .stemme-citat{font-size:1.18rem;}
   .pris-kort .pris-intro{font-size:1.1rem;}
   .pris-liste li{font-size:1.1rem;}
@@ -987,6 +1051,19 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:3rem
     <div class="reveal d2" style="text-align:center;">
       <a href="#kontakt" class="btn-wine-link ul-cta-link" id="fungererCta">Book en uforpligtende samtale</a>
     </div>
+  </div>
+</section>
+
+<!-- ── VÆRELSERNE (hentet fra Ejendommen — samme rum, holdes i sync) ── -->
+<section class="rooms has-canvas" id="indkvartering">
+  <canvas class="section-canvas" data-palette="warm"></canvas>
+  <div class="section-inner">
+    <div class="rooms-header reveal">
+      <span class="section-label" id="indkvLabel" style="justify-content:center;">Indkvartering</span>
+      <h2 id="indkvH2">Værelserne</h2>
+      <p id="indkvIntro">Syv dobbelte eksklusive værelser, alle med ensuite badeværelse — designet til komfort, ro og nærvær</p>
+    </div>
+    <div class="rooms-grid reveal d1"></div>
   </div>
 </section>
 
@@ -1497,6 +1574,7 @@ const ulSb = supabase.createClient(SUPABASE_URL_UL, SUPABASE_ANON_KEY_UL);
 
 let ulData = {};
 let ulLang = 'da';
+let ulRooms = []; // værelser hentet fra ejendommen_rooms (samme kilde som Ejendommen-siden)
 
 // Defaults for de NYE sektioner (DA + EN) — bruges når databasen (endnu) ikke har værdier
 const UL_SEED = {
@@ -1520,6 +1598,12 @@ const UL_SEED = {
   fungerer_facts_en: 'About 50 minutes from Málaga airport\nAirport transfers can be included\nRoom for 14 participants + 2 teachers\nOne all-in quote — reply within 24 hours\nHelp with marketing your retreat available',
   fungerer_cta: 'Book en uforpligtende samtale',
   fungerer_cta_en: 'Book a no-obligation call',
+  indkv_label: 'Indkvartering',
+  indkv_label_en: 'Accommodation',
+  indkv_h2: 'Værelserne',
+  indkv_h2_en: 'The Rooms',
+  indkv_intro: 'Syv dobbelte eksklusive værelser, alle med ensuite badeværelse — designet til komfort, ro og nærvær',
+  indkv_intro_en: 'Seven exclusive double rooms, all with en-suite bathrooms — designed for comfort, calm and presence',
   stemmer_label: 'Det siger arrangørerne',
   stemmer_label_en: 'What organisers say',
   stemmer_h2: 'Stemmer fra <em>tidligere</em> ophold',
@@ -1676,6 +1760,57 @@ function renderUlFakta() {
   el.innerHTML = raw.split('\n').map(l => l.trim()).filter(Boolean).map(f => `<span>${f}</span>`).join('');
 }
 
+// ── VÆRELSERNE — renderes fra ejendommen_rooms (samme data som Ejendommen-siden) ──
+function renderUlRooms() {
+  const grid = document.querySelector('#indkvartering .rooms-grid');
+  if (!grid) return;
+  if (!ulRooms.length) return; // beholder seed-headeren; grid forbliver tom hvis ingen rum hentet
+  grid.innerHTML = ulRooms.map((r, i) => {
+    const num = String(i + 1).padStart(2, '0');
+    const name = ulLang === 'en' ? (r.name_en || r.name_da) : r.name_da;
+    const desc = ulLang === 'en' ? (r.description_en || r.description_da) : r.description_da;
+    let features = ulLang === 'en' ? (r.features_en || r.features || []) : (r.features || []);
+    if (typeof features === 'string') { try { features = JSON.parse(features); } catch(e) { features = []; } }
+    let gallery = r.gallery_images || [];
+    if (typeof gallery === 'string') { try { gallery = JSON.parse(gallery); } catch(e) { gallery = []; } }
+    gallery = gallery.filter(Boolean);
+    const mainImg = gallery[0] || r.hero_image || '';
+    const hasMultiple = gallery.length > 1;
+    const amenitiesHtml = features.map(f => `<span class="room-amenity">${f}</span>`).join('');
+    return `<div class="room-card" data-gallery='${JSON.stringify(gallery)}' data-gidx="0" ${hasMultiple ? 'onclick="ulCycleRoomImg(this)" style="cursor:pointer;"' : ''}>
+      <div class="room-card-accent"></div>
+      <div class="room-card-img" style="position:relative;">
+        ${mainImg
+          ? `<img class="room-img-default" src="${mainImg}" alt="${name || ''}" style="width:100%;height:100%;object-fit:cover;transition:opacity .35s;">`
+          : `<div style="width:100%;height:100%;background:linear-gradient(145deg,#d4c0b0,#b8a090);"></div>`}
+        ${hasMultiple ? `<div style="position:absolute;bottom:8px;right:8px;background:rgba(44,35,24,.55);color:#fff;font-size:.58rem;padding:.2rem .5rem;letter-spacing:.06em;pointer-events:none;">1 / ${gallery.length}</div>` : ''}
+      </div>
+      <div class="room-card-body">
+        <span class="room-card-num">${num}</span>
+        <h3>${name || ''}</h3>
+        <p>${desc || ''}</p>
+        <div class="room-amenities">${amenitiesHtml}</div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function ulCycleRoomImg(card) {
+  let gallery = [];
+  try { gallery = JSON.parse(card.dataset.gallery || '[]'); } catch(e) {}
+  if (gallery.length < 2) return;
+  let idx = parseInt(card.dataset.gidx || '0');
+  idx = (idx + 1) % gallery.length;
+  card.dataset.gidx = idx;
+  const img = card.querySelector('.room-img-default');
+  const counter = card.querySelector('.room-card-img div');
+  if (img) {
+    img.style.opacity = '0';
+    setTimeout(() => { img.src = gallery[idx]; img.style.opacity = '1'; }, 180);
+  }
+  if (counter) counter.textContent = `${idx + 1} / ${gallery.length}`;
+}
+
 function renderUlStemmer() {
   const sec = document.getElementById('stemmer');
   const grid = document.getElementById('stemmerGrid');
@@ -1701,6 +1836,7 @@ function applyUlVisibility() {
   const visMap = {
     intro: 'vis_intro', fotostrip1: 'vis_strip1', undervisning: 'vis_undervisning',
     priser: 'vis_pris', faciliteter: 'vis_fac', fungerer: 'vis_fungerer',
+    indkvartering: 'vis_indkvartering',
     vaerter: 'vis_vaerter', mere: 'vis_mere', design: 'vis_design',
     fotostrip2: 'vis_strip2', ulfaq: 'vis_ulfaq', kontakt: 'vis_kontakt', sikkerhed: 'vis_sikkerhed'
   };
@@ -1749,7 +1885,7 @@ function renderUlNav() {
 
 // ── SEKTIONSRÆKKEFØLGE — flyttes med pile i admin, gemmes som JSON i sektion_orden ──
 // Kører kun én gang pr. sideindlæsning; en divider lige efter en sektion flytter med
-const UL_SEKTION_STANDARD_ORDEN = ['intro','fotostrip1','undervisning','priser','faciliteter','fungerer','stemmer','vaerter','mere','design','fotostrip2','ulfaq','kontakt','sikkerhed'];
+const UL_SEKTION_STANDARD_ORDEN = ['intro','fotostrip1','undervisning','priser','faciliteter','fungerer','indkvartering','stemmer','vaerter','mere','design','fotostrip2','ulfaq','kontakt','sikkerhed'];
 let ulOrdenAnvendt = false;
 function applyUlSektionOrden() {
   if (ulOrdenAnvendt) return;
@@ -1757,7 +1893,17 @@ function applyUlSektionOrden() {
   try { orden = JSON.parse(ulData.sektion_orden || '[]'); } catch(e) {}
   if (!Array.isArray(orden) || !orden.length) return;
   orden = orden.filter(id => UL_SEKTION_STANDARD_ORDEN.includes(id));
-  UL_SEKTION_STANDARD_ORDEN.forEach(id => { if (!orden.includes(id)) orden.push(id); }); // nye sektioner uden gemt plads kommer bagerst
+  // Manglende sektioner (fx nytilføjede som "indkvartering") indsættes på deres
+  // standardplads — lige efter nærmeste forudgående sektion — i stedet for bagerst.
+  UL_SEKTION_STANDARD_ORDEN.forEach((id, idx) => {
+    if (orden.includes(id)) return;
+    let insertAt = orden.length;
+    for (let k = idx - 1; k >= 0; k--) {
+      const p = orden.indexOf(UL_SEKTION_STANDARD_ORDEN[k]);
+      if (p !== -1) { insertAt = p + 1; break; }
+    }
+    orden.splice(insertAt, 0, id);
+  });
   const footer = document.querySelector('footer');
   if (!footer || !footer.parentNode) return;
   orden.forEach(id => {
@@ -1928,6 +2074,11 @@ function applyUlContent() {
   const ctaTxt = ulSC('fungerer_cta');
   if (ctaTxt) document.querySelectorAll('.ul-cta-link').forEach(a => { a.innerHTML = ctaTxt; });
 
+  setText('indkvLabel', ulSC('indkv_label'));
+  setHTML('indkvH2', ulSC('indkv_h2'));
+  setText('indkvIntro', ulSC('indkv_intro'));
+  renderUlRooms();
+
   setText('stemmerLabel', ulSC('stemmer_label'));
   setHTML('stemmerH2', ulSC('stemmer_h2'));
   renderUlStemmer();
@@ -1988,7 +2139,8 @@ async function loadUlContent() {
   try {
     const results = await Promise.allSettled([
       ulSb.from('udlejning_content').select('key,value'),
-      determineStartLangUl()
+      determineStartLangUl(),
+      ulSb.from('ejendommen_rooms').select('*').eq('active', true).order('sort_order')
     ]);
     if (results[0].status === 'fulfilled' && results[0].value.data) {
       results[0].value.data.forEach(r => { if (r.value !== null && r.value !== '') ulData[r.key] = r.value; });
@@ -1996,6 +2148,11 @@ async function loadUlContent() {
       console.warn('udlejning_content hentning fejlede:', results[0].reason);
     }
     if (results[1].status === 'fulfilled') startLang = results[1].value;
+    if (results[2].status === 'fulfilled' && results[2].value.data) {
+      ulRooms = results[2].value.data;
+    } else if (results[2].status === 'rejected') {
+      console.warn('ejendommen_rooms hentning fejlede:', results[2].reason);
+    }
   } catch(e) {
     console.warn('udlejning content load fejl:', e.message);
   }
@@ -2008,6 +2165,7 @@ async function loadUlContent() {
   // Disse kaldes ALTID — falder tilbage til dagens tekst/valgmuligheder hvis databasen er tom eller utilgængelig
   applyUlSektionOrden();
   applyUlContent();
+  renderUlRooms();
   renderUlDropdowns();
 }
 document.addEventListener('DOMContentLoaded', loadUlContent);

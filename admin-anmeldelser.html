@@ -8533,6 +8533,7 @@ const UL_SEKTION_DEFS = [
   { id: 'priser',       navn: 'Priser',                                  key: 'vis_pris' },
   { id: 'faciliteter',  navn: 'Faciliteter — "Vi stiller rammerne…"',    key: 'vis_fac' },
   { id: 'fungerer',     navn: 'Sådan fungerer det',                      key: 'vis_fungerer' },
+  { id: 'indkvartering', navn: 'Værelserne (hentet fra Ejendommen)',     key: 'vis_indkvartering' },
   { id: 'stemmer',      navn: 'Stemmer (citater)',                       key: 'vis_stemmer' },
   { id: 'vaerter',      navn: 'Værterne',                                key: 'vis_vaerter' },
   { id: 'mere',         navn: 'Mere end et kursussted',                  key: 'vis_mere' },
@@ -9391,7 +9392,17 @@ async function loadUdlejningAdmin() {
     (Array.isArray(gemtOrden) ? gemtOrden : []).forEach(id => {
       if (UL_SEKTION_DEFS.some(d => d.id === id) && !ulOrdenState.some(o => o.id === id)) ulOrdenState.push({ id });
     });
-    UL_SEKTION_DEFS.forEach(d => { if (!ulOrdenState.some(o => o.id === d.id)) ulOrdenState.push({ id: d.id }); });
+    // Manglende sektioner indsættes på deres standardplads (lige efter nærmeste
+    // forudgående def) i stedet for bagerst — så fx "indkvartering" lander efter "fungerer".
+    UL_SEKTION_DEFS.forEach((d, idx) => {
+      if (ulOrdenState.some(o => o.id === d.id)) return;
+      let insertAt = ulOrdenState.length;
+      for (let k = idx - 1; k >= 0; k--) {
+        const p = ulOrdenState.findIndex(o => o.id === UL_SEKTION_DEFS[k].id);
+        if (p !== -1) { insertAt = p + 1; break; }
+      }
+      ulOrdenState.splice(insertAt, 0, { id: d.id });
+    });
     ulOrdenState.forEach(o => {
       const def = UL_SEKTION_DEFS.find(d => d.id === o.id);
       o.vis = (def && map[def.key] === '0') ? '0' : '1'; // Synlig som standard
