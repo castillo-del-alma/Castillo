@@ -417,12 +417,41 @@
           <button id="frToggle">Overlay: Til</button>
         </div>
         <div>
+          <label>Skabelon</label>
+          <select id="frTemplate">
+            <option value="standard" selected>Standard-ramme</option>
+            <option value="cirkel">Ramme med cirkel-billede</option>
+          </select>
+        </div>
+        <div>
           <label>Egen overlay (PNG med transparens)</label>
           <input type="file" id="frFile" accept="image/png">
         </div>
         <div style="flex:0 0 auto">
           <label>&nbsp;</label>
-          <button class="ghost" id="frReset">Nulstil til standard</button>
+          <button class="ghost" id="frReset">Nulstil til skabelon</button>
+        </div>
+      </div>
+      <div class="row hidden" id="frCircWrap" style="margin-top:14px">
+        <div>
+          <label>Cirkel-billede (JPG/PNG)</label>
+          <input type="file" id="frCircFile" accept="image/*">
+        </div>
+        <div>
+          <label>Zoom (%)</label>
+          <input type="number" id="frCircZoom" value="100" min="100" max="400" step="5">
+        </div>
+        <div>
+          <label>Vandret (−100…100)</label>
+          <input type="number" id="frCircX" value="0" min="-100" max="100" step="2">
+        </div>
+        <div>
+          <label>Lodret (−100…100)</label>
+          <input type="number" id="frCircY" value="0" min="-100" max="100" step="2">
+        </div>
+        <div style="flex:0 0 auto">
+          <label>&nbsp;</label>
+          <button class="ghost" id="frCircClear">Fjern billede</button>
         </div>
       </div>
       <div class="row" style="margin-top:14px">
@@ -467,7 +496,7 @@
           <input type="number" id="frY" value="3.4" min="0" max="100" step="0.2">
         </div>
       </div>
-      <p class="note">Overlayet strækkes over hele videoen. Standard-rammen ligger fast på siden — uploader du en egen PNG, bruges den i stedet, og "Nulstil til standard" skifter tilbage. Slug-teksten skrives med højre kant 4,5&nbsp;% fra billedkanten.</p>
+      <p class="note">Overlayet strækkes over hele videoen. Vælg skabelon i menuen — vælger du "Ramme med cirkel-billede", kan du uploade et foto, der automatisk klippes rundt og lægges ind i cirklen (guldringen tegnes ovenpå fotoets kant). Justér med zoom og vandret/lodret forskydning. Uploader du en egen PNG, bruges den i stedet, og "Nulstil til skabelon" skifter tilbage. Slug-teksten skrives med højre kant 4,5&nbsp;% fra billedkanten.</p>
     </div>
     <p class="note">Forhåndsvisningen på videoen ovenfor viser cirka, hvordan det kommer til at se ud.</p>
   </div>
@@ -530,7 +559,15 @@ let ffmpeg = null;
 let ffmpegLoaded = false;
 
 /* Fast overlay (ramme) */
-const FR_DEFAULT_URL = 'img/video-overlay-standard.png';
+const FR_TEMPLATES = {
+  standard: 'img/video-overlay-standard.png',
+  cirkel:   'img/video-overlay-cirkel.png'
+};
+const FR_DEFAULT_URL = FR_TEMPLATES.standard;
+/* Cirklens geometri i cirkel-skabelonen (målt i 1284×2283-filen):
+   center (263.9, 269.6), maskeradius 366 px (midt i den 8 px guldring,
+   så fotoet stikker ind under ringen uden synlig sprække). */
+const FR_CIRC = { cx: 263.9 / 1284, cy: 269.6 / 2283, r: 366 / 1284 };
 const FR_FONTS = {
   cinzel:    { css: 'Cinzel',              weight: 700 },
   cormorant: { css: 'Cormorant Garamond',  weight: 600 },
@@ -538,7 +575,9 @@ const FR_FONTS = {
   inter:     { css: 'Inter',               weight: 600 }
 };
 let frOn = true;             // overlay til/fra
-let frImg = null;            // Image-objekt (standard eller egen upload)
+let frImg = null;            // Image-objekt (skabelon eller egen upload)
+let frCustom = false;        // true når egen overlay-PNG er uploadet
+let frCircImg = null;        // Image-objekt til foto i cirklen
 
 /* ---------- ffmpeg helpers ---------- */
 async function getFFmpeg(progressCb) {
@@ -821,6 +860,31 @@ async function renderFrameCanvas() {
   const canvas = document.createElement('canvas');
   canvas.width = W; canvas.height = H;
   const ctx = canvas.getContext('2d');
+
+  // Foto i cirklen — tegnes FØR rammen, så guldringen ligger ovenpå fotokanten.
+  // Kun når cirkel-skabelonen (eller en egen overlay) er i brug.
+  const circActive = frCircImg && ($('frTemplate')?.value === 'cirkel' || frCustom);
+  if (circActive) {
+    const cx = FR_CIRC.cx * W;
+    const cy = FR_CIRC.cy * H;
+    const r  = FR_CIRC.r  * W;
+    const zoom = Math.max(1, (parseFloat($('frCircZoom')?.value) || 100) / 100);
+    const offX = ((parseFloat($('frCircX')?.value) || 0) / 100) * r;
+    const offY = ((parseFloat($('frCircY')?.value) || 0) / 100) * r;
+    const iw = frCircImg.naturalWidth || frCircImg.width;
+    const ih = frCircImg.naturalHeight || frCircImg.height;
+    if (iw && ih) {
+      const scale = Math.max((2 * r) / iw, (2 * r) / ih) * zoom; // cover-fit
+      const dw = iw * scale, dh = ih * scale;
+      ctx.save();
+      ctx.beginPath();
+      ctx.arc(cx, cy, r, 0, Math.PI * 2);
+      ctx.clip();
+      ctx.drawImage(frCircImg, cx - dw / 2 + offX, cy - dh / 2 + offY, dw, dh);
+      ctx.restore();
+    }
+  }
+
   ctx.drawImage(frImg, 0, 0, W, H);
 
   const text = $('frSlug').value.trim();
@@ -878,11 +942,34 @@ $('frToggle').addEventListener('click', () => {
   updateFramePreview();
 });
 
+function currentTemplateUrl() {
+  return FR_TEMPLATES[$('frTemplate')?.value] || FR_DEFAULT_URL;
+}
+
+function updateCircVisibility() {
+  const wrap = $('frCircWrap');
+  if (wrap) wrap.classList.toggle('hidden', !($('frTemplate')?.value === 'cirkel' || frCustom));
+}
+
 $('frFile').addEventListener('change', async (e) => {
   if (!e.target.files.length) return;
   const f = e.target.files[0];
   try {
     frImg = await loadFrameImage(URL.createObjectURL(f));
+    frCustom = true;
+    updateCircVisibility();
+    updateFramePreview();
+  } catch (err) {
+    console.error(err);
+  }
+});
+
+$('frTemplate').addEventListener('change', async () => {
+  $('frFile').value = '';
+  frCustom = false;
+  updateCircVisibility();
+  try {
+    frImg = await loadFrameImage(currentTemplateUrl());
     updateFramePreview();
   } catch (err) {
     console.error(err);
@@ -891,20 +978,47 @@ $('frFile').addEventListener('change', async (e) => {
 
 $('frReset').addEventListener('click', async () => {
   $('frFile').value = '';
+  frCustom = false;
+  updateCircVisibility();
   try {
-    frImg = await loadFrameImage(FR_DEFAULT_URL);
+    frImg = await loadFrameImage(currentTemplateUrl());
     updateFramePreview();
   } catch (err) {
     console.error(err);
   }
 });
 
+/* Cirkel-billede */
+$('frCircFile').addEventListener('change', async (e) => {
+  if (!e.target.files.length) return;
+  const f = e.target.files[0];
+  try {
+    frCircImg = await loadFrameImage(URL.createObjectURL(f));
+    updateFramePreview();
+  } catch (err) {
+    console.error(err);
+  }
+});
+
+$('frCircClear').addEventListener('click', () => {
+  frCircImg = null;
+  const _fi = $('frCircFile');
+  if (_fi) _fi.value = '';
+  updateFramePreview();
+});
+
+['frCircZoom', 'frCircX', 'frCircY'].forEach(id => {
+  const _el = $(id);
+  if (_el) _el.addEventListener('input', updateFramePreview);
+});
+
 ['frSlug', 'frSize', 'frColor', 'frFont', 'frOutSize', 'frOutColor', 'frY'].forEach(id =>
   $(id).addEventListener('input', updateFramePreview));
 
-// Indlæs standard-overlayet ved start
+// Indlæs den valgte skabelon ved start
 setFrToggle();
-loadFrameImage(FR_DEFAULT_URL)
+updateCircVisibility();
+loadFrameImage(currentTemplateUrl())
   .then(img => { frImg = img; updateFramePreview(); })
   .catch(err => console.error(err));
 
