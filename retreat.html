@@ -1811,6 +1811,7 @@ function buildTeacherSection(data) {
     const nameEl = document.getElementById(`teacherImg${n}Name`);
     if (url && wrap && el) {
       el.src = url;
+      el.alt = name ? name : 'Facilitator · Castillo del Alma';
       if (nameEl) nameEl.textContent = name;
       wrap.style.display = 'block';
       anyImg = true;
