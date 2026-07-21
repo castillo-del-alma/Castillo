@@ -19,7 +19,7 @@ const BOT_RE = /facebookexternalhit|facebot|twitterbot|linkedinbot|whatsapp|slac
 
 const EN_HOME = {
   title: 'Castillo del Alma \u2014 Wellness & Wine Estate in Andalusia',
-  desc: 'Exclusive wellness and wine retreats in M\u00e1laga, Spain \u2014 tranquility, personal growth and authentic experiences at a historic estate surrounded by its own vineyards.'
+  desc: 'Exclusive wellness retreats at a Wine Estate in M\u00e1laga, Spain \u2014 tranquility, personal growth and authentic experiences among our own vineyards.'
 };
 
 const escAttr = s => String(s).replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;');
