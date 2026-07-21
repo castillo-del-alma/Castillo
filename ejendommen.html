@@ -22,6 +22,30 @@
 <meta name="twitter:title" content="Ejendommen — Castillo del Alma">
 <meta name="twitter:description" content="Historisk vinejendom i Mollina, Málaga med 4+ hektar egne vinmarker, pool, wellness og plads til 16 gæster. Udforsk Castillo del Alma.">
 <meta name="twitter:image" content="https://castillodelalma.es/img/castillo-del-alma-social-1200.jpg">
+<!-- SEO (Bølge 2): på /en/-stien får siden engelsk titel, beskrivelse og canonical. -->
+<script>
+(function(){
+  if (!/^\/en(\/|$)/.test(location.pathname)) return;
+  document.documentElement.lang = 'en';
+  var t = 'The Estate — Castillo del Alma · Wine Estate in Mollina, Málaga';
+  var ogt = 'The Estate — Castillo del Alma';
+  var d = 'Exclusive Wine Estate in Mollina, Málaga with 4+ hectares of private vineyards, pool, wellness and room for 16 guests. Explore Castillo del Alma.';
+  document.title = t;
+  function setMeta(attr, key, val){
+    var el = document.head.querySelector('meta['+attr+'="'+key+'"]');
+    if (el) el.setAttribute('content', val);
+  }
+  setMeta('name','description', d);
+  setMeta('property','og:title', ogt);
+  setMeta('property','og:description', d);
+  setMeta('property','og:url', 'https://castillodelalma.es/en/ejendommen');
+  setMeta('property','og:locale', 'en_US');
+  setMeta('name','twitter:title', ogt);
+  setMeta('name','twitter:description', d);
+  var c = document.head.querySelector('link[rel="canonical"]');
+  if (c) c.setAttribute('href', 'https://castillodelalma.es/en/ejendommen');
+})();
+</script>
 <link rel="stylesheet" href="fonts/fonts.css">
 <style>
 :root {

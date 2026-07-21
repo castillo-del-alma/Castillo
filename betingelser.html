@@ -362,7 +362,11 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:3rem
 <script>
 let legalLang = 'da';
 
+// På /en/-adressen er siden engelsk (SEO Bølge 2) — adressen vinder over geo.
+const urlIsEnLegal = /^\/en(\/|$)/.test(location.pathname);
+
 function detectLegalLang(){
+  if (urlIsEnLegal) return 'en';
   try{
     const langs = (navigator.languages && navigator.languages.length ? navigator.languages : [navigator.language])
       .filter(Boolean).map(l => String(l).toLowerCase());
@@ -394,6 +398,15 @@ function setLegalLang(lang, manual){
   document.title = legalLang === 'en'
     ? 'Terms of Sale & Booking — Castillo del Alma'
     : 'Salgs- og bookingbetingelser — Castillo del Alma';
+
+  const _desc = document.head.querySelector('meta[name="description"]');
+  if (_desc) _desc.setAttribute('content', legalLang === 'en'
+    ? 'Terms of sale and booking for retreats at Castillo del Alma in Mollina, Málaga — deposit, payment, cancellation rules and practical conditions.'
+    : 'Salgs- og bookingbetingelser for retreats hos Castillo del Alma i Mollina, Málaga — depositum, betaling, afbestillingsregler og praktiske vilkår.');
+  const _canon = document.head.querySelector('link[rel="canonical"]');
+  if (_canon) _canon.setAttribute('href', legalLang === 'en'
+    ? 'https://castillodelalma.es/en/betingelser'
+    : 'https://castillodelalma.es/betingelser');
 }
 
 setLegalLang(detectLegalLang());   // øjeblikkeligt bud fra browsersprog (undgår tomt/forkert flash)
@@ -401,6 +414,8 @@ setLegalLang(detectLegalLang());   // øjeblikkeligt bud fra browsersprog (undg�
 // Geo-baseret sprogvalg: Danmark → dansk, resten af verden → engelsk.
 // Bruger Netlifys geo-header via egen function (ingen ekstern IP-tjeneste → GDPR-venligt).
 async function applyGeoLegalLang(){
+  // På /en/-adressen låser vi engelsk — geo må ikke skifte tilbage til dansk.
+  if (urlIsEnLegal) return;
   // Samme geo-svar genbruges på tværs af sider i samme besøg (hurtigere + konsistent sprog)
   try{
     const cached = sessionStorage.getItem('cda_geo_lang');

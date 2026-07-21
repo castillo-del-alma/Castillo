@@ -42,10 +42,19 @@ exports.handler = async () => {
   xml += urlEntry(BASE + '/', { alternates: forsideAlt, changefreq: 'weekly', priority: '1.0' });
   xml += urlEntry(BASE + '/en/', { alternates: forsideAlt, changefreq: 'weekly', priority: '0.9' });
 
-  // Øvrige faste sider (kun dansk endnu — /en/-udgaver tilføjes i næste bølge)
-  xml += urlEntry(BASE + '/ejendommen', { changefreq: 'monthly', priority: '0.8' });
-  xml += urlEntry(BASE + '/udlejning', { changefreq: 'monthly', priority: '0.8' });
-  xml += urlEntry(BASE + '/kontakt', { changefreq: 'yearly', priority: '0.5' });
+  // Øvrige faste sider — dansk + engelsk (/en/) forbundet med hreflang begge veje
+  const fasteSider = [
+    { path: '/ejendommen', changefreq: 'monthly', priority: '0.8' },
+    { path: '/udlejning',  changefreq: 'monthly', priority: '0.8' },
+    { path: '/kontakt',    changefreq: 'yearly',  priority: '0.5' }
+  ];
+  for (const s of fasteSider) {
+    const daUrl = BASE + s.path;
+    const enUrl = BASE + '/en' + s.path;
+    const alt = [['da', daUrl], ['en', enUrl], ['x-default', daUrl]];
+    xml += urlEntry(daUrl, { alternates: alt, changefreq: s.changefreq, priority: s.priority });
+    xml += urlEntry(enUrl, { alternates: alt, changefreq: s.changefreq, priority: s.priority });
+  }
 
   // Alle aktive retreats — dansk + engelsk med hreflang begge veje
   for (const slug of slugs) {

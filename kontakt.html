@@ -22,6 +22,30 @@
 <meta name="twitter:title" content="Kontakt — Castillo del Alma">
 <meta name="twitter:description" content="Kontakt Castillo del Alma i Mollina, Málaga — spørgsmål om retreats, udlejning eller besøg. Vi svarer hurtigt på dansk, engelsk og spansk.">
 <meta name="twitter:image" content="https://castillodelalma.es/img/castillo-del-alma-social-1200.jpg">
+<!-- SEO (Bølge 2): på /en/-stien får siden engelsk titel, beskrivelse og canonical. -->
+<script>
+(function(){
+  if (!/^\/en(\/|$)/.test(location.pathname)) return;
+  document.documentElement.lang = 'en';
+  var t = 'Contact — Castillo del Alma, Mollina · Málaga';
+  var ogt = 'Contact — Castillo del Alma';
+  var d = 'Contact Castillo del Alma in Mollina, Málaga — questions about retreats, venue rental or visits. We reply quickly in English, Danish and Spanish.';
+  document.title = t;
+  function setMeta(attr, key, val){
+    var el = document.head.querySelector('meta['+attr+'="'+key+'"]');
+    if (el) el.setAttribute('content', val);
+  }
+  setMeta('name','description', d);
+  setMeta('property','og:title', ogt);
+  setMeta('property','og:description', d);
+  setMeta('property','og:url', 'https://castillodelalma.es/en/kontakt');
+  setMeta('property','og:locale', 'en_US');
+  setMeta('name','twitter:title', ogt);
+  setMeta('name','twitter:description', d);
+  var c = document.head.querySelector('link[rel="canonical"]');
+  if (c) c.setAttribute('href', 'https://castillodelalma.es/en/kontakt');
+})();
+</script>
 <link rel="stylesheet" href="fonts/fonts.css">
 <style>
 :root {
