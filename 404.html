@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Siden findes ikke — Castillo del Alma</title>
+<meta name="robots" content="noindex, follow">
+<meta name="description" content="Siden blev ikke fundet. Find vej tilbage til Castillo del Alma i Mollina, Málaga.">
+<link rel="stylesheet" href="/fonts/fonts.css">
+<style>
+:root {
+  --cream:      #faf6ee;
+  --beige:      #f0e8d5;
+  --sand:       #e0d0b0;
+  --stone:      #c8b898;
+  --charcoal:   #2c2318;
+  --text:       #2c2318;
+  --text-mid:   #5c4e3a;
+  --text-light: #9a8c7a;
+  --wine:       #7a1f35;
+  --wine-light: #a03048;
+  --terracotta: #c05c30;
+  --olive:      #6a7240;
+  --gold:       #b88a1e;
+  --gold-light: #d4a830;
+  --teal:       #3a6e6a;
+  --section-alt:#ede4d0;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{font-family:'Manrope',sans-serif;background:var(--cream);color:var(--text);overflow-x:hidden;min-height:100vh;display:flex;flex-direction:column;}
+
+/* ── NAV ── */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:200;
+  padding:1.4rem 4rem;
+  display:flex;justify-content:space-between;align-items:center;
+  background:rgba(250,246,238,.96);
+  backdrop-filter:blur(16px);
+  border-bottom:1px solid rgba(184,138,30,.15);
+  box-shadow:0 2px 28px rgba(44,35,24,.06);
+}
+.nav-logo img{height:48px;width:auto;}
+.nav-links{display:flex;gap:2rem;list-style:none;align-items:center;}
+.nav-links a{font-size:.68rem;font-weight:400;letter-spacing:.14em;text-transform:uppercase;color:var(--text-mid);text-decoration:none;transition:color .3s;}
+.nav-links a:hover{color:var(--wine);}
+.nav-back{
+  font-size:.68rem;font-weight:500;letter-spacing:.15em;text-transform:uppercase;
+  color:var(--wine);text-decoration:none;display:flex;align-items:center;gap:.5rem;
+  transition:gap .3s;
+}
+.nav-back:hover{gap:.8rem;}
+
+/* ── MOBILMENU (≤900px) — alt i @media, desktop urørt ── */
+.nav-burger{
+  display:none;
+  position:relative; z-index:12;
+  width:30px; height:20px; padding:0; margin:0;
+  background:none; border:none; cursor:pointer;
+  flex-direction:column; justify-content:space-between;
+}
+.nav-burger span{
+  display:block; height:2px; width:100%;
+  background:var(--charcoal);
+  transition:transform .35s ease, opacity .25s ease;
+}
+body.menu-open .nav-burger span:nth-child(1){ transform:translateY(9px) rotate(45deg); }
+body.menu-open .nav-burger span:nth-child(2){ opacity:0; }
+body.menu-open .nav-burger span:nth-child(3){ transform:translateY(-9px) rotate(-45deg); }
+
+.nav-backdrop{
+  display:none;
+  position:fixed; inset:0; z-index:9990;
+  background:rgba(30,22,12,.45);
+  opacity:0; pointer-events:none;
+  transition:opacity .4s ease;
+  -webkit-backdrop-filter:blur(2px); backdrop-filter:blur(2px);
+}
+
+@media (max-width:900px){
+  nav{ padding:1.1rem 1.6rem; z-index:9999; }
+  .nav-burger{ display:flex; }
+  .nav-backdrop{ display:block; }
+  body.menu-open .nav-backdrop{ opacity:1; pointer-events:auto; }
+  body.menu-open{ overflow:hidden; }
+
+  .nav-links{
+    position:fixed; top:0; right:0; z-index:10;
+    height:100vh; height:100svh;
+    width:min(82vw,360px);
+    flex-direction:column; align-items:stretch; justify-content:flex-start;
+    gap:0;
+    padding:6rem 2rem 6rem;
+    background:rgba(250,246,238,.99);
+    -webkit-backdrop-filter:blur(20px); backdrop-filter:blur(20px);
+    border-left:1px solid rgba(184,138,30,.2);
+    box-shadow:-16px 0 48px rgba(44,35,24,.16);
+    overflow-y:auto; overscroll-behavior:contain;
+    transform:translateX(100%);
+    transition:transform .45s cubic-bezier(.4,0,.2,1);
+  }
+  body.menu-open .nav-links{ transform:translateX(0); }
+  .nav-links > li{ width:100%; border-bottom:1px solid rgba(184,138,30,.1); }
+  .nav-links > li:last-child{ border-bottom:none; }
+  .nav-links a{ display:block; padding:1rem 0; font-size:.8rem; letter-spacing:.16em; }
+  .nav-links > li[style]{ margin-left:0 !important; margin-top:1.4rem !important; }
+
+  .nav-back{
+    position:fixed; right:0; bottom:0; z-index:11;
+    width:min(82vw,360px);
+    justify-content:center;
+    margin:0; padding:1.3rem 2rem;
+    background:rgba(250,246,238,.99);
+    -webkit-backdrop-filter:blur(20px); backdrop-filter:blur(20px);
+    border-top:1px solid rgba(184,138,30,.16);
+    transform:translateX(100%);
+    transition:transform .45s cubic-bezier(.4,0,.2,1);
+  }
+  body.menu-open .nav-back{ transform:translateX(0); }
+}
+
+/* ── 404 HERO ── */
+.err{
+  flex:1;
+  position:relative;
+  display:flex;align-items:center;justify-content:center;
+  text-align:center;
+  padding:9rem 2rem 5rem;
+  overflow:hidden;
+}
+/* Diskret tårn-vandmærke bag tallet */
+.err-watermark{
+  position:absolute;top:50%;left:50%;
+  transform:translate(-50%,-52%);
+  width:min(46vw,420px);max-width:90%;
+  opacity:.05;
+  pointer-events:none;user-select:none;
+  filter:grayscale(1);
+}
+.err-inner{position:relative;z-index:2;max-width:680px;margin:0 auto;}
+.err-eyebrow{
+  font-size:.62rem;letter-spacing:.4em;text-transform:uppercase;
+  color:var(--gold);margin-bottom:1.6rem;display:block;
+}
+.err-code{
+  font-family:'Cinzel',serif;font-weight:300;
+  font-size:clamp(6rem,20vw,13rem);
+  line-height:.9;letter-spacing:.06em;
+  color:var(--wine);
+  margin-bottom:1.4rem;
+  text-shadow:0 4px 40px rgba(122,31,53,.16);
+}
+.err-code em{
+  color:transparent;
+  -webkit-text-stroke:2px var(--wine);
+  font-style:normal;
+}
+.err h1{
+  font-family:'Cinzel',serif;font-weight:400;
+  font-size:clamp(1.5rem,4vw,2.4rem);
+  letter-spacing:.06em;color:var(--charcoal);line-height:1.2;
+  margin-bottom:1.4rem;
+}
+.err-lead{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(1.15rem,2.4vw,1.45rem);
+  font-weight:400;line-height:1.6;color:var(--text-mid);
+  max-width:520px;margin:0 auto 3rem;
+}
+.err-rule{
+  width:60px;height:1px;background:var(--gold);
+  margin:0 auto 2.6rem;opacity:.7;
+}
+.err-actions{
+  display:flex;flex-wrap:wrap;gap:1rem;justify-content:center;
+}
+.err-btn{
+  font-family:'Manrope',sans-serif;
+  font-size:.7rem;font-weight:500;letter-spacing:.16em;text-transform:uppercase;
+  text-decoration:none;
+  padding:1rem 2rem;
+  border:1.5px solid var(--wine);
+  transition:background .3s,color .3s,transform .3s;
+}
+.err-btn-primary{background:var(--wine);color:#fff;}
+.err-btn-primary:hover{background:var(--wine-light);border-color:var(--wine-light);transform:translateY(-2px);}
+.err-btn-ghost{background:transparent;color:var(--wine);}
+.err-btn-ghost:hover{background:var(--wine);color:#fff;transform:translateY(-2px);}
+
+/* ── LANG-SWITCHER ── */
+.lang-switcher{display:flex;border:1.5px solid var(--wine);overflow:hidden;}
+.lang-btn{
+  font-family:'Manrope',sans-serif;
+  font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;
+  padding:.3rem .6rem;border:none;cursor:pointer;
+}
+.lang-btn-active{background:var(--wine);color:#fff;}
+.lang-btn-inactive{background:transparent;color:var(--wine);}
+
+/* ── FOOTER ── */
+footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:3rem 4rem;}
+.footer-bottom{max-width:1320px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;}
+.footer-bottom p{font-size:.68rem;color:rgba(255,255,255,.48);letter-spacing:.04em;}
+.footer-bottom a{font-size:.68rem;color:rgba(255,255,255,.62);text-decoration:none;transition:color .3s;}
+.footer-bottom a:hover{color:var(--gold);}
+
+@media (max-width:900px){
+  html{overflow-x:hidden;}
+  .err{padding:8rem 1.6rem 4rem;}
+  .err-actions{flex-direction:column;align-items:stretch;}
+  .err-btn{text-align:center;}
+  .footer-bottom{flex-direction:column;gap:1.2rem;text-align:center;}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="/" class="nav-logo">
+    <img src="/img/taarne-hvid-trans.png" alt="Castillo del Alma">
+  </a>
+  <button class="nav-burger" id="navBurger" aria-label="Åbn menu" aria-controls="navLinks" aria-expanded="false">
+    <span></span><span></span><span></span>
+  </button>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="/" id="navForside">Forside</a></li>
+    <li><a href="/ejendommen.html" id="navEjendom">Ejendommen</a></li>
+    <li><a href="/udlejning.html" id="navUdlejning">Udlejning</a></li>
+    <li><a href="/kontakt.html" id="navKontakt">Kontakt</a></li>
+    <li style="display:flex;align-items:center;gap:.4rem;margin-left:.8rem;">
+      <div class="lang-switcher">
+        <button id="err-btn-da" class="lang-btn lang-btn-active" onclick="setErrLang('da')">DA</button>
+        <button id="err-btn-en" class="lang-btn lang-btn-inactive" onclick="setErrLang('en')">EN</button>
+      </div>
+    </li>
+  </ul>
+  <a href="/" class="nav-back" id="navBack">← Tilbage til forsiden</a>
+</nav>
+<div class="nav-backdrop" id="navBackdrop"></div>
+
+<main class="err">
+  <img class="err-watermark" src="/img/taarne-hvid-trans.png" alt="" aria-hidden="true">
+  <div class="err-inner">
+    <span class="err-eyebrow" id="errEyebrow">Fejl 404</span>
+    <div class="err-code" aria-hidden="true">4<em>0</em>4</div>
+    <h1 id="errH1">Denne side findes ikke</h1>
+    <div class="err-rule"></div>
+    <p class="err-lead" id="errLead">Siden, du leder efter, er flyttet eller findes ikke længere. Lad os føre dig sikkert tilbage.</p>
+    <div class="err-actions">
+      <a href="/" class="err-btn err-btn-primary" id="errCtaHome">Til forsiden</a>
+      <a href="/ejendommen.html" class="err-btn err-btn-ghost" id="errCtaEstate">Se ejendommen</a>
+      <a href="/kontakt.html" class="err-btn err-btn-ghost" id="errCtaContact">Kontakt os</a>
+    </div>
+  </div>
+</main>
+
+<footer>
+  <div class="footer-bottom">
+    <p id="footerCopy">© 2026 Castillo del Alma · Mollina, Málaga · All rights reserved</p>
+    <div style="display:flex;gap:1.6rem;flex-wrap:wrap;align-items:center;">
+      <a href="/privacidad.html" id="footerPrivacy">Persondatapolitik</a>
+      <a href="/aviso-legal.html" id="footerLegal">Juridisk meddelelse</a>
+      <a href="/" id="footerBack">← Tilbage til forsiden</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+// ── Sprog-tekster (selvstændige — ingen Supabase, så siden altid virker) ──
+var ERR_I18N = {
+  da: {
+    title:    'Siden findes ikke — Castillo del Alma',
+    eyebrow:  'Fejl 404',
+    h1:       'Denne side findes ikke',
+    lead:     'Siden, du leder efter, er flyttet eller findes ikke længere. Lad os føre dig sikkert tilbage.',
+    ctaHome:  'Til forsiden',
+    ctaEstate:'Se ejendommen',
+    ctaContact:'Kontakt os',
+    navForside:'Forside', navEjendom:'Ejendommen', navUdlejning:'Udlejning', navKontakt:'Kontakt',
+    navBack:  '← Tilbage til forsiden',
+    footerPrivacy:'Persondatapolitik', footerLegal:'Juridisk meddelelse', footerBack:'← Tilbage til forsiden'
+  },
+  en: {
+    title:    'Page not found — Castillo del Alma',
+    eyebrow:  'Error 404',
+    h1:       'This page could not be found',
+    lead:     'The page you are looking for has moved or no longer exists. Let us guide you safely back.',
+    ctaHome:  'To the front page',
+    ctaEstate:'View the estate',
+    ctaContact:'Contact us',
+    navForside:'Home', navEjendom:'The Estate', navUdlejning:'Venue Rental', navKontakt:'Contact',
+    navBack:  '← Back to the front page',
+    footerPrivacy:'Privacy Policy', footerLegal:'Legal Notice', footerBack:'← Back to the front page'
+  }
+};
+
+var errLang = 'da';
+
+function errSetText(id, val){ var el = document.getElementById(id); if (el && val) el.textContent = val; }
+
+function setErrLang(lang){
+  errLang = (lang === 'en') ? 'en' : 'da';
+  var t = ERR_I18N[errLang];
+  document.documentElement.lang = errLang;
+  document.title = t.title;
+  var da = document.getElementById('err-btn-da');
+  var en = document.getElementById('err-btn-en');
+  if (da){ da.classList.toggle('lang-btn-active', errLang==='da'); da.classList.toggle('lang-btn-inactive', errLang!=='da'); }
+  if (en){ en.classList.toggle('lang-btn-active', errLang==='en'); en.classList.toggle('lang-btn-inactive', errLang!=='en'); }
+  errSetText('errEyebrow', t.eyebrow);
+  errSetText('errH1', t.h1);
+  errSetText('errLead', t.lead);
+  errSetText('errCtaHome', t.ctaHome);
+  errSetText('errCtaEstate', t.ctaEstate);
+  errSetText('errCtaContact', t.ctaContact);
+  errSetText('navForside', t.navForside);
+  errSetText('navEjendom', t.navEjendom);
+  errSetText('navUdlejning', t.navUdlejning);
+  errSetText('navKontakt', t.navKontakt);
+  errSetText('navBack', t.navBack);
+  errSetText('footerPrivacy', t.footerPrivacy);
+  errSetText('footerLegal', t.footerLegal);
+  errSetText('footerBack', t.footerBack);
+}
+
+// ── Startsprog: /en/-sti → geo-cache → Netlify geo → browsersprog → dansk ──
+// (Netlify serverer 404.html men bevarer den oprindelige adresse, så /en/… kan aflæses.)
+async function determineStartLangErr(){
+  try {
+    if (/^\/en(\/|$)/i.test(location.pathname)) return 'en';
+  } catch(e){}
+  try {
+    var cached = sessionStorage.getItem('cda_geo_lang');
+    if (cached === 'da' || cached === 'en') return cached;
+  } catch(e){}
+  try {
+    var ctrl = new AbortController();
+    var tm = setTimeout(function(){ ctrl.abort(); }, 4000);
+    var res = await fetch('/.netlify/functions/geo-lang', { signal: ctrl.signal });
+    clearTimeout(tm);
+    if (res.ok){
+      var geo = await res.json();
+      if (geo && (geo.lang === 'da' || geo.lang === 'en')){
+        try { sessionStorage.setItem('cda_geo_lang', geo.lang); } catch(e){}
+        return geo.lang;
+      }
+    }
+  } catch(e){ /* geo utilgængelig → browsersprog nedenfor */ }
+  try {
+    var langs = (navigator.languages && navigator.languages.length ? navigator.languages : [navigator.language])
+      .filter(Boolean).map(function(l){ return l.toLowerCase(); });
+    if (langs.some(function(l){ return l.indexOf('da') === 0; })) return 'da';
+    return langs.length ? 'en' : 'da';
+  } catch(e){ return 'da'; }
+}
+
+(async function initErr(){
+  var start = await determineStartLangErr();
+  setErrLang(start);
+})();
+</script>
+
+<!-- MOBILMENU — slide-in toggle (isoleret, påvirker ikke desktop) -->
+<script>
+(function(){
+  var burger = document.getElementById('navBurger');
+  var backdrop = document.getElementById('navBackdrop');
+  if(!burger) return;
+  var isMobile = function(){ return window.matchMedia('(max-width:900px)').matches; };
+  function openMenu(){ document.body.classList.add('menu-open'); burger.setAttribute('aria-expanded','true'); }
+  function closeMenu(){ document.body.classList.remove('menu-open'); burger.setAttribute('aria-expanded','false'); }
+  function toggleMenu(){ document.body.classList.contains('menu-open') ? closeMenu() : openMenu(); }
+  burger.addEventListener('click', toggleMenu);
+  if(backdrop) backdrop.addEventListener('click', closeMenu);
+  document.querySelectorAll('.nav-links a, .nav-back').forEach(function(a){ a.addEventListener('click', closeMenu); });
+  document.addEventListener('keydown', function(e){ if(e.key === 'Escape') closeMenu(); });
+  window.addEventListener('resize', function(){ if(!isMobile()) closeMenu(); });
+})();
+</script>
+</body>
+</html>
