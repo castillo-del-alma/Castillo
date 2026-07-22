@@ -1409,8 +1409,8 @@ body.menu-open .nav-burger span:nth-child(3){ transform:translateY(-9px) rotate(
   <ul class="nav-links" id="navLinks">
     <li class="lang-switcher-item nav-lang-li" style="display:flex;align-items:center;gap:.6rem;margin-left:.6rem;">
       <div class="lang-switcher" style="display:flex;border:1.5px solid;overflow:hidden;">
-        <button id="btn-da" class="lang-btn lang-btn-active" onclick="setSiteLang('da')" style="font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;padding:.3rem .6rem;border:none;cursor:pointer;font-family:'Manrope',sans-serif;">DA</button>
-        <button id="btn-en" class="lang-btn lang-btn-inactive" onclick="setSiteLang('en')" style="font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;padding:.3rem .6rem;border:none;cursor:pointer;font-family:'Manrope',sans-serif;">EN</button>
+        <a id="btn-da" href="/" class="lang-btn lang-btn-active" onclick="setSiteLang('da');return false;" style="font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;padding:.3rem .6rem;border:none;cursor:pointer;font-family:'Manrope',sans-serif;display:inline-block;text-decoration:none;">DA</a>
+        <a id="btn-en" href="/en/" class="lang-btn lang-btn-inactive" onclick="setSiteLang('en');return false;" style="font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;padding:.3rem .6rem;border:none;cursor:pointer;font-family:'Manrope',sans-serif;display:inline-block;text-decoration:none;">EN</a>
       </div>
     </li>
   </ul>

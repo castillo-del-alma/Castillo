@@ -681,8 +681,8 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:3rem
     <li class="nav-item"><a href="#vingaarden">Vingården</a></li>
     <li class="nav-lang-li" style="display:flex;align-items:center;gap:.4rem;margin-left:.8rem;">
       <div class="lang-switcher" style="display:flex;border:1.5px solid;overflow:hidden;border-color:var(--wine);">
-        <button id="ej-btn-da" class="lang-btn lang-btn-active" onclick="setEjLang('da')" style="font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;padding:.3rem .6rem;border:none;cursor:pointer;font-family:'Manrope',sans-serif;">DA</button>
-        <button id="ej-btn-en" class="lang-btn lang-btn-inactive" onclick="setEjLang('en')" style="font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;padding:.3rem .6rem;border:none;cursor:pointer;font-family:'Manrope',sans-serif;">EN</button>
+        <a id="ej-btn-da" href="/ejendommen" class="lang-btn lang-btn-active" onclick="setEjLang('da');return false;" style="font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;padding:.3rem .6rem;border:none;cursor:pointer;font-family:'Manrope',sans-serif;display:inline-block;text-decoration:none;">DA</a>
+        <a id="ej-btn-en" href="/en/ejendommen" class="lang-btn lang-btn-inactive" onclick="setEjLang('en');return false;" style="font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;padding:.3rem .6rem;border:none;cursor:pointer;font-family:'Manrope',sans-serif;display:inline-block;text-decoration:none;">EN</a>
       </div>
     </li>
   </ul>

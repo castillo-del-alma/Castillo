@@ -890,8 +890,8 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:3rem
     <li class="nav-item"><a href="#booking" id="navBook">Book</a></li>
     <li class="nav-lang-li" style="display:flex;align-items:center;gap:.4rem;margin-left:.8rem;">
       <div class="lang-switcher" style="display:flex;border:1.5px solid;overflow:hidden;border-color:var(--wine);">
-        <button id="retreat-btn-da" class="lang-btn lang-btn-active" onclick="setRetreatLang('da')" style="font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;padding:.3rem .6rem;border:none;cursor:pointer;font-family:'Manrope',sans-serif;">DA</button>
-        <button id="retreat-btn-en" class="lang-btn lang-btn-inactive" onclick="setRetreatLang('en')" style="font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;padding:.3rem .6rem;border:none;cursor:pointer;font-family:'Manrope',sans-serif;">EN</button>
+        <a id="retreat-btn-da" href="/retreat" class="lang-btn lang-btn-active" onclick="setRetreatLang('da');return false;" style="font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;padding:.3rem .6rem;border:none;cursor:pointer;font-family:'Manrope',sans-serif;display:inline-block;text-decoration:none;">DA</a>
+        <a id="retreat-btn-en" href="/en/retreat" class="lang-btn lang-btn-inactive" onclick="setRetreatLang('en');return false;" style="font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;padding:.3rem .6rem;border:none;cursor:pointer;font-family:'Manrope',sans-serif;display:inline-block;text-decoration:none;">EN</a>
       </div>
     </li>
   </ul>
@@ -2027,6 +2027,12 @@ async function loadRetreatData() {
   const btnEn = document.getElementById('retreat-btn-en');
   if (btnDa) { btnDa.classList.toggle('lang-btn-active', retreatLang === 'da'); btnDa.classList.toggle('lang-btn-inactive', retreatLang !== 'da'); }
   if (btnEn) { btnEn.classList.toggle('lang-btn-active', retreatLang === 'en'); btnEn.classList.toggle('lang-btn-inactive', retreatLang !== 'en'); }
+  // Sprogknapperne er rigtige links, så Googlebot kan følge dem. Slug'en skal
+  // med, ellers peger de på en retreat-side uden valgt retreat.
+  if (location.search) {
+    if (btnDa) btnDa.setAttribute('href', '/retreat' + location.search);
+    if (btnEn) btnEn.setAttribute('href', '/en/retreat' + location.search);
+  }
   renderReviewsRetreat();
 
   if (error || !data) {
