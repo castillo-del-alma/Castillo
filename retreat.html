@@ -2033,6 +2033,10 @@ async function loadRetreatData() {
     if (btnDa) btnDa.setAttribute('href', '/retreat' + location.search);
     if (btnEn) btnEn.setAttribute('href', '/en/retreat' + location.search);
   }
+  // Sikkerhedssektionen henter sit indhold i en selvstændig IIFE og rendrede
+  // med startværdien 'da', hvis den blev færdig før sproget var afgjort her.
+  // Kaldet gør rækkefølgen ligegyldig — begge veje ender i rigtigt sprog.
+  if (window.applySikkerhed) window.applySikkerhed(retreatLang);
   renderReviewsRetreat();
 
   if (error || !data) {

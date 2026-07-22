@@ -2190,6 +2190,10 @@ async function loadUlContent() {
   // Disse kaldes ALTID — falder tilbage til dagens tekst/valgmuligheder hvis databasen er tom eller utilgængelig
   applyUlSektionOrden();
   applyUlContent();
+  // Sikkerhedssektionen henter sit indhold i en selvstændig IIFE og rendrede
+  // med startværdien 'da', hvis den blev færdig før sproget var afgjort her.
+  // Kaldet gør rækkefølgen ligegyldig — begge veje ender i rigtigt sprog.
+  if (window.applySikkerhed) window.applySikkerhed(ulLang);
   renderUlRooms();
   renderUlDropdowns();
 }
