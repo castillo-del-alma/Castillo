@@ -9,7 +9,6 @@
 <link rel="icon" type="image/png" href="img/logo-tower.png">
 <title>Min Booking — Castillo del Alma</title>
 <link rel="stylesheet" href="fonts/fonts.css">
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 :root{--cream:#faf6ee;--beige:#f0e8d5;--sand:#d8c49c;--charcoal:#241c12;--text-mid:#4a3d2a;--text-light:#6b5c47;--wine:#7a1f35;--gold:#8f6a12;}
 *{margin:0;padding:0;box-sizing:border-box;}
@@ -151,18 +150,52 @@ body{font-family:'Manrope',sans-serif;background:var(--cream);color:var(--charco
 </div>
 
 <script>
-const SUPABASE_URL = 'https://niniwgiytyqvdqejigxg.supabase.co';
-const SUPABASE_ANON_KEY = 'sb_publishable_GwrNUpIuWzdg1oswOY5HzA_mKWqhd6y';
-const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+/* Siden taler ikke længere med databasen.
+   Alt personligt data hentes gennem portal-data, som slår e-mailen op ud fra
+   login-sessionen og selv finder bookingen. Browseren sender aldrig et
+   booking-id eller en e-mail, der kan byttes ud. */
+
+async function portalData(action, ekstra) {
+  const session = localStorage.getItem('cda_session');
+  if (!session) { kraevLogin(); throw new Error('Ingen session'); }
+
+  const res = await fetch('/.netlify/functions/portal-data', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(Object.assign({ session: session, action: action }, ekstra || {}))
+  });
+
+  if (res.status === 401) { kraevLogin(); throw new Error('Log ind igen'); }
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) throw new Error(data.error || 'Kunne ikke hente data');
+  return data;
+}
+
+// Sessionen er væk eller udløbet — tilbage til login.
+function kraevLogin() {
+  localStorage.removeItem('cda_kunde_email');
+  localStorage.removeItem('cda_session');
+  const wrap = document.getElementById('loginWrap');
+  const head = document.getElementById('portalHeader');
+  const portal = document.getElementById('portalWrap');
+  if (wrap) wrap.style.display = 'block';
+  if (head) head.style.display = 'none';
+  if (portal) portal.style.display = 'none';
+  const s1 = document.getElementById('step1'), s2 = document.getElementById('step2');
+  if (s1) s1.style.display = 'block';
+  if (s2) s2.style.display = 'none';
+}
 
 let bookingData = null;
 let userEmail = '';
 let portalKundeNavn = '';
 let retreatData = null;
 
-// Check om allerede logget ind
+// Check om allerede logget ind.
+// En gemt e-mail er ikke nok — der skal være en gyldig session bag.
 const savedEmail = localStorage.getItem('cda_kunde_email');
-if (savedEmail) loadPortal(savedEmail);
+if (savedEmail && localStorage.getItem('cda_session')) loadPortal(savedEmail);
+else if (savedEmail) localStorage.removeItem('cda_kunde_email');
 
 async function sendOTP() {
   const email = document.getElementById('loginEmail').value.trim();
@@ -268,28 +301,27 @@ async function loadPortal(email) {
   portalRolle = 'booker';
   saetFanerEfterRolle();
 
-  const { data: kunde } = await sb.from('customers')
-    .select('*, bookings(*, payments(*), charges(*))')
-    .eq('email', email)
-    .single();
-
-  if (!kunde) { document.getElementById('portalNavn').textContent = T('ingenBooking'); return; }
-  saetSprog(sprogFraLand(kunde.nationality));
-
-  bookingData = (kunde.bookings || [])[0] || null;
-  portalKundeNavn = kunde.full_name;
-  retreatData = null;
-  if (bookingData?.retreat_id) {
-    const { data: rd } = await sb.from('retreats').select('addon_items').eq('id', bookingData.retreat_id).single();
-    retreatData = rd;
+  let d;
+  try {
+    d = await portalData('booking');
+  } catch (e) {
+    document.getElementById('portalNavn').textContent = T('ingenBooking');
+    return;
   }
-  document.getElementById('portalNavn').textContent = kunde.full_name;
+
+  saetSprog(sprogFraLand(d.nationality));
+
+  bookingData = d.booking || null;
+  portalKundeNavn = d.full_name || '';
+  retreatData = { addon_items: d.addon_items || [] };
+
+  document.getElementById('portalNavn').textContent = portalKundeNavn;
   renderBooking();
   renderProfilBillede();
   loadPasRegistrering();
   renderBetalinger();
   checkUnread();
-  startRealtimeBeskeder();
+  startBeskedPoll();
 }
 
 function renderBooking() {
@@ -473,19 +505,14 @@ async function gemTilvalg() {
   msg.style.color = 'rgba(44,35,24,.5)';
   msg.textContent = T('gemmer');
   try {
-    await sb.from('charges').delete().eq('booking_id', bookingData.id).like('description', 'Tilvalg:%');
-    const checkboxes = document.querySelectorAll('.dynamic-addon');
-    const newCharges = [];
-    checkboxes.forEach(cb => {
-      if (cb.checked) newCharges.push({
-        booking_id: bookingData.id,
-        description: 'Tilvalg: ' + cb.dataset.text,
-        amount: parseFloat(cb.dataset.price)
-      });
+    // Kun teksterne sendes. Prisen slås op på retreatet inde i funktionen,
+    // så et redigeret data-price i browseren ikke kan ændre beløbet.
+    const valgte = [];
+    document.querySelectorAll('.dynamic-addon').forEach(cb => {
+      if (cb.checked) valgte.push(cb.dataset.text);
     });
-    if (newCharges.length) await sb.from('charges').insert(newCharges);
-    const { data: freshCharges } = await sb.from('charges').select('*').eq('booking_id', bookingData.id);
-    bookingData.charges = freshCharges || [];
+    const svar = await portalData('tilvalg', { valgte });
+    bookingData.charges = svar.charges || [];
     msg.textContent = '✓ Tilvalg gemt';
     msg.style.color = '#6a7240';
     renderBetalinger();
@@ -573,13 +600,23 @@ function renderBetalinger() {
       </div>`).join('')}`;
 }
 
+let sidsteBeskedNoegle = '';
+
 async function loadKundeBeskeder() {
   if (!bookingData) return;
-  const { data } = await sb.from('messages').select('*').eq('booking_id', bookingData.id).order('created_at', { ascending: true });
-  await sb.from('messages').update({ read: true }).eq('booking_id', bookingData.id).eq('sender', 'admin');
+  let data;
+  try { data = (await portalData('beskeder')).beskeder; }
+  catch (e) { return; }
   document.getElementById('kundeUnreadBadge').style.display = 'none';
   const liste = document.getElementById('kundeBeskedListe');
   if (!data || !data.length) { liste.innerHTML = `<div class="empty-state">${T('besIngen')}</div>`; return; }
+
+  // Tråden hentes hvert 30. sekund mens fanen er åben. Er der intet nyt,
+  // rører vi ikke listen — ellers ville den rulle til bunds under læsning.
+  const noegle = data.map(m => m.id).join(',');
+  if (noegle === sidsteBeskedNoegle) return;
+  sidsteBeskedNoegle = noegle;
+
   liste.innerHTML = data.map(m => {
     const erAdmin = m.sender === 'admin';
     const tid = new Date(m.created_at).toLocaleString(LOC(), { day:'numeric', month:'short', hour:'2-digit', minute:'2-digit' });
@@ -601,7 +638,7 @@ async function sendKundeBesked() {
     const res = await fetch('/.netlify/functions/send-booking-message', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ bookingId: bookingData.id, message: msg })
+      body: JSON.stringify({ session: localStorage.getItem('cda_session'), message: msg })
     });
     if (!res.ok) throw new Error('send fejlede');
     input.value = '';
@@ -615,54 +652,48 @@ async function sendKundeBesked() {
 }
 
 // ── REAL-TIME BESKEDER ──
-function startRealtimeBeskeder() {
+/* Nye beskeder fra admin.
+   Tidligere en realtime-forbindelse direkte til messages-tabellen. Den vej
+   findes ikke længere fra browseren, så badge'en opdateres nu ved at spørge
+   portal-data med jævne mellemrum. Er beskedfanen åben, henter switchTab
+   hele tråden hvert 30. sekund i stedet. */
+let beskedPollInterval = null;
+
+function startBeskedPoll() {
+  if (beskedPollInterval) { clearInterval(beskedPollInterval); beskedPollInterval = null; }
   if (!bookingData) return;
-  sb.channel('beskeder-' + bookingData.id)
-    .on('postgres_changes', {
-      event: 'INSERT',
-      schema: 'public',
-      table: 'messages',
-      filter: `booking_id=eq.${bookingData.id}`
-    }, (payload) => {
-      if (payload.new.sender === 'admin') {
-        // Opdater badge hvis ikke på besked-fanen
-        const beskedTab = document.getElementById('tab-beskeder');
-        if (!beskedTab.classList.contains('active')) {
-          const badge = document.getElementById('kundeUnreadBadge');
-          badge.style.display = 'inline';
-          badge.textContent = parseInt(badge.textContent || 0) + 1;
-        } else {
-          loadKundeBeskeder();
-        }
-      }
-    })
-    .subscribe();
+  beskedPollInterval = setInterval(() => {
+    if (document.hidden) return;
+    const fane = document.getElementById('tab-beskeder');
+    if (fane && fane.classList.contains('active')) return; // switchTab står for den åbne fane
+    checkUnread();
+  }, 60000);
 }
 
 async function checkUnread() {
   if (!bookingData) return;
-  const { count } = await sb.from('messages').select('id', { count: 'exact' }).eq('booking_id', bookingData.id).eq('sender', 'admin').eq('read', false);
-  if (count > 0) { const b = document.getElementById('kundeUnreadBadge'); b.style.display = 'inline'; b.textContent = count; }
+  let antal = 0;
+  try { antal = (await portalData('ulaeste')).antal || 0; } catch (e) { return; }
+  const b = document.getElementById('kundeUnreadBadge');
+  if (!b) return;
+  if (antal > 0) { b.style.display = 'inline'; b.textContent = antal; }
+  else { b.style.display = 'none'; }
 }
 
 let heartbeatInterval = null;
 
 async function sendHeartbeat() {
   if (!bookingData) return;
-  await sb.from('customers')
-    .update({ last_seen: new Date().toISOString() })
-    .eq('id', bookingData.customer_id);
+  try { await portalData('heartbeat'); } catch (e) { /* uden betydning for visningen */ }
 }
 
 async function loadKundeEmails() {
   if (!bookingData) return;
   const el = document.getElementById('kundeEmailListe');
   el.innerHTML = `<div class="empty-state">${T('henter')}</div>`;
-  const { data, error } = await sb.from('emails')
-    .select('*')
-    .eq('booking_id', bookingData.id)
-    .order('sent_at', { ascending: false });
-  if (error || !data || !data.length) {
+  let data = null;
+  try { data = (await portalData('emails')).emails; } catch (e) { data = null; }
+  if (!data || !data.length) {
     el.innerHTML = '<div class="empty-state">Ingen e-mails endnu.</div>';
     return;
   }
@@ -698,13 +729,9 @@ async function loadFakturaTab() {
   const el = document.getElementById('fakturaTabContent');
   if (!bookingData?.id) { el.innerHTML = '<p style="font-size:.82rem;color:rgba(44,35,24,.5);">Ingen booking fundet.</p>'; return; }
   el.innerHTML = `<p style="font-size:.82rem;color:rgba(44,35,24,.5);">${T('henter')}</p>`;
-  const SUPABASE_URL = 'https://niniwgiytyqvdqejigxg.supabase.co';
-  const SUPABASE_ANON_KEY = 'sb_publishable_GwrNUpIuWzdg1oswOY5HzA_mKWqhd6y';
-  const res = await fetch(`${SUPABASE_URL}/rest/v1/invoices?booking_id=eq.${bookingData.id}&select=*`, {
-    headers: { 'apikey': SUPABASE_ANON_KEY, 'Authorization': `Bearer ${SUPABASE_ANON_KEY}` }
-  });
-  const invoices = await res.json();
-  if (!invoices || invoices.length === 0) {
+  let invoices = [];
+  try { invoices = (await portalData('faktura')).invoices || []; } catch (e) { invoices = []; }
+  if (!invoices.length) {
     el.innerHTML = '<p style="font-size:.82rem;color:rgba(44,35,24,.5);">Ingen faktura er udstedt endnu.</p>';
     return;
   }
@@ -753,7 +780,11 @@ function switchTab(tab, btn) {
     loadKundeBeskeder();
     sendHeartbeat();
     if (heartbeatInterval) clearInterval(heartbeatInterval);
-    heartbeatInterval = setInterval(sendHeartbeat, 30000); // hvert 30 sek
+    heartbeatInterval = setInterval(() => {
+      if (document.hidden) return;
+      sendHeartbeat();
+      loadKundeBeskeder(); // henter nye svar fra admin mens fanen er åben
+    }, 30000);
   } else {
     if (heartbeatInterval) { clearInterval(heartbeatInterval); heartbeatInterval = null; }
   }
@@ -968,7 +999,7 @@ async function loadGaestPortal(me) {
 
   renderMinProfil();
   checkUnread();
-  startRealtimeBeskeder();
+  startBeskedPoll();
 }
 
 /* ==========================================================

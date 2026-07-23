@@ -1,3 +1,8 @@
+// Beskeden skrives ind på den booking sessionen tilhører.
+// Tidligere kom booking-id'et fra browseren, så enhver kunne skrive i en
+// fremmed tråd som var det kunden selv.
+const { bookingFraSession } = require('./forum-session');
+
 const ADMIN_EMAIL = 'hello@castillodelalma.es';
 
 function esc(s) {
@@ -13,17 +18,22 @@ exports.handler = async (event) => {
   const SUPABASE_KEY = process.env.SUPABASE_SERVICE_KEY || process.env.SUPABASE_ANON_KEY;
   const RESEND_KEY = process.env.RESEND_API_KEY;
 
-  let bookingId, message;
+  let session, message;
   try {
-    ({ bookingId, message } = JSON.parse(event.body));
+    ({ session, message } = JSON.parse(event.body));
   } catch (e) {
     return { statusCode: 400, body: JSON.stringify({ error: 'Ugyldig anmodning' }) };
   }
 
   message = String(message || '').trim().slice(0, 5000);
-  if (!bookingId || !message) {
+  if (!message) {
     return { statusCode: 400, body: JSON.stringify({ error: 'Manglende besked' }) };
   }
+
+  const hvem = await bookingFraSession(session);
+  if (!hvem) return { statusCode: 401, body: JSON.stringify({ error: 'Log ind igen' }) };
+  const bookingId = hvem.booking_id;
+  if (!bookingId) return { statusCode: 404, body: JSON.stringify({ error: 'Ingen booking fundet' }) };
 
   const headers = {
     'Content-Type': 'application/json',

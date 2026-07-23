@@ -21,4 +21,37 @@ async function emailFraSession(token) {
   return Array.isArray(rows) && rows[0] ? rows[0].email : null;
 }
 
-module.exports = { emailFraSession, sbHeaders, SUPABASE_URL };
+// Hvilken booking hører den indloggede til?
+//
+// Den magre udgave: kun rollen og id'erne. Skal der også betalinger, tilvalg
+// og kundenavn med, bruger portal-data.js sin egen, bredere opslag.
+//
+// Bruges af funktioner der ellers ville tage et booking-id fra browseren —
+// og dermed lade enhver skrive i en fremmed booking.
+async function bookingFraSession(token) {
+  const email = await emailFraSession(token);
+  if (!email) return null;
+
+  const kRes = await fetch(
+    `${SUPABASE_URL}/rest/v1/customers?email=${encodeURIComponent('eq.' + email)}&select=id,bookings(id)&limit=1`,
+    { headers: sbHeaders }
+  );
+  const k = await kRes.json();
+  if (Array.isArray(k) && k[0]) {
+    const b = Array.isArray(k[0].bookings) ? k[0].bookings[0] : null;
+    return { email, rolle: 'booker', kunde_id: k[0].id, booking_id: b ? b.id : null };
+  }
+
+  const gRes = await fetch(
+    `${SUPABASE_URL}/rest/v1/booking_guests?email=${encodeURIComponent('eq.' + email)}&select=booking_id&order=id.desc&limit=1`,
+    { headers: sbHeaders }
+  );
+  const g = await gRes.json();
+  if (Array.isArray(g) && g[0]) {
+    return { email, rolle: 'gaest', kunde_id: null, booking_id: g[0].booking_id };
+  }
+
+  return { email, rolle: null, kunde_id: null, booking_id: null };
+}
+
+module.exports = { emailFraSession, bookingFraSession, sbHeaders, SUPABASE_URL };

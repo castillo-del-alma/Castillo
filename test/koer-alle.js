@@ -11,6 +11,8 @@ const TESTS = [
   ['Nyhedsbrev-slet', 'nyhedsbrev-slet.js'],
   ['Admin-login',   'admin-login.js'],
   ['RLS-antagelser', 'rls-antagelser.js'],
+  ['Portal-data',   'portal-data.js'],
+  ['Min booking',   'min-booking-portal.js'],
 ];
 
 const resultat = [];

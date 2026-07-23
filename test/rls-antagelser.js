@@ -99,7 +99,35 @@ for (const fil of ['index.html', 'retreat.html']) {
   }
 }
 
-// ── 4. Migrationen ligger i repoet ───────────────────────────────────
+// ── 4. Min booking taler ikke med databasen ──────────────────────────
+// Fase 2: alt personligt data går gennem portal-data, som slår e-mailen op
+// ud fra login-sessionen. Kommer der en direkte forespørgsel tilbage i siden,
+// er hullet åbent igen — derfor er der ingen undtagelser her.
+r.overskrift('min-booking.html');
+
+const mb = fs.readFileSync(path.join(ROD, 'min-booking.html'), 'utf8');
+
+r.tjek(!/supabase\.createClient/.test(mb), 'siden opretter en Supabase-klient');
+r.tjek(!/supabase-js/.test(mb), 'siden indlæser stadig supabase-js');
+r.tjek(!/sb_publishable_/.test(mb), 'anon-nøglen står stadig i siden');
+r.tjek(!/rest\/v1\//.test(mb), 'siden kalder stadig databasen direkte');
+r.tjek(/functions\/portal-data/.test(mb), 'siden kalder ikke portal-data');
+
+// Auto-login må ikke kunne ske på en e-mail alene — så kunne enhver skrive
+// en andens e-mail i localStorage og komme ind.
+r.tjek(/cda_kunde_email'\)[\s\S]{0,200}localStorage\.getItem\('cda_session'\)/.test(mb),
+  'auto-login kræver ikke en session');
+
+const portalData = path.join(ROD, 'netlify', 'functions', 'portal-data.js');
+r.tjek(fs.existsSync(portalData), 'netlify/functions/portal-data.js mangler');
+if (fs.existsSync(portalData)) {
+  const pd = fs.readFileSync(portalData, 'utf8');
+  r.tjek(/emailFraSession/.test(pd), 'portal-data slår ikke sessionen op');
+  r.tjek(!/data\.booking_id|data\.bookingId/.test(pd),
+    'portal-data bruger et booking-id fra klienten');
+}
+
+// ── 5. Migrationen ligger i repoet ───────────────────────────────────
 r.overskrift('migrationen');
 
 const migration = path.join(ROD, 'sql', '2026-07-23-rls-fase-1-indholdstabeller.sql');
