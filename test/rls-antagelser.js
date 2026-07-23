@@ -167,7 +167,37 @@ for (const fil of ['betal.html', 'anmeldelse.html']) {
 r.tjek(!/supabase\.createClient/.test(fs.readFileSync(path.join(ROD, 'betal.html'), 'utf8')),
   'betal.html opretter stadig en Supabase-klient');
 
-// ── 6. Migrationerne ligger i repoet ─────────────────────────────────
+// ── 6. settings og oprydningen (fase 4) ─────────────────────────────
+r.overskrift('settings');
+
+// settings holder visningstekst og læses af forsiden. Ingen offentlig side
+// må skrive i den — kun admin.
+for (const fil of OFFENTLIGE_SIDER) {
+  const sti = path.join(ROD, fil);
+  if (!fs.existsSync(sti)) continue;
+  const linjer = fs.readFileSync(sti, 'utf8').split('\n');
+  linjer.forEach((linje, i) => {
+    if (linje.includes("from('settings')") && SKRIVEORD.test(linje)) {
+      r.tjek(false, `${fil}:${i + 1} skriver til settings med anon-nøglen`);
+    }
+  });
+}
+
+// Forsidens galleri oplyser kun mappen galleri/. Policyen i fase 4 er skrevet
+// til netop den mappe — kommer der flere, skal policyen følge med.
+const forsideKode = fs.readFileSync(path.join(ROD, 'index.html'), 'utf8');
+const listKald = [...forsideKode.matchAll(/storage\.from\([^)]*\)\.list\('([^']*)'/g)].map((m) => m[1]);
+r.tjek(listKald.every((m) => m === 'galleri'),
+  'forsiden oplyser andre mapper end galleri/: ' + listKald.join(', '));
+
+// Ingen service-nøgle må nogensinde ende i en admin-side.
+for (const fil of ['admin-anmeldelser.html', 'admin-newsletter.html', 'admin-auth.js']) {
+  const kode = fs.readFileSync(path.join(ROD, fil), 'utf8');
+  r.tjek(!/sbService|SERVICE_KEY|service_role|sb_secret_/.test(kode),
+    fil + ' nævner en service-nøgle');
+}
+
+// ── 7. Migrationerne ligger i repoet ─────────────────────────────────
 r.overskrift('migrationen');
 
 const migration = path.join(ROD, 'sql', '2026-07-23-rls-fase-1-indholdstabeller.sql');
@@ -188,6 +218,15 @@ if (fs.existsSync(migration3)) {
     r.tjek(sql3.includes(`'${t}'`), `fase 3-migrationen nævner ikke ${t}`);
   }
   r.tjek(/REVOKE ALL ON public/.test(sql3), 'fase 3-migrationen fjerner ikke anons rettigheder');
+}
+
+const migration4 = path.join(ROD, 'sql', '2026-07-24-rls-fase-4-oprydning.sql');
+r.tjek(fs.existsSync(migration4), 'fase 4-migrationen mangler i sql/');
+if (fs.existsSync(migration4)) {
+  const sql4 = fs.readFileSync(migration4, 'utf8');
+  r.tjek(/public\.settings/.test(sql4), 'fase 4-migrationen nævner ikke settings');
+  r.tjek(/storage\.objects/.test(sql4), 'fase 4-migrationen nævner ikke storage');
+  r.tjek(/retreat-images/.test(sql4), 'fase 4-migrationen nævner ikke bucket\'en');
 }
 
 process.exit(r.afslut() === 0 ? 0 : 1);
