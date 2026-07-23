@@ -1,3 +1,4 @@
+const { hvemKalder, maaSeBooking } = require('./adgang');
 const PDFDocument = require('pdfkit');
 
 function fmtDate(iso) {
@@ -171,7 +172,22 @@ td:last-child{text-align:right;}
 
 exports.handler = async (event) => {
   if (event.httpMethod !== 'POST') return { statusCode:405, body:'Method Not Allowed' };
-  const { bookingId } = JSON.parse(event.body);
+
+  let indhold;
+  try { indhold = JSON.parse(event.body); }
+  catch (e) { return { statusCode:400, body: JSON.stringify({ error:'Ugyldig anmodning' }) }; }
+
+  // Fakturaen indeholder navn, e-mail og beløb. Tidligere kunne enhver bede om
+  // en vilkårlig booking ved bare at gætte eller kende id'et. Nu skal kalderen
+  // enten være logget ind som admin eller være kunden bag netop den booking.
+  const hvem = await hvemKalder(indhold);
+  if (!hvem) return { statusCode:401, body: JSON.stringify({ error:'Log ind igen' }) };
+
+  const bookingId = hvem.type === 'admin' ? indhold.bookingId : hvem.booking_id;
+  if (!bookingId) return { statusCode:400, body: JSON.stringify({ error:'Ingen booking' }) };
+  if (!maaSeBooking(hvem, bookingId)) {
+    return { statusCode:403, body: JSON.stringify({ error:'Ingen adgang til denne booking' }) };
+  }
   const SUPABASE_URL = process.env.SUPABASE_URL;
   const SUPABASE_KEY = process.env.SUPABASE_SERVICE_KEY || process.env.SUPABASE_ANON_KEY;
   const hdrs = { 'apikey':SUPABASE_KEY,'Authorization':`Bearer ${SUPABASE_KEY}`,'Content-Type':'application/json' };

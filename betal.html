@@ -29,11 +29,9 @@ p{font-size:.82rem;color:rgba(44,35,24,.65);line-height:1.7;margin-bottom:1.5rem
   <p id="msg">Et øjeblik — vi sender dig videre til betaling.</p>
   <p class="err" id="err" style="display:none;"></p>
 </div>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-const SUPABASE_URL = 'https://niniwgiytyqvdqejigxg.supabase.co';
-const SUPABASE_ANON_KEY = 'sb_publishable_GwrNUpIuWzdg1oswOY5HzA_mKWqhd6y';
-const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+/* Bookingen hentes gennem booking-link, som kun udleverer de felter denne
+   side bruger. Siden slår ikke længere op i bookings-tabellen selv. */
 
 async function init() {
   const params = new URLSearchParams(window.location.search);
@@ -41,10 +39,14 @@ async function init() {
   if (!bookingId) { showErr('Ingen booking ID fundet i linket.'); return; }
 
   try {
-    const { data: booking } = await sb.from('bookings').select('*, customers(full_name, email)').eq('id', bookingId).single();
-    if (!booking) { showErr('Booking ikke fundet.'); return; }
+    const bRes = await fetch('/.netlify/functions/booking-link', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ booking: bookingId, formaal: 'betaling' })
+    });
+    const booking = bRes.ok ? await bRes.json() : null;
+    if (!booking || !booking.id) { showErr('Booking ikke fundet.'); return; }
 
-    const kunde = booking.customers;
     const amount = booking.deposit_amount || Math.round(parseFloat(booking.total_price) * 0.3);
 
     document.getElementById('heading').textContent = 'Sender dig til betaling…';
@@ -55,8 +57,8 @@ async function init() {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         bookingId: booking.id,
-        navn: kunde?.full_name || '',
-        email: kunde?.email || '',
+        navn: booking.navn || '',
+        email: booking.email || '',
         amount: amount,
         paymentType: 'deposit',
         productName: 'Depositum — ' + (booking.retreat_name || 'Castillo del Alma')

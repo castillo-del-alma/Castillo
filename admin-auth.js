@@ -144,12 +144,25 @@
     });
   }
 
+  /* Access-tokenet for den indloggede admin.
+     Netlify Functions sender det videre til Supabase for at få bekræftet
+     hvem der kalder — se netlify/functions/adgang.js. */
+  async function token() {
+    try {
+      const res = await client.auth.getSession();
+      return res && res.data && res.data.session ? res.data.session.access_token : null;
+    } catch (e) {
+      return null;
+    }
+  }
+
   /* Delt klient — admin-siderne bruger den som deres 'sb'. */
   window.cdaSupabase = client;
 
   window.CDAAuth = {
     client: client,
     start: start,
+    token: token,
     login: doLogin,
     logout: doLogout,
     showLogin: showLogin,

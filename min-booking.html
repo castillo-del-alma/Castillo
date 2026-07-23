@@ -381,7 +381,7 @@ async function loadPasRegistrering() {
     const res = await fetch('/.netlify/functions/booking-guests', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ action: 'get', email: userEmail, booking_id: bookingData.id })
+      body: JSON.stringify({ action: 'get', session: localStorage.getItem('cda_session') })
     });
     if (res.ok) {
       const d = await res.json();
@@ -481,7 +481,7 @@ async function gemPasRegistrering() {
     const res = await fetch('/.netlify/functions/booking-guests', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ action: 'save', email: userEmail, booking_id: bookingData.id, guests })
+      body: JSON.stringify({ action: 'save', session: localStorage.getItem('cda_session'), guests })
     });
     if (!res.ok) {
       const d = await res.json().catch(() => ({}));
@@ -754,7 +754,7 @@ async function downloadFaktura(bookingId) {
   try {
     const res = await fetch('/.netlify/functions/generate-invoice', {
       method: 'POST', headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ bookingId })
+      body: JSON.stringify({ session: localStorage.getItem('cda_session') })
     });
     const data = await res.json();
     if (!res.ok || data.error) throw new Error(data.error);

@@ -5724,7 +5724,7 @@ async function downloadFakturaFraId(id, invNum, isManual, bookingId) {
       const data = await res.json();
       pdfBase64 = data.pdfBase64;
     } else if (bookingId) {
-      const res = await fetch('/.netlify/functions/generate-invoice', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ bookingId }) });
+      const res = await fetch('/.netlify/functions/generate-invoice', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ bookingId, adminToken: await CDAAuth.token() }) });
       const data = await res.json();
       pdfBase64 = data.pdfBase64;
     }
@@ -6191,7 +6191,7 @@ async function skabFaktura() {
   try {
     const res = await fetch('/.netlify/functions/generate-invoice', {
       method:'POST', headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({ bookingId: booking.id })
+      body: JSON.stringify({ bookingId: booking.id, adminToken: await CDAAuth.token() })
     });
     const data = await res.json();
     if (!res.ok || data.error) throw new Error(data.error);
@@ -6381,7 +6381,7 @@ async function loadPasAdmin(email, booking) {
     const res = await fetch('/.netlify/functions/booking-guests', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ action: 'get', email: email, booking_id: booking.id })
+      body: JSON.stringify({ action: 'get', booking_id: booking.id, adminToken: await CDAAuth.token() })
     });
     if (res.ok) {
       const d = await res.json();

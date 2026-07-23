@@ -570,17 +570,18 @@ async function prefillFromBooking() {
   if (!bookingId) return;
 
   try {
-    const SUPABASE_URL = 'https://niniwgiytyqvdqejigxg.supabase.co';
-    const SUPABASE_ANON_KEY = 'sb_publishable_GwrNUpIuWzdg1oswOY5HzA_mKWqhd6y';
-    const res = await fetch(`${SUPABASE_URL}/rest/v1/bookings?id=eq.${bookingId}&select=*,customers(*)`, {
-      headers: { 'apikey': SUPABASE_ANON_KEY, 'Authorization': `Bearer ${SUPABASE_ANON_KEY}` }
+    // Kun de felter formularen udfylder — siden slår ikke op i bookings selv.
+    const res = await fetch('/.netlify/functions/booking-link', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ booking: bookingId, formaal: 'anmeldelse' })
     });
-    const arr = await res.json();
-    const b = arr[0];
+    if (!res.ok) return;
+    const b = await res.json();
     if (!b) return;
 
-    const kunde = b.customers;
-    if (kunde?.full_name) {
+    const kunde = { full_name: b.navn, nationality: b.nationality };
+    if (kunde.full_name) {
       const parts = kunde.full_name.trim().split(' ');
       const el = document.getElementById('fname');
       if (el) el.value = parts[0];
@@ -605,7 +606,7 @@ async function prefillFromBooking() {
       const el = document.getElementById('visitDate');
       if (el) el.value = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`;
     }
-    if (kunde?.nationality) {
+    if (kunde.nationality) {
       const sel = document.getElementById('country');
       if (sel) {
         for (let opt of sel.options) {

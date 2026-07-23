@@ -1,13 +1,15 @@
 // Gæste- og pasregistrering (parte de viajeros) + invitation af gæster.
 //
 // Læser/skriver booking_guests via service-nøglen (tabellen har RLS til og er
-// utilgængelig for anon-nøglen). Verificerer altid, at bookingen tilhører den
-// angivne e-mail, før der returneres eller gemmes noget.
+// utilgængelig for anon-nøglen). Kalderen skal enten være admin med sit eget
+// Supabase-login eller bookeren med en gyldig session — se adgang.js.
+// Bookingen findes ud fra sessionen, ikke fra det browseren sender.
 //
 // VIGTIGT: gæsterækkerne OPDATERES (upsert på booking_id + guest_no).
 // Tidligere blev de slettet og genskabt ved hver gemning — det nulstillede
 // gæstens forum-medlemskab, e-mail og profilbillede.
 
+const { hvemKalder, maaSeBooking } = require('./adgang');
 const { inviterGaester } = require('./invite-guests');
 
 const SUPABASE_URL = process.env.SUPABASE_URL;
@@ -31,25 +33,26 @@ exports.handler = async (event) => {
   let data;
   try { data = JSON.parse(event.body); } catch { return badRequest('Ugyldig data'); }
 
-  const { action, email, booking_id } = data || {};
-  if (!action || !email || !booking_id) return badRequest('Manglende felter');
+  const { action } = data || {};
+  if (!action) return badRequest('Manglende felter');
 
-  // 1) Verificér at bookingen tilhører kunden med denne e-mail
-  const kundeRes = await fetch(
-    `${SUPABASE_URL}/rest/v1/customers?email=eq.${encodeURIComponent(email)}&select=id,full_name,nationality&limit=1`,
-    { headers: sbHeaders }
-  );
-  const kunder = await kundeRes.json();
-  const kunde = Array.isArray(kunder) ? kunder[0] : null;
-  if (!kunde) return { statusCode: 403, body: JSON.stringify({ error: 'Ukendt e-mail' }) };
+  // 1) Hvem kalder?
+  //    Her ligger pasoplysninger. Før byggede adgangen på en e-mail og et
+  //    booking-id fra browseren — begge dele kan skrives af hvem som helst.
+  //    Nu skal det enten være admin med sit eget login, eller bookeren med en
+  //    gyldig session. Medrejsende gæster redigerer kun deres egen række, og
+  //    det sker gennem portal-profile.
+  const hvem = await hvemKalder(data);
+  if (!hvem) return { statusCode: 401, body: JSON.stringify({ error: 'Log ind igen' }) };
+  if (hvem.type === 'kunde' && hvem.rolle !== 'booker') {
+    return { statusCode: 403, body: JSON.stringify({ error: 'Kun bookeren' }) };
+  }
 
-  const bkRes = await fetch(
-    `${SUPABASE_URL}/rest/v1/bookings?id=eq.${encodeURIComponent(booking_id)}&customer_id=eq.${encodeURIComponent(kunde.id)}&select=id,guests&limit=1`,
-    { headers: sbHeaders }
-  );
-  const bks = await bkRes.json();
-  const booking = Array.isArray(bks) ? bks[0] : null;
-  if (!booking) return { statusCode: 403, body: JSON.stringify({ error: 'Booking tilhører ikke denne e-mail' }) };
+  const booking_id = hvem.type === 'admin' ? (data.booking_id || null) : hvem.booking_id;
+  if (!booking_id) return badRequest('Manglende booking');
+  if (!maaSeBooking(hvem, booking_id)) {
+    return { statusCode: 403, body: JSON.stringify({ error: 'Ingen adgang til denne booking' }) };
+  }
 
   // 2) Hent
   if (action === 'get') {

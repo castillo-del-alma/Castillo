@@ -13,6 +13,7 @@ const TESTS = [
   ['RLS-antagelser', 'rls-antagelser.js'],
   ['Portal-data',   'portal-data.js'],
   ['Min booking',   'min-booking-portal.js'],
+  ['Adgang',        'adgang.js'],
 ];
 
 const resultat = [];

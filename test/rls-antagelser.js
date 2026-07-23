@@ -127,17 +127,67 @@ if (fs.existsSync(portalData)) {
     'portal-data bruger et booking-id fra klienten');
 }
 
-// ── 5. Migrationen ligger i repoet ───────────────────────────────────
+// ── 5. De følsomme tabeller røres ikke fra browseren ─────────────────
+// Fase 3: customers, bookings, payments, charges, invoices, emails,
+// messages og nyhedsbrevs-tabellerne er helt lukket for anon-nøglen.
+// Én undtagelse: tilmeldingsformularen på forsiden må indsætte i newsletter.
+r.overskrift('følsomme tabeller');
+
+const FOELSOMME = [
+  'customers', 'bookings', 'payments', 'charges', 'invoices',
+  'emails', 'messages', 'newsletter_subscribers',
+  'newsletter_campaigns', 'newsletter_lists',
+];
+
+for (const fil of OFFENTLIGE_SIDER) {
+  const sti = path.join(ROD, fil);
+  if (!fs.existsSync(sti)) continue;
+  const tekst = fs.readFileSync(sti, 'utf8');
+  for (const t of FOELSOMME) {
+    const re = new RegExp(`from\\('${t}'\\)|rest/v1/${t}\\b`);
+    r.tjek(!re.test(tekst), `${fil} rører ${t} med anon-nøglen`);
+  }
+}
+r.note('ingen offentlig side rører de følsomme tabeller');
+
+// Nyhedsbrevet: må indsætte, må ikke læse tilbage.
+const forside = fs.readFileSync(path.join(ROD, 'index.html'), 'utf8');
+if (/rest\/v1\/newsletter\b/.test(forside)) {
+  r.tjek(/'Prefer':\s*'return=minimal'/.test(forside),
+    'nyhedsbrevs-tilmeldingen bruger ikke return=minimal — INSERT vil fejle');
+  r.tjek(!/rest\/v1\/newsletter\?[^'"`]*select=/.test(forside),
+    'forsiden læser fra newsletter — det afviser policyen');
+}
+
+// betal.html og anmeldelse.html gik over til booking-link
+for (const fil of ['betal.html', 'anmeldelse.html']) {
+  const tekst = fs.readFileSync(path.join(ROD, fil), 'utf8');
+  r.tjek(/functions\/booking-link/.test(tekst), fil + ' kalder ikke booking-link');
+}
+r.tjek(!/supabase\.createClient/.test(fs.readFileSync(path.join(ROD, 'betal.html'), 'utf8')),
+  'betal.html opretter stadig en Supabase-klient');
+
+// ── 6. Migrationerne ligger i repoet ─────────────────────────────────
 r.overskrift('migrationen');
 
 const migration = path.join(ROD, 'sql', '2026-07-23-rls-fase-1-indholdstabeller.sql');
-r.tjek(fs.existsSync(migration), 'migrationsfilen mangler i sql/');
+r.tjek(fs.existsSync(migration), 'fase 1-migrationen mangler i sql/');
 if (fs.existsSync(migration)) {
   const sql = fs.readFileSync(migration, 'utf8');
   for (const t of TABELLER) {
-    r.tjek(sql.includes(`'${t}'`), `migrationen nævner ikke ${t}`);
+    r.tjek(sql.includes(`'${t}'`), `fase 1-migrationen nævner ikke ${t}`);
   }
-  r.tjek(/ENABLE ROW LEVEL SECURITY/.test(sql), 'migrationen slår ikke RLS til');
+  r.tjek(/ENABLE ROW LEVEL SECURITY/.test(sql), 'fase 1-migrationen slår ikke RLS til');
+}
+
+const migration3 = path.join(ROD, 'sql', '2026-07-24-rls-fase-3-foelsomme-tabeller.sql');
+r.tjek(fs.existsSync(migration3), 'fase 3-migrationen mangler i sql/');
+if (fs.existsSync(migration3)) {
+  const sql3 = fs.readFileSync(migration3, 'utf8');
+  for (const t of FOELSOMME) {
+    r.tjek(sql3.includes(`'${t}'`), `fase 3-migrationen nævner ikke ${t}`);
+  }
+  r.tjek(/REVOKE ALL ON public/.test(sql3), 'fase 3-migrationen fjerner ikke anons rettigheder');
 }
 
 process.exit(r.afslut() === 0 ? 0 : 1);
