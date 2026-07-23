@@ -86,6 +86,16 @@ Den er der, så en test ikke kan bestå bare fordi sektionen slet ikke blev
 rendret. Står der `ingen sprogstyrede sektioner på siden`, er det korrekt for
 `ejendommen.html` og `kontakt.html`.
 
+### `nyhedsbrev-slet.js`
+
+Slet-knappen under fanen **Nyhedsbrev** i admin. Testen tegner tabellen med
+attrap-data og tjekker, at knappen rammer den rigtige tilmeldte — også når
+navnet indeholder anførselstegn eller HTML, som ellers kunne bryde ud af
+tabellen eller ødelægge knappen.
+
+Supabase er en attrap, så testen sletter intet rigtigt. Den registrerer blot
+hvilken tabel og hvilket id sletningen *ville* have ramt.
+
 ---
 
 ## Hvis en test fejler

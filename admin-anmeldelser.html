@@ -499,7 +499,7 @@ body{font-family:'Manrope',sans-serif;background:#f0e8d5;color:#2c2318;min-heigh
       <button onclick="exportNewsletter()" style="font-size:.62rem;letter-spacing:.15em;text-transform:uppercase;padding:.5rem 1rem;background:rgba(74,80,40,.15);border:1px solid rgba(74,80,40,.3);color:#4a5028;cursor:pointer;font-family:'Manrope',sans-serif;">Eksporter CSV</button>
     </div>
     <table style="width:100%;border-collapse:collapse;font-size:.78rem;">
-      <thead><tr style="border-bottom:2px solid rgba(184,138,30,.2);"><th style="text-align:left;padding:.6rem .8rem;font-size:.6rem;letter-spacing:.15em;text-transform:uppercase;color:#7a5c14;">Navn</th><th style="text-align:left;padding:.6rem .8rem;font-size:.6rem;letter-spacing:.15em;text-transform:uppercase;color:#7a5c14;">E-mail</th><th style="text-align:left;padding:.6rem .8rem;font-size:.6rem;letter-spacing:.15em;text-transform:uppercase;color:#7a5c14;">Land</th><th style="text-align:left;padding:.6rem .8rem;font-size:.6rem;letter-spacing:.15em;text-transform:uppercase;color:#7a5c14;">Interesser</th><th style="text-align:left;padding:.6rem .8rem;font-size:.6rem;letter-spacing:.15em;text-transform:uppercase;color:#7a5c14;">Dato</th></tr></thead>
+      <thead><tr style="border-bottom:2px solid rgba(184,138,30,.2);"><th style="text-align:left;padding:.6rem .8rem;font-size:.6rem;letter-spacing:.15em;text-transform:uppercase;color:#7a5c14;">Navn</th><th style="text-align:left;padding:.6rem .8rem;font-size:.6rem;letter-spacing:.15em;text-transform:uppercase;color:#7a5c14;">E-mail</th><th style="text-align:left;padding:.6rem .8rem;font-size:.6rem;letter-spacing:.15em;text-transform:uppercase;color:#7a5c14;">Land</th><th style="text-align:left;padding:.6rem .8rem;font-size:.6rem;letter-spacing:.15em;text-transform:uppercase;color:#7a5c14;">Interesser</th><th style="text-align:left;padding:.6rem .8rem;font-size:.6rem;letter-spacing:.15em;text-transform:uppercase;color:#7a5c14;">Dato</th><th style="text-align:right;padding:.6rem .8rem;font-size:.6rem;letter-spacing:.15em;text-transform:uppercase;color:#7a5c14;">Handling</th></tr></thead>
       <tbody id="nlTbody"></tbody>
     </table>
   </div>
@@ -5917,11 +5917,42 @@ async function loadNewsletter() {
   const count = document.getElementById('nlCount');
   if (!tbody) return;
   const { data, error } = await sb.from('newsletter').select('*').order('created_at', { ascending: false });
-  if (error || !data) { tbody.innerHTML = '<tr><td colspan="5">Fejl</td></tr>'; return; }
+  if (error || !data) { tbody.innerHTML = '<tr><td colspan="6">Fejl</td></tr>'; return; }
   count.textContent = data.length + ' tilmeldte';
   window._nlData = data;
-  if (!data.length) { tbody.innerHTML = '<tr><td colspan="5" style="padding:1rem;color:rgba(44,35,24,.4);">Ingen endnu.</td></tr>'; return; }
-  tbody.innerHTML = data.map(r => '<tr style="border-bottom:1px solid rgba(184,138,30,.1);"><td style="padding:.6rem .8rem;">' + (r.navn||'') + '</td><td style="padding:.6rem .8rem;"><a href="mailto:' + r.email + '" style="color:#7a1f35;">' + (r.email||'') + '</a></td><td style="padding:.6rem .8rem;">' + (r.land||'') + '</td><td style="padding:.6rem .8rem;">' + (r.interesser||'') + '</td><td style="padding:.6rem .8rem;color:rgba(44,35,24,.5);">' + new Date(r.created_at).toLocaleDateString('da-DK',{day:'numeric',month:'short',year:'numeric'}) + '</td></tr>').join('');
+  if (!data.length) { tbody.innerHTML = '<tr><td colspan="6" style="padding:1rem;color:rgba(44,35,24,.4);">Ingen endnu.</td></tr>'; return; }
+  // Navn, e-mail m.m. er skrevet af den tilmeldte selv og escapes derfor,
+  // så < og " ikke kan bryde ud af tabellen.
+  tbody.innerHTML = data.map(r => '<tr style="border-bottom:1px solid rgba(184,138,30,.1);"><td style="padding:.6rem .8rem;">' + escFaq(r.navn) + '</td><td style="padding:.6rem .8rem;"><a href="mailto:' + escFaq(r.email) + '" style="color:#7a1f35;">' + escFaq(r.email) + '</a></td><td style="padding:.6rem .8rem;">' + escFaq(r.land) + '</td><td style="padding:.6rem .8rem;">' + escFaq(r.interesser) + '</td><td style="padding:.6rem .8rem;color:rgba(44,35,24,.5);">' + new Date(r.created_at).toLocaleDateString('da-DK',{day:'numeric',month:'short',year:'numeric'}) + '</td><td style="padding:.6rem .8rem;text-align:right;"><button class="kunde-btn nl-slet-btn" data-id="' + escFaq(r.id) + '" style="background:rgba(192,92,48,.12);color:#7a3818;border:1px solid rgba(192,92,48,.3);font-weight:600;">Slet</button></td></tr>').join('');
+  // Delegeret klik: id'et står i data-id, så navne med anførselstegn eller
+  // apostroffer ikke kan ødelægge knappen.
+  tbody.querySelectorAll('.nl-slet-btn').forEach(btn => {
+    btn.addEventListener('click', () => sletNyhedsbrevTilmeldt(btn.getAttribute('data-id')));
+  });
+}
+
+// ── SLET NYHEDSBREVS-TILMELDT ──
+// Sletningen er permanent og kan ikke fortrydes. Bruges bl.a. når nogen beder
+// om at få deres oplysninger fjernet (GDPR, retten til at blive glemt).
+async function sletNyhedsbrevTilmeldt(id) {
+  const raekke = (window._nlData || []).find(r => String(r.id) === String(id));
+  if (!raekke) { showToast('Kunne ikke finde tilmeldingen — prøv at genindlæse', true); return; }
+
+  await visBekraeft(
+    'Slet tilmelding',
+    'Slet <strong>' + escFaq(raekke.navn || raekke.email) + '</strong> fra nyhedsbrevet?' +
+    '<br><br><span style="color:rgba(44,35,24,.6);">' + escFaq(raekke.email) + '</span>' +
+    '<br><br>Tilmeldingen slettes permanent og kan ikke gendannes.'
+  );
+
+  try {
+    const { error } = await sb.from('newsletter').delete().eq('id', id);
+    if (error) throw error;
+    showToast('Tilmelding slettet');
+    await loadNewsletter();
+  } catch (e) {
+    showToast('Fejl: ' + e.message, true);
+  }
 }
 function exportNewsletter() {
   const data = window._nlData;

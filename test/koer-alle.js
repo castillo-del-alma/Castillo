@@ -8,6 +8,7 @@ const TESTS = [
   ['Struktur',      'struktur.js'],
   ['Sprogskifter',  'sprog-links.js'],
   ['Sprog-kapløb',  'sprog-kaploeb.js'],
+  ['Nyhedsbrev-slet', 'nyhedsbrev-slet.js'],
 ];
 
 const resultat = [];
