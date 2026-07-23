@@ -10,6 +10,7 @@ const TESTS = [
   ['Sprog-kapløb',  'sprog-kaploeb.js'],
   ['Nyhedsbrev-slet', 'nyhedsbrev-slet.js'],
   ['Admin-login',   'admin-login.js'],
+  ['RLS-antagelser', 'rls-antagelser.js'],
 ];
 
 const resultat = [];
