@@ -52,6 +52,12 @@ const TILMELDTE = [
       w.matchMedia = () => ({ matches: false, addEventListener() {}, addListener() {} });
       w.scrollTo = () => {};
       w.supabase = { createClient: lavKlient };
+      // Siden henter sin Supabase-klient fra admin-auth.js, som er et
+      // eksternt script og derfor pillet ud herover. Vi lægger attrappen
+      // og en tom CDAAuth ind i stedet — tom start() = ikke logget ind,
+      // så dashboardet ikke går i gang bag om testen.
+      w.cdaSupabase = lavKlient();
+      w.CDAAuth = { start: () => {} };
       w.fetch = () => Promise.resolve({ ok: true, json: () => Promise.resolve([]), text: () => Promise.resolve('') });
     },
   });
@@ -61,9 +67,9 @@ const TILMELDTE = [
   const d = w.document;
 
   // sb er en lexical variabel i sidens script og kan ikke sættes udefra.
-  // Sidens egen initSupabase() kalder supabase.createClient, som er attrappen.
+  // Sidens egen initSupabase() henter window.cdaSupabase, som er attrappen.
   r.tjek(typeof w.initSupabase === 'function', 'initSupabase findes ikke');
-  w.initSupabase('test-noegle');
+  w.initSupabase();
 
   r.overskrift('tabellen tegnes');
   r.tjek(typeof w.loadNewsletter === 'function', 'loadNewsletter findes ikke');

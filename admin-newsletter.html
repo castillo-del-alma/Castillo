@@ -6,6 +6,7 @@
 <link rel="icon" type="image/png" href="img/logo-tower.png">
 <title>Newsletter Admin — Castillo del Alma</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="admin-auth.js"></script>
 <style>
 :root {
   --cream: #faf6ee;
@@ -258,9 +259,10 @@ body { background: var(--cream); color: var(--dark); font-family: 'Georgia', ser
     <p class="login-logo">Castillo del Alma</p>
     <p class="login-sub">Newsletter Administration</p>
     <h2 class="login-title">Log ind</h2>
-    <input type="password" id="pwInput" class="form-input" placeholder="Adgangskode" onkeydown="if(event.key==='Enter')doLogin()">
-    <button class="btn-primary" onclick="doLogin()">Log ind</button>
-    <p id="loginError">Forkert adgangskode</p>
+    <input type="email" id="emailInput" class="form-input" autocomplete="username" placeholder="E-mail" onkeydown="if(event.key==='Enter')doLogin()">
+    <input type="password" id="pwInput" class="form-input" autocomplete="current-password" placeholder="Adgangskode" onkeydown="if(event.key==='Enter')doLogin()">
+    <button class="btn-primary" id="loginBtn" onclick="doLogin()">Log ind</button>
+    <p id="loginError"></p>
   </div>
 </div>
 
@@ -608,38 +610,23 @@ body { background: var(--cream); color: var(--dark); font-family: 'Georgia', ser
 
 <script>
 // ── CONFIG ──
-const PASS = 'castillo2025';
 const SUPABASE_URL = 'https://niniwgiytyqvdqejigxg.supabase.co';
 const SUPABASE_ANON_KEY = 'sb_publishable_GwrNUpIuWzdg1oswOY5HzA_mKWqhd6y';
 let sb;
 
 // ── AUTH ──
-function doLogin() {
-  const pw = document.getElementById('pwInput').value;
-  if (pw === PASS) {
-    localStorage.setItem('cda_admin_auth', '1');
-    document.getElementById('loginScreen').style.display = 'none';
-    document.getElementById('dashboard').style.display = 'block';
-    init();
+// doLogin() og doLogout() kommer fra admin-auth.js (Supabase Auth).
+document.addEventListener('DOMContentLoaded', () => {
+  if (window.CDAAuth) {
+    CDAAuth.start({ onLogin: init });
   } else {
-    document.getElementById('loginError').style.display = 'block';
-    document.getElementById('pwInput').value = '';
+    console.error('admin-auth.js blev ikke indlæst — login er ikke aktivt');
   }
-}
-function doLogout() {
-  localStorage.removeItem('cda_admin_auth');
-  document.getElementById('loginScreen').style.display = 'flex';
-  document.getElementById('dashboard').style.display = 'none';
-}
-if (localStorage.getItem('cda_admin_auth') === '1') {
-  document.getElementById('loginScreen').style.display = 'none';
-  document.getElementById('dashboard').style.display = 'block';
-  document.addEventListener('DOMContentLoaded', init);
-}
+});
 
 // ── INIT ──
 async function init() {
-  sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  sb = window.cdaSupabase;
   await loadStats();
   await loadSubscribers();
   await loadCampaigns();

@@ -7,6 +7,7 @@
 <title>Admin — Castillo del Alma</title>
 <link rel="stylesheet" href="fonts/fonts.css">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="admin-auth.js"></script>
 <style>
 :root{
   --cream:#faf6ee;--beige:#f0e8d5;--sand:#e0d0b0;
@@ -241,9 +242,10 @@ body{font-family:'Manrope',sans-serif;background:#f0e8d5;color:#2c2318;min-heigh
   <div class="login-box">
     <h2>Castillo del Alma</h2>
     <p>ADMIN</p>
-    <input type="password" id="pwInput" placeholder="Adgangskode" onkeydown="if(event.key==='Enter')doLogin()">
-    <button onclick="doLogin()">Log ind</button>
-    <div class="login-error" id="loginError">Forkert adgangskode</div>
+    <input type="email" id="emailInput" autocomplete="username" placeholder="E-mail" onkeydown="if(event.key==='Enter')doLogin()">
+    <input type="password" id="pwInput" autocomplete="current-password" placeholder="Adgangskode" onkeydown="if(event.key==='Enter')doLogin()">
+    <button id="loginBtn" onclick="doLogin()">Log ind</button>
+    <div class="login-error" id="loginError"></div>
   </div>
 </div>
 
@@ -4880,18 +4882,20 @@ feeling more calm – and coming home to yourself again."</textarea></div>
 
 <script>
 // ── SUPABASE ──
+// Klienten oprettes i admin-auth.js, så data-kald sender den
+// indloggede admins token med. Vi genbruger den her.
 const SUPABASE_URL = 'https://niniwgiytyqvdqejigxg.supabase.co';
 const SUPABASE_ANON_KEY = 'sb_publishable_GwrNUpIuWzdg1oswOY5HzA_mKWqhd6y';
-let sb = null;
+let sb = window.cdaSupabase || null;
 
-function initSupabase(key) {
-  sb = supabase.createClient(SUPABASE_URL, key);
+function initSupabase() {
+  sb = window.cdaSupabase || null;
+  return sb;
 }
 
 // ── CONFIG ──
 const FORM_ID  = 'xykawbvk';
 const API_BASE = `https://formspree.io/api/0/forms/${FORM_ID}/submissions`;
-const PASS     = 'castillo2025';
 
 let allReviews = [];
 let allKunder  = [];
@@ -4902,34 +4906,22 @@ let aktivBookingId = null;
 let reviewTranslations = {}; // { [id]: { da: '', en: '' } }
 
 // ── LOGIN ──
-function doLogin() {
-  const pw = document.getElementById('pwInput').value;
-  if (pw === PASS) {
-    localStorage.setItem('cda_admin_auth', '1');
-    showDashboard();
-  } else {
-    document.getElementById('loginError').style.display = 'block';
-    document.getElementById('pwInput').value = '';
-  }
-}
-function doLogout() {
-  localStorage.removeItem('cda_admin_auth');
-  document.getElementById('loginScreen').style.display = 'flex';
-  document.getElementById('dashboard').style.display = 'none';
-  document.getElementById('pwInput').value = '';
-}
-function showDashboard() {
-  document.getElementById('loginScreen').style.display = 'none';
-  document.getElementById('dashboard').style.display = 'block';
+// doLogin() og doLogout() kommer fra admin-auth.js (Supabase Auth).
+// Herfra starter vi kun selve dashboardet, når sessionen er på plads.
+function startDashboard() {
+  initSupabase();
   loadReviews();
   loadKunder();
   loadRetreats();
   startRealtimeBadges();
   initSettings();
 }
-// Auto-login hvis tidligere logget ind
 document.addEventListener('DOMContentLoaded', () => {
-  if (localStorage.getItem('cda_admin_auth') === '1') { showDashboard(); }
+  if (window.CDAAuth) {
+    CDAAuth.start({ onLogin: startDashboard });
+  } else {
+    console.error('admin-auth.js blev ikke indlæst — login er ikke aktivt');
+  }
 });
 
 // ── FANER ──
@@ -5144,7 +5136,7 @@ function showFull(id) {
 // ── KUNDER ──
 async function loadKunder() {
   if (!sb) {
-    initSupabase(SUPABASE_ANON_KEY);
+    initSupabase();
   }
 
   try {
