@@ -717,7 +717,7 @@ body { background: var(--cream); color: var(--dark); font-family: 'Georgia', ser
               <label class="form-label">Navnefelt</label>
               <label class="pp-toggle" style="margin-top:8px;">
                 <input type="checkbox" id="pp_vis_navn" onchange="ppTegn()">
-                <span>Spørg også om navn</span>
+                <span>Spørg om fornavn</span>
               </label>
             </div>
           </div>
@@ -1266,7 +1266,7 @@ async function loadLists() {
   document.getElementById('subStatTotal').textContent = allSubsFlat.length + legacyCount;
   document.getElementById('subStatActive').textContent = active.length + legacyCount;
   document.getElementById('subStatUnsub').textContent = allSubsFlat.filter(s => s.status === 'unsubscribed').length;
-  document.getElementById('subStatLists').textContent = allLists.length + 1; // +1 for website list
+  document.getElementById('subStatLists').textContent = allLists.length + 2; // + hjemmeside- og popup-kortet
 
   renderListsGrid(allLists, active.length, legacyCount);
 }
@@ -1293,6 +1293,22 @@ function renderListsGrid(lists, totalActive, legacyCount) {
     </div>
   `);
 
+  // Tilmeldinger uden liste — popup og andre formularer
+  cards.push(`
+    <div style="border:1px solid var(--border);background:var(--cream);padding:20px 24px;cursor:pointer;transition:border-color .15s;"
+         onclick="openList('uden-liste','Popup &amp; direkte tilmeldinger')"
+         onmouseenter="this.style.borderColor='var(--gold)'" onmouseleave="this.style.borderColor='var(--border)'">
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:10px;">
+        <div>
+          <div style="font-size:15px;color:var(--dark);margin-bottom:4px;">🪟 Popup &amp; direkte</div>
+          <div style="font-family:sans-serif;font-size:12px;color:var(--muted);">Tilmeldt uden at høre til en bestemt liste</div>
+        </div>
+        <span class="badge badge-active" id="listCount-uden-liste">— aktive</span>
+      </div>
+      <div style="font-family:sans-serif;font-size:11px;color:var(--gold-muted);margin-top:8px;">Modtager nyhedsbrevet →</div>
+    </div>
+  `);
+
   // Custom lists
   lists.forEach(l => {
     cards.push(`
@@ -1315,6 +1331,14 @@ function renderListsGrid(lists, totalActive, legacyCount) {
   });
 
   grid.innerHTML = `<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;">${cards.join('')}</div>`;
+
+  // Antal uden liste
+  (async () => {
+    const { count } = await sb.from('newsletter_subscribers')
+      .select('id', { count: 'exact', head: true }).is('list_id', null).eq('status', 'active');
+    const el = document.getElementById('listCount-uden-liste');
+    if (el) el.textContent = (count || 0) + ' aktive';
+  })();
 
   // Load counts for custom lists
   lists.forEach(async l => {
@@ -1358,13 +1382,21 @@ async function deleteList(id) {
   await loadLists();
 }
 
+/* Lister med bogstav-id ('website', 'uden-liste') er saerlige visninger,
+   ikke rigtige raekker i newsletter_lists. De maa aldrig sendes med som
+   list_id til databasen. */
+function aktivListeId() {
+  return (currentListId === 'website' || currentListId === 'uden-liste') ? null : currentListId;
+}
+
 async function openList(listId, listName, isWebsite) {
   currentListId = listId;
-  currentListSlug = listId === 'website' ? 'website' : null;
+  currentListSlug = (listId === 'website' || listId === 'uden-liste') ? listId : null;
 
   document.getElementById('listsView').style.display = 'none';
   document.getElementById('listDetailView').style.display = 'block';
-  document.getElementById('listDetailName').textContent = listId === 'website' ? '🌐 ' + listName : '📋 ' + listName;
+  const ikon = listId === 'website' ? '🌐 ' : listId === 'uden-liste' ? '🪟 ' : '📋 ';
+  document.getElementById('listDetailName').textContent = ikon + listName;
 
   // Hide add/import for website list (read-only)
   const addPanel = document.getElementById('listAddPanel');
@@ -1373,6 +1405,11 @@ async function openList(listId, listName, isWebsite) {
     addPanel.style.display = 'none';
     importPanel.style.display = 'none';
     document.getElementById('listDetailBadge').textContent = 'Skrivebeskyttet — administreres via hjemmesidens tilmeldingsformular';
+  } else if (listId === 'uden-liste') {
+    addPanel.style.display = 'none';
+    importPanel.style.display = 'none';
+    document.getElementById('listDetailBadge').textContent =
+      'Tilmeldt via popup eller andre formularer. De modtager nyhedsbrevet som alle andre.';
   } else {
     addPanel.style.display = 'block';
     importPanel.style.display = 'block';
@@ -1407,6 +1444,11 @@ async function loadListSubscribers() {
       created_at: r.created_at,
       readonly: true
     }));
+  } else if (currentListSlug === 'uden-liste') {
+    // Popup og andre formularer saetter ingen list_id — uden denne visning
+    // ville de vaere usynlige i admin, selv om de modtager nyhedsbrevet.
+    const { data } = await sb.from('newsletter_subscribers').select('*').is('list_id', null).order('created_at', { ascending: false });
+    subs = data || [];
   } else {
     const { data } = await sb.from('newsletter_subscribers').select('*').eq('list_id', currentListId).order('created_at', { ascending: false });
     subs = data || [];
@@ -1475,7 +1517,7 @@ async function addSubscriber() {
   const source = document.getElementById('addSource').value;
   if (!email) { toast('Udfyld e-mail', 'err'); return; }
   const { error } = await sb.from('newsletter_subscribers').insert({
-    email, full_name: name, lang, source, status: 'active', list_id: currentListId
+    email, full_name: name, lang, source, status: 'active', list_id: aktivListeId()
   });
   if (error) { toast(error.code === '23505' ? 'E-mail findes allerede på denne liste' : 'Fejl: ' + error.message, 'err'); return; }
   document.getElementById('addEmail').value = '';
@@ -1553,7 +1595,7 @@ async function importCSV(input) {
       lang,
       source: 'csv_import',
       status: 'active',
-      list_id: currentListId
+      list_id: aktivListeId()
     });
     if (error) { skipped++; } else { added++; }
   }
@@ -1792,7 +1834,7 @@ const PP_TEKSTFELTER = [
   { key: 'label',          navn: 'Lille label øverst',     type: 'input' },
   { key: 'overskrift',     navn: 'Overskrift',             type: 'input' },
   { key: 'brodtekst',      navn: 'Brødtekst',              type: 'textarea' },
-  { key: 'ph_navn',        navn: 'Pladsholder: navn',      type: 'input' },
+  { key: 'ph_navn',        navn: 'Pladsholder: fornavn',   type: 'input' },
   { key: 'ph_email',       navn: 'Pladsholder: e-mail',    type: 'input' },
   { key: 'knap',           navn: 'Tekst på knappen',       type: 'input' },
   { key: 'smaatekst',      navn: 'Lille tekst nederst',    type: 'textarea' },

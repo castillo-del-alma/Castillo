@@ -60,13 +60,13 @@
     interesser_valgte: 'retreats,wine,wellness,gay',
 
     /* indhold — dansk */
-    vis_navn: '0',
+    vis_navn: '1',
     label_interesser: 'Interesser',
     label: 'Nyhedsbrev',
     overskrift: 'Kom tættere på Castillo del Alma',
     brodtekst: 'Få besked først om nye retreats, ledige datoer og små historier fra ejendommen i Andalusien.',
     knap: 'Tilmeld mig',
-    ph_navn: 'Dit navn',
+    ph_navn: 'Dit fornavn',
     ph_email: 'Din e-mail',
     smaatekst: 'Vi skriver sjældent — og du kan altid framelde dig igen.',
     tak_overskrift: 'Tak for din tilmelding',
@@ -78,7 +78,7 @@
     overskrift_en: 'Come closer to Castillo del Alma',
     brodtekst_en: 'Be the first to hear about new retreats, available dates and small stories from the estate in Andalusia.',
     knap_en: 'Sign me up',
-    ph_navn_en: 'Your name',
+    ph_navn_en: 'Your first name',
     ph_email_en: 'Your email',
     smaatekst_en: 'We write rarely — and you can unsubscribe at any time.',
     tak_overskrift_en: 'Thank you for signing up',
@@ -275,7 +275,7 @@
     var visNavn = String(cfg.vis_navn) === '1';
     var h = '';
     if (visNavn) {
-      h += '<input type="text" class="cdapop-felt cdapop-navn" autocomplete="name" placeholder="' +
+      h += '<input type="text" class="cdapop-felt cdapop-navn" autocomplete="given-name" placeholder="' +
            esc(felt(cfg, 'ph_navn', lang)) + '" aria-label="' + esc(felt(cfg, 'ph_navn', lang)) + '">';
     }
     h += '<input type="email" class="cdapop-felt cdapop-email" autocomplete="email" required placeholder="' +
