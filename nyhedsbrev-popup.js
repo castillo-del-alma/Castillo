@@ -54,8 +54,14 @@
     hjoerner: '0',               // px
     billede: '',
 
+    /* interesser — teksterne selv hentes fra site_content, saa de altid
+       er identiske med afkrydsningsfelterne paa forsiden */
+    vis_interesser: '0',
+    interesser_valgte: 'retreats,wine,wellness,gay',
+
     /* indhold — dansk */
     vis_navn: '0',
+    label_interesser: 'Interesser',
     label: 'Nyhedsbrev',
     overskrift: 'Kom tættere på Castillo del Alma',
     brodtekst: 'Få besked først om nye retreats, ledige datoer og små historier fra ejendommen i Andalusien.',
@@ -68,6 +74,7 @@
 
     /* indhold — engelsk */
     label_en: 'Newsletter',
+    label_interesser_en: 'Interests',
     overskrift_en: 'Come closer to Castillo del Alma',
     brodtekst_en: 'Be the first to hear about new retreats, available dates and small stories from the estate in Andalusia.',
     knap_en: 'Sign me up',
@@ -130,6 +137,51 @@
     return cfg[key] != null ? cfg[key] : '';
   }
 
+  /* ── Interesser ───────────────────────────────────────────────
+     Selve teksterne bor i site_content — de samme noegler som
+     afkrydsningsfelterne i nyhedsbrev-sektionen paa forsiden. Retter
+     du dem under "Forside" i admin, aendrer popup'en sig med. Her
+     staar kun id, noegle og en reserve, hvis site_content ikke svarer. */
+  var INTERESSER = [
+    { id: 'retreats', noegle: 'nl_cb_retreats', da: 'Retreats',      en: 'Retreats' },
+    { id: 'wine',     noegle: 'nl_cb_wine',     da: 'Wine & Gourmet', en: 'Wine & Gourmet' },
+    { id: 'wellness', noegle: 'nl_cb_wellness', da: 'Wellness',      en: 'Wellness' },
+    { id: 'gay',      noegle: 'nl_cb_gay',      da: 'GAY RETREATS',  en: 'GAY RETREATS', regnbue: true }
+  ];
+
+  var REGNBUE = ['#FF0000','#FF7700','#FFDD00','#00AA00','#0000FF','#8B00FF',
+                 '#FF0000','#FF7700','#FFDD00','#00AA00','#0000FF','#FF0000'];
+
+  /* GAY RETREATS beholder regnbuefarverne som paa forsiden */
+  function regnbueHTML(tekst) {
+    return String(tekst).split('').map(function (ch, i) {
+      return '<span style="color:' + REGNBUE[i % REGNBUE.length] + '">' +
+             (ch === ' ' ? '&nbsp;' : esc(ch)) + '</span>';
+    }).join('');
+  }
+
+  /* Hvilke interesser er slaaet til, og hvad hedder de paa dette sprog? */
+  function aktiveInteresser(cfg, lang) {
+    if (String(cfg.vis_interesser) !== '1') return [];
+    var valgte = String(cfg.interesser_valgte == null ? '' : cfg.interesser_valgte)
+      .split(',').map(function (x) { return x.trim(); }).filter(Boolean);
+    var tekster = cfg._interessetekster || {};
+    return INTERESSER.filter(function (i) { return valgte.indexOf(i.id) > -1; })
+      .map(function (i) {
+        var fra = tekster[i.noegle + (lang === 'en' ? '_en' : '_da')];
+        return {
+          id: i.id,
+          regnbue: !!i.regnbue,
+          vist: (fra != null && String(fra).trim() !== '') ? String(fra) : i[lang === 'en' ? 'en' : 'da'],
+          /* gemmes altid paa dansk, saa data kan sammenlignes paa tvaers af sprog */
+          vaerdi: (function () {
+            var d = tekster[i.noegle + '_da'];
+            return (d != null && String(d).trim() !== '') ? String(d) : i.da;
+          })()
+        };
+      });
+  }
+
   /* ── Opbygning af markup ──────────────────────────────────── */
 
   function css(cfg) {
@@ -178,6 +230,15 @@
       '.cdapop-smaa{font-family:Manrope,system-ui,sans-serif;font-size:11px;line-height:1.6;',
       'margin:14px 0 0;opacity:.6;}',
       '.cdapop-fejl{font-family:Manrope,system-ui,sans-serif;font-size:12px;color:#c0392b;margin:8px 0 0;display:none;}',
+      /* interesser */
+      '.cdapop-int{margin:2px 0 14px;}',
+      '.cdapop-int-label{font-family:Manrope,system-ui,sans-serif;font-size:10px;letter-spacing:.22em;',
+      'text-transform:uppercase;color:' + accent + ';margin:0 0 9px;}',
+      '.cdapop-int-liste{display:flex;flex-wrap:wrap;gap:8px 16px;}',
+      '.cdapop-int-emne{display:flex;align-items:center;gap:8px;cursor:pointer;',
+      'font-family:Manrope,system-ui,sans-serif;font-size:13px;line-height:1.3;}',
+      '.cdapop-int-emne input{width:16px;height:16px;flex:0 0 auto;cursor:pointer;margin:0;',
+      'accent-color:' + knap + ';}',
       '.cdapop-billede{display:block;width:100%;height:190px;object-fit:cover;}',
       /* skabelon: billede ved siden af */
       '.cdapop-split{display:grid;grid-template-columns:1fr;}',
@@ -219,6 +280,24 @@
     }
     h += '<input type="email" class="cdapop-felt cdapop-email" autocomplete="email" required placeholder="' +
          esc(felt(cfg, 'ph_email', lang)) + '" aria-label="' + esc(felt(cfg, 'ph_email', lang)) + '">';
+
+    var emner = aktiveInteresser(cfg, lang);
+    if (emner.length) {
+      var overskrift = felt(cfg, 'label_interesser', lang);
+      h += '<fieldset class="cdapop-int" style="border:0;margin-inline:0;padding:0;">';
+      if (String(overskrift).trim()) {
+        h += '<legend class="cdapop-int-label" style="padding:0;">' + rig(overskrift) + '</legend>';
+      }
+      h += '<div class="cdapop-int-liste">';
+      emner.forEach(function (e) {
+        h += '<label class="cdapop-int-emne">' +
+             '<input type="checkbox" class="cdapop-interesse" value="' + esc(e.vaerdi) + '">' +
+             '<span>' + (e.regnbue ? regnbueHTML(e.vist) : esc(e.vist)) + '</span>' +
+             '</label>';
+      });
+      h += '</div></fieldset>';
+    }
+
     h += '<button type="submit" class="cdapop-knap">' + esc(felt(cfg, 'knap', lang)) + '</button>';
     h += '<p class="cdapop-fejl" role="alert"></p>';
     return h;
@@ -341,6 +420,9 @@
         e.preventDefault();
         var emailEl = form.querySelector('.cdapop-email');
         var navnEl = form.querySelector('.cdapop-navn');
+        var interesser = Array.prototype.slice
+          .call(form.querySelectorAll('.cdapop-interesse:checked'))
+          .map(function (c) { return c.value; }).join(', ');
         var knapEl = form.querySelector('.cdapop-knap');
         var email = ((emailEl && emailEl.value) || '').trim();
         if (fejl) { fejl.style.display = 'none'; fejl.textContent = ''; }
@@ -366,6 +448,7 @@
             action: 'subscribe',
             email: email,
             name: navnEl ? navnEl.value.trim() : '',
+            interests: interesser,
             lang: lang,
             source: 'popup'
           })
@@ -480,10 +563,30 @@
 
   /* ── Hent opsætning ───────────────────────────────────────── */
 
+  function sbHeaders() {
+    return { apikey: SUPABASE_ANON_KEY, Authorization: 'Bearer ' + SUPABASE_ANON_KEY };
+  }
+
+  /* Interesse-teksterne deles med forsiden og ligger i site_content */
+  function hentInteressetekster() {
+    var noegler = INTERESSER.map(function (i) {
+      return '"' + i.noegle + '_da","' + i.noegle + '_en"';
+    }).join(',');
+    return fetch(SUPABASE_URL + '/rest/v1/site_content?select=key,value&key=in.(' +
+                 encodeURIComponent(noegler) + ')', { headers: sbHeaders() })
+      .then(function (r) { return r.ok ? r.json() : []; })
+      .then(function (rows) {
+        var m = {};
+        (rows || []).forEach(function (row) {
+          if (row && row.key != null) m[row.key] = row.value;
+        });
+        return m;
+      })
+      .catch(function () { return {}; });
+  }
+
   function hentConfig() {
-    return fetch(SUPABASE_URL + '/rest/v1/popup_content?select=key,value', {
-      headers: { apikey: SUPABASE_ANON_KEY, Authorization: 'Bearer ' + SUPABASE_ANON_KEY }
-    })
+    return fetch(SUPABASE_URL + '/rest/v1/popup_content?select=key,value', { headers: sbHeaders() })
       .then(function (r) { return r.ok ? r.json() : []; })
       .then(function (rows) {
         var cfg = {};
@@ -491,7 +594,12 @@
         (rows || []).forEach(function (row) {
           if (row && row.key != null && row.value != null && String(row.value) !== '') cfg[row.key] = row.value;
         });
-        return cfg;
+        /* Teksterne hentes kun, hvis der faktisk skal vises interesser */
+        if (String(cfg.vis_interesser) !== '1') return cfg;
+        return hentInteressetekster().then(function (m) {
+          cfg._interessetekster = m;
+          return cfg;
+        });
       })
       .catch(function () { return null; });
   }
@@ -511,6 +619,8 @@
     vis: vis,
     luk: function () { luk({}, false); },
     hentConfig: hentConfig,
+    hentInteressetekster: hentInteressetekster,
+    INTERESSER: INTERESSER,
     nulstil: function () { try { localStorage.removeItem(STATE_KEY); } catch (e) {} }
   };
 

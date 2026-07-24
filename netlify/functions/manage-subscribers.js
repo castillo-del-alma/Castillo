@@ -9,7 +9,7 @@ exports.handler = async (event) => {
 
     // ── SUBSCRIBE (from website form) ──
     if (action === 'subscribe') {
-      const { email, name, lang = 'da', source = 'website' } = body;
+      const { email, name, interests, lang = 'da', source = 'website' } = body;
       if (!email || !email.includes('@')) {
         return { statusCode: 400, body: JSON.stringify({ error: 'Ugyldig e-mail' }) };
       }
@@ -21,11 +21,14 @@ exports.handler = async (event) => {
         if (existing[0].status === 'active') {
           return { statusCode: 200, body: JSON.stringify({ success: true, alreadySubscribed: true }) };
         }
-        // Reactivate
+        // Reactivate — nyere oplysninger fra formularen tages med
+        const genaktiver = { status: 'active', unsubscribed_at: null };
+        if (name) genaktiver.full_name = name;
+        if (interests) genaktiver.interests = interests;
         await fetch(`${SUPABASE_URL}/rest/v1/newsletter_subscribers?id=eq.${existing[0].id}`, {
           method: 'PATCH',
           headers: { ...hdrs, 'Prefer': 'return=minimal' },
-          body: JSON.stringify({ status: 'active', unsubscribed_at: null })
+          body: JSON.stringify(genaktiver)
         });
         return { statusCode: 200, body: JSON.stringify({ success: true, reactivated: true }) };
       }
@@ -39,6 +42,7 @@ exports.handler = async (event) => {
         body: JSON.stringify({
           email,
           full_name: name || null,
+          interests: interests || null,
           lang,
           source,
           status: 'active',

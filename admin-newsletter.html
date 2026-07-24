@@ -122,6 +122,9 @@ body { background: var(--cream); color: var(--dark); font-family: 'Georgia', ser
 .pp-fig-baggrund span { inset: 12% 16%; background: linear-gradient(160deg,var(--gold),var(--wine)); }
 .pp-fig-hjoerne span { right: 8%; bottom: 10%; width: 40%; height: 46%; }
 .pp-fig-banner span { left: 0; right: 0; bottom: 0; height: 34%; }
+.pp-int-liste { display: flex; flex-wrap: wrap; gap: 10px 22px; }
+.pp-int-liste label { display: flex; align-items: center; gap: 9px; font-family: sans-serif; font-size: 14px; cursor: pointer; }
+.pp-int-liste input { width: 17px; height: 17px; accent-color: var(--wine); cursor: pointer; }
 #ppPreview { width: 100%; height: 560px; border: 1px solid var(--border); background: #efe9dd; display: block; }
 @media (max-width: 900px) {
   .pp-grid3 { grid-template-columns: 1fr 1fr; }
@@ -597,11 +600,11 @@ body { background: var(--cream); color: var(--dark); font-family: 'Georgia', ser
               <thead>
                 <tr>
                   <th>Navn</th><th>E-mail</th><th>Sprog</th><th>Status</th>
-                  <th>Kilde</th><th>Tilmeldt</th><th></th>
+                  <th>Interesser</th><th>Kilde</th><th>Tilmeldt</th><th></th>
                 </tr>
               </thead>
               <tbody id="subTableBody">
-                <tr><td colspan="7" class="empty-state"><div class="spinner"></div></td></tr>
+                <tr><td colspan="8" class="empty-state"><div class="spinner"></div></td></tr>
               </tbody>
             </table>
           </div>
@@ -745,6 +748,29 @@ body { background: var(--cream); color: var(--dark); font-family: 'Georgia', ser
           <div class="pp-sprogrk"><span class="pp-flag">🇩🇰 Dansk</span><span class="pp-flag">🇬🇧 English</span></div>
 
           <div class="pp-2col" id="ppTekstFelter"></div>
+        </div>
+      </div>
+
+      <!-- 4b. INTERESSER -->
+      <div class="panel">
+        <div class="panel-head"><span class="panel-title">4b · Interesser</span></div>
+        <div class="panel-body">
+          <label class="pp-toggle">
+            <input type="checkbox" id="pp_vis_interesser" onchange="ppTegn()">
+            <span>Bed dem krydse af, hvad de interesserer sig for</span>
+          </label>
+
+          <div id="ppInteresseValg" style="margin-top:18px;">
+            <label class="form-label">Vis disse</label>
+            <input type="hidden" id="pp_interesser_valgte" value="retreats,wine,wellness,gay">
+            <div class="pp-int-liste" id="ppInteresseFelter"></div>
+            <p class="form-hint" style="margin-top:12px;">
+              Det er de samme fire som i nyhedsbrev-sektionen på forsiden — teksterne hentes
+              derfra, så de altid passer sammen. Vil du omdøbe dem, gøres det ét sted:
+              <b>admin → Sprog &amp; Indhold → Forside</b>. Afkrydsningerne gemmes på abonnenten
+              og kan ses under <b>👥 Abonnenter</b>.
+            </p>
+          </div>
         </div>
       </div>
 
@@ -1376,6 +1402,7 @@ async function loadListSubscribers() {
       email: r.email || '',
       lang: r.land === 'Danmark' || r.land === 'DK' || r.land === 'da' ? 'da' : 'en',
       status: 'active',
+      interests: r.interesser || '',
       source: 'website',
       created_at: r.created_at,
       readonly: true
@@ -1395,18 +1422,26 @@ async function loadListSubscribers() {
   updateRecipientCount(active);
 }
 
+/* Abonnentdata kommer fra formularer og CSV-import — skal escapes foer visning */
+function esc(v) {
+  return String(v == null ? '' : v)
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+}
+
 function renderSubTable(subs) {
   const tbody = document.getElementById('subTableBody');
   if (!subs.length) {
-    tbody.innerHTML = '<tr><td colspan="7" class="empty-state">Ingen abonnenter endnu</td></tr>';
+    tbody.innerHTML = '<tr><td colspan="8" class="empty-state">Ingen abonnenter endnu</td></tr>';
     return;
   }
   tbody.innerHTML = subs.map(s => `
     <tr>
-      <td>${s.full_name || '—'}</td>
-      <td>${s.email}</td>
+      <td>${esc(s.full_name) || '—'}</td>
+      <td>${esc(s.email)}</td>
       <td><span class="badge badge-${s.lang || 'da'}">${s.lang === 'en' ? 'EN' : 'DA'}</span></td>
       <td><span class="badge ${s.status === 'active' ? 'badge-active' : 'badge-unsub'}">${s.status === 'active' ? 'Aktiv' : 'Afmeldt'}</span></td>
+      <td style="font-family:sans-serif;font-size:12px;color:var(--muted);max-width:220px;">${esc(s.interests) || '—'}</td>
       <td style="font-family:sans-serif;font-size:12px;color:var(--muted);">${s.source || '—'}</td>
       <td style="font-family:sans-serif;font-size:12px;color:var(--muted);">${fmtDate(s.created_at)}</td>
       <td>
@@ -1528,8 +1563,9 @@ async function importCSV(input) {
 }
 
 function exportCSV() {
-  const csv = ['Navn,E-mail,Sprog,Status,Tilmeldt'].concat(
-    allSubs.map(s => `"${s.full_name || ''}","${s.email}","${s.lang || 'da'}","${s.status}","${s.created_at}"`)
+  const q = v => `"${String(v == null ? '' : v).replace(/"/g, '""')}"`;
+  const csv = ['Navn,E-mail,Sprog,Status,Interesser,Tilmeldt'].concat(
+    allSubs.map(s => [s.full_name, s.email, s.lang || 'da', s.status, s.interests, s.created_at].map(q).join(','))
   ).join('\n');
   const a = document.createElement('a');
   a.href = 'data:text/csv;charset=utf-8,' + encodeURIComponent(csv);
@@ -1761,16 +1797,17 @@ const PP_TEKSTFELTER = [
   { key: 'knap',           navn: 'Tekst på knappen',       type: 'input' },
   { key: 'smaatekst',      navn: 'Lille tekst nederst',    type: 'textarea' },
   { key: 'tak_overskrift', navn: 'Kvittering: overskrift', type: 'input' },
-  { key: 'tak_tekst',      navn: 'Kvittering: tekst',      type: 'textarea' }
+  { key: 'tak_tekst',      navn: 'Kvittering: tekst',      type: 'textarea' },
+  { key: 'label_interesser', navn: 'Interesser: overskrift', type: 'input' }
 ];
 
 const PP_VALGFELTER = [
   'skabelon', 'trigger', 'forsinkelse', 'scroll_pct', 'frekvens_dage', 'min_besog',
   'sider', 'farve_bg', 'farve_tekst', 'farve_accent', 'farve_knap', 'farve_knap_tekst',
-  'overlay', 'bredde', 'hjoerner', 'billede'
+  'overlay', 'bredde', 'hjoerner', 'billede', 'interesser_valgte'
 ];
 
-const PP_TJEKFELTER = ['aktiv', 'exit_intent', 'vis_paa_mobil', 'vis_navn'];
+const PP_TJEKFELTER = ['aktiv', 'exit_intent', 'vis_paa_mobil', 'vis_navn', 'vis_interesser'];
 
 const PP_SKABELONER = [
   {
@@ -1842,6 +1879,14 @@ function ppByggFelter() {
     }).join('');
   }
 
+  const il = document.getElementById('ppInteresseFelter');
+  if (il && window.CDAPopup) {
+    il.innerHTML = window.CDAPopup.INTERESSER.map(i =>
+      `<label><input type="checkbox" id="ppInt_${i.id}" onchange="ppSyncInteresser()">
+         <span id="ppIntNavn_${i.id}">${i.da}</span></label>`
+    ).join('');
+  }
+
   const sk = document.getElementById('ppSkabelonGrid');
   if (sk) {
     sk.innerHTML = PP_SKABELONER.map(s =>
@@ -1852,6 +1897,44 @@ function ppByggFelter() {
        </div>`
     ).join('');
   }
+}
+
+/* Afkrydsningerne -> det skjulte felt, som gemmes i databasen */
+function ppSyncInteresser() {
+  if (!window.CDAPopup) return;
+  const valgte = window.CDAPopup.INTERESSER
+    .filter(i => (document.getElementById('ppInt_' + i.id) || {}).checked)
+    .map(i => i.id);
+  const felt = document.getElementById('pp_interesser_valgte');
+  if (felt) felt.value = valgte.join(',');
+  ppTegn();
+}
+
+/* Det skjulte felt -> afkrydsningerne */
+function ppVisInteresser() {
+  if (!window.CDAPopup) return;
+  const felt = document.getElementById('pp_interesser_valgte');
+  const valgte = String((felt && felt.value) || '').split(',').map(x => x.trim());
+  window.CDAPopup.INTERESSER.forEach(i => {
+    const el = document.getElementById('ppInt_' + i.id);
+    if (el) el.checked = valgte.indexOf(i.id) > -1;
+  });
+}
+
+/* Teksterne deles med forsiden — vis dem, som de faktisk staves i site_content */
+let ppInteressetekster = {};
+async function ppHentInteressetekster() {
+  if (!window.CDAPopup) return;
+  try {
+    ppInteressetekster = await window.CDAPopup.hentInteressetekster();
+  } catch (e) {
+    ppInteressetekster = {};
+  }
+  window.CDAPopup.INTERESSER.forEach(i => {
+    const el = document.getElementById('ppIntNavn_' + i.id);
+    const tekst = ppInteressetekster[i.noegle + '_da'];
+    if (el && tekst) el.textContent = tekst;
+  });
 }
 
 /* ── Hent fra databasen ── */
@@ -1886,6 +1969,8 @@ async function ppLoad() {
   });
 
   ppMarkerSkabelon(cfg.skabelon || 'klassisk');
+  ppVisInteresser();
+  await ppHentInteressetekster();
   ppOpdaterTrigger();
   ppOpdaterStatus();
   ppSaetSprog(ppSprog);
@@ -1931,10 +2016,21 @@ function ppSamlCfg() {
   return cfg;
 }
 
+/* Samme som ppSamlCfg, men med interesse-teksterne paa, saa
+   forhaandsvisningen viser de rigtige ord. _interessetekster er kun til
+   visning og gemmes aldrig i popup_content (se ppGem). */
+function ppSamlCfgTilVisning() {
+  const cfg = ppSamlCfg();
+  cfg._interessetekster = ppInteressetekster;
+  return cfg;
+}
+
 /* ── Gem ── */
 async function ppGem() {
   const cfg = ppSamlCfg();
-  const rows = Object.keys(cfg).map(k => ({ key: k, value: String(cfg[k] == null ? '' : cfg[k]) }));
+  const rows = Object.keys(cfg)
+    .filter(k => k.charAt(0) !== '_')   // interne hjaelpefelter gemmes ikke
+    .map(k => ({ key: k, value: String(cfg[k] == null ? '' : cfg[k]) }));
 
   try {
     const { error } = await sb.from('popup_content').upsert(rows, { onConflict: 'key' });
@@ -2071,7 +2167,7 @@ function ppTegn() {
   if (!ramme || !window.CDAPopup) return;
   ppOpdaterStatus();
 
-  const cfg = ppSamlCfg();
+  const cfg = ppSamlCfgTilVisning();
   let d;
   try {
     d = window.CDAPopup.byg(cfg, ppSprog);
