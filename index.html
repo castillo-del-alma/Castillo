@@ -2666,7 +2666,28 @@ async function tilmeldNyhedsbrev(btn) {
   const navn = document.getElementById('nl-navn')?.value.trim();
   const email = document.getElementById('nl-email')?.value.trim();
   const land = document.getElementById('nl-land')?.value;
-  const interesser = Array.from(document.querySelectorAll('.nl-form .cb-item input:checked')).map(cb => cb.closest('.cb-item').textContent.trim()).join(', ');
+  // Interesser gemmes altid på dansk, uanset hvilket sprog siden vises på.
+  // Ellers ville «Wine & Gourmet» og «Vin & Gourmet» blive to forskellige
+  // grupper i listen. Popup'en gør præcis det samme.
+  const NL_INTERESSER = {
+    nlCbRetreats: ['nl_cb_retreats', 'Retreats'],
+    nlCbWine:     ['nl_cb_wine',     'Wine & Gourmet'],
+    nlCbWellness: ['nl_cb_wellness', 'Wellness'],
+    nlCbGay:      ['nl_cb_gay',      'GAY RETREATS']
+  };
+  const interesser = Array.from(document.querySelectorAll('.nl-form .cb-item input:checked'))
+    .map(cb => {
+      const felt = cb.closest('.cb-item');
+      const maerke = felt && felt.querySelector('[id^="nlCb"]');
+      const opslag = maerke && NL_INTERESSER[maerke.id];
+      if (opslag) {
+        const dansk = (typeof siteContentData !== 'undefined') && siteContentData[opslag[0] + '_da'];
+        return (dansk && String(dansk).trim()) ? String(dansk).trim() : opslag[1];
+      }
+      return felt ? felt.textContent.trim() : '';
+    })
+    .filter(Boolean)
+    .join(', ');
   const msg = document.getElementById('nl-msg');
 
   const errMsg = SC('nl_fejl_udfyld', 'Udfyld venligst navn og e-mail.');
@@ -2679,16 +2700,26 @@ async function tilmeldNyhedsbrev(btn) {
   if (!navn || !email) { msg.style.color='#7a1f35'; msg.textContent=errMsg; return; }
 
   btn.disabled = true; btn.textContent = sendingMsg;
-  const SUPABASE_URL = 'https://niniwgiytyqvdqejigxg.supabase.co';
-  const SUPABASE_ANON_KEY = 'sb_publishable_GwrNUpIuWzdg1oswOY5HzA_mKWqhd6y';
 
   try {
-    const res = await fetch(`${SUPABASE_URL}/rest/v1/newsletter`, {
+    // Samme endepunkt som popup'en. Tidligere skrev denne formular direkte
+    // til den gamle newsletter-tabel, som send-newsletter aldrig udsender
+    // til — de tilmeldte fik derfor aldrig noget. Nu lander alle samme sted.
+    const res = await fetch('/.netlify/functions/manage-subscribers', {
       method: 'POST',
-      headers: { 'apikey': SUPABASE_ANON_KEY, 'Authorization': `Bearer ${SUPABASE_ANON_KEY}`, 'Content-Type': 'application/json', 'Prefer': 'return=minimal' },
-      body: JSON.stringify({ navn, email, land: land||null, interesser: interesser||null })
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        action: 'subscribe',
+        email,
+        name: navn,
+        country: land || '',
+        interests: interesser || '',
+        lang: (land === 'Danmark') ? 'da' : 'en',
+        source: 'website'
+      })
     });
-    if (res.ok) {
+    const svar = await res.json().catch(() => ({}));
+    if (res.ok && svar && svar.success) {
       msg.style.color = '#4a5028'; msg.textContent = successMsg;
       btn.textContent = successBtnMsg;
       document.getElementById('nl-navn').value = '';

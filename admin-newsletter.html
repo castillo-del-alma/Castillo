@@ -1258,13 +1258,15 @@ async function loadLists() {
   const allSubsFlat = subs || [];
   const active = allSubsFlat.filter(s => s.status === 'active');
 
-  // Fetch count from legacy newsletter table
+  // Den gamle newsletter-tabel er nu en sikkerhedskopi. Rækkerne derfra er
+  // flyttet over i newsletter_subscribers, så de må IKKE lægges oveni —
+  // ellers tælles de samme mennesker to gange.
   const { data: legacySubs } = await sb.from('newsletter').select('id');
   const legacyCount = (legacySubs || []).length;
 
   // Update global stats
-  document.getElementById('subStatTotal').textContent = allSubsFlat.length + legacyCount;
-  document.getElementById('subStatActive').textContent = active.length + legacyCount;
+  document.getElementById('subStatTotal').textContent = allSubsFlat.length;
+  document.getElementById('subStatActive').textContent = active.length;
   document.getElementById('subStatUnsub').textContent = allSubsFlat.filter(s => s.status === 'unsubscribed').length;
   document.getElementById('subStatLists').textContent = allLists.length + 2; // + hjemmeside- og popup-kortet
 
@@ -1280,27 +1282,27 @@ function renderListsGrid(lists, totalActive, legacyCount) {
   // Always show the website signup list first
   cards.push(`
     <div style="border:1px solid var(--border);background:var(--cream);padding:20px 24px;cursor:pointer;transition:border-color .15s;"
-         onclick="openList('website','Hjemmeside tilmeldinger')"
+         onclick="openList('website','Arkiv — gamle tilmeldinger')"
          onmouseenter="this.style.borderColor='var(--gold)'" onmouseleave="this.style.borderColor='var(--border)'">
       <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:10px;">
         <div>
-          <div style="font-size:15px;color:var(--dark);margin-bottom:4px;">🌐 Hjemmeside tilmeldinger</div>
-          <div style="font-family:sans-serif;font-size:12px;color:var(--muted);">Tilmeldinger fra castillodelalma.es</div>
+          <div style="font-size:15px;color:var(--dark);margin-bottom:4px;">🗄️ Arkiv — gamle tilmeldinger</div>
+          <div style="font-family:sans-serif;font-size:12px;color:var(--muted);">Kopi af den gamle tabel. Alle er flyttet over.</div>
         </div>
-        <span class="badge badge-active">${legacyCount} aktive</span>
+        <span class="badge badge-da">${legacyCount} gemt</span>
       </div>
-      <div style="font-family:sans-serif;font-size:11px;color:var(--gold-muted);margin-top:8px;">Synkroniseret automatisk →</div>
+      <div style="font-family:sans-serif;font-size:11px;color:var(--gold-muted);margin-top:8px;">Skrivebeskyttet — kun til opslag →</div>
     </div>
   `);
 
   // Tilmeldinger uden liste — popup og andre formularer
   cards.push(`
     <div style="border:1px solid var(--border);background:var(--cream);padding:20px 24px;cursor:pointer;transition:border-color .15s;"
-         onclick="openList('uden-liste','Popup &amp; direkte tilmeldinger')"
+         onclick="openList('uden-liste','Popup, forside &amp; direkte tilmeldinger')"
          onmouseenter="this.style.borderColor='var(--gold)'" onmouseleave="this.style.borderColor='var(--border)'">
       <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:10px;">
         <div>
-          <div style="font-size:15px;color:var(--dark);margin-bottom:4px;">🪟 Popup &amp; direkte</div>
+          <div style="font-size:15px;color:var(--dark);margin-bottom:4px;">🪟 Popup, forside &amp; direkte</div>
           <div style="font-family:sans-serif;font-size:12px;color:var(--muted);">Tilmeldt uden at høre til en bestemt liste</div>
         </div>
         <span class="badge badge-active" id="listCount-uden-liste">— aktive</span>
@@ -1404,7 +1406,7 @@ async function openList(listId, listName, isWebsite) {
   if (listId === 'website') {
     addPanel.style.display = 'none';
     importPanel.style.display = 'none';
-    document.getElementById('listDetailBadge').textContent = 'Skrivebeskyttet — administreres via hjemmesidens tilmeldingsformular';
+    document.getElementById('listDetailBadge').textContent = 'Sikkerhedskopi af den gamle tabel. Alle er flyttet over i den samlede liste — kig her kun, hvis noget mangler.';
   } else if (listId === 'uden-liste') {
     addPanel.style.display = 'none';
     importPanel.style.display = 'none';

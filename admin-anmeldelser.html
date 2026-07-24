@@ -5912,23 +5912,34 @@ document.addEventListener('DOMContentLoaded', () => { mfTilfoejLinje(); });
 // netlify/functions/send-newsletter.js). Listen her viser begge, saa
 // ingen tilmelding er usynlig, og kolonnen Kilde goer forskellen tydelig.
 const NL_KILDER = {
-  website:    { navn: 'Forside',  faar: false },
-  popup:      { navn: 'Popup',    faar: true  },
-  csv_import: { navn: 'Import',   faar: true  },
-  manual:     { navn: 'Manuel',   faar: true  }
+  website:    'Forside',
+  popup:      'Popup',
+  csv_import: 'Import',
+  manual:     'Manuel'
 };
 
+// Om nogen modtager nyhedsbrevet afgoeres af HVILKEN TABEL raekken ligger i,
+// ikke af kilden: send-newsletter henter kun fra newsletter_subscribers.
+// En raekke, der stadig kun findes i den gamle newsletter-tabel, er ikke
+// flyttet over endnu.
+function nlModtager(r) {
+  return r._tabel === 'newsletter_subscribers' && r._status !== 'unsubscribed';
+}
+
 function nlKildeMaerke(r) {
-  const k = NL_KILDER[r._kilde] || { navn: r._kilde || 'Ukendt', faar: true };
+  const navn = NL_KILDER[r._kilde] || r._kilde || 'Ukendt';
   const afmeldt = r._status === 'unsubscribed';
-  let farve = afmeldt ? 'rgba(122,31,53,.12);color:#7a1f35'
-            : k.faar   ? 'rgba(74,80,40,.15);color:#4a5028'
-                       : 'rgba(184,138,30,.18);color:#7a5c14';
-  let tekst = escFaq(k.navn);
+  const efterladt = r._tabel === 'newsletter';
+  const farve = afmeldt   ? 'rgba(122,31,53,.12);color:#7a1f35'
+              : efterladt ? 'rgba(184,138,30,.18);color:#7a5c14'
+                          : 'rgba(74,80,40,.15);color:#4a5028';
+  let tekst = escFaq(navn);
   if (afmeldt) tekst += ' · afmeldt';
-  else if (!k.faar) tekst += ' · får ikke mails';
-  return '<span title="' + (afmeldt ? 'Har frameldt sig' : k.faar ? 'Modtager nyhedsbrevet' :
-         'Ligger i den gamle newsletter-tabel og modtager derfor ikke udsendelser') +
+  else if (efterladt) tekst += ' · ikke flyttet';
+  const forklaring = afmeldt ? 'Har frameldt sig'
+    : efterladt ? 'Findes kun i den gamle newsletter-tabel og modtager derfor ikke udsendelser. Kør sql/2026-07-24-samlet-nyhedsbrev.sql.'
+    : 'Modtager nyhedsbrevet';
+  return '<span title="' + forklaring +
          '" style="display:inline-block;padding:.15rem .5rem;font-size:.6rem;letter-spacing:.08em;' +
          'text-transform:uppercase;background:' + farve + ';">' + tekst + '</span>';
 }
@@ -5947,24 +5958,32 @@ async function loadNewsletter() {
     return;
   }
 
-  const raekker = []
-    .concat((gamle.data || []).map(r => ({
+  // Den samlede liste bor i newsletter_subscribers. Den gamle newsletter-tabel
+  // laeses stadig, saa ingen forsvinder, hvis flytte-migrationen ikke er koert
+  // endnu — men findes e-mailen begge steder, vinder den nye raekke.
+  const set = new Map();
+  (nye.data || []).forEach(r => set.set(String(r.email || '').toLowerCase(), {
+    _tabel: 'newsletter_subscribers', _kilde: r.source || 'manual', _status: r.status,
+    id: r.id, navn: r.full_name, email: r.email,
+    sted: r.country || (r.lang || 'da').toUpperCase(),
+    interesser: r.interests, created_at: r.created_at
+  }));
+  (gamle.data || []).forEach(r => {
+    const noegle = String(r.email || '').toLowerCase();
+    if (set.has(noegle)) return;   // allerede flyttet over
+    set.set(noegle, {
       _tabel: 'newsletter', _kilde: 'website', _status: 'active',
       id: r.id, navn: r.navn, email: r.email,
       sted: r.land, interesser: r.interesser, created_at: r.created_at
-    })))
-    .concat((nye.data || []).map(r => ({
-      _tabel: 'newsletter_subscribers', _kilde: r.source || 'manual', _status: r.status,
-      id: r.id, navn: r.full_name, email: r.email,
-      sted: (r.lang || 'da').toUpperCase(), interesser: r.interests, created_at: r.created_at
-    })))
+    });
+  });
+  const raekker = Array.from(set.values())
     .sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
 
   window._nlData = raekker;
 
   const aktive = raekker.filter(r => r._status !== 'unsubscribed').length;
-  const modtager = raekker.filter(r => r._status !== 'unsubscribed' &&
-                                       (NL_KILDER[r._kilde] || { faar: true }).faar).length;
+  const modtager = raekker.filter(nlModtager).length;
   count.textContent = aktive + ' tilmeldte · ' + modtager + ' modtager udsendelser';
 
   if (!raekker.length) {
@@ -6029,8 +6048,8 @@ function exportNewsletter() {
   const q = v => '"' + String(v == null ? '' : v).replace(/"/g, '""') + '"';
   const rows = data.map(r => [
     r.navn, r.email, r.sted, r.interesser,
-    (NL_KILDER[r._kilde] || { navn: r._kilde }).navn,
-    r._status === 'unsubscribed' ? 'afmeldt' : 'aktiv',
+    NL_KILDER[r._kilde] || r._kilde,
+    r._status === 'unsubscribed' ? 'afmeldt' : nlModtager(r) ? 'aktiv' : 'ikke flyttet',
     new Date(r.created_at).toLocaleDateString('da-DK')
   ].map(q).join(','));
   const csv = ['Navn,E-mail,Land/sprog,Interesser,Kilde,Status,Dato',...rows].join('\n');
