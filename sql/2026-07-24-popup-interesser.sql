@@ -10,14 +10,39 @@
 -- "Forside" i admin, følger popup'en automatisk med. Denne
 -- migration opretter derfor ingen tekster — kun opsætningen.
 --
--- Kør ALTID 2026-07-24-popup-nyhedsbrev.sql først.
+-- Rækkefølgen er ligegyldig: kan popup_content ikke findes, bliver
+-- den oprettet i punkt 1 herunder. Kør stadig gerne
+-- 2026-07-24-popup-nyhedsbrev.sql også — den lægger de øvrige 38
+-- startværdier ind (tekster, farver, visningsregler).
 --
 -- Idempotent: kan køres flere gange uden bivirkninger.
 -- Køres i Supabase SQL Editor.
 -- ============================================================
 
 
--- 1) Plads til interesserne på abonnenten.
+-- 1) Sikkerhedsnet: opret popup_content, hvis den ikke findes.
+--    Samme tabel og samme RLS som i popup-nyhedsbrev-migrationen.
+--    Findes den allerede, sker der intet.
+create table if not exists public.popup_content (
+  key   text primary key,
+  value text
+);
+
+alter table public.popup_content enable row level security;
+
+drop policy if exists "alle_maa_laese"       on public.popup_content;
+drop policy if exists "kun_admin_maa_skrive" on public.popup_content;
+
+create policy "alle_maa_laese" on public.popup_content
+  for select to anon, authenticated
+  using (true);
+
+create policy "kun_admin_maa_skrive" on public.popup_content
+  for all to authenticated
+  using (true) with check (true);
+
+
+-- 2) Plads til interesserne på abonnenten.
 --    Samme format som den gamle newsletter-tabels 'interesser':
 --    kommasepareret tekst, fx 'Retreats, Wellness'.
 alter table public.newsletter_subscribers
@@ -27,7 +52,7 @@ comment on column public.newsletter_subscribers.interests is
   'Kommasepareret liste af valgte interesser, gemt på dansk uanset visningssprog.';
 
 
--- 2) Nye nøgler i popup_content.
+-- 3) Nye nøgler i popup_content.
 --    vis_interesser      '1' = vis afkrydsningsfelterne
 --    interesser_valgte   hvilke af de fire der vises
 --    label_interesser    overskriften over felterne
