@@ -2978,20 +2978,22 @@ function lukBetalingsvalg() {
   document.getElementById('betalingsvalg-overlay').style.display = 'none';
 }
 
+// Beløbene på knapperne er kun til visning. Hvad der rent faktisk opkræves,
+// regnes ud i create-checkout ud fra retreatets pris i databasen.
 async function gennemfoerBetaling(type) {
-  let amount, paymentType;
-  if (type === 'deposit') { amount = _bvDepositum; paymentType = 'deposit'; }
-  else if (type === 'full') { amount = _bvFuldt; paymentType = 'full'; }
+  let paymentType, oensket = null;
+  if (type === 'deposit') { paymentType = 'deposit'; }
+  else if (type === 'full') { paymentType = 'full'; }
   else {
-    amount = Math.round(parseFloat(document.getElementById('bv-eget').value));
-    if (!amount || amount < 1) { alert('Indtast et gyldigt beløb i €'); return; }
+    oensket = Math.round(parseFloat(document.getElementById('bv-eget').value));
+    if (!oensket || oensket < 1) { alert('Indtast et gyldigt beløb i €'); return; }
     paymentType = 'custom';
   }
   lukBetalingsvalg();
-  await betalDepositum(amount, paymentType);
+  await betalDepositum(paymentType, oensket);
 }
 
-async function betalDepositum(overrideAmount = null, paymentType = 'deposit') {
+async function betalDepositum(paymentType = 'deposit', oensketBeloeb = null) {
   const { fornavn, efternavn, name, email } = getFormData();
   const telefon = document.getElementById('f-telefon').value;
   if (!fornavn || !email || !telefon) { showFormError('Udfyld fornavn, e-mail og telefon.'); return; }
@@ -3012,9 +3014,7 @@ async function betalDepositum(overrideAmount = null, paymentType = 'deposit') {
     }));
 
     const ekstraGaesterListe = laesEkstraGaester();
-
-    const antalGaester = overrideAmount !== null ? _bvAntalGaester : 1 + ekstraGaesterListe.length;
-    const depositum = overrideAmount !== null ? overrideAmount : Math.round(RETREAT_PRICE * DEPOSIT_PCT * antalGaester);
+    const antalGaester = 1 + ekstraGaesterListe.length;
 
     const bookingRes = await fetch('/.netlify/functions/create-booking', {
       method: 'POST',
@@ -3056,10 +3056,9 @@ async function betalDepositum(overrideAmount = null, paymentType = 'deposit') {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         bookingId: bookingData.bookingId,
-        navn: name,
         email,
-        amount: depositum,
         paymentType: paymentType,
+        ...(oensketBeloeb !== null ? { oensketBeloeb: oensketBeloeb } : {}),
         productName: (paymentType==='full'?'Fuld betaling':paymentType==='deposit'?'Depositum':'Betaling') + ' — ' + (CURRENT_RETREAT?.title||'Castillo del Alma')
       }),
     });

@@ -1,4 +1,5 @@
 const { buildEmail, getLang, fmtDate, texts } = require('./email-template');
+const { retreatPris, beregnBookingpris } = require('./beloeb');
 
 exports.handler = async (event) => {
   if (event.httpMethod !== 'POST') {
@@ -10,7 +11,11 @@ exports.handler = async (event) => {
   const RESEND_KEY = process.env.RESEND_API_KEY;
 
   try {
-    const { fornavn, efternavn, email, telefon, nationalitet, gaester, vaerelse, addon_foer, addon_efter, addon_massage, selected_addons, kommentar, ekstra_gaester, retreat_id, retreat_name, arrival_date, departure_date, price_per_guest, deposit_pct, direct_payment, betingelser_accepteret } = JSON.parse(event.body);
+    // `gaester`, `price_per_guest` og `deposit_pct` pilles bevidst IKKE ud af
+    // kroppen. Siderne sender dem stadig, men alt der handler om penge og
+    // antal regnes ud herinde. Står de ikke her, kan de heller ikke snige sig
+    // ind i en beregning ved et uheld senere.
+    const { fornavn, efternavn, email, telefon, nationalitet, vaerelse, addon_foer, addon_efter, addon_massage, selected_addons, kommentar, ekstra_gaester, retreat_id, retreat_name, arrival_date, departure_date, direct_payment, betingelser_accepteret } = JSON.parse(event.body);
 
     if (!fornavn || !email) {
       return { statusCode: 400, body: JSON.stringify({ error: 'Fornavn og email er påkrævet' }) };
@@ -22,9 +27,32 @@ exports.handler = async (event) => {
       const d = new Date(iso);
       return `${d.getDate()}. ${months[d.getMonth()]} ${d.getFullYear()}`;
     }
-    const antalGaesterTotal = gaester || 1;
-    const totalPrice = Math.round((price_per_guest || 0) * antalGaesterTotal);
-    const depositAmount = Math.round((price_per_guest || 0) * antalGaesterTotal * (deposit_pct || 0.30));
+    // ── PRISEN ───────────────────────────────────────────────────────────
+    // Slås op på retreatet. Browseren sender stadig `price_per_guest` og
+    // `deposit_pct` med, men de læses ikke: ellers kunne enhver oprette en
+    // booking til prisen nul og få den bekræftet ved at betale nul.
+    //
+    // Antal gæster tælles også her. Klienten sendte både `gaester` og listen
+    // over medrejsende, og de to kunne være uenige — så ville totalen dække
+    // færre end dem der faktisk kommer.
+    const antalGaesterTotal = 1 + (Array.isArray(ekstra_gaester) ? ekstra_gaester.filter(g => g && String(g.navn || '').trim()).length : 0);
+
+    const priser = await retreatPris(retreat_id);
+    if (!priser && direct_payment) {
+      // Ingen pris at regne ud fra, og kunden er på vej til betaling.
+      // Bookingen må ikke oprettes med et beløb vi ikke kan stå inde for.
+      return {
+        statusCode: 400,
+        body: JSON.stringify({ error: 'Prisen på dette retreat kunne ikke bekræftes. Kontakt os venligst.' })
+      };
+    }
+    if (!priser) {
+      console.warn(`create-booking: ingen pris fundet for retreat ${retreat_id} — forespørgsel oprettes med beløb 0`);
+    }
+
+    const { totalPrice, depositAmount } = priser
+      ? beregnBookingpris(priser.pris, priser.pct, antalGaesterTotal)
+      : { totalPrice: 0, depositAmount: 0 };
 
     const headers = {
       'Content-Type': 'application/json',
@@ -68,7 +96,7 @@ exports.handler = async (event) => {
             if (holderPlads) optaget += antal;
           }
 
-          const nyeGaester = parseInt(gaester, 10) || 1;
+          const nyeGaester = antalGaesterTotal;
           if (optaget + nyeGaester > maxGuests) {
             return {
               statusCode: 409,
@@ -122,7 +150,7 @@ exports.handler = async (event) => {
         retreat_name: retreat_name || 'Ukendt retreat',
         arrival_date: arrival_date || null,
         departure_date: departure_date || null,
-        guests: gaester || 1,
+        guests: antalGaesterTotal,
         room: vaerelse || null,
         extra_guests: ekstra_gaester || [],
         total_price: totalPrice,
@@ -256,7 +284,7 @@ exports.handler = async (event) => {
               [t.label_retreat, retreat_name],
               [t.label_arrival, fmtDate(arrival_date, lang)],
               [t.label_departure, fmtDate(departure_date, lang)],
-              [t.label_guests, String(gaester || 1)],
+              [t.label_guests, String(antalGaesterTotal)],
               [t.label_room, vaerelse || null],
               [t.label_addons, (selected_addons||[]).length > 0 ? (selected_addons.map(a=>a.text).join(', ') + ' (' + t.addons_note + ')') : null],
               [t.label_deposit, '€' + depositAmount.toFixed(2)],

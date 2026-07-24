@@ -1,10 +1,46 @@
+// Opretter Stripe-betalingen.
+//
+// Beløbet kommer IKKE fra browseren længere. Klienten oplyser hvilken
+// booking og hvilken slags betaling — depositum, resten eller et selvvalgt
+// delbeløb — og beløbet regnes ud her ud fra bookingens egne tal.
+// Se beloeb.js for reglerne.
+
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 const { getLang } = require('./email-template');
+const { bookingBeloeb, beslutBeloeb } = require('./beloeb');
 
 exports.handler = async (event) => {
   if (event.httpMethod !== 'POST') return { statusCode: 405, body: 'Method Not Allowed' };
 
-  const { bookingId, navn, email, amount, productName, cancelPath, paymentType } = JSON.parse(event.body);
+  let indhold;
+  try { indhold = JSON.parse(event.body); }
+  catch { return { statusCode: 400, body: JSON.stringify({ error: 'Ugyldig data' }) }; }
+
+  const { bookingId, email, productName, cancelPath, paymentType, oensketBeloeb } = indhold;
+
+  if (!bookingId) {
+    return { statusCode: 400, body: JSON.stringify({ error: 'Ingen booking angivet' }) };
+  }
+
+  // ── Beløbet ──────────────────────────────────────────────────────────
+  // Slås op på bookingen: grundpris plus tilvalgslinjer, minus det der
+  // allerede er betalt. Et `amount` i kroppen bliver ikke læst.
+  let beslutning;
+  try {
+    const oek = await bookingBeloeb(bookingId);
+    if (!oek) return { statusCode: 404, body: JSON.stringify({ error: 'Booking ikke fundet' }) };
+    beslutning = beslutBeloeb(oek, paymentType, oensketBeloeb);
+  } catch (e) {
+    console.error('create-checkout: kunne ikke regne beløbet ud:', e.message);
+    return { statusCode: 500, body: JSON.stringify({ error: 'Kunne ikke beregne beløbet' }) };
+  }
+
+  if (beslutning.fejl) {
+    return { statusCode: 400, body: JSON.stringify({ error: beslutning.fejl }) };
+  }
+
+  const amount = beslutning.beloeb;
+  const betalingsType = beslutning.type;
 
   try {
     // Bekræftelsesside OG Stripe-produktnavn skal følge KUNDENS sprog (samme kilde som e-mailene),
@@ -39,7 +75,7 @@ exports.handler = async (event) => {
         en: { deposit:'Deposit', full:'Full payment', final:'Remaining payment', rest:'Remaining payment', remaining:'Remaining payment', balance:'Remaining payment', custom:'Payment' }
       };
       const pmap = PREFIX[lang] || PREFIX.da;
-      const prefix = pmap[paymentType] || (lang === 'en' ? 'Payment' : 'Betaling');
+      const prefix = pmap[betalingsType] || (lang === 'en' ? 'Payment' : 'Betaling');
       if (retreatTitle) serverProductName = `${prefix} — ${retreatTitle}`;
     } catch (e) {
       console.log('create-checkout: kunne ikke hente sprog/retreat, falder tilbage:', e.message);
@@ -62,7 +98,7 @@ exports.handler = async (event) => {
       }],
       success_url: `${process.env.URL}/betal-success?booking=${bookingId}${langParam}`,
       cancel_url: `${process.env.URL}/${cancelPath || 'betal'}?booking=${bookingId}`,
-      metadata: { booking_id: bookingId, payment_type: paymentType || 'deposit' }
+      metadata: { booking_id: bookingId, payment_type: betalingsType }
     });
 
     return { statusCode: 200, body: JSON.stringify({ url: session.url }) };

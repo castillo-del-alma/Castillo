@@ -47,19 +47,17 @@ async function init() {
     const booking = bRes.ok ? await bRes.json() : null;
     if (!booking || !booking.id) { showErr('Booking ikke fundet.'); return; }
 
-    const amount = booking.deposit_amount || Math.round(parseFloat(booking.total_price) * 0.3);
-
     document.getElementById('heading').textContent = 'Sender dig til betaling…';
     document.getElementById('msg').textContent = booking.retreat_name || 'Castillo del Alma';
 
+    // Beløbet sendes ikke med. create-checkout slår depositummet op på
+    // bookingen selv — ellers kunne det ændres her i browseren.
     const res = await fetch('/.netlify/functions/create-checkout', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         bookingId: booking.id,
-        navn: booking.navn || '',
         email: booking.email || '',
-        amount: amount,
         paymentType: 'deposit',
         productName: 'Depositum — ' + (booking.retreat_name || 'Castillo del Alma')
       })

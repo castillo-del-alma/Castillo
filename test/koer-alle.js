@@ -14,6 +14,7 @@ const TESTS = [
   ['Portal-data',   'portal-data.js'],
   ['Min booking',   'min-booking-portal.js'],
   ['Adgang',        'adgang.js'],
+  ['Beløb',         'beloeb.js'],
 ];
 
 const resultat = [];

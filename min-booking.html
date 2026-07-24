@@ -536,20 +536,25 @@ function visBetalMinBooking(skylder, depositum) {
   ov.style.display = 'flex';
 }
 
+// Beløbet regnes ud i create-checkout ud fra bookingen. Herfra sendes kun
+// HVAD kunden har valgt — depositum, resten, eller et selvvalgt delbeløb.
+// Tallene på knapperne er de samme, fordi de bygger på de samme rækker;
+// men det er serverens udregning der bliver til en Stripe-betaling.
 async function gennemfoerBetalingMB(type) {
-  let amount, paymentType;
-  if (type === 'deposit') { amount = _mbDepositum; paymentType = 'deposit'; }
-  else if (type === 'full') { amount = _mbSkylder; paymentType = 'final'; }
+  let paymentType, oensket = null, visBeloeb;
+  if (type === 'deposit') { paymentType = 'deposit'; visBeloeb = _mbDepositum; }
+  else if (type === 'full') { paymentType = 'final'; visBeloeb = _mbSkylder; }
   else {
-    amount = Math.round(parseFloat(document.getElementById('mb-eget-amt').value));
-    if (!amount || amount < 1) { alert(T('betGyldigt')); return; }
+    oensket = Math.round(parseFloat(document.getElementById('mb-eget-amt').value));
+    if (!oensket || oensket < 1) { alert(T('betGyldigt')); return; }
     paymentType = 'custom';
+    visBeloeb = oensket;
   }
   document.getElementById('mb-betal-overlay').style.display = 'none';
-  await betalResten(amount, paymentType);
+  await betalResten(paymentType, oensket, visBeloeb);
 }
 
-async function betalResten(amount, paymentType = 'final') {
+async function betalResten(paymentType = 'final', oensketBeloeb = null, visBeloeb = 0) {
   const btn = (typeof event !== 'undefined' && event?.target) ? event.target.closest('button') : null;
   if (btn) { btn.disabled = true; btn.textContent = T('betOpretter'); }
   try {
@@ -558,19 +563,18 @@ async function betalResten(amount, paymentType = 'final') {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         bookingId: bookingData.id,
-        navn: portalKundeNavn,
         email: userEmail,
-        amount: Math.round(amount),
         productName: T('betRest') + ' — ' + (bookingData.retreat_name || 'Castillo del Alma'),
         cancelPath: 'min-booking',
-        paymentType: paymentType
+        paymentType: paymentType,
+        ...(oensketBeloeb !== null ? { oensketBeloeb: oensketBeloeb } : {})
       })
     });
     const data = await res.json();
     if (!res.ok || data.error) throw new Error(data.error || T('fejlUkendt'));
     window.location.href = data.url;
   } catch(e) {
-    if (btn) { btn.disabled = false; btn.textContent = T('betBetalUdest') + ' — €' + parseFloat(amount).toFixed(2); }
+    if (btn) { btn.disabled = false; btn.textContent = T('betBetalUdest') + ' — €' + (parseFloat(visBeloeb) || 0).toFixed(2); }
     alert(T('fejlPrefix') + ': ' + e.message);
   }
 }
