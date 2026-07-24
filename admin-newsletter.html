@@ -7,6 +7,8 @@
 <title>Newsletter Admin — Castillo del Alma</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="admin-auth.js"></script>
+<script>window.CDA_POPUP_MANUAL = true;</script>
+<script src="nyhedsbrev-popup.js"></script>
 <style>
 :root {
   --cream: #faf6ee;
@@ -97,6 +99,35 @@ body { background: var(--cream); color: var(--dark); font-family: 'Georgia', ser
 }
 .panel-title { font-size: 11px; letter-spacing: .3em; text-transform: uppercase; color: #5c3f0e; }
 .panel-body { padding: 24px; }
+
+/* ── POPUP-FANEN ── */
+.pp-toggle { display: flex; align-items: center; gap: 10px; font-family: sans-serif; font-size: 14px; cursor: pointer; }
+.pp-toggle input { width: 17px; height: 17px; accent-color: var(--wine); cursor: pointer; }
+.pp-grid3 { display: grid; grid-template-columns: repeat(3,1fr); gap: 18px; }
+.pp-2col { display: grid; grid-template-columns: 1fr 1fr; gap: 14px 20px; }
+.pp-sprogrk { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 10px; }
+.pp-flag { font-family: sans-serif; font-size: 10px; letter-spacing: .25em; text-transform: uppercase; color: var(--gold-muted); }
+.pp-farve { width: 100%; height: 42px; padding: 3px; border: 1px solid var(--border); background: var(--cream); cursor: pointer; }
+.pp-skabeloner { display: grid; grid-template-columns: repeat(auto-fill,minmax(210px,1fr)); gap: 16px; }
+.pp-skabelon { border: 1px solid var(--border); background: var(--cream); padding: 16px; cursor: pointer; transition: border-color .15s, background .15s; }
+.pp-skabelon:hover { border-color: var(--gold); background: var(--hover); }
+.pp-skabelon.valgt { border-color: var(--wine); background: rgba(122,31,53,.05); box-shadow: inset 0 0 0 1px var(--wine); }
+.pp-sk-navn { font-family: Georgia, serif; font-size: 15px; margin: 12px 0 4px; }
+.pp-sk-tekst { font-family: sans-serif; font-size: 12px; line-height: 1.5; color: var(--muted); }
+.pp-fig { position: relative; height: 84px; background: #e6ddc9; border: 1px solid var(--border); overflow: hidden; }
+.pp-fig span { position: absolute; background: var(--wine); opacity: .8; }
+.pp-fig-klassisk span { inset: 20% 26%; }
+.pp-fig-billede span:first-child { top: 22%; bottom: 22%; left: 16%; width: 34%; background: var(--gold); }
+.pp-fig-billede span:last-child { top: 22%; bottom: 22%; right: 16%; width: 34%; }
+.pp-fig-baggrund span { inset: 12% 16%; background: linear-gradient(160deg,var(--gold),var(--wine)); }
+.pp-fig-hjoerne span { right: 8%; bottom: 10%; width: 40%; height: 46%; }
+.pp-fig-banner span { left: 0; right: 0; bottom: 0; height: 34%; }
+#ppPreview { width: 100%; height: 560px; border: 1px solid var(--border); background: #efe9dd; display: block; }
+@media (max-width: 900px) {
+  .pp-grid3 { grid-template-columns: 1fr 1fr; }
+  .pp-2col, .pp-sprogrk { grid-template-columns: 1fr; }
+  .pp-sprogrk { display: none; }
+}
 
 /* ── STATS ── */
 .stats-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 16px; margin-bottom: 28px; }
@@ -281,6 +312,7 @@ body { background: var(--cream); color: var(--dark); font-family: 'Georgia', ser
     <button class="tab-btn" onclick="switchTab('campaigns')">📬 Kampagner</button>
     <button class="tab-btn" onclick="switchTab('subscribers')">👥 Abonnenter</button>
     <button class="tab-btn" onclick="switchTab('templates')">🎨 Skabeloner</button>
+    <button class="tab-btn" onclick="switchTab('popup')">🪟 Popup</button>
   </div>
 
   <div class="content">
@@ -590,6 +622,211 @@ body { background: var(--cream); color: var(--dark); font-family: 'Georgia', ser
       </div>
     </div>
 
+    <!-- ── TAB: POPUP ── -->
+    <div class="tab-pane" id="tab-popup">
+
+      <div class="stats-grid" style="grid-template-columns:repeat(3,1fr);">
+        <div class="stat-card">
+          <div class="stat-num" id="ppStatus">—</div>
+          <div class="stat-label">Popup-status</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num" id="ppStatTilmeldte">—</div>
+          <div class="stat-label">Tilmeldt via popup</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num" id="ppStatSkabelon">—</div>
+          <div class="stat-label">Valgt skabelon</div>
+        </div>
+      </div>
+
+      <!-- 1. TÆND / SLUK -->
+      <div class="panel">
+        <div class="panel-head">
+          <span class="panel-title">1 · Tænd og sluk</span>
+          <div class="btn-group">
+            <button class="btn btn-ghost btn-sm" onclick="ppNulstilBrowser()">↺ Nulstil på denne browser</button>
+            <button class="btn btn-wine btn-sm" onclick="ppGem()">💾 Gem popup</button>
+          </div>
+        </div>
+        <div class="panel-body">
+          <label class="pp-toggle">
+            <input type="checkbox" id="pp_aktiv" onchange="ppOpdaterStatus()">
+            <span>Popup'en er tændt på hjemmesiden</span>
+          </label>
+          <p class="form-hint" style="margin-top:10px;">
+            Ændringer træder i kraft, så snart du klikker <b>💾 Gem popup</b> — der skal ikke deployes.
+            Teksten i felterne er først gemt, når du har klikket.
+          </p>
+        </div>
+      </div>
+
+      <!-- 2. SKABELON -->
+      <div class="panel">
+        <div class="panel-head"><span class="panel-title">2 · Vælg skabelon</span></div>
+        <div class="panel-body">
+          <p class="form-hint" style="margin-bottom:16px;">
+            En skabelon sætter layout, farver og bredde. Du kan altid finpudse det hele bagefter under punkt 3.
+          </p>
+          <input type="hidden" id="pp_skabelon" value="klassisk">
+          <div class="pp-skabeloner" id="ppSkabelonGrid"></div>
+        </div>
+      </div>
+
+      <!-- 3. UDSEENDE -->
+      <div class="panel">
+        <div class="panel-head"><span class="panel-title">3 · Udseende</span></div>
+        <div class="panel-body">
+          <div class="pp-grid3">
+            <div class="form-row">
+              <label class="form-label">Baggrund</label>
+              <input type="color" class="pp-farve" id="pp_farve_bg" oninput="ppTegn()">
+            </div>
+            <div class="form-row">
+              <label class="form-label">Tekst</label>
+              <input type="color" class="pp-farve" id="pp_farve_tekst" oninput="ppTegn()">
+            </div>
+            <div class="form-row">
+              <label class="form-label">Accent (label)</label>
+              <input type="color" class="pp-farve" id="pp_farve_accent" oninput="ppTegn()">
+            </div>
+            <div class="form-row">
+              <label class="form-label">Knap</label>
+              <input type="color" class="pp-farve" id="pp_farve_knap" oninput="ppTegn()">
+            </div>
+            <div class="form-row">
+              <label class="form-label">Knaptekst</label>
+              <input type="color" class="pp-farve" id="pp_farve_knap_tekst" oninput="ppTegn()">
+            </div>
+            <div class="form-row">
+              <label class="form-label">Bredde (px)</label>
+              <input type="number" class="form-input" id="pp_bredde" min="300" max="1100" step="10" oninput="ppTegn()">
+            </div>
+            <div class="form-row">
+              <label class="form-label">Runde hjørner (px)</label>
+              <input type="number" class="form-input" id="pp_hjoerner" min="0" max="40" oninput="ppTegn()">
+            </div>
+            <div class="form-row">
+              <label class="form-label">Mørkning bagved (0–90)</label>
+              <input type="number" class="form-input" id="pp_overlay" min="0" max="90" oninput="ppTegn()">
+            </div>
+            <div class="form-row">
+              <label class="form-label">Navnefelt</label>
+              <label class="pp-toggle" style="margin-top:8px;">
+                <input type="checkbox" id="pp_vis_navn" onchange="ppTegn()">
+                <span>Spørg også om navn</span>
+              </label>
+            </div>
+          </div>
+
+          <div class="form-row" style="margin-top:6px;">
+            <label class="form-label">Billede</label>
+            <div style="display:flex;gap:10px;align-items:flex-start;flex-wrap:wrap;">
+              <input type="text" class="form-input" id="pp_billede" style="flex:1 1 320px;"
+                     placeholder="https://… eller upload til højre" oninput="ppTegn()">
+              <input type="file" id="pp_billede_fil" accept="image/*" style="display:none;" onchange="ppUploadBillede()">
+              <button class="btn btn-ghost btn-sm" onclick="document.getElementById('pp_billede_fil').click()">📷 Upload</button>
+              <button class="btn btn-danger btn-sm" onclick="ppFjernBillede()">Fjern</button>
+            </div>
+            <p class="form-hint">Bruges af skabelonerne «Billede ved siden» og «Foto i baggrunden» — og som topbillede i «Klassisk».</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4. TEKSTER -->
+      <div class="panel">
+        <div class="panel-head"><span class="panel-title">4 · Tekster — dansk og engelsk</span></div>
+        <div class="panel-body">
+          <p class="form-hint" style="margin-bottom:18px;">
+            Du må gerne bruge <b>&lt;b&gt;</b>, <b>&lt;em&gt;</b> og <b>&lt;br&gt;</b> i overskrift og brødtekst.
+            Er et engelsk felt tomt, bruges den danske tekst.
+          </p>
+
+          <div class="pp-sprogrk"><span class="pp-flag">🇩🇰 Dansk</span><span class="pp-flag">🇬🇧 English</span></div>
+
+          <div class="pp-2col" id="ppTekstFelter"></div>
+        </div>
+      </div>
+
+      <!-- 5. VISNINGSREGLER -->
+      <div class="panel">
+        <div class="panel-head"><span class="panel-title">5 · Hvornår skal den komme frem?</span></div>
+        <div class="panel-body">
+          <div class="pp-grid3">
+            <div class="form-row">
+              <label class="form-label">Udløser</label>
+              <select class="form-select" id="pp_trigger" onchange="ppOpdaterTrigger()">
+                <option value="tid">Efter et antal sekunder</option>
+                <option value="scroll">Når man har scrollet et stykke</option>
+                <option value="exit">Når musen forlader vinduet</option>
+                <option value="straks">Med det samme</option>
+              </select>
+            </div>
+            <div class="form-row" id="ppRowTid">
+              <label class="form-label">Sekunder</label>
+              <input type="number" class="form-input" id="pp_forsinkelse" min="0" max="120">
+            </div>
+            <div class="form-row" id="ppRowScroll">
+              <label class="form-label">Scroll-procent</label>
+              <input type="number" class="form-input" id="pp_scroll_pct" min="5" max="100">
+            </div>
+            <div class="form-row">
+              <label class="form-label">Vis igen efter (dage)</label>
+              <input type="number" class="form-input" id="pp_frekvens_dage" min="0" max="365">
+              <p class="form-hint">0 = vis aldrig igen, når den er lukket.</p>
+            </div>
+            <div class="form-row">
+              <label class="form-label">Først ved besøg nr.</label>
+              <input type="number" class="form-input" id="pp_min_besog" min="1" max="20">
+              <p class="form-hint">1 = allerede ved første besøg.</p>
+            </div>
+            <div class="form-row">
+              <label class="form-label">Ekstra</label>
+              <label class="pp-toggle" style="margin-top:8px;">
+                <input type="checkbox" id="pp_exit_intent">
+                <span>Vis også når musen forlader vinduet</span>
+              </label>
+              <label class="pp-toggle" style="margin-top:8px;">
+                <input type="checkbox" id="pp_vis_paa_mobil">
+                <span>Vis også på mobil</span>
+              </label>
+            </div>
+          </div>
+
+          <div class="form-row" style="margin-top:6px;">
+            <label class="form-label">Sider</label>
+            <input type="text" class="form-input" id="pp_sider" placeholder="alle">
+            <p class="form-hint">
+              Skriv <b>alle</b> for hele sitet — eller adskil stier med komma, fx
+              <b>/, /retreat.html, /ejendommen.html</b>. Engelske /en/-sider følger automatisk med.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 6. FORHÅNDSVISNING -->
+      <div class="panel">
+        <div class="panel-head">
+          <span class="panel-title">6 · Sådan ser den ud</span>
+          <div class="btn-group">
+            <button class="btn btn-ghost btn-sm" id="ppSprogDa" onclick="ppSaetSprog('da')">🇩🇰 Dansk</button>
+            <button class="btn btn-ghost btn-sm" id="ppSprogEn" onclick="ppSaetSprog('en')">🇬🇧 English</button>
+            <button class="btn btn-gold btn-sm" onclick="ppTegn()">↻ Opdatér</button>
+          </div>
+        </div>
+        <div class="panel-body">
+          <iframe id="ppPreview" title="Forhåndsvisning af popup"></iframe>
+          <p class="form-hint" style="margin-top:12px;">
+            Forhåndsvisningen er live — den opdaterer sig, når du ændrer noget. Formularen her sender ikke noget af sted.
+          </p>
+          <div class="btn-group" style="margin-top:16px;">
+            <button class="btn btn-wine" onclick="ppGem()">💾 Gem popup</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
   </div><!-- /content -->
 </div><!-- /dashboard -->
 
@@ -631,6 +868,8 @@ async function init() {
   await loadSubscribers();
   await loadCampaigns();
   renderTemplates();
+  ppByggFelter();
+  await ppLoad();
 }
 
 // ── STATS ──
@@ -656,17 +895,27 @@ function updateRecipientCount(activeSubs) {
 }
 
 // ── TABS ──
+const TAB_ORD = {
+  compose: 'skriv',
+  campaigns: 'kampagner',
+  subscribers: 'abonnenter',
+  templates: 'skabeloner',
+  popup: 'popup'
+};
+
 function switchTab(tab) {
+  const pane = document.getElementById('tab-' + tab);
+  if (!pane) return;
   document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
   document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-  document.getElementById('tab-' + tab).classList.add('active');
+  pane.classList.add('active');
+  const ord = TAB_ORD[tab];
   document.querySelectorAll('.tab-btn').forEach(b => {
-    if (b.textContent.toLowerCase().includes(tab === 'compose' ? 'skriv' : tab === 'campaigns' ? 'kampagner' : tab === 'subscribers' ? 'abonnenter' : 'skabeloner')) {
-      b.classList.add('active');
-    }
+    if (ord && b.textContent.toLowerCase().includes(ord)) b.classList.add('active');
   });
   if (tab === 'campaigns') loadCampaigns();
   if (tab === 'subscribers') loadSubscribers();
+  if (tab === 'popup') ppTegn();
 }
 
 // ── EDITOR MODE ──
@@ -1493,6 +1742,361 @@ function toast(msg, type = '') {
   el.className = 'show ' + (type === 'ok' ? 'ok' : type === 'err' ? 'err' : '');
   clearTimeout(toastTimer);
   toastTimer = setTimeout(() => el.className = '', 3500);
+}
+
+/* ══════════════════════════════════════════════════════════════
+   POPUP — nyhedsbrev-popup på hjemmesiden
+   Indholdet gemmes i Supabase-tabellen popup_content og læses af
+   /nyhedsbrev-popup.js på de offentlige sider. Selve tegningen af
+   popup'en genbruges fra samme fil (CDAPopup.byg), så admin viser
+   præcis det, de besøgende får.
+   ══════════════════════════════════════════════════════════════ */
+
+const PP_TEKSTFELTER = [
+  { key: 'label',          navn: 'Lille label øverst',     type: 'input' },
+  { key: 'overskrift',     navn: 'Overskrift',             type: 'input' },
+  { key: 'brodtekst',      navn: 'Brødtekst',              type: 'textarea' },
+  { key: 'ph_navn',        navn: 'Pladsholder: navn',      type: 'input' },
+  { key: 'ph_email',       navn: 'Pladsholder: e-mail',    type: 'input' },
+  { key: 'knap',           navn: 'Tekst på knappen',       type: 'input' },
+  { key: 'smaatekst',      navn: 'Lille tekst nederst',    type: 'textarea' },
+  { key: 'tak_overskrift', navn: 'Kvittering: overskrift', type: 'input' },
+  { key: 'tak_tekst',      navn: 'Kvittering: tekst',      type: 'textarea' }
+];
+
+const PP_VALGFELTER = [
+  'skabelon', 'trigger', 'forsinkelse', 'scroll_pct', 'frekvens_dage', 'min_besog',
+  'sider', 'farve_bg', 'farve_tekst', 'farve_accent', 'farve_knap', 'farve_knap_tekst',
+  'overlay', 'bredde', 'hjoerner', 'billede'
+];
+
+const PP_TJEKFELTER = ['aktiv', 'exit_intent', 'vis_paa_mobil', 'vis_navn'];
+
+const PP_SKABELONER = [
+  {
+    id: 'klassisk', navn: 'Klassisk',
+    beskrivelse: 'Midt på skærmen. Roligt, enkelt — og det sikreste valg.',
+    figur: '<div class="pp-fig pp-fig-klassisk"><span></span></div>',
+    preset: {
+      skabelon: 'klassisk', farve_bg: '#faf6ee', farve_tekst: '#2c2318',
+      farve_accent: '#b88a1e', farve_knap: '#7a1f35', farve_knap_tekst: '#ffffff',
+      bredde: '520', hjoerner: '0', overlay: '55'
+    }
+  },
+  {
+    id: 'billede', navn: 'Billede ved siden',
+    beskrivelse: 'Foto i venstre halvdel, tilmelding i højre. Kræver et billede.',
+    figur: '<div class="pp-fig pp-fig-billede"><span></span><span></span></div>',
+    preset: {
+      skabelon: 'billede', farve_bg: '#faf6ee', farve_tekst: '#2c2318',
+      farve_accent: '#b88a1e', farve_knap: '#7a1f35', farve_knap_tekst: '#ffffff',
+      bredde: '880', hjoerner: '0', overlay: '60'
+    }
+  },
+  {
+    id: 'baggrund', navn: 'Foto i baggrunden',
+    beskrivelse: 'Billedet fylder hele vinduet med tekst hen over. Kræver et billede.',
+    figur: '<div class="pp-fig pp-fig-baggrund"><span></span></div>',
+    preset: {
+      skabelon: 'baggrund', farve_bg: '#2c2318', farve_tekst: '#ffffff',
+      farve_accent: '#e2c069', farve_knap: '#b88a1e', farve_knap_tekst: '#ffffff',
+      bredde: '560', hjoerner: '0', overlay: '55'
+    }
+  },
+  {
+    id: 'hjoerne', navn: 'Diskret hjørne',
+    beskrivelse: 'Lille kort nede i højre hjørne. Mørkner ikke siden.',
+    figur: '<div class="pp-fig pp-fig-hjoerne"><span></span></div>',
+    preset: {
+      skabelon: 'hjoerne', farve_bg: '#faf6ee', farve_tekst: '#2c2318',
+      farve_accent: '#b88a1e', farve_knap: '#7a1f35', farve_knap_tekst: '#ffffff',
+      bredde: '380', hjoerner: '2', overlay: '0'
+    }
+  },
+  {
+    id: 'banner', navn: 'Bundbanner',
+    beskrivelse: 'Bånd i bunden i fuld bredde. Den mildeste af dem alle.',
+    figur: '<div class="pp-fig pp-fig-banner"><span></span></div>',
+    preset: {
+      skabelon: 'banner', farve_bg: '#f0e8d5', farve_tekst: '#2c2318',
+      farve_accent: '#7a5c14', farve_knap: '#7a1f35', farve_knap_tekst: '#ffffff',
+      bredde: '520', hjoerner: '0', overlay: '0'
+    }
+  }
+];
+
+let ppSprog = 'da';
+let ppTegnTimer = null;
+
+/* ── Opbygning af felterne ── */
+function ppByggFelter() {
+  const grid = document.getElementById('ppTekstFelter');
+  if (grid) {
+    grid.innerHTML = PP_TEKSTFELTER.map(f => {
+      const felt = (suffix, ekstra) =>
+        f.type === 'textarea'
+          ? `<textarea class="form-textarea" style="min-height:78px" id="pp_${f.key}${suffix}" oninput="ppTegnSenere()"></textarea>`
+          : `<input type="text" class="form-input" id="pp_${f.key}${suffix}" oninput="ppTegnSenere()">`;
+      return `<div class="form-row"><label class="form-label">${f.navn}</label>${felt('')}</div>` +
+             `<div class="form-row"><label class="form-label">${f.navn} · EN</label>${felt('_en')}</div>`;
+    }).join('');
+  }
+
+  const sk = document.getElementById('ppSkabelonGrid');
+  if (sk) {
+    sk.innerHTML = PP_SKABELONER.map(s =>
+      `<div class="pp-skabelon" id="ppSk_${s.id}" onclick="ppVaelgSkabelon('${s.id}')">
+         ${s.figur}
+         <p class="pp-sk-navn">${s.navn}</p>
+         <p class="pp-sk-tekst">${s.beskrivelse}</p>
+       </div>`
+    ).join('');
+  }
+}
+
+/* ── Hent fra databasen ── */
+async function ppLoad() {
+  const std = (window.CDAPopup && window.CDAPopup.DEFAULTS) || {};
+  let cfg = Object.assign({}, std);
+
+  try {
+    const { data, error } = await sb.from('popup_content').select('key,value');
+    if (error) throw error;
+    (data || []).forEach(r => {
+      if (r && r.key != null && r.value != null && String(r.value) !== '') cfg[r.key] = r.value;
+    });
+  } catch (e) {
+    console.warn('ppLoad: kunne ikke hente popup_content (er tabellen oprettet?):', e.message);
+    toast('Kunne ikke hente popup-opsætningen — er SQL-migrationen kørt?', 'err');
+  }
+
+  PP_VALGFELTER.forEach(k => {
+    const el = document.getElementById('pp_' + k);
+    if (el) el.value = cfg[k] != null ? cfg[k] : '';
+  });
+  PP_TJEKFELTER.forEach(k => {
+    const el = document.getElementById('pp_' + k);
+    if (el) el.checked = String(cfg[k]) === '1';
+  });
+  PP_TEKSTFELTER.forEach(f => {
+    const a = document.getElementById('pp_' + f.key);
+    const b = document.getElementById('pp_' + f.key + '_en');
+    if (a) a.value = cfg[f.key] != null ? cfg[f.key] : '';
+    if (b) b.value = cfg[f.key + '_en'] != null ? cfg[f.key + '_en'] : '';
+  });
+
+  ppMarkerSkabelon(cfg.skabelon || 'klassisk');
+  ppOpdaterTrigger();
+  ppOpdaterStatus();
+  ppSaetSprog(ppSprog);
+  ppHentTilmeldte();
+}
+
+async function ppHentTilmeldte() {
+  const el = document.getElementById('ppStatTilmeldte');
+  if (!el) return;
+  try {
+    const { data } = await sb.from('newsletter_subscribers').select('id,source,status');
+    const n = (data || []).filter(s => s.source === 'popup' && s.status === 'active').length;
+    el.textContent = n;
+  } catch (e) { el.textContent = '—'; }
+}
+
+/* ── Saml opsætningen fra felterne ── */
+function ppSamlCfg() {
+  const std = (window.CDAPopup && window.CDAPopup.DEFAULTS) || {};
+  const cfg = Object.assign({}, std);
+
+  PP_VALGFELTER.forEach(k => {
+    const el = document.getElementById('pp_' + k);
+    if (el) cfg[k] = (el.value || '').trim();
+  });
+  PP_TJEKFELTER.forEach(k => {
+    const el = document.getElementById('pp_' + k);
+    if (el) cfg[k] = el.checked ? '1' : '0';
+  });
+  PP_TEKSTFELTER.forEach(f => {
+    const a = document.getElementById('pp_' + f.key);
+    const b = document.getElementById('pp_' + f.key + '_en');
+    if (a) cfg[f.key] = a.value;
+    if (b) cfg[f.key + '_en'] = b.value;
+  });
+
+  /* Tomme tal må ikke ende som tom streng i databasen */
+  ['forsinkelse', 'scroll_pct', 'frekvens_dage', 'min_besog', 'overlay', 'bredde', 'hjoerner'].forEach(k => {
+    if (cfg[k] === '' || cfg[k] == null) cfg[k] = std[k];
+  });
+  if (!cfg.sider) cfg.sider = 'alle';
+
+  return cfg;
+}
+
+/* ── Gem ── */
+async function ppGem() {
+  const cfg = ppSamlCfg();
+  const rows = Object.keys(cfg).map(k => ({ key: k, value: String(cfg[k] == null ? '' : cfg[k]) }));
+
+  try {
+    const { error } = await sb.from('popup_content').upsert(rows, { onConflict: 'key' });
+    if (error) throw error;
+    toast(cfg.aktiv === '1' ? '✓ Gemt — popup\'en er tændt' : '✓ Gemt — popup\'en er slukket', 'ok');
+    ppOpdaterStatus();
+  } catch (e) {
+    console.error('ppGem:', e);
+    toast('Kunne ikke gemme: ' + (e.message || 'ukendt fejl'), 'err');
+  }
+}
+
+/* ── Skabeloner ── */
+function ppVaelgSkabelon(id) {
+  const s = PP_SKABELONER.find(x => x.id === id);
+  if (!s) return;
+  Object.keys(s.preset).forEach(k => {
+    const el = document.getElementById('pp_' + k);
+    if (el) el.value = s.preset[k];
+  });
+  ppMarkerSkabelon(id);
+  ppTegn();
+  toast('Skabelonen «' + s.navn + '» er indlæst — husk 💾 Gem', 'ok');
+}
+
+function ppMarkerSkabelon(id) {
+  PP_SKABELONER.forEach(s => {
+    const el = document.getElementById('ppSk_' + s.id);
+    if (el) el.classList.toggle('valgt', s.id === id);
+  });
+  const felt = document.getElementById('pp_skabelon');
+  if (felt) felt.value = id;
+  const stat = document.getElementById('ppStatSkabelon');
+  const fundet = PP_SKABELONER.find(s => s.id === id);
+  if (stat) stat.textContent = fundet ? fundet.navn : '—';
+}
+
+/* ── Små opdateringer i brugerfladen ── */
+function ppOpdaterStatus() {
+  const el = document.getElementById('ppStatus');
+  const paa = document.getElementById('pp_aktiv');
+  if (!el || !paa) return;
+  el.textContent = paa.checked ? 'Tændt' : 'Slukket';
+  el.style.color = paa.checked ? '#2e7d32' : 'var(--muted)';
+}
+
+function ppOpdaterTrigger() {
+  const t = (document.getElementById('pp_trigger') || {}).value || 'tid';
+  const tid = document.getElementById('ppRowTid');
+  const scr = document.getElementById('ppRowScroll');
+  if (tid) tid.style.opacity = t === 'tid' ? '1' : '0.35';
+  if (scr) scr.style.opacity = t === 'scroll' ? '1' : '0.35';
+}
+
+function ppSaetSprog(lang) {
+  ppSprog = lang === 'en' ? 'en' : 'da';
+  const da = document.getElementById('ppSprogDa');
+  const en = document.getElementById('ppSprogEn');
+  if (da) { da.classList.toggle('btn-wine', ppSprog === 'da'); da.classList.toggle('btn-ghost', ppSprog !== 'da'); }
+  if (en) { en.classList.toggle('btn-wine', ppSprog === 'en'); en.classList.toggle('btn-ghost', ppSprog !== 'en'); }
+  ppTegn();
+}
+
+function ppNulstilBrowser() {
+  if (window.CDAPopup) window.CDAPopup.nulstil();
+  toast('Nulstillet — popup\'en vises igen i denne browser', 'ok');
+}
+
+/* ── Billede ── */
+function ppFilnavn(originalName) {
+  const dot = originalName.lastIndexOf('.');
+  const ext = dot > -1 ? originalName.slice(dot + 1).toLowerCase() : 'jpg';
+  let base = (dot > -1 ? originalName.slice(0, dot) : originalName)
+    .toLowerCase()
+    .replace(/æ/g, 'ae').replace(/ø/g, 'oe').replace(/å/g, 'aa')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '')
+    .replace(/^castillo-del-alma-?/, '');
+  if (base.length > 60) {
+    base = base.slice(0, 60);
+    const sidste = base.lastIndexOf('-');
+    if (sidste > 20) base = base.slice(0, sidste);
+  }
+  return `castillo-del-alma-${base || 'popup'}-${Date.now()}.${ext}`;
+}
+
+async function ppUploadBillede() {
+  const input = document.getElementById('pp_billede_fil');
+  const felt = document.getElementById('pp_billede');
+  if (!input || !input.files || !input.files.length || !felt) return;
+  const fil = input.files[0];
+  const gammel = felt.value;
+
+  toast('Uploader billede…');
+  try {
+    const sti = 'popup/' + ppFilnavn(fil.name);
+    const { error } = await sb.storage.from('retreat-images').upload(sti, fil);
+    if (error) throw error;
+    const { data } = sb.storage.from('retreat-images').getPublicUrl(sti);
+    felt.value = data.publicUrl;
+    ppTegn();
+    toast('✓ Billede uploadet — husk 💾 Gem', 'ok');
+
+    /* Ryd op i det gamle billede, men først når det nye ligger sikkert */
+    const marker = '/object/public/retreat-images/';
+    if (gammel && gammel.includes(marker)) {
+      const gammelSti = decodeURIComponent(gammel.split(marker)[1].split('?')[0]);
+      if (gammelSti.startsWith('popup/')) {
+        try { await sb.storage.from('retreat-images').remove([gammelSti]); } catch (_) { /* best effort */ }
+      }
+    }
+  } catch (e) {
+    console.error('ppUploadBillede:', e);
+    toast('Upload fejlede: ' + (e.message || 'ukendt fejl'), 'err');
+  } finally {
+    input.value = '';
+  }
+}
+
+function ppFjernBillede() {
+  const felt = document.getElementById('pp_billede');
+  if (felt) { felt.value = ''; ppTegn(); }
+  toast('Billedet er fjernet fra popup\'en — husk 💾 Gem');
+}
+
+/* ── Forhåndsvisning ── */
+function ppTegnSenere() {
+  clearTimeout(ppTegnTimer);
+  ppTegnTimer = setTimeout(ppTegn, 260);
+}
+
+function ppTegn() {
+  const ramme = document.getElementById('ppPreview');
+  if (!ramme || !window.CDAPopup) return;
+  ppOpdaterStatus();
+
+  const cfg = ppSamlCfg();
+  let d;
+  try {
+    d = window.CDAPopup.byg(cfg, ppSprog);
+  } catch (e) {
+    console.error('ppTegn:', e);
+    return;
+  }
+  d.overlay.classList.add('cdapop-vis');
+
+  const baggrund =
+    '<div class="pp-fake"><div class="pp-fake-nav"></div>' +
+    '<div class="pp-fake-h"></div><div class="pp-fake-l"></div><div class="pp-fake-l"></div>' +
+    '<div class="pp-fake-l" style="width:62%"></div><div class="pp-fake-l" style="width:78%"></div>' +
+    '<div class="pp-fake-l" style="width:54%"></div></div>';
+
+  ramme.srcdoc =
+    '<!DOCTYPE html><html lang="' + ppSprog + '"><head><meta charset="utf-8">' +
+    '<link rel="stylesheet" href="fonts/fonts.css">' +
+    '<style>html,body{margin:0;height:100%;overflow:hidden;background:#efe9dd;}' +
+    '.pp-fake{padding:26px 34px;font-family:sans-serif;}' +
+    '.pp-fake-nav{height:14px;background:rgba(44,35,24,.16);margin-bottom:28px;border-radius:2px;}' +
+    '.pp-fake-h{height:22px;width:46%;background:rgba(44,35,24,.22);margin-bottom:18px;border-radius:2px;}' +
+    '.pp-fake-l{height:9px;width:88%;background:rgba(44,35,24,.1);margin-bottom:11px;border-radius:2px;}' +
+    '</style><style>' + d.stil.textContent + '</style></head><body>' +
+    baggrund + d.overlay.outerHTML + '</body></html>';
 }
 </script>
 </body>
