@@ -2612,7 +2612,11 @@ async function loadRetreatsGrid() {
 
   grid.innerHTML = data.map((r, i) => {
     const num = String(i + 1).padStart(2, '0');
-    const isPride = (r.pride === true) || (r.pride === undefined && r.slug === 'gay-retreat-og-faellesskab');
+    // Pride styres af flaget på retreatet i admin. Tidligere faldt den tilbage
+    // til slug'en 'gay-retreat-og-faellesskab', hvis flaget manglede — det gjorde
+    // ét bestemt retreat særligt i koden og ville have ramt forkert, hvis det
+    // slug nogensinde blev genbrugt eller ændret.
+    const isPride = r.pride === true;
     const isEN = currentSiteLang === 'en';
     const title = isEN ? (r.title_en || r.title || '') : (r.title || '');
     const subtitle = isEN ? (r.subtitle_en || r.subtitle || '') : (r.subtitle || '');
