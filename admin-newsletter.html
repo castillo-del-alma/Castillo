@@ -363,11 +363,40 @@ body { background: var(--cream); color: var(--dark); font-family: 'Georgia', ser
 
           <div class="form-row">
             <label class="form-label">Målgruppe</label>
+
+            <div style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:10px;">
+              <div>
+                <label style="display:block;font-family:sans-serif;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-bottom:4px;">Liste</label>
+                <select class="form-select" id="segListe" style="width:230px;" onchange="opdaterMaalgruppe()">
+                  <option value="alle">Alle lister</option>
+                </select>
+              </div>
+              <div>
+                <label style="display:block;font-family:sans-serif;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-bottom:4px;">Interesse</label>
+                <select class="form-select" id="segInteresse" style="width:200px;" onchange="opdaterMaalgruppe()">
+                  <option value="alle">Alle interesser</option>
+                  <option value="retreats">Retreats</option>
+                  <option value="wine">Wine &amp; Gourmet</option>
+                  <option value="wellness">Wellness</option>
+                  <option value="gay">Gay retreats</option>
+                </select>
+              </div>
+            </div>
+
             <div class="segment-row">
-              <label class="segment-opt"><input type="checkbox" id="segAll" checked onchange="toggleSegAll(this)"> <strong>Alle aktive</strong></label>
-              <label class="segment-opt"><input type="checkbox" id="segDA"> Kun dansk</label>
-              <label class="segment-opt"><input type="checkbox" id="segEN"> Kun engelsk</label>
-              <label class="segment-opt"><input type="checkbox" id="segBooking"> Har foretaget booking</label>
+              <label class="segment-opt"><input type="checkbox" id="segAll" checked onchange="toggleSegAll(this); opdaterMaalgruppe()"> <strong>Alle sprog</strong></label>
+              <label class="segment-opt"><input type="checkbox" id="segDA" onchange="vaelgSprog(this)"> Kun dansk</label>
+              <label class="segment-opt"><input type="checkbox" id="segEN" onchange="vaelgSprog(this)"> Kun engelsk</label>
+            </div>
+
+            <!-- Hvem rammer valget faktisk. Opdateres mens du klikker, saa
+                 du aldrig sender uden at vide hvem der modtager. -->
+            <div style="margin-top:12px;padding:12px 14px;background:var(--cream);border:1px solid var(--border);font-family:sans-serif;font-size:13px;">
+              <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;">
+                <span id="maalgruppeTal" style="font-weight:600;">—</span>
+                <button type="button" class="btn btn-sm btn-ghost" id="maalgruppeKnap" onclick="visModtagere()">Vis hvem</button>
+              </div>
+              <div id="maalgruppeListe" style="display:none;margin-top:10px;max-height:220px;overflow-y:auto;border-top:1px solid var(--border);padding-top:10px;line-height:1.7;"></div>
             </div>
           </div>
         </div>
@@ -946,10 +975,16 @@ async function loadStats() {
   updateRecipientCount(active);
 }
 
-function updateRecipientCount(activeSubs) {
-  const count = (activeSubs || allSubs.filter(s => s.status === 'active')).length;
+function updateRecipientCount() {
+  /* Argumentet ignoreres nu. Teksten skal vise det valg der reelt
+     sendes efter, ikke hvilken liste man sidst kiggede på. */
   const el = document.getElementById('recipientCount');
-  if (el) el.textContent = `Denne newsletter sendes til ca. ${count} aktive abonnenter.`;
+  if (!el) return;
+  const n = (typeof maalgruppeModtagere === 'function') ? maalgruppeModtagere().length : 0;
+  el.textContent = n === 1
+    ? 'Denne newsletter sendes til 1 modtager.'
+    : `Denne newsletter sendes til ${n} modtagere.`;
+  opdaterMaalgruppe();
 }
 
 // ── TABS ──
@@ -1146,12 +1181,32 @@ function insertCTA() {
 }
 
 // ── SEGMENT ──
+/* De tre sprogfelter opfører sig som radioknapper: præcis ét er
+   valgt. Feltet "Har foretaget booking" er fjernet — det så ud til at
+   virke, men blev aldrig oversat til en forespørgsel på serveren, så
+   et kryds der sendte til ALLE aktive i stedet for kun dem med en
+   booking. Bedre ikke at have knappen end at have en der lyver. */
 function toggleSegAll(el) {
+  const da = document.getElementById('segDA');
+  const en = document.getElementById('segEN');
   if (el.checked) {
-    document.getElementById('segDA').checked = false;
-    document.getElementById('segEN').checked = false;
-    document.getElementById('segBooking').checked = false;
+    if (da) da.checked = false;
+    if (en) en.checked = false;
+  } else if (!(da && da.checked) && !(en && en.checked)) {
+    el.checked = true; // mindst ét skal altid være valgt
   }
+}
+
+function vaelgSprog(el) {
+  const alle = document.getElementById('segAll');
+  const anden = document.getElementById(el.id === 'segDA' ? 'segEN' : 'segDA');
+  if (el.checked) {
+    if (alle) alle.checked = false;
+    if (anden) anden.checked = false;
+  } else if (alle) {
+    alle.checked = true;
+  }
+  opdaterMaalgruppe();
 }
 
 // ── SAVE DRAFT ──
@@ -1208,9 +1263,26 @@ function confirmSend() {
   if (!subject) { toast('Udfyld emnelinjen', 'err'); return; }
   const content = getContent();
   if (!content || content === '<br>') { toast('Skriv noget indhold', 'err'); return; }
-  const active = allSubs.filter(s => s.status === 'active');
+  /* Tidligere blev der talt i allSubs, som kun indeholder den liste
+     man sidst havde åbnet under Modtagere. Tallet i bekræftelsen
+     kunne derfor være et helt andet end det, der reelt blev sendt
+     til. Nu bruges samme udvælgelse begge steder. */
+  const modtagere = maalgruppeModtagere();
+  if (!modtagere.length) {
+    toast('Ingen modtagere matcher målgruppen — juster valget først', 'err');
+    return;
+  }
+
+  const s = getSegment();
+  const listeNavn = s.listId === 'alle' ? 'alle lister'
+    : s.listId === 'ingen' ? 'dem uden liste'
+    : `«${(allLists.find(l => String(l.id) === String(s.listId)) || {}).name || 'listen'}»`;
+  const sprog = s.lang === 'alle' ? '' : (s.lang === 'da' ? ', kun dansk' : ', kun engelsk');
+  const interesse = s.interesse === 'alle' ? '' : `, interesse: ${s.interesse}`;
+
   document.getElementById('confirmTitle').textContent = subject;
-  document.getElementById('confirmBody').textContent = `Du er ved at sende denne newsletter til ${active.length} aktive abonnenter. Denne handling kan ikke fortrydes.`;
+  document.getElementById('confirmBody').textContent =
+    `Sendes til ${modtagere.length} ${modtagere.length === 1 ? 'modtager' : 'modtagere'} — ${listeNavn}${sprog}${interesse}. Handlingen kan ikke fortrydes.`;
   document.getElementById('confirmModal').style.display = 'flex';
 }
 function closeModal() { document.getElementById('confirmModal').style.display = 'none'; }
@@ -1220,10 +1292,10 @@ async function doSend() {
   closeModal();
   const subject = document.getElementById('subjectInput').value;
   const content = getContent();
-  const active = allSubs.filter(s => s.status === 'active');
+  const modtagere = maalgruppeModtagere();
 
   document.getElementById('sendingOverlay').classList.add('show');
-  document.getElementById('sendingMsg').textContent = `Sender til ${active.length} abonnenter…`;
+  document.getElementById('sendingMsg').textContent = `Sender til ${modtagere.length} ${modtagere.length === 1 ? 'modtager' : 'modtagere'}…`;
 
   try {
     const res = await fetch('/.netlify/functions/send-newsletter', {
@@ -1255,11 +1327,93 @@ async function doSend() {
   }
 }
 
+/* ------------------------------------------------------------
+   Målgruppe.
+
+   Før kunne man kun sende til "alle aktive", eventuelt filtreret på
+   sprog. Listerne kunne oprettes og folk flyttes rundt, men der var
+   ingen vej til at sende til én af dem — valget fandtes simpelthen
+   ikke i panelet.
+
+   getSegment returnerer nu et objekt. Netlify-funktionen forstår
+   stadig de gamle strengværdier, så en gammel kladde ikke går i
+   stykker.
+   ------------------------------------------------------------ */
+let alleAbonnenter = [];
+
 function getSegment() {
-  if (document.getElementById('segDA').checked) return 'da';
-  if (document.getElementById('segEN').checked) return 'en';
-  if (document.getElementById('segBooking').checked) return 'booking';
-  return 'all';
+  const el = id => document.getElementById(id);
+  return {
+    lang: el('segDA')?.checked ? 'da' : (el('segEN')?.checked ? 'en' : 'alle'),
+    listId: el('segListe')?.value || 'alle',
+    interesse: el('segInteresse')?.value || 'alle'
+  };
+}
+
+/* Samme udvælgelse som funktionen laver på serveren. Findes begge
+   steder med vilje: her for at kunne vise tallet, før der sendes. */
+function maalgruppeModtagere() {
+  const s = getSegment();
+  let ude = alleAbonnenter.filter(a => a.status === 'active');
+
+  if (s.lang !== 'alle') ude = ude.filter(a => a.lang === s.lang);
+
+  if (s.listId === 'ingen') ude = ude.filter(a => !a.list_id);
+  else if (s.listId !== 'alle') ude = ude.filter(a => String(a.list_id) === String(s.listId));
+
+  if (s.interesse !== 'alle') ude = ude.filter(a => interesseKoder(a.interests).has(s.interesse));
+
+  return ude;
+}
+
+function fyldSegListe() {
+  const sel = document.getElementById('segListe');
+  if (!sel) return;
+  const valgt = sel.value;
+  const dele = ['<option value="alle">Alle lister</option>',
+                '<option value="ingen">Uden liste (popup &amp; direkte)</option>'];
+  allLists.forEach(l => dele.push(`<option value="${esc(l.id)}">${esc(l.name)}</option>`));
+  sel.innerHTML = dele.join('');
+  if (valgt) sel.value = valgt;
+  if (!sel.value) sel.value = 'alle';
+}
+
+function opdaterMaalgruppe() {
+  const tal = document.getElementById('maalgruppeTal');
+  if (!tal) return;
+  const n = maalgruppeModtagere().length;
+  tal.textContent = n === 0
+    ? 'Ingen modtagere matcher dette valg'
+    : (n === 1 ? '1 modtager' : `${n} modtagere`);
+  tal.style.color = n === 0 ? 'var(--wine)' : '';
+
+  const knap = document.getElementById('maalgruppeKnap');
+  if (knap) knap.style.display = n === 0 ? 'none' : '';
+
+  /* Er listen åben, skal den følge med valget — ellers står den og
+     viser modtagere fra et filter, man lige har lavet om. */
+  const boks = document.getElementById('maalgruppeListe');
+  if (boks && boks.style.display !== 'none') tegnModtagere();
+}
+
+function tegnModtagere() {
+  const boks = document.getElementById('maalgruppeListe');
+  if (!boks) return;
+  boks.innerHTML = maalgruppeModtagere()
+    .slice()
+    .sort((a, b) => String(a.email || '').localeCompare(String(b.email || ''), 'da'))
+    .map(a => `<div>${esc(a.full_name || '')} ${a.full_name ? '·' : ''} ${esc(a.email)}</div>`)
+    .join('') || '<div style="color:var(--muted);">Ingen</div>';
+}
+
+function visModtagere() {
+  const boks = document.getElementById('maalgruppeListe');
+  const knap = document.getElementById('maalgruppeKnap');
+  if (!boks) return;
+  const aaben = boks.style.display !== 'none';
+  boks.style.display = aaben ? 'none' : 'block';
+  if (knap) knap.textContent = aaben ? 'Vis hvem' : 'Skjul';
+  if (!aaben) tegnModtagere();
 }
 
 function clearEditor() {
@@ -1285,10 +1439,18 @@ async function loadLists() {
   const { data: lists } = await sb.from('newsletter_lists').select('*').order('created_at', { ascending: true });
   allLists = lists || [];
 
-  // Fetch counts from newsletter_subscribers
-  const { data: subs } = await sb.from('newsletter_subscribers').select('id,status,lang');
+  /* Alle abonnenter hentes én gang og bruges to steder: til tallene
+     øverst, og til at regne ud hvem en udsendelse rammer. Uden email,
+     interests og list_id her kan målgruppe-visningen ikke vise hvem
+     modtagerne er. */
+  const { data: subs } = await sb.from('newsletter_subscribers')
+    .select('id,status,lang,email,full_name,interests,list_id');
   const allSubsFlat = subs || [];
+  alleAbonnenter = allSubsFlat;
   const active = allSubsFlat.filter(s => s.status === 'active');
+
+  fyldSegListe();
+  opdaterMaalgruppe();
 
   // Den gamle newsletter-tabel er nu en sikkerhedskopi. Rækkerne derfra er
   // flyttet over i newsletter_subscribers, så de må IKKE lægges oveni —

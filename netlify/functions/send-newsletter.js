@@ -103,11 +103,45 @@ body { margin:0; padding:0; background:#faf6ee; font-family:Georgia,'Times New R
 
     // ── SEND MODE ──
     // Fetch subscribers
+    /* Målgruppen kommer nu som et objekt: { lang, listId, interesse }.
+       Gamle kladder og gamle kald sender stadig en simpel streng
+       ('da', 'en', 'all'), så begge former skal forstås. */
+    const maal = (segment && typeof segment === 'object')
+      ? segment
+      : { lang: (segment === 'da' || segment === 'en') ? segment : 'alle', listId: 'alle', interesse: 'alle' };
+
     let url = `${SUPABASE_URL}/rest/v1/newsletter_subscribers?status=eq.active&select=*`;
-    if (segment === 'da') url += '&lang=eq.da';
-    if (segment === 'en') url += '&lang=eq.en';
+    if (maal.lang === 'da' || maal.lang === 'en') url += `&lang=eq.${maal.lang}`;
+
+    /* Liste filtreres i databasen — det er et enkelt felt. */
+    if (maal.listId === 'ingen') url += '&list_id=is.null';
+    else if (maal.listId && maal.listId !== 'alle') {
+      url += `&list_id=eq.${encodeURIComponent(maal.listId)}`;
+    }
+
     const subRes = await fetch(url, { headers: hdrs });
     let subscribers = await subRes.json();
+
+    /* Interesser står som fritekst ("Retreats, Wellness"), og teksten
+       kan redigeres i admin. Derfor kan der ikke sammenlignes på
+       præcis tekst — der genkendes på nøgleord, præcis som i admin.
+       Gay prøves før retreats, ellers ville "GAY RETREATS" også
+       lande under Retreats. */
+    if (maal.interesse && maal.interesse !== 'alle' && Array.isArray(subscribers)) {
+      const koder = (tekst) => {
+        const ud = new Set();
+        String(tekst || '').split(',').forEach(del => {
+          const t = del.trim().toLowerCase();
+          if (!t) return;
+          if (/gay|lgbt|regnbue/.test(t)) ud.add('gay');
+          else if (/retreat|ophold/.test(t)) ud.add('retreats');
+          else if (/wine|vin|gourmet|mad/.test(t)) ud.add('wine');
+          else if (/wellness|velv[æa]re|yoga|spa/.test(t)) ud.add('wellness');
+        });
+        return ud;
+      };
+      subscribers = subscribers.filter(s => koder(s.interests).has(maal.interesse));
+    }
     if (!subscribers || !subscribers.length) {
       return { statusCode: 200, body: JSON.stringify({ success: true, sent: 0 }) };
     }
