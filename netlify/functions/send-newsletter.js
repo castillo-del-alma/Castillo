@@ -107,9 +107,34 @@ body { margin:0; padding:0; background:#faf6ee; font-family:Georgia,'Times New R
     if (segment === 'da') url += '&lang=eq.da';
     if (segment === 'en') url += '&lang=eq.en';
     const subRes = await fetch(url, { headers: hdrs });
-    const subscribers = await subRes.json();
+    let subscribers = await subRes.json();
     if (!subscribers || !subscribers.length) {
       return { statusCode: 200, body: JSON.stringify({ success: true, sent: 0 }) };
+    }
+
+    /* Spærrelisten. Adresser der er kommet retur eller har markeret os
+       som spam må ikke få mere — ellers falder vores omdømme som
+       afsender, og så ryger nyhedsbrevet i spam hos alle de andre.
+       Tabellen kan være tom eller endnu ikke oprettet; i så fald
+       sendes der bare til alle som før. */
+    let spaerret = 0;
+    try {
+      const supRes = await fetch(`${SUPABASE_URL}/rest/v1/newsletter_suppression?select=email`, { headers: hdrs });
+      if (supRes.ok) {
+        const liste = await supRes.json();
+        if (Array.isArray(liste) && liste.length) {
+          const spaerreliste = new Set(liste.map(r => String(r.email || '').toLowerCase()));
+          const foer = subscribers.length;
+          subscribers = subscribers.filter(s => !spaerreliste.has(String(s.email || '').toLowerCase()));
+          spaerret = foer - subscribers.length;
+        }
+      }
+    } catch (e) {
+      console.error('Spærreliste kunne ikke hentes:', e.message);
+    }
+
+    if (!subscribers.length) {
+      return { statusCode: 200, body: JSON.stringify({ success: true, sent: 0, spaerret }) };
     }
 
     // Save campaign record
@@ -153,6 +178,29 @@ body { margin:0; padding:0; background:#faf6ee; font-family:Georgia,'Times New R
           });
           if (res.ok) {
             sent++;
+
+            /* Skriv afsendelsen ned med Resends eget id for mailen.
+               Det er den eneste tråd, der binder en åbning eller et klik
+               tre timer senere sammen med DENNE kampagne og DENNE
+               modtager — resend-webhook slår op i netop denne række.
+               Fejler den, skal mailen stadig tælle som sendt. */
+            const svar = await res.json().catch(() => ({}));
+            try {
+              await fetch(`${SUPABASE_URL}/rest/v1/newsletter_events`, {
+                method: 'POST',
+                headers: { ...hdrs, 'Prefer': 'return=minimal' },
+                body: JSON.stringify({
+                  campaign_id: campaign?.id || null,
+                  subscriber_id: sub.id,
+                  resend_email_id: svar.id || null,
+                  email: String(sub.email || '').toLowerCase(),
+                  event_type: 'sent'
+                })
+              });
+            } catch (e) {
+              console.error('Kunne ikke gemme sent-hændelse for', sub.email, e.message);
+            }
+
             // Update last_sent_at on subscriber
             await fetch(`${SUPABASE_URL}/rest/v1/newsletter_subscribers?id=eq.${sub.id}`, {
               method: 'PATCH',
@@ -166,7 +214,7 @@ body { margin:0; padding:0; background:#faf6ee; font-family:Georgia,'Times New R
       }));
     }
 
-    return { statusCode: 200, body: JSON.stringify({ success: true, sent, campaignId: campaign?.id }) };
+    return { statusCode: 200, body: JSON.stringify({ success: true, sent, spaerret, campaignId: campaign?.id }) };
 
   } catch (e) {
     console.error('Newsletter error:', e);
