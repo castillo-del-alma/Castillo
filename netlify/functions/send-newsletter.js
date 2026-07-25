@@ -103,20 +103,41 @@ body { margin:0; padding:0; background:#faf6ee; font-family:Georgia,'Times New R
 
     // ── SEND MODE ──
     // Fetch subscribers
-    /* Målgruppen kommer nu som et objekt: { lang, listId, interesse }.
-       Gamle kladder og gamle kald sender stadig en simpel streng
-       ('da', 'en', 'all'), så begge former skal forstås. */
-    const maal = (segment && typeof segment === 'object')
-      ? segment
-      : { lang: (segment === 'da' || segment === 'en') ? segment : 'alle', listId: 'alle', interesse: 'alle' };
+    /* Målgruppen kommer nu som et objekt: { lang, lister, interesse },
+       hvor lister er et array. Ældre kald sender enten en simpel
+       streng ('da', 'en', 'all') eller et objekt med listId — begge
+       forstås stadig, så en gammel kladde ikke går i stykker. */
+    let maal;
+    if (segment && typeof segment === 'object') {
+      maal = {
+        lang: segment.lang || 'alle',
+        interesse: segment.interesse || 'alle',
+        lister: Array.isArray(segment.lister)
+          ? segment.lister
+          : (segment.listId ? [segment.listId] : ['alle'])
+      };
+    } else {
+      maal = {
+        lang: (segment === 'da' || segment === 'en') ? segment : 'alle',
+        interesse: 'alle',
+        lister: ['alle']
+      };
+    }
 
     let url = `${SUPABASE_URL}/rest/v1/newsletter_subscribers?status=eq.active&select=*`;
     if (maal.lang === 'da' || maal.lang === 'en') url += `&lang=eq.${maal.lang}`;
 
-    /* Liste filtreres i databasen — det er et enkelt felt. */
-    if (maal.listId === 'ingen') url += '&list_id=is.null';
-    else if (maal.listId && maal.listId !== 'alle') {
-      url += `&list_id=eq.${encodeURIComponent(maal.listId)}`;
+    /* Lister filtreres i databasen. 'ingen' betyder list_id is null,
+       og skal derfor kombineres med et or, når den vælges sammen med
+       rigtige lister. En abonnent hører til højst én liste, så der
+       kan ikke opstå dubletter. */
+    if (!maal.lister.includes('alle')) {
+      const ids = maal.lister.filter(v => v && v !== 'ingen').map(v => `"${encodeURIComponent(v)}"`);
+      const udenListe = maal.lister.includes('ingen');
+
+      if (udenListe && ids.length) url += `&or=(list_id.is.null,list_id.in.(${ids.join(',')}))`;
+      else if (udenListe) url += '&list_id=is.null';
+      else if (ids.length) url += `&list_id=in.(${ids.join(',')})`;
     }
 
     const subRes = await fetch(url, { headers: hdrs });

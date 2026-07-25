@@ -365,12 +365,12 @@ body { background: var(--cream); color: var(--dark); font-family: 'Georgia', ser
           <div class="form-row">
             <label class="form-label">Målgruppe</label>
 
-            <div style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:10px;">
+            <div style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:10px;align-items:flex-start;">
               <div>
-                <label style="display:block;font-family:sans-serif;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-bottom:4px;">Liste</label>
-                <select class="form-select" id="segListe" style="width:230px;" onchange="opdaterMaalgruppe()">
-                  <option value="alle">Alle lister</option>
-                </select>
+                <label style="display:block;font-family:sans-serif;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-bottom:4px;">Lister — vælg en eller flere</label>
+                <div id="segListeBoks" style="width:280px;max-height:150px;overflow-y:auto;border:1px solid var(--border);background:#fff;padding:8px 10px;font-family:sans-serif;font-size:13px;line-height:1.9;">
+                  <span class="text-muted">Henter…</span>
+                </div>
               </div>
               <div>
                 <label style="display:block;font-family:sans-serif;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-bottom:4px;">Interesse</label>
@@ -1292,15 +1292,12 @@ function confirmSend() {
   }
 
   const s = getSegment();
-  const listeNavn = s.listId === 'alle' ? 'alle lister'
-    : s.listId === 'ingen' ? 'dem uden liste'
-    : `«${(allLists.find(l => String(l.id) === String(s.listId)) || {}).name || 'listen'}»`;
   const sprog = s.lang === 'alle' ? '' : (s.lang === 'da' ? ', kun dansk' : ', kun engelsk');
   const interesse = s.interesse === 'alle' ? '' : `, interesse: ${s.interesse}`;
 
   document.getElementById('confirmTitle').textContent = subject;
   document.getElementById('confirmBody').textContent =
-    `Sendes til ${modtagere.length} ${modtagere.length === 1 ? 'modtager' : 'modtagere'} — ${listeNavn}${sprog}${interesse}. Handlingen kan ikke fortrydes.`;
+    `Sendes til ${modtagere.length} ${modtagere.length === 1 ? 'modtager' : 'modtagere'} — ${listeNavne()}${sprog}${interesse}. Handlingen kan ikke fortrydes.`;
   document.getElementById('confirmModal').style.display = 'flex';
 }
 function closeModal() { document.getElementById('confirmModal').style.display = 'none'; }
@@ -1363,9 +1360,23 @@ function getSegment() {
   const el = id => document.getElementById(id);
   return {
     lang: el('segDA')?.checked ? 'da' : (el('segEN')?.checked ? 'en' : 'alle'),
-    listId: el('segListe')?.value || 'alle',
+    lister: valgteLister(),
     interesse: el('segInteresse')?.value || 'alle'
   };
+}
+
+/* Returnerer ['alle'] eller en liste af id'er, hvor 'ingen' betyder
+   dem uden liste. En abonnent hører til højst én liste, så flere
+   valgte lister kan lægges sammen uden at nogen tælles to gange. */
+function valgteLister() {
+  const boks = document.getElementById('segListeBoks');
+  if (!boks) return ['alle'];
+  const alle = boks.querySelector('input[data-liste="alle"]');
+  if (alle && alle.checked) return ['alle'];
+  const valgt = [...boks.querySelectorAll('input[data-liste]')]
+    .filter(cb => cb.checked && cb.dataset.liste !== 'alle')
+    .map(cb => cb.dataset.liste);
+  return valgt.length ? valgt : ['alle'];
 }
 
 /* Samme udvælgelse som funktionen laver på serveren. Findes begge
@@ -1376,24 +1387,72 @@ function maalgruppeModtagere() {
 
   if (s.lang !== 'alle') ude = ude.filter(a => a.lang === s.lang);
 
-  if (s.listId === 'ingen') ude = ude.filter(a => !a.list_id);
-  else if (s.listId !== 'alle') ude = ude.filter(a => String(a.list_id) === String(s.listId));
+  if (!s.lister.includes('alle')) {
+    ude = ude.filter(a => a.list_id
+      ? s.lister.includes(String(a.list_id))
+      : s.lister.includes('ingen'));
+  }
 
   if (s.interesse !== 'alle') ude = ude.filter(a => interesseKoder(a.interests).has(s.interesse));
 
   return ude;
 }
 
+/* Navne på det valgte — bruges i bekræftelsen, så man kan se hvad
+   man er ved at gøre, uden at skulle huske sine kryds. */
+function listeNavne() {
+  const s = getSegment();
+  if (s.lister.includes('alle')) return 'alle lister';
+  return s.lister.map(id => id === 'ingen'
+    ? 'uden liste'
+    : (allLists.find(l => String(l.id) === String(id)) || {}).name || 'ukendt liste'
+  ).join(' + ');
+}
+
 function fyldSegListe() {
-  const sel = document.getElementById('segListe');
-  if (!sel) return;
-  const valgt = sel.value;
-  const dele = ['<option value="alle">Alle lister</option>',
-                '<option value="ingen">Uden liste (popup &amp; direkte)</option>'];
-  allLists.forEach(l => dele.push(`<option value="${esc(l.id)}">${esc(l.name)}</option>`));
-  sel.innerHTML = dele.join('');
-  if (valgt) sel.value = valgt;
-  if (!sel.value) sel.value = 'alle';
+  const boks = document.getElementById('segListeBoks');
+  if (!boks) return;
+
+  /* Krydsene skal overleve at listerne hentes igen. */
+  const tidligere = new Set(
+    [...boks.querySelectorAll('input[data-liste]')].filter(cb => cb.checked).map(cb => cb.dataset.liste)
+  );
+  const foerstegang = tidligere.size === 0;
+
+  const felt = (vaerdi, navn, ekstra) => {
+    const markeret = foerstegang ? (vaerdi === 'alle') : tidligere.has(vaerdi);
+    return `<label style="display:block;cursor:pointer;">
+      <input type="checkbox" data-liste="${esc(vaerdi)}" ${markeret ? 'checked' : ''} onchange="segListeKlik(this)">
+      ${esc(navn)}${ekstra ? ` <span class="text-muted">${esc(ekstra)}</span>` : ''}
+    </label>`;
+  };
+
+  const antal = id => alleAbonnenter.filter(a =>
+    a.status === 'active' && (id === 'ingen' ? !a.list_id : String(a.list_id) === String(id))).length;
+
+  boks.innerHTML =
+    felt('alle', 'Alle lister', '') +
+    '<div style="border-top:1px solid var(--border);margin:6px 0;"></div>' +
+    felt('ingen', 'Uden liste (popup & direkte)', `· ${antal('ingen')}`) +
+    allLists.map(l => felt(String(l.id), l.name, `· ${antal(l.id)}`)).join('');
+}
+
+/* "Alle lister" og de enkelte lister udelukker hinanden. Krydser man
+   en enkelt liste af, giver det ingen mening at "alle" også står. */
+function segListeKlik(el) {
+  const boks = document.getElementById('segListeBoks');
+  if (!boks) return;
+  const alle = boks.querySelector('input[data-liste="alle"]');
+  const enkelte = [...boks.querySelectorAll('input[data-liste]')].filter(cb => cb.dataset.liste !== 'alle');
+
+  if (el.dataset.liste === 'alle') {
+    if (el.checked) enkelte.forEach(cb => { cb.checked = false; });
+    else if (!enkelte.some(cb => cb.checked)) el.checked = true; // noget skal altid være valgt
+  } else {
+    if (el.checked && alle) alle.checked = false;
+    if (!enkelte.some(cb => cb.checked) && alle) alle.checked = true;
+  }
+  opdaterMaalgruppe();
 }
 
 function opdaterMaalgruppe() {
