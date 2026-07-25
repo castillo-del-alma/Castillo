@@ -209,6 +209,9 @@ body { background: var(--cream); color: var(--dark); font-family: 'Georgia', ser
 }
 .sub-table td { padding: 11px 14px; border-bottom: 1px solid rgba(184,138,30,.1); color: var(--dark); }
 .sub-table tr:hover td { background: var(--hover); }
+.sub-table th.sortbar { cursor: pointer; user-select: none; white-space: nowrap; }
+.sub-table th.sortbar:hover { color: var(--wine); }
+.sortpil { display: inline-block; width: 12px; margin-left: 3px; opacity: .55; font-size: 10px; }
 .badge {
   display: inline-block; padding: 2px 8px; font-size: 10px; letter-spacing: .1em;
   text-transform: uppercase; border-radius: 2px;
@@ -592,19 +595,48 @@ body { background: var(--cream); color: var(--dark); font-family: 'Georgia', ser
                 <option value="da">Dansk</option>
                 <option value="en">Engelsk</option>
               </select>
+              <select class="form-select" id="subInteresse" style="width:150px;padding:6px 10px;font-size:13px;" onchange="filterSubs()">
+                <option value="all">Alle interesser</option>
+                <option value="retreats">Retreats</option>
+                <option value="wine">Wine &amp; Gourmet</option>
+                <option value="wellness">Wellness</option>
+                <option value="gay">Gay retreats</option>
+                <option value="ingen">Uden interesser</option>
+              </select>
               <button class="btn btn-sm btn-ghost" onclick="exportCSV()">📤 Eksporter</button>
             </div>
           </div>
+
+          <!-- Flyt markerede til en anden liste. Skjult indtil noget er markeret. -->
+          <div id="bulkPanel" style="display:none;padding:10px 16px;border-bottom:1px solid var(--border);background:rgba(184,138,30,.07);align-items:center;gap:10px;flex-wrap:wrap;font-family:sans-serif;font-size:13px;">
+            <span id="bulkCount" style="font-weight:600;"></span>
+            <span style="color:var(--muted);">Flyt til:</span>
+            <select class="form-select" id="bulkListe" style="width:210px;padding:6px 10px;font-size:13px;">
+              <option value="">Vælg liste…</option>
+            </select>
+            <button class="btn btn-sm" onclick="flytMarkerede()">Flyt</button>
+            <button class="btn btn-sm btn-ghost" onclick="ryddMarkering()">Ryd markering</button>
+          </div>
+
           <div style="overflow-x:auto;">
             <table class="sub-table" id="subTable">
               <thead>
                 <tr>
-                  <th>Navn</th><th>E-mail</th><th>Sprog</th><th>Status</th>
-                  <th>Interesser</th><th>Kilde</th><th>Tilmeldt</th><th></th>
+                  <th style="width:34px;text-align:center;">
+                    <input type="checkbox" id="subAlle" onchange="markerAlle(this.checked)" aria-label="Markér alle">
+                  </th>
+                  <th class="sortbar" onclick="sorterEfter('full_name')">Navn<span class="sortpil" data-felt="full_name"></span></th>
+                  <th class="sortbar" onclick="sorterEfter('email')">E-mail<span class="sortpil" data-felt="email"></span></th>
+                  <th class="sortbar" onclick="sorterEfter('lang')">Sprog<span class="sortpil" data-felt="lang"></span></th>
+                  <th class="sortbar" onclick="sorterEfter('status')">Status<span class="sortpil" data-felt="status"></span></th>
+                  <th class="sortbar" onclick="sorterEfter('interests')">Interesser<span class="sortpil" data-felt="interests"></span></th>
+                  <th class="sortbar" onclick="sorterEfter('source')">Kilde<span class="sortpil" data-felt="source"></span></th>
+                  <th class="sortbar" onclick="sorterEfter('created_at')">Tilmeldt<span class="sortpil" data-felt="created_at"></span></th>
+                  <th></th>
                 </tr>
               </thead>
               <tbody id="subTableBody">
-                <tr><td colspan="8" class="empty-state"><div class="spinner"></div></td></tr>
+                <tr><td colspan="9" class="empty-state"><div class="spinner"></div></td></tr>
               </tbody>
             </table>
           </div>
@@ -1462,7 +1494,16 @@ async function loadListSubscribers() {
   document.getElementById('listStatDA').textContent = active.filter(s => s.lang === 'da').length;
   document.getElementById('listStatEN').textContent = active.filter(s => s.lang === 'en').length;
   document.getElementById('listTableTitle').textContent = `${subs.length} abonnenter`;
-  renderSubTable(subs);
+
+  /* Ny liste hentet: gamle markeringer hører til den forrige visning
+     og skal væk, ellers kunne man komme til at flytte nogen, man
+     ikke længere kan se. */
+  markerede.clear();
+  const alleBoks = document.getElementById('subAlle');
+  if (alleBoks) alleBoks.checked = false;
+  fyldBulkListe();
+
+  filterSubs();
   updateRecipientCount(active);
 }
 
@@ -1473,14 +1514,163 @@ function esc(v) {
     .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
 }
 
+/* ------------------------------------------------------------
+   Interesser.
+
+   Teksten i feltet kommer fra afkrydsningsfelterne på forsiden og i
+   popup'en, og den kan redigeres i admin under "Forside". Derfor kan
+   vi ikke sammenligne på præcis tekst — står der "Wine & Gourmet"
+   i dag og "Vin og gastronomi" i morgen, skal begge stadig kunne
+   findes. Vi genkender derfor på nøgleord.
+
+   Rækkefølgen er ikke tilfældig: "GAY RETREATS" indeholder ordet
+   retreats, så gay SKAL afprøves først. Ellers ville alle gay-
+   tilmeldte også dukke op under Retreats.
+   ------------------------------------------------------------ */
+function interesseKoder(tekst) {
+  const koder = new Set();
+  String(tekst || '').split(',').forEach(del => {
+    const t = del.trim().toLowerCase();
+    if (!t) return;
+    if (/gay|lgbt|regnbue/.test(t)) koder.add('gay');
+    else if (/retreat|ophold/.test(t)) koder.add('retreats');
+    else if (/wine|vin|gourmet|mad/.test(t)) koder.add('wine');
+    else if (/wellness|velv[æa]re|yoga|spa/.test(t)) koder.add('wellness');
+  });
+  return koder;
+}
+
+/* Markerede rækker. Holdes på tværs af søgning og sortering, så en
+   markering ikke forsvinder, fordi man lige søgte efter noget. */
+let markerede = new Set();
+
+/* Sorteringstilstand. Klik på samme kolonne igen vender retningen. */
+let sortFelt = 'created_at';
+let sortStigende = false;
+
+function sorterEfter(felt) {
+  if (sortFelt === felt) sortStigende = !sortStigende;
+  else { sortFelt = felt; sortStigende = felt !== 'created_at'; }
+  filterSubs();
+}
+
+function sorterListe(subs) {
+  const retning = sortStigende ? 1 : -1;
+  return subs.slice().sort((a, b) => {
+    let x = a[sortFelt], y = b[sortFelt];
+
+    /* Datoer sammenlignes som tal, ikke som tekst — ellers står
+       10. januar før 9. februar. */
+    if (sortFelt === 'created_at') {
+      x = x ? new Date(x).getTime() : 0;
+      y = y ? new Date(y).getTime() : 0;
+      return (x - y) * retning;
+    }
+
+    /* Tomme felter samles altid nederst, uanset retning. Ellers
+       fylder en stribe streger toppen af tabellen. */
+    const xTom = x == null || x === '';
+    const yTom = y == null || y === '';
+    if (xTom && yTom) return 0;
+    if (xTom) return 1;
+    if (yTom) return -1;
+
+    /* localeCompare med 'da' sorterer æ, ø og å korrekt til sidst. */
+    return String(x).localeCompare(String(y), 'da', { sensitivity: 'base' }) * retning;
+  });
+}
+
+function opdaterSortPile() {
+  document.querySelectorAll('.sortpil').forEach(el => {
+    el.textContent = el.dataset.felt === sortFelt ? (sortStigende ? '▲' : '▼') : '';
+  });
+}
+
+function markerAlle(til) {
+  document.querySelectorAll('.sub-vaelg').forEach(cb => {
+    cb.checked = til;
+    if (til) markerede.add(cb.value); else markerede.delete(cb.value);
+  });
+  opdaterBulk();
+}
+
+function vaelgRaekke(id, til) {
+  if (til) markerede.add(id); else markerede.delete(id);
+  opdaterBulk();
+}
+
+function ryddMarkering() {
+  markerede.clear();
+  document.querySelectorAll('.sub-vaelg').forEach(cb => { cb.checked = false; });
+  const alle = document.getElementById('subAlle');
+  if (alle) alle.checked = false;
+  opdaterBulk();
+}
+
+function opdaterBulk() {
+  const panel = document.getElementById('bulkPanel');
+  const taeller = document.getElementById('bulkCount');
+  if (!panel || !taeller) return;
+  if (!markerede.size) { panel.style.display = 'none'; return; }
+  panel.style.display = 'flex';
+  taeller.textContent = markerede.size === 1 ? '1 markeret' : `${markerede.size} markerede`;
+}
+
+/* Fylder flyt-menuen. Den aktuelle liste udelades — det giver ingen
+   mening at flytte nogen hen hvor de allerede er. */
+function fyldBulkListe() {
+  const sel = document.getElementById('bulkListe');
+  if (!sel) return;
+  const dele = ['<option value="">Vælg liste…</option>'];
+  if (currentListSlug !== 'uden-liste') {
+    dele.push('<option value="ingen">Ingen liste (Popup &amp; direkte)</option>');
+  }
+  allLists.forEach(l => {
+    if (String(l.id) === String(currentListId)) return;
+    dele.push(`<option value="${esc(l.id)}">${esc(l.name)}</option>`);
+  });
+  sel.innerHTML = dele.join('');
+}
+
+async function flytMarkerede() {
+  const sel = document.getElementById('bulkListe');
+  const valg = sel ? sel.value : '';
+  if (!valg) { toast('Vælg hvilken liste de skal flyttes til', 'err'); return; }
+  if (!markerede.size) { toast('Ingen er markeret', 'err'); return; }
+
+  const nyId = valg === 'ingen' ? null : valg;
+  const navn = valg === 'ingen'
+    ? 'Popup & direkte'
+    : (allLists.find(l => String(l.id) === String(valg)) || {}).name || 'listen';
+  const antal = markerede.size;
+
+  if (!confirm(`Flyt ${antal} ${antal === 1 ? 'abonnent' : 'abonnenter'} til «${navn}»?`)) return;
+
+  /* Flytningen er kun et nyt list_id. Ingen bliver afmeldt, ingen
+     mister sin historik, og der sendes ingenting. */
+  const { error } = await sb.from('newsletter_subscribers')
+    .update({ list_id: nyId })
+    .in('id', Array.from(markerede));
+
+  if (error) { toast('Kunne ikke flytte: ' + error.message, 'err'); return; }
+
+  toast(`${antal} flyttet til ${navn}`);
+  markerede.clear();
+  await loadListSubscribers();
+}
+
 function renderSubTable(subs) {
   const tbody = document.getElementById('subTableBody');
+  opdaterSortPile();
   if (!subs.length) {
-    tbody.innerHTML = '<tr><td colspan="8" class="empty-state">Ingen abonnenter endnu</td></tr>';
+    tbody.innerHTML = '<tr><td colspan="9" class="empty-state">Ingen abonnenter matcher</td></tr>';
+    opdaterBulk();
     return;
   }
   tbody.innerHTML = subs.map(s => `
     <tr>
+      <td style="text-align:center;">${s.readonly ? '' :
+        `<input type="checkbox" class="sub-vaelg" value="${esc(s.id)}" ${markerede.has(String(s.id)) ? 'checked' : ''} onchange="vaelgRaekke('${esc(s.id)}', this.checked)" aria-label="Markér ${esc(s.email)}">`}</td>
       <td>${esc(s.full_name) || '—'}</td>
       <td>${esc(s.email)}</td>
       <td><span class="badge badge-${s.lang || 'da'}">${s.lang === 'en' ? 'EN' : 'DA'}</span></td>
@@ -1501,15 +1691,35 @@ function renderSubTable(subs) {
 }
 
 function filterSubs() {
-  const search = document.getElementById('subSearch').value.toLowerCase();
-  const filter = document.getElementById('subFilter').value;
+  const soegEl = document.getElementById('subSearch');
+  const filterEl = document.getElementById('subFilter');
+  const interesseEl = document.getElementById('subInteresse');
+  const search = soegEl ? soegEl.value.toLowerCase() : '';
+  const filter = filterEl ? filterEl.value : 'all';
+  const interesse = interesseEl ? interesseEl.value : 'all';
+
   let subs = allSubs;
   if (filter === 'active') subs = subs.filter(s => s.status === 'active');
   if (filter === 'unsubscribed') subs = subs.filter(s => s.status === 'unsubscribed');
   if (filter === 'da') subs = subs.filter(s => s.lang === 'da');
   if (filter === 'en') subs = subs.filter(s => s.lang === 'en');
+
+  if (interesse === 'ingen') {
+    subs = subs.filter(s => interesseKoder(s.interests).size === 0);
+  } else if (interesse !== 'all') {
+    subs = subs.filter(s => interesseKoder(s.interests).has(interesse));
+  }
+
   if (search) subs = subs.filter(s => (s.email + ' ' + (s.full_name || '')).toLowerCase().includes(search));
-  renderSubTable(subs);
+
+  const antal = document.getElementById('listTableTitle');
+  if (antal) {
+    antal.textContent = subs.length === allSubs.length
+      ? `${subs.length} abonnenter`
+      : `${subs.length} af ${allSubs.length} abonnenter`;
+  }
+
+  renderSubTable(sorterListe(subs));
 }
 
 async function addSubscriber() {
