@@ -316,6 +316,7 @@ body { background: var(--cream); color: var(--dark); font-family: 'Georgia', ser
   <div class="tabs-bar">
     <button class="tab-btn active" onclick="switchTab('compose')">✏️ Skriv newsletter</button>
     <button class="tab-btn" onclick="switchTab('campaigns')">📬 Kampagner</button>
+    <button class="tab-btn" onclick="switchTab('rapport')">📊 Rapport</button>
     <button class="tab-btn" onclick="switchTab('subscribers')">👥 Abonnenter</button>
     <button class="tab-btn" onclick="switchTab('templates')">🎨 Skabeloner</button>
     <button class="tab-btn" onclick="switchTab('popup')">🪟 Popup</button>
@@ -499,6 +500,21 @@ body { background: var(--cream); color: var(--dark); font-family: 'Georgia', ser
         </div>
         <div class="panel-body" id="campaignsList">
           <div class="empty-state"><div class="spinner"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── TAB: RAPPORT ── -->
+    <div class="tab-pane" id="tab-rapport">
+      <div class="panel">
+        <div class="panel-head">
+          <span class="panel-title">📊 Rapport</span>
+          <select class="form-select" id="rapKampagne" style="width:320px;padding:6px 10px;font-size:13px;" onchange="loadRapport()">
+            <option value="">Vælg kampagne…</option>
+          </select>
+        </div>
+        <div class="panel-body" id="rapIndhold">
+          <div class="empty-state">Vælg en kampagne for at se tallene</div>
         </div>
       </div>
     </div>
@@ -991,6 +1007,7 @@ function updateRecipientCount() {
 const TAB_ORD = {
   compose: 'skriv',
   campaigns: 'kampagner',
+  rapport: 'rapport',
   subscribers: 'abonnenter',
   templates: 'skabeloner',
   popup: 'popup'
@@ -1007,6 +1024,7 @@ function switchTab(tab) {
     if (ord && b.textContent.toLowerCase().includes(ord)) b.classList.add('active');
   });
   if (tab === 'campaigns') loadCampaigns();
+  if (tab === 'rapport') initRapport();
   if (tab === 'subscribers') loadSubscribers();
   if (tab === 'popup') ppTegn();
 }
@@ -2610,6 +2628,288 @@ function ppTegn() {
     '</style><style>' + d.stil.textContent + '</style></head><body>' +
     baggrund + d.overlay.outerHTML + '</body></html>';
 }
+
+/* ══════════════════════════════════════════════════════════════
+   RAPPORT
+
+   Tallene regnes i databasen (se sql/2026-07-25-nyhedsbrev-rapport.sql).
+   Browseren henter kun resultatet. Ved tusind modtagere ville en
+   udsendelse fylde 4-6000 rækker i newsletter_events, og Supabase
+   leverer højst 1000 ad gangen — at tælle her ville give forkerte
+   tal, så snart listen voksede.
+   ══════════════════════════════════════════════════════════════ */
+
+let rapAabenModtager = null;   // e-mail på den tidslinje der er foldet ud
+let rapKampagneId = null;
+
+async function initRapport() {
+  const sel = document.getElementById('rapKampagne');
+  if (!sel) return;
+
+  const { data, error } = await sb.from('newsletter_campaigns')
+    .select('id,subject,sent_at,recipient_count')
+    .eq('status', 'sent')
+    .order('sent_at', { ascending: false });
+
+  if (error) { toast('Kunne ikke hente kampagner: ' + error.message, 'err'); return; }
+
+  const kampagner = data || [];
+  if (!kampagner.length) {
+    sel.innerHTML = '<option value="">Ingen sendte kampagner endnu</option>';
+    document.getElementById('rapIndhold').innerHTML =
+      '<div class="empty-state">Der er ikke sendt nogen kampagner endnu</div>';
+    return;
+  }
+
+  const valgt = sel.value;
+  sel.innerHTML = '<option value="">Vælg kampagne…</option>' +
+    kampagner.map(c =>
+      `<option value="${esc(c.id)}">${esc(c.subject)} — ${fmtDate(c.sent_at)}</option>`).join('');
+
+  /* Nyeste kampagne vælges af sig selv. Man åbner rapporten for at se
+     den seneste udsendelse, ikke for at vælge i en menu. */
+  sel.value = valgt || kampagner[0].id;
+  loadRapport();
+}
+
+async function loadRapport() {
+  const sel = document.getElementById('rapKampagne');
+  const boks = document.getElementById('rapIndhold');
+  if (!sel || !boks) return;
+
+  const id = sel.value;
+  rapKampagneId = id;
+  rapAabenModtager = null;
+
+  if (!id) { boks.innerHTML = '<div class="empty-state">Vælg en kampagne for at se tallene</div>'; return; }
+  boks.innerHTML = '<div class="empty-state"><div class="spinner"></div></div>';
+
+  try {
+    const [noegle, links, forloeb, modtagere] = await Promise.all([
+      sb.rpc('newsletter_kampagne_noegletal', { p_campaign: id }),
+      sb.rpc('newsletter_kampagne_links',     { p_campaign: id }),
+      sb.rpc('newsletter_kampagne_forloeb',   { p_campaign: id }),
+      sb.rpc('newsletter_kampagne_modtagere', { p_campaign: id })
+    ]);
+
+    const fejl = [noegle, links, forloeb, modtagere].find(r => r.error);
+    if (fejl) {
+      /* Typisk fordi migrationen ikke er kørt endnu. Sig det ligeud
+         i stedet for at vise en tom rapport, der ligner en fejl. */
+      boks.innerHTML = `<div class="empty-state" style="line-height:1.7;">
+        Kunne ikke hente tallene.<br>
+        <span class="text-muted">${esc(fejl.error.message)}</span><br><br>
+        <span class="text-muted">Er <code>sql/2026-07-25-nyhedsbrev-rapport.sql</code> kørt i Supabase?</span>
+      </div>`;
+      return;
+    }
+
+    tegnRapport(noegle.data?.[0] || {}, links.data || [], forloeb.data || [], modtagere.data || []);
+  } catch (e) {
+    boks.innerHTML = `<div class="empty-state">Fejl: ${esc(e.message)}</div>`;
+  }
+}
+
+function rapProcent(taeller, naevner) {
+  if (!naevner) return '—';
+  return (taeller / naevner * 100).toFixed(1).replace('.', ',') + ' %';
+}
+
+function rapKort(label, tal, under) {
+  return `<div style="border:1px solid var(--border);background:var(--cream);padding:14px 16px;">
+    <div style="font-family:sans-serif;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-bottom:6px;">${esc(label)}</div>
+    <div style="font-size:26px;font-family:'Cormorant Garamond',serif;line-height:1;">${esc(String(tal))}</div>
+    ${under ? `<div style="font-family:sans-serif;font-size:12px;color:var(--muted);margin-top:5px;">${under}</div>` : ''}
+  </div>`;
+}
+
+function tegnRapport(n, links, forloeb, modtagere) {
+  const boks = document.getElementById('rapIndhold');
+
+  const sendt   = Number(n.sendt || 0);
+  const leveret = Number(n.leveret || 0);
+  const aabnU   = Number(n.aabnet_unik || 0);
+  const klikU   = Number(n.klik_unik || 0);
+  const klik    = Number(n.klik || 0);
+  const bounces = Number(n.bounces || 0);
+  const klager  = Number(n.klager || 0);
+
+  /* Kampagner sendt før webhook'en blev sat op har ingen hændelser.
+     Nul overalt ville ligne en fejl — sig hvad der faktisk er sket. */
+  if (!sendt && !leveret && !aabnU && !klikU) {
+    boks.innerHTML = `<div class="empty-state" style="line-height:1.7;">
+      Ingen hændelser registreret på denne kampagne.<br>
+      <span class="text-muted">Den er sandsynligvis sendt, før sporingen blev sat op.</span>
+    </div>`;
+    return;
+  }
+
+  const basis = leveret || sendt;
+
+  const kort = `
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:22px;">
+      ${rapKort('Sendt', sendt, leveret ? `${leveret} leveret · ${rapProcent(leveret, sendt)}` : '')}
+      ${rapKort('Åbnet', aabnU, `${rapProcent(aabnU, basis)} <span title="Apple Mail henter billeder på forhånd og registrerer åbninger, som aldrig er sket. Tallet er for højt.">⚠︎</span>`)}
+      ${rapKort('Klik', klikU, `${rapProcent(klikU, basis)} · ${klik} klik i alt`)}
+      ${rapKort('Klik af dem der åbnede', rapProcent(klikU, aabnU), 'siger mest om indholdet')}
+      ${rapKort('Problemer', bounces + klager, bounces + klager ? `${bounces} retur · ${klager} spamklager` : 'ingen')}
+    </div>
+
+    <div style="font-family:sans-serif;font-size:12px;color:var(--muted);background:var(--cream);border-left:3px solid var(--gold);padding:10px 14px;margin-bottom:26px;line-height:1.6;">
+      <strong>Om åbningstallet:</strong> Apple Mail henter billeder på forhånd, så alle Apple-brugere tælles som «åbnet», uanset om de har set mailen.
+      Tallet er derfor for højt og kan ikke sammenlignes på tværs af perioder. <strong>Klik er det ærlige tal.</strong>
+    </div>`;
+
+  /* ── Links ── */
+  const linkTabel = links.length ? `
+    <div style="margin-bottom:26px;">
+      <div style="font-family:sans-serif;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-bottom:8px;">Hvilke links blev klikket</div>
+      <table class="sub-table">
+        <thead><tr><th>Link</th><th style="width:90px;">Personer</th><th style="width:80px;">Klik</th></tr></thead>
+        <tbody>${links.map(l => `
+          <tr>
+            <td style="word-break:break-all;">${esc(l.link_url)}</td>
+            <td>${esc(String(l.klik_unik))}</td>
+            <td>${esc(String(l.klik))}</td>
+          </tr>`).join('')}
+        </tbody>
+      </table>
+    </div>` : '';
+
+  /* ── Forløb: hvornår reagerede folk ── */
+  let kurve = '';
+  if (forloeb.length) {
+    const maks = Math.max(...forloeb.map(f => Number(f.aabninger) + Number(f.klik)), 1);
+    const bredde = 480, hoejde = 110, bund = 88;
+    const timer = forloeb.map(f => Number(f.time_nr));
+    const sidste = Math.max(...timer, 5);
+    const bw = Math.max(2, Math.min(14, bredde / (sidste + 1) - 2));
+
+    const soejler = forloeb.map(f => {
+      const t = Number(f.time_nr);
+      const x = (t / (sidste + 1)) * bredde;
+      const hA = (Number(f.aabninger) / maks) * bund;
+      const hK = (Number(f.klik) / maks) * bund;
+      return `<rect x="${x.toFixed(1)}" y="${(bund - hA).toFixed(1)}" width="${bw.toFixed(1)}" height="${hA.toFixed(1)}" fill="var(--gold)" opacity=".55"/>
+              <rect x="${x.toFixed(1)}" y="${(bund - hK).toFixed(1)}" width="${bw.toFixed(1)}" height="${hK.toFixed(1)}" fill="var(--wine)"/>`;
+    }).join('');
+
+    kurve = `
+      <div style="margin-bottom:26px;">
+        <div style="font-family:sans-serif;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-bottom:8px;">Hvornår reagerede folk — timer efter afsendelse</div>
+        <svg viewBox="0 0 ${bredde} ${hoejde}" style="width:100%;max-width:560px;height:auto;" role="img" aria-label="Åbninger og klik fordelt over timerne efter afsendelse">
+          <line x1="0" y1="${bund}" x2="${bredde}" y2="${bund}" stroke="var(--border)" stroke-width="1"/>
+          ${soejler}
+          <text x="0" y="${hoejde - 4}" font-size="9" fill="#999" font-family="sans-serif">0 t</text>
+          <text x="${bredde - 24}" y="${hoejde - 4}" font-size="9" fill="#999" font-family="sans-serif">${sidste} t</text>
+        </svg>
+        <div style="font-family:sans-serif;font-size:12px;color:var(--muted);margin-top:4px;">
+          <span style="display:inline-block;width:10px;height:10px;background:var(--gold);opacity:.55;vertical-align:-1px;"></span> åbninger
+          &nbsp;&nbsp;
+          <span style="display:inline-block;width:10px;height:10px;background:var(--wine);vertical-align:-1px;"></span> klik
+        </div>
+      </div>`;
+  }
+
+  /* ── Modtagere ── */
+  const raekker = modtagere.map(m => {
+    const merke = m.problem
+      ? `<span class="badge badge-draft" style="background:#fbeaea;color:var(--wine);">${esc(m.problem)}</span>`
+      : (Number(m.klik) > 0 ? '<span class="badge badge-sent">klikkede</span>'
+        : (Number(m.aabninger) > 0 ? '<span class="badge badge-draft">åbnede</span>' : ''));
+    return `
+      <tr class="rap-raekke" style="cursor:pointer;" onclick="visTidslinje('${esc(m.email)}')">
+        <td>${esc(m.full_name || '—')}</td>
+        <td>${esc(m.email)}</td>
+        <td>${esc(String(m.aabninger))}</td>
+        <td>${esc(String(m.klik))}</td>
+        <td>${merke}</td>
+        <td class="text-muted">${m.sidste_haendelse ? esc(fmtDatetime(m.sidste_haendelse)) : '—'}</td>
+      </tr>
+      <tr id="tl-${esc(m.email).replace(/[^a-zA-Z0-9]/g, '_')}" style="display:none;">
+        <td colspan="6" style="background:var(--cream);padding:14px 18px;"></td>
+      </tr>`;
+  }).join('');
+
+  const modtagerTabel = modtagere.length ? `
+    <div>
+      <div style="font-family:sans-serif;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-bottom:8px;">
+        Modtagere — klik på en række for at se tidslinjen
+      </div>
+      <div style="overflow-x:auto;">
+        <table class="sub-table">
+          <thead><tr>
+            <th>Navn</th><th>E-mail</th><th style="width:80px;">Åbninger</th>
+            <th style="width:70px;">Klik</th><th style="width:110px;"></th><th style="width:150px;">Sidst aktiv</th>
+          </tr></thead>
+          <tbody>${raekker}</tbody>
+        </table>
+      </div>
+    </div>` : '';
+
+  boks.innerHTML = kort + linkTabel + kurve + modtagerTabel;
+}
+
+/* Tidslinjen hentes først når rækken åbnes. Ville alle blive hentet
+   på forhånd, ville en udsendelse til tusind personer betyde tusind
+   forespørgsler for noget, man måske aldrig kigger på. */
+async function visTidslinje(email) {
+  const raekkeId = 'tl-' + email.replace(/[^a-zA-Z0-9]/g, '_');
+  const raekke = document.getElementById(raekkeId);
+  if (!raekke) return;
+  const celle = raekke.querySelector('td');
+
+  if (rapAabenModtager === email) {
+    raekke.style.display = 'none';
+    rapAabenModtager = null;
+    return;
+  }
+
+  document.querySelectorAll('[id^="tl-"]').forEach(r => { r.style.display = 'none'; });
+  rapAabenModtager = email;
+  raekke.style.display = '';
+  celle.innerHTML = '<span class="text-muted">Henter…</span>';
+
+  const { data, error } = await sb.rpc('newsletter_modtager_tidslinje', {
+    p_campaign: rapKampagneId,
+    p_email: email
+  });
+
+  if (error) { celle.innerHTML = `<span class="text-muted">Kunne ikke hente: ${esc(error.message)}</span>`; return; }
+  if (!data || !data.length) { celle.innerHTML = '<span class="text-muted">Ingen hændelser</span>'; return; }
+
+  const NAVNE = {
+    sent: 'Sendt', delivered: 'Leveret', opened: 'Åbnet', clicked: 'Klik',
+    bounced: 'Kom retur', complained: 'Markeret som spam', delivery_delayed: 'Forsinket'
+  };
+
+  celle.innerHTML = `
+    <div style="border-left:2px solid var(--gold);padding-left:14px;font-family:sans-serif;font-size:13px;line-height:1.9;">
+      ${data.map(e => {
+        const enhed = e.user_agent ? enhedNavn(e.user_agent) : '';
+        return `<div>
+          <span class="text-muted" style="display:inline-block;min-width:130px;">${esc(fmtDatetime(e.created_at))}</span>
+          <strong>${esc(NAVNE[e.event_type] || e.event_type)}</strong>
+          ${e.link_url ? ` · <span style="word-break:break-all;">${esc(e.link_url)}</span>` : ''}
+          ${enhed ? ` · <span class="text-muted">${esc(enhed)}</span>` : ''}
+        </div>`;
+      }).join('')}
+    </div>`;
+}
+
+/* Browserstrengen er lang og ulæselig. Vi vil kun vide om det var
+   telefon eller computer — det siger noget om, hvordan mailen skal
+   sættes op næste gang. */
+function enhedNavn(ua) {
+  const s = String(ua).toLowerCase();
+  if (/iphone/.test(s)) return 'iPhone';
+  if (/ipad/.test(s)) return 'iPad';
+  if (/android/.test(s)) return 'Android';
+  if (/macintosh|mac os/.test(s)) return 'Mac';
+  if (/windows/.test(s)) return 'Windows';
+  return '';
+}
+
 </script>
 </body>
 </html>
