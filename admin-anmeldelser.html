@@ -8,6 +8,7 @@
 <link rel="stylesheet" href="fonts/fonts.css">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="admin-auth.js"></script>
+<script src="js/jszip.min.js"></script>
 <style>
 :root{
   --cream:#faf6ee;--beige:#f0e8d5;--sand:#e0d0b0;
@@ -269,6 +270,7 @@ body{font-family:'Manrope',sans-serif;background:#f0e8d5;color:#2c2318;min-heigh
     <button class="tab-btn" onclick="switchTab('sprog',this)">Sprog &amp; Indhold</button>
     <button class="tab-btn" onclick="switchTab('newsletter',this)">Nyhedsbrev</button>
     <button class="tab-btn" onclick="switchTab('faktura-historik',this)">Faktura historik</button>
+    <button class="tab-btn" onclick="switchTab('bilag',this)">Bilag</button>
   </div>
 
   <!-- FANE: FORUM -->
@@ -432,6 +434,72 @@ body{font-family:'Manrope',sans-serif;background:#f0e8d5;color:#2c2318;min-heigh
         </tr>
       </thead>
       <tbody id="fhTbody"></tbody>
+    </table>
+  </div>
+
+  <!-- FANE: BILAG -->
+  <div class="tab-content" id="tab-bilag" style="padding:2rem 3rem;">
+
+    <div style="display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:1.3rem;flex-wrap:wrap;gap:1rem;">
+      <div>
+        <h3 style="font-family:'Cinzel',serif;font-weight:300;font-size:1.2rem;color:#2c2318;margin:0 0 .3rem;">Bilag til revisor</h3>
+        <div id="blCount" style="font-size:.72rem;color:rgba(44,35,24,.6);">Henter&hellip;</div>
+      </div>
+      <div style="display:flex;gap:.5rem;align-items:center;flex-wrap:wrap;">
+        <a href="bilag.html" target="_blank" rel="noopener" style="font-size:.7rem;letter-spacing:.14em;text-transform:uppercase;color:#7a1f35;text-decoration:none;border-bottom:1px solid rgba(122,31,53,.3);padding-bottom:.15rem;">Åbn upload-siden &rarr;</a>
+      </div>
+    </div>
+
+    <!-- Filtre -->
+    <div style="display:flex;gap:.7rem;align-items:center;flex-wrap:wrap;margin-bottom:1.2rem;padding:.9rem 1rem;background:#faf6ee;border:1px solid rgba(184,138,30,.22);">
+      <label style="font-size:.6rem;letter-spacing:.15em;text-transform:uppercase;color:#7a5c14;">Måned</label>
+      <select id="blMaaned" onchange="blHent()" style="padding:.45rem .6rem;border:1px solid #e0d0b0;background:#fff;font-family:'Manrope',sans-serif;font-size:.78rem;">
+        <option value="">Alle måneder</option>
+      </select>
+
+      <label style="font-size:.6rem;letter-spacing:.15em;text-transform:uppercase;color:#7a5c14;margin-left:.5rem;">Status</label>
+      <select id="blStatus" onchange="blTegn()" style="padding:.45rem .6rem;border:1px solid #e0d0b0;background:#fff;font-family:'Manrope',sans-serif;font-size:.78rem;">
+        <option value="">Alle</option>
+        <option value="ny">Ikke bogført</option>
+        <option value="bogfoert">Bogført</option>
+      </select>
+
+      <label style="font-size:.6rem;letter-spacing:.15em;text-transform:uppercase;color:#7a5c14;margin-left:.5rem;">Betaling</label>
+      <select id="blBetaling" onchange="blTegn()" style="padding:.45rem .6rem;border:1px solid #e0d0b0;background:#fff;font-family:'Manrope',sans-serif;font-size:.78rem;">
+        <option value="">Alle</option>
+        <option value="firmakort">Firmakort</option>
+        <option value="privat">Privat udlæg</option>
+      </select>
+
+      <input type="text" id="blSoeg" oninput="blTegn()" placeholder="Søg firma, navn, beskrivelse&hellip;" style="flex:1;min-width:180px;padding:.45rem .7rem;border:1px solid #e0d0b0;background:#fff;font-family:'Manrope',sans-serif;font-size:.78rem;">
+    </div>
+
+    <!-- Totaler -->
+    <div id="blTotaler" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:.7rem;margin-bottom:1.2rem;"></div>
+
+    <!-- Handlinger -->
+    <div style="display:flex;gap:.6rem;align-items:center;flex-wrap:wrap;margin-bottom:.9rem;">
+      <button class="btn-primary" onclick="blZip()" id="blZipKnap">&darr; Download valgte som ZIP</button>
+      <button class="btn-primary" style="background:none;color:#7a1f35;border:1px solid #7a1f35;" onclick="blMarker('bogfoert')">Markér valgte som bogført</button>
+      <button class="btn-primary" style="background:none;color:#7a1f35;border:1px solid #7a1f35;" onclick="blMarker('ny')">Markér som ikke bogført</button>
+      <div id="blValgt" style="font-size:.72rem;color:rgba(44,35,24,.6);"></div>
+    </div>
+
+    <table style="width:100%;border-collapse:collapse;font-size:.78rem;">
+      <thead>
+        <tr style="border-bottom:2px solid rgba(184,138,30,.2);">
+          <th style="padding:.6rem .5rem;width:34px;"><input type="checkbox" id="blAlle" onchange="blVaelgAlle(this.checked)"></th>
+          <th style="text-align:left;padding:.6rem .8rem;font-size:.6rem;letter-spacing:.15em;text-transform:uppercase;color:#7a5c14;">Dato</th>
+          <th style="text-align:left;padding:.6rem .8rem;font-size:.6rem;letter-spacing:.15em;text-transform:uppercase;color:#7a5c14;">Firma</th>
+          <th style="text-align:left;padding:.6rem .8rem;font-size:.6rem;letter-spacing:.15em;text-transform:uppercase;color:#7a5c14;">Hvad</th>
+          <th style="text-align:right;padding:.6rem .8rem;font-size:.6rem;letter-spacing:.15em;text-transform:uppercase;color:#7a5c14;">Beløb</th>
+          <th style="text-align:left;padding:.6rem .8rem;font-size:.6rem;letter-spacing:.15em;text-transform:uppercase;color:#7a5c14;">Betalt</th>
+          <th style="text-align:left;padding:.6rem .8rem;font-size:.6rem;letter-spacing:.15em;text-transform:uppercase;color:#7a5c14;">Indsendt af</th>
+          <th style="text-align:left;padding:.6rem .8rem;font-size:.6rem;letter-spacing:.15em;text-transform:uppercase;color:#7a5c14;">Status</th>
+          <th style="padding:.6rem .8rem;"></th>
+        </tr>
+      </thead>
+      <tbody id="blTbody"></tbody>
     </table>
   </div>
 
@@ -4933,6 +5001,7 @@ function switchTab(tab, btn) {
   if (tab === 'forum') foInit();
   if (tab === 'newsletter') loadNewsletter();
   if (tab === 'faktura-historik') loadFakturaHistorik();
+  if (tab === 'bilag') blInit();
   if (tab === 'faktura') { if (!document.querySelector('#mf-linjer [id^="mf-linje-"]')) mfTilfoejLinje(); loadKunderTilFaktura(); }
   if (tab === 'sprog') {
     // Load den aktive under-fane (default: forside)
@@ -11932,6 +12001,297 @@ async function foSletBesked(id) {
     toast('Besked slettet');
     foBeskeder();
   } catch (e) { toast(e.message, true); }
+}
+
+
+/* ============================================================
+   BILAG — bilag til revisoren
+   Rækkerne og filerne ligger bag netlify/functions/bilag-admin.js,
+   som kræver et gyldigt admin-token. Bucket'et er privat: filerne
+   hentes gennem midlertidige links, der udløber efter fem minutter.
+   ============================================================ */
+let blAlleBilag = [];
+let blHentet = false;
+
+async function blKald(payload) {
+  const res = await fetch('/.netlify/functions/bilag-admin', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(Object.assign({ adminToken: await CDAAuth.token() }, payload))
+  });
+  let data = null;
+  try { data = await res.json(); } catch (e) {}
+  if (!res.ok || !data || !data.success) throw new Error((data && data.error) || 'Der skete en fejl');
+  return data;
+}
+
+function blEsc(s) {
+  return String(s == null ? '' : s)
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+}
+
+function blEuro(n) {
+  return (Number(n) || 0).toLocaleString('da-DK', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' €';
+}
+
+function blDato(iso) {
+  const d = String(iso || '').split('-');
+  return d.length === 3 ? d[2] + '.' + d[1] + '.' + d[0] : String(iso || '');
+}
+
+function blMaanedNavn(m) {
+  const n = ['januar','februar','marts','april','maj','juni','juli','august','september','oktober','november','december'];
+  const d = String(m || '').split('-');
+  if (d.length !== 2) return m;
+  const i = parseInt(d[1], 10) - 1;
+  return (n[i] || d[1]) + ' ' + d[0];
+}
+
+async function blInit() {
+  if (blHentet) return;
+  blHentet = true;
+  try {
+    const data = await blKald({ handling: 'maaneder' });
+    const vaelg = document.getElementById('blMaaned');
+    if (vaelg) {
+      (data.maaneder || []).forEach(m => {
+        const o = document.createElement('option');
+        o.value = m;
+        o.textContent = blMaanedNavn(m);
+        vaelg.appendChild(o);
+      });
+      /* Start på indeværende måned hvis der er bilag i den */
+      const nu = new Date();
+      const denne = nu.getFullYear() + '-' + String(nu.getMonth() + 1).padStart(2, '0');
+      if ((data.maaneder || []).indexOf(denne) !== -1) vaelg.value = denne;
+    }
+  } catch (e) {
+    console.warn('bilag: kunne ikke hente måneder', e);
+  }
+  blHent();
+}
+
+async function blHent() {
+  const tbody = document.getElementById('blTbody');
+  const count = document.getElementById('blCount');
+  if (count) count.textContent = 'Henter…';
+  if (tbody) tbody.innerHTML = '<tr><td colspan="9" style="padding:1.4rem;text-align:center;color:rgba(44,35,24,.5);font-size:.78rem;">Henter bilag…</td></tr>';
+
+  try {
+    const maaned = (document.getElementById('blMaaned') || {}).value || '';
+    const data = await blKald({ handling: 'liste', maaned });
+    blAlleBilag = data.bilag || [];
+    blTegn();
+  } catch (e) {
+    blAlleBilag = [];
+    if (tbody) tbody.innerHTML = '<tr><td colspan="9" style="padding:1.4rem;text-align:center;color:#7a1f35;font-size:.78rem;">' + blEsc(e.message) + '</td></tr>';
+    if (count) count.textContent = '';
+  }
+}
+
+function blFiltrerede() {
+  const st = (document.getElementById('blStatus') || {}).value || '';
+  const be = (document.getElementById('blBetaling') || {}).value || '';
+  const sq = ((document.getElementById('blSoeg') || {}).value || '').toLowerCase().trim();
+
+  return blAlleBilag.filter(b => {
+    if (st && b.status !== st) return false;
+    if (be && b.betaling !== be) return false;
+    if (sq) {
+      const h = [b.firma, b.navn, b.beskrivelse, b.ref, b.email].join(' ').toLowerCase();
+      if (h.indexOf(sq) === -1) return false;
+    }
+    return true;
+  });
+}
+
+function blTegn() {
+  const raekker = blFiltrerede();
+  const tbody = document.getElementById('blTbody');
+  const count = document.getElementById('blCount');
+
+  let sum = 0, firmakort = 0, privat = 0, ubogfoert = 0;
+  raekker.forEach(b => {
+    const v = Number(b.beloeb) || 0;
+    sum += v;
+    if (b.betaling === 'privat') privat += v; else firmakort += v;
+    if (b.status !== 'bogfoert') ubogfoert++;
+  });
+
+  const kort = [
+    ['Antal bilag', String(raekker.length), '#2c2318'],
+    ['I alt', blEuro(sum), '#7a1f35'],
+    ['Firmakort', blEuro(firmakort), '#2c2318'],
+    ['Privat udlæg', blEuro(privat), '#2c2318'],
+    ['Ikke bogført', String(ubogfoert), ubogfoert ? '#b88a1e' : '#2c2318']
+  ];
+  const tot = document.getElementById('blTotaler');
+  if (tot) {
+    tot.innerHTML = kort.map(k =>
+      '<div style="background:#faf6ee;border:1px solid rgba(184,138,30,.22);padding:.85rem 1rem;">' +
+        '<div style="font-size:.58rem;letter-spacing:.16em;text-transform:uppercase;color:#7a5c14;margin-bottom:.35rem;">' + blEsc(k[0]) + '</div>' +
+        '<div style="font-family:\'Cinzel\',serif;font-size:1.05rem;color:' + k[2] + ';">' + blEsc(k[1]) + '</div>' +
+      '</div>'
+    ).join('');
+  }
+
+  if (count) {
+    count.textContent = raekker.length
+      ? raekker.length + ' bilag' + (raekker.length !== blAlleBilag.length ? ' (af ' + blAlleBilag.length + ')' : '')
+      : 'Ingen bilag';
+  }
+
+  if (!tbody) return;
+  if (!raekker.length) {
+    tbody.innerHTML = '<tr><td colspan="9" style="padding:2rem;text-align:center;color:rgba(44,35,24,.5);font-size:.8rem;">Ingen bilag her endnu.</td></tr>';
+    blOpdaterValgt();
+    return;
+  }
+
+  tbody.innerHTML = raekker.map(b => {
+    const bogfoert = b.status === 'bogfoert';
+    const betalt = b.betaling === 'privat'
+      ? '<span style="font-size:.66rem;letter-spacing:.1em;text-transform:uppercase;color:#b88a1e;">Privat</span>'
+      : '<span style="font-size:.66rem;letter-spacing:.1em;text-transform:uppercase;color:#7a1f35;">Firmakort</span>';
+    const status = bogfoert
+      ? '<span style="font-size:.64rem;letter-spacing:.1em;text-transform:uppercase;color:#4a7c59;">&#10003; Bogført</span>'
+      : '<span style="font-size:.64rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(44,35,24,.45);">Ny</span>';
+
+    return '<tr style="border-bottom:1px solid rgba(184,138,30,.12);">' +
+      '<td style="padding:.55rem .5rem;text-align:center;"><input type="checkbox" class="bl-tjek" value="' + blEsc(b.id) + '" onchange="blOpdaterValgt()"></td>' +
+      '<td style="padding:.55rem .8rem;white-space:nowrap;">' + blEsc(blDato(b.bilag_dato)) + '<div style="font-size:.62rem;color:rgba(44,35,24,.45);">' + blEsc(b.ref) + '</div></td>' +
+      '<td style="padding:.55rem .8rem;">' + blEsc(b.firma) + '</td>' +
+      '<td style="padding:.55rem .8rem;max-width:260px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title="' + blEsc(b.beskrivelse) + '">' + blEsc(b.beskrivelse) + '</td>' +
+      '<td style="padding:.55rem .8rem;text-align:right;white-space:nowrap;font-weight:600;">' + blEsc(blEuro(b.beloeb)) + '</td>' +
+      '<td style="padding:.55rem .8rem;white-space:nowrap;">' + betalt + '</td>' +
+      '<td style="padding:.55rem .8rem;">' + blEsc(b.navn) + '<div style="font-size:.62rem;color:rgba(44,35,24,.45);">' + blEsc(b.antal_bilag) + ' bilag</div></td>' +
+      '<td style="padding:.55rem .8rem;white-space:nowrap;">' + status + '</td>' +
+      '<td style="padding:.55rem .8rem;white-space:nowrap;text-align:right;">' +
+        '<button onclick="blAaben(\'' + blEsc(b.id) + '\')" style="background:none;border:none;color:#7a1f35;cursor:pointer;font-size:.72rem;text-decoration:underline;">PDF</button>' +
+        '<button onclick="blSlet(\'' + blEsc(b.id) + '\')" style="background:none;border:none;color:rgba(44,35,24,.4);cursor:pointer;font-size:.9rem;margin-left:.4rem;">&times;</button>' +
+      '</td>' +
+    '</tr>';
+  }).join('');
+
+  const alle = document.getElementById('blAlle');
+  if (alle) alle.checked = false;
+  blOpdaterValgt();
+}
+
+function blValgteIder() {
+  return Array.from(document.querySelectorAll('.bl-tjek:checked')).map(i => i.value);
+}
+
+function blOpdaterValgt() {
+  const n = blValgteIder().length;
+  const e = document.getElementById('blValgt');
+  if (e) e.textContent = n ? n + ' valgt' : '';
+}
+
+function blVaelgAlle(paa) {
+  document.querySelectorAll('.bl-tjek').forEach(i => { i.checked = !!paa; });
+  blOpdaterValgt();
+}
+
+async function blAaben(id) {
+  try {
+    const data = await blKald({ handling: 'fil', id });
+    window.open(data.url, '_blank', 'noopener');
+  } catch (e) { toast(e.message, true); }
+}
+
+async function blSlet(id) {
+  if (!confirm('Slet dette bilag? Både rækken og PDF-filen fjernes permanent.')) return;
+  try {
+    await blKald({ handling: 'slet', id });
+    blAlleBilag = blAlleBilag.filter(b => b.id !== id);
+    blTegn();
+    toast('Bilaget er slettet');
+  } catch (e) { toast(e.message, true); }
+}
+
+async function blMarker(status) {
+  const ider = blValgteIder();
+  if (!ider.length) { toast('Vælg først et eller flere bilag', true); return; }
+  try {
+    for (const id of ider) {
+      await blKald({ handling: 'status', id, status });
+      const r = blAlleBilag.find(b => b.id === id);
+      if (r) r.status = status;
+    }
+    blTegn();
+    toast(ider.length + ' bilag opdateret');
+  } catch (e) { toast(e.message, true); }
+}
+
+/* ZIP med alle valgte PDF'er plus en oversigt.csv til revisoren */
+async function blZip() {
+  const ider = blValgteIder();
+  if (!ider.length) { toast('Vælg først de bilag der skal med', true); return; }
+  if (typeof JSZip === 'undefined') { toast('ZIP-værktøjet kunne ikke indlæses', true); return; }
+
+  const knap = document.getElementById('blZipKnap');
+  const label = knap ? knap.textContent : '';
+  if (knap) { knap.disabled = true; knap.textContent = 'Henter bilag…'; }
+
+  try {
+    const data = await blKald({ handling: 'filer', ider });
+    const filer = data.filer || [];
+    if (!filer.length) throw new Error('Ingen filer kunne hentes');
+
+    const zip = new JSZip();
+    let sum = 0;
+
+    const linjer = ['Dato;Reference;Firma;Beskrivelse;Beloeb EUR;Betalt med;Indsendt af;Filnavn'];
+    const opslag = {};
+    blAlleBilag.forEach(b => { opslag[b.id] = b; });
+
+    for (let i = 0; i < filer.length; i++) {
+      const f = filer[i];
+      if (knap) knap.textContent = 'Henter ' + (i + 1) + ' af ' + filer.length + '…';
+      const res = await fetch(f.url);
+      if (!res.ok) continue;
+      zip.file(f.filnavn, await res.arrayBuffer());
+
+      const b = opslag[f.id] || {};
+      sum += Number(f.beloeb) || 0;
+      linjer.push([
+        f.dato,
+        f.ref,
+        String(f.firma || '').replace(/;/g, ','),
+        String(b.beskrivelse || '').replace(/[;\r\n]/g, ' '),
+        (Number(f.beloeb) || 0).toFixed(2).replace('.', ','),
+        f.betaling === 'privat' ? 'Privat udlaeg' : 'Firmakort',
+        String(b.navn || '').replace(/;/g, ','),
+        f.filnavn
+      ].join(';'));
+    }
+    linjer.push(['', '', '', '', '', '', '', ''].join(';'));
+    linjer.push(['I ALT', '', '', '', sum.toFixed(2).replace('.', ','), '', '', ''].join(';'));
+
+    /* BOM foran, så Excel forstår æ ø å */
+    zip.file('oversigt.csv', '\ufeff' + linjer.join('\r\n'));
+
+    if (knap) knap.textContent = 'Pakker ZIP…';
+    const blob = await zip.generateAsync({ type: 'blob' });
+
+    const maaned = (document.getElementById('blMaaned') || {}).value || 'alle';
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'castillo-del-alma-bilag-' + maaned + '.zip';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    setTimeout(() => URL.revokeObjectURL(url), 4000);
+
+    toast(filer.length + ' bilag pakket');
+  } catch (e) {
+    toast(e.message, true);
+  } finally {
+    if (knap) { knap.disabled = false; knap.textContent = label || '↓ Download valgte som ZIP'; }
+  }
 }
 
 </script>
