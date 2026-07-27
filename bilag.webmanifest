@@ -1,0 +1,25 @@
+{
+  "name": "Castillo del Alma — Bilag",
+  "short_name": "CDA Bilag",
+  "description": "Upload af bilag til regnskabet på Castillo del Alma",
+  "start_url": "/bilag.html",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#7a1f35",
+  "theme_color": "#7a1f35",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "/img/bilag-icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/img/bilag-icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}

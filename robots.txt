@@ -12,5 +12,6 @@ Disallow: /betal.html
 Disallow: /betal-success.html
 Disallow: /betaling-tak.html
 Disallow: /forum.html
+Disallow: /bilag.html
 
 Sitemap: https://castillodelalma.es/sitemap.xml

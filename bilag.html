@@ -1,0 +1,942 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>Bilag — Castillo del Alma</title>
+
+<link rel="icon" type="image/png" href="img/bilag-icon-192.png">
+<link rel="apple-touch-icon" href="img/bilag-icon-192.png">
+<link rel="manifest" href="bilag.webmanifest">
+<meta name="theme-color" content="#7a1f35">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="CDA Bilag">
+
+<link rel="stylesheet" href="fonts/fonts.css">
+
+<style>
+:root{
+  --wine:#7a1f35;
+  --wine-dark:#5f1729;
+  --gold:#b88a1e;
+  --cream:#faf6ee;
+  --sand:#f2ead9;
+  --text:#2c2318;
+  --text-light:rgba(44,35,24,.6);
+  --line:#e0d0b0;
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+html{-webkit-text-size-adjust:100%;}
+body{
+  font-family:'Manrope',sans-serif;
+  background:var(--cream);
+  color:var(--text);
+  line-height:1.5;
+  min-height:100vh;
+  padding-bottom:env(safe-area-inset-bottom);
+}
+
+/* ── TOP ── */
+.top{
+  background:var(--wine);
+  color:#fff;
+  padding:calc(1.4rem + env(safe-area-inset-top)) 1.3rem 1.4rem;
+  text-align:center;
+  position:relative;
+}
+.top img{width:44px;height:44px;display:block;margin:0 auto .7rem;}
+.top .brand{
+  font-family:'Cinzel',serif;font-weight:400;
+  font-size:.78rem;letter-spacing:.32em;text-transform:uppercase;
+}
+.top .sub{
+  font-size:.63rem;letter-spacing:.24em;text-transform:uppercase;
+  color:rgba(255,255,255,.62);margin-top:.45rem;
+}
+.lang{
+  position:absolute;top:calc(1rem + env(safe-area-inset-top));right:1rem;
+  display:flex;gap:.15rem;align-items:center;
+}
+.lang button{
+  background:none;border:none;color:rgba(255,255,255,.55);
+  font-family:'Manrope',sans-serif;font-size:.66rem;letter-spacing:.14em;
+  padding:.3rem .35rem;cursor:pointer;text-transform:uppercase;
+}
+.lang button.on{color:#fff;border-bottom:1px solid var(--gold);}
+.lang span{color:rgba(255,255,255,.3);font-size:.62rem;}
+
+/* ── LAYOUT ── */
+.wrap{max-width:640px;margin:0 auto;padding:1.6rem 1.1rem 3rem;}
+
+.field{margin-bottom:1.15rem;}
+label.lbl{
+  display:block;font-size:.62rem;letter-spacing:.22em;text-transform:uppercase;
+  color:var(--text-light);margin-bottom:.42rem;
+}
+input[type=text],input[type=email],input[type=date],input[type=number],textarea{
+  width:100%;padding:.85rem .9rem;
+  background:#fff;border:1px solid var(--line);border-radius:0;
+  font-family:'Manrope',sans-serif;font-size:1rem;color:var(--text);
+  outline:none;-webkit-appearance:none;appearance:none;
+}
+input:focus,textarea:focus{border-color:var(--gold);}
+textarea{min-height:88px;resize:vertical;line-height:1.55;}
+input[type=date]{min-height:3rem;}
+
+/* Beløb */
+.beloeb-boks{position:relative;}
+.beloeb-boks input{padding-left:2.2rem;font-size:1.25rem;font-weight:600;}
+.beloeb-boks .eur{
+  position:absolute;left:.9rem;top:50%;transform:translateY(-50%);
+  color:var(--wine);font-size:1.1rem;font-weight:600;pointer-events:none;
+}
+
+/* Betalingsvalg */
+.betal{display:grid;grid-template-columns:1fr 1fr;gap:.55rem;}
+.betal button{
+  padding:1rem .6rem;background:#fff;border:1px solid var(--line);border-radius:0;
+  font-family:'Manrope',sans-serif;cursor:pointer;text-align:center;
+  transition:all .15s;color:var(--text);
+}
+.betal button .ikon{font-size:1.2rem;display:block;margin-bottom:.3rem;}
+.betal button .t{font-size:.68rem;letter-spacing:.13em;text-transform:uppercase;line-height:1.35;}
+.betal button.on{background:var(--wine);border-color:var(--wine);color:#fff;}
+
+/* Filer */
+.filknapper{display:grid;grid-template-columns:1fr 1fr;gap:.55rem;}
+.filknap{
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:.35rem;padding:1.15rem .5rem;
+  background:#fff;border:1px dashed var(--line);border-radius:0;
+  cursor:pointer;text-align:center;color:var(--text);
+}
+.filknap:active{background:var(--sand);}
+.filknap .ikon{font-size:1.35rem;}
+.filknap .t{font-size:.65rem;letter-spacing:.13em;text-transform:uppercase;}
+.skjult{position:absolute;width:1px;height:1px;opacity:0;pointer-events:none;}
+
+.filliste{margin-top:.75rem;display:flex;flex-direction:column;gap:.45rem;}
+.filrk{
+  display:flex;align-items:center;gap:.7rem;
+  background:#fff;border:1px solid var(--line);padding:.5rem .6rem;
+}
+.filrk img,.filrk .pdfikon{
+  width:46px;height:46px;object-fit:cover;flex-shrink:0;background:var(--sand);
+  display:flex;align-items:center;justify-content:center;font-size:.58rem;
+  letter-spacing:.08em;color:var(--wine);
+}
+.filrk .navn{flex:1;min-width:0;font-size:.78rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.filrk .stoer{font-size:.66rem;color:var(--text-light);}
+.filrk .fjern{
+  background:none;border:none;color:var(--wine);font-size:1.15rem;
+  cursor:pointer;padding:.2rem .4rem;line-height:1;
+}
+
+/* Knap */
+.send{
+  width:100%;padding:1.15rem;margin-top:1.6rem;
+  background:var(--wine);color:#fff;border:none;border-radius:0;
+  font-family:'Manrope',sans-serif;font-size:.76rem;letter-spacing:.24em;
+  text-transform:uppercase;cursor:pointer;
+}
+.send:disabled{opacity:.5;cursor:default;}
+
+.besked{
+  margin-top:1rem;padding:.85rem .95rem;font-size:.82rem;line-height:1.55;
+  border:1px solid var(--line);background:#fff;display:none;
+}
+.besked.fejl{border-color:var(--wine);color:var(--wine);background:#fdf7f8;}
+.besked.info{border-color:var(--gold);background:#fdfaf2;}
+
+.hjaelp{font-size:.72rem;color:var(--text-light);margin-top:.4rem;line-height:1.5;}
+
+/* Kvittering */
+.kvit{display:none;text-align:center;padding:2.5rem 1.2rem;}
+.kvit .mrk{
+  width:64px;height:64px;border:1px solid var(--gold);border-radius:50%;
+  display:flex;align-items:center;justify-content:center;margin:0 auto 1.3rem;
+  font-size:1.6rem;color:var(--gold);
+}
+.kvit h2{font-family:'Cinzel',serif;font-weight:300;font-size:1.4rem;margin-bottom:.7rem;}
+.kvit p{font-family:'Cormorant Garamond',serif;font-size:1.05rem;color:var(--text-light);line-height:1.65;margin-bottom:.5rem;}
+.kvit .ref{
+  display:inline-block;margin:1.1rem 0 1.5rem;padding:.6rem 1.1rem;
+  background:var(--sand);font-size:.82rem;letter-spacing:.16em;color:var(--wine);
+}
+.kvit button{
+  padding:.95rem 2rem;background:none;border:1px solid var(--wine);color:var(--wine);
+  font-family:'Manrope',sans-serif;font-size:.7rem;letter-spacing:.2em;
+  text-transform:uppercase;cursor:pointer;
+}
+
+/* Loader */
+.loader{
+  display:none;position:fixed;inset:0;background:rgba(250,246,238,.96);
+  z-index:50;flex-direction:column;align-items:center;justify-content:center;gap:1.1rem;
+  padding:2rem;text-align:center;
+}
+.loader .snurre{
+  width:38px;height:38px;border:2px solid var(--line);border-top-color:var(--wine);
+  border-radius:50%;animation:snur .8s linear infinite;
+}
+@keyframes snur{to{transform:rotate(360deg);}}
+.loader .txt{font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;color:var(--text-light);}
+
+.fod{
+  text-align:center;font-size:.66rem;color:var(--text-light);
+  padding:1.5rem 1rem 2rem;line-height:1.7;
+}
+.fod a{color:var(--wine);}
+</style>
+</head>
+<body>
+
+<div class="top">
+  <div class="lang">
+    <button id="lang-da" class="on" onclick="saetSprog('da')">DA</button>
+    <span>/</span>
+    <button id="lang-en" onclick="saetSprog('en')">EN</button>
+  </div>
+  <img src="img/taarn-hvid.png" alt="Castillo del Alma">
+  <div class="brand">Castillo del Alma</div>
+  <div class="sub" data-t="undertitel">Bilag til regnskabet</div>
+</div>
+
+<!-- ── FORMULAR ── -->
+<div class="wrap" id="formular">
+
+  <div class="field">
+    <label class="lbl" for="f-dato" data-t="l_dato">Dato på bilaget</label>
+    <input type="date" id="f-dato">
+    <div class="hjaelp" data-t="h_dato">Købsdatoen — den bestemmer hvilken måned bilaget hører til.</div>
+  </div>
+
+  <div class="field">
+    <label class="lbl" for="f-navn" data-t="l_navn">Dit navn</label>
+    <input type="text" id="f-navn" autocomplete="name" enterkeyhint="next">
+  </div>
+
+  <div class="field">
+    <label class="lbl" for="f-email" data-t="l_email">Din e-mail</label>
+    <input type="email" id="f-email" autocomplete="email" inputmode="email" enterkeyhint="next">
+    <div class="hjaelp" data-t="h_email">Du får en kvittering med bilaget på mail.</div>
+  </div>
+
+  <div class="field">
+    <label class="lbl" data-t="l_betal">Hvordan er der betalt?</label>
+    <div class="betal">
+      <button type="button" id="b-firmakort" onclick="vaelgBetaling('firmakort')">
+        <span class="ikon">&#9646;&#9646;</span>
+        <span class="t" data-t="b_firma">Firmakort</span>
+      </button>
+      <button type="button" id="b-privat" onclick="vaelgBetaling('privat')">
+        <span class="ikon">&#9679;</span>
+        <span class="t" data-t="b_privat">Privat udlæg</span>
+      </button>
+    </div>
+  </div>
+
+  <div class="field">
+    <label class="lbl" for="f-beloeb" data-t="l_beloeb">Beløb</label>
+    <div class="beloeb-boks">
+      <span class="eur">&euro;</span>
+      <input type="text" id="f-beloeb" inputmode="decimal" placeholder="0,00" enterkeyhint="next">
+    </div>
+  </div>
+
+  <div class="field">
+    <label class="lbl" for="f-firma" data-t="l_firma">Firma / forretning</label>
+    <input type="text" id="f-firma" enterkeyhint="next" placeholder="Mercadona, Leroy Merlin …">
+  </div>
+
+  <div class="field">
+    <label class="lbl" for="f-hvad" data-t="l_hvad">Hvad er der købt?</label>
+    <textarea id="f-hvad" enterkeyhint="done"></textarea>
+  </div>
+
+  <div class="field">
+    <label class="lbl" data-t="l_filer">Bilag</label>
+    <div class="filknapper">
+      <div class="filknap" onclick="document.getElementById('f-kamera').click()">
+        <span class="ikon">&#9635;</span>
+        <span class="t" data-t="b_kamera">Tag foto</span>
+      </div>
+      <div class="filknap" onclick="document.getElementById('f-filer').click()">
+        <span class="ikon">&#8593;</span>
+        <span class="t" data-t="b_vaelg">Vælg filer</span>
+      </div>
+    </div>
+    <input class="skjult" type="file" id="f-kamera" accept="image/*" capture="environment">
+    <input class="skjult" type="file" id="f-filer" accept="image/*,application/pdf" multiple>
+    <div class="hjaelp" data-t="h_filer">Foto, billeder fra galleriet eller PDF fra fx OneDrive. Du kan vælge flere.</div>
+    <div class="filliste" id="filliste"></div>
+  </div>
+
+  <!-- Honeypot — usynlig for mennesker, udfyldes kun af robotter -->
+  <input class="skjult" type="text" id="website_url" tabindex="-1" autocomplete="off" aria-hidden="true">
+
+  <button class="send" id="sendknap" onclick="send()" data-t="b_send">Upload bilag</button>
+  <div class="besked" id="besked"></div>
+</div>
+
+<!-- ── KVITTERING ── -->
+<div class="kvit" id="kvittering">
+  <div class="mrk">&#10003;</div>
+  <h2 data-t="k_titel">Bilag modtaget</h2>
+  <p data-t="k_tekst">Bilaget er lagt i regnskabet, og du har fået en kvittering på mail.</p>
+  <div class="ref" id="kvit-ref"></div>
+  <div>
+    <button onclick="nulstil()" data-t="k_knap">Upload et bilag mere</button>
+  </div>
+</div>
+
+<div class="fod">
+  NEO Studio Mijas S.L. &middot; NIF B67914515<br>
+  <a href="index.html">castillodelalma.es</a>
+</div>
+
+<div class="loader" id="loader">
+  <div class="snurre"></div>
+  <div class="txt" id="loader-txt">Arbejder…</div>
+</div>
+
+<script src="js/pdf-lib.min.js"></script>
+<script>
+/* ============================================================
+   Bilag — Castillo del Alma
+   Browseren samler alt til ÉN PDF: forside med oplysningerne og
+   derefter ét opslag pr. dokument. Billeder skaleres og komprimeres
+   først, så filen kan sendes selv fra en telefon på dårligt net.
+   ============================================================ */
+(function () {
+'use strict';
+
+var API = '/.netlify/functions/bilag-upload';
+
+/* Loft på den færdige PDF. Netlify tager imod 6 MB, og base64 gør filen
+   en tredjedel større — derfor 3,8 MB som øvre grænse på selve PDF'en. */
+var MAKS_PDF   = 3.8 * 1024 * 1024;
+var MAKS_FILER = 25;
+
+/* Trinene komprimeringen prøver, hårdere for hvert forsøg */
+var TRIN = [
+  { px: 2000, q: 0.72 },
+  { px: 1600, q: 0.62 },
+  { px: 1250, q: 0.50 },
+  { px: 1000, q: 0.42 }
+];
+
+var valgteFiler = [];
+var betaling = null;
+var sprog = 'da';
+var sender = false;
+
+/* ── Tekster ────────────────────────────────────────────────── */
+var T = {
+  da: {
+    undertitel:'Bilag til regnskabet',
+    l_dato:'Dato på bilaget', h_dato:'Købsdatoen — den bestemmer hvilken måned bilaget hører til.',
+    l_navn:'Dit navn', l_email:'Din e-mail', h_email:'Du får en kvittering med bilaget på mail.',
+    l_betal:'Hvordan er der betalt?', b_firma:'Firmakort', b_privat:'Privat udlæg',
+    l_beloeb:'Beløb', l_firma:'Firma / forretning', l_hvad:'Hvad er der købt?',
+    l_filer:'Bilag', b_kamera:'Tag foto', b_vaelg:'Vælg filer',
+    h_filer:'Foto, billeder fra galleriet eller PDF fra fx OneDrive. Du kan vælge flere.',
+    b_send:'Upload bilag',
+    k_titel:'Bilag modtaget',
+    k_tekst:'Bilaget er lagt i regnskabet, og du har fået en kvittering på mail.',
+    k_knap:'Upload et bilag mere',
+    ph_firma:'Mercadona, Leroy Merlin …',
+    /* beskeder */
+    fejl_dato:'Vælg datoen på bilaget.',
+    fejl_navn:'Skriv dit navn.',
+    fejl_email:'Skriv en gyldig e-mail.',
+    fejl_betal:'Vælg om der er betalt med firmakort eller privat.',
+    fejl_beloeb:'Skriv beløbet i euro.',
+    fejl_firmanavn:'Skriv hvor der er købt.',
+    fejl_hvad:'Skriv kort hvad der er købt.',
+    fejl_filer:'Vedhæft mindst ét bilag.',
+    fejl_maks:'Der kan højst vedhæftes ' + MAKS_FILER + ' bilag ad gangen.',
+    fejl_stor:'Bilagene fylder for meget, selv efter komprimering. Prøv at sende dem i to omgange.',
+    fejl_laes:'Denne fil kunne ikke læses: ',
+    fejl_net:'Der er ingen forbindelse. Prøv igen.',
+    ar_klar:'Klargør bilag…', ar_pdf:'Samler PDF…', ar_send:'Sender…'
+  },
+  en: {
+    undertitel:'Receipts for the accounts',
+    l_dato:'Date on the receipt', h_dato:'The purchase date — it decides which month the receipt belongs to.',
+    l_navn:'Your name', l_email:'Your e-mail', h_email:'You will receive a copy by e-mail.',
+    l_betal:'How was it paid?', b_firma:'Company card', b_privat:'Privately paid',
+    l_beloeb:'Amount', l_firma:'Business name', l_hvad:'What has been bought?',
+    l_filer:'Documents', b_kamera:'Take photo', b_vaelg:'Choose files',
+    h_filer:'Photo, images from the gallery or a PDF from e.g. OneDrive. You can pick several.',
+    b_send:'Upload receipt',
+    k_titel:'Receipt received',
+    k_tekst:'The receipt has been filed, and a copy is on its way to your inbox.',
+    k_knap:'Upload another receipt',
+    ph_firma:'Mercadona, Leroy Merlin …',
+    fejl_dato:'Choose the date on the receipt.',
+    fejl_navn:'Please enter your name.',
+    fejl_email:'Please enter a valid e-mail.',
+    fejl_betal:'Choose company card or privately paid.',
+    fejl_beloeb:'Enter the amount in euro.',
+    fejl_firmanavn:'Enter where it was bought.',
+    fejl_hvad:'Briefly describe what was bought.',
+    fejl_filer:'Attach at least one document.',
+    fejl_maks:'You can attach at most ' + MAKS_FILER + ' documents at a time.',
+    fejl_stor:'The documents are too large, even after compression. Try sending them in two batches.',
+    fejl_laes:'This file could not be read: ',
+    fejl_net:'No connection. Please try again.',
+    ar_klar:'Preparing documents…', ar_pdf:'Building PDF…', ar_send:'Sending…'
+  }
+};
+
+function t(n) { return (T[sprog] && T[sprog][n]) || T.da[n] || ''; }
+function el(id) { return document.getElementById(id); }
+
+function saetSprog(s) {
+  sprog = (s === 'en') ? 'en' : 'da';
+  document.documentElement.lang = sprog;
+  var da = el('lang-da'), en = el('lang-en');
+  if (da) da.classList.toggle('on', sprog === 'da');
+  if (en) en.classList.toggle('on', sprog === 'en');
+  document.querySelectorAll('[data-t]').forEach(function (n) {
+    var k = n.getAttribute('data-t');
+    if (T[sprog][k]) n.textContent = T[sprog][k];
+  });
+  var fi = el('f-firma'); if (fi) fi.placeholder = t('ph_firma');
+  try { localStorage.setItem('cda-bilag-sprog', sprog); } catch (e) {}
+}
+
+/* ── Formularen ─────────────────────────────────────────────── */
+function vaelgBetaling(v) {
+  betaling = v;
+  var a = el('b-firmakort'), b = el('b-privat');
+  if (a) a.classList.toggle('on', v === 'firmakort');
+  if (b) b.classList.toggle('on', v === 'privat');
+}
+
+function vis(msg, type) {
+  var b = el('besked');
+  if (!b) return;
+  b.textContent = msg || '';
+  b.className = 'besked' + (type ? ' ' + type : '');
+  b.style.display = msg ? 'block' : 'none';
+  if (msg) b.scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+
+function loader(vist, tekst) {
+  var l = el('loader');
+  if (!l) return;
+  l.style.display = vist ? 'flex' : 'none';
+  var x = el('loader-txt');
+  if (x && tekst) x.textContent = tekst;
+}
+
+function stoerrelse(b) {
+  if (b < 1024) return b + ' B';
+  if (b < 1024 * 1024) return Math.round(b / 1024) + ' KB';
+  return (b / 1024 / 1024).toFixed(1) + ' MB';
+}
+
+function tilfoejFiler(liste) {
+  var nye = Array.prototype.slice.call(liste || []);
+  for (var i = 0; i < nye.length; i++) {
+    if (valgteFiler.length >= MAKS_FILER) { vis(t('fejl_maks'), 'fejl'); break; }
+    var f = nye[i];
+    var erPdf = f.type === 'application/pdf' || /\.pdf$/i.test(f.name || '');
+    var erBil = /^image\//.test(f.type) || /\.(jpe?g|png|heic|heif|webp|gif)$/i.test(f.name || '');
+    if (!erPdf && !erBil) continue;
+    valgteFiler.push({ fil: f, pdf: erPdf, navn: f.name || (erPdf ? 'bilag.pdf' : 'foto.jpg') });
+  }
+  tegnFiler();
+}
+
+function fjernFil(i) { valgteFiler.splice(i, 1); tegnFiler(); }
+
+function tegnFiler() {
+  var boks = el('filliste');
+  if (!boks) return;
+  boks.innerHTML = '';
+  valgteFiler.forEach(function (v, i) {
+    var rk = document.createElement('div');
+    rk.className = 'filrk';
+
+    if (v.pdf) {
+      var ik = document.createElement('div');
+      ik.className = 'pdfikon';
+      ik.textContent = 'PDF';
+      rk.appendChild(ik);
+    } else {
+      var im = document.createElement('img');
+      im.alt = '';
+      try { im.src = URL.createObjectURL(v.fil); } catch (e) {}
+      im.onload = function () { try { URL.revokeObjectURL(im.src); } catch (e) {} };
+      rk.appendChild(im);
+    }
+
+    var midt = document.createElement('div');
+    midt.style.flex = '1';
+    midt.style.minWidth = '0';
+    var n = document.createElement('div');
+    n.className = 'navn';
+    n.textContent = v.navn;
+    var s = document.createElement('div');
+    s.className = 'stoer';
+    s.textContent = stoerrelse(v.fil.size || 0);
+    midt.appendChild(n); midt.appendChild(s);
+    rk.appendChild(midt);
+
+    var x = document.createElement('button');
+    x.className = 'fjern';
+    x.type = 'button';
+    x.innerHTML = '&times;';
+    x.onclick = function () { fjernFil(i); };
+    rk.appendChild(x);
+
+    boks.appendChild(rk);
+  });
+}
+
+/* ── Billedkomprimering ─────────────────────────────────────── */
+function indlaesBillede(fil) {
+  return new Promise(function (ok, fejl) {
+    if (typeof createImageBitmap === 'function') {
+      createImageBitmap(fil, { imageOrientation: 'from-image' })
+        .then(ok)
+        .catch(function () { viaImg(fil, ok, fejl); });
+    } else {
+      viaImg(fil, ok, fejl);
+    }
+  });
+}
+
+function viaImg(fil, ok, fejl) {
+  var url = URL.createObjectURL(fil);
+  var im = new Image();
+  im.onload = function () { URL.revokeObjectURL(url); ok(im); };
+  im.onerror = function () { URL.revokeObjectURL(url); fejl(new Error('billede')); };
+  im.src = url;
+}
+
+function tilJpeg(kilde, maksPx, kvalitet) {
+  return new Promise(function (ok, fejl) {
+    var w = kilde.width, h = kilde.height;
+    if (!w || !h) return fejl(new Error('tom'));
+    var skala = Math.min(1, maksPx / Math.max(w, h));
+    var cw = Math.max(1, Math.round(w * skala));
+    var ch = Math.max(1, Math.round(h * skala));
+
+    var c = document.createElement('canvas');
+    c.width = cw; c.height = ch;
+    var ctx = c.getContext('2d');
+    ctx.fillStyle = '#ffffff';
+    ctx.fillRect(0, 0, cw, ch);
+    ctx.drawImage(kilde, 0, 0, cw, ch);
+
+    c.toBlob(function (blob) {
+      if (!blob) return fejl(new Error('blob'));
+      blob.arrayBuffer().then(function (buf) {
+        ok({ bytes: new Uint8Array(buf), bredde: cw, hoejde: ch });
+      }).catch(fejl);
+    }, 'image/jpeg', kvalitet);
+  });
+}
+
+/* ── PDF ────────────────────────────────────────────────────── */
+var WINE = [0.478, 0.122, 0.208];
+var GOLD = [0.722, 0.541, 0.118];
+var TEKST = [0.173, 0.137, 0.094];
+var GRAA = [0.45, 0.42, 0.38];
+var LINJE = [0.87, 0.84, 0.77];
+
+/* pdf-lib skriver WinAnsi. Typografiske tegn og alt uden for det
+   sæt byttes ud, så generering aldrig kan vælte på ét tegn. */
+function wa(s) {
+  var ud = String(s == null ? '' : s)
+    .replace(/[\u2018\u2019\u201A\u2032]/g, "'")
+    .replace(/[\u201C\u201D\u201E\u2033]/g, '"')
+    .replace(/[\u2013\u2014\u2212]/g, '-')
+    .replace(/\u2026/g, '...')
+    .replace(/\u00A0/g, ' ')
+    .replace(/[\u2022\u00B7]/g, '-')
+    .replace(/\r\n?/g, '\n');
+  var res = '';
+  for (var i = 0; i < ud.length; i++) {
+    var n = ud.charCodeAt(i);
+    if (n === 10 || n === 8364 || (n >= 32 && n <= 126) || (n >= 160 && n <= 255)) res += ud[i];
+  }
+  return res;
+}
+
+function ombryd(tekst, font, str, bredde) {
+  var linjer = [];
+  wa(tekst).split('\n').forEach(function (afsnit) {
+    var ord = afsnit.split(/\s+/).filter(Boolean);
+    if (!ord.length) { linjer.push(''); return; }
+    var l = '';
+    ord.forEach(function (o) {
+      var forsoeg = l ? l + ' ' + o : o;
+      if (font.widthOfTextAtSize(forsoeg, str) <= bredde) { l = forsoeg; }
+      else { if (l) linjer.push(l); l = o; }
+    });
+    if (l) linjer.push(l);
+  });
+  return linjer;
+}
+
+function spred(s) { return wa(s).split('').join(' '); }
+
+function euro(n) {
+  var v = (Math.round(Number(n) * 100) / 100).toFixed(2);
+  var d = v.split('.');
+  return d[0].replace(/\B(?=(\d{3})+(?!\d))/g, '.') + ',' + d[1];
+}
+
+function datoDk(iso) {
+  var d = String(iso || '').split('-');
+  return d.length === 3 ? d[2] + '.' + d[1] + '.' + d[0] : String(iso || '');
+}
+
+/* Bygger hele PDF'en. `dok` er formularens felter, `sider` er de
+   klargjorte bilag ({type:'jpg'|'pdf', bytes, bredde, hoejde, navn}). */
+async function byggPdf(dok, sider, logoBytes) {
+  var PDFLib = window.PDFLib;
+  var pdf = await PDFLib.PDFDocument.create();
+  var reg = await pdf.embedFont(PDFLib.StandardFonts.Helvetica);
+  var fed = await pdf.embedFont(PDFLib.StandardFonts.HelveticaBold);
+  var rgb = PDFLib.rgb;
+
+  pdf.setTitle('Bilag ' + wa(dok.ref) + ' - ' + wa(dok.firma));
+  pdf.setAuthor('Castillo del Alma - NEO Studio Mijas S.L.');
+  pdf.setSubject('Bilag til regnskab');
+  pdf.setProducer('castillodelalma.es');
+  pdf.setCreationDate(new Date());
+
+  var B = 595.28, H = 841.89, M = 54;
+  var side = pdf.addPage([B, H]);
+  var y = H - M;
+
+  /* Logo */
+  if (logoBytes) {
+    try {
+      var logo = await pdf.embedPng(logoBytes);
+      var ls = 42;
+      side.drawImage(logo, { x: (B - ls) / 2, y: y - ls, width: ls, height: ls });
+      y -= ls + 14;
+    } catch (e) { y -= 8; }
+  }
+
+  /* Ordmærke */
+  var ord = spred('CASTILLO DEL ALMA');
+  var ow = reg.widthOfTextAtSize(ord, 9.5);
+  side.drawText(ord, { x: (B - ow) / 2, y: y, size: 9.5, font: reg, color: rgb(WINE[0], WINE[1], WINE[2]) });
+  y -= 13;
+
+  var firmalinje = wa('NEO Studio Mijas S.L.  -  NIF B67914515  -  Mollina, Malaga');
+  var fw = reg.widthOfTextAtSize(firmalinje, 7.5);
+  side.drawText(firmalinje, { x: (B - fw) / 2, y: y, size: 7.5, font: reg, color: rgb(GRAA[0], GRAA[1], GRAA[2]) });
+  y -= 22;
+
+  side.drawLine({ start: { x: M, y: y }, end: { x: B - M, y: y }, thickness: 0.9, color: rgb(GOLD[0], GOLD[1], GOLD[2]) });
+  y -= 34;
+
+  /* Overskrift */
+  side.drawText(spred('BILAG / RECEIPT'), { x: M, y: y, size: 7.5, font: reg, color: rgb(GRAA[0], GRAA[1], GRAA[2]) });
+  var refT = wa(dok.ref);
+  var rw = reg.widthOfTextAtSize(refT, 8.5);
+  side.drawText(refT, { x: B - M - rw, y: y, size: 8.5, font: reg, color: rgb(GRAA[0], GRAA[1], GRAA[2]) });
+  y -= 26;
+
+  /* Firma */
+  ombryd(dok.firma, fed, 21, B - 2 * M).slice(0, 2).forEach(function (l) {
+    side.drawText(l, { x: M, y: y, size: 21, font: fed, color: rgb(TEKST[0], TEKST[1], TEKST[2]) });
+    y -= 25;
+  });
+  y -= 12;
+
+  /* Beløb + betalingsmåde */
+  var bh = 74;
+  side.drawRectangle({ x: M, y: y - bh, width: B - 2 * M, height: bh, color: rgb(0.976, 0.961, 0.925) });
+  side.drawRectangle({ x: M, y: y - bh, width: 2.5, height: bh, color: rgb(WINE[0], WINE[1], WINE[2]) });
+
+  side.drawText(spred('BELOB EUR'), { x: M + 18, y: y - 24, size: 6.8, font: reg, color: rgb(GRAA[0], GRAA[1], GRAA[2]) });
+  side.drawText(euro(dok.beloeb) + ' EUR', { x: M + 18, y: y - 52, size: 22, font: fed, color: rgb(WINE[0], WINE[1], WINE[2]) });
+
+  var bt = dok.betaling === 'privat' ? 'PRIVAT UDLAG / PRIVATELY PAID' : 'FIRMAKORT / COMPANY CARD';
+  var btw = fed.widthOfTextAtSize(wa(bt), 8);
+  side.drawText(spred('BETALT MED'), {
+    x: B - M - 18 - reg.widthOfTextAtSize(spred('BETALT MED'), 6.8),
+    y: y - 24, size: 6.8, font: reg, color: rgb(GRAA[0], GRAA[1], GRAA[2])
+  });
+  side.drawRectangle({
+    x: B - M - 18 - btw - 16, y: y - 52, width: btw + 16, height: 20,
+    color: rgb(WINE[0], WINE[1], WINE[2])
+  });
+  side.drawText(wa(bt), { x: B - M - 18 - btw - 8, y: y - 46, size: 8, font: fed, color: rgb(1, 1, 1) });
+
+  y -= bh + 30;
+
+  /* Oplysninger */
+  var raekker = [
+    ['DATO / DATE', datoDk(dok.dato)],
+    ['INDSENDT AF / SUBMITTED BY', dok.navn],
+    ['E-MAIL', dok.email],
+    ['ANTAL BILAG / DOCUMENTS', String(dok.antal)],
+    ['MODTAGET / RECEIVED', new Date().toLocaleString('da-DK')]
+  ];
+  raekker.forEach(function (r) {
+    side.drawText(spred(r[0]), { x: M, y: y, size: 6.8, font: reg, color: rgb(GRAA[0], GRAA[1], GRAA[2]) });
+    var v = wa(r[1]);
+    var vw = reg.widthOfTextAtSize(v, 10);
+    if (vw > (B - 2 * M) * 0.6) v = ombryd(v, reg, 10, (B - 2 * M) * 0.6)[0] || v;
+    side.drawText(v, { x: B - M - reg.widthOfTextAtSize(v, 10), y: y - 1, size: 10, font: reg, color: rgb(TEKST[0], TEKST[1], TEKST[2]) });
+    y -= 12;
+    side.drawLine({ start: { x: M, y: y }, end: { x: B - M, y: y }, thickness: 0.5, color: rgb(LINJE[0], LINJE[1], LINJE[2]) });
+    y -= 18;
+  });
+
+  /* Hvad er købt */
+  y -= 10;
+  side.drawText(spred('HVAD ER KOBT / WHAT HAS BEEN BOUGHT'), { x: M, y: y, size: 6.8, font: reg, color: rgb(GRAA[0], GRAA[1], GRAA[2]) });
+  y -= 18;
+  ombryd(dok.beskrivelse, reg, 11, B - 2 * M).slice(0, 12).forEach(function (l) {
+    side.drawText(l, { x: M, y: y, size: 11, font: reg, color: rgb(TEKST[0], TEKST[1], TEKST[2]) });
+    y -= 15;
+  });
+
+  /* Fod */
+  side.drawLine({ start: { x: M, y: 78 }, end: { x: B - M, y: 78 }, thickness: 0.5, color: rgb(LINJE[0], LINJE[1], LINJE[2]) });
+  var fod = wa('Genereret automatisk pa castillodelalma.es - forsiden efterfolges af ' + dok.antal + ' bilag');
+  side.drawText(fod, { x: M, y: 62, size: 7.5, font: reg, color: rgb(GRAA[0], GRAA[1], GRAA[2]) });
+
+  /* Bilagssiderne */
+  var nr = 0;
+  for (var i = 0; i < sider.length; i++) {
+    var s = sider[i];
+
+    if (s.type === 'pdf') {
+      var kilde = await PDFLib.PDFDocument.load(s.bytes, { ignoreEncryption: true });
+      var kopier = await pdf.copyPages(kilde, kilde.getPageIndices());
+      kopier.forEach(function (p) { pdf.addPage(p); });
+      nr++;
+      continue;
+    }
+
+    nr++;
+    var bs = pdf.addPage([B, H]);
+    var top = H - 42;
+
+    bs.drawText(wa(dok.ref + '  -  ' + dok.firma).slice(0, 70), { x: M, y: top, size: 7.5, font: reg, color: rgb(GRAA[0], GRAA[1], GRAA[2]) });
+    var mrk = wa('BILAG ' + nr + ' / ' + sider.length);
+    bs.drawText(mrk, { x: B - M - reg.widthOfTextAtSize(mrk, 7.5), y: top, size: 7.5, font: reg, color: rgb(GRAA[0], GRAA[1], GRAA[2]) });
+    bs.drawLine({ start: { x: M, y: top - 10 }, end: { x: B - M, y: top - 10 }, thickness: 0.5, color: rgb(LINJE[0], LINJE[1], LINJE[2]) });
+
+    var jpg = await pdf.embedJpg(s.bytes);
+    var maksB = B - 2 * M;
+    var maksH = (top - 10) - 60;
+    var sk = Math.min(maksB / jpg.width, maksH / jpg.height);
+    var bw = jpg.width * sk, bhh = jpg.height * sk;
+    bs.drawImage(jpg, { x: (B - bw) / 2, y: 54 + (maksH - bhh) / 2, width: bw, height: bhh });
+
+    var fn = wa(s.navn).slice(0, 60);
+    bs.drawText(fn, { x: (B - reg.widthOfTextAtSize(fn, 7)) / 2, y: 40, size: 7, font: reg, color: rgb(GRAA[0], GRAA[1], GRAA[2]) });
+  }
+
+  return await pdf.save();
+}
+
+/* ── Indsendelse ────────────────────────────────────────────── */
+function gyldigEmail(s) { return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(String(s || '')); }
+
+function lavRef() {
+  var d = new Date();
+  var dato = d.getFullYear() + String(d.getMonth() + 1).padStart(2, '0') + String(d.getDate()).padStart(2, '0');
+  var tegn = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+  var slut = '';
+  for (var i = 0; i < 4; i++) slut += tegn[Math.floor(Math.random() * tegn.length)];
+  return 'B-' + dato + '-' + slut;
+}
+
+function tilBase64(bytes) {
+  var bin = '', blok = 0x8000;
+  for (var i = 0; i < bytes.length; i += blok) {
+    bin += String.fromCharCode.apply(null, bytes.subarray(i, i + blok));
+  }
+  return btoa(bin);
+}
+
+async function hentLogo() {
+  try {
+    var r = await fetch('img/castillo-del-alma-taarn-pdf.png');
+    if (!r.ok) return null;
+    return new Uint8Array(await r.arrayBuffer());
+  } catch (e) { return null; }
+}
+
+async function send() {
+  if (sender) return;
+  vis('');
+
+  var dok = {
+    ref: lavRef(),
+    dato: (el('f-dato').value || '').trim(),
+    navn: (el('f-navn').value || '').trim(),
+    email: (el('f-email').value || '').trim(),
+    betaling: betaling,
+    beloeb: (el('f-beloeb').value || '').trim().replace(/\s|\./g, '').replace(',', '.'),
+    firma: (el('f-firma').value || '').trim(),
+    beskrivelse: (el('f-hvad').value || '').trim(),
+    antal: valgteFiler.length
+  };
+
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(dok.dato)) return vis(t('fejl_dato'), 'fejl');
+  if (!dok.navn)                              return vis(t('fejl_navn'), 'fejl');
+  if (!gyldigEmail(dok.email))                return vis(t('fejl_email'), 'fejl');
+  if (!dok.betaling)                          return vis(t('fejl_betal'), 'fejl');
+  if (!(parseFloat(dok.beloeb) > 0))          return vis(t('fejl_beloeb'), 'fejl');
+  if (!dok.firma)                             return vis(t('fejl_firmanavn'), 'fejl');
+  if (!dok.beskrivelse)                       return vis(t('fejl_hvad'), 'fejl');
+  if (!valgteFiler.length)                    return vis(t('fejl_filer'), 'fejl');
+
+  sender = true;
+  var knap = el('sendknap');
+  if (knap) knap.disabled = true;
+  loader(true, t('ar_klar'));
+
+  try {
+    /* Billederne indlæses én gang og genbruges gennem komprimeringstrinene */
+    var raa = [];
+    for (var i = 0; i < valgteFiler.length; i++) {
+      var v = valgteFiler[i];
+      if (v.pdf) {
+        raa.push({ type: 'pdf', bytes: new Uint8Array(await v.fil.arrayBuffer()), navn: v.navn });
+      } else {
+        var kilde;
+        try { kilde = await indlaesBillede(v.fil); }
+        catch (e) { throw new Error(t('fejl_laes') + v.navn); }
+        raa.push({ type: 'img', kilde: kilde, navn: v.navn });
+      }
+    }
+
+    var logoBytes = await hentLogo();
+    loader(true, t('ar_pdf'));
+
+    var pdfBytes = null;
+    for (var trin = 0; trin < TRIN.length; trin++) {
+      var sider = [];
+      for (var j = 0; j < raa.length; j++) {
+        if (raa[j].type === 'pdf') { sider.push(raa[j]); continue; }
+        var k = await tilJpeg(raa[j].kilde, TRIN[trin].px, TRIN[trin].q);
+        sider.push({ type: 'jpg', bytes: k.bytes, navn: raa[j].navn });
+      }
+      pdfBytes = await byggPdf(dok, sider, logoBytes);
+      if (pdfBytes.length <= MAKS_PDF) break;
+      pdfBytes = (trin === TRIN.length - 1) ? null : pdfBytes;
+    }
+
+    if (!pdfBytes) throw new Error(t('fejl_stor'));
+
+    loader(true, t('ar_send'));
+
+    var svar = await fetch(API, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        ref: dok.ref,
+        dato: dok.dato,
+        navn: dok.navn,
+        email: dok.email,
+        betaling: dok.betaling,
+        beloeb: dok.beloeb,
+        firma: dok.firma,
+        beskrivelse: dok.beskrivelse,
+        antal_bilag: dok.antal,
+        pdf: tilBase64(pdfBytes),
+        website_url: (el('website_url') || {}).value || ''
+      })
+    });
+
+    var data = null;
+    try { data = await svar.json(); } catch (e) {}
+
+    if (!svar.ok || !data || !data.success) {
+      throw new Error((data && data.error) || t('fejl_net'));
+    }
+
+    /* Navn og e-mail huskes til næste gang — resten ryddes */
+    try {
+      localStorage.setItem('cda-bilag-navn', dok.navn);
+      localStorage.setItem('cda-bilag-email', dok.email);
+    } catch (e) {}
+
+    el('kvit-ref').textContent = dok.ref;
+    el('formular').style.display = 'none';
+    el('kvittering').style.display = 'block';
+    window.scrollTo(0, 0);
+
+  } catch (e) {
+    console.error('bilag:', e);
+    vis(e && e.message ? e.message : t('fejl_net'), 'fejl');
+  } finally {
+    loader(false);
+    sender = false;
+    if (knap) knap.disabled = false;
+  }
+}
+
+function nulstil() {
+  valgteFiler = [];
+  betaling = null;
+  ['f-beloeb', 'f-firma', 'f-hvad'].forEach(function (id) { var n = el(id); if (n) n.value = ''; });
+  vaelgBetaling(null);
+  var a = el('b-firmakort'), b = el('b-privat');
+  if (a) a.classList.remove('on');
+  if (b) b.classList.remove('on');
+  tegnFiler();
+  vis('');
+  el('kvittering').style.display = 'none';
+  el('formular').style.display = 'block';
+  window.scrollTo(0, 0);
+}
+
+/* ── Start ──────────────────────────────────────────────────── */
+function start() {
+  var d = new Date();
+  var iso = d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+  var dato = el('f-dato');
+  if (dato) { dato.value = iso; dato.max = iso; }
+
+  try {
+    var s = localStorage.getItem('cda-bilag-sprog');
+    if (s) saetSprog(s);
+    else if ((navigator.language || '').slice(0, 2) !== 'da') saetSprog('en');
+
+    var n = localStorage.getItem('cda-bilag-navn');
+    var e2 = localStorage.getItem('cda-bilag-email');
+    if (n && el('f-navn')) el('f-navn').value = n;
+    if (e2 && el('f-email')) el('f-email').value = e2;
+  } catch (e) {}
+
+  var kam = el('f-kamera'), fil = el('f-filer');
+  if (kam) kam.addEventListener('change', function () { tilfoejFiler(this.files); this.value = ''; });
+  if (fil) fil.addEventListener('change', function () { tilfoejFiler(this.files); this.value = ''; });
+}
+
+if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', start);
+else start();
+
+/* Bruges af knapperne i markuppen og af røgtesten */
+window.saetSprog = saetSprog;
+window.vaelgBetaling = vaelgBetaling;
+window.send = send;
+window.nulstil = nulstil;
+window.CDABilag = {
+  byggPdf: byggPdf, wa: wa, ombryd: ombryd, euro: euro, lavRef: lavRef,
+  tilfoejFiler: tilfoejFiler, filer: function () { return valgteFiler; }
+};
+})();
+</script>
+</body>
+</html>
