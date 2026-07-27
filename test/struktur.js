@@ -16,6 +16,7 @@ const SIDER = [
   'index.html', 'ejendommen.html', 'udlejning.html', 'retreat.html',
   'kontakt.html', 'betingelser.html', '404.html',
   'admin-anmeldelser.html', 'admin-newsletter.html', 'min-booking.html',
+  'bilag.html',
 ];
 
 const r = rapport('STRUKTUR');
@@ -31,7 +32,11 @@ for (const fil of SIDER) {
   const aAaben = (s.match(/<a\b/g) || []).length;
   const aLukket = (s.match(/<\/a>/g) || []).length;
 
-  const ids = [...s.matchAll(/\sid="([^"]+)"/g)].map((m) => m[1]);
+  // id'er der indeholder ${…} er skabelon-pladsholdere inde i JavaScript.
+  // De bliver til forskellige id'er når siden kører, så de tælles ikke med.
+  const ids = [...s.matchAll(/\sid="([^"]+)"/g)]
+    .map((m) => m[1])
+    .filter((i) => !i.includes('${'));
   const dubletter = [...new Set(ids.filter((i) => ids.filter((x) => x === i).length > 1))];
 
   r.overskrift(fil);
