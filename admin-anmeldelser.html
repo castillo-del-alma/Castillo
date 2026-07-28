@@ -4223,6 +4223,27 @@ feeling more calm – and coming home to yourself again."</textarea></div>
       </div>
     </div>
 
+    <!-- 3.2 · GOOGLE-VISNING (struktureret data / JSON-LD) -->
+    <div class="fc-block" id="ra_jsonld" style="margin-bottom:1.5rem;">
+      <div class="fc-block-header" style="display:flex;align-items:center;gap:.8rem;"><span class="fc-block-title">3.2 · Google-visning (struktureret data)</span></div>
+      <div class="fc-block-body">
+        <div style="font-size:.68rem;color:rgba(44,35,24,.55);line-height:1.5;margin-bottom:.8rem;">
+          Retreatet sender <b>automatisk</b> dato, pris, sted og udsolgt-status til Google — ét opslag pr. dato, både hoveddatoen og alle ekstra datoer. <b>Du behøver ikke skrive noget her.</b>
+          Feltet nedenfor er kun til særtilfælde, hvor du vil tilføje ekstra struktureret data.
+        </div>
+        <div class="fc-row">
+          <div style="grid-column:1 / -1;">
+            <label class="fc-label">Ekstra JSON-LD (valgfrit — lad stå tomt i næsten alle tilfælde)</label>
+            <textarea id="retreat_jsonld_extra" class="fc-input-da fc-textarea" rows="6" spellcheck="false" style="font-family:ui-monospace,Menlo,Consolas,monospace;font-size:.72rem;" placeholder='Fx: {"@context":"https://schema.org","@type":"FAQPage","mainEntity":[]}'></textarea>
+            <div id="retreat_jsonld_status" style="margin-top:.4rem;font-family:Manrope,sans-serif;font-size:.65rem;letter-spacing:.04em;min-height:1.1em;"></div>
+            <div style="font-size:.64rem;color:rgba(44,35,24,.45);line-height:1.5;margin-top:.4rem;">
+              Indsæt ét objekt <code>{…}</code> eller en liste <code>[{…},{…}]</code>. Ugyldig kode kan ikke gemmes — status ovenfor viser fejlen.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <!-- 4 · OM RETREATET -->
     <div class="fc-block" id="ra_om" style="margin-bottom:1.5rem;">
       <div class="fc-block-header" style="display:flex;align-items:center;gap:.8rem;"><span class="fc-block-title">4 · Om retreatet</span><button type="button" onclick="oversaetBlok(this)" style="background:rgba(58,110,106,.1);border:1px solid rgba(58,110,106,.35);color:#2a7a74;padding:.3rem .8rem;font-family:Manrope,sans-serif;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;margin-left:auto;" title="Oversæt tomme engelske felter i denne sektion">⇄ Oversæt</button></div>
@@ -7426,6 +7447,8 @@ function openNytRetreat() {
   { const _si = document.getElementById('retreat_social_image'); if (_si) _si.value = ''; }
   { const _st = document.getElementById('retreat_social_text'); if (_st) _st.value = ''; }
   { const _ste = document.getElementById('retreat_social_text_en'); if (_ste) _ste.value = ''; }
+  { const _jl = document.getElementById('retreat_jsonld_extra'); if (_jl) _jl.value = ''; }
+  tjekJsonLd();
   saetBilledPreview('retreat_hero_preview', '');
   saetBilledPreview('retreat_card_preview', '');
   saetBilledPreview('retreat_social_preview', '');
@@ -7491,6 +7514,8 @@ function udfyldRetreatForm(r) {
   { const _si = document.getElementById('retreat_social_image'); if (_si) _si.value = r.social_image || ''; }
   { const _st = document.getElementById('retreat_social_text'); if (_st) _st.value = r.social_text || ''; }
   { const _ste = document.getElementById('retreat_social_text_en'); if (_ste) _ste.value = r.social_text_en || ''; }
+  { const _jl = document.getElementById('retreat_jsonld_extra'); if (_jl) _jl.value = r.jsonld_extra || ''; }
+  tjekJsonLd();
   saetBilledPreview('retreat_social_preview', r.social_image);
   { const _sf = document.getElementById('retreat_social_file'); if (_sf) _sf.value = ''; }
   { const _cu = document.getElementById('retreat_card_image'); if (_cu) _cu.value = r.card_image || ''; }
@@ -7828,6 +7853,42 @@ function cdaFilename(originalName) {
 // ── Billed-preview + storage-oprydningshjælpere ──
 let retreatOrigImages = { hero: '', card: '', food: '' }; // snapshot af DB-værdier ved åbning af editor
 
+// ── STRUKTURERET DATA (3.2): validering af det valgfrie JSON-LD-felt ──
+// Feltet er tomt i næsten alle tilfælde. Er der skrevet noget, skal det være
+// gyldig JSON — ellers ignorerer Google hele blokken uden at sige noget.
+// Derfor valideres der live, og gem blokeres ved fejl.
+function tjekJsonLd() {
+  const felt = document.getElementById('retreat_jsonld_extra');
+  const status = document.getElementById('retreat_jsonld_status');
+  if (!felt || !status) return true;
+  const raa = (felt.value || '').trim();
+  felt.style.borderColor = '';
+  if (!raa) { status.textContent = ''; return true; }
+  try {
+    const v = JSON.parse(raa);
+    if (v === null || typeof v !== 'object') throw new Error('Skal være et objekt {…} eller en liste [{…}]');
+    const antal = Array.isArray(v) ? v.length : 1;
+    status.style.color = '#1d7a55';
+    status.textContent = '✓ Gyldig JSON — ' + antal + (antal === 1 ? ' opslag' : ' opslag') + ' tilføjes ud over de automatiske';
+    return true;
+  } catch (e) {
+    const m = /position (\d+)/.exec(e.message || '');
+    let hvor = '';
+    if (m) {
+      const linje = raa.slice(0, parseInt(m[1], 10)).split('\n').length;
+      hvor = ' (omkring linje ' + linje + ')';
+    }
+    status.style.color = '#a33';
+    status.textContent = '✗ Ugyldig JSON' + hvor + ' — ' + (e.message || 'kan ikke læses');
+    felt.style.borderColor = '#a33';
+    return false;
+  }
+}
+document.addEventListener('DOMContentLoaded', function () {
+  const felt = document.getElementById('retreat_jsonld_extra');
+  if (felt) felt.addEventListener('input', tjekJsonLd);
+});
+
 function saetBilledPreview(id, url) {
   const el = document.getElementById(id);
   if (!el) return;
@@ -7953,6 +8014,7 @@ async function gemRetreat() {
   const title = document.getElementById('retreat_title').value.trim();
   const slug = document.getElementById('retreat_slug').value.trim();
   if (!title || !slug) { showToast('Titel og slug er påkrævet', true); return; }
+  if (!tjekJsonLd()) { showToast('Ugyldig JSON i 3.2 · Google-visning — ret fejlen eller ryd feltet', true); return; }
 
   const btn = document.getElementById('retreatSaveBtn');
   btn.disabled = true;
@@ -8210,6 +8272,7 @@ async function gemRetreat() {
     };
 
     // Hent billeder — enten fra fil-upload eller fra URL-feltet (sat af uploadRetreatBillede)
+    payload.jsonld_extra = document.getElementById('retreat_jsonld_extra')?.value.trim() || null;
     payload.social_text = document.getElementById('retreat_social_text')?.value.trim() || null;
     payload.social_text_en = document.getElementById('retreat_social_text_en')?.value.trim() || null;
     const socialFile = document.getElementById('retreat_social_file')?.files[0];
@@ -8237,19 +8300,19 @@ async function gemRetreat() {
 
     if (id) {
       let { error } = await sb.from('retreats').update(payload).eq('id', id);
-      if (error && /nav_links|sektion_orden|retreat_images5_2|retreat_images5_3/.test(error.message || '')) {
+      if (error && /nav_links|sektion_orden|retreat_images5_2|retreat_images5_3|jsonld_extra/.test(error.message || '')) {
         // Kolonnerne findes ikke endnu (SQL ikke kørt) — gem resten og advar
         delete payload.nav_links; delete payload.sektion_orden;
-        delete payload.retreat_images5_2; delete payload.retreat_images5_3;
+        delete payload.retreat_images5_2; delete payload.retreat_images5_3; delete payload.jsonld_extra;
         ({ error } = await sb.from('retreats').update(payload).eq('id', id));
         if (!error) showToast('⚠ Gemt, men menu/rækkefølge/fotostriber kræver at SQL-opdateringen køres først', true);
       }
       if (error) throw error;
     } else {
       let { error } = await sb.from('retreats').insert(payload);
-      if (error && /nav_links|sektion_orden|retreat_images5_2|retreat_images5_3/.test(error.message || '')) {
+      if (error && /nav_links|sektion_orden|retreat_images5_2|retreat_images5_3|jsonld_extra/.test(error.message || '')) {
         delete payload.nav_links; delete payload.sektion_orden;
-        delete payload.retreat_images5_2; delete payload.retreat_images5_3;
+        delete payload.retreat_images5_2; delete payload.retreat_images5_3; delete payload.jsonld_extra;
         ({ error } = await sb.from('retreats').insert(payload));
         if (!error) showToast('⚠ Gemt, men menu/rækkefølge/fotostriber kræver at SQL-opdateringen køres først', true);
       }

@@ -2095,34 +2095,67 @@ function applyRetreatContent() {
   document.getElementById('pageTitle').textContent = `${rSC('title')} — Castillo del Alma`;
 
   // ── STRUKTURERET DATA: Event-schema pr. retreat (dato, pris, sted) til rich results ──
+  // Der udsendes ÉT Event pr. afholdelse — hoveddatoen og hver af de ekstra
+  // datoer — så alle afholdelser kan optræde hver for sig i Google.
   try {
     const skemaUrl = byggRetreatUrl(data.slug, paaEngelskSti() ? 'en' : 'da');
     const beskrivelse = String(rSC('description') || rSC('subtitle') || '').replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim().slice(0, 300);
-    const skema = {
-      '@context': 'https://schema.org',
-      '@type': 'Event',
-      'name': rSC('title') || 'Retreat — Castillo del Alma',
-      'description': beskrivelse || undefined,
-      'image': data.hero_image || 'https://castillodelalma.es/img/castillo-del-alma-social-1200.jpg',
-      'url': skemaUrl,
-      'eventAttendanceMode': 'https://schema.org/OfflineEventAttendanceMode',
-      'eventStatus': 'https://schema.org/EventScheduled',
-      'location': {
-        '@type': 'Place',
-        'name': 'Castillo del Alma',
-        'address': { '@type': 'PostalAddress', 'addressLocality': 'Mollina', 'addressRegion': 'Málaga', 'addressCountry': 'ES' }
-      },
-      'organizer': { '@type': 'Organization', 'name': 'Castillo del Alma', 'url': 'https://castillodelalma.es', '@id': 'https://castillodelalma.es/#business' }
-    };
-    if (data.arrival_date) skema.startDate = String(data.arrival_date).slice(0, 10);
-    if (data.departure_date) skema.endDate = String(data.departure_date).slice(0, 10);
-    if (data.price) skema.offers = {
-      '@type': 'Offer',
-      'price': String(data.price),
-      'priceCurrency': 'EUR',
-      'url': skemaUrl,
-      'availability': data.arrival_soldout ? 'https://schema.org/SoldOut' : 'https://schema.org/InStock'
-    };
+    const navn = rSC('title') || 'Retreat — Castillo del Alma';
+    const billede = data.hero_image || 'https://castillodelalma.es/img/castillo-del-alma-social-1200.jpg';
+
+    // Saml alle datoer: hoveddato først, derefter extra_dates (kan være JSON-tekst)
+    const datoer = [];
+    if (data.arrival_date) datoer.push({ arrival: data.arrival_date, departure: data.departure_date, soldout: !!data.arrival_soldout });
+    let ekstra = data.extra_dates;
+    if (typeof ekstra === 'string') { try { ekstra = JSON.parse(ekstra); } catch (e) { ekstra = null; } }
+    if (Array.isArray(ekstra)) ekstra.forEach(d => {
+      if (d && d.arrival) datoer.push({ arrival: d.arrival, departure: d.departure, soldout: !!d.soldout });
+    });
+
+    function byggEvent(dato) {
+      const ev = {
+        '@context': 'https://schema.org',
+        '@type': 'Event',
+        'name': navn,
+        'description': beskrivelse || undefined,
+        'image': billede,
+        'url': skemaUrl,
+        'eventAttendanceMode': 'https://schema.org/OfflineEventAttendanceMode',
+        'eventStatus': 'https://schema.org/EventScheduled',
+        'location': {
+          '@type': 'Place',
+          'name': 'Castillo del Alma',
+          'address': { '@type': 'PostalAddress', 'addressLocality': 'Mollina', 'addressRegion': 'Málaga', 'addressCountry': 'ES' }
+        },
+        'organizer': { '@type': 'Organization', 'name': 'Castillo del Alma', 'url': 'https://castillodelalma.es', '@id': 'https://castillodelalma.es/#business' }
+      };
+      if (dato) {
+        if (dato.arrival) { ev.startDate = String(dato.arrival).slice(0, 10); ev['@id'] = skemaUrl + '#' + ev.startDate; }
+        if (dato.departure) ev.endDate = String(dato.departure).slice(0, 10);
+      }
+      if (data.price) ev.offers = {
+        '@type': 'Offer',
+        'price': String(data.price),
+        'priceCurrency': 'EUR',
+        'url': skemaUrl,
+        'availability': (dato && dato.soldout) ? 'https://schema.org/SoldOut' : 'https://schema.org/InStock'
+      };
+      return ev;
+    }
+
+    // Ingen datoer registreret → ét Event uden dato (som hidtil)
+    const events = datoer.length ? datoer.map(byggEvent) : [byggEvent(null)];
+
+    // Valgfri, admin-skrevet tilføjelse (felt 3.2). Ugyldig JSON kan ikke gemmes
+    // i admin, men vi parser defensivt her, så siden aldrig kan vælte.
+    if (data.jsonld_extra) {
+      try {
+        const x = JSON.parse(data.jsonld_extra);
+        if (Array.isArray(x)) x.forEach(o => { if (o && typeof o === 'object') events.push(o); });
+        else if (x && typeof x === 'object') events.push(x);
+      } catch (e) { /* ugyldig tilføjelse ignoreres — de automatiske Events består */ }
+    }
+
     let skemaEl = document.getElementById('retreatEventSchema');
     if (!skemaEl) {
       skemaEl = document.createElement('script');
@@ -2130,7 +2163,7 @@ function applyRetreatContent() {
       skemaEl.id = 'retreatEventSchema';
       document.head.appendChild(skemaEl);
     }
-    skemaEl.textContent = JSON.stringify(skema);
+    skemaEl.textContent = JSON.stringify(events.length === 1 ? events[0] : events);
   } catch(e) { /* schema er en bonus — må aldrig vælte renderingen */ }
   // SEO: opdatér meta dynamisk pr. retreat (slug)
   (function(){
