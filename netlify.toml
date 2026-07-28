@@ -23,6 +23,53 @@
   status = 200
   force = true
 
+# ── RENE RETREAT-ADRESSER ────────────────────────────────────────────────
+# /retreat/<slug> i stedet for /retreat?slug=<slug>.
+# Slug'en er uændret — den er stadig præcis den, der oprettes i admin.
+# De gamle adresser sendes videre med 301, så delte links og indekserede
+# sider bevarer deres værdi. Rækkefølgen er vigtig: query-reglerne skal stå
+# før både /en/retreat og /en/*, ellers vinder de forkerte regler.
+
+[[redirects]]
+  from = "/retreat"
+  query = { slug = ":slug" }
+  to = "/retreat/:slug"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/retreat.html"
+  query = { slug = ":slug" }
+  to = "/retreat/:slug"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/en/retreat"
+  query = { slug = ":slug" }
+  to = "/en/retreat/:slug"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/en/retreat.html"
+  query = { slug = ":slug" }
+  to = "/en/retreat/:slug"
+  status = 301
+  force = true
+
+# Selve visningen: begge sprogstier serverer samme skabelon (status 200 =
+# rewrite, adressen i browseren bevares)
+[[redirects]]
+  from = "/retreat/*"
+  to = "/retreat.html"
+  status = 200
+
+[[redirects]]
+  from = "/en/retreat/*"
+  to = "/retreat.html"
+  status = 200
+
 # ── Engelske SEO-adresser (/en/) ─────────────────────────────────────────
 # Samme HTML-filer serveres på /en/-stier; siderne opdager selv /en/ i
 # adressen og starter på engelsk med engelsk titel/meta/canonical.
@@ -83,10 +130,16 @@
   path = "/retreat"
   function = "social-meta"
 [[edge_functions]]
+  path = "/retreat/*"
+  function = "social-meta"
+[[edge_functions]]
   path = "/retreat.html"
   function = "social-meta"
 [[edge_functions]]
   path = "/en/retreat"
+  function = "social-meta"
+[[edge_functions]]
+  path = "/en/retreat/*"
   function = "social-meta"
 [[edge_functions]]
   path = "/en/retreat.html"

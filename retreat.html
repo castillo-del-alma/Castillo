@@ -2001,8 +2001,25 @@ function renderFaqSection(data) {
 }
 
 function getSlugFromUrl() {
+  // Ny, ren adresseform: /retreat/<slug> — også under /en/
+  const m = window.location.pathname.match(/^(?:\/en)?\/retreat(?:\.html)?\/([^/]+)\/?$/);
+  if (m && m[1]) {
+    try { return decodeURIComponent(m[1]); } catch (e) { return m[1]; }
+  }
+  // Gammel adresseform (?slug=…) bevares som fallback, så gamle links aldrig dør
   const params = new URLSearchParams(window.location.search);
   return params.get('slug');
+}
+
+// Er vi på den engelske sti? Bruges til at bygge sprogrigtige adresser.
+function paaEngelskSti() {
+  return /^\/en(\/|$)/.test(window.location.pathname);
+}
+
+// Bygger den rene, absolutte adresse til et retreat. sprog: 'da' | 'en'
+function byggRetreatUrl(slug, sprog) {
+  return 'https://castillodelalma.es' + (sprog === 'en' ? '/en' : '') +
+         '/retreat/' + encodeURIComponent(slug || '');
 }
 
 function fmtDateDK(d) {
@@ -2079,7 +2096,7 @@ function applyRetreatContent() {
 
   // ── STRUKTURERET DATA: Event-schema pr. retreat (dato, pris, sted) til rich results ──
   try {
-    const skemaUrl = location.origin + '/retreat?slug=' + encodeURIComponent(data.slug || '');
+    const skemaUrl = byggRetreatUrl(data.slug, paaEngelskSti() ? 'en' : 'da');
     const beskrivelse = String(rSC('description') || rSC('subtitle') || '').replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim().slice(0, 300);
     const skema = {
       '@context': 'https://schema.org',
@@ -2119,11 +2136,10 @@ function applyRetreatContent() {
   (function(){
     var d = (rSC('description') || (retreatLang === 'en' ? 'Exclusive retreat at Castillo del Alma in Andalusia.' : 'Eksklusivt retreat på Castillo del Alma i Andalusien.')).replace(/<[^>]*>/g,'').slice(0,300);
     var slug = (data && data.slug) ? data.slug : '';
-    var q = slug ? ('?slug=' + encodeURIComponent(slug)) : '';
     // SEO (Bølge 2): på /en/-stien peger canonical på den engelske adresse
-    var onEn = /^\/en(\/|$)/.test(location.pathname);
-    var daUrl = 'https://castillodelalma.es/retreat' + q;
-    var enUrl = 'https://castillodelalma.es/en/retreat' + q;
+    var onEn = paaEngelskSti();
+    var daUrl = slug ? byggRetreatUrl(slug, 'da') : 'https://castillodelalma.es/retreat';
+    var enUrl = slug ? byggRetreatUrl(slug, 'en') : 'https://castillodelalma.es/en/retreat';
     var url = onEn ? enUrl : daUrl;
     var title = document.getElementById('pageTitle').textContent;
     function setMeta(attr, key, val){
@@ -2560,7 +2576,7 @@ function delInitShare(){
   if (!sec || !CURRENT_RETREAT) return;
   const isEN = retreatLang === 'en';
   const titel = (isEN ? (CURRENT_RETREAT.title_en || CURRENT_RETREAT.title) : CURRENT_RETREAT.title) || 'Castillo del Alma';
-  const url = location.origin + location.pathname + '?slug=' + encodeURIComponent(CURRENT_RETREAT.slug || '');
+  const url = byggRetreatUrl(CURRENT_RETREAT.slug, isEN ? 'en' : 'da');
   const lbl = document.getElementById('shareLabel');
   const hed = document.getElementById('shareHeading');
   if (lbl) lbl.textContent = isEN ? 'Share this retreat' : 'Del dette retreat';

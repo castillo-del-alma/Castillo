@@ -57,8 +57,15 @@ export default async (request, context) => {
 
   const url = new URL(request.url);
   const isEN = /^\/en(\/|$)/.test(url.pathname);
-  const erRetreatSide = /\/retreat(\.html)?$/.test(url.pathname);
-  const slug = url.searchParams.get('slug');
+  // Ren adresseform: /retreat/<slug> (også /en/retreat/<slug>).
+  // Gammel form (?slug=…) bevares som fallback — den 301'er normalt videre,
+  // men robotter kan stadig ramme den direkte fra gamle links.
+  const stiSlug = url.pathname.match(/^(?:\/en)?\/retreat(?:\.html)?\/([^/]+)\/?$/);
+  const erRetreatSide = !!stiSlug || /\/retreat(\.html)?$/.test(url.pathname);
+  let slug = url.searchParams.get('slug');
+  if (stiSlug) {
+    try { slug = decodeURIComponent(stiSlug[1]); } catch (e) { slug = stiSlug[1]; }
+  }
 
   const res = await context.next();
   const ctype = res.headers.get('content-type') || '';
@@ -84,7 +91,7 @@ export default async (request, context) => {
         const beskriv = isEN
           ? (stripHtml(d.social_text_en || d.description_en || d.subtitle_en).slice(0, 200) || EN_HOME.desc)
           : (stripHtml(d.social_text || d.description || d.subtitle).slice(0, 200) || 'Eksklusive retreats i M\u00e1laga, Spanien med fokus p\u00e5 ro, personlig udvikling og autentiske oplevelser.');
-        const canonical = 'https://castillodelalma.es' + (isEN ? '/en' : '') + '/retreat?slug=' + encodeURIComponent(slug);
+        const canonical = 'https://castillodelalma.es' + (isEN ? '/en' : '') + '/retreat/' + encodeURIComponent(slug);
         html = transformHtml(html, {
           title: titel,
           desc: beskriv,

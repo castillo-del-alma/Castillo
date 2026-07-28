@@ -2572,6 +2572,13 @@ function buildAvailBadge(r, availData, isEN) {
   return `<div class="retreat-avail ${cls}">${txt}</div>`;
 }
 
+// Bygger den rene adresse til et retreat: /retreat/<slug> — eller /en/retreat/<slug>
+// når vi står på den engelske sti. Slug'en er uændret den, der oprettes i admin.
+function retreatHref(slug) {
+  const enSti = /^\/en(\/|$)/.test(location.pathname);
+  return (enSti ? '/en' : '') + '/retreat/' + encodeURIComponent(slug || '');
+}
+
 // Footer: RETREATS-kolonnen viser altid kun de aktive retreats med deres aktuelle titler.
 // Kaldes fra loadRetreatsGrid (samme data/sortering som kortene) — genrenderes automatisk ved DA/EN-skift.
 function renderFooterRetreats(data) {
@@ -2581,7 +2588,7 @@ function renderFooterRetreats(data) {
   const esc = s => String(s == null ? '' : s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
   list.innerHTML = data.map(r => {
     const title = isEN ? (r.title_en || r.title || '') : (r.title || '');
-    return `<li><a href="retreat.html?slug=${encodeURIComponent(r.slug)}">${esc(title)}</a></li>`;
+    return `<li><a href="${retreatHref(r.slug)}">${esc(title)}</a></li>`;
   }).join('');
   // Ekstra, admin-styret link efter sidste retreat (med ekstra linjeskift).
   // Tekst: footer_kol2_ekstra_tekst (DA/EN) · URL: footer_kol2_ekstra_url — inline HTML tilladt i teksten.
@@ -2623,7 +2630,7 @@ async function loadRetreatsGrid() {
     const subtitle = isEN ? (r.subtitle_en || r.subtitle || '') : (r.subtitle || '');
     const description = isEN ? (r.description_en || r.description || '') : (r.description || '');
     const seMere = isEN ? 'View retreat →' : 'Se retreat →';
-    const clickAttr = `onclick="window.location='retreat.html?slug=${r.slug}'" style="cursor:pointer;"`;
+    const clickAttr = `onclick="window.location='${retreatHref(r.slug)}'" style="cursor:pointer;"`;
     const accentPalette = [
       'linear-gradient(90deg,var(--terracotta),var(--gold))',
       'linear-gradient(90deg,var(--olive),#b8c870)',

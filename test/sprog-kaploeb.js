@@ -41,7 +41,7 @@ const STIER = {
   'index.html':      ['/en/', '/'],
   'ejendommen.html': ['/en/ejendommen', '/ejendommen'],
   'udlejning.html':  ['/en/udlejning', '/udlejning'],
-  'retreat.html':    ['/en/retreat?slug=test', '/retreat?slug=test'],
+  'retreat.html':    ['/en/retreat/test', '/retreat/test'],
   'kontakt.html':    ['/en/kontakt', '/kontakt'],
 };
 

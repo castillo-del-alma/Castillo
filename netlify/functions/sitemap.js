@@ -58,9 +58,9 @@ exports.handler = async () => {
 
   // Alle aktive retreats — dansk + engelsk med hreflang begge veje
   for (const slug of slugs) {
-    const q = '?slug=' + encodeURIComponent(slug);
-    const daUrl = BASE + '/retreat' + q;
-    const enUrl = BASE + '/en/retreat' + q;
+    const p = '/' + encodeURIComponent(slug);
+    const daUrl = BASE + '/retreat' + p;
+    const enUrl = BASE + '/en/retreat' + p;
     const alt = [['da', daUrl], ['en', enUrl], ['x-default', daUrl]];
     xml += urlEntry(daUrl, { alternates: alt, changefreq: 'weekly', priority: '0.9' });
     xml += urlEntry(enUrl, { alternates: alt, changefreq: 'weekly', priority: '0.9' });

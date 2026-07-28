@@ -56,12 +56,12 @@ const SIDER = [
   // retreat.html skal have slug'en med i linket, ellers peger det på en
   // retreat-side uden valgt retreat.
   const dom = await indlaesSide('retreat.html', {
-    url: 'https://castillodelalma.es/retreat?slug=proeve', vent: 900,
+    url: 'https://castillodelalma.es/retreat/proeve', vent: 900,
   });
   const bEn = dom.window.document.getElementById('retreat-btn-en');
   r.overskrift('retreat.html   slug følger med i linket');
-  r.tjek(bEn && bEn.getAttribute('href') === '/en/retreat?slug=proeve',
-    'EN href er ' + (bEn && bEn.getAttribute('href')) + ' — forventet /en/retreat?slug=proeve');
+  r.tjek(bEn && bEn.getAttribute('href') === '/en/retreat/proeve',
+    'EN href er ' + (bEn && bEn.getAttribute('href')) + ' — forventet /en/retreat/proeve');
   if (bEn) r.note(bEn.getAttribute('href'));
   dom.window.close();
 
