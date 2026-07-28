@@ -102,7 +102,9 @@ section{padding:6.5rem 4rem;}
   position:relative;min-height:100svh;display:flex;align-items:flex-end;
   padding:0 0 4.5rem;margin-top:0;overflow:hidden;
 }
-.hero-bg{position:absolute;inset:0;overflow:hidden;}
+/* Mørk bund: hero'en er læsbar, også før billedet er hentet — eller hvis
+   der slet ikke er valgt et i admin. */
+.hero-bg{position:absolute;inset:0;overflow:hidden;background:var(--charcoal);}
 .hero-bg img{
   width:100%;height:100%;object-fit:cover;
   transform:scale(1.06);
@@ -414,7 +416,7 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--gold);outline-offse
 <!-- HERO -->
 <header class="hero">
   <div class="hero-bg">
-    <img id="g_hero_image" src="/img/group-men-sit-hill-overlooking-mountain.jpg" alt="Castillo del Alma — gay retreat i Andalusien" fetchpriority="high">
+    <img id="g_hero_image" alt="" fetchpriority="high" style="display:none;">
   </div>
   <div class="hero-inner">
     <div class="hero-content">
@@ -789,7 +791,6 @@ const GAY_SEED = {
     "cta_btn_en": "View the retreats",
     "footer_copy_en": "© 2026 Castillo del Alma · Mollina, Málaga · All rights reserved",
     "social_image": "https://castillodelalma.es/img/castillo-del-alma-social-1200.jpg",
-    "hero_image": "/img/group-men-sit-hill-overlooking-mountain.jpg",
     "ejendom_image": "/img/estate-pool.jpg",
     "sted_image": "/img/vinmark1.jpg",
     "cta_link": "#retreats",
@@ -826,7 +827,12 @@ function gaySC(key, fallback) {
   return (v !== undefined && v !== null && v !== '') ? v : (gayData[key] || fallback || '');
 }
 function gSet(id, val) { const el = document.getElementById(id); if (el && val) el.innerHTML = val; }
-function gSetImg(id, val) { const el = document.getElementById(id); if (el && val) el.src = val; }
+function gSetImg(id, val) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  if (val) { el.src = val; el.style.display = ''; }
+  else { el.removeAttribute('src'); el.style.display = 'none'; }
+}
 function gSetAfsnit(id, val) {
   const el = document.getElementById(id);
   if (el && val) el.innerHTML = String(val).split('\n').filter(Boolean).map(t => '<p>' + t + '</p>').join('');
@@ -857,6 +863,13 @@ function applyGayContent() {
   gSet('g_hero_text',    gaySC('hero_text'));
   gSet('g_hero_scroll',  gaySC('hero_scroll'));
   gSetImg('g_hero_image', gayData.hero_image);
+  { // Alt-tekst følger overskriften, så den også passer på engelsk
+    const _hi = document.getElementById('g_hero_image');
+    if (_hi && gayData.hero_image) {
+      _hi.alt = String(gaySC('hero_h1') || '').replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim()
+                + ' — Castillo del Alma';
+    }
+  }
   const meta = String(gaySC('hero_meta') || '').split('\n').filter(Boolean);
   if (meta.length) gSet('g_hero_meta', meta.map(m => '<span>' + m + '</span>').join(''));
 

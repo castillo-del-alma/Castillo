@@ -17,7 +17,12 @@ const imgs=JSON.parse(adm.match(/const GAY_IMG_KEYS  = (\[[^\]]*\])/)[1]);
 console.log('── Ingen tomme felter ──');
 t(`alle ${keys.length} DA-defaults har tekst`, keys.every(k=>DA[k] && DA[k].trim().length>0));
 t(`alle ${keys.length} EN-defaults har tekst`, keys.every(k=>EN[k] && EN[k].trim().length>0));
-t(`alle ${imgs.length} billed-defaults har sti`, imgs.every(k=>IMG[k] && IMG[k].length>0));
+// hero_image har bevidst INGEN standard — billedet vaelges i admin,
+// saa der ikke ligger en gammel hardkodet fil som fallback
+const UDEN_DEFAULT = ['hero_image'];
+t(`billed-defaults har sti (undtagen ${UDEN_DEFAULT.join(', ')})`,
+  imgs.filter(k=>!UDEN_DEFAULT.includes(k)).every(k=>IMG[k] && IMG[k].length>0));
+t('hero_image har bevidst ingen standard', !IMG.hero_image);
 const tomme=keys.filter(k=>!DA[k]||!EN[k]);
 if(tomme.length) console.log('     tomme:', tomme.join(', '));
 
@@ -26,7 +31,7 @@ console.log('\n── Admin og side har samme tekst ──');
   const uens=keys.filter(k=>SEED[k]!==DA[k] || SEED[k+'_en']!==EN[k]);
   t('DA og EN stemmer mellem admin og side', uens.length===0);
   if(uens.length) console.log('     uens:', uens.join(', '));
-  const iu=imgs.filter(k=>SEED[k]!==IMG[k]);
+  const iu=imgs.filter(k=>!UDEN_DEFAULT.includes(k) && SEED[k]!==IMG[k]);
   t('billeder stemmer', iu.length===0);
 }
 

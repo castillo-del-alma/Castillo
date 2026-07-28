@@ -170,7 +170,8 @@ insert into public.gay_content (key, value) values
   ('footer_copy_en', '© 2026 Castillo del Alma · Mollina, Málaga · All rights reserved'),
 
   -- Billeder (fælles for begge sprog)
-  ('hero_image',    '/img/group-men-sit-hill-overlooking-mountain.jpg'),
+  -- Hero-billedet vælges i admin (blok 2). Ingen standardfil.
+  ('hero_image',    ''),
   ('ejendom_image', '/img/estate-pool.jpg'),
   ('sted_image',    '/img/vinmark1.jpg'),
   ('social_image',  'https://castillodelalma.es/img/castillo-del-alma-social-1200.jpg'),
