@@ -3801,22 +3801,43 @@ feeling more calm – and coming home to yourself again."</textarea></div>
       </div>
     </div>
     <div class="fc-block" id="gayblok_12" style="margin-bottom:1.5rem;">
-      <div class="fc-block-header"><span class="fc-block-title">12 · Synlig på siden</span></div>
+      <div class="fc-block-header"><span class="fc-block-title">12 · Rækkefølge og synlighed</span></div>
       <div class="fc-block-body">
-        <div style="font-size:.68rem;color:rgba(44,35,24,.55);line-height:1.5;margin-bottom:.8rem;">Fjern fluebenet for at skjule en sektion helt. Indholdet bevares — sektionen vises bare ikke.</div>
-        <div style="display:flex;flex-wrap:wrap;gap:1.4rem;">
-          <label style="display:flex;align-items:center;gap:.5rem;font-family:Manrope,sans-serif;font-size:.72rem;cursor:pointer;"><input type="checkbox" id="gay_vis_intro" checked> Intro</label>
-          <label style="display:flex;align-items:center;gap:.5rem;font-family:Manrope,sans-serif;font-size:.72rem;cursor:pointer;"><input type="checkbox" id="gay_vis_retreats" checked> Retreats</label>
-          <label style="display:flex;align-items:center;gap:.5rem;font-family:Manrope,sans-serif;font-size:.72rem;cursor:pointer;"><input type="checkbox" id="gay_vis_uge" checked> Ugen</label>
-          <label style="display:flex;align-items:center;gap:.5rem;font-family:Manrope,sans-serif;font-size:.72rem;cursor:pointer;"><input type="checkbox" id="gay_vis_ejendom" checked> Ejendommen</label>
-          <label style="display:flex;align-items:center;gap:.5rem;font-family:Manrope,sans-serif;font-size:.72rem;cursor:pointer;"><input type="checkbox" id="gay_vis_sted" checked> Sådan kommer du hertil</label>
-          <label style="display:flex;align-items:center;gap:.5rem;font-family:Manrope,sans-serif;font-size:.72rem;cursor:pointer;"><input type="checkbox" id="gay_vis_faq" checked> FAQ</label>
-          <label style="display:flex;align-items:center;gap:.5rem;font-family:Manrope,sans-serif;font-size:.72rem;cursor:pointer;"><input type="checkbox" id="gay_vis_cta" checked> Opfordring nederst</label>
-        </div>
+        <div style="font-size:.68rem;color:rgba(44,35,24,.55);line-height:1.5;margin-bottom:.8rem;">Brug pilene til at flytte sektionerne op og ned på siden. Fjern fluebenet for at skjule en sektion helt — indholdet bevares.</div>
+        <div id="gayOrdenEditor"></div>
       </div>
     </div>
-    <div style="margin-top:2rem;">
+
+    <div class="fc-block" id="gayblok_13" style="margin-bottom:1.5rem;">
+      <div class="fc-block-header"><span class="fc-block-title">13 · Billedstribe 1 (efter Intro)</span></div>
+      <div class="fc-block-body">
+        <div style="font-size:.68rem;color:rgba(44,35,24,.55);line-height:1.5;margin-bottom:.8rem;">Op til 5 billeder med mouseover-effekt. Brug pilene til at ændre rækkefølgen. Er striben tom, vises den slet ikke på siden.</div>
+        <div id="gayStribe1Liste"></div>
+        <button type="button" onclick="gayStribeTilfoej(1)" style="width:100%;background:rgba(42,122,116,.06);border:1px dashed rgba(42,122,116,.4);color:#2a7a74;padding:.7rem;font-family:Manrope,sans-serif;font-size:.66rem;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;margin-top:.6rem;">+ Tilføj billede (max 5)</button>
+      </div>
+    </div>
+
+    <div class="fc-block" id="gayblok_14" style="margin-bottom:1.5rem;">
+      <div class="fc-block-header"><span class="fc-block-title">14 · Billedstribe 2 (efter Ejendommen)</span></div>
+      <div class="fc-block-body">
+        <div style="font-size:.68rem;color:rgba(44,35,24,.55);line-height:1.5;margin-bottom:.8rem;">Op til 5 billeder med mouseover-effekt. Brug pilene til at ændre rækkefølgen.</div>
+        <div id="gayStribe2Liste"></div>
+        <button type="button" onclick="gayStribeTilfoej(2)" style="width:100%;background:rgba(42,122,116,.06);border:1px dashed rgba(42,122,116,.4);color:#2a7a74;padding:.7rem;font-family:Manrope,sans-serif;font-size:.66rem;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;margin-top:.6rem;">+ Tilføj billede (max 5)</button>
+      </div>
+    </div>
+
+    <div class="fc-block" id="gayblok_15" style="margin-bottom:1.5rem;">
+      <div class="fc-block-header"><span class="fc-block-title">15 · Billedstribe 3 (efter FAQ)</span></div>
+      <div class="fc-block-body">
+        <div style="font-size:.68rem;color:rgba(44,35,24,.55);line-height:1.5;margin-bottom:.8rem;">Op til 5 billeder med mouseover-effekt. Brug pilene til at ændre rækkefølgen.</div>
+        <div id="gayStribe3Liste"></div>
+        <button type="button" onclick="gayStribeTilfoej(3)" style="width:100%;background:rgba(42,122,116,.06);border:1px dashed rgba(42,122,116,.4);color:#2a7a74;padding:.7rem;font-family:Manrope,sans-serif;font-size:.66rem;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;margin-top:.6rem;">+ Tilføj billede (max 5)</button>
+      </div>
+    </div>
+
+    <div style="margin-top:2rem;display:flex;gap:.8rem;justify-content:flex-end;flex-wrap:wrap;">
       <button type="button" onclick="gemGay()" style="background:#7a1f35;color:#fff;border:none;padding:.7rem 2rem;font-family:Manrope,sans-serif;font-size:.68rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;">💾 Gem</button>
+      <button type="button" onclick="gemGayOgSeSiden()" style="background:#2a7a74;color:#fff;border:none;padding:.7rem 2rem;font-family:Manrope,sans-serif;font-size:.68rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;">💾 Gem og se siden</button>
     </div>
   </div>
 
@@ -10044,6 +10065,7 @@ async function gemUdlejning() {
 const GAY_TEXT_KEYS = ["seo_title", "seo_desc", "nav_links", "nav_back", "hero_eyebrow", "hero_h1", "hero_text", "hero_meta", "hero_scroll", "intro_label", "intro_h2", "intro_lede", "intro_text", "retreats_label", "retreats_h2", "retreats_intro", "uge_label", "uge_h2", "uge_intro", "uge_items", "ejendom_label", "ejendom_h2", "ejendom_text", "sted_label", "sted_h2", "sted_text", "sted_afstande", "sted_text2", "faq_label", "faq_h2", "faq_items", "cta_h2", "cta_text", "cta_btn", "footer_copy"];
 const GAY_IMG_KEYS  = ["social_image", "hero_image", "ejendom_image", "sted_image"];
 const GAY_SOLO_KEYS = ["cta_link"];
+// Synligheden sættes nu i rækkefølge-editoren (blok 12), ikke som løse flueben
 const GAY_VIS_KEYS  = ["vis_intro", "vis_retreats", "vis_uge", "vis_ejendom", "vis_sted", "vis_faq", "vis_cta"];
 
 // Standardtekster = præcis det, siden viser i dag. Felterne står derfor ALDRIG
@@ -10133,6 +10155,96 @@ const GAY_IMG_DEFAULTS = {
     "sted_image": "/img/vinmark1.jpg"
   };
 
+
+// ── Rækkefølge og synlighed (blok 12) ──
+const GAY_SEKTION_DEFS = [
+  { id: 'sec-intro', navn: 'Intro — "En vinejendom, ikke et hotel"', key: 'vis_intro' },
+  { id: 'strip1',    navn: 'Billedstribe 1',                          key: 'vis_strip1' },
+  { id: 'retreats',  navn: 'Retreats (kortene)',                      key: 'vis_retreats' },
+  { id: 'week',      navn: 'Ugen',                                    key: 'vis_uge' },
+  { id: 'estate',    navn: 'Ejendommen',                              key: 'vis_ejendom' },
+  { id: 'strip2',    navn: 'Billedstribe 2',                          key: 'vis_strip2' },
+  { id: 'location',  navn: 'Sådan kommer du hertil',                  key: 'vis_sted' },
+  { id: 'faq',       navn: 'FAQ',                                     key: 'vis_faq' },
+  { id: 'strip3',    navn: 'Billedstribe 3',                          key: 'vis_strip3' },
+  { id: 'sec-cta',   navn: 'Opfordring nederst',                      key: 'vis_cta' }
+];
+let gayOrdenState = [];                 // [{ id, vis }] i den rækkefølge sektionerne vises
+let gayStriber = { 1: [], 2: [], 3: [] }; // billed-URL'er pr. stribe
+
+const GAY_PIL_BTN = 'background:rgba(184,138,30,.12);border:1px solid rgba(184,138,30,.35);color:#8a6a15;width:22px;height:16px;line-height:1;font-size:.55rem;cursor:pointer;padding:0;';
+
+function gayRenderOrden() {
+  const c = document.getElementById('gayOrdenEditor');
+  if (!c) return;
+  c.innerHTML = gayOrdenState.map((o, i) => {
+    const def = GAY_SEKTION_DEFS.find(d => d.id === o.id) || { navn: o.id };
+    return '<div style="display:flex;gap:.6rem;align-items:center;margin-bottom:.4rem;padding:.35rem .6rem;background:rgba(184,138,30,.05);border:1px solid rgba(184,138,30,.18);">' +
+      '<div style="display:flex;flex-direction:column;gap:2px;">' +
+        '<button type="button" onclick="gayOrdenFlyt(' + i + ',-1)"' + (i === 0 ? ' disabled' : '') + ' style="' + GAY_PIL_BTN + '" title="Flyt op">▲</button>' +
+        '<button type="button" onclick="gayOrdenFlyt(' + i + ',1)"' + (i === gayOrdenState.length - 1 ? ' disabled' : '') + ' style="' + GAY_PIL_BTN + '" title="Flyt ned">▼</button>' +
+      '</div>' +
+      '<span style="flex:1;font-family:Manrope,sans-serif;font-size:.72rem;color:#2c2318;">' + gayEsc(def.navn) + '</span>' +
+      '<label style="display:flex;align-items:center;gap:.35rem;font-family:Manrope,sans-serif;font-size:.66rem;cursor:pointer;white-space:nowrap;">' +
+        '<input type="checkbox"' + (o.vis !== '0' ? ' checked' : '') + ' onchange="gayOrdenState[' + i + '].vis=this.checked?\'1\':\'0\'" style="cursor:pointer;"> Synlig</label>' +
+    '</div>';
+  }).join('');
+}
+
+function gayOrdenFlyt(i, retning) {
+  const j = i + retning;
+  if (j < 0 || j >= gayOrdenState.length) return;
+  const t = gayOrdenState[i]; gayOrdenState[i] = gayOrdenState[j]; gayOrdenState[j] = t;
+  gayRenderOrden();
+}
+
+// ── Billedstriber (blok 13–15) ──
+function gayRenderStribe(nr) {
+  const c = document.getElementById('gayStribe' + nr + 'Liste');
+  if (!c) return;
+  const liste = gayStriber[nr] || [];
+  c.innerHTML = liste.map((url, i) =>
+    '<div style="display:flex;gap:.7rem;align-items:center;margin-bottom:.5rem;padding:.5rem .7rem;background:rgba(184,138,30,.04);border:1px solid rgba(184,138,30,.18);">' +
+      '<div style="display:flex;flex-direction:column;gap:3px;">' +
+        '<button type="button" onclick="gayStribeFlyt(' + nr + ',' + i + ',-1)"' + (i === 0 ? ' disabled' : '') + ' style="' + GAY_PIL_BTN + '" title="Flyt op">▲</button>' +
+        '<button type="button" onclick="gayStribeFlyt(' + nr + ',' + i + ',1)"' + (i === liste.length - 1 ? ' disabled' : '') + ' style="' + GAY_PIL_BTN + '" title="Flyt ned">▼</button>' +
+      '</div>' +
+      '<img src="' + gayEsc(url || '') + '" style="' + (url ? '' : 'display:none;') + 'width:48px;height:60px;object-fit:cover;border:1px solid rgba(184,138,30,.3);">' +
+      '<input type="file" accept="image/*" id="gayStribe' + nr + 'Fil' + i + '" style="font-size:.72rem;flex:1;" onchange="gayStribeUpload(' + nr + ',' + i + ')">' +
+      '<button type="button" onclick="gayStribeFjern(' + nr + ',' + i + ')" style="background:rgba(163,51,51,.08);color:#a33;border:1px solid rgba(163,51,51,.35);padding:.35rem .7rem;font-family:Manrope,sans-serif;font-size:.7rem;cursor:pointer;" title="Fjern billedet">✕</button>' +
+    '</div>').join('') ||
+    '<div style="font-family:Manrope,sans-serif;font-size:.7rem;color:rgba(44,35,24,.45);padding:.6rem 0;">Ingen billeder — striben vises ikke på siden.</div>';
+}
+
+function gayStribeTilfoej(nr) {
+  if ((gayStriber[nr] || []).length >= 5) { showToast('Der er plads til 5 billeder pr. stribe', true); return; }
+  gayStriber[nr].push('');
+  gayRenderStribe(nr);
+}
+function gayStribeFjern(nr, i) { gayStriber[nr].splice(i, 1); gayRenderStribe(nr); }
+function gayStribeFlyt(nr, i, retning) {
+  const j = i + retning;
+  if (j < 0 || j >= gayStriber[nr].length) return;
+  const t = gayStriber[nr][i]; gayStriber[nr][i] = gayStriber[nr][j]; gayStriber[nr][j] = t;
+  gayRenderStribe(nr);
+}
+async function gayStribeUpload(nr, i) {
+  const felt = document.getElementById('gayStribe' + nr + 'Fil' + i);
+  const fil = felt && felt.files && felt.files[0];
+  if (!fil) return;
+  try {
+    const url = await uploadRetreatImage(fil);   // samme upload som resten af admin
+    if (url) { gayStriber[nr][i] = url; gayRenderStribe(nr); showToast('✓ Billede uploadet — husk 💾 Gem'); }
+  } catch (e) {
+    showToast('Upload fejlede: ' + (e.message || e), true);
+  }
+}
+
+async function gemGayOgSeSiden() {
+  await gemGay();
+  window.open('/gay-retreat-malaga-spain', '_blank', 'noopener');
+}
+
 async function loadGayAdmin() {
   if (!sb) return;
   const advarsel = document.getElementById('gayAdvarsel');
@@ -10178,9 +10290,33 @@ async function loadGayAdmin() {
       else { pv.removeAttribute('src'); pv.style.display = 'none'; }
     }
   });
-  GAY_VIS_KEYS.forEach(key => {
-    const el = document.getElementById('gay_' + key);
-    if (el) el.checked = map[key] !== '0';   // alt vises som udgangspunkt
+  // Rækkefølge: gemt orden hvis den findes, ellers standardrækkefølgen.
+  // Sektioner der mangler i den gemte liste (fx nytilføjede striber) sættes
+  // ind på deres standardplads, så de aldrig forsvinder.
+  let gemtOrden = [];
+  try { gemtOrden = JSON.parse(map.sektion_orden || '[]'); } catch (e) { gemtOrden = []; }
+  if (!Array.isArray(gemtOrden)) gemtOrden = [];
+  gemtOrden = gemtOrden.filter(id => GAY_SEKTION_DEFS.some(d => d.id === id));
+  GAY_SEKTION_DEFS.forEach((def, idx) => {
+    if (gemtOrden.indexOf(def.id) !== -1) return;
+    let hvor = gemtOrden.length;
+    for (let k = idx - 1; k >= 0; k--) {
+      const pos = gemtOrden.indexOf(GAY_SEKTION_DEFS[k].id);
+      if (pos !== -1) { hvor = pos + 1; break; }
+    }
+    gemtOrden.splice(hvor, 0, def.id);
+  });
+  gayOrdenState = gemtOrden.map(id => {
+    const def = GAY_SEKTION_DEFS.find(d => d.id === id);
+    return { id: id, vis: (def && map[def.key] === '0') ? '0' : '1' };
+  });
+  gayRenderOrden();
+
+  [1, 2, 3].forEach(nr => {
+    let liste = [];
+    try { liste = JSON.parse(map['strip' + nr + '_images'] || '[]'); } catch (e) { liste = []; }
+    gayStriber[nr] = Array.isArray(liste) ? liste.filter(x => typeof x === 'string').slice(0, 5) : [];
+    gayRenderStribe(nr);
   });
 }
 
@@ -10207,9 +10343,16 @@ async function gemGay() {
     const el = document.getElementById('gay_' + key + '_url');
     if (el) upserts.push({ key: key, value: el.value.trim() });
   });
-  GAY_VIS_KEYS.forEach(key => {
-    const el = document.getElementById('gay_' + key);
-    if (el) upserts.push({ key: key, value: el.checked ? '1' : '0' });
+  // Rækkefølge og synlighed styres nu fra blok 12
+  if (gayOrdenState.length) {
+    upserts.push({ key: 'sektion_orden', value: JSON.stringify(gayOrdenState.map(o => o.id)) });
+    gayOrdenState.forEach(o => {
+      const def = GAY_SEKTION_DEFS.find(d => d.id === o.id);
+      if (def) upserts.push({ key: def.key, value: o.vis === '0' ? '0' : '1' });
+    });
+  }
+  [1, 2, 3].forEach(nr => {
+    upserts.push({ key: 'strip' + nr + '_images', value: JSON.stringify((gayStriber[nr] || []).filter(Boolean)) });
   });
   try {
     const { error } = await sb.from('gay_content').upsert(upserts, { onConflict: 'key' });

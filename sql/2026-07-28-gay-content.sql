@@ -151,8 +151,20 @@ insert into public.gay_content (key, value) values
   ('sted_image',    '/img/vinmark1.jpg'),
   ('social_image',  'https://castillodelalma.es/img/castillo-del-alma-social-1200.jpg'),
 
+  -- Billedstriber: JSON-lister med op til 5 billed-URL'er hver.
+  -- Tomme som udgangspunkt — striben vises først, når du har lagt billeder i.
+  ('strip1_images', '[]'),
+  ('strip2_images', '[]'),
+  ('strip3_images', '[]'),
+
+  -- Rækkefølgen på sektionerne (redigeres i admin, blok 12)
+  ('sektion_orden', '["sec-intro","strip1","retreats","week","estate","strip2","location","faq","strip3","sec-cta"]'),
+
   -- Synlighed: '1' = vist, '0' = skjult
   ('vis_intro',    '1'),
+  ('vis_strip1',   '1'),
+  ('vis_strip2',   '1'),
+  ('vis_strip3',   '1'),
   ('vis_retreats', '1'),
   ('vis_uge',      '1'),
   ('vis_ejendom',  '1'),

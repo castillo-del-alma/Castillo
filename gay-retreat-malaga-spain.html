@@ -249,6 +249,14 @@ section{padding:6.5rem 4rem;}
 }
 .rcard:hover .rcard-arrow{transform:translateX(5px);}
 
+/* ── FOTOSTRIBER — tre striber à op til 5 billeder, styres i admin ── */
+.foto-stribe{padding:0;background:var(--section-alt);}
+.foto-stribe-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:.6rem;padding:.6rem;}
+.stribe-felt{position:relative;overflow:hidden;aspect-ratio:3/4;background:var(--sand);}
+.stribe-felt img{width:100%;height:100%;object-fit:cover;transition:transform .8s cubic-bezier(.23,1,.32,1);}
+.stribe-felt:hover img{transform:scale(1.07);}
+.stribe-felt .stribe-accent{position:absolute;top:0;left:0;right:0;height:3px;z-index:2;}
+
 /* ── TO-KOLONNE ── */
 .split{display:grid;grid-template-columns:1fr 1fr;gap:4.5rem;align-items:center;}
 .split-img{aspect-ratio:4/3;overflow:hidden;}
@@ -330,6 +338,7 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--gold);outline-offse
   .hero-meta span{padding:0 .9rem;font-size:.58rem;}
   .hero-scroll{display:none;}
   .split{grid-template-columns:1fr;gap:2.4rem;}
+  .foto-stribe-grid{grid-template-columns:repeat(2,1fr);gap:.4rem;padding:.4rem;}
   .rcard{min-height:520px;}
   .rcard-content{padding:1.5rem 1.3rem;}
   .rcard-avail{left:1.3rem;}
@@ -401,6 +410,9 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--gold);outline-offse
     </div>
   </div>
 </section>
+
+<!-- FOTOSTRIBE 1 -->
+<section class="foto-stribe" id="strip1" style="display:none;"><div class="foto-stribe-grid"></div></section>
 
 <!-- RETREATS -->
 <section class="alt" id="retreats">
@@ -505,6 +517,9 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--gold);outline-offse
   </div>
 </section>
 
+<!-- FOTOSTRIBE 2 -->
+<section class="foto-stribe" id="strip2" style="display:none;"><div class="foto-stribe-grid"></div></section>
+
 <!-- BELIGGENHED -->
 <section id="location">
   <div class="wrap split">
@@ -573,6 +588,9 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--gold);outline-offse
     </div>
   </div>
 </section>
+
+<!-- FOTOSTRIBE 3 -->
+<section class="foto-stribe" id="strip3" style="display:none;"><div class="foto-stribe-grid"></div></section>
 
 <!-- CTA -->
 <section class="cta-band" id="sec-cta">
@@ -739,7 +757,14 @@ const GAY_SEED = {
     "ejendom_image": "/img/estate-pool.jpg",
     "sted_image": "/img/vinmark1.jpg",
     "cta_link": "#retreats",
-    "vis_intro": "1",
+    "strip1_images": "[]",
+  "strip2_images": "[]",
+  "strip3_images": "[]",
+  "sektion_orden": "[\"sec-intro\",\"strip1\",\"retreats\",\"week\",\"estate\",\"strip2\",\"location\",\"faq\",\"strip3\",\"sec-cta\"]",
+  "vis_intro": "1",
+  "vis_strip1": "1",
+  "vis_strip2": "1",
+  "vis_strip3": "1",
     "vis_retreats": "1",
     "vis_uge": "1",
     "vis_ejendom": "1",
@@ -750,9 +775,15 @@ const GAY_SEED = {
 
 // Sektionens id på siden ← nøglen der styrer synlighed
 const GAY_SEKTIONER = {
-  'sec-intro': 'vis_intro', 'retreats': 'vis_retreats', 'week': 'vis_uge',
-  'estate': 'vis_ejendom', 'location': 'vis_sted', 'faq': 'vis_faq', 'sec-cta': 'vis_cta'
+  'sec-intro': 'vis_intro', 'strip1': 'vis_strip1', 'retreats': 'vis_retreats',
+  'week': 'vis_uge', 'estate': 'vis_ejendom', 'strip2': 'vis_strip2',
+  'location': 'vis_sted', 'faq': 'vis_faq', 'strip3': 'vis_strip3', 'sec-cta': 'vis_cta'
 };
+// Standardrækkefølgen. Admin kan bytte om, men nye sektioner falder altid
+// tilbage på deres plads her, så en gemt rækkefølge ikke taber dem.
+const GAY_STANDARD_ORDEN = ['sec-intro','strip1','retreats','week','estate','strip2','location','faq','strip3','sec-cta'];
+// Accentfarver på striberne — samme palet som resten af sitet
+const GAY_STRIBE_FARVER = ['var(--wine)','var(--gold)','var(--teal)','var(--terracotta)','var(--olive)'];
 
 function gaySC(key, fallback) {
   const v = gayData[gayLang === 'en' ? key + '_en' : key];
@@ -846,6 +877,8 @@ function applyGayContent() {
   gSet('g_footer_copy', gaySC('footer_copy'));
   gSet('g_nav_back',    gaySC('nav_back'));
   byggGayNav();
+  byggGayStriber();
+  applyGaySektionOrden();
   applyGaySynlighed();
   applyGayMeta();
   byggGayJsonLd();
@@ -867,6 +900,51 @@ function byggGayNav() {
     a.textContent = r[0] || '';
     li.appendChild(a);
     ul.insertBefore(li, holder);
+  });
+}
+
+// Op til fem billeder pr. stribe. Er en stribe tom, skjules den helt.
+function byggGayStriber() {
+  ['strip1', 'strip2', 'strip3'].forEach(function (id) {
+    const sec = document.getElementById(id);
+    if (!sec) return;
+    const grid = sec.querySelector('.foto-stribe-grid');
+    let billeder = gayData[id + '_images'];
+    if (typeof billeder === 'string') { try { billeder = JSON.parse(billeder); } catch (e) { billeder = null; } }
+    billeder = Array.isArray(billeder) ? billeder.filter(Boolean).slice(0, 5) : [];
+    if (!billeder.length) { sec.style.display = 'none'; grid.innerHTML = ''; return; }
+    grid.style.gridTemplateColumns = 'repeat(' + billeder.length + ',1fr)';
+    grid.innerHTML = billeder.map(function (u, i) {
+      return '<div class="stribe-felt">' +
+        '<span class="stribe-accent" style="background:' + GAY_STRIBE_FARVER[i % GAY_STRIBE_FARVER.length] + ';"></span>' +
+        '<img src="' + gEsc(u) + '" alt="Castillo del Alma" loading="lazy">' +
+      '</div>';
+    }).join('');
+    sec.style.display = '';
+  });
+}
+
+// Rækkefølgen fra admin. Sektioner, der ikke står i den gemte liste (fx nye),
+// sættes ind på deres standardplads i stedet for at ryge bagerst.
+function applyGaySektionOrden() {
+  let orden = [];
+  try { orden = JSON.parse(gayData.sektion_orden || '[]'); } catch (e) { orden = []; }
+  if (!Array.isArray(orden) || !orden.length) return;
+  orden = orden.filter(id => GAY_STANDARD_ORDEN.indexOf(id) !== -1);
+  GAY_STANDARD_ORDEN.forEach(function (id, idx) {
+    if (orden.indexOf(id) !== -1) return;
+    let hvor = orden.length;
+    for (let k = idx - 1; k >= 0; k--) {
+      const pos = orden.indexOf(GAY_STANDARD_ORDEN[k]);
+      if (pos !== -1) { hvor = pos + 1; break; }
+    }
+    orden.splice(hvor, 0, id);
+  });
+  const footer = document.querySelector('footer');
+  if (!footer || !footer.parentNode) return;
+  orden.forEach(function (id) {
+    const sec = document.getElementById(id);
+    if (sec) footer.parentNode.insertBefore(sec, footer);
   });
 }
 
