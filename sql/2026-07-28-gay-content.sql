@@ -138,8 +138,8 @@ insert into public.gay_content (key, value) values
   ('cta_link',    '#retreats'),
 
   -- Navigation og footer
-  ('nav_links',     'Retreats|#retreats' || chr(10) || 'Ugen|#week' || chr(10) || 'Ejendommen|#estate' || chr(10) || 'Sådan kommer du hertil|#location' || chr(10) || 'FAQ|#faq'),
-  ('nav_links_en',  'Retreats|#retreats' || chr(10) || 'The week|#week' || chr(10) || 'The estate|#estate' || chr(10) || 'Getting here|#location' || chr(10) || 'FAQ|#faq'),
+  -- Menu: JSON fra admin — [{tekst, tekst_en, link, vis}]
+  ('nav_links',    '[{"tekst": "Retreats", "tekst_en": "Retreats", "link": "#retreats", "vis": "1"}, {"tekst": "Ugen", "tekst_en": "The week", "link": "#week", "vis": "1"}, {"tekst": "Ejendommen", "tekst_en": "The estate", "link": "#estate", "vis": "1"}, {"tekst": "Sådan kommer du hertil", "tekst_en": "Getting here", "link": "#location", "vis": "1"}, {"tekst": "FAQ", "tekst_en": "FAQ", "link": "#faq", "vis": "1"}]'),
   ('nav_back',      '← Tilbage til forsiden'),
   ('nav_back_en',   '← Back to home'),
   ('footer_copy',    '© 2026 Castillo del Alma · Mollina, Málaga · Alle rettigheder forbeholdes'),

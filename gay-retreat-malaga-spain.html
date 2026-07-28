@@ -684,7 +684,7 @@ let gayLang = 'en';
 const GAY_SEED = {
     "seo_title": "Gay Retreat i Spanien — wellness og vin nær Málaga, Andalusien",
     "seo_desc": "Gay retreats for mænd på en vinejendom i Mollina, 45 minutter fra Málaga. Saunaritualer, kakaoceremonier, breathwork og fællesskab — syv dage i de andalusiske bakker.",
-    "nav_links": "Retreats|#retreats\nUgen|#week\nEjendommen|#estate\nSådan kommer du hertil|#location\nFAQ|#faq",
+    "nav_links": "[{\"tekst\": \"Retreats\", \"tekst_en\": \"Retreats\", \"link\": \"#retreats\", \"vis\": \"1\"}, {\"tekst\": \"Ugen\", \"tekst_en\": \"The week\", \"link\": \"#week\", \"vis\": \"1\"}, {\"tekst\": \"Ejendommen\", \"tekst_en\": \"The estate\", \"link\": \"#estate\", \"vis\": \"1\"}, {\"tekst\": \"Sådan kommer du hertil\", \"tekst_en\": \"Getting here\", \"link\": \"#location\", \"vis\": \"1\"}, {\"tekst\": \"FAQ\", \"tekst_en\": \"FAQ\", \"link\": \"#faq\", \"vis\": \"1\"}]",
     "nav_back": "← Tilbage til forsiden",
     "hero_eyebrow": "Mollina · Málaga · Andalusien",
     "hero_h1": "Gay Retreats<br>i Spanien",
@@ -719,7 +719,6 @@ const GAY_SEED = {
     "footer_copy": "© 2026 Castillo del Alma · Mollina, Málaga · Alle rettigheder forbeholdes",
     "seo_title_en": "Gay Retreat in Spain — Wellness & Wine Estate near Málaga, Andalusia",
     "seo_desc_en": "Gay retreats for men on a working wine estate in Mollina, 45 minutes from Málaga. Sauna rituals, cacao ceremonies, breathwork and community — seven days in the Andalusian hills.",
-    "nav_links_en": "Retreats|#retreats\nThe week|#week\nThe estate|#estate\nGetting here|#location\nFAQ|#faq",
     "nav_back_en": "← Back to home",
     "hero_eyebrow_en": "Mollina · Málaga · Andalusia",
     "hero_h1_en": "Gay Retreats<br>in Spain",
@@ -889,15 +888,27 @@ function byggGayNav() {
   const holder = document.getElementById('g_nav_links_holder');
   if (!ul || !holder) return;
   Array.prototype.slice.call(ul.querySelectorAll('.g-navlink')).forEach(el => el.remove());
-  const links = gLinjer(gaySC('nav_links'));
+  // Menuen gemmes som JSON fra admin: [{tekst, tekst_en, link, vis}].
+  // Ældre indhold i rør-format læses stadig, så intet går tabt.
+  let links = [];
+  try {
+    const raa = JSON.parse(gayData.nav_links || '[]');
+    if (Array.isArray(raa)) links = raa.map(l => ({
+      tekst: (gayLang === 'en' ? (l.tekst_en || l.tekst) : l.tekst) || '',
+      link: l.link || '', vis: l.vis
+    }));
+  } catch (e) {
+    links = gLinjer(gaySC('nav_links')).map(r => ({ tekst: r[0], link: r[1], vis: '1' }));
+  }
+  links = links.filter(l => l.vis !== '0' && l.tekst && l.link);
   if (!links.length) { holder.style.display = ''; return; }
   holder.style.display = 'none';
-  links.forEach(r => {
+  links.forEach(l => {
     const li = document.createElement('li');
     li.className = 'g-navlink';
     const a = document.createElement('a');
-    a.setAttribute('href', r[1] || '#');
-    a.textContent = r[0] || '';
+    a.setAttribute('href', l.link);
+    a.textContent = l.tekst;
     li.appendChild(a);
     ul.insertBefore(li, holder);
   });
