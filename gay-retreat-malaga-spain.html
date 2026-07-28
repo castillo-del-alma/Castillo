@@ -1334,8 +1334,19 @@ bindGayFaq();
     .then(function (svar) {
       var res = svar[0];
       ledighed = svar[1] || {};
-      if (res && res.error) return;
-      if (!Array.isArray(res.data) || !res.data.length) return; // behold statiske kort
+      // Fejlede opslaget, ved vi ikke hvad der er sandt — så bliver de
+      // statiske kort stående, så siden ikke står tom.
+      if (!res || res.error || !Array.isArray(res.data)) return;
+      // Lykkedes det derimod og gav nul rækker, er der ingen aktive
+      // pride-retreats lige nu. Så skal de statiske kort VÆK — ellers
+      // reklamerer siden for retreats, der er lukket ned i admin.
+      if (!res.data.length) {
+        var tomGrid = document.getElementById('retreatGrid');
+        if (tomGrid) tomGrid.innerHTML = '';
+        var tomSek = document.getElementById('retreats');
+        if (tomSek) tomSek.style.display = 'none';
+        return;
+      }
       raekker = res.data;
       tegn();
     })
