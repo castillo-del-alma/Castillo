@@ -79,20 +79,26 @@ nav{
 .nav-backdrop.open{display:block;}
 
 /* ── FÆLLES ── */
+/* Samme som .section-label på de øvrige sider, inkl. guldstregen foran */
 .eyebrow{
-  font-family:'Manrope',sans-serif;font-size:.62rem;font-weight:500;
-  letter-spacing:.28em;text-transform:uppercase;color:var(--gold);
-  display:block;margin-bottom:1.2rem;
+  font-family:'Manrope',sans-serif;font-size:.6rem;
+  letter-spacing:.4em;text-transform:uppercase;color:var(--gold);
+  margin-bottom:1.4rem;display:flex;align-items:center;gap:1rem;
 }
+.eyebrow::before{content:'';width:28px;height:1px;background:var(--gold);flex-shrink:0;}
 h1,h2,h3{font-family:'Cinzel',serif;font-weight:400;line-height:1.15;letter-spacing:.01em;}
 h1{font-size:clamp(2.4rem,5.6vw,4.6rem);}
 h2{font-size:clamp(1.7rem,3.4vw,2.7rem);margin-bottom:1.6rem;}
 h3{font-size:1.05rem;letter-spacing:.04em;margin-bottom:.7rem;}
 p{font-family:'Cormorant Garamond',serif;font-size:1.16rem;line-height:1.78;color:var(--text-mid);}
 .lede{font-size:1.36rem;line-height:1.7;color:var(--text);}
-section{padding:6.5rem 4rem;}
-.wrap{max-width:1180px;margin:0 auto;}
-.narrow{max-width:760px;margin:0 auto;}
+/* Sitets faste geometri — samme som ejendommen, udlejning, retreat og
+   forsiden: 8 rem lodret luft på sektionen, og en .section-inner på
+   1320 px med 4 rem sidemargin. Afvig ikke herfra. */
+section{padding:8rem 0;}
+.section-inner{max-width:1320px;margin:0 auto;padding:0 4rem;}
+/* Smallere tekstspalte til brødtekst — ligger inden for samme sidemargin */
+.narrow{max-width:888px;margin:0 auto;padding:0 4rem;}
 .alt{background:var(--section-alt);}
 .rule{width:56px;height:1px;background:var(--gold);margin:2.2rem 0;}
 .rule.center{margin-left:auto;margin-right:auto;}
@@ -121,7 +127,7 @@ section{padding:6.5rem 4rem;}
   position:relative;z-index:2;width:100%;padding:0 4rem;
 }
 .hero-content{
-  max-width:1180px;margin:0 auto;
+  max-width:1320px;margin:0 auto;
   display:flex;justify-content:space-between;align-items:flex-end;gap:3rem;
 }
 .hero-text{max-width:680px;}
@@ -269,7 +275,6 @@ section{padding:6.5rem 4rem;}
    Samme opskrift som .retreat-img5-item på retreat-siden: kvadratiske
    felter i sidens almindelige indholdsbredde, ikke kant til kant. */
 .foto-stribe{padding:2rem 0;}
-.foto-stribe-inner{max-width:1320px;margin:0 auto;padding:0 4rem;}
 .foto-stribe-grid{display:grid;gap:.6rem;margin:0 auto;}
 .stribe-felt{
   position:relative;overflow:hidden;aspect-ratio:1/1;
@@ -312,15 +317,15 @@ section{padding:6.5rem 4rem;}
 .cta-band{background:var(--charcoal);color:var(--cream);text-align:center;}
 .cta-band h2{color:var(--cream);}
 .cta-band p{color:rgba(250,246,238,.8);}
-.btn{
+/* Samme som .btn-wine på ejendommen og udlejning */
+.btn-wine{
   display:inline-block;margin-top:2.2rem;
-  background:var(--wine);color:#fff;text-decoration:none;
-  padding:1.05rem 2.9rem;border-radius:0;
   font-family:'Manrope',sans-serif;font-size:.7rem;font-weight:500;
   letter-spacing:.2em;text-transform:uppercase;
-  transition:background .3s;
+  color:#fff;background:var(--wine);padding:1rem 2.5rem;
+  text-decoration:none;transition:background .3s;
 }
-.btn:hover,.btn:focus-visible{background:var(--wine-light);}
+.btn-wine:hover,.btn-wine:focus-visible{background:var(--wine-light);}
 /* .nav-links a sætter padding i mobil-visningen, og den er mere specifik end
    .lang-btn alene. Sprogknapperne skrives derfor som .nav-links .lang-btn,
    så deres polstring ikke bliver nulstillet og DA/EN klemt sammen. */
@@ -384,9 +389,11 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--gold);outline-offse
   .nav-lang-li{margin-left:0 !important;padding-top:1.6rem;border-bottom:none !important;}
   .nav-links .lang-btn{padding:.6rem 1.15rem;font-size:.7rem;letter-spacing:.14em;}
   .nav-backdrop{z-index:9990;background:rgba(30,22,12,.45);-webkit-backdrop-filter:blur(2px);backdrop-filter:blur(2px);}
-  section{padding:4rem 1.5rem;}
+  section{padding:4.5rem 0;}
+  .section-inner{padding:0 1.4rem;}
+  .narrow{padding:0 1.4rem;}
   .hero{padding:0 0 2.5rem;min-height:88svh;}
-  .hero-inner{padding:0 1.5rem;}
+  .hero-inner{padding:0 1.4rem;}
   .hero-content{flex-direction:column;align-items:flex-start;gap:1.6rem;}
   .hero p{font-size:1.12rem;}
   .hero-meta{margin-top:1.6rem;gap:.45rem;}
@@ -394,7 +401,6 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--gold);outline-offse
   .hero-scroll{display:none;}
   .split{grid-template-columns:1fr;gap:2.4rem;}
   .foto-stribe{padding:1.2rem 0;}
-  .foto-stribe-inner{padding:0 1.5rem;}
   /* Inline-stilene fra JS skal vige på mobil, derfor !important */
   .foto-stribe-grid{grid-template-columns:repeat(2,1fr) !important;max-width:none !important;gap:.4rem;}
   .rcard{min-height:520px;}
@@ -471,11 +477,11 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--gold);outline-offse
 </section>
 
 <!-- FOTOSTRIBE 1 -->
-<section class="foto-stribe" id="strip1" style="display:none;"><div class="foto-stribe-inner"><div class="foto-stribe-grid"></div></div></section>
+<section class="foto-stribe" id="strip1" style="display:none;"><div class="section-inner"><div class="foto-stribe-grid"></div></div></section>
 
 <!-- RETREATS -->
 <section class="alt" id="retreats">
-  <div class="wrap">
+  <div class="section-inner">
     <span class="eyebrow" id="g_retreats_label">Upcoming</span>
     <h2 id="g_retreats_h2">Two retreats a year</h2>
     <p class="narrow" style="margin-left:0;" id="g_retreats_intro">Each retreat is built around a different centre of gravity. Both are exclusively for gay men, both run for a full week, and both take place at the estate in Mollina.</p>
@@ -528,7 +534,7 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--gold);outline-offse
 
 <!-- UGEN -->
 <section id="week">
-  <div class="wrap">
+  <div class="section-inner">
     <span class="eyebrow" id="g_uge_label">What a week holds</span>
     <h2 id="g_uge_h2">Structure, and room to ignore it</h2>
     <p class="narrow" style="margin-left:0;" id="g_uge_intro">Mornings have shape. Afternoons mostly don't. Nothing is compulsory, and no one keeps score.</p>
@@ -563,7 +569,7 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--gold);outline-offse
 
 <!-- EJENDOMMEN -->
 <section class="alt" id="estate">
-  <div class="wrap split">
+  <div class="section-inner split">
     <div>
       <span class="eyebrow" id="g_ejendom_label">The estate</span>
       <h2 id="g_ejendom_h2">Four hectares of vineyard, sixteen beds</h2>
@@ -577,11 +583,11 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--gold);outline-offse
 </section>
 
 <!-- FOTOSTRIBE 2 -->
-<section class="foto-stribe" id="strip2" style="display:none;"><div class="foto-stribe-inner"><div class="foto-stribe-grid"></div></div></section>
+<section class="foto-stribe" id="strip2" style="display:none;"><div class="section-inner"><div class="foto-stribe-grid"></div></div></section>
 
 <!-- BELIGGENHED -->
 <section id="location">
-  <div class="wrap split">
+  <div class="section-inner split">
     <div class="split-img"><img id="g_sted_image" src="/img/vinmark1.jpg" alt="Vinmarken på ejendommen i Mollina" loading="lazy"></div>
     <div>
       <span class="eyebrow" id="g_sted_label">Getting here</span>
@@ -649,14 +655,14 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--gold);outline-offse
 </section>
 
 <!-- FOTOSTRIBE 3 -->
-<section class="foto-stribe" id="strip3" style="display:none;"><div class="foto-stribe-inner"><div class="foto-stribe-grid"></div></div></section>
+<section class="foto-stribe" id="strip3" style="display:none;"><div class="section-inner"><div class="foto-stribe-grid"></div></div></section>
 
 <!-- CTA -->
 <section class="cta-band" id="sec-cta">
   <div class="narrow">
     <h2 id="g_cta_h2">Come and see</h2>
     <p id="g_cta_text">Sixteen places, twice a year. If a week in Andalusia sounds like the right idea, the retreat pages have the dates, the rooms and the full programme.</p>
-    <a class="btn" id="g_cta_btn" href="#retreats">View the retreats</a>
+    <a class="btn-wine" id="g_cta_btn" href="#retreats">View the retreats</a>
   </div>
 </section>
 

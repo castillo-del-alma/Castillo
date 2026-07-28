@@ -18,7 +18,9 @@ t('samme hover-effekt (scale 1.05)', /transform:scale\(1\.05\)/.test(regel('.str
 t('samme accent-højde (4px)', /height:4px/.test(regel('.stribe-felt .stribe-accent{',base)) && /height:4px/.test(regel('.retreat-img5-item::before{',rtcss)));
 
 console.log('\n── Fylder ikke hele bredden ──');
-const inner=regel('.foto-stribe-inner{',base), rtInner=regel('.section-inner{',rtcss);
+// Striben bruger nu sitets egen .section-inner — samme regel som paa de
+// oevrige sider, i stedet for en container opfundet til denne side.
+const inner=regel('.section-inner{',base), rtInner=regel('.section-inner{',rtcss);
 t('samme maks-bredde som retreat-siden (1320px)', /max-width:1320px/.test(inner) && /max-width:1320px/.test(rtInner));
 t('samme sidemargin (4rem)', /padding:0 4rem/.test(inner) && /padding:0 4rem/.test(rtInner));
 t('centreret', /margin:0 auto/.test(inner));
@@ -30,7 +32,7 @@ console.log('\n── Markup ──');
   const d=new JSDOM(side).window.document;
   [1,2,3].forEach(n=>{
     const sec=d.getElementById('strip'+n);
-    t(`stribe ${n}: grid ligger i indholds-containeren`, !!sec.querySelector('.foto-stribe-inner > .foto-stribe-grid'));
+    t(`stribe ${n}: grid ligger i sitets .section-inner`, !!sec.querySelector('.section-inner > .foto-stribe-grid'));
   });
 }
 
@@ -40,7 +42,7 @@ console.log('\n── Felterne har samme størrelse uanset antal ──');
   for(let k=j;k<side.length;k++){if(side[k]==='{')dd++;else if(side[k]==='}'){dd--;if(!dd){e=k;break}}}
   const kode=side.slice(i2,e+1);
   const html='<!doctype html><body>'+[1,2,3].map(n=>
-    `<section class="foto-stribe" id="strip${n}" style="display:none;"><div class="foto-stribe-inner"><div class="foto-stribe-grid"></div></div></section>`).join('')+'</body>';
+    `<section class="foto-stribe" id="strip${n}" style="display:none;"><div class="section-inner"><div class="foto-stribe-grid"></div></div></section>`).join('')+'</body>';
   [[5,'100%'],[4,'80%'],[3,'60%'],[2,'40%'],[1,'20%']].forEach(([antal,forvent])=>{
     const dom=new JSDOM(html); const doc=dom.window.document;
     const fn=new Function('document','gayData','gEsc','GAY_STRIBE_FARVER',kode+'\nreturn byggGayStriber;')
@@ -55,6 +57,6 @@ console.log('\n── Felterne har samme størrelse uanset antal ──');
 console.log('\n── Mobil ──');
 t('to i bredden, kun i @media', /grid-template-columns:repeat\(2,1fr\) !important/.test(mob));
 t('JS-bredden ophæves på mobil', /max-width:none !important/.test(mob));
-t('smallere sidemargin', /\.foto-stribe-inner\{padding:0 1\.5rem/.test(mob));
+t('smallere sidemargin paa mobil (sitets 1.4rem)', /\.section-inner\{padding:0 1\.4rem/.test(mob));
 console.log(f?('\nFEJL: '+f):'\nAlle tests bestået');
 process.exit(f?1:0);
