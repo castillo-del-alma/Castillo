@@ -3606,10 +3606,8 @@ feeling more calm – and coming home to yourself again."</textarea></div>
           <div><label class="fc-label fc-label-da">Brødtekst</label><textarea id="gay_hero_text_da" class="fc-input-da fc-textarea" rows="3"></textarea></div>
           <div><label class="fc-label fc-label-en">Body text</label><textarea id="gay_hero_text_en" class="fc-input-en fc-textarea" rows="3"></textarea></div>
         </div>
-        <div class="fc-row">
-          <div><label class="fc-label fc-label-da">Tre nøgletal — én pr. linje</label><textarea id="gay_hero_meta_da" class="fc-input-da fc-textarea" rows="3"></textarea></div>
-          <div><label class="fc-label fc-label-en">Three key facts — one per line</label><textarea id="gay_hero_meta_en" class="fc-input-en fc-textarea" rows="3"></textarea></div>
-        </div>
+        <div id="gayListe_hero_meta"></div>
+        <button type="button" onclick="gayListeTilfoej('hero_meta')" style="background:#2a7a74;color:#fff;border:none;padding:.45rem 1.1rem;font-family:Manrope,sans-serif;font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;margin-top:.4rem;">+ Tilføj række</button>
         <div class="fc-row">
           <div><label class="fc-label fc-label-da">Tekst ved scroll-pilen</label><input type="text" id="gay_hero_scroll_da" class="fc-input-da"></div>
           <div><label class="fc-label fc-label-en">Scroll cue label</label><input type="text" id="gay_hero_scroll_en" class="fc-input-en"></div>
@@ -3678,7 +3676,7 @@ feeling more calm – and coming home to yourself again."</textarea></div>
     <div class="fc-block" id="gayblok_5" style="margin-bottom:1.5rem;">
       <div class="fc-block-header" style="display:flex;align-items:center;gap:.8rem;"><span class="fc-block-title">5 · Ugen</span><button type="button" onclick="oversaetBlok(this)" style="background:rgba(58,110,106,.1);border:1px solid rgba(58,110,106,.35);color:#2a7a74;padding:.3rem .8rem;font-family:Manrope,sans-serif;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;margin-left:auto;" title="Oversæt tomme engelske felter i denne sektion">⇄ Oversæt</button></div>
       <div class="fc-block-body">
-        <div style="font-size:.68rem;color:rgba(44,35,24,.55);line-height:1.5;margin-bottom:.8rem;">Én linje pr. punkt: <b>Overskrift|Tekst</b>.</div>
+        <div style="font-size:.68rem;color:rgba(44,35,24,.55);line-height:1.5;margin-bottom:.8rem;">Hvert punkt har en overskrift og en tekst. Brug pilene til at ændre rækkefølgen.</div>
         <div class="fc-row">
           <div><label class="fc-label fc-label-da">Overlinje</label><input type="text" id="gay_uge_label_da" class="fc-input-da"></div>
           <div><label class="fc-label fc-label-en">Eyebrow</label><input type="text" id="gay_uge_label_en" class="fc-input-en"></div>
@@ -3691,10 +3689,8 @@ feeling more calm – and coming home to yourself again."</textarea></div>
           <div><label class="fc-label fc-label-da">Introtekst</label><textarea id="gay_uge_intro_da" class="fc-input-da fc-textarea" rows="3"></textarea></div>
           <div><label class="fc-label fc-label-en">Intro text</label><textarea id="gay_uge_intro_en" class="fc-input-en fc-textarea" rows="3"></textarea></div>
         </div>
-        <div class="fc-row">
-          <div><label class="fc-label fc-label-da">Punkter (Overskrift|Tekst)</label><textarea id="gay_uge_items_da" class="fc-input-da fc-textarea" rows="7"></textarea></div>
-          <div><label class="fc-label fc-label-en">Items (Heading|Text)</label><textarea id="gay_uge_items_en" class="fc-input-en fc-textarea" rows="7"></textarea></div>
-        </div>
+        <div id="gayListe_uge_items"></div>
+        <button type="button" onclick="gayListeTilfoej('uge_items')" style="background:#2a7a74;color:#fff;border:none;padding:.45rem 1.1rem;font-family:Manrope,sans-serif;font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;margin-top:.4rem;">+ Tilføj række</button>
       </div>
     </div>
     <div class="fc-block" id="gayblok_6" style="margin-bottom:1.5rem;">
@@ -3729,7 +3725,7 @@ feeling more calm – and coming home to yourself again."</textarea></div>
     <div class="fc-block" id="gayblok_7" style="margin-bottom:1.5rem;">
       <div class="fc-block-header" style="display:flex;align-items:center;gap:.8rem;"><span class="fc-block-title">7 · Sådan kommer du hertil</span><button type="button" onclick="oversaetBlok(this)" style="background:rgba(58,110,106,.1);border:1px solid rgba(58,110,106,.35);color:#2a7a74;padding:.3rem .8rem;font-family:Manrope,sans-serif;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;margin-left:auto;" title="Oversæt tomme engelske felter i denne sektion">⇄ Oversæt</button></div>
       <div class="fc-block-body">
-        <div style="font-size:.68rem;color:rgba(44,35,24,.55);line-height:1.5;margin-bottom:.8rem;">Afstande: én linje pr. punkt, <b>Tal|Tekst</b> — fx <code>45 min|Málaga lufthavn</code>.</div>
+        <div style="font-size:.68rem;color:rgba(44,35,24,.55);line-height:1.5;margin-bottom:.8rem;">Afstande: et tal og et stednavn pr. række — fx <b>45 min</b> og <b>Málaga lufthavn</b>.</div>
         <div class="fc-row">
           <div><label class="fc-label fc-label-da">Overlinje</label><input type="text" id="gay_sted_label_da" class="fc-input-da"></div>
           <div><label class="fc-label fc-label-en">Eyebrow</label><input type="text" id="gay_sted_label_en" class="fc-input-en"></div>
@@ -3742,10 +3738,8 @@ feeling more calm – and coming home to yourself again."</textarea></div>
           <div><label class="fc-label fc-label-da">Brødtekst</label><textarea id="gay_sted_text_da" class="fc-input-da fc-textarea" rows="3"></textarea></div>
           <div><label class="fc-label fc-label-en">Body text</label><textarea id="gay_sted_text_en" class="fc-input-en fc-textarea" rows="3"></textarea></div>
         </div>
-        <div class="fc-row">
-          <div><label class="fc-label fc-label-da">Afstande (Tal|Tekst)</label><textarea id="gay_sted_afstande_da" class="fc-input-da fc-textarea" rows="3"></textarea></div>
-          <div><label class="fc-label fc-label-en">Distances (Figure|Label)</label><textarea id="gay_sted_afstande_en" class="fc-input-en fc-textarea" rows="3"></textarea></div>
-        </div>
+        <div id="gayListe_sted_afstande"></div>
+        <button type="button" onclick="gayListeTilfoej('sted_afstande')" style="background:#2a7a74;color:#fff;border:none;padding:.45rem 1.1rem;font-family:Manrope,sans-serif;font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;margin-top:.4rem;">+ Tilføj række</button>
         <div class="fc-row">
           <div><label class="fc-label fc-label-da">Tekst under afstandene</label><textarea id="gay_sted_text2_da" class="fc-input-da fc-textarea" rows="3"></textarea></div>
           <div><label class="fc-label fc-label-en">Text below the distances</label><textarea id="gay_sted_text2_en" class="fc-input-en fc-textarea" rows="3"></textarea></div>
@@ -3767,7 +3761,7 @@ feeling more calm – and coming home to yourself again."</textarea></div>
     <div class="fc-block" id="gayblok_8" style="margin-bottom:1.5rem;">
       <div class="fc-block-header" style="display:flex;align-items:center;gap:.8rem;"><span class="fc-block-title">8 · FAQ</span><button type="button" onclick="oversaetBlok(this)" style="background:rgba(58,110,106,.1);border:1px solid rgba(58,110,106,.35);color:#2a7a74;padding:.3rem .8rem;font-family:Manrope,sans-serif;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;margin-left:auto;" title="Oversæt tomme engelske felter i denne sektion">⇄ Oversæt</button></div>
       <div class="fc-block-body">
-        <div style="font-size:.68rem;color:rgba(44,35,24,.55);line-height:1.5;margin-bottom:.8rem;">Én linje pr. spørgsmål: <b>Spørgsmål|Svar</b>. Spørgsmålene sendes automatisk til Google som struktureret data.</div>
+        <div style="font-size:.68rem;color:rgba(44,35,24,.55);line-height:1.5;margin-bottom:.8rem;">Hvert spørgsmål har sit eget svar. De sendes automatisk til Google som struktureret data.</div>
         <div class="fc-row">
           <div><label class="fc-label fc-label-da">Overlinje</label><input type="text" id="gay_faq_label_da" class="fc-input-da"></div>
           <div><label class="fc-label fc-label-en">Eyebrow</label><input type="text" id="gay_faq_label_en" class="fc-input-en"></div>
@@ -3776,10 +3770,8 @@ feeling more calm – and coming home to yourself again."</textarea></div>
           <div><label class="fc-label fc-label-da">Overskrift</label><input type="text" id="gay_faq_h2_da" class="fc-input-da"></div>
           <div><label class="fc-label fc-label-en">Heading</label><input type="text" id="gay_faq_h2_en" class="fc-input-en"></div>
         </div>
-        <div class="fc-row">
-          <div><label class="fc-label fc-label-da">Spørgsmål og svar (Spørgsmål|Svar)</label><textarea id="gay_faq_items_da" class="fc-input-da fc-textarea" rows="7"></textarea></div>
-          <div><label class="fc-label fc-label-en">Questions and answers (Question|Answer)</label><textarea id="gay_faq_items_en" class="fc-input-en fc-textarea" rows="7"></textarea></div>
-        </div>
+        <div id="gayListe_faq_items"></div>
+        <button type="button" onclick="gayListeTilfoej('faq_items')" style="background:#2a7a74;color:#fff;border:none;padding:.45rem 1.1rem;font-family:Manrope,sans-serif;font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;margin-top:.4rem;">+ Tilføj række</button>
       </div>
     </div>
     <div class="fc-block" id="gayblok_9" style="margin-bottom:1.5rem;">
@@ -10072,7 +10064,7 @@ async function gemUdlejning() {
 // Samme mønster som udlejningssiden: nøgle/værdi i gay_content, dansk uden
 // suffiks, engelsk med _en. Siden har egne defaults, så tomme felter betyder
 // "brug sidens standardtekst" — ikke "vis ingenting".
-const GAY_TEXT_KEYS = ["seo_title", "seo_desc", "nav_back", "hero_eyebrow", "hero_h1", "hero_text", "hero_meta", "hero_scroll", "intro_label", "intro_h2", "intro_lede", "intro_text", "retreats_label", "retreats_h2", "retreats_intro", "uge_label", "uge_h2", "uge_intro", "uge_items", "ejendom_label", "ejendom_h2", "ejendom_text", "sted_label", "sted_h2", "sted_text", "sted_afstande", "sted_text2", "faq_label", "faq_h2", "faq_items", "cta_h2", "cta_text", "cta_btn", "footer_copy"];
+const GAY_TEXT_KEYS = ["seo_title", "seo_desc", "nav_back", "hero_eyebrow", "hero_h1", "hero_text", "hero_scroll", "intro_label", "intro_h2", "intro_lede", "intro_text", "retreats_label", "retreats_h2", "retreats_intro", "uge_label", "uge_h2", "uge_intro", "ejendom_label", "ejendom_h2", "ejendom_text", "sted_label", "sted_h2", "sted_text", "sted_text2", "faq_label", "faq_h2", "cta_h2", "cta_text", "cta_btn", "footer_copy"];
 const GAY_IMG_KEYS  = ["social_image", "hero_image", "ejendom_image", "sted_image"];
 const GAY_SOLO_KEYS = ["cta_link"];
 // Synligheden sættes nu i rækkefølge-editoren (blok 12), ikke som løse flueben
@@ -10082,6 +10074,211 @@ const GAY_VIS_KEYS  = ["vis_intro", "vis_retreats", "vis_uge", "vis_ejendom", "v
 // tomme, heller ikke før SQL-filen er kørt. Databasen overskriver dem, når der
 // er gemt noget. Kilden er sql/2026-07-28-gay-content.sql — de to må ikke skride
 // fra hinanden, så begge steder genereres fra samme fil.
+const GAY_LISTE_DEFAULTS = {
+  "hero_meta": [
+    {
+      "da": [
+        "To retreats om året"
+      ],
+      "en": [
+        "Two retreats a year"
+      ]
+    },
+    {
+      "da": [
+        "Seksten mænd"
+      ],
+      "en": [
+        "Sixteen men"
+      ]
+    },
+    {
+      "da": [
+        "Syv dage"
+      ],
+      "en": [
+        "Seven days"
+      ]
+    }
+  ],
+  "uge_items": [
+    {
+      "da": [
+        "Saunaritualer",
+        "Guidede aufguss-sessioner med æteriske olier og koldt vand bagefter — det tætteste ugen kommer på en fast ceremoni."
+      ],
+      "en": [
+        "Sauna rituals",
+        "Guided aufguss sessions with essential oils and cold water afterwards — the closest thing the week has to a fixed ceremony."
+      ]
+    },
+    {
+      "da": [
+        "Breathwork",
+        "Sessioner der flytter overraskende meget for noget, der handler om at ligge stille. Begyndere er velkomne; der er ingen forkert måde."
+      ],
+      "en": [
+        "Breathwork",
+        "Sessions that move a surprising amount for something that involves lying still. Beginners welcome; there is no wrong way to do it."
+      ]
+    },
+    {
+      "da": [
+        "Kakaoceremoni",
+        "En aftencirkel omkring ceremoniel kakao, hvor pointen er mindre drikken end det, der bliver sagt omkring den."
+      ],
+      "en": [
+        "Cacao ceremony",
+        "An evening circle built around ceremonial cacao, where the point is less the drink than what gets said around it."
+      ]
+    },
+    {
+      "da": [
+        "Tantra",
+        "Grebet an som nærvær og forbindelse frem for præstation. Altid med samtykke, altid noget man kan sidde over."
+      ],
+      "en": [
+        "Tantra",
+        "Approached as presence and connection rather than performance. Always consent-led, always something you can sit out."
+      ]
+    },
+    {
+      "da": [
+        "Bordet",
+        "Lange middage med andalusisk mad og vin fra ejendommens egen mark. Det er her, det meste af ugen faktisk sker."
+      ],
+      "en": [
+        "The table",
+        "Long dinners with Andalusian food and wine from the estate's own vineyard. This is where most of the week actually happens."
+      ]
+    },
+    {
+      "da": [
+        "Ingenting",
+        "Poolen, en bog, stien gennem vinmarken, en middagslur på to timer. Den ustrukturerede tid er en del af programmet, ikke et hul i det."
+      ],
+      "en": [
+        "Nothing at all",
+        "The pool, a book, the vineyard path, a two-hour nap. Unstructured time is part of the programme, not a gap in it."
+      ]
+    }
+  ],
+  "sted_afstande": [
+    {
+      "da": [
+        "45 min",
+        "Málaga lufthavn"
+      ],
+      "en": [
+        "45 min",
+        "Málaga airport"
+      ]
+    },
+    {
+      "da": [
+        "75 min",
+        "Granada"
+      ],
+      "en": [
+        "75 min",
+        "Granada"
+      ]
+    },
+    {
+      "da": [
+        "90 min",
+        "Sevilla"
+      ],
+      "en": [
+        "90 min",
+        "Seville"
+      ]
+    }
+  ],
+  "faq_items": [
+    {
+      "da": [
+        "Hvem er disse retreats for?",
+        "Bøsser, og kun bøsser — det er hele pointen med at lukke ejendommen frem for at køre et blandet program. Mænd kommer alene, som par og som venner. Aldrene spænder vidt, og ingen er til overs."
+      ],
+      "en": [
+        "Who are these retreats for?",
+        "Gay men, and only gay men — that is the point of closing the estate rather than running a mixed programme. Men come on their own, as couples and as friends. Ages vary widely and no one is the odd one out."
+      ]
+    },
+    {
+      "da": [
+        "Kan jeg komme alene?",
+        "Det gør de fleste. En lukket gruppe på seksten i en hel uge betyder, at du ikke kommer til at være fremmed ugen igennem — ved anden middag holder det op med at føles som en samling enkeltpersoner."
+      ],
+      "en": [
+        "Can I come alone?",
+        "Most men do. A closed group of sixteen for a full week means you will not spend the week as a stranger — by the second dinner it stops feeling like a group of individuals."
+      ]
+    },
+    {
+      "da": [
+        "Skal jeg have erfaring med breathwork, tantra eller meditation?",
+        "Nej. Sessionerne ledes med førstegangsdeltagere for øje, og alt er frivilligt. At sidde en over er helt normalt, ikke en udmelding."
+      ],
+      "en": [
+        "Do I need experience with breathwork, tantra or meditation?",
+        "No. Sessions are led with first-timers in mind and everything is optional. Sitting one out is a normal thing to do, not a statement."
+      ]
+    },
+    {
+      "da": [
+        "Hvor foregår det præcis?",
+        "På Castillo del Alma, en privat vinejendom uden for Mollina i Málaga-provinsen, Andalusien. Hele ejendommen er reserveret til gruppen — der er ingen andre gæster."
+      ],
+      "en": [
+        "Where exactly is the retreat held?",
+        "At Castillo del Alma, a private wine estate outside Mollina in the province of Málaga, Andalusia. The whole estate is reserved for the group — there are no other guests."
+      ]
+    },
+    {
+      "da": [
+        "Hvordan kommer jeg dertil fra Málaga lufthavn?",
+        "Turen tager cirka femogfyrre minutter. Lejebil er ligetil, og vi kan hjælpe med at arrangere transport, hvis du hellere vil hentes. Send os dine flytider, når du booker."
+      ],
+      "en": [
+        "How do I get there from Málaga airport?",
+        "The drive is roughly forty-five minutes. Hire cars are straightforward, and we can help arrange a transfer if you would rather be picked up. Let us know your flight times when you book."
+      ]
+    },
+    {
+      "da": [
+        "Hvad er inkluderet i prisen?",
+        "Ophold, måltider, vin til middagen, brug af pool og wellness samt hele programmet. På hvert retreats egen side står præcis, hvad der er med, sammen med eventuelle tilvalg som massage."
+      ],
+      "en": [
+        "What is included in the price?",
+        "Accommodation, meals, wine at dinner, use of the pool and wellness facilities and the full programme of sessions. Each retreat page lists exactly what is covered, along with any optional extras such as massage."
+      ]
+    },
+    {
+      "da": [
+        "Hvor mange deltager?",
+        "Ejendommen har plads til seksten, og det er loftet. Det er lille nok til, at alle rent faktisk kender hinanden, når ugen er omme."
+      ],
+      "en": [
+        "How many men attend?",
+        "The estate sleeps sixteen, and that is the ceiling. It is small enough that everyone actually knows everyone by the end of the week."
+      ]
+    },
+    {
+      "da": [
+        "Hvilket sprog tales der?",
+        "Retreats afholdes på engelsk og dansk. Gæsterne kommer fra hele Europa, og gruppens arbejdssprog finder sig selv i løbet af en dag."
+      ],
+      "en": [
+        "What language is spoken?",
+        "Retreats are run in English and Danish. Guests come from across Europe, and the working language of the group settles itself within a day."
+      ]
+    }
+  ]
+};
+
 const GAY_ADM_DEFAULTS = {
     "seo_title": "Gay Retreat i Spanien — wellness og vin nær Málaga, Andalusien",
     "seo_desc": "Gay retreats for mænd på en vinejendom i Mollina, 45 minutter fra Málaga. Saunaritualer, kakaoceremonier, breathwork og fællesskab — syv dage i de andalusiske bakker.",
@@ -10165,6 +10362,141 @@ const GAY_IMG_DEFAULTS = {
   };
 
 
+
+
+// ── RÆKKELISTER (blok 2, 5, 7, 8) ─────────────────────────────────────────
+// Fire lister på siden er rækker med felter, ikke fritekst. De blev tidligere
+// skrevet som "Overskrift|Tekst" på hver sin linje, men det havde to
+// problemer: man skulle huske en kode, og oversætterknappen sendte hele
+// klumpen til oversættelse på én gang — hvorefter den kom retur med egne
+// linjeskift og uden rør, så den engelske side gik i stå.
+//
+// Nu er hvert felt sit eget input med sit eget id. Oversætteren behandler
+// dem ét ad gangen, og strukturen kan derfor ikke gå i stykker.
+const GAY_LISTER = {
+  hero_meta:     { felter: [{ da: 'Tekst', en: 'Text', lang: false }] },
+  uge_items:     { felter: [{ da: 'Overskrift', en: 'Heading', lang: false },
+                            { da: 'Tekst', en: 'Text', lang: true }] },
+  sted_afstande: { felter: [{ da: 'Tal (fx 45 min)', en: 'Figure', lang: false },
+                            { da: 'Stednavn', en: 'Label', lang: false }] },
+  faq_items:     { felter: [{ da: 'Spørgsmål', en: 'Question', lang: false },
+                            { da: 'Svar', en: 'Answer', lang: true }] }
+};
+// Antal rækker pr. liste. Selve teksterne læses fra felterne ved gem, så
+// oversætterknappen (der skriver direkte i felterne) ikke kan blive overhalet.
+let gayListeAntal = {};
+
+function gayListeRender(key) {
+  const c = document.getElementById('gayListe_' + key);
+  const spec = GAY_LISTER[key];
+  if (!c || !spec) return;
+  const n = gayListeAntal[key] || 0;
+  if (!n) {
+    c.innerHTML = '<div style="font-family:Manrope,sans-serif;font-size:.7rem;color:rgba(44,35,24,.45);padding:.6rem 0;">Ingen rækker endnu — klik "+ Tilføj række".</div>';
+    return;
+  }
+  let ud = '';
+  for (let i = 0; i < n; i++) {
+    ud += '<div style="display:flex;gap:.7rem;align-items:flex-start;margin-bottom:.7rem;padding:.7rem;background:rgba(184,138,30,.04);border:1px solid rgba(184,138,30,.18);">' +
+      '<div style="display:flex;flex-direction:column;gap:3px;padding-top:1.1rem;">' +
+        '<button type="button" onclick="gayListeFlyt(\'' + key + '\',' + i + ',-1)"' + (i === 0 ? ' disabled' : '') + ' style="' + GAY_PIL_BTN + '" title="Flyt op">▲</button>' +
+        '<button type="button" onclick="gayListeFlyt(\'' + key + '\',' + i + ',1)"' + (i === n - 1 ? ' disabled' : '') + ' style="' + GAY_PIL_BTN + '" title="Flyt ned">▼</button>' +
+      '</div>' +
+      '<div style="flex:1;display:flex;flex-direction:column;gap:.6rem;">' +
+        spec.felter.map(function (felt, j) {
+          const idDa = 'gay_' + key + '_' + i + '_' + j + '_da';
+          const idEn = 'gay_' + key + '_' + i + '_' + j + '_en';
+          const tag = felt.lang
+            ? ['<textarea rows="3" class="fc-input-da fc-textarea" id="' + idDa + '"></textarea>',
+               '<textarea rows="3" class="fc-input-en fc-textarea" id="' + idEn + '"></textarea>']
+            : ['<input type="text" class="fc-input-da" id="' + idDa + '">',
+               '<input type="text" class="fc-input-en" id="' + idEn + '">'];
+          return '<div class="fc-row">' +
+            '<div><label class="fc-label fc-label-da">' + gayEsc(felt.da) + '</label>' + tag[0] + '</div>' +
+            '<div><label class="fc-label fc-label-en">' + gayEsc(felt.en) + '</label>' + tag[1] + '</div>' +
+          '</div>';
+        }).join('') +
+      '</div>' +
+      '<button type="button" onclick="gayListeFjern(\'' + key + '\',' + i + ')" style="background:rgba(163,51,51,.08);color:#a33;border:1px solid rgba(163,51,51,.35);padding:.35rem .7rem;font-family:Manrope,sans-serif;font-size:.7rem;cursor:pointer;margin-top:1.1rem;" title="Fjern rækken">✕</button>' +
+    '</div>';
+  }
+  c.innerHTML = ud;
+}
+
+// Læs alt fra felterne — ikke fra en mellemliggende state, som oversætteren
+// ville kunne overhale.
+function gayListeLaes(key) {
+  const spec = GAY_LISTER[key];
+  const n = gayListeAntal[key] || 0;
+  const ud = [];
+  for (let i = 0; i < n; i++) {
+    const da = [], en = [];
+    spec.felter.forEach(function (_, j) {
+      const a = document.getElementById('gay_' + key + '_' + i + '_' + j + '_da');
+      const b = document.getElementById('gay_' + key + '_' + i + '_' + j + '_en');
+      da.push(a ? a.value.trim() : '');
+      en.push(b ? b.value.trim() : '');
+    });
+    if (da.some(Boolean) || en.some(Boolean)) ud.push({ da: da, en: en });
+  }
+  return ud;
+}
+
+function gayListeSkriv(key, raekker) {
+  gayListeAntal[key] = raekker.length;
+  gayListeRender(key);
+  raekker.forEach(function (r, i) {
+    GAY_LISTER[key].felter.forEach(function (_, j) {
+      const a = document.getElementById('gay_' + key + '_' + i + '_' + j + '_da');
+      const b = document.getElementById('gay_' + key + '_' + i + '_' + j + '_en');
+      if (a) a.value = (r.da && r.da[j]) || '';
+      if (b) b.value = (r.en && r.en[j]) || '';
+    });
+  });
+}
+
+function gayListeTilfoej(key) {
+  const nu = gayListeLaes(key);
+  nu.push({ da: GAY_LISTER[key].felter.map(function () { return ''; }),
+            en: GAY_LISTER[key].felter.map(function () { return ''; }) });
+  gayListeSkriv(key, nu);
+}
+function gayListeFjern(key, i) {
+  const nu = gayListeLaes(key);
+  nu.splice(i, 1);
+  gayListeSkriv(key, nu);
+}
+function gayListeFlyt(key, i, retning) {
+  const nu = gayListeLaes(key);
+  const j = i + retning;
+  if (j < 0 || j >= nu.length) return;
+  const t = nu[i]; nu[i] = nu[j]; nu[j] = t;
+  gayListeSkriv(key, nu);
+}
+
+// Læser både det nye format og de gamle "Tekst|Tekst"-linjer, så intet
+// gemt indhold går tabt.
+function gayListeFraDb(key, raa, raaEn) {
+  const antal = GAY_LISTER[key].felter.length;
+  try {
+    const j = JSON.parse(raa || '[]');
+    if (Array.isArray(j) && (!j.length || (j[0] && j[0].da))) return j;
+  } catch (e) { /* ikke JSON — så er det gammelt rør-format */ }
+  const del = function (v) {
+    return String(v || '').split('\n').map(function (l) { return l.trim(); }).filter(Boolean)
+      .map(function (l) {
+        const d = l.split('|').map(function (x) { return x.trim(); });
+        while (d.length < antal) d.push('');
+        return d.slice(0, antal);
+      });
+  };
+  const da = del(raa), en = del(raaEn);
+  const ud = [];
+  for (let i = 0; i < Math.max(da.length, en.length); i++) {
+    ud.push({ da: da[i] || [], en: en[i] || [] });
+  }
+  return ud;
+}
 
 // ── Menu-links (blok 0) — samme editor som på udlejningssiden ──
 const GAY_NAV_DEFAULT = [
@@ -10381,6 +10713,12 @@ async function loadGayAdmin() {
       else { pv.removeAttribute('src'); pv.style.display = 'none'; }
     }
   });
+  Object.keys(GAY_LISTER).forEach(function (key) {
+    let raekker = gayListeFraDb(key, map[key], map[key + '_en']);
+    if (!raekker.length) raekker = GAY_LISTE_DEFAULTS[key] || [];
+    gayListeSkriv(key, raekker);
+  });
+
   { // Regnbuestribe på hero — tændt som udgangspunkt
     const _ps = document.getElementById('gay_vis_pride_stribe');
     if (_ps) _ps.checked = map.vis_pride_stribe !== '0';
@@ -10448,6 +10786,10 @@ async function gemGay() {
   GAY_IMG_KEYS.forEach(key => {
     const el = document.getElementById('gay_' + key + '_url');
     if (el) upserts.push({ key: key, value: el.value.trim() });
+  });
+  Object.keys(GAY_LISTER).forEach(function (key) {
+    upserts.push({ key: key, value: JSON.stringify(gayListeLaes(key)) });
+    upserts.push({ key: key + '_en', value: '' });   // gammelt felt ryddes
   });
   { const _ps = document.getElementById('gay_vis_pride_stribe');
     if (_ps) upserts.push({ key: 'vis_pride_stribe', value: _ps.checked ? '1' : '0' }); }
