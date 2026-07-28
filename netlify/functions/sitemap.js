@@ -42,8 +42,10 @@ exports.handler = async () => {
   xml += urlEntry(BASE + '/', { alternates: forsideAlt, changefreq: 'weekly', priority: '1.0' });
   xml += urlEntry(BASE + '/en/', { alternates: forsideAlt, changefreq: 'weekly', priority: '0.9' });
 
-  // Kun-engelske landingssider (ingen dansk modpart → ingen hreflang-par)
-  xml += urlEntry(BASE + '/en/gay-retreat-malaga-spain', { changefreq: 'monthly', priority: '0.8' });
+  // Gay-retreat-landingssiden — dansk og engelsk forbundet
+  const gayAlt = [['da', BASE + '/gay-retreat-malaga-spain'], ['en', BASE + '/en/gay-retreat-malaga-spain'], ['x-default', BASE + '/gay-retreat-malaga-spain']];
+  xml += urlEntry(BASE + '/gay-retreat-malaga-spain', { alternates: gayAlt, changefreq: 'monthly', priority: '0.8' });
+  xml += urlEntry(BASE + '/en/gay-retreat-malaga-spain', { alternates: gayAlt, changefreq: 'monthly', priority: '0.8' });
 
   // Øvrige faste sider — dansk + engelsk (/en/) forbundet med hreflang begge veje
   const fasteSider = [

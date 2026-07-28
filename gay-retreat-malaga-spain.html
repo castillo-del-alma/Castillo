@@ -280,6 +280,9 @@ section{padding:6.5rem 4rem;}
   transition:background .3s;
 }
 .btn:hover,.btn:focus-visible{background:var(--wine-light);}
+.lang-btn{border-radius:0;font-family:'Manrope',sans-serif;font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;padding:.3rem .6rem;border:none;cursor:pointer;display:inline-block;text-decoration:none;}
+.lang-btn.lang-btn-active{background:var(--wine);color:#fff !important;}
+.lang-btn.lang-btn-inactive{background:transparent;color:var(--wine) !important;}
 
 /* ── FOOTER ── */
 footer{background:var(--charcoal);color:rgba(250,246,238,.72);padding:3rem 4rem;border-top:1px solid rgba(184,138,30,.2);}
@@ -339,57 +342,61 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--gold);outline-offse
     <span></span><span></span><span></span>
   </button>
   <ul class="nav-links" id="navLinks">
-    <li><a href="#retreats">Retreats</a></li>
-    <li><a href="#week">The week</a></li>
-    <li><a href="#estate">The estate</a></li>
-    <li><a href="#location">Getting here</a></li>
-    <li><a href="#faq">FAQ</a></li>
+    <li id="g_nav_links_holder"></li>
+    <li class="nav-lang-li" style="display:flex;align-items:center;gap:.4rem;margin-left:.8rem;">
+      <div class="lang-switcher" style="display:flex;border:1.5px solid var(--wine);overflow:hidden;">
+        <a id="gay-btn-da" href="/gay-retreat-malaga-spain" class="lang-btn lang-btn-inactive" onclick="setGayLang('da');return false;">DA</a>
+        <a id="gay-btn-en" href="/en/gay-retreat-malaga-spain" class="lang-btn lang-btn-active" onclick="setGayLang('en');return false;">EN</a>
+      </div>
+    </li>
   </ul>
-  <a href="/en/" class="nav-back">← Back to home</a>
+  <a href="/index.html" class="nav-back" id="g_nav_back">← Back to home</a>
 </nav>
 <div class="nav-backdrop" id="navBackdrop"></div>
 
 <!-- HERO -->
 <header class="hero">
   <div class="hero-bg">
-    <img src="/img/group-men-sit-hill-overlooking-mountain.jpg" alt="A group of men sitting together on a hillside above the Andalusian countryside" fetchpriority="high">
+    <img id="g_hero_image" src="/img/group-men-sit-hill-overlooking-mountain.jpg" alt="Castillo del Alma — gay retreat i Andalusien" fetchpriority="high">
   </div>
   <div class="hero-inner">
     <div class="hero-content">
       <div class="hero-text">
         <div class="pride-bar" aria-hidden="true"></div>
-        <span class="eyebrow">Mollina · Málaga · Andalusia</span>
-        <h1>Gay Retreats<br>in Spain</h1>
-        <p>Seven days for gay men on a working wine estate in the Andalusian hills — forty-five minutes inland from Málaga, and a long way from everything else.</p>
-        <div class="hero-meta">
+        <span class="eyebrow" id="g_hero_eyebrow">Mollina · Málaga · Andalusia</span>
+        <h1 id="g_hero_h1">Gay Retreats<br>in Spain</h1>
+        <p id="g_hero_text">Seven days for gay men on a working wine estate in the Andalusian hills — forty-five minutes inland from Málaga, and a long way from everything else.</p>
+        <div class="hero-meta" id="g_hero_meta">
           <span>Two retreats a year</span>
           <span>Sixteen men</span>
           <span>Seven days</span>
         </div>
       </div>
-      <a class="hero-scroll" href="#retreats">Retreats<i aria-hidden="true">↓</i></a>
+      <a class="hero-scroll" href="#retreats"><span id="g_hero_scroll">Retreats</span><i aria-hidden="true">↓</i></a>
     </div>
   </div>
 </header>
 
 <!-- INTRO -->
-<section>
+<section id="sec-intro">
   <div class="narrow">
-    <span class="eyebrow">What this is</span>
-    <h2>A wine estate, not a hotel</h2>
-    <p class="lede">Castillo del Alma is a restored estate with more than four hectares of vineyard, set in the hills above Mollina in the province of Málaga. Twice a year we close it entirely and hand it to one group of gay men.</p>
+    <span class="eyebrow" id="g_intro_label">What this is</span>
+    <h2 id="g_intro_h2">A wine estate, not a hotel</h2>
+    <p class="lede" id="g_intro_lede">Castillo del Alma is a restored estate with more than four hectares of vineyard, set in the hills above Mollina in the province of Málaga. Twice a year we close it entirely and hand it to one group of gay men.</p>
     <div class="rule"></div>
-    <p>Nobody is passing through. There is no lobby, no other guests, no schedule you have to share with strangers. Sixteen men, one house, one week — which is what makes the difference between a holiday and a retreat.</p>
-    <p>The days hold real content: sauna rituals, cacao ceremonies, breathwork, tantra, bodywork and long conversations that go somewhere. They also hold a pool, a vineyard, a shared table and enough silence to hear yourself think. Both retreats are led in a way that leaves room for men who have never done any of this before.</p>
+    <div id="g_intro_text">
+      <p>Nobody is passing through. There is no lobby, no other guests, no schedule you have to share with strangers. Sixteen men, one house, one week — which is what makes the difference between a holiday and a retreat.</p>
+      <p>The days hold real content: sauna rituals, cacao ceremonies, breathwork, tantra, bodywork and long conversations that go somewhere. They also hold a pool, a vineyard, a shared table and enough silence to hear yourself think. Both retreats are led in a way that leaves room for men who have never done any of this before.</p>
+    </div>
   </div>
 </section>
 
 <!-- RETREATS -->
 <section class="alt" id="retreats">
   <div class="wrap">
-    <span class="eyebrow">Upcoming</span>
-    <h2>Two retreats a year</h2>
-    <p class="narrow" style="margin-left:0;">Each retreat is built around a different centre of gravity. Both are exclusively for gay men, both run for a full week, and both take place at the estate in Mollina.</p>
+    <span class="eyebrow" id="g_retreats_label">Upcoming</span>
+    <h2 id="g_retreats_h2">Two retreats a year</h2>
+    <p class="narrow" style="margin-left:0;" id="g_retreats_intro">Each retreat is built around a different centre of gravity. Both are exclusively for gay men, both run for a full week, and both take place at the estate in Mollina.</p>
 
     <!-- Statisk indhold = det Google ser uden JavaScript. Erstattes af live-data
          fra Supabase, så datoer og priser aldrig kan stå forældede. -->
@@ -440,10 +447,10 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--gold);outline-offse
 <!-- UGEN -->
 <section id="week">
   <div class="wrap">
-    <span class="eyebrow">What a week holds</span>
-    <h2>Structure, and room to ignore it</h2>
-    <p class="narrow" style="margin-left:0;">Mornings have shape. Afternoons mostly don't. Nothing is compulsory, and no one keeps score.</p>
-    <div class="feature">
+    <span class="eyebrow" id="g_uge_label">What a week holds</span>
+    <h2 id="g_uge_h2">Structure, and room to ignore it</h2>
+    <p class="narrow" style="margin-left:0;" id="g_uge_intro">Mornings have shape. Afternoons mostly don't. Nothing is compulsory, and no one keeps score.</p>
+    <div class="feature" id="g_uge_items">
       <div class="feature-item">
         <h3>Sauna rituals</h3>
         <p>Guided aufguss sessions with essential oils and cold water afterwards — the closest thing the week has to a fixed ceremony.</p>
@@ -476,29 +483,31 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--gold);outline-offse
 <section class="alt" id="estate">
   <div class="wrap split">
     <div>
-      <span class="eyebrow">The estate</span>
-      <h2>Four hectares of vineyard, sixteen beds</h2>
-      <p>The house sits among its own vines, with a pool, wellness facilities and terraces that catch the evening light. Rooms are private or shared depending on what you book.</p>
-      <p>The vineyard is worked, not decorative — the wine served at dinner comes from the ground you can see from the terrace. During harvest you are welcome to help, or to watch from a chair with a glass in your hand.</p>
+      <span class="eyebrow" id="g_ejendom_label">The estate</span>
+      <h2 id="g_ejendom_h2">Four hectares of vineyard, sixteen beds</h2>
+      <div id="g_ejendom_text">
+        <p>The house sits among its own vines, with a pool, wellness facilities and terraces that catch the evening light. Rooms are private or shared depending on what you book.</p>
+        <p>The vineyard is worked, not decorative — the wine served at dinner comes from the ground you can see from the terrace. During harvest you are welcome to help, or to watch from a chair with a glass in your hand.</p>
+      </div>
     </div>
-    <div class="split-img"><img src="/img/estate-pool.jpg" alt="The pool at Castillo del Alma, surrounded by terraces and vineyard" loading="lazy"></div>
+    <div class="split-img"><img id="g_ejendom_image" src="/img/estate-pool.jpg" alt="Poolen på Castillo del Alma" loading="lazy"></div>
   </div>
 </section>
 
 <!-- BELIGGENHED -->
 <section id="location">
   <div class="wrap split">
-    <div class="split-img"><img src="/img/vinmark1.jpg" alt="Vineyard rows at the estate in Mollina" loading="lazy"></div>
+    <div class="split-img"><img id="g_sted_image" src="/img/vinmark1.jpg" alt="Vinmarken på ejendommen i Mollina" loading="lazy"></div>
     <div>
-      <span class="eyebrow">Getting here</span>
-      <h2>Inland, on purpose</h2>
-      <p>Mollina sits in the Antequera basin, between the Sierra de Camorra and the plains. It is far enough from the coast to be quiet, close enough that getting here is simple: fly to Málaga, and you are at the gate within the hour.</p>
-      <div class="dist">
+      <span class="eyebrow" id="g_sted_label">Getting here</span>
+      <h2 id="g_sted_h2">Inland, on purpose</h2>
+      <p id="g_sted_text">Mollina sits in the Antequera basin, between the Sierra de Camorra and the plains. It is far enough from the coast to be quiet, close enough that getting here is simple: fly to Málaga, and you are at the gate within the hour.</p>
+      <div class="dist" id="g_sted_afstande">
         <div><span class="n">45 min</span><span class="l">Málaga airport</span></div>
         <div><span class="n">75 min</span><span class="l">Granada</span></div>
         <div><span class="n">90 min</span><span class="l">Seville</span></div>
       </div>
-      <p style="margin-top:2rem;">El Torcal, the Antequera dolmens and the flamingo lake at Fuente de Piedra are all within a short drive, if you want a day out mid-week.</p>
+      <p style="margin-top:2rem;" id="g_sted_text2">El Torcal, the Antequera dolmens and the flamingo lake at Fuente de Piedra are all within a short drive, if you want a day out mid-week.</p>
     </div>
   </div>
 </section>
@@ -506,9 +515,9 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--gold);outline-offse
 <!-- FAQ -->
 <section class="alt" id="faq">
   <div class="narrow">
-    <span class="eyebrow">Questions</span>
-    <h2>Before you book</h2>
-    <div style="margin-top:2.5rem;">
+    <span class="eyebrow" id="g_faq_label">Questions</span>
+    <h2 id="g_faq_h2">Before you book</h2>
+    <div style="margin-top:2.5rem;" id="g_faq_items">
 
       <div class="faq-item open">
         <button class="faq-q" type="button" aria-expanded="true">Who are these retreats for?</button>
@@ -555,17 +564,17 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--gold);outline-offse
 </section>
 
 <!-- CTA -->
-<section class="cta-band">
+<section class="cta-band" id="sec-cta">
   <div class="narrow">
-    <h2>Come and see</h2>
-    <p>Sixteen places, twice a year. If a week in Andalusia sounds like the right idea, the retreat pages have the dates, the rooms and the full programme.</p>
-    <a class="btn" href="#retreats">View the retreats</a>
+    <h2 id="g_cta_h2">Come and see</h2>
+    <p id="g_cta_text">Sixteen places, twice a year. If a week in Andalusia sounds like the right idea, the retreat pages have the dates, the rooms and the full programme.</p>
+    <a class="btn" id="g_cta_btn" href="#retreats">View the retreats</a>
   </div>
 </section>
 
 <footer>
   <div class="footer-bottom">
-    <p>© 2026 Castillo del Alma · Mollina, Málaga · All rights reserved</p>
+    <p id="g_footer_copy">© 2026 Castillo del Alma · Mollina, Málaga · All rights reserved</p>
     <div style="display:flex;gap:1.6rem;flex-wrap:wrap;align-items:center;">
       <a href="/en/retreat/krop-og-sjael">Body &amp; Soul</a>
       <a href="/en/retreat/gay-retreat-malaga-spain-faellesskab-og-afslapning">Community &amp; Relaxation</a>
@@ -578,7 +587,7 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--gold);outline-offse
 
 <!-- Struktureret data: FAQ + brødkrumme. Event-schema pr. dato ligger på de
      enkelte retreat-sider, så det aldrig kan stå to steder og blive uenigt. -->
-<script type="application/ld+json">
+<script type="application/ld+json" id="g_jsonld">
 {
   "@context": "https://schema.org",
   "@graph": [
@@ -625,6 +634,294 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--gold);outline-offse
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
+// ══ INDHOLD FRA ADMIN ══════════════════════════════════════════════════════
+// Samme mønster som udlejning.html: defaults ligger i GAY_SEED, databasen
+// overskriver. Siden viser derfor altid noget rigtigt — også hvis Supabase
+// er nede, eller tabellen endnu ikke er oprettet.
+const GAY_SB_URL = 'https://niniwgiytyqvdqejigxg.supabase.co';
+const GAY_SB_KEY = 'sb_publishable_GwrNUpIuWzdg1oswOY5HzA_mKWqhd6y';
+const gSb = (typeof supabase !== 'undefined' && supabase.createClient)
+  ? supabase.createClient(GAY_SB_URL, GAY_SB_KEY) : null;
+
+// Defaults = præcis den tekst, der står i HTML'en. De to må aldrig skride fra
+// hinanden, så teksten er ikke gentaget her: den læses ud af siden ved start.
+let gayData = {};
+let gayLang = 'en';
+
+const GAY_SEED = {
+  cta_link: '#retreats',
+  nav_links:    'Retreats|#retreats\nUgen|#week\nEjendommen|#estate\nSådan kommer du hertil|#location\nFAQ|#faq',
+  nav_links_en: 'Retreats|#retreats\nThe week|#week\nThe estate|#estate\nGetting here|#location\nFAQ|#faq',
+  nav_back:     '← Tilbage til forsiden',
+  nav_back_en:  '← Back to home',
+  vis_intro: '1', vis_retreats: '1', vis_uge: '1',
+  vis_ejendom: '1', vis_sted: '1', vis_faq: '1', vis_cta: '1'
+};
+
+// Sektionens id på siden ← nøglen der styrer synlighed
+const GAY_SEKTIONER = {
+  'sec-intro': 'vis_intro', 'retreats': 'vis_retreats', 'week': 'vis_uge',
+  'estate': 'vis_ejendom', 'location': 'vis_sted', 'faq': 'vis_faq', 'sec-cta': 'vis_cta'
+};
+
+function gaySC(key, fallback) {
+  const v = gayData[gayLang === 'en' ? key + '_en' : key];
+  return (v !== undefined && v !== null && v !== '') ? v : (gayData[key] || fallback || '');
+}
+function gSet(id, val) { const el = document.getElementById(id); if (el && val) el.innerHTML = val; }
+function gSetImg(id, val) { const el = document.getElementById(id); if (el && val) el.src = val; }
+function gSetAfsnit(id, val) {
+  const el = document.getElementById(id);
+  if (el && val) el.innerHTML = String(val).split('\n').filter(Boolean).map(t => '<p>' + t + '</p>').join('');
+}
+// Én linje pr. punkt, felter adskilt med | — samme parser som udlejningssiden.
+// Linjer uden | limes på den forrige, så et glemt rør ikke smadrer listen.
+function gLinjer(val) {
+  const ud = [];
+  String(val || '').split('\n').forEach(l => {
+    const t = l.trim();
+    if (!t) return;
+    if (t.indexOf('|') === -1 && ud.length) { ud[ud.length - 1][ud[ud.length - 1].length - 1] += ' ' + t; return; }
+    if (t.indexOf('|') === -1) return;
+    ud.push(t.split('|').map(x => x.trim()));
+  });
+  return ud;
+}
+function gEsc(t) {
+  return String(t == null ? '' : t).replace(/&/g, '&amp;').replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+}
+
+function applyGayContent() {
+  document.documentElement.lang = gayLang;
+
+  gSet('g_hero_eyebrow', gaySC('hero_eyebrow'));
+  gSet('g_hero_h1',      gaySC('hero_h1'));
+  gSet('g_hero_text',    gaySC('hero_text'));
+  gSet('g_hero_scroll',  gaySC('hero_scroll'));
+  gSetImg('g_hero_image', gayData.hero_image);
+  const meta = String(gaySC('hero_meta') || '').split('\n').filter(Boolean);
+  if (meta.length) gSet('g_hero_meta', meta.map(m => '<span>' + m + '</span>').join(''));
+
+  gSet('g_intro_label', gaySC('intro_label'));
+  gSet('g_intro_h2',    gaySC('intro_h2'));
+  gSet('g_intro_lede',  gaySC('intro_lede'));
+  gSetAfsnit('g_intro_text', gaySC('intro_text'));
+
+  gSet('g_retreats_label', gaySC('retreats_label'));
+  gSet('g_retreats_h2',    gaySC('retreats_h2'));
+  gSet('g_retreats_intro', gaySC('retreats_intro'));
+
+  gSet('g_uge_label', gaySC('uge_label'));
+  gSet('g_uge_h2',    gaySC('uge_h2'));
+  gSet('g_uge_intro', gaySC('uge_intro'));
+  const uge = gLinjer(gaySC('uge_items'));
+  if (uge.length) gSet('g_uge_items', uge.map(r =>
+    '<div class="feature-item"><h3>' + (r[0] || '') + '</h3><p>' + (r[1] || '') + '</p></div>').join(''));
+
+  gSet('g_ejendom_label', gaySC('ejendom_label'));
+  gSet('g_ejendom_h2',    gaySC('ejendom_h2'));
+  gSetAfsnit('g_ejendom_text', gaySC('ejendom_text'));
+  gSetImg('g_ejendom_image', gayData.ejendom_image);
+
+  gSet('g_sted_label', gaySC('sted_label'));
+  gSet('g_sted_h2',    gaySC('sted_h2'));
+  gSet('g_sted_text',  gaySC('sted_text'));
+  gSet('g_sted_text2', gaySC('sted_text2'));
+  gSetImg('g_sted_image', gayData.sted_image);
+  const afs = gLinjer(gaySC('sted_afstande'));
+  if (afs.length) gSet('g_sted_afstande', afs.map(r =>
+    '<div><span class="n">' + (r[0] || '') + '</span><span class="l">' + (r[1] || '') + '</span></div>').join(''));
+
+  gSet('g_faq_label', gaySC('faq_label'));
+  gSet('g_faq_h2',    gaySC('faq_h2'));
+  const faq = gLinjer(gaySC('faq_items'));
+  if (faq.length) {
+    gSet('g_faq_items', faq.map((r, i) =>
+      '<div class="faq-item' + (i === 0 ? ' open' : '') + '">' +
+        '<button class="faq-q" type="button" aria-expanded="' + (i === 0 ? 'true' : 'false') + '">' + (r[0] || '') + '</button>' +
+        '<div class="faq-a"><p>' + (r[1] || '') + '</p></div>' +
+      '</div>').join(''));
+    bindGayFaq();
+  }
+
+  gSet('g_cta_h2',   gaySC('cta_h2'));
+  gSet('g_cta_text', gaySC('cta_text'));
+  const cta = document.getElementById('g_cta_btn');
+  if (cta) {
+    const t = gaySC('cta_btn'); if (t) cta.textContent = t;
+    const l = gayData.cta_link; if (l) cta.setAttribute('href', l);
+  }
+
+  gSet('g_footer_copy', gaySC('footer_copy'));
+  gSet('g_nav_back',    gaySC('nav_back'));
+  byggGayNav();
+  applyGaySynlighed();
+  applyGayMeta();
+  byggGayJsonLd();
+}
+
+function byggGayNav() {
+  const ul = document.getElementById('navLinks');
+  const holder = document.getElementById('g_nav_links_holder');
+  if (!ul || !holder) return;
+  Array.prototype.slice.call(ul.querySelectorAll('.g-navlink')).forEach(el => el.remove());
+  const links = gLinjer(gaySC('nav_links'));
+  if (!links.length) { holder.style.display = ''; return; }
+  holder.style.display = 'none';
+  links.forEach(r => {
+    const li = document.createElement('li');
+    li.className = 'g-navlink';
+    const a = document.createElement('a');
+    a.setAttribute('href', r[1] || '#');
+    a.textContent = r[0] || '';
+    li.appendChild(a);
+    ul.insertBefore(li, holder);
+  });
+}
+
+function applyGaySynlighed() {
+  Object.keys(GAY_SEKTIONER).forEach(id => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.style.display = (gayData[GAY_SEKTIONER[id]] === '0') ? 'none' : '';
+  });
+}
+
+function gayUrl(sprog) {
+  return 'https://castillodelalma.es' + (sprog === 'en' ? '/en' : '') + '/gay-retreat-malaga-spain';
+}
+
+function applyGayMeta() {
+  const paaEn = gayLang === 'en';
+  const url = gayUrl(paaEn ? 'en' : 'da');
+  const titel = gaySC('seo_title') || document.title;
+  const desc  = String(gaySC('seo_desc') || '').replace(/<[^>]*>/g, '');
+  const img   = gayData.social_image || 'https://castillodelalma.es/img/castillo-del-alma-social-1200.jpg';
+  document.title = titel;
+  function m(attr, key, val) {
+    if (!val) return;
+    let el = document.head.querySelector('meta[' + attr + '="' + key + '"]');
+    if (!el) { el = document.createElement('meta'); el.setAttribute(attr, key); document.head.appendChild(el); }
+    el.setAttribute('content', val);
+  }
+  m('name', 'description', desc);
+  m('property', 'og:title', titel);
+  m('property', 'og:description', desc);
+  m('property', 'og:url', url);
+  m('property', 'og:image', img);
+  m('property', 'og:locale', paaEn ? 'en_US' : 'da_DK');
+  m('name', 'twitter:title', titel);
+  m('name', 'twitter:description', desc);
+  m('name', 'twitter:image', img);
+  let c = document.head.querySelector('link[rel="canonical"]');
+  if (!c) { c = document.createElement('link'); c.setAttribute('rel', 'canonical'); document.head.appendChild(c); }
+  c.setAttribute('href', url);
+  function alt(hl, href) {
+    let el = document.head.querySelector('link[rel="alternate"][hreflang="' + hl + '"]');
+    if (!el) { el = document.createElement('link'); el.setAttribute('rel', 'alternate'); el.setAttribute('hreflang', hl); document.head.appendChild(el); }
+    el.setAttribute('href', href);
+  }
+  alt('da', gayUrl('da')); alt('en', gayUrl('en')); alt('x-default', gayUrl('da'));
+}
+
+// FAQ-schemaet skal altid stemme med de spørgsmål, der faktisk står på siden
+function byggGayJsonLd() {
+  const el = document.getElementById('g_jsonld');
+  if (!el) return;
+  const url = gayUrl(gayLang === 'en' ? 'en' : 'da');
+  const faq = gLinjer(gaySC('faq_items'));
+  const graf = [
+    { '@type': 'WebPage', '@id': url + '#page', url: url,
+      name: gaySC('seo_title'), inLanguage: gayLang,
+      description: String(gaySC('seo_desc') || '').replace(/<[^>]*>/g, ''),
+      isPartOf: { '@type': 'WebSite', name: 'Castillo del Alma', url: 'https://castillodelalma.es' } },
+    { '@type': 'BreadcrumbList', itemListElement: [
+      { '@type': 'ListItem', position: 1, name: gayLang === 'en' ? 'Home' : 'Forsiden',
+        item: 'https://castillodelalma.es' + (gayLang === 'en' ? '/en/' : '/') },
+      { '@type': 'ListItem', position: 2, name: String(gaySC('hero_h1') || '').replace(/<[^>]*>/g, ' ').trim(), item: url }
+    ] }
+  ];
+  if (faq.length) graf.push({ '@type': 'FAQPage', mainEntity: faq.map(r => ({
+    '@type': 'Question', name: String(r[0] || '').replace(/<[^>]*>/g, ''),
+    acceptedAnswer: { '@type': 'Answer', text: String(r[1] || '').replace(/<[^>]*>/g, '') }
+  })) });
+  el.textContent = JSON.stringify({ '@context': 'https://schema.org', '@graph': graf });
+}
+
+function setGayLang(lang) {
+  gayLang = (lang === 'en') ? 'en' : 'da';
+  try {
+    const paaEn = /^\/en(\/|$)/.test(location.pathname);
+    if (gayLang === 'en' && !paaEn) history.replaceState(null, '', '/en/gay-retreat-malaga-spain' + location.hash);
+    else if (gayLang === 'da' && paaEn) history.replaceState(null, '', '/gay-retreat-malaga-spain' + location.hash);
+  } catch (e) { /* replaceState utilgængelig → sproget skifter stadig */ }
+  const bDa = document.getElementById('gay-btn-da'), bEn = document.getElementById('gay-btn-en');
+  if (bDa) { bDa.classList.toggle('lang-btn-active', gayLang === 'da'); bDa.classList.toggle('lang-btn-inactive', gayLang !== 'da'); }
+  if (bEn) { bEn.classList.toggle('lang-btn-active', gayLang === 'en'); bEn.classList.toggle('lang-btn-inactive', gayLang !== 'en'); }
+  applyGayContent();
+  if (window.gayRenderRetreats) window.gayRenderRetreats();
+}
+
+async function bestemGayStartsprog() {
+  // Adressen vinder: står man på /en/, er sproget engelsk uanset hvor man bor
+  if (/^\/en(\/|$)/.test(location.pathname)) return 'en';
+  try {
+    const c = sessionStorage.getItem('cda_geo_lang');
+    if (c === 'da' || c === 'en') return c;
+  } catch (e) { /* sessionStorage utilgængelig */ }
+  try {
+    const ctrl = new AbortController();
+    const t = setTimeout(() => ctrl.abort(), 4000);
+    const res = await fetch('/.netlify/functions/geo-lang', { signal: ctrl.signal });
+    clearTimeout(t);
+    if (res.ok) {
+      const geo = await res.json();
+      if (geo && (geo.lang === 'da' || geo.lang === 'en')) {
+        try { sessionStorage.setItem('cda_geo_lang', geo.lang); } catch (e) {}
+        return geo.lang;
+      }
+    }
+  } catch (e) { /* geo utilgængelig → browsersprog nedenfor */ }
+  try {
+    const langs = (navigator.languages && navigator.languages.length ? navigator.languages : [navigator.language])
+      .filter(Boolean).map(l => l.toLowerCase());
+    if (langs.some(l => l.startsWith('da'))) return 'da';
+    return langs.length ? 'en' : 'da';
+  } catch (e) { return 'da'; }
+}
+
+async function loadGayContent() {
+  gayData = Object.assign({}, GAY_SEED);
+  let start = 'en';
+  const svar = await Promise.allSettled([
+    gSb ? gSb.from('gay_content').select('key,value') : Promise.resolve({ data: [] }),
+    bestemGayStartsprog()
+  ]);
+  if (svar[0].status === 'fulfilled' && svar[0].value && svar[0].value.data) {
+    svar[0].value.data.forEach(r => { if (r.value !== null && r.value !== '') gayData[r.key] = r.value; });
+  } else if (svar[0].status === 'rejected') {
+    console.warn('gay_content hentning fejlede (er tabellen oprettet?):', svar[0].reason);
+  }
+  if (svar[1].status === 'fulfilled') start = svar[1].value;
+  setGayLang(start);
+}
+
+// FAQ-udfoldning bindes igen, hver gang listen bygges om
+function bindGayFaq() {
+  document.querySelectorAll('.faq-q').forEach(function (btn) {
+    if (btn.dataset.gbundet) return;
+    btn.dataset.gbundet = '1';
+    btn.addEventListener('click', function () {
+      const item = btn.closest('.faq-item');
+      const aaben = item.classList.toggle('open');
+      btn.setAttribute('aria-expanded', aaben ? 'true' : 'false');
+    });
+  });
+}
+</script>
+
+<script>
 // ── MOBILMENU ──
 (function () {
   var burger = document.getElementById('navBurger');
@@ -641,25 +938,17 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--gold);outline-offse
   links.addEventListener('click', function (e) { if (e.target.tagName === 'A') luk(); });
 })();
 
-// ── FAQ-udfoldning ──
-document.querySelectorAll('.faq-q').forEach(function (btn) {
-  btn.addEventListener('click', function () {
-    var item = btn.closest('.faq-item');
-    var aaben = item.classList.toggle('open');
-    btn.setAttribute('aria-expanded', aaben ? 'true' : 'false');
-  });
-});
+// ── FAQ-udfoldning (bindes igen hver gang listen bygges om) ──
+bindGayFaq();
 
 // ── LIVE RETREAT-DATA ──────────────────────────────────────────────────────
-// Kortene ovenfor står som statisk HTML, så Google og besøgende uden JS ser
-// dem med det samme. Lykkes opslaget, erstattes de af aktuelle data, så
-// datoer og priser aldrig kan stå forældede efter en ændring i admin.
+// Kortene står som statisk HTML, så Google og besøgende uden JS ser dem med
+// det samme. Lykkes opslaget, erstattes de af aktuelle data, så datoer og
+// priser aldrig kan stå forældede efter en ændring i admin. Rendereren
+// eksponeres, så sprogskiftet kan tegne kortene om uden at hente igen.
 (function () {
-  var URL_SB = 'https://niniwgiytyqvdqejigxg.supabase.co';
-  var KEY_SB = 'sb_publishable_GwrNUpIuWzdg1oswOY5HzA_mKWqhd6y';
   var FALLBACK_IMG = '/img/castillo-del-alma-social-1200.jpg';
-  if (typeof supabase === 'undefined' || !supabase.createClient) return;
-  var sb = supabase.createClient(URL_SB, KEY_SB);
+  var raekker = null, ledighed = {};
 
   function esc(s) {
     return String(s == null ? '' : s)
@@ -667,87 +956,96 @@ document.querySelectorAll('.faq-q').forEach(function (btn) {
   }
   function rent(s) { return String(s || '').replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim(); }
 
-  // "1–7 August 2026" · samme måned skrives kun én gang
+  // "1.–7. august 2026" på dansk, "1–7 August 2026" på engelsk
   function periode(fra, til) {
     if (!fra) return '';
+    var loc = (typeof gayLang !== 'undefined' && gayLang === 'da') ? 'da-DK' : 'en-GB';
     var a = new Date(fra), b = til ? new Date(til) : null;
     if (isNaN(a)) return '';
-    var md = { month: 'long' }, opt = { day: 'numeric' };
-    var aDag = a.toLocaleDateString('en-GB', opt);
-    if (!b || isNaN(b)) return aDag + ' ' + a.toLocaleDateString('en-GB', md) + ' ' + a.getFullYear();
-    var sammeMaaned = a.getMonth() === b.getMonth() && a.getFullYear() === b.getFullYear();
-    if (sammeMaaned) return aDag + '–' + b.toLocaleDateString('en-GB', opt) + ' ' + b.toLocaleDateString('en-GB', md) + ' ' + b.getFullYear();
-    return aDag + ' ' + a.toLocaleDateString('en-GB', md) + ' – ' +
-           b.toLocaleDateString('en-GB', opt) + ' ' + b.toLocaleDateString('en-GB', md) + ' ' + b.getFullYear();
+    var md = { month: 'long' }, dag = { day: 'numeric' };
+    var aDag = a.toLocaleDateString(loc, dag);
+    if (!b || isNaN(b)) return aDag + ' ' + a.toLocaleDateString(loc, md) + ' ' + a.getFullYear();
+    if (a.getMonth() === b.getMonth() && a.getFullYear() === b.getFullYear())
+      return aDag + '–' + b.toLocaleDateString(loc, dag) + ' ' + b.toLocaleDateString(loc, md) + ' ' + b.getFullYear();
+    return aDag + ' ' + a.toLocaleDateString(loc, md) + ' – ' +
+           b.toLocaleDateString(loc, dag) + ' ' + b.toLocaleDateString(loc, md) + ' ' + b.getFullYear();
   }
-
   function pris(p) {
     var n = parseFloat(p);
     if (!n || isNaN(n)) return '';
-    return 'From €' + n.toLocaleString('en-GB');
+    var da = (typeof gayLang !== 'undefined' && gayLang === 'da');
+    return (da ? 'Fra €' : 'From €') + n.toLocaleString(da ? 'da-DK' : 'en-GB');
   }
-
-  // Ledighed hentes fra samme funktion som forsiden, så badgen viser det samme
-  // begge steder. Fejler den, beholder kortene deres udgangsstand.
-  function hentLedighed() {
-    return fetch('/.netlify/functions/retreat-availability')
-      .then(function (r) { return r.ok ? r.json() : null; })
-      .then(function (d) { return (d && d.bookedByDate) || {}; })
-      .catch(function () { return {}; });
-  }
-
   // Samme tærskel som buildAvailBadge() på forsiden: 75 % booket = "kun få"
-  function badge(r, byDate) {
+  function badge(r) {
+    var da = (typeof gayLang !== 'undefined' && gayLang === 'da');
     var max = parseInt(r.max_guests, 10);
     var topDato = r.arrival_date ? String(r.arrival_date).slice(0, 10) : '';
-    var booket = (topDato && byDate[r.id]) ? (byDate[r.id][topDato] || 0) : 0;
-    if (max > 0 && booket / max >= 0.75) return { cls: 'avail-few', txt: 'Only a few spaces left' };
-    return { cls: 'avail-good', txt: 'Available' };
+    var booket = (topDato && ledighed[r.id]) ? (ledighed[r.id][topDato] || 0) : 0;
+    if (max > 0 && booket / max >= 0.75)
+      return { cls: 'avail-few', txt: da ? 'Kun få ledige pladser' : 'Only a few spaces left' };
+    return { cls: 'avail-good', txt: da ? 'Ledige pladser' : 'Available' };
   }
 
+  function tegn() {
+    if (!Array.isArray(raekker) || !raekker.length) return;
+    var grid = document.getElementById('retreatGrid');
+    if (!grid) return;
+    var da = (typeof gayLang !== 'undefined' && gayLang === 'da');
+    grid.innerHTML = raekker.map(function (r) {
+      // Flaget bliver stående — det er en del af genkendeligheden fra forsiden
+      var titel = rent(da ? (r.title || r.title_en) : (r.title_en || r.title)) || 'Retreat';
+      var brudt = esc(titel).replace(' &amp; ', '<br>&amp; ').replace(' og ', '<br>og ').replace(' and ', '<br>and ');
+      var kat = rent(da ? (r.subtitle || r.subtitle_en) : (r.subtitle_en || r.subtitle)) || 'Gay Retreat:';
+      var tekst = rent(da ? (r.description || r.description_en) : (r.description_en || r.description)).slice(0, 260);
+      var img = r.card_image || r.hero_image || FALLBACK_IMG;
+      var naar = periode(r.arrival_date, r.departure_date);
+      var kr = pris(r.price);
+      var b = badge(r);
+      var href = (da ? '' : '/en') + '/retreat/' + encodeURIComponent(r.slug || '');
+      return '<a class="rcard" href="' + href + '">' +
+        '<div class="rcard-bg" style="background-image:url(\'' + esc(img) + '\');"></div>' +
+        '<div class="rcard-fade"></div><div class="pride-overlay"></div>' +
+        '<div class="rcard-overlay"></div><div class="rcard-accent"></div>' +
+        '<div class="rcard-avail ' + b.cls + '">' + b.txt + '</div>' +
+        '<div class="rcard-content">' +
+          '<div class="rcard-category">' + esc(kat) + '</div>' +
+          '<h3>' + brudt + '</h3>' +
+          '<p>' + esc(tekst) + '</p>' +
+          '<div class="rcard-meta">' +
+            (naar ? '<span>' + esc(naar) + '</span>' : '<span></span>') +
+            (kr ? '<span class="rcard-price">' + esc(kr) + '</span>' : '') +
+          '</div>' +
+          '<span class="rcard-arrow">' + (da ? 'Se retreat →' : 'View retreat →') + '</span>' +
+        '</div></a>';
+    }).join('');
+  }
+  window.gayRenderRetreats = tegn;
+
+  if (!gSb) return;
   Promise.all([
-    sb.from('retreats')
+    gSb.from('retreats')
       .select('id,slug,title,title_en,subtitle,subtitle_en,description,description_en,price,arrival_date,departure_date,max_guests,hero_image,card_image,active,pride')
       .eq('pride', true).eq('active', true)
       .order('arrival_date', { ascending: true }),
-    hentLedighed()
+    fetch('/.netlify/functions/retreat-availability')
+      .then(function (r) { return r.ok ? r.json() : null; })
+      .then(function (d) { return (d && d.bookedByDate) || {}; })
+      .catch(function () { return {}; })
   ])
     .then(function (svar) {
-      var res = svar[0], byDate = svar[1] || {};
-      var rows = res && res.data;
+      var res = svar[0];
+      ledighed = svar[1] || {};
       if (res && res.error) return;
-      if (!Array.isArray(rows) || !rows.length) return; // behold statiske kort
-      var grid = document.getElementById('retreatGrid');
-      if (!grid) return;
-      grid.innerHTML = rows.map(function (r) {
-        // Flaget bliver stående — det er en del af genkendeligheden fra forsiden
-        var titel = rent(r.title_en || r.title || 'Retreat');
-        var brudt = esc(titel).replace(' &amp; ', '<br>&amp; ').replace(' and ', '<br>and ');
-        var kat = rent(r.subtitle_en || r.subtitle || 'Gay Retreat:');
-        var tekst = rent(r.description_en || r.description || '').slice(0, 260);
-        var img = r.card_image || r.hero_image || FALLBACK_IMG;
-        var naar = periode(r.arrival_date, r.departure_date);
-        var kr = pris(r.price);
-        var b = badge(r, byDate);
-        return '<a class="rcard" href="/en/retreat/' + encodeURIComponent(r.slug || '') + '">' +
-          '<div class="rcard-bg" style="background-image:url(\'' + esc(img) + '\');"></div>' +
-          '<div class="rcard-fade"></div><div class="pride-overlay"></div>' +
-          '<div class="rcard-overlay"></div><div class="rcard-accent"></div>' +
-          '<div class="rcard-avail ' + b.cls + '">' + b.txt + '</div>' +
-          '<div class="rcard-content">' +
-            '<div class="rcard-category">' + esc(kat) + '</div>' +
-            '<h3>' + brudt + '</h3>' +
-            '<p>' + esc(tekst) + '</p>' +
-            '<div class="rcard-meta">' +
-              (naar ? '<span>' + esc(naar) + '</span>' : '<span></span>') +
-              (kr ? '<span class="rcard-price">' + esc(kr) + '</span>' : '') +
-            '</div>' +
-            '<span class="rcard-arrow">View retreat →</span>' +
-          '</div></a>';
-      }).join('');
+      if (!Array.isArray(res.data) || !res.data.length) return; // behold statiske kort
+      raekker = res.data;
+      tegn();
     })
     .catch(function () { /* netværksfejl — de statiske kort bliver stående */ });
 })();
+
+// Indholdet hentes til sidst, så alt andet er bundet først
+loadGayContent();
 </script>
 
 </body>

@@ -82,7 +82,8 @@
   status = 301
   force = true
 
-# /en/gay-retreat-malaga-spain — engelsk landingsside (kun engelsk, ingen DA-udgave).
+# Landingssiden er nu tosproget som resten af sitet: dansk på
+# /gay-retreat-malaga-spain, engelsk på /en/gay-retreat-malaga-spain.
 # Skal stå før /en/* så adressen bevares i browseren.
 [[redirects]]
   from = "/en/gay-retreat-malaga-spain"

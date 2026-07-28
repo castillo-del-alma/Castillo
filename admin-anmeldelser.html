@@ -580,6 +580,7 @@ body{font-family:'Manrope',sans-serif;background:#f0e8d5;color:#2c2318;min-heigh
       <button class="subtab-btn active" onclick="switchSubTab('forside',this)">Forside</button>
       <button class="subtab-btn" onclick="switchSubTab('ejendommen',this)">Ejendommen</button>
       <button class="subtab-btn" onclick="switchSubTab('udlejning',this)">Udlejning</button>
+      <button class="subtab-btn" onclick="switchSubTab('gay',this)">Gay Retreat</button>
       <button class="subtab-btn" onclick="switchSubTab('kontakt',this)">Kontakt</button>
       <button class="subtab-btn" onclick="switchSubTab('anmeldelser',this)">Se anmeldelser</button>
       <button class="subtab-btn" onclick="switchSubTab('indstillinger',this)">Indstillinger</button>
@@ -3533,6 +3534,292 @@ feeling more calm – and coming home to yourself again."</textarea></div>
   </div>
 
   <!-- FANE: KONTAKT -->
+  <div class="subtab-content" id="tab-gay" style="padding:2rem 3rem;max-width:1100px;">
+    <div style="display:flex;align-items:center;gap:1rem;margin-bottom:1.4rem;flex-wrap:wrap;">
+      <h2 style="font-family:Cinzel,serif;font-weight:400;font-size:1.3rem;margin:0;">Gay Retreat — landingsside</h2>
+      <a href="/gay-retreat-malaga-spain" target="_blank" rel="noopener" style="font-family:Manrope,sans-serif;font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;color:#2a7a74;">Se siden ↗</a>
+      <button type="button" onclick="oversaetHeleSiden(this,'tab-gay')" style="background:rgba(58,110,106,.1);border:1px solid rgba(58,110,106,.35);color:#2a7a74;padding:.3rem .8rem;font-family:Manrope,sans-serif;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;margin-left:auto;">⇄ Oversæt hele siden</button>
+      <button type="button" onclick="gemGay()" id="gayGemBtn" style="background:#7a1f35;color:#fff;border:none;padding:.6rem 1.6rem;font-family:Manrope,sans-serif;font-size:.66rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;">💾 Gem</button>
+    </div>
+    <div id="gayAdvarsel" style="display:none;background:rgba(163,51,51,.08);border:1px solid rgba(163,51,51,.35);color:#a33;padding:.8rem 1rem;font-family:Manrope,sans-serif;font-size:.7rem;line-height:1.5;margin-bottom:1.2rem;"></div>
+    <div style="font-family:Manrope,sans-serif;font-size:.7rem;color:rgba(44,35,24,.55);line-height:1.6;margin-bottom:1.6rem;">
+      Siden findes på dansk (<code>/gay-retreat-malaga-spain</code>) og engelsk (<code>/en/gay-retreat-malaga-spain</code>).
+      Inline HTML som <code>&lt;b&gt;</code>, <code>&lt;em&gt;</code> og <code>&lt;br&gt;</code> virker i alle tekstfelter.
+      <b>Husk at klikke 💾 Gem</b> — tekst i felterne er ikke gemt, før du gør det.
+    </div>
+    <div class="fc-block" id="gayblok_1" style="margin-bottom:1.5rem;">
+      <div class="fc-block-header" style="display:flex;align-items:center;gap:.8rem;"><span class="fc-block-title">1 · SEO og deling</span><button type="button" onclick="oversaetBlok(this)" style="background:rgba(58,110,106,.1);border:1px solid rgba(58,110,106,.35);color:#2a7a74;padding:.3rem .8rem;font-family:Manrope,sans-serif;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;margin-left:auto;" title="Oversæt tomme engelske felter i denne sektion">⇄ Oversæt</button></div>
+      <div class="fc-block-body">
+        <div style="font-size:.68rem;color:rgba(44,35,24,.55);line-height:1.5;margin-bottom:.8rem;">Titel og beskrivelse i Google og på sociale medier. Beskrivelsen bør være 120–160 tegn.</div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Sidetitel (vises i Google)</label><input type="text" id="gay_seo_title_da" class="fc-input-da"></div>
+          <div><label class="fc-label fc-label-en">Page title (shown in Google)</label><input type="text" id="gay_seo_title_en" class="fc-input-en"></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Beskrivelse (meta description)</label><textarea id="gay_seo_desc_da" class="fc-input-da fc-textarea" rows="3"></textarea></div>
+          <div><label class="fc-label fc-label-en">Description (meta description)</label><textarea id="gay_seo_desc_en" class="fc-input-en fc-textarea" rows="3"></textarea></div>
+        </div>
+        <div class="fc-row">
+          <div>
+            <label class="fc-label fc-label-da">Delebillede (1200×630)</label>
+            <input type="text" id="gay_social_image_url" class="fc-input-da" placeholder="URL indsættes automatisk ved upload">
+            <label class="fc-label" style="color:#2a7a74;margin-top:.6rem;">📁 Upload</label>
+            <div style="display:flex;align-items:center;gap:.6rem;margin-top:.3rem;">
+              <img id="gay_social_image_preview" src="" style="display:none;width:56px;height:56px;object-fit:cover;border:1px solid rgba(184,138,30,.3);">
+              <input type="file" id="gay_social_image_file" accept="image/*" style="font-size:.76rem;flex:1;">
+              <button type="button" onclick="uploadRetreatBillede('gay_social_image_file','gay_social_image_url','gay_social_image_preview')" style="background:#2a7a74;color:#fff;border:none;padding:.45rem 1.1rem;font-family:Manrope,sans-serif;font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;white-space:nowrap;">⬆ Upload</button><button type="button" onclick="fjernBilledeFelt('gay_social_image_url','gay_social_image_preview')" style="background:rgba(163,51,51,.08);color:#a33;border:1px solid rgba(163,51,51,.35);padding:.45rem .9rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;white-space:nowrap;" title="Fjern billedet helt">🗑 Fjern</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="fc-block" id="gayblok_2" style="margin-bottom:1.5rem;">
+      <div class="fc-block-header" style="display:flex;align-items:center;gap:.8rem;"><span class="fc-block-title">2 · Menu og links</span><button type="button" onclick="oversaetBlok(this)" style="background:rgba(58,110,106,.1);border:1px solid rgba(58,110,106,.35);color:#2a7a74;padding:.3rem .8rem;font-family:Manrope,sans-serif;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;margin-left:auto;" title="Oversæt tomme engelske felter i denne sektion">⇄ Oversæt</button></div>
+      <div class="fc-block-body">
+        <div style="font-size:.68rem;color:rgba(44,35,24,.55);line-height:1.5;margin-bottom:.8rem;">Én linje pr. menupunkt: <b>Tekst|#anker</b>. Ankrene er <code>#retreats</code>, <code>#week</code>, <code>#estate</code>, <code>#location</code>, <code>#faq</code>.</div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Menupunkter (Tekst|#anker)</label><textarea id="gay_nav_links_da" class="fc-input-da fc-textarea" rows="3"></textarea></div>
+          <div><label class="fc-label fc-label-en">Menu items (Text|#anchor)</label><textarea id="gay_nav_links_en" class="fc-input-en fc-textarea" rows="3"></textarea></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Tilbage-link øverst til højre</label><input type="text" id="gay_nav_back_da" class="fc-input-da"></div>
+          <div><label class="fc-label fc-label-en">Back link, top right</label><input type="text" id="gay_nav_back_en" class="fc-input-en"></div>
+        </div>
+      </div>
+    </div>
+    <div class="fc-block" id="gayblok_3" style="margin-bottom:1.5rem;">
+      <div class="fc-block-header" style="display:flex;align-items:center;gap:.8rem;"><span class="fc-block-title">3 · Hero (øverst)</span><button type="button" onclick="oversaetBlok(this)" style="background:rgba(58,110,106,.1);border:1px solid rgba(58,110,106,.35);color:#2a7a74;padding:.3rem .8rem;font-family:Manrope,sans-serif;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;margin-left:auto;" title="Oversæt tomme engelske felter i denne sektion">⇄ Oversæt</button></div>
+      <div class="fc-block-body">
+        <div style="font-size:.68rem;color:rgba(44,35,24,.55);line-height:1.5;margin-bottom:.8rem;">Det første man ser. I overskriften kan <code>&lt;br&gt;</code> bruges til at styre linjeskiftet.</div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Overlinje</label><input type="text" id="gay_hero_eyebrow_da" class="fc-input-da"></div>
+          <div><label class="fc-label fc-label-en">Eyebrow</label><input type="text" id="gay_hero_eyebrow_en" class="fc-input-en"></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Overskrift</label><textarea id="gay_hero_h1_da" class="fc-input-da fc-textarea" rows="3"></textarea></div>
+          <div><label class="fc-label fc-label-en">Heading</label><textarea id="gay_hero_h1_en" class="fc-input-en fc-textarea" rows="3"></textarea></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Brødtekst</label><textarea id="gay_hero_text_da" class="fc-input-da fc-textarea" rows="3"></textarea></div>
+          <div><label class="fc-label fc-label-en">Body text</label><textarea id="gay_hero_text_en" class="fc-input-en fc-textarea" rows="3"></textarea></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Tre nøgletal — én pr. linje</label><textarea id="gay_hero_meta_da" class="fc-input-da fc-textarea" rows="3"></textarea></div>
+          <div><label class="fc-label fc-label-en">Three key facts — one per line</label><textarea id="gay_hero_meta_en" class="fc-input-en fc-textarea" rows="3"></textarea></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Tekst ved scroll-pilen</label><input type="text" id="gay_hero_scroll_da" class="fc-input-da"></div>
+          <div><label class="fc-label fc-label-en">Scroll cue label</label><input type="text" id="gay_hero_scroll_en" class="fc-input-en"></div>
+        </div>
+        <div class="fc-row">
+          <div>
+            <label class="fc-label fc-label-da">Baggrundsbillede</label>
+            <input type="text" id="gay_hero_image_url" class="fc-input-da" placeholder="URL indsættes automatisk ved upload">
+            <label class="fc-label" style="color:#2a7a74;margin-top:.6rem;">📁 Upload</label>
+            <div style="display:flex;align-items:center;gap:.6rem;margin-top:.3rem;">
+              <img id="gay_hero_image_preview" src="" style="display:none;width:56px;height:56px;object-fit:cover;border:1px solid rgba(184,138,30,.3);">
+              <input type="file" id="gay_hero_image_file" accept="image/*" style="font-size:.76rem;flex:1;">
+              <button type="button" onclick="uploadRetreatBillede('gay_hero_image_file','gay_hero_image_url','gay_hero_image_preview')" style="background:#2a7a74;color:#fff;border:none;padding:.45rem 1.1rem;font-family:Manrope,sans-serif;font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;white-space:nowrap;">⬆ Upload</button><button type="button" onclick="fjernBilledeFelt('gay_hero_image_url','gay_hero_image_preview')" style="background:rgba(163,51,51,.08);color:#a33;border:1px solid rgba(163,51,51,.35);padding:.45rem .9rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;white-space:nowrap;" title="Fjern billedet helt">🗑 Fjern</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="fc-block" id="gayblok_4" style="margin-bottom:1.5rem;">
+      <div class="fc-block-header" style="display:flex;align-items:center;gap:.8rem;"><span class="fc-block-title">4 · Intro</span><button type="button" onclick="oversaetBlok(this)" style="background:rgba(58,110,106,.1);border:1px solid rgba(58,110,106,.35);color:#2a7a74;padding:.3rem .8rem;font-family:Manrope,sans-serif;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;margin-left:auto;" title="Oversæt tomme engelske felter i denne sektion">⇄ Oversæt</button></div>
+      <div class="fc-block-body">
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Overlinje</label><input type="text" id="gay_intro_label_da" class="fc-input-da"></div>
+          <div><label class="fc-label fc-label-en">Eyebrow</label><input type="text" id="gay_intro_label_en" class="fc-input-en"></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Overskrift</label><input type="text" id="gay_intro_h2_da" class="fc-input-da"></div>
+          <div><label class="fc-label fc-label-en">Heading</label><input type="text" id="gay_intro_h2_en" class="fc-input-en"></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Manchet (stor tekst)</label><textarea id="gay_intro_lede_da" class="fc-input-da fc-textarea" rows="3"></textarea></div>
+          <div><label class="fc-label fc-label-en">Lede (large text)</label><textarea id="gay_intro_lede_en" class="fc-input-en fc-textarea" rows="3"></textarea></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Brødtekst — ét afsnit pr. linje</label><textarea id="gay_intro_text_da" class="fc-input-da fc-textarea" rows="4"></textarea></div>
+          <div><label class="fc-label fc-label-en">Body text — one paragraph per line</label><textarea id="gay_intro_text_en" class="fc-input-en fc-textarea" rows="4"></textarea></div>
+        </div>
+      </div>
+    </div>
+    <div class="fc-block" id="gayblok_5" style="margin-bottom:1.5rem;">
+      <div class="fc-block-header" style="display:flex;align-items:center;gap:.8rem;"><span class="fc-block-title">5 · Retreats (overskrift over kortene)</span><button type="button" onclick="oversaetBlok(this)" style="background:rgba(58,110,106,.1);border:1px solid rgba(58,110,106,.35);color:#2a7a74;padding:.3rem .8rem;font-family:Manrope,sans-serif;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;margin-left:auto;" title="Oversæt tomme engelske felter i denne sektion">⇄ Oversæt</button></div>
+      <div class="fc-block-body">
+        <div style="font-size:.68rem;color:rgba(44,35,24,.55);line-height:1.5;margin-bottom:.8rem;">Selve kortene hentes automatisk fra de retreats, der har pride-flaget slået til. De redigeres under Retreats, ikke her.</div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Overlinje</label><input type="text" id="gay_retreats_label_da" class="fc-input-da"></div>
+          <div><label class="fc-label fc-label-en">Eyebrow</label><input type="text" id="gay_retreats_label_en" class="fc-input-en"></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Overskrift</label><input type="text" id="gay_retreats_h2_da" class="fc-input-da"></div>
+          <div><label class="fc-label fc-label-en">Heading</label><input type="text" id="gay_retreats_h2_en" class="fc-input-en"></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Introtekst</label><textarea id="gay_retreats_intro_da" class="fc-input-da fc-textarea" rows="3"></textarea></div>
+          <div><label class="fc-label fc-label-en">Intro text</label><textarea id="gay_retreats_intro_en" class="fc-input-en fc-textarea" rows="3"></textarea></div>
+        </div>
+      </div>
+    </div>
+    <div class="fc-block" id="gayblok_6" style="margin-bottom:1.5rem;">
+      <div class="fc-block-header" style="display:flex;align-items:center;gap:.8rem;"><span class="fc-block-title">6 · Ugen</span><button type="button" onclick="oversaetBlok(this)" style="background:rgba(58,110,106,.1);border:1px solid rgba(58,110,106,.35);color:#2a7a74;padding:.3rem .8rem;font-family:Manrope,sans-serif;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;margin-left:auto;" title="Oversæt tomme engelske felter i denne sektion">⇄ Oversæt</button></div>
+      <div class="fc-block-body">
+        <div style="font-size:.68rem;color:rgba(44,35,24,.55);line-height:1.5;margin-bottom:.8rem;">Én linje pr. punkt: <b>Overskrift|Tekst</b>.</div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Overlinje</label><input type="text" id="gay_uge_label_da" class="fc-input-da"></div>
+          <div><label class="fc-label fc-label-en">Eyebrow</label><input type="text" id="gay_uge_label_en" class="fc-input-en"></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Overskrift</label><input type="text" id="gay_uge_h2_da" class="fc-input-da"></div>
+          <div><label class="fc-label fc-label-en">Heading</label><input type="text" id="gay_uge_h2_en" class="fc-input-en"></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Introtekst</label><textarea id="gay_uge_intro_da" class="fc-input-da fc-textarea" rows="3"></textarea></div>
+          <div><label class="fc-label fc-label-en">Intro text</label><textarea id="gay_uge_intro_en" class="fc-input-en fc-textarea" rows="3"></textarea></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Punkter (Overskrift|Tekst)</label><textarea id="gay_uge_items_da" class="fc-input-da fc-textarea" rows="7"></textarea></div>
+          <div><label class="fc-label fc-label-en">Items (Heading|Text)</label><textarea id="gay_uge_items_en" class="fc-input-en fc-textarea" rows="7"></textarea></div>
+        </div>
+      </div>
+    </div>
+    <div class="fc-block" id="gayblok_7" style="margin-bottom:1.5rem;">
+      <div class="fc-block-header" style="display:flex;align-items:center;gap:.8rem;"><span class="fc-block-title">7 · Ejendommen</span><button type="button" onclick="oversaetBlok(this)" style="background:rgba(58,110,106,.1);border:1px solid rgba(58,110,106,.35);color:#2a7a74;padding:.3rem .8rem;font-family:Manrope,sans-serif;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;margin-left:auto;" title="Oversæt tomme engelske felter i denne sektion">⇄ Oversæt</button></div>
+      <div class="fc-block-body">
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Overlinje</label><input type="text" id="gay_ejendom_label_da" class="fc-input-da"></div>
+          <div><label class="fc-label fc-label-en">Eyebrow</label><input type="text" id="gay_ejendom_label_en" class="fc-input-en"></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Overskrift</label><input type="text" id="gay_ejendom_h2_da" class="fc-input-da"></div>
+          <div><label class="fc-label fc-label-en">Heading</label><input type="text" id="gay_ejendom_h2_en" class="fc-input-en"></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Brødtekst — ét afsnit pr. linje</label><textarea id="gay_ejendom_text_da" class="fc-input-da fc-textarea" rows="4"></textarea></div>
+          <div><label class="fc-label fc-label-en">Body text — one paragraph per line</label><textarea id="gay_ejendom_text_en" class="fc-input-en fc-textarea" rows="4"></textarea></div>
+        </div>
+        <div class="fc-row">
+          <div>
+            <label class="fc-label fc-label-da">Billede</label>
+            <input type="text" id="gay_ejendom_image_url" class="fc-input-da" placeholder="URL indsættes automatisk ved upload">
+            <label class="fc-label" style="color:#2a7a74;margin-top:.6rem;">📁 Upload</label>
+            <div style="display:flex;align-items:center;gap:.6rem;margin-top:.3rem;">
+              <img id="gay_ejendom_image_preview" src="" style="display:none;width:56px;height:56px;object-fit:cover;border:1px solid rgba(184,138,30,.3);">
+              <input type="file" id="gay_ejendom_image_file" accept="image/*" style="font-size:.76rem;flex:1;">
+              <button type="button" onclick="uploadRetreatBillede('gay_ejendom_image_file','gay_ejendom_image_url','gay_ejendom_image_preview')" style="background:#2a7a74;color:#fff;border:none;padding:.45rem 1.1rem;font-family:Manrope,sans-serif;font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;white-space:nowrap;">⬆ Upload</button><button type="button" onclick="fjernBilledeFelt('gay_ejendom_image_url','gay_ejendom_image_preview')" style="background:rgba(163,51,51,.08);color:#a33;border:1px solid rgba(163,51,51,.35);padding:.45rem .9rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;white-space:nowrap;" title="Fjern billedet helt">🗑 Fjern</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="fc-block" id="gayblok_8" style="margin-bottom:1.5rem;">
+      <div class="fc-block-header" style="display:flex;align-items:center;gap:.8rem;"><span class="fc-block-title">8 · Sådan kommer du hertil</span><button type="button" onclick="oversaetBlok(this)" style="background:rgba(58,110,106,.1);border:1px solid rgba(58,110,106,.35);color:#2a7a74;padding:.3rem .8rem;font-family:Manrope,sans-serif;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;margin-left:auto;" title="Oversæt tomme engelske felter i denne sektion">⇄ Oversæt</button></div>
+      <div class="fc-block-body">
+        <div style="font-size:.68rem;color:rgba(44,35,24,.55);line-height:1.5;margin-bottom:.8rem;">Afstande: én linje pr. punkt, <b>Tal|Tekst</b> — fx <code>45 min|Málaga lufthavn</code>.</div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Overlinje</label><input type="text" id="gay_sted_label_da" class="fc-input-da"></div>
+          <div><label class="fc-label fc-label-en">Eyebrow</label><input type="text" id="gay_sted_label_en" class="fc-input-en"></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Overskrift</label><input type="text" id="gay_sted_h2_da" class="fc-input-da"></div>
+          <div><label class="fc-label fc-label-en">Heading</label><input type="text" id="gay_sted_h2_en" class="fc-input-en"></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Brødtekst</label><textarea id="gay_sted_text_da" class="fc-input-da fc-textarea" rows="3"></textarea></div>
+          <div><label class="fc-label fc-label-en">Body text</label><textarea id="gay_sted_text_en" class="fc-input-en fc-textarea" rows="3"></textarea></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Afstande (Tal|Tekst)</label><textarea id="gay_sted_afstande_da" class="fc-input-da fc-textarea" rows="3"></textarea></div>
+          <div><label class="fc-label fc-label-en">Distances (Figure|Label)</label><textarea id="gay_sted_afstande_en" class="fc-input-en fc-textarea" rows="3"></textarea></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Tekst under afstandene</label><textarea id="gay_sted_text2_da" class="fc-input-da fc-textarea" rows="3"></textarea></div>
+          <div><label class="fc-label fc-label-en">Text below the distances</label><textarea id="gay_sted_text2_en" class="fc-input-en fc-textarea" rows="3"></textarea></div>
+        </div>
+        <div class="fc-row">
+          <div>
+            <label class="fc-label fc-label-da">Billede</label>
+            <input type="text" id="gay_sted_image_url" class="fc-input-da" placeholder="URL indsættes automatisk ved upload">
+            <label class="fc-label" style="color:#2a7a74;margin-top:.6rem;">📁 Upload</label>
+            <div style="display:flex;align-items:center;gap:.6rem;margin-top:.3rem;">
+              <img id="gay_sted_image_preview" src="" style="display:none;width:56px;height:56px;object-fit:cover;border:1px solid rgba(184,138,30,.3);">
+              <input type="file" id="gay_sted_image_file" accept="image/*" style="font-size:.76rem;flex:1;">
+              <button type="button" onclick="uploadRetreatBillede('gay_sted_image_file','gay_sted_image_url','gay_sted_image_preview')" style="background:#2a7a74;color:#fff;border:none;padding:.45rem 1.1rem;font-family:Manrope,sans-serif;font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;white-space:nowrap;">⬆ Upload</button><button type="button" onclick="fjernBilledeFelt('gay_sted_image_url','gay_sted_image_preview')" style="background:rgba(163,51,51,.08);color:#a33;border:1px solid rgba(163,51,51,.35);padding:.45rem .9rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;white-space:nowrap;" title="Fjern billedet helt">🗑 Fjern</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="fc-block" id="gayblok_9" style="margin-bottom:1.5rem;">
+      <div class="fc-block-header" style="display:flex;align-items:center;gap:.8rem;"><span class="fc-block-title">9 · FAQ</span><button type="button" onclick="oversaetBlok(this)" style="background:rgba(58,110,106,.1);border:1px solid rgba(58,110,106,.35);color:#2a7a74;padding:.3rem .8rem;font-family:Manrope,sans-serif;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;margin-left:auto;" title="Oversæt tomme engelske felter i denne sektion">⇄ Oversæt</button></div>
+      <div class="fc-block-body">
+        <div style="font-size:.68rem;color:rgba(44,35,24,.55);line-height:1.5;margin-bottom:.8rem;">Én linje pr. spørgsmål: <b>Spørgsmål|Svar</b>. Spørgsmålene sendes automatisk til Google som struktureret data.</div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Overlinje</label><input type="text" id="gay_faq_label_da" class="fc-input-da"></div>
+          <div><label class="fc-label fc-label-en">Eyebrow</label><input type="text" id="gay_faq_label_en" class="fc-input-en"></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Overskrift</label><input type="text" id="gay_faq_h2_da" class="fc-input-da"></div>
+          <div><label class="fc-label fc-label-en">Heading</label><input type="text" id="gay_faq_h2_en" class="fc-input-en"></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Spørgsmål og svar (Spørgsmål|Svar)</label><textarea id="gay_faq_items_da" class="fc-input-da fc-textarea" rows="7"></textarea></div>
+          <div><label class="fc-label fc-label-en">Questions and answers (Question|Answer)</label><textarea id="gay_faq_items_en" class="fc-input-en fc-textarea" rows="7"></textarea></div>
+        </div>
+      </div>
+    </div>
+    <div class="fc-block" id="gayblok_10" style="margin-bottom:1.5rem;">
+      <div class="fc-block-header" style="display:flex;align-items:center;gap:.8rem;"><span class="fc-block-title">10 · Opfordring nederst</span><button type="button" onclick="oversaetBlok(this)" style="background:rgba(58,110,106,.1);border:1px solid rgba(58,110,106,.35);color:#2a7a74;padding:.3rem .8rem;font-family:Manrope,sans-serif;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;margin-left:auto;" title="Oversæt tomme engelske felter i denne sektion">⇄ Oversæt</button></div>
+      <div class="fc-block-body">
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Overskrift</label><input type="text" id="gay_cta_h2_da" class="fc-input-da"></div>
+          <div><label class="fc-label fc-label-en">Heading</label><input type="text" id="gay_cta_h2_en" class="fc-input-en"></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Brødtekst</label><textarea id="gay_cta_text_da" class="fc-input-da fc-textarea" rows="3"></textarea></div>
+          <div><label class="fc-label fc-label-en">Body text</label><textarea id="gay_cta_text_en" class="fc-input-en fc-textarea" rows="3"></textarea></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Knaptekst</label><input type="text" id="gay_cta_btn_da" class="fc-input-da"></div>
+          <div><label class="fc-label fc-label-en">Button text</label><input type="text" id="gay_cta_btn_en" class="fc-input-en"></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label">Knappens link (fx #retreats eller /kontakt)</label><input type="text" id="gay_cta_link" class="fc-input-da"></div>
+        </div>
+      </div>
+    </div>
+    <div class="fc-block" id="gayblok_11" style="margin-bottom:1.5rem;">
+      <div class="fc-block-header" style="display:flex;align-items:center;gap:.8rem;"><span class="fc-block-title">11 · Footer</span><button type="button" onclick="oversaetBlok(this)" style="background:rgba(58,110,106,.1);border:1px solid rgba(58,110,106,.35);color:#2a7a74;padding:.3rem .8rem;font-family:Manrope,sans-serif;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;margin-left:auto;" title="Oversæt tomme engelske felter i denne sektion">⇄ Oversæt</button></div>
+      <div class="fc-block-body">
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Copyright-linje</label><input type="text" id="gay_footer_copy_da" class="fc-input-da"></div>
+          <div><label class="fc-label fc-label-en">Copyright line</label><input type="text" id="gay_footer_copy_en" class="fc-input-en"></div>
+        </div>
+      </div>
+    </div>
+    <div class="fc-block" id="gayblok_12" style="margin-bottom:1.5rem;">
+      <div class="fc-block-header"><span class="fc-block-title">12 · Synlig på siden</span></div>
+      <div class="fc-block-body">
+        <div style="font-size:.68rem;color:rgba(44,35,24,.55);line-height:1.5;margin-bottom:.8rem;">Fjern fluebenet for at skjule en sektion helt. Indholdet bevares — sektionen vises bare ikke.</div>
+        <div style="display:flex;flex-wrap:wrap;gap:1.4rem;">
+          <label style="display:flex;align-items:center;gap:.5rem;font-family:Manrope,sans-serif;font-size:.72rem;cursor:pointer;"><input type="checkbox" id="gay_vis_intro" checked> Intro</label>
+          <label style="display:flex;align-items:center;gap:.5rem;font-family:Manrope,sans-serif;font-size:.72rem;cursor:pointer;"><input type="checkbox" id="gay_vis_retreats" checked> Retreats</label>
+          <label style="display:flex;align-items:center;gap:.5rem;font-family:Manrope,sans-serif;font-size:.72rem;cursor:pointer;"><input type="checkbox" id="gay_vis_uge" checked> Ugen</label>
+          <label style="display:flex;align-items:center;gap:.5rem;font-family:Manrope,sans-serif;font-size:.72rem;cursor:pointer;"><input type="checkbox" id="gay_vis_ejendom" checked> Ejendommen</label>
+          <label style="display:flex;align-items:center;gap:.5rem;font-family:Manrope,sans-serif;font-size:.72rem;cursor:pointer;"><input type="checkbox" id="gay_vis_sted" checked> Sådan kommer du hertil</label>
+          <label style="display:flex;align-items:center;gap:.5rem;font-family:Manrope,sans-serif;font-size:.72rem;cursor:pointer;"><input type="checkbox" id="gay_vis_faq" checked> FAQ</label>
+          <label style="display:flex;align-items:center;gap:.5rem;font-family:Manrope,sans-serif;font-size:.72rem;cursor:pointer;"><input type="checkbox" id="gay_vis_cta" checked> Opfordring nederst</label>
+        </div>
+      </div>
+    </div>
+    <div style="margin-top:2rem;">
+      <button type="button" onclick="gemGay()" style="background:#7a1f35;color:#fff;border:none;padding:.7rem 2rem;font-family:Manrope,sans-serif;font-size:.68rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;">💾 Gem</button>
+    </div>
+  </div>
+
   <div class="subtab-content" id="tab-kontakt" style="padding:2rem 3rem;max-width:1100px;">
     <h2 style="font-family:Cinzel,serif;font-weight:300;font-size:1.4rem;letter-spacing:.08em;color:#2c2318;margin-bottom:.4rem;">Kontakt (kontakt.html)</h2>
     <p style="font-size:.75rem;color:rgba(44,35,24,.5);margin-bottom:2rem;">Alt indhold på kontaktsiden. DA/EN side om side. Husk 💾 Gem — tekst i felterne er ikke gemt før da.</p>
@@ -5046,6 +5333,7 @@ function loadSubTab(sub) {
   if (sub === 'forside') loadForside();
   if (sub === 'ejendommen') loadEjendommensAdmin();
   if (sub === 'udlejning') { loadUdlejningAdmin(); loadSikkerhedAdmin(); }
+  if (sub === 'gay') loadGayAdmin();
   if (sub === 'kontakt') loadKontaktAdmin();
 }
 
@@ -9746,6 +10034,102 @@ async function gemUdlejning() {
   }
 }
 
+
+
+
+// ═══ GAY RETREAT — LANDINGSSIDE (gay_content) ══════════════════════════════
+// Samme mønster som udlejningssiden: nøgle/værdi i gay_content, dansk uden
+// suffiks, engelsk med _en. Siden har egne defaults, så tomme felter betyder
+// "brug sidens standardtekst" — ikke "vis ingenting".
+const GAY_TEXT_KEYS = ["seo_title", "seo_desc", "nav_links", "nav_back", "hero_eyebrow", "hero_h1", "hero_text", "hero_meta", "hero_scroll", "intro_label", "intro_h2", "intro_lede", "intro_text", "retreats_label", "retreats_h2", "retreats_intro", "uge_label", "uge_h2", "uge_intro", "uge_items", "ejendom_label", "ejendom_h2", "ejendom_text", "sted_label", "sted_h2", "sted_text", "sted_afstande", "sted_text2", "faq_label", "faq_h2", "faq_items", "cta_h2", "cta_text", "cta_btn", "footer_copy"];
+const GAY_IMG_KEYS  = ["social_image", "hero_image", "ejendom_image", "sted_image"];
+const GAY_SOLO_KEYS = ["cta_link"];
+const GAY_VIS_KEYS  = ["vis_intro", "vis_retreats", "vis_uge", "vis_ejendom", "vis_sted", "vis_faq", "vis_cta"];
+
+async function loadGayAdmin() {
+  if (!sb) return;
+  const advarsel = document.getElementById('gayAdvarsel');
+  let map = {}, fejl = null;
+  try {
+    const { data, error } = await sb.from('gay_content').select('key,value');
+    if (error) throw error;
+    (data || []).forEach(r => { map[r.key] = r.value; });
+  } catch (e) {
+    fejl = e.message || String(e);
+    console.warn('loadGayAdmin: kunne ikke hente gay_content (er tabellen oprettet?):', fejl);
+  }
+  if (advarsel) {
+    if (fejl) {
+      advarsel.style.display = 'block';
+      advarsel.innerHTML = 'Kunne ikke hente indholdet. Er tabellen oprettet? Kør <code>sql/2026-07-28-gay-content.sql</code> i Supabase SQL Editor.<br><span style="opacity:.7;">' + gayEsc(fejl) + '</span>';
+    } else {
+      advarsel.style.display = 'none';
+    }
+  }
+  GAY_TEXT_KEYS.forEach(key => {
+    ['da', 'en'].forEach(lang => {
+      const el = document.getElementById('gay_' + key + '_' + lang);
+      if (!el) return;
+      el.value = map[lang === 'da' ? key : key + '_en'] || '';
+    });
+  });
+  GAY_SOLO_KEYS.forEach(key => {
+    const el = document.getElementById('gay_' + key);
+    if (el) el.value = map[key] || '';
+  });
+  GAY_IMG_KEYS.forEach(key => {
+    const el = document.getElementById('gay_' + key + '_url');
+    if (!el) return;
+    el.value = map[key] || '';
+    const pv = document.getElementById('gay_' + key + '_preview');
+    if (pv) {
+      if (map[key]) { pv.src = map[key]; pv.style.display = 'inline-block'; }
+      else { pv.removeAttribute('src'); pv.style.display = 'none'; }
+    }
+  });
+  GAY_VIS_KEYS.forEach(key => {
+    const el = document.getElementById('gay_' + key);
+    if (el) el.checked = map[key] !== '0';   // alt vises som udgangspunkt
+  });
+}
+
+function gayEsc(t) {
+  return String(t == null ? '' : t).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
+
+async function gemGay() {
+  if (!sb) return;
+  const btn = document.getElementById('gayGemBtn');
+  if (btn) { btn.disabled = true; btn.textContent = 'Gemmer...'; }
+  const upserts = [];
+  GAY_TEXT_KEYS.forEach(key => {
+    const da = document.getElementById('gay_' + key + '_da');
+    const en = document.getElementById('gay_' + key + '_en');
+    if (da) upserts.push({ key: key, value: da.value.trim() });
+    if (en) upserts.push({ key: key + '_en', value: en.value.trim() });
+  });
+  GAY_SOLO_KEYS.forEach(key => {
+    const el = document.getElementById('gay_' + key);
+    if (el) upserts.push({ key: key, value: el.value.trim() });
+  });
+  GAY_IMG_KEYS.forEach(key => {
+    const el = document.getElementById('gay_' + key + '_url');
+    if (el) upserts.push({ key: key, value: el.value.trim() });
+  });
+  GAY_VIS_KEYS.forEach(key => {
+    const el = document.getElementById('gay_' + key);
+    if (el) upserts.push({ key: key, value: el.checked ? '1' : '0' });
+  });
+  try {
+    const { error } = await sb.from('gay_content').upsert(upserts, { onConflict: 'key' });
+    if (error) throw error;
+    showToast('\u2713 Gay Retreat-siden gemt!');
+  } catch (e) {
+    showToast('Fejl: ' + (e.message || e), true);
+  } finally {
+    if (btn) { btn.disabled = false; btn.textContent = '\uD83D\uDCBE Gem'; }
+  }
+}
 
 
 // ─── DIN SIKKERHED (fælles sektion på forside/ejendommen/udlejning — site_content) ───
