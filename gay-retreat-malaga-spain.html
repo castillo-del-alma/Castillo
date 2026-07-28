@@ -1285,7 +1285,9 @@ bindGayFaq();
     grid.innerHTML = raekker.map(function (r) {
       // Flaget bliver stående — det er en del af genkendeligheden fra forsiden
       var titel = rent(da ? (r.title || r.title_en) : (r.title_en || r.title)) || 'Retreat';
-      var brudt = esc(titel).replace(' &amp; ', '<br>&amp; ').replace(' og ', '<br>og ').replace(' and ', '<br>and ');
+      // Samme regel som forsiden: kun "&" brækker titlen. Titlen er escapet
+      // først, så tegnet står som &amp; her.
+      var brudt = esc(titel).replace(' &amp; ', '<br>&amp; ');
       var kat = rent(da ? (r.subtitle || r.subtitle_en) : (r.subtitle_en || r.subtitle)) || 'Gay Retreat:';
       var tekst = rent(da ? (r.description || r.description_en) : (r.description_en || r.description)).slice(0, 260);
       var img = r.card_image || r.hero_image || FALLBACK_IMG;

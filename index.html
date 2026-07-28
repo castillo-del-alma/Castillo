@@ -2507,6 +2507,18 @@ function buildAvailBadge(r, availData, isEN) {
   return `<div class="retreat-avail ${cls}">${txt}</div>`;
 }
 
+// Brækker en retreat-titel over to linjer. KUN ved "&", som reglen oprindeligt
+// var lavet til ("Krop & Sjæl" → "Krop / & Sjæl").
+//
+// Den brød tidligere også ved " og " og " and ". Det gav to problemer:
+// " og " blev erstattet med et linjeskift UDEN at ordet kom med, så
+// "Krop og sjæl" blev vist som "Krop / sjæl", og " and " efterlod
+// bindeordet alene i starten af linje to. Titler uden "&" ombryder nu
+// naturligt, som al anden tekst.
+function brydTitel(t) {
+  return String(t == null ? '' : t).replace(' & ', '<br>&amp; ');
+}
+
 // Bygger den rene adresse til et retreat: /retreat/<slug> — eller /en/retreat/<slug>
 // når vi står på den engelske sti. Slug'en er uændret den, der oprettes i admin.
 function retreatHref(slug) {
@@ -2595,7 +2607,7 @@ async function loadRetreatsGrid() {
         ${buildAvailBadge(r, availData, isEN)}
         <div class="retreat-card-content">
           ${subtitle ? `<div class="retreat-card-category">${subtitle}</div>` : ''}
-          <h3>${title.replace(' & ', '<br>&amp; ').replace(' og ', '<br>').replace(' and ', '<br>and ')}</h3>
+          <h3>${brydTitel(title)}</h3>
           <p>${description}</p>
           <span class="retreat-card-arrow">${seMere}</span>
         </div>
