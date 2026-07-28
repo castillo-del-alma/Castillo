@@ -265,13 +265,19 @@ section{padding:6.5rem 4rem;}
 }
 .rcard:hover .rcard-arrow{transform:translateX(5px);}
 
-/* ── FOTOSTRIBER — tre striber à op til 5 billeder, styres i admin ── */
-.foto-stribe{padding:0;background:var(--section-alt);}
-.foto-stribe-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:.6rem;padding:.6rem;}
-.stribe-felt{position:relative;overflow:hidden;aspect-ratio:3/4;background:var(--sand);}
-.stribe-felt img{width:100%;height:100%;object-fit:cover;transition:transform .8s cubic-bezier(.23,1,.32,1);}
-.stribe-felt:hover img{transform:scale(1.07);}
-.stribe-felt .stribe-accent{position:absolute;top:0;left:0;right:0;height:3px;z-index:2;}
+/* ── FOTOSTRIBER — tre striber à op til 5 billeder, styres i admin ──
+   Samme opskrift som .retreat-img5-item på retreat-siden: kvadratiske
+   felter i sidens almindelige indholdsbredde, ikke kant til kant. */
+.foto-stribe{padding:2rem 0;}
+.foto-stribe-inner{max-width:1320px;margin:0 auto;padding:0 4rem;}
+.foto-stribe-grid{display:grid;gap:.6rem;margin:0 auto;}
+.stribe-felt{
+  position:relative;overflow:hidden;aspect-ratio:1/1;
+  background:var(--sand);transition:transform .4s;
+}
+.stribe-felt:hover{transform:scale(1.05);}
+.stribe-felt img{width:100%;height:100%;object-fit:cover;display:block;}
+.stribe-felt .stribe-accent{position:absolute;top:0;left:0;right:0;height:4px;z-index:2;}
 
 /* ── TO-KOLONNE ── */
 .split{display:grid;grid-template-columns:1fr 1fr;gap:4.5rem;align-items:center;}
@@ -387,7 +393,10 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--gold);outline-offse
   .hero-meta span{padding:.42rem .8rem;font-size:.55rem;letter-spacing:.12em;}
   .hero-scroll{display:none;}
   .split{grid-template-columns:1fr;gap:2.4rem;}
-  .foto-stribe-grid{grid-template-columns:repeat(2,1fr);gap:.4rem;padding:.4rem;}
+  .foto-stribe{padding:1.2rem 0;}
+  .foto-stribe-inner{padding:0 1.5rem;}
+  /* Inline-stilene fra JS skal vige på mobil, derfor !important */
+  .foto-stribe-grid{grid-template-columns:repeat(2,1fr) !important;max-width:none !important;gap:.4rem;}
   .rcard{min-height:520px;}
   .rcard-content{padding:1.5rem 1.3rem;}
   .rcard-avail{left:1.3rem;}
@@ -462,7 +471,7 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--gold);outline-offse
 </section>
 
 <!-- FOTOSTRIBE 1 -->
-<section class="foto-stribe" id="strip1" style="display:none;"><div class="foto-stribe-grid"></div></section>
+<section class="foto-stribe" id="strip1" style="display:none;"><div class="foto-stribe-inner"><div class="foto-stribe-grid"></div></div></section>
 
 <!-- RETREATS -->
 <section class="alt" id="retreats">
@@ -568,7 +577,7 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--gold);outline-offse
 </section>
 
 <!-- FOTOSTRIBE 2 -->
-<section class="foto-stribe" id="strip2" style="display:none;"><div class="foto-stribe-grid"></div></section>
+<section class="foto-stribe" id="strip2" style="display:none;"><div class="foto-stribe-inner"><div class="foto-stribe-grid"></div></div></section>
 
 <!-- BELIGGENHED -->
 <section id="location">
@@ -640,7 +649,7 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--gold);outline-offse
 </section>
 
 <!-- FOTOSTRIBE 3 -->
-<section class="foto-stribe" id="strip3" style="display:none;"><div class="foto-stribe-grid"></div></section>
+<section class="foto-stribe" id="strip3" style="display:none;"><div class="foto-stribe-inner"><div class="foto-stribe-grid"></div></div></section>
 
 <!-- CTA -->
 <section class="cta-band" id="sec-cta">
@@ -990,7 +999,10 @@ function byggGayStriber() {
     if (typeof billeder === 'string') { try { billeder = JSON.parse(billeder); } catch (e) { billeder = null; } }
     billeder = Array.isArray(billeder) ? billeder.filter(Boolean).slice(0, 5) : [];
     if (!billeder.length) { sec.style.display = 'none'; grid.innerHTML = ''; return; }
+    // Felterne holder samme størrelse uanset antal: fire billeder fylder
+    // 4/5 af bredden i stedet for at blive strukket ud til fem felters plads.
     grid.style.gridTemplateColumns = 'repeat(' + billeder.length + ',1fr)';
+    grid.style.maxWidth = (billeder.length / 5 * 100) + '%';
     grid.innerHTML = billeder.map(function (u, i) {
       return '<div class="stribe-felt">' +
         '<span class="stribe-accent" style="background:' + GAY_STRIBE_FARVER[i % GAY_STRIBE_FARVER.length] + ';"></span>' +
