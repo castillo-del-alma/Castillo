@@ -14,7 +14,10 @@ console.log('── Admin-fanen ──');
   t('fanen ligger blandt de andre subtab-content', tab.parentElement===d.getElementById('tab-udlejning').parentElement);
   t('14 blokke (0-13)', tab.querySelectorAll('.fc-block').length===14);
   t('oversaet-knap paa indholdsblokkene', tab.querySelectorAll('button[onclick="oversaetBlok(this)"]').length===11);
-  t('gem-knapper findes (top, blok 0, bund)', tab.querySelectorAll('button[onclick="gemGay()"]').length===3);
+  // Hver blok har nu sit eget gem-par, plus top og bund.
+// Placeringen testes i detaljer i gemknaptest.js.
+t('gem-knap i hver blok samt top og bund',
+  tab.querySelectorAll('button[onclick="gemGay()"]').length === tab.querySelectorAll('.fc-block').length + 2);
   // alle DA-felter har en EN-makker (ellers virker ⇄ Oversæt ikke)
   const daFelter=[...tab.querySelectorAll('[id$="_da"]')];
   const uden=daFelter.filter(e=>!d.getElementById(e.id.slice(0,-3)+'_en'));
