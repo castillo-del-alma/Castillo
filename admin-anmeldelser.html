@@ -3624,6 +3624,14 @@ feeling more calm – and coming home to yourself again."</textarea></div>
               <input type="file" id="gay_hero_image_file" accept="image/*" style="font-size:.76rem;flex:1;">
               <button type="button" onclick="uploadRetreatBillede('gay_hero_image_file','gay_hero_image_url','gay_hero_image_preview')" style="background:#2a7a74;color:#fff;border:none;padding:.45rem 1.1rem;font-family:Manrope,sans-serif;font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;white-space:nowrap;">⬆ Upload</button><button type="button" onclick="fjernBilledeFelt('gay_hero_image_url','gay_hero_image_preview')" style="background:rgba(163,51,51,.08);color:#a33;border:1px solid rgba(163,51,51,.35);padding:.45rem .9rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;white-space:nowrap;" title="Fjern billedet helt">🗑 Fjern</button>
             </div>
+        <div class="fc-row">
+          <div style="grid-column:1 / -1;">
+            <label style="display:flex;align-items:center;gap:.5rem;font-family:Manrope,sans-serif;font-size:.72rem;cursor:pointer;">
+              <input type="checkbox" id="gay_vis_pride_stribe" checked> Regnbuestribe langs bunden af hero-billedet
+            </label>
+            <div style="font-size:.64rem;color:rgba(44,35,24,.45);line-height:1.5;margin-top:.4rem;">Samme stribe som på retreat-siderne, hvor den markerer overgangen fra hero til booking-baren.</div>
+          </div>
+        </div>
           </div>
         </div>
       </div>
@@ -10366,6 +10374,11 @@ async function loadGayAdmin() {
       else { pv.removeAttribute('src'); pv.style.display = 'none'; }
     }
   });
+  { // Regnbuestribe på hero — tændt som udgangspunkt
+    const _ps = document.getElementById('gay_vis_pride_stribe');
+    if (_ps) _ps.checked = map.vis_pride_stribe !== '0';
+  }
+
   // Menu-links: JSON fra databasen, ellers standardmenuen
   let navRaa = [];
   try { navRaa = JSON.parse(map.nav_links || '[]'); } catch (e) { navRaa = []; }
@@ -10429,6 +10442,8 @@ async function gemGay() {
     const el = document.getElementById('gay_' + key + '_url');
     if (el) upserts.push({ key: key, value: el.value.trim() });
   });
+  { const _ps = document.getElementById('gay_vis_pride_stribe');
+    if (_ps) upserts.push({ key: 'vis_pride_stribe', value: _ps.checked ? '1' : '0' }); }
   upserts.push({ key: 'nav_links', value: JSON.stringify(gayNavState
     .filter(l => (l.tekst || '').trim() || (l.link || '').trim())
     .map(l => ({ tekst: (l.tekst || '').trim(), tekst_en: (l.tekst_en || '').trim(),

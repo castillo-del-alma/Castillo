@@ -22,7 +22,13 @@ console.log('── Admin-fanen ──');
   if(uden.length) console.log('     mangler:', uden.map(e=>e.id).join(', '));
   t('4 billedfelter med upload+fjern', tab.querySelectorAll('[id^="gay_"][id$="_url"]').length===4
      && tab.querySelectorAll('input[type=file]').length===4);
-  t('synlighed ligger nu i raekkefoelge-editoren', tab.querySelectorAll('input[type=checkbox][id^="gay_vis_"]').length===0 && !!d.getElementById('gayOrdenEditor'));
+  // Sektionernes synlighed hoerer til i raekkefoelge-editoren. Enkeltstaaende
+// flueben er kun tilladt for ting der IKKE er sektioner (fx pynt paa hero).
+const IKKE_SEKTION = ['gay_vis_pride_stribe'];
+const loeseSektionsFlueben = [...tab.querySelectorAll('input[type=checkbox][id^="gay_vis_"]')]
+  .filter(el => !IKKE_SEKTION.includes(el.id));
+t('ingen loese synligheds-flueben for sektioner', loeseSektionsFlueben.length===0 && !!d.getElementById('gayOrdenEditor'));
+if(loeseSektionsFlueben.length) console.log('     fundet:', loeseSektionsFlueben.map(e=>e.id).join(', '));
   t('loadSubTab kalder loadGayAdmin', /if \(sub === 'gay'\) loadGayAdmin\(\);/.test(adm));
 }
 

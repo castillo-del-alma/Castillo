@@ -185,6 +185,9 @@ insert into public.gay_content (key, value) values
   -- Rækkefølgen på sektionerne (redigeres i admin, blok 12)
   ('sektion_orden', '["sec-intro","strip1","retreats","week","estate","strip2","location","faq","strip3","sec-cta"]'),
 
+  -- Regnbuestribe langs bunden af hero-billedet (blok 2 · Hero)
+  ('vis_pride_stribe', '1'),
+
   -- Synlighed: '1' = vist, '0' = skjult
   ('vis_intro',    '1'),
   ('vis_strip1',   '1'),

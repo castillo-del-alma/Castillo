@@ -13,7 +13,11 @@ console.log('── Admin ──');
   t('rækkefølge-editor findes', !!d.getElementById('gayOrdenEditor'));
   t('tre stribelister findes', [1,2,3].every(n=>d.getElementById('gayStribe'+n+'Liste')));
   t('tre "Tilføj billede"-knapper', tab.querySelectorAll('button[onclick^="gayStribeTilfoej"]').length===3);
-  t('gamle løse synligheds-flueben er væk', tab.querySelectorAll('input[type=checkbox][id^="gay_vis_"]').length===0);
+  // Kun sektions-synlighed skal ligge i raekkefoelge-editoren; pynt paa hero
+// (regnbuestriben) har sit eget flueben i blok 2 og taeller ikke med.
+t('gamle løse sektions-flueben er væk',
+  [...tab.querySelectorAll('input[type=checkbox][id^="gay_vis_"]')]
+    .filter(el => el.id !== 'gay_vis_pride_stribe').length===0);
   t('Gem + Gem og se siden', !!tab.querySelector('button[onclick="gemGay()"]') && !!tab.querySelector('button[onclick="gemGayOgSeSiden()"]'));
 }
 
