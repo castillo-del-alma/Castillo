@@ -7,7 +7,7 @@
 
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="icon" type="image/png" href="img/logo-tower.png">
+<link rel="icon" type="image/png" href="/img/logo-tower.png">
 <title id="pageTitle">Castillo del Alma</title>
 <meta name="description" content="Eksklusive wellness retreats på en vingård i Málaga, Spanien — ro, personlig udvikling og autentiske oplevelser omgivet af egne vinmarker.">
 <link rel="canonical" href="https://castillodelalma.es/retreat">
@@ -44,7 +44,7 @@
   if (c) c.setAttribute('href', 'https://castillodelalma.es/en/retreat' + location.search);
 })();
 </script>
-<link rel="stylesheet" href="fonts/fonts.css">
+<link rel="stylesheet" href="/fonts/fonts.css">
 <style>
 :root {
   --cream:#faf6ee;--beige:#f0e8d5;--sand:#e0d0b0;--stone:#c8b898;
@@ -875,8 +875,8 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:3rem
 
 <!-- NAV -->
 <nav>
-  <a href="index.html" class="nav-logo">
-    <img src="img/taarne-hvid-trans.png" alt="Castillo del Alma">
+  <a href="/index.html" class="nav-logo">
+    <img src="/img/taarne-hvid-trans.png" alt="Castillo del Alma">
   </a>
   <button class="nav-burger" id="navBurger" aria-label="Åbn menu" aria-controls="navLinks" aria-expanded="false">
     <span></span><span></span><span></span>
@@ -896,7 +896,7 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:3rem
       </div>
     </li>
   </ul>
-  <a href="index.html#retreats" class="nav-back" id="navAllRetreats">← Alle retreats</a>
+  <a href="/index.html#retreats" class="nav-back" id="navAllRetreats">← Alle retreats</a>
 </nav>
 
 <!-- MOBIL-MENU BACKDROP -->
@@ -1085,7 +1085,7 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:3rem
         </div>
       </div>
       <div class="food-img reveal-right d2">
-        <img src="img/estate-dining.jpg" alt="Mad på Castillo del Alma" id="foodImg">
+        <img src="/img/estate-dining.jpg" alt="Mad på Castillo del Alma" id="foodImg">
       </div>
     </div>
   </div>
@@ -1355,7 +1355,7 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:3rem
           <label class="addon-item" style="align-items:flex-start;margin-top:.2rem;">
             <input type="checkbox" id="f-betingelser">
             <span class="addon-box" style="margin-top:.15rem;"></span>
-            <span class="addon-text" id="betingelserTekst" style="line-height:1.5;">Jeg har læst og accepterer <a href="betingelser.html" target="_blank" rel="noopener" style="color:var(--wine);text-decoration:underline;">salgs- og bookingbetingelserne</a> *</span>
+            <span class="addon-text" id="betingelserTekst" style="line-height:1.5;">Jeg har læst og accepterer <a href="/betingelser.html" target="_blank" rel="noopener" style="color:var(--wine);text-decoration:underline;">salgs- og bookingbetingelserne</a> *</span>
           </label>
           <div class="form-btns">
             <button type="button" class="form-submit form-submit-secondary" onclick="sendForespørgsel()" id="btnReserverPlads">Reserver din plads</button>
@@ -1442,11 +1442,11 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:3rem
   <div class="footer-bottom">
     <p>© 2026 Castillo del Alma · Mollina, Málaga · All rights reserved</p>
     <div style="display:flex;gap:1.6rem;flex-wrap:wrap;align-items:center;">
-      <a href="kontakt.html" id="rt_footer_kontakt">Kontakt</a>
-      <a href="betingelser.html" id="rt_footer_terms">Salgsbetingelser</a>
-      <a href="privacidad.html" id="rt_footer_privacy">Persondatapolitik</a>
-      <a href="aviso-legal.html" id="rt_footer_legal">Juridisk meddelelse</a>
-      <a href="index.html" id="rt_footer_back">← Tilbage til forsiden</a>
+      <a href="/kontakt.html" id="rt_footer_kontakt">Kontakt</a>
+      <a href="/betingelser.html" id="rt_footer_terms">Salgsbetingelser</a>
+      <a href="/privacidad.html" id="rt_footer_privacy">Persondatapolitik</a>
+      <a href="/aviso-legal.html" id="rt_footer_legal">Juridisk meddelelse</a>
+      <a href="/index.html" id="rt_footer_back">← Tilbage til forsiden</a>
     </div>
   </div>
 </footer>
@@ -1745,8 +1745,8 @@ function applyStaticLabels() {
   const bp = document.getElementById('bookPolicyNote'); if (bp) bp.textContent = rSC('ui_policy_note', retreatLang === 'en' ? 'By signing up you accept our payment and cancellation terms. A 30% deposit is due at sign-up and reserves your spot. The remaining balance is due no later than 6 weeks before arrival.' : 'Ved tilmelding accepterer du vores betalings- og afbestillingsbetingelser. Depositum på 30% forfalder ved tilmelding og reserverer din plads. Restbeløbet forfalder senest 6 uger før ankomst.');
   const bt = document.getElementById('betingelserTekst');
   if (bt) bt.innerHTML = retreatLang === 'en'
-    ? 'I have read and accept the <a href="betingelser.html" target="_blank" rel="noopener" style="color:var(--wine);text-decoration:underline;">terms of sale &amp; booking</a> *'
-    : 'Jeg har læst og accepterer <a href="betingelser.html" target="_blank" rel="noopener" style="color:var(--wine);text-decoration:underline;">salgs- og bookingbetingelserne</a> *';
+    ? 'I have read and accept the <a href="/betingelser.html" target="_blank" rel="noopener" style="color:var(--wine);text-decoration:underline;">terms of sale &amp; booking</a> *'
+    : 'Jeg har læst og accepterer <a href="/betingelser.html" target="_blank" rel="noopener" style="color:var(--wine);text-decoration:underline;">salgs- og bookingbetingelserne</a> *';
 
   // Hurtig-info bar (booking-bar) — Varighed/Ankomst/Afrejse har rigtige admin-felter
   setText('barDurationLabel', rSC('ui_label_duration', SI18N('barDurationLabel')));
@@ -1768,9 +1768,12 @@ function setRetreatLang(lang) {
   retreatLang = lang;
   // SEO (Bølge 2): hold adressen i sync med sproget (/retreat ↔ /en/retreat) uden reload
   try {
-    const onEn = /^\/en(\/|$)/.test(location.pathname);
-    if (lang === 'en' && !onEn) history.replaceState(null, '', '/en/retreat' + location.search + location.hash);
-    else if (lang === 'da' && onEn) history.replaceState(null, '', '/retreat' + location.search + location.hash);
+    const onEn = paaEngelskSti();
+    // Slug'en ligger nu i stien, ikke i ?slug= — den skal med over, ellers
+    // ender sprogskiftet på en retreat-side uden valgt retreat.
+    const _s = getSlugFromUrl();
+    if (lang === 'en' && !onEn) history.replaceState(null, '', retreatSti(_s, 'en') + location.hash);
+    else if (lang === 'da' && onEn) history.replaceState(null, '', retreatSti(_s, 'da') + location.hash);
   } catch(e) { /* replaceState utilgængelig → sproget skifter stadig, kun adressen står uændret */ }
   if (window.applySikkerhed) window.applySikkerhed(lang);
   const btnDa = document.getElementById('retreat-btn-da');
@@ -2018,8 +2021,27 @@ function paaEngelskSti() {
 
 // Bygger den rene, absolutte adresse til et retreat. sprog: 'da' | 'en'
 function byggRetreatUrl(slug, sprog) {
-  return 'https://castillodelalma.es' + (sprog === 'en' ? '/en' : '') +
-         '/retreat/' + encodeURIComponent(slug || '');
+  return 'https://castillodelalma.es' + retreatSti(slug, sprog);
+}
+
+// Kun stien — bruges til sprogknapper og history.replaceState
+function retreatSti(slug, sprog) {
+  return (sprog === 'en' ? '/en' : '') + '/retreat/' + encodeURIComponent(slug || '');
+}
+
+// Adressen /retreat/<slug> har ét niveau mere end de gamle ?slug=-adresser,
+// så relative stier peger forkert. Alle stier er derfor absolutte. Til gengæld
+// mistede de interne sidelinks dermed det /en-præfiks, de før arvede af sig
+// selv — det sættes tilbage her, så man bliver på engelsk, når man klikker.
+function sprogRetInterneLinks() {
+  if (!paaEngelskSti()) return;
+  document.querySelectorAll('a[href^="/"]').forEach(function (a) {
+    if (a.id === 'retreat-btn-da' || a.id === 'retreat-btn-en') return; // sprogskifteren styrer sig selv
+    var h = a.getAttribute('href');
+    if (!h || /^\/en(\/|$)/.test(h)) return;   // allerede engelsk
+    if (/^\/\//.test(h)) return;               // protokolrelativ — ikke intern
+    a.setAttribute('href', '/en' + h);
+  });
 }
 
 function fmtDateDK(d) {
@@ -2047,10 +2069,12 @@ async function loadRetreatData() {
   if (btnEn) { btnEn.classList.toggle('lang-btn-active', retreatLang === 'en'); btnEn.classList.toggle('lang-btn-inactive', retreatLang !== 'en'); }
   // Sprogknapperne er rigtige links, så Googlebot kan følge dem. Slug'en skal
   // med, ellers peger de på en retreat-side uden valgt retreat.
-  if (location.search) {
-    if (btnDa) btnDa.setAttribute('href', '/retreat' + location.search);
-    if (btnEn) btnEn.setAttribute('href', '/en/retreat' + location.search);
+  const _slugUrl = getSlugFromUrl();
+  if (_slugUrl) {
+    if (btnDa) btnDa.setAttribute('href', retreatSti(_slugUrl, 'da'));
+    if (btnEn) btnEn.setAttribute('href', retreatSti(_slugUrl, 'en'));
   }
+  sprogRetInterneLinks();
   // Sikkerhedssektionen henter sit indhold i en selvstændig IIFE og rendrede
   // med startværdien 'da', hvis den blev færdig før sproget var afgjort her.
   // Kaldet gør rækkefølgen ligegyldig — begge veje ender i rigtigt sprog.
