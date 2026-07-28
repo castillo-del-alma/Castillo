@@ -277,7 +277,10 @@ section{padding:8rem 0;}
 /* ── FOTOSTRIBER — tre striber à op til 5 billeder, styres i admin ──
    Samme opskrift som .retreat-img5-item på retreat-siden: kvadratiske
    felter i sidens almindelige indholdsbredde, ikke kant til kant. */
-.foto-stribe{padding:2rem 0;}
+/* Luften over og under styres pr. stribe fra admin. Variablerne sættes
+   som inline-stil på sektionen, så mobilreglen nedenfor stadig kan skalere
+   dem ned — det kunne den ikke, hvis vi satte padding direkte. */
+.foto-stribe{padding:var(--stribe-top,2rem) 0 var(--stribe-bund,2rem);}
 .foto-stribe-grid{display:grid;gap:.6rem;margin:0 auto;}
 .stribe-felt{
   position:relative;overflow:hidden;aspect-ratio:1/1;
@@ -403,7 +406,7 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--gold);outline-offse
   .hero-meta span{padding:.42rem .8rem;font-size:.55rem;letter-spacing:.12em;}
   .hero-scroll{display:none;}
   .split{grid-template-columns:1fr;gap:2.4rem;}
-  .foto-stribe{padding:1.2rem 0;}
+  .foto-stribe{padding:calc(var(--stribe-top,2rem) * .6) 0 calc(var(--stribe-bund,2rem) * .6);}
   /* Inline-stilene fra JS skal vige på mobil, derfor !important */
   .foto-stribe-grid{grid-template-columns:repeat(2,1fr) !important;max-width:none !important;gap:.4rem;}
   .rcard{min-height:520px;}
@@ -819,7 +822,13 @@ const GAY_SEED = {
     "ejendom_image": "/img/estate-pool.jpg",
     "sted_image": "/img/vinmark1.jpg",
     "cta_link": "#retreats",
-    "strip1_images": "[]",
+    "strip1_top": "2",
+  "strip1_bund": "2",
+  "strip2_top": "2",
+  "strip2_bund": "2",
+  "strip3_top": "2",
+  "strip3_bund": "2",
+  "strip1_images": "[]",
     "strip2_images": "[]",
     "strip3_images": "[]",
     "sektion_orden": "[\"sec-intro\",\"strip1\",\"retreats\",\"week\",\"estate\",\"strip2\",\"location\",\"faq\",\"strip3\",\"sec-cta\"]",
@@ -1026,6 +1035,11 @@ function byggGayStriber() {
     let billeder = gayData[id + '_images'];
     if (typeof billeder === 'string') { try { billeder = JSON.parse(billeder); } catch (e) { billeder = null; } }
     billeder = Array.isArray(billeder) ? billeder.filter(Boolean).slice(0, 5) : [];
+    // Luft over og under — tal i rem fra admin, 2 hvis intet er sat
+    var luftTop = parseFloat(gayData[id + '_top']);
+    var luftBund = parseFloat(gayData[id + '_bund']);
+    sec.style.setProperty('--stribe-top', (isNaN(luftTop) ? 2 : luftTop) + 'rem');
+    sec.style.setProperty('--stribe-bund', (isNaN(luftBund) ? 2 : luftBund) + 'rem');
     if (!billeder.length) { sec.style.display = 'none'; grid.innerHTML = ''; return; }
     // Felterne holder samme størrelse uanset antal: fire billeder fylder
     // 4/5 af bredden i stedet for at blive strukket ud til fem felters plads.

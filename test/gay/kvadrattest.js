@@ -25,7 +25,11 @@ t('samme maks-bredde som retreat-siden (1320px)', /max-width:1320px/.test(inner)
 t('samme sidemargin (4rem)', /padding:0 4rem/.test(inner) && /padding:0 4rem/.test(rtInner));
 t('centreret', /margin:0 auto/.test(inner));
 t('ingen fuldbredde-baggrund længere', !/background:var\(--section-alt\)/.test(regel('.foto-stribe{',base)));
-t('samme lodrette luft som retreat (2rem 0)', /padding:2rem 0/.test(regel('.foto-stribe{',base)));
+// Luften styres nu pr. stribe fra admin. Standarden er stadig 2rem,
+// som retreat-sidens sektioner — den ligger bare i variablens fallback.
+t('samme lodrette standard-luft som retreat (2rem)',
+  /var\(--stribe-top,\s*2rem\)/.test(regel('.foto-stribe{',base)) &&
+  /var\(--stribe-bund,\s*2rem\)/.test(regel('.foto-stribe{',base)));
 
 console.log('\n── Markup ──');
 {

@@ -150,6 +150,9 @@ insert into public.gay_content (key, value) values
 
   -- Billedstriber: JSON-lister med op til 5 billed-URL'er hver.
   -- Tomme som udgangspunkt — striben vises først, når du har lagt billeder i.
+  ('strip1_top', '2'), ('strip1_bund', '2'),
+  ('strip2_top', '2'), ('strip2_bund', '2'),
+  ('strip3_top', '2'), ('strip3_bund', '2'),
   ('strip1_images', '[]'),
   ('strip2_images', '[]'),
   ('strip3_images', '[]'),
