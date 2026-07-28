@@ -131,17 +131,21 @@ section{padding:6.5rem 4rem;}
   height:4px;width:180px;margin-bottom:2rem;transform-origin:left center;
   background:linear-gradient(90deg,#d43b3b 0%,#e08a25 20%,#d9c11f 40%,#4f9a4a 60%,#2f6fb5 80%,#7d4a9c 100%);
 }
-/* Tre faste tal — det man vil vide, før man læser videre */
+/* Nøgletal i kasser — samme udtryk som .pill i retreat-siden hero.
+   Hver kasse er et selvstændigt element, så de står side om side og
+   ombryder som hele enheder i stedet for at knække midt i en tekst. */
 .hero-meta{
-  display:flex;flex-wrap:wrap;gap:0;margin-top:2.4rem;
-  border-top:1px solid rgba(255,255,255,.28);padding-top:1.2rem;
+  display:flex;flex-wrap:wrap;gap:.6rem;margin-top:2.2rem;
 }
 .hero-meta span{
-  font-size:.64rem;font-weight:500;letter-spacing:.2em;text-transform:uppercase;
-  color:rgba(255,255,255,.86);padding:0 1.5rem;
-  border-left:1px solid rgba(255,255,255,.24);
+  font-size:.6rem;font-weight:500;letter-spacing:.15em;text-transform:uppercase;
+  color:rgba(255,255,255,.8);
+  padding:.5rem 1.05rem;
+  border:1px solid rgba(255,255,255,.35);
+  background:rgba(255,255,255,.06);
+  -webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px);
+  white-space:nowrap;
 }
-.hero-meta span:first-child{padding-left:0;border-left:none;}
 .hero-scroll{
   display:flex;flex-direction:column;align-items:center;gap:.7rem;
   text-decoration:none;color:rgba(255,255,255,.78);flex-shrink:0;padding-bottom:.4rem;
@@ -367,8 +371,8 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--gold);outline-offse
   .hero-inner{padding:0 1.5rem;}
   .hero-content{flex-direction:column;align-items:flex-start;gap:1.6rem;}
   .hero p{font-size:1.12rem;}
-  .hero-meta{margin-top:1.8rem;padding-top:1rem;gap:.5rem 0;}
-  .hero-meta span{padding:0 .9rem;font-size:.58rem;}
+  .hero-meta{margin-top:1.6rem;gap:.45rem;}
+  .hero-meta span{padding:.42rem .8rem;font-size:.55rem;letter-spacing:.12em;}
   .hero-scroll{display:none;}
   .split{grid-template-columns:1fr;gap:2.4rem;}
   .foto-stribe-grid{grid-template-columns:repeat(2,1fr);gap:.4rem;padding:.4rem;}
