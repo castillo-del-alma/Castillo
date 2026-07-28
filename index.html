@@ -1814,72 +1814,6 @@ body.menu-open .nav-burger span:nth-child(3){ transform:translateY(-9px) rotate(
           <div class="form-field">
             <label id="nlLabelLand">Land</label>
             <select id="nl-land"><option value="" id="nlOptVaelgLand">Vælg land</option>
-              <option>Danmark</option>
-              <option>Norge</option>
-              <option>Sverige</option>
-              <option>Finland</option>
-              <option>Island</option>
-              <option>Tyskland</option>
-              <option>Holland</option>
-              <option>Belgien</option>
-              <option>Luxembourg</option>
-              <option>Østrig</option>
-              <option>Schweiz</option>
-              <option>Frankrig</option>
-              <option>Spanien</option>
-              <option>Portugal</option>
-              <option>Italien</option>
-              <option>Grækenland</option>
-              <option>Irland</option>
-              <option>Det Forenede Kongerige</option>
-              <option>Polen</option>
-              <option>Tjekkiet</option>
-              <option>Slovakiet</option>
-              <option>Ungarn</option>
-              <option>Rumænien</option>
-              <option>Bulgarien</option>
-              <option>Kroatien</option>
-              <option>Slovenien</option>
-              <option>Serbien</option>
-              <option>Bosnien-Hercegovina</option>
-              <option>Montenegro</option>
-              <option>Nordmakedonien</option>
-              <option>Albanien</option>
-              <option>Kosovo</option>
-              <option>Estland</option>
-              <option>Letland</option>
-              <option>Litauen</option>
-              <option>Malta</option>
-              <option>Cypern</option>
-              <option>Liechtenstein</option>
-              <option>Monaco</option>
-              <option>Andorra</option>
-              <option>San Marino</option>
-              <option>Vatikanstaten</option>
-              <option>USA</option>
-              <option>Canada</option>
-              <option>Mexico</option>
-              <option>Brasilien</option>
-              <option>Argentina</option>
-              <option>Colombia</option>
-              <option>Chile</option>
-              <option>Peru</option>
-              <option>Venezuela</option>
-              <option>Ecuador</option>
-              <option>Uruguay</option>
-              <option>Bolivia</option>
-              <option>Israel</option>
-              <option>De Forenede Arabiske Emirater</option>
-              <option>Saudi-Arabien</option>
-              <option>Japan</option>
-              <option>Kina</option>
-              <option>Indien</option>
-              <option>Sydkorea</option>
-              <option>Singapore</option>
-              <option>Thailand</option>
-              <option>Indonesien</option>
-              <option>Malaysia</option>
-              <option>Australien</option>
               <option id="nlOptAndet">Andet</option></select>
           </div>
           <div class="form-field">
@@ -2452,6 +2386,7 @@ document.addEventListener('keydown', e => { if (e.key === 'Escape') closeWModal(
 </script>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="/js/lande.js"></script>
 <script>
 const SUPABASE_URL_RETREATS = 'https://niniwgiytyqvdqejigxg.supabase.co';
 const SUPABASE_ANON_KEY_RETREATS = 'sb_publishable_GwrNUpIuWzdg1oswOY5HzA_mKWqhd6y';
@@ -3253,6 +3188,11 @@ function applySiteLang() {
   set('nlLabelInteresser', 'nl_label_interesser');
   set('nlOptVaelgLand', 'nl_opt_vaelg_land');
   set('nlOptAndet', 'nl_opt_andet');
+  // Landelisten bygges fra js/lande.js, så navnene følger sproget.
+  // Værdien der gemmes er altid det danske navn — se kommentaren i filen.
+  if (typeof cdaByggLandeliste === 'function') {
+    cdaByggLandeliste(document.getElementById('nl-land'), currentSiteLang);
+  }
   set('nlCbRetreats', 'nl_cb_retreats');
   set('nlCbWine', 'nl_cb_wine');
   set('nlCbWellness', 'nl_cb_wellness');

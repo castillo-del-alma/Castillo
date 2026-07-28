@@ -1234,76 +1234,7 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:3rem
           </div>
           <div class="form-field">
             <label id="labelLand">Land</label>
-            <select id="f-land" required>
-              <option value="" id="optVaelgLand">Vælg dit land</option>
-              <option value="Danmark">Danmark</option>
-              <option value="Norge">Norge</option>
-              <option value="Sverige">Sverige</option>
-              <option value="Finland">Finland</option>
-              <option value="Island">Island</option>
-              <option value="Tyskland">Tyskland</option>
-              <option value="Holland">Holland</option>
-              <option value="Belgien">Belgien</option>
-              <option value="Luxembourg">Luxembourg</option>
-              <option value="Østrig">Østrig</option>
-              <option value="Schweiz">Schweiz</option>
-              <option value="Frankrig">Frankrig</option>
-              <option value="Spanien">Spanien</option>
-              <option value="Portugal">Portugal</option>
-              <option value="Italien">Italien</option>
-              <option value="Grækenland">Grækenland</option>
-              <option value="Irland">Irland</option>
-              <option value="Det Forenede Kongerige">Det Forenede Kongerige</option>
-              <option value="Polen">Polen</option>
-              <option value="Tjekkiet">Tjekkiet</option>
-              <option value="Slovakiet">Slovakiet</option>
-              <option value="Ungarn">Ungarn</option>
-              <option value="Rumænien">Rumænien</option>
-              <option value="Bulgarien">Bulgarien</option>
-              <option value="Kroatien">Kroatien</option>
-              <option value="Slovenien">Slovenien</option>
-              <option value="Serbien">Serbien</option>
-              <option value="Bosnien-Hercegovina">Bosnien-Hercegovina</option>
-              <option value="Montenegro">Montenegro</option>
-              <option value="Nordmakedonien">Nordmakedonien</option>
-              <option value="Albanien">Albanien</option>
-              <option value="Kosovo">Kosovo</option>
-              <option value="Estland">Estland</option>
-              <option value="Letland">Letland</option>
-              <option value="Litauen">Litauen</option>
-              <option value="Malta">Malta</option>
-              <option value="Cypern">Cypern</option>
-              <option value="Liechtenstein">Liechtenstein</option>
-              <option value="Monaco">Monaco</option>
-              <option value="Andorra">Andorra</option>
-              <option value="San Marino">San Marino</option>
-              <option value="Vatikanstaten">Vatikanstaten</option>
-              <option value="USA">USA</option>
-              <option value="Canada">Canada</option>
-              <option value="Mexico">Mexico</option>
-              <option value="Brasilien">Brasilien</option>
-              <option value="Argentina">Argentina</option>
-              <option value="Colombia">Colombia</option>
-              <option value="Chile">Chile</option>
-              <option value="Peru">Peru</option>
-              <option value="Venezuela">Venezuela</option>
-              <option value="Ecuador">Ecuador</option>
-              <option value="Uruguay">Uruguay</option>
-              <option value="Bolivia">Bolivia</option>
-              <option value="Israel">Israel</option>
-              <option value="De Forenede Arabiske Emirater">De Forenede Arabiske Emirater</option>
-              <option value="Saudi-Arabien">Saudi-Arabien</option>
-              <option value="Japan">Japan</option>
-              <option value="Kina">Kina</option>
-              <option value="Indien">Indien</option>
-              <option value="Sydkorea">Sydkorea</option>
-              <option value="Singapore">Singapore</option>
-              <option value="Thailand">Thailand</option>
-              <option value="Indonesien">Indonesien</option>
-              <option value="Malaysia">Malaysia</option>
-              <option value="Australien">Australien</option>
-              <option value="New Zealand">New Zealand</option>
-            </select>
+            <select id="f-land" required><option value="" id="optVaelgLand">Vælg dit land</option></select>
           </div>
           <div id="extra-guests"></div>
           <button type="button" class="add-guest-btn" onclick="addGuest()">
@@ -1559,6 +1490,7 @@ document.addEventListener('DOMContentLoaded', loadReviews);
 </script>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="/js/lande.js"></script>
 <script>
 const SUPABASE_URL_R = 'https://niniwgiytyqvdqejigxg.supabase.co';
 const SUPABASE_ANON_KEY_R = 'sb_publishable_GwrNUpIuWzdg1oswOY5HzA_mKWqhd6y';
@@ -1716,6 +1648,12 @@ function applyStaticLabels() {
   setText('labelTelefon', SI18N('labelTelefon'));
   setText('labelLand', SI18N('labelLand'));
   setText('optVaelgLand', SI18N('optVaelgLand'));
+  // Landelisten bygges fra js/lande.js, så navnene følger sproget.
+  // Værdien der gemmes er altid det danske navn — nationalitet === 'Danmark'
+  // styrer sproget i kundemails og må derfor ikke ændre sig med visningen.
+  if (typeof cdaByggLandeliste === 'function') {
+    cdaByggLandeliste(document.getElementById('f-land'), retreatLang);
+  }
   setText('labelTilfoejGaest', SI18N('labelTilfoejGaest'));
   setText('labelVaelgDato', SI18N('labelVaelgDato'));
   setText('optVaelgDato', SI18N('optVaelgDato'));
