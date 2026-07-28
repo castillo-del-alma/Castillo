@@ -5,8 +5,10 @@
 -- nøgle, dansk i `key`, engelsk i `key_en`. Siden har defaults indbygget
 -- (GAY_SEED), så den viser rigtigt indhold også før denne tabel udfyldes.
 --
--- RLS er slået FRA — nødvendigt for at admin kan gemme, præcis som på de
--- øvrige indholdstabeller. RØR IKKE RLS på betalings-/kunde-tabeller.
+-- RLS følger samme mønster som de øvrige indholdstabeller efter fase 1:
+-- alle må LÆSE (siden skal virke for besøgende), kun rollen 'authenticated'
+-- må SKRIVE (admin er logget ind med en ægte Supabase-session).
+-- RØR IKKE RLS på betalings-/kunde-tabeller.
 --
 -- Køres i Supabase SQL Editor. Idempotent — kan køres flere gange.
 -- ─────────────────────────────────────────────────────────────────────────
@@ -16,7 +18,29 @@ create table if not exists public.gay_content (
   value text
 );
 
-alter table public.gay_content disable row level security;
+-- Ryd eventuelle gamle policies, så filen kan køres igen uden fejl,
+-- og slå RLS til. Samme fremgangsmåde som i RLS fase 1.
+DO $$
+DECLARE
+  p record;
+BEGIN
+  FOR p IN
+    SELECT policyname FROM pg_policies
+    WHERE schemaname = 'public' AND tablename = 'gay_content'
+  LOOP
+    EXECUTE format('DROP POLICY IF EXISTS %I ON public.gay_content', p.policyname);
+  END LOOP;
+END $$;
+
+ALTER TABLE public.gay_content ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "alle_maa_laese" ON public.gay_content
+  FOR SELECT TO anon, authenticated
+  USING (true);
+
+CREATE POLICY "kun_admin_maa_skrive" ON public.gay_content
+  FOR ALL TO authenticated
+  USING (true) WITH CHECK (true);
 
 comment on table public.gay_content is
   'Indhold til /gay-retreat-malaga-spain (DA) og /en/gay-retreat-malaga-spain (EN). '
@@ -173,3 +197,15 @@ insert into public.gay_content (key, value) values
   ('vis_cta',      '1')
 
 on conflict (key) do nothing;
+
+
+-- ═════════════════════════════════════════════════════════════════════════
+-- KONTROL — kør denne bagefter. Forventet:
+--   rls_slaaet_til = true, og to policies: alle_maa_laese + kun_admin_maa_skrive
+-- ═════════════════════════════════════════════════════════════════════════
+-- select c.relrowsecurity as rls_slaaet_til,
+--        (select count(*) from pg_policies
+--          where schemaname='public' and tablename='gay_content') as antal_policies
+--   from pg_class c
+--   join pg_namespace n on n.oid = c.relnamespace
+--  where n.nspname='public' and c.relname='gay_content';

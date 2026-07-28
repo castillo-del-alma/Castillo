@@ -11,10 +11,13 @@ const fs = require('fs');
 const path = require('path');
 const { rapport, ROD } = require('./harness');
 
-// Tabellerne der blev låst i sql/2026-07-23-rls-fase-1-indholdstabeller.sql
+// Tabellerne der blev låst i sql/2026-07-23-rls-fase-1-indholdstabeller.sql,
+// plus senere indholdstabeller der følger samme mønster:
+//   gay_content — sql/2026-07-28-gay-content.sql
 const TABELLER = [
   'site_content', 'kontakt_content', 'udlejning_content',
   'ejendommen_content', 'ejendommen_rooms', 'retreats', 'reviews',
+  'gay_content',
 ];
 
 // Siderne der kører med anon-nøglen uden login. Admin-siderne er
@@ -23,6 +26,7 @@ const OFFENTLIGE_SIDER = [
   'index.html', 'retreat.html', 'ejendommen.html', 'udlejning.html',
   'kontakt.html', 'anmeldelse.html', 'min-booking.html', 'betal.html',
   'betal-success.html', 'betaling-tak.html', 'forum.html', '404.html',
+  'gay-retreat-malaga-spain.html',
 ];
 
 const SKRIVEORD = /\.(insert|update|upsert|delete)\s*\(/;
@@ -203,11 +207,24 @@ r.overskrift('migrationen');
 const migration = path.join(ROD, 'sql', '2026-07-23-rls-fase-1-indholdstabeller.sql');
 r.tjek(fs.existsSync(migration), 'fase 1-migrationen mangler i sql/');
 if (fs.existsSync(migration)) {
-  const sql = fs.readFileSync(migration, 'utf8');
-  for (const t of TABELLER) {
-    r.tjek(sql.includes(`'${t}'`), `fase 1-migrationen nævner ikke ${t}`);
-  }
-  r.tjek(/ENABLE ROW LEVEL SECURITY/.test(sql), 'fase 1-migrationen slår ikke RLS til');
+  r.tjek(/ENABLE ROW LEVEL SECURITY/.test(fs.readFileSync(migration, 'utf8')),
+    'fase 1-migrationen slår ikke RLS til');
+}
+
+// Hver låst tabel skal være dækket af EN migration i sql/ — fase 1 for de
+// oprindelige, en egen fil for dem der er kommet til siden. Kravet er, at
+// tabellen både nævnes OG får RLS slået til et sted.
+const alleMigrationer = fs.readdirSync(path.join(ROD, 'sql'))
+  .filter(f => f.endsWith('.sql'))
+  .map(f => ({ navn: f, sql: fs.readFileSync(path.join(ROD, 'sql', f), 'utf8') }));
+
+for (const t of TABELLER) {
+  const daekket = alleMigrationer.filter(m =>
+    m.sql.includes(`'${t}'`) || new RegExp(`\\b${t}\\b`).test(m.sql));
+  const medRls = daekket.filter(m => /ENABLE ROW LEVEL SECURITY/.test(m.sql));
+  r.tjek(medRls.length > 0,
+    `ingen migration slår RLS til for ${t}` +
+    (daekket.length ? ` (nævnt i ${daekket.map(m => m.navn).join(', ')})` : ''));
 }
 
 const migration3 = path.join(ROD, 'sql', '2026-07-24-rls-fase-3-foelsomme-tabeller.sql');
