@@ -32,9 +32,12 @@ for (const fil of SIDER) {
   const aAaben = (s.match(/<a\b/g) || []).length;
   const aLukket = (s.match(/<\/a>/g) || []).length;
 
-  // id'er der indeholder ${…} er skabelon-pladsholdere inde i JavaScript.
-  // De bliver til forskellige id'er når siden kører, så de tælles ikke med.
-  const ids = [...s.matchAll(/\sid="([^"]+)"/g)]
+  // Kun id'er i selve markupen tæller. Alt inde i <script> er JavaScript,
+  // der BYGGER markup — der står fx id="' + idDa + '" eller id="${n}", og
+  // det bliver til forskellige id'er, når siden kører. Tidligere blev kun
+  // ${…} sorteret fra, så almindelig strengsammensætning gav falsk alarm.
+  const markup = s.replace(/<script[\s\S]*?<\/script>/g, '');
+  const ids = [...markup.matchAll(/\sid="([^"]+)"/g)]
     .map((m) => m[1])
     .filter((i) => !i.includes('${'));
   const dubletter = [...new Set(ids.filter((i) => ids.filter((x) => x === i).length > 1))];

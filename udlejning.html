@@ -244,7 +244,9 @@ body.menu-open .nav-burger span:nth-child(3){ transform:translateY(-9px) rotate(
 .intro-small-img img{width:100%;height:100%;object-fit:cover;display:block;}
 
 /* ── PHOTO STRIP ── */
-.photo-strip{background:var(--section-alt);padding:0;}
+/* Luften over og under styres pr. stribe fra admin. Variabler frem for
+   padding direkte, så mobilreglen stadig kan skalere dem ned. */
+.photo-strip{background:var(--section-alt);padding:var(--stribe-top,0rem) 0 var(--stribe-bund,0rem);}
 .photo-strip-grid{
   display:grid;grid-template-columns:repeat(4,1fr);
   height:280px;
@@ -762,6 +764,7 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:3rem
   .intro-small-img{left:auto;right:1rem;bottom:-1.2rem;width:48%;}
 
   /* Foto-strib: 4 → 2 kolonner */
+  .photo-strip{padding:calc(var(--stribe-top,0rem) * .6) 0 calc(var(--stribe-bund,0rem) * .6);}
   .photo-strip-grid{grid-template-columns:repeat(2,1fr);height:auto;}
   .strip-item{aspect-ratio:4/3;}
 
@@ -1913,6 +1916,18 @@ function renderUlNav() {
 // Kører kun én gang pr. sideindlæsning; en divider lige efter en sektion flytter med
 const UL_SEKTION_STANDARD_ORDEN = ['intro','fotostrip1','undervisning','priser','faciliteter','fungerer','indkvartering','stemmer','vaerter','mere','design','fotostrip2','ulfaq','kontakt','sikkerhed'];
 let ulOrdenAnvendt = false;
+// Luft over og under billedstriberne — tal i rem fra admin, 0 hvis intet er sat
+function applyUlStribeLuft() {
+  [1, 2].forEach(function (nr) {
+    var sec = document.getElementById('fotostrip' + nr);
+    if (!sec) return;
+    var t = parseFloat(ulSC('fotostrip' + nr + '_top'));
+    var b = parseFloat(ulSC('fotostrip' + nr + '_bund'));
+    sec.style.setProperty('--stribe-top', (isNaN(t) ? 0 : t) + 'rem');
+    sec.style.setProperty('--stribe-bund', (isNaN(b) ? 0 : b) + 'rem');
+  });
+}
+
 function applyUlSektionOrden() {
   if (ulOrdenAnvendt) return;
   let orden = [];
@@ -2190,6 +2205,7 @@ async function loadUlContent() {
   if (btnEn) { btnEn.classList.toggle('lang-btn-active', ulLang === 'en'); btnEn.classList.toggle('lang-btn-inactive', ulLang !== 'en'); }
   // Disse kaldes ALTID — falder tilbage til dagens tekst/valgmuligheder hvis databasen er tom eller utilgængelig
   applyUlSektionOrden();
+  applyUlStribeLuft();
   applyUlContent();
   // Sikkerhedssektionen henter sit indhold i en selvstændig IIFE og rendrede
   // med startværdien 'da', hvis den blev færdig før sproget var afgjort her.
