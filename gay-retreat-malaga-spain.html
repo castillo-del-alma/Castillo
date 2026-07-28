@@ -242,6 +242,9 @@ section{padding:8rem 0;}
 .rcard h3{
   font-family:'Cinzel',serif;font-weight:300;font-size:1.32rem;letter-spacing:.06em;
   color:var(--gold-pale);margin-bottom:.7rem;line-height:1.3;
+  /* Ombryd først når pladsen slipper op — og fordel så linjerne jævnt
+     i stedet for at efterlade ét ord alene nederst. */
+  text-wrap:balance;
 }
 .rcard p{
   font-family:'Cormorant Garamond',serif;font-style:italic;
@@ -499,7 +502,7 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--gold);outline-offse
         <div class="rcard-avail avail-good">Available</div>
         <div class="rcard-content">
           <div class="rcard-category">Gay Retreat:</div>
-          <h3>🏳️‍🌈 Body<br>&amp; Soul</h3>
+          <h3>🏳️‍🌈 Body &amp; Soul</h3>
           <p>A luxury gay men's retreat. Seven days where wellness, sauna rituals, tantra, cacao ceremonies, personal development and strong community create the backdrop for an exclusive experience.</p>
           <div class="rcard-meta">
             <div class="rcard-datoer"><span class="rcard-dato"><span class="d">1–7 August 2026</span></span></div>
@@ -518,7 +521,7 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--gold);outline-offse
         <div class="rcard-avail avail-good">Available</div>
         <div class="rcard-content">
           <div class="rcard-category">Gay Retreat:</div>
-          <h3>🏳️‍🌈 Community<br>&amp; Relaxation</h3>
+          <h3>🏳️‍🌈 Community &amp; Relaxation</h3>
           <p>An exclusive gay retreat in Málaga, Spain focused on community, joy of life and authentic presence — a slower week, built around the table, the pool and each other.</p>
           <div class="rcard-meta">
             <div class="rcard-datoer"><span class="rcard-dato"><span class="d">12–18 September 2026</span></span></div>
@@ -1285,9 +1288,13 @@ bindGayFaq();
     grid.innerHTML = raekker.map(function (r) {
       // Flaget bliver stående — det er en del af genkendeligheden fra forsiden
       var titel = rent(da ? (r.title || r.title_en) : (r.title_en || r.title)) || 'Retreat';
-      // Samme regel som forsiden: kun "&" brækker titlen. Titlen er escapet
-      // først, så tegnet står som &amp; her.
-      var brudt = esc(titel).replace(' &amp; ', '<br>&amp; ');
+      // Ingen tvungen deling her. Kortene på denne side er brede nok til at
+      // titlen som regel går på én linje, og et hårdt <br> ville dele den
+      // alligevel. Browseren bryder selv, når pladsen slipper op.
+      // Forsidens kort er smalle og har fortsat sin egen faste brydning.
+      // Det eneste vi styrer: regnbueflaget skal blive hængende ved det
+      // første ord, så det aldrig står alene på en linje.
+      var brudt = esc(titel).replace(/^(\s*[\u{1F3F3}\u{FE0F}\u{200D}\u{1F308}]+)\s+/u, '$1\u00a0');
       var kat = rent(da ? (r.subtitle || r.subtitle_en) : (r.subtitle_en || r.subtitle)) || 'Gay Retreat:';
       var tekst = rent(da ? (r.description || r.description_en) : (r.description_en || r.description)).slice(0, 260);
       var img = r.card_image || r.hero_image || FALLBACK_IMG;
