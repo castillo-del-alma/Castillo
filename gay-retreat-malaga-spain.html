@@ -299,9 +299,23 @@ section{padding:6.5rem 4rem;}
   transition:background .3s;
 }
 .btn:hover,.btn:focus-visible{background:var(--wine-light);}
-.lang-btn{border-radius:0;font-family:'Manrope',sans-serif;font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;padding:.3rem .6rem;border:none;cursor:pointer;display:inline-block;text-decoration:none;}
-.lang-btn.lang-btn-active{background:var(--wine);color:#fff !important;}
-.lang-btn.lang-btn-inactive{background:transparent;color:var(--wine) !important;}
+/* .nav-links a sætter padding i mobil-visningen, og den er mere specifik end
+   .lang-btn alene. Sprogknapperne skrives derfor som .nav-links .lang-btn,
+   så deres polstring ikke bliver nulstillet og DA/EN klemt sammen. */
+.nav-links .lang-btn{
+  border-radius:0;font-family:'Manrope',sans-serif;
+  font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;
+  padding:.35rem .7rem;border:none;cursor:pointer;
+  display:inline-block;text-decoration:none;line-height:1.2;
+}
+.nav-links .lang-btn.lang-btn-active{background:var(--wine);color:#fff !important;}
+.nav-links .lang-btn.lang-btn-inactive{background:transparent;color:var(--wine) !important;}
+.nav-links .lang-switcher{display:inline-flex;flex:0 0 auto;}
+/* Burgeren bliver til et kryds, når menuen er åben — som på de øvrige sider */
+.nav-burger span{transform-origin:center;}
+.nav-burger.open span:nth-child(1){transform:translateY(6.5px) rotate(45deg);}
+.nav-burger.open span:nth-child(2){opacity:0;}
+.nav-burger.open span:nth-child(3){transform:translateY(-6.5px) rotate(-45deg);}
 
 /* ── FOOTER ── */
 footer{background:var(--charcoal);color:rgba(250,246,238,.72);padding:3rem 4rem;border-top:1px solid rgba(184,138,30,.2);}
@@ -345,7 +359,8 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--gold);outline-offse
   .nav-links a{display:block;padding:1rem 0;font-size:.8rem;letter-spacing:.16em;}
   .nav-links li{border-bottom:1px solid rgba(184,138,30,.14);}
   .nav-links li:last-child{border-bottom:none;}
-  .nav-lang-li{margin-left:0 !important;padding-top:1.2rem;}
+  .nav-lang-li{margin-left:0 !important;padding-top:1.6rem;border-bottom:none !important;}
+  .nav-links .lang-btn{padding:.6rem 1.15rem;font-size:.7rem;letter-spacing:.14em;}
   .nav-backdrop{z-index:9990;background:rgba(30,22,12,.45);-webkit-backdrop-filter:blur(2px);backdrop-filter:blur(2px);}
   section{padding:4rem 1.5rem;}
   .hero{padding:0 0 2.5rem;min-height:88svh;}
@@ -1125,14 +1140,26 @@ function bindGayFaq() {
   var links = document.getElementById('navLinks');
   var backdrop = document.getElementById('navBackdrop');
   if (!burger || !links || !backdrop) return;
-  function luk() { links.classList.remove('open'); backdrop.classList.remove('open'); burger.setAttribute('aria-expanded', 'false'); }
+  function luk() {
+    links.classList.remove('open');
+    backdrop.classList.remove('open');
+    burger.classList.remove('open');
+    burger.setAttribute('aria-expanded', 'false');
+    burger.setAttribute('aria-label', 'Åbn menu');
+  }
   burger.addEventListener('click', function () {
     var aaben = links.classList.toggle('open');
     backdrop.classList.toggle('open', aaben);
+    burger.classList.toggle('open', aaben);
     burger.setAttribute('aria-expanded', aaben ? 'true' : 'false');
+    burger.setAttribute('aria-label', aaben ? 'Luk menu' : 'Åbn menu');
   });
   backdrop.addEventListener('click', luk);
-  links.addEventListener('click', function (e) { if (e.target.tagName === 'A') luk(); });
+  links.addEventListener('click', function (e) {
+    // Sprogskifteren skal ikke lukke menuen — man skifter sprog og bliver stående
+    if (e.target.closest && e.target.closest('.lang-switcher')) return;
+    if (e.target.tagName === 'A') luk();
+  });
 })();
 
 // ── FAQ-udfoldning (bindes igen hver gang listen bygges om) ──
