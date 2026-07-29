@@ -2400,11 +2400,21 @@ async function loadReviews() {
   try {
     const SUPABASE_URL = 'https://niniwgiytyqvdqejigxg.supabase.co';
     const SUPABASE_ANON_KEY = 'sb_publishable_GwrNUpIuWzdg1oswOY5HzA_mKWqhd6y';
-    const res = await fetch(`${SUPABASE_URL}/rest/v1/reviews?approved=eq.true&order=sort_order.asc&order=created_at.desc&limit=3&select=*,comment_da,comment_en,reviewer_name_display`, {
+    // Der hentes flere end de tre, der vises, og sorteres fra herinde. Så
+    // virker siden også i minutterne før placeringskolonnerne er oprettet i
+    // databasen: mangler feltet, er det ikke false, og anmeldelsen vises.
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/reviews?approved=eq.true&order=sort_order.asc&order=created_at.desc&limit=40&select=*,comment_da,comment_en,reviewer_name_display`, {
       headers: { 'apikey': SUPABASE_ANON_KEY, 'Authorization': `Bearer ${SUPABASE_ANON_KEY}` }
     });
-    const reviews = await res.json();
-    if (!reviews || !reviews.length) { grid.innerHTML = ''; return; }
+    const alle = await res.json();
+    const reviews = Array.isArray(alle) ? alle.filter(r => r.vis_forside !== false).slice(0, 3) : [];
+    const sektion = document.getElementById('reviews');
+    if (!reviews.length) {
+      grid.innerHTML = '';
+      if (sektion) sektion.style.display = 'none';
+      return;
+    }
+    if (sektion) sektion.style.display = '';
     allReviewsDataIndex = reviews;
     renderReviewsIndex(currentSiteLang);
   } catch(e) { console.log('Reviews fejl:', e); }

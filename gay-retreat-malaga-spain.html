@@ -319,6 +319,32 @@ section{padding:8rem 0;}
 .faq-item.open .faq-a{max-height:600px;}
 .faq-a p{padding-bottom:1.6rem;}
 
+/* ── ANMELDELSER ── */
+/* Nøjagtig samme kort som på forsiden og retreat-siderne, så en anmeldelse
+   ser ens ud uanset hvilken side den står på. Sektionen skjules af JS, hvis
+   der ikke er nogen anmeldelser markeret til denne side. */
+.reviews-section{background:#ACB5A8;}
+.reviews-section h2{color:var(--charcoal);}
+.reviews-section h2 em{color:var(--wine);font-style:normal;}
+.reviews-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2rem;margin-top:4rem;}
+.review-card{
+  background:#fff;border:1px solid rgba(184,138,30,.2);border-top:3px solid var(--gold);
+  padding:2.4rem 2.2rem;cursor:pointer;transition:box-shadow .4s,transform .4s;
+  display:flex;flex-direction:column;
+}
+.review-card:hover{box-shadow:0 16px 48px rgba(44,35,24,.13);transform:translateY(-5px);}
+.review-stars{color:var(--gold);font-size:1.15rem;letter-spacing:.15em;margin-bottom:1.4rem;text-align:center;}
+.review-quote{
+  font-family:'Cormorant Garamond',serif;font-size:1.2rem;font-style:italic;
+  color:var(--charcoal);line-height:1.85;flex:1;text-align:center;
+  display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden;
+}
+.review-author{
+  margin-top:1.6rem;padding-top:1rem;border-top:1px solid rgba(184,138,30,.15);
+  font-size:.62rem;letter-spacing:.18em;text-transform:uppercase;
+  color:rgba(44,35,24,.5);text-align:center;
+}
+
 /* ── CTA ── */
 .cta-band{background:var(--charcoal);color:var(--cream);text-align:center;}
 .cta-band h2{color:var(--cream);}
@@ -413,6 +439,9 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--gold);outline-offse
   .rcard-content{padding:1.5rem 1.3rem;}
   .rcard-avail{left:1.3rem;}
   .retreat-grid{gap:1.2rem;}
+  .reviews-grid{grid-template-columns:1fr;gap:1.2rem;margin-top:2.4rem;}
+  .review-card{padding:1.8rem 1.5rem;}
+  .review-quote{font-size:1.3rem;}
   .feature{gap:1.8rem;}
   .dist{gap:1.8rem;}
   p{font-size:1.08rem;}
@@ -663,6 +692,24 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--gold);outline-offse
 <!-- FOTOSTRIBE 3 -->
 <section class="foto-stribe" id="strip3" style="display:none;"><div class="section-inner"><div class="foto-stribe-grid"></div></div></section>
 
+<!-- ANMELDELSER -->
+<!-- Sektionen starter skjult og vises kun, hvis der faktisk er anmeldelser
+     markeret til denne side i admin. Så kan overskriften aldrig stå alene. -->
+<section class="reviews-section" id="anmeldelser" style="display:none;">
+  <div class="section-inner">
+    <span class="eyebrow" id="g_anmeldelser_label">Guest experiences</span>
+    <h2 id="g_anmeldelser_h2">What our <em>guests</em> say</h2>
+    <div class="reviews-grid" id="gayReviewsGrid"></div>
+  </div>
+</section>
+
+<div id="gayReviewModal" style="display:none;position:fixed;inset:0;background:rgba(44,35,24,.75);z-index:3000;align-items:center;justify-content:center;cursor:pointer;">
+  <div style="background:#faf6ee;max-width:580px;width:92%;max-height:85vh;overflow-y:auto;padding:3rem 2.8rem;position:relative;cursor:default;" onclick="event.stopPropagation()">
+    <button type="button" onclick="document.getElementById('gayReviewModal').style.display='none'" style="position:absolute;top:1rem;right:1.2rem;background:none;border:none;font-size:1.3rem;cursor:pointer;color:rgba(44,35,24,.4);line-height:1;">✕</button>
+    <div id="gayReviewModalContent"></div>
+  </div>
+</div>
+
 <!-- CTA -->
 <section class="cta-band" id="sec-cta">
   <div class="narrow">
@@ -784,6 +831,8 @@ const GAY_SEED = {
     "faq_label": "Spørgsmål",
     "faq_h2": "Før du booker",
     "faq_items": "[{\"da\": [\"Hvem er disse retreats for?\", \"Bøsser, og kun bøsser — det er hele pointen med at lukke ejendommen frem for at køre et blandet program. Mænd kommer alene, som par og som venner. Aldrene spænder vidt, og ingen er til overs.\"], \"en\": [\"Who are these retreats for?\", \"Gay men, and only gay men — that is the point of closing the estate rather than running a mixed programme. Men come on their own, as couples and as friends. Ages vary widely and no one is the odd one out.\"]}, {\"da\": [\"Kan jeg komme alene?\", \"Det gør de fleste. En lukket gruppe på seksten i en hel uge betyder, at du ikke kommer til at være fremmed ugen igennem — ved anden middag holder det op med at føles som en samling enkeltpersoner.\"], \"en\": [\"Can I come alone?\", \"Most men do. A closed group of sixteen for a full week means you will not spend the week as a stranger — by the second dinner it stops feeling like a group of individuals.\"]}, {\"da\": [\"Skal jeg have erfaring med breathwork, tantra eller meditation?\", \"Nej. Sessionerne ledes med førstegangsdeltagere for øje, og alt er frivilligt. At sidde en over er helt normalt, ikke en udmelding.\"], \"en\": [\"Do I need experience with breathwork, tantra or meditation?\", \"No. Sessions are led with first-timers in mind and everything is optional. Sitting one out is a normal thing to do, not a statement.\"]}, {\"da\": [\"Hvor foregår det præcis?\", \"På Castillo del Alma, en privat vinejendom uden for Mollina i Málaga-provinsen, Andalusien. Hele ejendommen er reserveret til gruppen — der er ingen andre gæster.\"], \"en\": [\"Where exactly is the retreat held?\", \"At Castillo del Alma, a private wine estate outside Mollina in the province of Málaga, Andalusia. The whole estate is reserved for the group — there are no other guests.\"]}, {\"da\": [\"Hvordan kommer jeg dertil fra Málaga lufthavn?\", \"Turen tager cirka femogfyrre minutter. Lejebil er ligetil, og vi kan hjælpe med at arrangere transport, hvis du hellere vil hentes. Send os dine flytider, når du booker.\"], \"en\": [\"How do I get there from Málaga airport?\", \"The drive is roughly forty-five minutes. Hire cars are straightforward, and we can help arrange a transfer if you would rather be picked up. Let us know your flight times when you book.\"]}, {\"da\": [\"Hvad er inkluderet i prisen?\", \"Ophold, måltider, vin til middagen, brug af pool og wellness samt hele programmet. På hvert retreats egen side står præcis, hvad der er med, sammen med eventuelle tilvalg som massage.\"], \"en\": [\"What is included in the price?\", \"Accommodation, meals, wine at dinner, use of the pool and wellness facilities and the full programme of sessions. Each retreat page lists exactly what is covered, along with any optional extras such as massage.\"]}, {\"da\": [\"Hvor mange deltager?\", \"Ejendommen har plads til seksten, og det er loftet. Det er lille nok til, at alle rent faktisk kender hinanden, når ugen er omme.\"], \"en\": [\"How many men attend?\", \"The estate sleeps sixteen, and that is the ceiling. It is small enough that everyone actually knows everyone by the end of the week.\"]}, {\"da\": [\"Hvilket sprog tales der?\", \"Retreats afholdes på engelsk og dansk. Gæsterne kommer fra hele Europa, og gruppens arbejdssprog finder sig selv i løbet af en dag.\"], \"en\": [\"What language is spoken?\", \"Retreats are run in English and Danish. Guests come from across Europe, and the working language of the group settles itself within a day.\"]}]",
+    "anmeldelser_label": "Gæsternes oplevelser",
+    "anmeldelser_h2": "Hvad siger vores <em>gæster</em>",
     "cta_h2": "Kom og se",
     "cta_text": "Seksten pladser, to gange om året. Lyder en uge i Andalusien som den rigtige idé, står datoer, værelser og hele programmet på retreat-siderne.",
     "cta_btn": "Se de to retreats",
@@ -814,6 +863,8 @@ const GAY_SEED = {
     "sted_text2_en": "El Torcal, the Antequera dolmens and the flamingo lake at Fuente de Piedra are all within a short drive, if you want a day out mid-week.",
     "faq_label_en": "Questions",
     "faq_h2_en": "Before you book",
+    "anmeldelser_label_en": "Guest experiences",
+    "anmeldelser_h2_en": "What our <em>guests</em> say",
     "cta_h2_en": "Come and see",
     "cta_text_en": "Sixteen places, twice a year. If a week in Andalusia sounds like the right idea, the retreat pages have the dates, the rooms and the full programme.",
     "cta_btn_en": "View the retreats",
@@ -831,7 +882,7 @@ const GAY_SEED = {
   "strip1_images": "[]",
     "strip2_images": "[]",
     "strip3_images": "[]",
-    "sektion_orden": "[\"sec-intro\",\"strip1\",\"retreats\",\"week\",\"estate\",\"strip2\",\"location\",\"faq\",\"strip3\",\"sec-cta\"]",
+    "sektion_orden": "[\"sec-intro\",\"strip1\",\"retreats\",\"week\",\"estate\",\"strip2\",\"location\",\"faq\",\"strip3\",\"anmeldelser\",\"sec-cta\"]",
     "vis_pride_stribe": "1",
     "vis_intro": "1",
     "vis_strip1": "1",
@@ -842,6 +893,7 @@ const GAY_SEED = {
     "vis_ejendom": "1",
     "vis_sted": "1",
     "vis_faq": "1",
+    "vis_anmeldelser": "1",
     "vis_cta": "1"
   };
 
@@ -849,11 +901,12 @@ const GAY_SEED = {
 const GAY_SEKTIONER = {
   'sec-intro': 'vis_intro', 'strip1': 'vis_strip1', 'retreats': 'vis_retreats',
   'week': 'vis_uge', 'estate': 'vis_ejendom', 'strip2': 'vis_strip2',
-  'location': 'vis_sted', 'faq': 'vis_faq', 'strip3': 'vis_strip3', 'sec-cta': 'vis_cta'
+  'location': 'vis_sted', 'faq': 'vis_faq', 'strip3': 'vis_strip3',
+  'anmeldelser': 'vis_anmeldelser', 'sec-cta': 'vis_cta'
 };
 // Standardrækkefølgen. Admin kan bytte om, men nye sektioner falder altid
 // tilbage på deres plads her, så en gemt rækkefølge ikke taber dem.
-const GAY_STANDARD_ORDEN = ['sec-intro','strip1','retreats','week','estate','strip2','location','faq','strip3','sec-cta'];
+const GAY_STANDARD_ORDEN = ['sec-intro','strip1','retreats','week','estate','strip2','location','faq','strip3','anmeldelser','sec-cta'];
 // Accentfarver på striberne — samme palet som resten af sitet
 const GAY_STRIBE_FARVER = ['var(--wine)','var(--gold)','var(--teal)','var(--terracotta)','var(--olive)'];
 
@@ -977,6 +1030,9 @@ function applyGayContent() {
     bindGayFaq();
   }
 
+  gSet('g_anmeldelser_label', gaySC('anmeldelser_label'));
+  gSet('g_anmeldelser_h2',    gaySC('anmeldelser_h2'));
+
   gSet('g_cta_h2',   gaySC('cta_h2'));
   gSet('g_cta_text', gaySC('cta_text'));
   const cta = document.getElementById('g_cta_btn');
@@ -991,6 +1047,7 @@ function applyGayContent() {
   byggGayStriber();
   applyGaySektionOrden();
   applyGaySynlighed();
+  gayAnmeldelserSynlighed();
   applyGayMeta();
   byggGayJsonLd();
 }
@@ -1087,6 +1144,17 @@ function applyGaySynlighed() {
   });
 }
 
+// Anmeldelses-sektionen har to betingelser: den skal være slået til i admin,
+// OG der skal være mindst én anmeldelse markeret til denne side. Ellers ville
+// overskriften stå tilbage over et tomt felt.
+function gayAnmeldelserSynlighed() {
+  const sec = document.getElementById('anmeldelser');
+  if (!sec) return;
+  const slaaetFra = gayData.vis_anmeldelser === '0';
+  const antal = (window.gayReviewsData && window.gayReviewsData.length) || 0;
+  sec.style.display = (slaaetFra || !antal) ? 'none' : '';
+}
+
 function gayUrl(sprog) {
   return 'https://castillodelalma.es' + (sprog === 'en' ? '/en' : '') + '/gay-retreat-malaga-spain';
 }
@@ -1160,6 +1228,7 @@ function setGayLang(lang) {
   if (bEn) { bEn.classList.toggle('lang-btn-active', gayLang === 'en'); bEn.classList.toggle('lang-btn-inactive', gayLang !== 'en'); }
   applyGayContent();
   if (window.gayRenderRetreats) window.gayRenderRetreats();
+  if (window.gayRenderReviews) window.gayRenderReviews();
 }
 
 async function bestemGayStartsprog() {
@@ -1393,6 +1462,104 @@ bindGayFaq();
       tegn();
     })
     .catch(function () { /* netværksfejl — de statiske kort bliver stående */ });
+})();
+
+// ── ANMELDELSER ────────────────────────────────────────────────────────────
+// Samme kort og samme detaljevindue som forsiden. Forskellen er filteret:
+// her vises kun anmeldelser, der i admin er markeret med "Gay-siden".
+// Der hentes bredt og sorteres herinde, så siden også virker, hvis
+// placeringskolonnerne endnu ikke er oprettet i databasen — så er der
+// bare ingen markerede endnu, og sektionen bliver skjult.
+window.gayReviewsData = [];
+(function () {
+  var GAY_SB_URL = 'https://niniwgiytyqvdqejigxg.supabase.co';
+  var GAY_SB_KEY = 'sb_publishable_GwrNUpIuWzdg1oswOY5HzA_mKWqhd6y';
+
+  function gennemsnit(r) {
+    var vals = [r.r1_modtagelse, r.r2_vaerelse, r.r3_mad, r.r4_omgivelser, r.r5_program,
+                r.r6_terapeuter, r.r7_faellesskab, r.r8_personlig, r.r9_ro, r.r10_samlet].filter(Boolean);
+    return vals.length ? Math.round(vals.reduce(function (a, b) { return a + b; }, 0) / vals.length * 10) / 10 : 0;
+  }
+  function navnPaa(r, paaEn) {
+    return r.reviewer_name_display ||
+      (r.fornavn ? (r.fornavn + (r.efternavn ? ' ' + r.efternavn[0] + '.' : '')) : (paaEn ? 'Anonymous' : 'Anonym'));
+  }
+
+  function tegn() {
+    var grid = document.getElementById('gayReviewsGrid');
+    if (!grid) return;
+    var paaEn = (typeof gayLang !== 'undefined' && gayLang === 'en');
+    grid.innerHTML = window.gayReviewsData.map(function (r) {
+      var avg = gennemsnit(r);
+      var stjerner = '★'.repeat(Math.round(avg)) + '☆'.repeat(5 - Math.round(avg));
+      var navn = navnPaa(r, paaEn);
+      var citat = paaEn ? (r.comment_en || r.markedsfoering || r.bedste || '')
+                        : (r.comment_da || r.markedsfoering || r.bedste || '');
+      var ord = String(citat).split(' ');
+      var kort = ord.length > 30 ? ord.slice(0, 30).join(' ') + '…' : citat;
+      var pakket = encodeURIComponent(JSON.stringify(r));
+      return '<div class="review-card" onclick="gayVisReviewDetalje(\'' + pakket + '\')">' +
+        '<div class="review-stars">' + stjerner + ' <span style="font-size:.75rem;color:rgba(44,35,24,.5);">' + avg + '/5</span></div>' +
+        '<div class="review-quote">&#8220;' + gEsc(kort) + '&#8221;</div>' +
+        '<div class="review-author"><strong>' + gEsc(navn) + '</strong>' +
+          (r.retreat_navn ? '<br><span style="display:block;margin-top:.3rem;"><strong>' + gEsc(r.retreat_navn) + '</strong></span>' : '') +
+        '</div>' +
+      '</div>';
+    }).join('');
+    if (typeof gayAnmeldelserSynlighed === 'function') gayAnmeldelserSynlighed();
+  }
+  window.gayRenderReviews = tegn;
+
+  window.gayVisReviewDetalje = function (pakket) {
+    var r;
+    try { r = JSON.parse(decodeURIComponent(pakket)); } catch (e) { return; }
+    var paaEn = (typeof gayLang !== 'undefined' && gayLang === 'en');
+    var avg = gennemsnit(r);
+    var navn = navnPaa(r, paaEn);
+    var citat = paaEn ? (r.comment_en || r.markedsfoering || '') : (r.comment_da || r.markedsfoering || '');
+    var bedste = paaEn ? (r.bedste_en || r.bedste || '') : (r.bedste || '');
+    var forandring = paaEn ? (r.forandring_en || r.forandring || '') : (r.forandring || '');
+    var snitLabel = paaEn ? 'average' : 'gennemsnit';
+    var bedsteLabel = paaEn ? 'Best part:' : 'Det bedste:';
+    var forandringLabel = paaEn ? 'Change:' : 'Forandring:';
+    var karakterer = paaEn
+      ? [['Reception', r.r1_modtagelse], ['Room', r.r2_vaerelse], ['Food', r.r3_mad], ['Surroundings', r.r4_omgivelser],
+         ['Programme', r.r5_program], ['Facilitators', r.r6_terapeuter], ['Community', r.r7_faellesskab],
+         ['Personal', r.r8_personlig], ['Calm', r.r9_ro], ['Overall', r.r10_samlet], ['Recommendation', r.r11_anbefaling]]
+      : [['Modtagelse', r.r1_modtagelse], ['Værelse', r.r2_vaerelse], ['Mad', r.r3_mad], ['Omgivelser', r.r4_omgivelser],
+         ['Program', r.r5_program], ['Terapeuter', r.r6_terapeuter], ['Fællesskab', r.r7_faellesskab],
+         ['Personlig', r.r8_personlig], ['Ro', r.r9_ro], ['Samlet', r.r10_samlet], ['Anbefaling', r.r11_anbefaling]];
+    var indhold = document.getElementById('gayReviewModalContent');
+    if (!indhold) return;
+    indhold.innerHTML =
+      '<p style="font-size:.6rem;letter-spacing:.3em;text-transform:uppercase;color:#7a5c14;margin:0 0 .5rem;">' + gEsc(r.retreat_navn || 'Castillo del Alma') + '</p>' +
+      '<h3 style="font-family:\'Cinzel\',serif;font-weight:300;font-size:1.2rem;color:#2c2318;margin:0 0 .3rem;">' + gEsc(navn) + '</h3>' +
+      '<div style="color:#b88a1e;margin-bottom:1.2rem;">' + '★'.repeat(Math.round(avg)) + '☆'.repeat(5 - Math.round(avg)) +
+        ' <span style="font-size:.8rem;color:rgba(44,35,24,.5);">' + avg + '/5 ' + snitLabel + '</span></div>' +
+      (citat ? '<p style="font-family:\'Cormorant Garamond\',serif;font-size:1.15rem;font-style:italic;line-height:1.8;color:#2c2318;margin:0 0 1.5rem;">&#8220;' + gEsc(citat) + '&#8221;</p>' : '') +
+      '<div style="display:grid;grid-template-columns:1fr 1fr;gap:.4rem .8rem;margin-bottom:1.2rem;">' +
+        karakterer.filter(function (p) { return p[1]; }).map(function (p) {
+          return '<div style="font-size:.75rem;color:rgba(44,35,24,.85);">' + gEsc(p[0]) + ': ' + '★'.repeat(p[1]) + '☆'.repeat(5 - p[1]) + '</div>';
+        }).join('') +
+      '</div>' +
+      (bedste ? '<p style="font-size:.85rem;line-height:1.7;color:rgba(44,35,24,.85);margin:0 0 .8rem;"><strong>' + bedsteLabel + '</strong> ' + gEsc(bedste) + '</p>' : '') +
+      (forandring ? '<p style="font-size:.85rem;line-height:1.7;color:rgba(44,35,24,.85);margin:0;"><strong>' + forandringLabel + '</strong> ' + gEsc(forandring) + '</p>' : '');
+    var modal = document.getElementById('gayReviewModal');
+    if (!modal) return;
+    modal.style.display = 'flex';
+    modal.onclick = function (e) { if (e.target === modal) modal.style.display = 'none'; };
+  };
+
+  fetch(GAY_SB_URL + '/rest/v1/reviews?approved=eq.true&order=sort_order.asc&order=created_at.desc&limit=40' +
+        '&select=*,comment_da,comment_en,reviewer_name_display', {
+    headers: { 'apikey': GAY_SB_KEY, 'Authorization': 'Bearer ' + GAY_SB_KEY }
+  })
+    .then(function (res) { return res.ok ? res.json() : []; })
+    .then(function (alle) {
+      window.gayReviewsData = Array.isArray(alle) ? alle.filter(function (r) { return r.vis_gay === true; }).slice(0, 3) : [];
+      tegn();
+    })
+    .catch(function () { /* netværksfejl — sektionen bliver bare stående skjult */ });
 })();
 
 // Indholdet hentes til sidst, så alt andet er bundet først

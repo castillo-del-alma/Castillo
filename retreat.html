@@ -1427,11 +1427,18 @@ async function loadReviews() {
   try {
     const SUPABASE_URL = 'https://niniwgiytyqvdqejigxg.supabase.co';
     const SUPABASE_ANON_KEY = 'sb_publishable_GwrNUpIuWzdg1oswOY5HzA_mKWqhd6y';
-    const res = await fetch(`${SUPABASE_URL}/rest/v1/reviews?approved=eq.true&order=sort_order.asc&order=created_at.desc&limit=3&select=*,comment_da,comment_en,reviewer_name_display`, {
+    // Som på forsiden: hent bredt og sortér fra herinde, så siden også
+    // virker før placeringskolonnerne findes i databasen.
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/reviews?approved=eq.true&order=sort_order.asc&order=created_at.desc&limit=40&select=*,comment_da,comment_en,reviewer_name_display`, {
       headers: { 'apikey': SUPABASE_ANON_KEY, 'Authorization': `Bearer ${SUPABASE_ANON_KEY}` }
     });
-    const reviews = await res.json();
-    REVIEWS_CACHE_R = reviews || [];
+    const alle = await res.json();
+    REVIEWS_CACHE_R = Array.isArray(alle) ? alle.filter(r => r.vis_retreat !== false).slice(0, 3) : [];
+    const sektion = document.getElementById('anmeldelser');
+    if (sektion) sektion.style.display = REVIEWS_CACHE_R.length ? '' : 'none';
+    // Menupunktet skal ikke pege på en sektion, der ikke er der
+    const navLink = document.getElementById('navReviews');
+    if (navLink && navLink.parentElement) navLink.parentElement.style.display = REVIEWS_CACHE_R.length ? '' : 'none';
     renderReviewsRetreat();
   } catch(e) { console.log('Reviews fejl:', e); }
 }
