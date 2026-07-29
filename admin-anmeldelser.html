@@ -3990,6 +3990,25 @@ feeling more calm – and coming home to yourself again."</textarea></div>
 </div>
     </div>
 
+    <div class="fc-block" id="gayblok_14" style="margin-bottom:1.5rem;">
+      <div class="fc-block-header" style="display:flex;align-items:center;gap:.8rem;"><span class="fc-block-title">14 · Gæsternes oplevelser (anmeldelser)</span><button type="button" onclick="oversaetBlok(this)" style="background:rgba(58,110,106,.1);border:1px solid rgba(58,110,106,.35);color:#2a7a74;padding:.3rem .8rem;font-family:Manrope,sans-serif;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;margin-left:auto;" title="Oversæt tomme engelske felter i denne sektion">⇄ Oversæt</button></div>
+      <div class="fc-block-body">
+        <div style="font-size:.68rem;color:rgba(44,35,24,.55);line-height:1.5;margin-bottom:.9rem;">
+          Samme anmeldelseskort som på forsiden. <b>Hvilke</b> anmeldelser der vises her, styres under <b>Se anmeldelser</b> — sæt flueben i “Gay-siden” ved de anmeldelser, der hører til her. Er ingen markeret, vises sektionen slet ikke.<br>
+          Rækkefølge og synlighed for selve sektionen sætter du i blok <b>0 · Menu og rækkefølge</b>.
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Overlinje</label><input type="text" id="gay_anmeldelser_label_da" class="fc-input-da"></div>
+          <div><label class="fc-label fc-label-en">Eyebrow</label><input type="text" id="gay_anmeldelser_label_en" class="fc-input-en"></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Overskrift (&lt;em&gt; giver vinrød fremhævning)</label><input type="text" id="gay_anmeldelser_h2_da" class="fc-input-da"></div>
+          <div><label class="fc-label fc-label-en">Heading (&lt;em&gt; highlights in wine red)</label><input type="text" id="gay_anmeldelser_h2_en" class="fc-input-en"></div>
+        </div>
+              <div style="text-align:right;margin-top:1.2rem;padding-top:1rem;border-top:1px solid rgba(184,138,30,.18);"><button type="button" onclick="gemGay()" style="background:var(--wine);color:#fff;border:none;padding:.5rem 1.4rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;">💾 Gem</button><button type="button" onclick="gemGayOgSeSiden()" style="background:#2a7a74;color:#fff;border:none;padding:.5rem 1.4rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;margin-left:.6rem;">💾 Gem og se siden</button></div>
+</div>
+    </div>
+
     <div style="margin-top:2rem;display:flex;gap:.8rem;justify-content:flex-end;flex-wrap:wrap;">
       <button type="button" onclick="gemGay()" style="background:#7a1f35;color:#fff;border:none;padding:.7rem 2rem;font-family:Manrope,sans-serif;font-size:.68rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;">💾 Gem</button>
       <button type="button" onclick="gemGayOgSeSiden()" style="background:#2a7a74;color:#fff;border:none;padding:.7rem 2rem;font-family:Manrope,sans-serif;font-size:.68rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;">💾 Gem og se siden</button>
@@ -6698,9 +6717,39 @@ async function loadAnmeldelserFane() {
     pending.forEach(r => { html += anmeldelseKortFane(r, false, 0, 0); });
     html += '<div style="height:1px;background:rgba(184,138,30,.15);margin:1.5rem 0;"></div>';
   }
-  html += '<p style="font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;color:#7a5c14;margin-bottom:.6rem;">Godkendte — rækkefølge på forsiden</p>';
+  html += '<p style="font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;color:#7a5c14;margin-bottom:.6rem;">Godkendte — rækkefølge og placering</p>';
   approved.forEach((r, idx) => { html += anmeldelseKortFane(r, true, idx, approved.length); });
   el.innerHTML = html;
+}
+
+// Hvor må anmeldelsen vises? Tre kolonner på reviews, oprettet i sql/
+// 2026-07-29-anmeldelser-placering.sql. Mangler kolonnen (filen ikke kørt
+// endnu), læses undefined som "tændt" for forside/retreat og "slukket" for
+// gay-siden — præcis de standardværdier SQL'en også sætter.
+function anmeldelsePlaceringFlueben(r, felt, tekst) {
+  const til = (felt === 'vis_gay') ? (r[felt] === true) : (r[felt] !== false);
+  return '<label style="display:flex;align-items:center;gap:.3rem;font-family:Manrope,sans-serif;font-size:.64rem;color:rgba(44,35,24,.75);cursor:pointer;white-space:nowrap;">' +
+    '<input type="checkbox"' + (til ? ' checked' : '') +
+    ' onchange="setAnmeldelsePlacering(\'' + r.id + '\',\'' + felt + '\',this)" style="cursor:pointer;"> ' + tekst + '</label>';
+}
+
+// Gemmes med det samme — som godkendelsesknappen. Der er ingen 💾 Gem her.
+async function setAnmeldelsePlacering(id, felt, el) {
+  if (!sb || !el) return;
+  const vaerdi = !!el.checked;
+  el.disabled = true;
+  try {
+    const opd = {};
+    opd[felt] = vaerdi;
+    const { error } = await sb.from('reviews').update(opd).eq('id', id);
+    if (error) throw error;
+    showToast('\u2713 Placering gemt');
+  } catch (e) {
+    el.checked = !vaerdi;   // fejlede det, skal fluebenet ikke lyve
+    showToast('Kunne ikke gemme: ' + (e.message || e) + ' — er sql/2026-07-29-anmeldelser-placering.sql kørt i Supabase?', true);
+  } finally {
+    el.disabled = false;
+  }
 }
 
 function anmeldelseKortFane(r, isApproved, idx, total) {
@@ -6714,7 +6763,14 @@ function anmeldelseKortFane(r, isApproved, idx, total) {
     (r.markedsfoering ? '<div style="font-size:.78rem;font-style:italic;color:rgba(44,35,24,.7);margin-top:.3rem;">“' + r.markedsfoering + '”</div>' : '') +
     '<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:.2rem .6rem;margin-top:.5rem;">' +
     [['Modtagelse',r.r1_modtagelse],['Værelse',r.r2_vaerelse],['Mad',r.r3_mad],['Omgivelser',r.r4_omgivelser],['Program',r.r5_program],['Terapeuter',r.r6_terapeuter],['Fællesskab',r.r7_faellesskab],['Personlig',r.r8_personlig],['Ro',r.r9_ro],['Samlet',r.r10_samlet],['Anbefaling',r.r11_anbefaling]].filter(([,v])=>v).map(([l,v])=>'<span style="font-size:.65rem;color:rgba(44,35,24,.85);">'+l+': '+'●'.repeat(v)+'○'.repeat(5-v)+' '+v+'/5</span>').join('') +
-    '</div></div>' +
+    '</div>' +
+    '<div style="display:flex;gap:.9rem;flex-wrap:wrap;align-items:center;margin-top:.7rem;padding-top:.55rem;border-top:1px solid rgba(184,138,30,.15);">' +
+    '<span style="font-family:Manrope,sans-serif;font-size:.58rem;letter-spacing:.14em;text-transform:uppercase;color:rgba(44,35,24,.45);">Vises på</span>' +
+    anmeldelsePlaceringFlueben(r,'vis_forside','Forsiden') +
+    anmeldelsePlaceringFlueben(r,'vis_retreat','Retreat-sider') +
+    anmeldelsePlaceringFlueben(r,'vis_gay','Gay-siden') +
+    '</div>' +
+    '</div>' +
     '<div style="display:flex;gap:.4rem;align-items:center;">' +
     (isApproved && idx > 0 ? '<button onclick="flytAnmeldelseOgGenindlaes(' + idx + ',-1);" style="font-size:.6rem;padding:.3rem .6rem;background:rgba(44,35,24,.06);border:1px solid rgba(44,35,24,.15);cursor:pointer;">↑ Op</button>' : '') +
     (isApproved && idx < total-1 ? '<button onclick="flytAnmeldelseOgGenindlaes(' + idx + ',1);" style="font-size:.6rem;padding:.3rem .6rem;background:rgba(44,35,24,.06);border:1px solid rgba(44,35,24,.15);cursor:pointer;">↓ Ned</button>' : '') +
@@ -10327,7 +10383,7 @@ async function gemUdlejning() {
 // Samme mønster som udlejningssiden: nøgle/værdi i gay_content, dansk uden
 // suffiks, engelsk med _en. Siden har egne defaults, så tomme felter betyder
 // "brug sidens standardtekst" — ikke "vis ingenting".
-const GAY_TEXT_KEYS = ["seo_title", "seo_desc", "nav_back", "hero_eyebrow", "hero_h1", "hero_text", "hero_scroll", "intro_label", "intro_h2", "intro_lede", "intro_text", "retreats_label", "retreats_h2", "retreats_intro", "uge_label", "uge_h2", "uge_intro", "ejendom_label", "ejendom_h2", "ejendom_text", "sted_label", "sted_h2", "sted_text", "sted_text2", "faq_label", "faq_h2", "cta_h2", "cta_text", "cta_btn", "footer_copy"];
+const GAY_TEXT_KEYS = ["seo_title", "seo_desc", "nav_back", "hero_eyebrow", "hero_h1", "hero_text", "hero_scroll", "intro_label", "intro_h2", "intro_lede", "intro_text", "retreats_label", "retreats_h2", "retreats_intro", "uge_label", "uge_h2", "uge_intro", "ejendom_label", "ejendom_h2", "ejendom_text", "sted_label", "sted_h2", "sted_text", "sted_text2", "faq_label", "faq_h2", "anmeldelser_label", "anmeldelser_h2", "cta_h2", "cta_text", "cta_btn", "footer_copy"];
 const GAY_IMG_KEYS  = ["social_image", "hero_image", "ejendom_image", "sted_image"];
 const GAY_SOLO_KEYS = ["cta_link"];
 // Synligheden sættes nu i rækkefølge-editoren (blok 12), ikke som løse flueben
@@ -10574,6 +10630,8 @@ const GAY_ADM_DEFAULTS = {
     "faq_label": "Spørgsmål",
     "faq_h2": "Før du booker",
     "faq_items": "Hvem er disse retreats for?|Bøsser, og kun bøsser — det er hele pointen med at lukke ejendommen frem for at køre et blandet program. Mænd kommer alene, som par og som venner. Aldrene spænder vidt, og ingen er til overs.\nKan jeg komme alene?|Det gør de fleste. En lukket gruppe på seksten i en hel uge betyder, at du ikke kommer til at være fremmed ugen igennem — ved anden middag holder det op med at føles som en samling enkeltpersoner.\nSkal jeg have erfaring med breathwork, tantra eller meditation?|Nej. Sessionerne ledes med førstegangsdeltagere for øje, og alt er frivilligt. At sidde en over er helt normalt, ikke en udmelding.\nHvor foregår det præcis?|På Castillo del Alma, en privat vinejendom uden for Mollina i Málaga-provinsen, Andalusien. Hele ejendommen er reserveret til gruppen — der er ingen andre gæster.\nHvordan kommer jeg dertil fra Málaga lufthavn?|Turen tager cirka femogfyrre minutter. Lejebil er ligetil, og vi kan hjælpe med at arrangere transport, hvis du hellere vil hentes. Send os dine flytider, når du booker.\nHvad er inkluderet i prisen?|Ophold, måltider, vin til middagen, brug af pool og wellness samt hele programmet. På hvert retreats egen side står præcis, hvad der er med, sammen med eventuelle tilvalg som massage.\nHvor mange deltager?|Ejendommen har plads til seksten, og det er loftet. Det er lille nok til, at alle rent faktisk kender hinanden, når ugen er omme.\nHvilket sprog tales der?|Retreats afholdes på engelsk og dansk. Gæsterne kommer fra hele Europa, og gruppens arbejdssprog finder sig selv i løbet af en dag.",
+    "anmeldelser_label": "Gæsternes oplevelser",
+    "anmeldelser_h2": "Hvad siger vores <em>gæster</em>",
     "cta_h2": "Kom og se",
     "cta_text": "Seksten pladser, to gange om året. Lyder en uge i Andalusien som den rigtige idé, står datoer, værelser og hele programmet på retreat-siderne.",
     "cta_btn": "Se de to retreats",
@@ -10612,6 +10670,8 @@ const GAY_ADM_DEFAULTS_EN = {
     "faq_label": "Questions",
     "faq_h2": "Before you book",
     "faq_items": "Who are these retreats for?|Gay men, and only gay men — that is the point of closing the estate rather than running a mixed programme. Men come on their own, as couples and as friends. Ages vary widely and no one is the odd one out.\nCan I come alone?|Most men do. A closed group of sixteen for a full week means you will not spend the week as a stranger — by the second dinner it stops feeling like a group of individuals.\nDo I need experience with breathwork, tantra or meditation?|No. Sessions are led with first-timers in mind and everything is optional. Sitting one out is a normal thing to do, not a statement.\nWhere exactly is the retreat held?|At Castillo del Alma, a private wine estate outside Mollina in the province of Málaga, Andalusia. The whole estate is reserved for the group — there are no other guests.\nHow do I get there from Málaga airport?|The drive is roughly forty-five minutes. Hire cars are straightforward, and we can help arrange a transfer if you would rather be picked up. Let us know your flight times when you book.\nWhat is included in the price?|Accommodation, meals, wine at dinner, use of the pool and wellness facilities and the full programme of sessions. Each retreat page lists exactly what is covered, along with any optional extras such as massage.\nHow many men attend?|The estate sleeps sixteen, and that is the ceiling. It is small enough that everyone actually knows everyone by the end of the week.\nWhat language is spoken?|Retreats are run in English and Danish. Guests come from across Europe, and the working language of the group settles itself within a day.",
+    "anmeldelser_label": "Guest experiences",
+    "anmeldelser_h2": "What our <em>guests</em> say",
     "cta_h2": "Come and see",
     "cta_text": "Sixteen places, twice a year. If a week in Andalusia sounds like the right idea, the retreat pages have the dates, the rooms and the full programme.",
     "cta_btn": "View the retreats",
@@ -10853,6 +10913,7 @@ const GAY_SEKTION_DEFS = [
   { id: 'location',  navn: 'Sådan kommer du hertil',                  key: 'vis_sted' },
   { id: 'faq',       navn: 'FAQ',                                     key: 'vis_faq' },
   { id: 'strip3',    navn: 'Billedstribe 3',                          key: 'vis_strip3' },
+  { id: 'anmeldelser', navn: 'Gæsternes oplevelser (anmeldelser)',    key: 'vis_anmeldelser' },
   { id: 'sec-cta',   navn: 'Opfordring nederst',                      key: 'vis_cta' }
 ];
 let gayOrdenState = [];                 // [{ id, vis }] i den rækkefølge sektionerne vises
