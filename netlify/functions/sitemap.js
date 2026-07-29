@@ -13,6 +13,9 @@ const BASE = 'https://castillodelalma.es';
 function urlEntry(loc, opts) {
   opts = opts || {};
   let x = '  <url>\n    <loc>' + loc + '</loc>\n';
+  // Rækkefølgen loc → lastmod → changefreq → priority følger sitemap-skemaet.
+  // hreflang-linkene er en udvidelse og lægges mellem, hvor Google forventer dem.
+  if (opts.lastmod) x += '    <lastmod>' + opts.lastmod + '</lastmod>\n';
   if (opts.alternates) {
     for (const [hl, href] of opts.alternates) {
       x += '    <xhtml:link rel="alternate" hreflang="' + hl + '" href="' + href + '"/>\n';
@@ -23,15 +26,28 @@ function urlEntry(loc, opts) {
   return x + '  </url>\n';
 }
 
+// YYYY-MM-DD. Google accepterer også fuldt tidsstempel, men datoen er nok
+// og undgår at et gemt-klik uden reelle ændringer ser ud som nyt indhold.
+function somDato(v) {
+  if (!v) return null;
+  const d = new Date(v);
+  return isNaN(d) ? null : d.toISOString().slice(0, 10);
+}
+
 exports.handler = async () => {
-  // Aktive retreat-slugs — fejler kaldet, fortsætter vi uden retreats
-  let slugs = [];
+  const hoved = { apikey: SUPABASE_KEY, Authorization: 'Bearer ' + SUPABASE_KEY };
+  const grund = SUPABASE_URL + '/rest/v1/retreats?active=eq.true&order=sort_order.asc&select=';
+
+  // Aktive retreats. Først med tidsstempler; har databasen dem ikke, hentes
+  // slug alene, så sitemappet aldrig mister sine retreats over en kolonne.
+  let raekker = [];
   try {
-    const res = await fetch(
-      SUPABASE_URL + '/rest/v1/retreats?select=slug&active=eq.true&order=sort_order.asc',
-      { headers: { apikey: SUPABASE_KEY, Authorization: 'Bearer ' + SUPABASE_KEY } }
-    );
-    if (res.ok) slugs = (await res.json()).map(r => r.slug).filter(Boolean);
+    let res = await fetch(grund + 'slug,updated_at,created_at', { headers: hoved });
+    if (!res.ok) res = await fetch(grund + 'slug', { headers: hoved });
+    if (res.ok) {
+      const data = await res.json();
+      if (Array.isArray(data)) raekker = data.filter(r => r && r.slug);
+    }
   } catch (e) { /* Supabase utilgængelig → kun faste sider */ }
 
   let xml = '<?xml version="1.0" encoding="UTF-8"?>\n' +
@@ -61,14 +77,19 @@ exports.handler = async () => {
     xml += urlEntry(enUrl, { alternates: alt, changefreq: s.changefreq, priority: s.priority });
   }
 
-  // Alle aktive retreats — dansk + engelsk med hreflang begge veje
-  for (const slug of slugs) {
-    const p = '/' + encodeURIComponent(slug);
+  // Alle aktive retreats — dansk + engelsk med hreflang begge veje.
+  // lastmod er det eneste felt Google reelt bruger; changefreq og priority
+  // ignoreres, men bliver stående, fordi andre søgemaskiner læser dem.
+  for (const r of raekker) {
+    const p = '/' + encodeURIComponent(r.slug);
     const daUrl = BASE + '/retreat' + p;
     const enUrl = BASE + '/en/retreat' + p;
     const alt = [['da', daUrl], ['en', enUrl], ['x-default', daUrl]];
-    xml += urlEntry(daUrl, { alternates: alt, changefreq: 'weekly', priority: '0.9' });
-    xml += urlEntry(enUrl, { alternates: alt, changefreq: 'weekly', priority: '0.9' });
+    const lastmod = somDato(r.updated_at) || somDato(r.created_at);
+    const o = { alternates: alt, changefreq: 'weekly', priority: '0.9' };
+    if (lastmod) o.lastmod = lastmod;
+    xml += urlEntry(daUrl, o);
+    xml += urlEntry(enUrl, o);
   }
 
   xml += '</urlset>\n';
