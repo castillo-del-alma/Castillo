@@ -319,6 +319,43 @@ section{padding:8rem 0;}
 .faq-item.open .faq-a{max-height:600px;}
 .faq-a p{padding-bottom:1.6rem;}
 
+/* ── OM OS ── */
+/* Samme greb som .om-os på forsiden: vinrød etiket, langsom zoom ved hover
+   og tårnet svagt bag teksten. Forskellen er to mindre billeder i stedet
+   for ét portræt, så parret kan vises sammen med stedet. */
+.omos{background:var(--section-alt);}
+.omos-grid{display:grid;grid-template-columns:1fr 1fr;gap:5.5rem;align-items:center;}
+.omos-text{position:relative;}
+.omos-text::after{
+  content:'';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+  width:85%;height:100%;
+  background:url('/img/logo-tower.png') center center/contain no-repeat;
+  opacity:.1;pointer-events:none;z-index:0;
+}
+.omos-text>*{position:relative;z-index:1;}
+.omos h2{color:var(--charcoal);}
+.omos h2 em{color:var(--wine);font-style:normal;}
+.omos-text p{
+  font-family:'Cormorant Garamond',serif;font-size:1.08rem;font-weight:300;
+  line-height:1.95;color:var(--text-mid);margin-bottom:1.4rem;
+}
+.omos-signatur{
+  margin-top:2.2rem;font-family:'Cormorant Garamond',serif;font-style:italic;
+  font-size:1.12rem;color:var(--text-mid);
+}
+.omos-billeder-wrap{position:relative;padding-bottom:1.8rem;padding-right:1.8rem;}
+.omos-billeder{display:grid;grid-template-columns:1fr 1fr;gap:1.1rem;}
+.omos-img{position:relative;overflow:hidden;border-radius:2px;aspect-ratio:3/4;}
+.omos-img img{width:100%;height:100%;object-fit:cover;object-position:center 28%;display:block;transition:transform 1.2s ease;}
+.omos-img:hover img{transform:scale(1.03);}
+/* Står der kun ét billede, fylder det hele bredden frem for at hænge skævt */
+.omos-billeder.enkelt{grid-template-columns:1fr;}
+.omos-billedlabel{
+  position:absolute;bottom:0;right:0;background:var(--wine);color:#fff;
+  font-family:'Manrope',sans-serif;font-size:.6rem;font-weight:500;
+  letter-spacing:.22em;text-transform:uppercase;padding:.65rem 1.1rem;
+}
+
 /* ── ANMELDELSER ── */
 /* Nøjagtig samme kort som på forsiden og retreat-siderne, så en anmeldelse
    ser ens ud uanset hvilken side den står på. Sektionen skjules af JS, hvis
@@ -439,6 +476,10 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--gold);outline-offse
   .rcard-content{padding:1.5rem 1.3rem;}
   .rcard-avail{left:1.3rem;}
   .retreat-grid{gap:1.2rem;}
+  .omos-grid{grid-template-columns:1fr;gap:3rem;}
+  .omos-billeder{gap:.8rem;}
+  .omos-billeder-wrap{padding-bottom:1.4rem;padding-right:1.4rem;}
+  .omos-text p{font-size:1.22rem;}
   .reviews-grid{grid-template-columns:1fr;gap:1.2rem;margin-top:2.4rem;}
   .review-card{padding:1.8rem 1.5rem;}
   .review-quote{font-size:1.3rem;}
@@ -692,6 +733,29 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--gold);outline-offse
 <!-- FOTOSTRIBE 3 -->
 <section class="foto-stribe" id="strip3" style="display:none;"><div class="section-inner"><div class="foto-stribe-grid"></div></div></section>
 
+<!-- OM OS -->
+<section class="omos" id="omos">
+  <div class="section-inner">
+    <div class="omos-grid">
+      <div class="omos-text">
+        <span class="eyebrow" id="g_omos_label">About us</span>
+        <h2 id="g_omos_h2">Michael<br>&amp; <em>Erik</em></h2>
+        <div id="g_omos_text"></div>
+        <div class="omos-signatur" id="g_omos_signatur">— Michael &amp; Erik</div>
+      </div>
+      <div>
+        <div class="omos-billeder-wrap">
+          <div class="omos-billeder" id="g_omos_billeder">
+            <div class="omos-img" id="g_omos_img1_wrap"><img id="g_omos_image1" alt="" loading="lazy" style="display:none;"></div>
+            <div class="omos-img" id="g_omos_img2_wrap"><img id="g_omos_image2" alt="" loading="lazy" style="display:none;"></div>
+          </div>
+          <div class="omos-billedlabel" id="g_omos_billedlabel">Michael &amp; Erik · Hosts</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- ANMELDELSER -->
 <!-- Sektionen starter skjult og vises kun, hvis der faktisk er anmeldelser
      markeret til denne side i admin. Så kan overskriften aldrig stå alene. -->
@@ -831,6 +895,11 @@ const GAY_SEED = {
     "faq_label": "Spørgsmål",
     "faq_h2": "Før du booker",
     "faq_items": "[{\"da\": [\"Hvem er disse retreats for?\", \"Bøsser, og kun bøsser — det er hele pointen med at lukke ejendommen frem for at køre et blandet program. Mænd kommer alene, som par og som venner. Aldrene spænder vidt, og ingen er til overs.\"], \"en\": [\"Who are these retreats for?\", \"Gay men, and only gay men — that is the point of closing the estate rather than running a mixed programme. Men come on their own, as couples and as friends. Ages vary widely and no one is the odd one out.\"]}, {\"da\": [\"Kan jeg komme alene?\", \"Det gør de fleste. En lukket gruppe på seksten i en hel uge betyder, at du ikke kommer til at være fremmed ugen igennem — ved anden middag holder det op med at føles som en samling enkeltpersoner.\"], \"en\": [\"Can I come alone?\", \"Most men do. A closed group of sixteen for a full week means you will not spend the week as a stranger — by the second dinner it stops feeling like a group of individuals.\"]}, {\"da\": [\"Skal jeg have erfaring med breathwork, tantra eller meditation?\", \"Nej. Sessionerne ledes med førstegangsdeltagere for øje, og alt er frivilligt. At sidde en over er helt normalt, ikke en udmelding.\"], \"en\": [\"Do I need experience with breathwork, tantra or meditation?\", \"No. Sessions are led with first-timers in mind and everything is optional. Sitting one out is a normal thing to do, not a statement.\"]}, {\"da\": [\"Hvor foregår det præcis?\", \"På Castillo del Alma, en privat vinejendom uden for Mollina i Málaga-provinsen, Andalusien. Hele ejendommen er reserveret til gruppen — der er ingen andre gæster.\"], \"en\": [\"Where exactly is the retreat held?\", \"At Castillo del Alma, a private wine estate outside Mollina in the province of Málaga, Andalusia. The whole estate is reserved for the group — there are no other guests.\"]}, {\"da\": [\"Hvordan kommer jeg dertil fra Málaga lufthavn?\", \"Turen tager cirka femogfyrre minutter. Lejebil er ligetil, og vi kan hjælpe med at arrangere transport, hvis du hellere vil hentes. Send os dine flytider, når du booker.\"], \"en\": [\"How do I get there from Málaga airport?\", \"The drive is roughly forty-five minutes. Hire cars are straightforward, and we can help arrange a transfer if you would rather be picked up. Let us know your flight times when you book.\"]}, {\"da\": [\"Hvad er inkluderet i prisen?\", \"Ophold, måltider, vin til middagen, brug af pool og wellness samt hele programmet. På hvert retreats egen side står præcis, hvad der er med, sammen med eventuelle tilvalg som massage.\"], \"en\": [\"What is included in the price?\", \"Accommodation, meals, wine at dinner, use of the pool and wellness facilities and the full programme of sessions. Each retreat page lists exactly what is covered, along with any optional extras such as massage.\"]}, {\"da\": [\"Hvor mange deltager?\", \"Ejendommen har plads til seksten, og det er loftet. Det er lille nok til, at alle rent faktisk kender hinanden, når ugen er omme.\"], \"en\": [\"How many men attend?\", \"The estate sleeps sixteen, and that is the ceiling. It is small enough that everyone actually knows everyone by the end of the week.\"]}, {\"da\": [\"Hvilket sprog tales der?\", \"Retreats afholdes på engelsk og dansk. Gæsterne kommer fra hele Europa, og gruppens arbejdssprog finder sig selv i løbet af en dag.\"], \"en\": [\"What language is spoken?\", \"Retreats are run in English and Danish. Guests come from across Europe, and the working language of the group settles itself within a day.\"]}]",
+    "omos_label": "Om os",
+    "omos_h2": "Michael<br>& <em>Erik</em>",
+    "omos_text": "Vi er Michael og Erik — et par der har været sammen siden 1988, og som gennem hele vores fælles liv har delt én overbevisning: man skal kun bruge tiden på det, der giver mening og glæde.\nEfter tre års søgen i Andalusien fandt vi det. Castillo del Alma er ikke bare et hus — det er præcis det, vi havde drømt om. Et sted vi selv vil bo, og som vi med stolthed åbner for vores gæster.\nTo gange om året lukker vi ejendommen helt og giver den til én gruppe homoseksuelle mænd. Vi er her selv hele ugen — ikke som værter på afstand, men som en del af gruppen.",
+    "omos_signatur": "— Michael & Erik",
+    "omos_billedlabel": "Michael & Erik · Værter",
     "anmeldelser_label": "Gæsternes oplevelser",
     "anmeldelser_h2": "Hvad siger vores <em>gæster</em>",
     "cta_h2": "Kom og se",
@@ -863,6 +932,11 @@ const GAY_SEED = {
     "sted_text2_en": "El Torcal, the Antequera dolmens and the flamingo lake at Fuente de Piedra are all within a short drive, if you want a day out mid-week.",
     "faq_label_en": "Questions",
     "faq_h2_en": "Before you book",
+    "omos_label_en": "About us",
+    "omos_h2_en": "Michael<br>& <em>Erik</em>",
+    "omos_text_en": "We are Michael and Erik — a couple since 1988, who have shared one conviction throughout our life together: only spend your time on what means something and brings joy.\nAfter three years of searching in Andalusia, we found it. Castillo del Alma is not just a house — it is exactly what we had dreamed of. A place we want to live ourselves, and one we open to our guests with pride.\nTwice a year we close the estate entirely and hand it to one group of gay men. We are here for the whole week ourselves — not as hosts at a distance, but as part of the group.",
+    "omos_signatur_en": "— Michael & Erik",
+    "omos_billedlabel_en": "Michael & Erik · Hosts",
     "anmeldelser_label_en": "Guest experiences",
     "anmeldelser_h2_en": "What our <em>guests</em> say",
     "cta_h2_en": "Come and see",
@@ -871,6 +945,8 @@ const GAY_SEED = {
     "footer_copy_en": "© 2026 Castillo del Alma · Mollina, Málaga · All rights reserved",
     "social_image": "https://castillodelalma.es/img/castillo-del-alma-social-1200.jpg",
     "ejendom_image": "/img/estate-pool.jpg",
+    "omos_image1": "/img/erik-michael-castillo-del-alma.webp",
+    "omos_image2": "",
     "sted_image": "/img/vinmark1.jpg",
     "cta_link": "#retreats",
     "strip1_top": "2",
@@ -882,7 +958,7 @@ const GAY_SEED = {
   "strip1_images": "[]",
     "strip2_images": "[]",
     "strip3_images": "[]",
-    "sektion_orden": "[\"sec-intro\",\"strip1\",\"retreats\",\"week\",\"estate\",\"strip2\",\"location\",\"faq\",\"strip3\",\"anmeldelser\",\"sec-cta\"]",
+    "sektion_orden": "[\"sec-intro\",\"strip1\",\"retreats\",\"week\",\"estate\",\"strip2\",\"location\",\"faq\",\"strip3\",\"omos\",\"anmeldelser\",\"sec-cta\"]",
     "vis_pride_stribe": "1",
     "vis_intro": "1",
     "vis_strip1": "1",
@@ -893,6 +969,7 @@ const GAY_SEED = {
     "vis_ejendom": "1",
     "vis_sted": "1",
     "vis_faq": "1",
+    "vis_omos": "1",
     "vis_anmeldelser": "1",
     "vis_cta": "1"
   };
@@ -902,11 +979,11 @@ const GAY_SEKTIONER = {
   'sec-intro': 'vis_intro', 'strip1': 'vis_strip1', 'retreats': 'vis_retreats',
   'week': 'vis_uge', 'estate': 'vis_ejendom', 'strip2': 'vis_strip2',
   'location': 'vis_sted', 'faq': 'vis_faq', 'strip3': 'vis_strip3',
-  'anmeldelser': 'vis_anmeldelser', 'sec-cta': 'vis_cta'
+  'omos': 'vis_omos', 'anmeldelser': 'vis_anmeldelser', 'sec-cta': 'vis_cta'
 };
 // Standardrækkefølgen. Admin kan bytte om, men nye sektioner falder altid
 // tilbage på deres plads her, så en gemt rækkefølge ikke taber dem.
-const GAY_STANDARD_ORDEN = ['sec-intro','strip1','retreats','week','estate','strip2','location','faq','strip3','anmeldelser','sec-cta'];
+const GAY_STANDARD_ORDEN = ['sec-intro','strip1','retreats','week','estate','strip2','location','faq','strip3','omos','anmeldelser','sec-cta'];
 // Accentfarver på striberne — samme palet som resten af sitet
 const GAY_STRIBE_FARVER = ['var(--wine)','var(--gold)','var(--teal)','var(--terracotta)','var(--olive)'];
 
@@ -1028,6 +1105,24 @@ function applyGayContent() {
         '<div class="faq-a"><p>' + (r[1] || '') + '</p></div>' +
       '</div>').join(''));
     bindGayFaq();
+  }
+
+  gSet('g_omos_label',       gaySC('omos_label'));
+  gSet('g_omos_h2',          gaySC('omos_h2'));
+  gSetAfsnit('g_omos_text',  gaySC('omos_text'));
+  gSet('g_omos_signatur',    gaySC('omos_signatur'));
+  gSet('g_omos_billedlabel', gaySC('omos_billedlabel'));
+  gSetImg('g_omos_image1',   gayData.omos_image1);
+  gSetImg('g_omos_image2',   gayData.omos_image2);
+  // Er der kun ét billede, skal det ikke stå og hænge i den halve bredde
+  const _ob = document.getElementById('g_omos_billeder');
+  if (_ob) {
+    const _antal = [gayData.omos_image1, gayData.omos_image2].filter(Boolean).length;
+    _ob.classList.toggle('enkelt', _antal < 2);
+    const _w1 = document.getElementById('g_omos_img1_wrap');
+    const _w2 = document.getElementById('g_omos_img2_wrap');
+    if (_w1) _w1.style.display = gayData.omos_image1 ? '' : 'none';
+    if (_w2) _w2.style.display = gayData.omos_image2 ? '' : 'none';
   }
 
   gSet('g_anmeldelser_label', gaySC('anmeldelser_label'));

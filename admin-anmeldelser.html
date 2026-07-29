@@ -3932,7 +3932,60 @@ feeling more calm – and coming home to yourself again."</textarea></div>
     </div>
 
     <div class="fc-block" id="gayblok_14" style="margin-bottom:1.5rem;">
-      <div class="fc-block-header" style="display:flex;align-items:center;gap:.8rem;"><span class="fc-block-title">14 · Gæsternes oplevelser (anmeldelser)</span><button type="button" onclick="oversaetBlok(this)" style="background:rgba(58,110,106,.1);border:1px solid rgba(58,110,106,.35);color:#2a7a74;padding:.3rem .8rem;font-family:Manrope,sans-serif;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;margin-left:auto;" title="Oversæt tomme engelske felter i denne sektion">⇄ Oversæt</button></div>
+      <div class="fc-block-header" style="display:flex;align-items:center;gap:.8rem;"><span class="fc-block-title">14 · Om os — Michael &amp; Erik</span><button type="button" onclick="oversaetBlok(this)" style="background:rgba(58,110,106,.1);border:1px solid rgba(58,110,106,.35);color:#2a7a74;padding:.3rem .8rem;font-family:Manrope,sans-serif;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;margin-left:auto;" title="Oversæt tomme engelske felter i denne sektion">⇄ Oversæt</button></div>
+      <div class="fc-block-body">
+        <div style="font-size:.68rem;color:rgba(44,35,24,.55);line-height:1.5;margin-bottom:.9rem;">
+          Samme afsnit som på forsiden, men med jeres egen tekst til gay-siden og plads til <b>to billeder</b> ved siden af hinanden. Uploader du kun ét, fylder det hele bredden af sig selv.<br>
+          Rækkefølge og synlighed sætter du i blok <b>0 · Menu og rækkefølge</b>.
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Overlinje</label><input type="text" id="gay_omos_label_da" class="fc-input-da"></div>
+          <div><label class="fc-label fc-label-en">Eyebrow</label><input type="text" id="gay_omos_label_en" class="fc-input-en"></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Overskrift (&lt;br&gt; giver linjeskift, &lt;em&gt; vinrød)</label><input type="text" id="gay_omos_h2_da" class="fc-input-da"></div>
+          <div><label class="fc-label fc-label-en">Heading (&lt;br&gt; line break, &lt;em&gt; wine red)</label><input type="text" id="gay_omos_h2_en" class="fc-input-en"></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Brødtekst — ét afsnit pr. linje</label><textarea id="gay_omos_text_da" class="fc-input-da fc-textarea" rows="6"></textarea></div>
+          <div><label class="fc-label fc-label-en">Body text — one paragraph per line</label><textarea id="gay_omos_text_en" class="fc-input-en fc-textarea" rows="6"></textarea></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Underskrift</label><input type="text" id="gay_omos_signatur_da" class="fc-input-da"></div>
+          <div><label class="fc-label fc-label-en">Signature</label><input type="text" id="gay_omos_signatur_en" class="fc-input-en"></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Etiket på billedet</label><input type="text" id="gay_omos_billedlabel_da" class="fc-input-da"></div>
+          <div><label class="fc-label fc-label-en">Image label</label><input type="text" id="gay_omos_billedlabel_en" class="fc-input-en"></div>
+        </div>
+        <div class="fc-row">
+          <div>
+            <label class="fc-label fc-label-da">Billede 1</label>
+            <input type="text" id="gay_omos_image1_url" class="fc-input-da" placeholder="URL indsættes automatisk ved upload">
+            <label class="fc-label" style="color:#2a7a74;margin-top:.6rem;">📁 Upload</label>
+            <div style="display:flex;align-items:center;gap:.6rem;margin-top:.3rem;">
+              <img id="gay_omos_image1_preview" src="" style="display:none;width:56px;height:56px;object-fit:cover;border:1px solid rgba(184,138,30,.3);">
+              <input type="file" id="gay_omos_image1_file" accept="image/*" style="font-size:.76rem;flex:1;">
+              <button type="button" onclick="uploadRetreatBillede('gay_omos_image1_file','gay_omos_image1_url','gay_omos_image1_preview')" style="background:#2a7a74;color:#fff;border:none;padding:.45rem 1.1rem;font-family:Manrope,sans-serif;font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;white-space:nowrap;">⬆ Upload</button><button type="button" onclick="fjernBilledeFelt('gay_omos_image1_url','gay_omos_image1_preview')" style="background:rgba(163,51,51,.08);color:#a33;border:1px solid rgba(163,51,51,.35);padding:.45rem .9rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;white-space:nowrap;" title="Fjern billedet helt">🗑 Fjern</button>
+            </div>
+          </div>
+          <div>
+            <label class="fc-label fc-label-da">Billede 2</label>
+            <input type="text" id="gay_omos_image2_url" class="fc-input-da" placeholder="URL indsættes automatisk ved upload">
+            <label class="fc-label" style="color:#2a7a74;margin-top:.6rem;">📁 Upload</label>
+            <div style="display:flex;align-items:center;gap:.6rem;margin-top:.3rem;">
+              <img id="gay_omos_image2_preview" src="" style="display:none;width:56px;height:56px;object-fit:cover;border:1px solid rgba(184,138,30,.3);">
+              <input type="file" id="gay_omos_image2_file" accept="image/*" style="font-size:.76rem;flex:1;">
+              <button type="button" onclick="uploadRetreatBillede('gay_omos_image2_file','gay_omos_image2_url','gay_omos_image2_preview')" style="background:#2a7a74;color:#fff;border:none;padding:.45rem 1.1rem;font-family:Manrope,sans-serif;font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;white-space:nowrap;">⬆ Upload</button><button type="button" onclick="fjernBilledeFelt('gay_omos_image2_url','gay_omos_image2_preview')" style="background:rgba(163,51,51,.08);color:#a33;border:1px solid rgba(163,51,51,.35);padding:.45rem .9rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;white-space:nowrap;" title="Fjern billedet helt">🗑 Fjern</button>
+            </div>
+          </div>
+        </div>
+              <div style="text-align:right;margin-top:1.2rem;padding-top:1rem;border-top:1px solid rgba(184,138,30,.18);"><button type="button" onclick="gemGay()" style="background:var(--wine);color:#fff;border:none;padding:.5rem 1.4rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;">💾 Gem</button><button type="button" onclick="gemGayOgSeSiden()" style="background:#2a7a74;color:#fff;border:none;padding:.5rem 1.4rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;margin-left:.6rem;">💾 Gem og se siden</button></div>
+</div>
+    </div>
+
+    <div class="fc-block" id="gayblok_15" style="margin-bottom:1.5rem;">
+      <div class="fc-block-header" style="display:flex;align-items:center;gap:.8rem;"><span class="fc-block-title">15 · Gæsternes oplevelser (anmeldelser)</span><button type="button" onclick="oversaetBlok(this)" style="background:rgba(58,110,106,.1);border:1px solid rgba(58,110,106,.35);color:#2a7a74;padding:.3rem .8rem;font-family:Manrope,sans-serif;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;margin-left:auto;" title="Oversæt tomme engelske felter i denne sektion">⇄ Oversæt</button></div>
       <div class="fc-block-body">
         <div style="font-size:.68rem;color:rgba(44,35,24,.55);line-height:1.5;margin-bottom:.9rem;">
           Samme anmeldelseskort som på forsiden. <b>Hvilke</b> anmeldelser der vises her, styres under <b>Se anmeldelser</b> — sæt flueben i “Gay-siden” ved de anmeldelser, der hører til her. Er ingen markeret, vises sektionen slet ikke.<br>
@@ -10058,8 +10111,8 @@ async function gemUdlejning() {
 // Samme mønster som udlejningssiden: nøgle/værdi i gay_content, dansk uden
 // suffiks, engelsk med _en. Siden har egne defaults, så tomme felter betyder
 // "brug sidens standardtekst" — ikke "vis ingenting".
-const GAY_TEXT_KEYS = ["seo_title", "seo_desc", "nav_back", "hero_eyebrow", "hero_h1", "hero_text", "hero_scroll", "intro_label", "intro_h2", "intro_lede", "intro_text", "retreats_label", "retreats_h2", "retreats_intro", "uge_label", "uge_h2", "uge_intro", "ejendom_label", "ejendom_h2", "ejendom_text", "sted_label", "sted_h2", "sted_text", "sted_text2", "faq_label", "faq_h2", "anmeldelser_label", "anmeldelser_h2", "cta_h2", "cta_text", "cta_btn", "footer_copy"];
-const GAY_IMG_KEYS  = ["social_image", "hero_image", "ejendom_image", "sted_image"];
+const GAY_TEXT_KEYS = ["seo_title", "seo_desc", "nav_back", "hero_eyebrow", "hero_h1", "hero_text", "hero_scroll", "intro_label", "intro_h2", "intro_lede", "intro_text", "retreats_label", "retreats_h2", "retreats_intro", "uge_label", "uge_h2", "uge_intro", "ejendom_label", "ejendom_h2", "ejendom_text", "sted_label", "sted_h2", "sted_text", "sted_text2", "faq_label", "faq_h2", "omos_label", "omos_h2", "omos_text", "omos_signatur", "omos_billedlabel", "anmeldelser_label", "anmeldelser_h2", "cta_h2", "cta_text", "cta_btn", "footer_copy"];
+const GAY_IMG_KEYS  = ["social_image", "hero_image", "ejendom_image", "sted_image", "omos_image1", "omos_image2"];
 const GAY_SOLO_KEYS = ["cta_link"];
 // Synligheden sættes nu i rækkefølge-editoren (blok 12), ikke som løse flueben
 const GAY_VIS_KEYS  = ["vis_intro", "vis_retreats", "vis_uge", "vis_ejendom", "vis_sted", "vis_faq", "vis_cta"];
@@ -10305,6 +10358,11 @@ const GAY_ADM_DEFAULTS = {
     "faq_label": "Spørgsmål",
     "faq_h2": "Før du booker",
     "faq_items": "Hvem er disse retreats for?|Bøsser, og kun bøsser — det er hele pointen med at lukke ejendommen frem for at køre et blandet program. Mænd kommer alene, som par og som venner. Aldrene spænder vidt, og ingen er til overs.\nKan jeg komme alene?|Det gør de fleste. En lukket gruppe på seksten i en hel uge betyder, at du ikke kommer til at være fremmed ugen igennem — ved anden middag holder det op med at føles som en samling enkeltpersoner.\nSkal jeg have erfaring med breathwork, tantra eller meditation?|Nej. Sessionerne ledes med førstegangsdeltagere for øje, og alt er frivilligt. At sidde en over er helt normalt, ikke en udmelding.\nHvor foregår det præcis?|På Castillo del Alma, en privat vinejendom uden for Mollina i Málaga-provinsen, Andalusien. Hele ejendommen er reserveret til gruppen — der er ingen andre gæster.\nHvordan kommer jeg dertil fra Málaga lufthavn?|Turen tager cirka femogfyrre minutter. Lejebil er ligetil, og vi kan hjælpe med at arrangere transport, hvis du hellere vil hentes. Send os dine flytider, når du booker.\nHvad er inkluderet i prisen?|Ophold, måltider, vin til middagen, brug af pool og wellness samt hele programmet. På hvert retreats egen side står præcis, hvad der er med, sammen med eventuelle tilvalg som massage.\nHvor mange deltager?|Ejendommen har plads til seksten, og det er loftet. Det er lille nok til, at alle rent faktisk kender hinanden, når ugen er omme.\nHvilket sprog tales der?|Retreats afholdes på engelsk og dansk. Gæsterne kommer fra hele Europa, og gruppens arbejdssprog finder sig selv i løbet af en dag.",
+    "omos_label": "Om os",
+    "omos_h2": "Michael<br>& <em>Erik</em>",
+    "omos_text": "Vi er Michael og Erik — et par der har været sammen siden 1988, og som gennem hele vores fælles liv har delt én overbevisning: man skal kun bruge tiden på det, der giver mening og glæde.\nEfter tre års søgen i Andalusien fandt vi det. Castillo del Alma er ikke bare et hus — det er præcis det, vi havde drømt om. Et sted vi selv vil bo, og som vi med stolthed åbner for vores gæster.\nTo gange om året lukker vi ejendommen helt og giver den til én gruppe homoseksuelle mænd. Vi er her selv hele ugen — ikke som værter på afstand, men som en del af gruppen.",
+    "omos_signatur": "— Michael & Erik",
+    "omos_billedlabel": "Michael & Erik · Værter",
     "anmeldelser_label": "Gæsternes oplevelser",
     "anmeldelser_h2": "Hvad siger vores <em>gæster</em>",
     "cta_h2": "Kom og se",
@@ -10345,6 +10403,11 @@ const GAY_ADM_DEFAULTS_EN = {
     "faq_label": "Questions",
     "faq_h2": "Before you book",
     "faq_items": "Who are these retreats for?|Gay men, and only gay men — that is the point of closing the estate rather than running a mixed programme. Men come on their own, as couples and as friends. Ages vary widely and no one is the odd one out.\nCan I come alone?|Most men do. A closed group of sixteen for a full week means you will not spend the week as a stranger — by the second dinner it stops feeling like a group of individuals.\nDo I need experience with breathwork, tantra or meditation?|No. Sessions are led with first-timers in mind and everything is optional. Sitting one out is a normal thing to do, not a statement.\nWhere exactly is the retreat held?|At Castillo del Alma, a private wine estate outside Mollina in the province of Málaga, Andalusia. The whole estate is reserved for the group — there are no other guests.\nHow do I get there from Málaga airport?|The drive is roughly forty-five minutes. Hire cars are straightforward, and we can help arrange a transfer if you would rather be picked up. Let us know your flight times when you book.\nWhat is included in the price?|Accommodation, meals, wine at dinner, use of the pool and wellness facilities and the full programme of sessions. Each retreat page lists exactly what is covered, along with any optional extras such as massage.\nHow many men attend?|The estate sleeps sixteen, and that is the ceiling. It is small enough that everyone actually knows everyone by the end of the week.\nWhat language is spoken?|Retreats are run in English and Danish. Guests come from across Europe, and the working language of the group settles itself within a day.",
+    "omos_label": "About us",
+    "omos_h2": "Michael<br>& <em>Erik</em>",
+    "omos_text": "We are Michael and Erik — a couple since 1988, who have shared one conviction throughout our life together: only spend your time on what means something and brings joy.\nAfter three years of searching in Andalusia, we found it. Castillo del Alma is not just a house — it is exactly what we had dreamed of. A place we want to live ourselves, and one we open to our guests with pride.\nTwice a year we close the estate entirely and hand it to one group of gay men. We are here for the whole week ourselves — not as hosts at a distance, but as part of the group.",
+    "omos_signatur": "— Michael & Erik",
+    "omos_billedlabel": "Michael & Erik · Hosts",
     "anmeldelser_label": "Guest experiences",
     "anmeldelser_h2": "What our <em>guests</em> say",
     "cta_h2": "Come and see",
@@ -10356,7 +10419,9 @@ const GAY_ADM_DEFAULTS_EN = {
 const GAY_IMG_DEFAULTS = {
     "social_image": "https://castillodelalma.es/img/castillo-del-alma-social-1200.jpg",
     "ejendom_image": "/img/estate-pool.jpg",
-    "sted_image": "/img/vinmark1.jpg"
+    "sted_image": "/img/vinmark1.jpg",
+    "omos_image1": "/img/erik-michael-castillo-del-alma.webp",
+    "omos_image2": ""
   };
 
 
@@ -10588,6 +10653,7 @@ const GAY_SEKTION_DEFS = [
   { id: 'location',  navn: 'Sådan kommer du hertil',                  key: 'vis_sted' },
   { id: 'faq',       navn: 'FAQ',                                     key: 'vis_faq' },
   { id: 'strip3',    navn: 'Billedstribe 3',                          key: 'vis_strip3' },
+  { id: 'omos',      navn: 'Om os — Michael & Erik',                  key: 'vis_omos' },
   { id: 'anmeldelser', navn: 'Gæsternes oplevelser (anmeldelser)',    key: 'vis_anmeldelser' },
   { id: 'sec-cta',   navn: 'Opfordring nederst',                      key: 'vis_cta' }
 ];
