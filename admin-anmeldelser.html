@@ -65,46 +65,6 @@ body{font-family:'Manrope',sans-serif;background:#f0e8d5;color:#2c2318;min-heigh
 .stat-num{font-family:'Cinzel',serif;font-size:2rem;color:var(--gold);font-weight:300;display:block;line-height:1;}
 .stat-label{font-size:.58rem;letter-spacing:.2em;text-transform:uppercase;color:rgba(44,35,24,.75);margin-top:.3rem;display:block;}
 
-/* ── FILTERS ── */
-.filters{padding:1.5rem 3rem;display:flex;gap:.8rem;align-items:center;flex-wrap:wrap;border-bottom:1px solid rgba(184,138,30,.1);}
-.filter-btn{font-size:.62rem;letter-spacing:.15em;text-transform:uppercase;padding:.45rem 1rem;background:none;border:1px solid rgba(184,138,30,.2);color:rgba(44,35,24,.85);cursor:pointer;transition:all .3s;}
-.filter-btn:hover,.filter-btn.active{background:rgba(184,138,30,.12);color:var(--gold);border-color:rgba(184,138,30,.4);}
-.filter-label{font-size:.62rem;letter-spacing:.15em;text-transform:uppercase;color:rgba(44,35,24,.95);margin-right:.3rem;}
-#searchInput{margin-left:auto;padding:.45rem .9rem;background:rgba(44,35,24,.05);border:1px solid rgba(184,138,30,.15);color:#2c2318;font-size:.78rem;font-family:'Manrope',sans-serif;outline:none;width:200px;transition:border-color .3s;}
-#searchInput:focus{border-color:rgba(184,138,30,.4);}
-
-/* ── REVIEWS GRID ── */
-.reviews-grid{padding:2rem 3rem;display:grid;grid-template-columns:repeat(auto-fill,minmax(380px,1fr));gap:1.2rem;}
-.review-card{background:rgba(44,35,24,.04);border:1px solid rgba(184,138,30,.12);padding:1.8rem;position:relative;transition:border-color .3s;}
-.review-card:hover{border-color:rgba(184,138,30,.3);}
-.review-card.approved{border-left:3px solid var(--olive);}
-.review-card.rejected{opacity:.4;}
-.rc-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:1.2rem;}
-.rc-name{font-family:'Cinzel',serif;font-weight:300;font-size:.95rem;color:#2c2318;letter-spacing:.05em;}
-.rc-meta{font-size:.62rem;color:rgba(44,35,24,.75);margin-top:.2rem;letter-spacing:.05em;}
-.rc-retreat{font-size:.58rem;letter-spacing:.15em;text-transform:uppercase;color:var(--gold);background:rgba(184,138,30,.1);padding:.2rem .6rem;white-space:nowrap;}
-.rc-stars{display:flex;flex-direction:column;gap:.35rem;margin-bottom:1.2rem;}
-.rc-star-row{display:flex;justify-content:space-between;align-items:center;}
-.rc-star-label{font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(44,35,24,.8);}
-.rc-star-val{display:flex;align-items:center;gap:.3rem;font-size:.75rem;color:var(--gold);}
-.rc-star-num{font-size:.62rem;color:rgba(44,35,24,.8);margin-left:.2rem;}
-.rc-quote{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.98rem;color:rgba(44,35,24,.95);line-height:1.7;margin-bottom:1.2rem;padding-left:1rem;border-left:1px solid rgba(184,138,30,.25);}
-.rc-quote-empty{color:rgba(44,35,24,.2);font-style:italic;font-size:.85rem;}
-.rc-consent{font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;padding:.2rem .6rem;display:inline-block;margin-bottom:1rem;}
-.rc-consent.ja{color:var(--olive);background:rgba(106,114,64,.12);}
-.rc-consent.anonymt{color:var(--teal);background:rgba(58,110,106,.12);}
-.rc-consent.nej{color:rgba(192,92,48,.8);background:rgba(192,92,48,.1);}
-.rc-actions{display:flex;gap:.6rem;flex-wrap:wrap;}
-.rc-btn{font-size:.6rem;letter-spacing:.15em;text-transform:uppercase;padding:.4rem .9rem;border:none;cursor:pointer;transition:all .3s;}
-.rc-btn-approve{background:rgba(106,114,64,.2);color:#a0c880;border:1px solid rgba(106,114,64,.3);}
-.rc-btn-approve:hover{background:rgba(106,114,64,.35);}
-.rc-btn-reject{background:rgba(192,92,48,.1);color:rgba(192,92,48,.7);border:1px solid rgba(192,92,48,.2);}
-.rc-btn-reject:hover{background:rgba(192,92,48,.2);}
-.rc-btn-copy{background:rgba(184,138,30,.1);color:var(--gold);border:1px solid rgba(184,138,30,.2);}
-.rc-btn-copy:hover{background:rgba(184,138,30,.2);}
-.rc-btn-export{background:rgba(58,110,106,.15);color:rgba(90,160,156,.8);border:1px solid rgba(58,110,106,.25);}
-.rc-btn-export:hover{background:rgba(58,110,106,.3);}
-
 /* ── KUNDER SEKTION ── */
 .kunde-toolbar{padding:1.5rem 3rem;display:flex;gap:1rem;align-items:center;border-bottom:1px solid rgba(184,138,30,.1);}
 .btn-primary{font-size:.65rem;letter-spacing:.15em;text-transform:uppercase;padding:.6rem 1.4rem;background:var(--wine);color:#fff;border:none;cursor:pointer;transition:background .3s;}
@@ -588,27 +548,8 @@ body{font-family:'Manrope',sans-serif;background:#f0e8d5;color:#2c2318;min-heigh
 
   <!-- FANE: ANMELDELSER -->
   <div class="subtab-content" id="tab-anmeldelser">
-    <div id="anmeldelserFaneIndhold" style="padding:2rem 3rem;">
-      <div style="display:flex;gap:2rem;margin-bottom:1.5rem;flex-wrap:wrap;">
-        <div style="background:#fff;border:1px solid rgba(184,138,30,.2);padding:1rem 1.5rem;text-align:center;">
-          <div id="statTotal" style="font-size:2rem;font-weight:600;color:var(--wine);">—</div>
-          <div style="font-size:.7rem;color:rgba(44,35,24,.5);margin-top:.2rem;">Anmeldelser</div>
-        </div>
-        <div style="background:#fff;border:1px solid rgba(184,138,30,.2);padding:1rem 1.5rem;text-align:center;">
-          <div id="statAvg" style="font-size:2rem;font-weight:600;color:var(--gold);">—</div>
-          <div style="font-size:.7rem;color:rgba(44,35,24,.5);margin-top:.2rem;">Gns. oplevelse</div>
-        </div>
-        <div style="background:#fff;border:1px solid rgba(184,138,30,.2);padding:1rem 1.5rem;text-align:center;">
-          <div id="statRecommend" style="font-size:2rem;font-weight:600;color:#2a7a74;">—</div>
-          <div style="font-size:.7rem;color:rgba(44,35,24,.5);margin-top:.2rem;">Gns. anbefaling</div>
-        </div>
-        <div style="background:#fff;border:1px solid rgba(184,138,30,.2);padding:1rem 1.5rem;text-align:center;">
-          <div id="statConsent" style="font-size:2rem;font-weight:600;color:#2c2318;">—</div>
-          <div style="font-size:.7rem;color:rgba(44,35,24,.5);margin-top:.2rem;">Samtykke givet</div>
-        </div>
-      </div>
-      <div id="reviewsGrid"></div>
-    </div>
+    <!-- Indholdet tegnes af loadAnmeldelserFane() -->
+    <div id="anmeldelserFaneIndhold" style="padding:2rem 3rem;"></div>
   </div>
 
   <!-- FANE: FORSIDE -->
@@ -5519,23 +5460,14 @@ function initSupabase() {
 }
 
 // ── CONFIG ──
-const FORM_ID  = 'xykawbvk';
-const API_BASE = `https://formspree.io/api/0/forms/${FORM_ID}/submissions`;
-
-let allReviews = [];
 let allKunder  = [];
-let approved   = JSON.parse(localStorage.getItem('cda_approved') || '[]');
-let rejected   = JSON.parse(localStorage.getItem('cda_rejected') || '[]');
-let currentFilter = 'all';
 let aktivBookingId = null;
-let reviewTranslations = {}; // { [id]: { da: '', en: '' } }
 
 // ── LOGIN ──
 // doLogin() og doLogout() kommer fra admin-auth.js (Supabase Auth).
 // Herfra starter vi kun selve dashboardet, når sessionen er på plads.
 function startDashboard() {
   initSupabase();
-  loadReviews();
   loadKunder();
   loadRetreats();
   startRealtimeBadges();
@@ -5586,179 +5518,10 @@ function loadSubTab(sub) {
   if (sub === 'kontakt') loadKontaktAdmin();
 }
 
-// ── ANMELDELSER ──
-async function loadReviews() {
-  try {
-    const res = await fetch(API_BASE + '?pageSize=100', { headers: { 'Accept': 'application/json' } });
-    if (!res.ok) throw new Error('API fejl');
-    const data = await res.json();
-    allReviews = (data.submissions || []).map(parseSubmission);
-    // Hent oversættelser fra Supabase
-    try {
-      const { data: trans } = await sb.from('reviews').select('form_id, comment_da, comment_en, reviewer_name_display');
-      if (trans) {
-        trans.forEach(t => {
-          reviewTranslations[t.form_id] = { da: t.comment_da || '', en: t.comment_en || '', name: t.reviewer_name_display || '' };
-        });
-      }
-    } catch(e2) { console.warn('Kunne ikke hente oversættelser:', e2); }
-    updateStats();
-    renderReviews();
-  } catch(e) {
-    document.getElementById('reviewsGrid').innerHTML = '<div class="empty-state"><p>Kunne ikke hente anmeldelser.</p></div>';
-  }
-}
-
-function parseSubmission(s) {
-  return {
-    id: s._id || s.id || Math.random().toString(),
-    date: s._date || s.date || '',
-    navn: s.navn || '—', retreat: s.retreat || '—', land: s.land || '—',
-    besøgt: s.besøgt || '—', samlet: s.samlet || '—', anbefaling: s.anbefaling || '—',
-    samtykke: s.samtykke || 'nej', bedste: s.bedste || '', forandring: s.forandring || '',
-    raw: s.message || '', consent: s.samtykke || 'nej',
-  };
-}
-
-function updateStats() {
-  document.getElementById('statTotal').textContent = allReviews.length;
-  const samtals = allReviews.map(r => parseInt(r.samlet)).filter(n => !isNaN(n));
-  const avg = samtals.length ? (samtals.reduce((a,b)=>a+b,0)/samtals.length).toFixed(1) : '—';
-  document.getElementById('statAvg').textContent = avg + (avg !== '—' ? ' ★' : '');
-  const anb = allReviews.map(r => parseInt(r.anbefaling)).filter(n => !isNaN(n));
-  const avgA = anb.length ? (anb.reduce((a,b)=>a+b,0)/anb.length).toFixed(1) : '—';
-  document.getElementById('statRecommend').textContent = avgA + (avgA !== '—' ? ' ★' : '');
-  const consented = allReviews.filter(r => r.consent === 'ja' || r.consent === 'anonymt').length;
-  document.getElementById('statConsent').textContent = consented;
-}
-
-function setFilter(f, btn) {
-  currentFilter = f;
-  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-  renderReviews();
-}
-
-function renderReviews() {
-  const search = (document.getElementById('searchInput').value || '').toLowerCase();
-  let filtered = allReviews.filter(r => {
-    if (currentFilter === 'ja') return r.consent === 'ja';
-    if (currentFilter === 'anonymt') return r.consent === 'anonymt';
-    if (currentFilter === 'approved') return approved.includes(r.id);
-    if (currentFilter === '5star') return parseInt(r.samlet) >= 5;
-    return true;
-  }).filter(r => !search || (r.navn + r.retreat + r.land + r.bedste).toLowerCase().includes(search));
-
-  if (!filtered.length) {
-    document.getElementById('reviewsGrid').innerHTML = '<div class="empty-state"><p>Ingen anmeldelser matcher filteret.</p></div>';
-    return;
-  }
-  document.getElementById('reviewsGrid').innerHTML = filtered.map(r => renderCard(r)).join('');
-}
-
-function renderCard(r) {
-  const isApproved = approved.includes(r.id);
-  const isRejected = rejected.includes(r.id);
-  const stars = n => '★'.repeat(n) + '☆'.repeat(5-n);
-  const quote = r.bedste || r.forandring || '';
-  const samtalNum = parseInt(r.samlet) || 0;
-  const anbNum = parseInt(r.anbefaling) || 0;
-  const trans = reviewTranslations[r.id] || { da: '', en: '', name: '' };
-  const transDa = trans.da || '';
-  const transEn = trans.en || '';
-  const transName = trans.name || '';
-  return `<div class="review-card ${isApproved?'approved':''} ${isRejected?'rejected':''}" id="card_${r.id}">
-    <div class="rc-header">
-      <div><div class="rc-name">${r.navn}</div><div class="rc-meta">${r.land} · ${r.besøgt||r.date||'—'}</div></div>
-      <span class="rc-retreat">${r.retreat}</span>
-    </div>
-    <div class="rc-stars">
-      <div class="rc-star-row"><span class="rc-star-label">Samlet oplevelse</span><span class="rc-star-val">${stars(samtalNum)}<span class="rc-star-num">${r.samlet}</span></span></div>
-      <div class="rc-star-row"><span class="rc-star-label">Anbefaling</span><span class="rc-star-val">${stars(anbNum)}<span class="rc-star-num">${r.anbefaling}</span></span></div>
-    </div>
-    ${quote ? `<div class="rc-quote">"${quote.substring(0,200)}${quote.length>200?'…':''}"</div>` : '<div class="rc-quote rc-quote-empty">Ingen fritekst</div>'}
-    <span class="rc-consent ${r.consent}">${r.consent==='ja'?'✓ Samtykke givet':r.consent==='anonymt'?'~ Anonymt samtykke':'✗ Intet samtykke'}</span>
-    <div class="rc-actions">
-      <button class="rc-btn rc-btn-approve" onclick="approveReview('${r.id}')">${isApproved?'✓ Godkendt':'Godkend'}</button>
-      <button class="rc-btn rc-btn-reject" onclick="rejectReview('${r.id}')">Afvis</button>
-      <button class="rc-btn rc-btn-copy" onclick="copyQuote('${r.id}')">Kopiér citat</button>
-      <button class="rc-btn rc-btn-export" onclick="showFull('${r.id}')">Se fuld</button>
-      <button class="rc-btn" onclick="toggleTranslation('${r.id}')" style="background:rgba(42,122,116,.1);color:#2a7a74;border-color:#2a7a74;">🌐 Oversæt</button>
-    </div>
-    <div id="trans_${r.id}" style="display:none;margin-top:1rem;border-top:1px solid rgba(184,138,30,.15);padding-top:1rem;">
-      <div style="font-size:.6rem;letter-spacing:.15em;text-transform:uppercase;color:#2a7a74;margin-bottom:.8rem;font-weight:600;">🌐 Oversættelser & visningsnavn</div>
-      <div style="margin-bottom:.6rem;">
-        <label style="font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;color:#b88a1e;display:block;margin-bottom:.3rem;">🇩🇰 Visningsnavn</label>
-        <input type="text" id="name_${r.id}" placeholder="${r.navn}" value="${transName}"
-          style="width:100%;padding:.5rem .7rem;border:1px solid rgba(184,138,30,.3);background:#fffef8;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;">
-      </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:.8rem;margin-bottom:.8rem;">
-        <div>
-          <label style="font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;color:#b88a1e;display:block;margin-bottom:.3rem;">🇩🇰 Citat på dansk</label>
-          <textarea id="trans_da_${r.id}" placeholder="Skriv eller indsæt dansk version..."
-            style="width:100%;min-height:100px;padding:.5rem .7rem;border:1px solid rgba(184,138,30,.3);background:#fffef8;font-family:Cormorant Garamond,serif;font-size:.95rem;outline:none;resize:vertical;">${transDa}</textarea>
-        </div>
-        <div>
-          <label style="font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;color:#2a7a74;display:block;margin-bottom:.3rem;">🇬🇧 Quote in English</label>
-          <textarea id="trans_en_${r.id}" placeholder="Write or paste English version..."
-            style="width:100%;min-height:100px;padding:.5rem .7rem;border:1px solid #7fb3af;background:#e8f4f3;font-family:Cormorant Garamond,serif;font-size:.95rem;outline:none;resize:vertical;">${transEn}</textarea>
-        </div>
-      </div>
-      <button onclick="gemOversaettelse('${r.id}','${r.navn}')"
-        style="background:#2a7a74;color:#fff;border:none;padding:.6rem 1.5rem;font-family:Manrope,sans-serif;font-size:.65rem;font-weight:500;letter-spacing:.15em;text-transform:uppercase;cursor:pointer;">
-        💾 Gem oversættelse
-      </button>
-    </div>
-  </div>`;
-}
-
-function toggleTranslation(id) {
-  const el = document.getElementById('trans_' + id);
-  if (el) el.style.display = el.style.display === 'none' ? 'block' : 'none';
-}
-
-async function gemOversaettelse(id, navn) {
-  const da = document.getElementById('trans_da_' + id)?.value || '';
-  const en = document.getElementById('trans_en_' + id)?.value || '';
-  const name = document.getElementById('name_' + id)?.value || navn;
-  try {
-    // Gem i Supabase reviews tabel
-    const { error } = await sb.from('reviews')
-      .upsert({ form_id: id, comment_da: da, comment_en: en, reviewer_name_display: name }, { onConflict: 'form_id' });
-    if (error) throw error;
-    // Opdater lokal state
-    reviewTranslations[id] = { da, en, name };
-    showToast('Oversættelse gemt ✓');
-  } catch(e) {
-    showToast('Fejl: ' + e.message, true);
-  }
-}
-
-function approveReview(id) {
-  if (!approved.includes(id)) approved.push(id);
-  rejected = rejected.filter(x => x !== id);
-  localStorage.setItem('cda_approved', JSON.stringify(approved));
-  localStorage.setItem('cda_rejected', JSON.stringify(rejected));
-  renderReviews(); showToast('Anmeldelse godkendt ✓');
-}
-function rejectReview(id) {
-  if (!rejected.includes(id)) rejected.push(id);
-  approved = approved.filter(x => x !== id);
-  localStorage.setItem('cda_approved', JSON.stringify(approved));
-  localStorage.setItem('cda_rejected', JSON.stringify(rejected));
-  renderReviews(); showToast('Anmeldelse afvist');
-}
-function copyQuote(id) {
-  const r = allReviews.find(x => x.id === id);
-  if (!r) return;
-  const name = r.consent === 'anonymt' ? 'Anonym gæst' : r.navn;
-  const citattekst = '"' + (r.bedste||r.forandring) + '" — ' + name;
-  navigator.clipboard.writeText(citattekst).then(() => showToast('Citat kopieret'));
-}
-function showFull(id) {
-  const r = allReviews.find(x => x.id === id);
-  if (r) alert(r.raw || JSON.stringify(r, null, 2));
-}
+// Anmeldelser hentes fra Supabase i loadAnmeldelserFane() længere nede.
+// Den oprindelige Formspree-løsning, med godkendelse gemt i browserens
+// localStorage, er fjernet — fanen overskrev den, så den kunne ikke ses,
+// men den hentede stadig fra formspree.io ved hvert login.
 
 // ── KUNDER ──
 async function loadKunder() {
