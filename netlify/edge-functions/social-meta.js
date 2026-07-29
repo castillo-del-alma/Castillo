@@ -26,11 +26,14 @@ const escAttr = s => String(s).replace(/&/g, '&amp;').replace(/"/g, '&quot;').re
 const stripHtml = s => String(s || '').replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
 
 // Ren transformations-funktion — testes isoleret i Node
-export function transformHtml(html, { title, desc, img, canonical, fjernImgDim, langEn }) {
+export function transformHtml(html, { title, desc, img, canonical, fjernImgDim, langEn, lang, hreflang }) {
   let ud = html;
-  if (langEn) ud = ud
-    .replace(/<html lang="da">/, '<html lang="en">')
-    .replace(/(<meta property="og:locale" content=")[^"]*(")/, '$1en_US$2');
+  // Sproget kan skulle rettes begge veje: forsiden er dansk i rå HTML,
+  // gay-siden er engelsk. langEn bevares som ældre kaldeform.
+  const sprog = lang || (langEn ? 'en' : null);
+  if (sprog) ud = ud
+    .replace(/<html lang="[^"]*">/, `<html lang="${sprog}">`)
+    .replace(/(<meta property="og:locale" content=")[^"]*(")/, `$1${sprog === 'en' ? 'en_US' : 'da_DK'}$2`);
   if (title) ud = ud
     .replace(/<title[^>]*>[\s\S]*?<\/title>/, `<title id="pageTitle">${escAttr(title)}</title>`)
     .replace(/(<meta property="og:title" content=")[^"]*(")/, `$1${escAttr(title)}$2`)
@@ -48,6 +51,14 @@ export function transformHtml(html, { title, desc, img, canonical, fjernImgDim, 
   if (fjernImgDim) ud = ud
     .replace(/<meta property="og:image:width"[^>]*>\s*/, '')
     .replace(/<meta property="og:image:height"[^>]*>\s*/, '');
+  // hreflang sættes af JavaScript på nogle sider og findes derfor ikke i den
+  // rå HTML. Robotter kører ikke JS, så de indsættes her — kun dem der mangler.
+  if (hreflang && hreflang.length) {
+    const nye = hreflang
+      .filter(([hl]) => !new RegExp('rel="alternate"[^>]*hreflang="' + hl + '"').test(ud))
+      .map(([hl, href]) => `<link rel="alternate" hreflang="${hl}" href="${escAttr(href)}">`);
+    if (nye.length) ud = ud.replace(/<\/head>/, nye.join('\n') + '\n</head>');
+  }
   return ud;
 }
 
@@ -62,6 +73,9 @@ export default async (request, context) => {
   // men robotter kan stadig ramme den direkte fra gamle links.
   const stiSlug = url.pathname.match(/^(?:\/en)?\/retreat(?:\.html)?\/([^/]+)\/?$/);
   const erRetreatSide = !!stiSlug || /\/retreat(\.html)?$/.test(url.pathname);
+  // Gay-landingssiden serveres fra én fil på to adresser. Titel, beskrivelse
+  // og canonical sættes ellers først af JavaScript, som robotter ikke kører.
+  const erGaySide = /^(?:\/en)?\/gay-retreat-malaga-spain(?:\.html)?\/?$/.test(url.pathname);
   let slug = url.searchParams.get('slug');
   if (stiSlug) {
     try { slug = decodeURIComponent(stiSlug[1]); } catch (e) { slug = stiSlug[1]; }
@@ -76,7 +90,27 @@ export default async (request, context) => {
 
   try {
     let haandteret = false;
-    if (erRetreatSide && slug) {
+    if (erGaySide) {
+      const GAY_DA = 'https://castillodelalma.es/gay-retreat-malaga-spain';
+      const GAY_EN = 'https://castillodelalma.es/en/gay-retreat-malaga-spain';
+      const api = SUPABASE_URL + '/rest/v1/gay_content?select=key,value'
+        + '&key=in.(seo_title,seo_desc,seo_title_en,seo_desc_en,social_image)';
+      const g = {};
+      try {
+        const r = await fetch(api, { headers: { apikey: ANON_KEY, authorization: 'Bearer ' + ANON_KEY } });
+        (r.ok ? await r.json() : []).forEach(x => { g[x.key] = x.value; });
+      } catch (e) { /* uden svar beholdes den statiske engelske tekst */ }
+      html = transformHtml(html, {
+        title: (isEN ? g.seo_title_en : g.seo_title) || null,
+        desc: stripHtml(isEN ? g.seo_desc_en : g.seo_desc) || null,
+        img: g.social_image || null,
+        canonical: isEN ? GAY_EN : GAY_DA,
+        fjernImgDim: !!g.social_image,
+        lang: isEN ? 'en' : 'da',
+        hreflang: [['da', GAY_DA], ['en', GAY_EN], ['x-default', GAY_DA]]
+      });
+      haandteret = true;
+    } else if (erRetreatSide && slug) {
       // Slå retreatet op og indsæt dets egne tekster
       const api = SUPABASE_URL + '/rest/v1/retreats'
         + '?select=title,title_en,subtitle,subtitle_en,description,description_en,hero_image,social_image,social_text,social_text_en'

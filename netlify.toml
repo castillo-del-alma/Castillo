@@ -160,6 +160,15 @@
   path = "/en/retreat.html"
   function = "social-meta"
 [[edge_functions]]
+  path = "/gay-retreat-malaga-spain"
+  function = "social-meta"
+[[edge_functions]]
+  path = "/gay-retreat-malaga-spain.html"
+  function = "social-meta"
+[[edge_functions]]
+  path = "/en/gay-retreat-malaga-spain"
+  function = "social-meta"
+[[edge_functions]]
   path = "/en"
   function = "social-meta"
 [[edge_functions]]
