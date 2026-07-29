@@ -3792,6 +3792,26 @@ feeling more calm – and coming home to yourself again."</textarea></div>
               <button type="button" onclick="uploadRetreatBillede('gay_sted_image_file','gay_sted_image_url','gay_sted_image_preview')" style="background:#2a7a74;color:#fff;border:none;padding:.45rem 1.1rem;font-family:Manrope,sans-serif;font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;white-space:nowrap;">⬆ Upload</button><button type="button" onclick="fjernBilledeFelt('gay_sted_image_url','gay_sted_image_preview')" style="background:rgba(163,51,51,.08);color:#a33;border:1px solid rgba(163,51,51,.35);padding:.45rem .9rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;white-space:nowrap;" title="Fjern billedet helt">🗑 Fjern</button>
             </div>
           </div>
+          <div>
+            <label class="fc-label fc-label-da">Ekstra billede — bredt (65 %)</label>
+            <input type="text" id="gay_sted_image2_url" class="fc-input-da" placeholder="URL indsættes automatisk ved upload">
+            <label class="fc-label" style="color:#2a7a74;margin-top:.6rem;">📁 Upload</label>
+            <div style="display:flex;align-items:center;gap:.6rem;margin-top:.3rem;">
+              <img id="gay_sted_image2_preview" src="" style="display:none;width:56px;height:56px;object-fit:cover;border:1px solid rgba(184,138,30,.3);">
+              <input type="file" id="gay_sted_image2_file" accept="image/*" style="font-size:.76rem;flex:1;">
+              <button type="button" onclick="uploadRetreatBillede('gay_sted_image2_file','gay_sted_image2_url','gay_sted_image2_preview')" style="background:#2a7a74;color:#fff;border:none;padding:.45rem 1.1rem;font-family:Manrope,sans-serif;font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;white-space:nowrap;">⬆ Upload</button><button type="button" onclick="fjernBilledeFelt('gay_sted_image2_url','gay_sted_image2_preview')" style="background:rgba(163,51,51,.08);color:#a33;border:1px solid rgba(163,51,51,.35);padding:.45rem .9rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;white-space:nowrap;" title="Fjern billedet helt">🗑 Fjern</button>
+            </div>
+          </div>
+          <div>
+            <label class="fc-label fc-label-da">Ekstra billede — smalt (35 %)</label>
+            <input type="text" id="gay_sted_image3_url" class="fc-input-da" placeholder="URL indsættes automatisk ved upload">
+            <label class="fc-label" style="color:#2a7a74;margin-top:.6rem;">📁 Upload</label>
+            <div style="display:flex;align-items:center;gap:.6rem;margin-top:.3rem;">
+              <img id="gay_sted_image3_preview" src="" style="display:none;width:56px;height:56px;object-fit:cover;border:1px solid rgba(184,138,30,.3);">
+              <input type="file" id="gay_sted_image3_file" accept="image/*" style="font-size:.76rem;flex:1;">
+              <button type="button" onclick="uploadRetreatBillede('gay_sted_image3_file','gay_sted_image3_url','gay_sted_image3_preview')" style="background:#2a7a74;color:#fff;border:none;padding:.45rem 1.1rem;font-family:Manrope,sans-serif;font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;white-space:nowrap;">⬆ Upload</button><button type="button" onclick="fjernBilledeFelt('gay_sted_image3_url','gay_sted_image3_preview')" style="background:rgba(163,51,51,.08);color:#a33;border:1px solid rgba(163,51,51,.35);padding:.45rem .9rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;white-space:nowrap;" title="Fjern billedet helt">🗑 Fjern</button>
+            </div>
+          </div>
         </div>
               <div style="text-align:right;margin-top:1.2rem;padding-top:1rem;border-top:1px solid rgba(184,138,30,.18);"><button type="button" onclick="gemGay()" style="background:var(--wine);color:#fff;border:none;padding:.5rem 1.4rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;">💾 Gem</button><button type="button" onclick="gemGayOgSeSiden()" style="background:#2a7a74;color:#fff;border:none;padding:.5rem 1.4rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;margin-left:.6rem;">💾 Gem og se siden</button></div>
 </div>
@@ -10122,7 +10142,7 @@ async function gemUdlejning() {
 // suffiks, engelsk med _en. Siden har egne defaults, så tomme felter betyder
 // "brug sidens standardtekst" — ikke "vis ingenting".
 const GAY_TEXT_KEYS = ["seo_title", "seo_desc", "nav_back", "hero_eyebrow", "hero_h1", "hero_text", "hero_scroll", "intro_label", "intro_h2", "intro_lede", "intro_text", "retreats_label", "retreats_h2", "retreats_intro", "uge_label", "uge_h2", "uge_intro", "ejendom_label", "ejendom_h2", "ejendom_text", "sted_label", "sted_h2", "sted_text", "sted_text2", "faq_label", "faq_h2", "omos_label", "omos_h2", "omos_text", "omos_signatur", "omos_billedlabel", "anmeldelser_label", "anmeldelser_h2", "cta_h2", "cta_text", "cta_btn", "footer_copy"];
-const GAY_IMG_KEYS  = ["social_image", "hero_image", "ejendom_image", "sted_image", "omos_image1", "omos_image2", "omos_image3"];
+const GAY_IMG_KEYS  = ["social_image", "hero_image", "ejendom_image", "sted_image", "sted_image2", "sted_image3", "omos_image1", "omos_image2", "omos_image3"];
 const GAY_SOLO_KEYS = ["cta_link"];
 // Synligheden sættes nu i rækkefølge-editoren (blok 12), ikke som løse flueben
 const GAY_VIS_KEYS  = ["vis_intro", "vis_retreats", "vis_uge", "vis_ejendom", "vis_sted", "vis_faq", "vis_cta"];
@@ -10430,6 +10450,8 @@ const GAY_IMG_DEFAULTS = {
     "social_image": "https://castillodelalma.es/img/castillo-del-alma-social-1200.jpg",
     "ejendom_image": "/img/estate-pool.jpg",
     "sted_image": "/img/vinmark1.jpg",
+    "sted_image2": "",
+    "sted_image3": "",
     "omos_image1": "/img/erik-michael-castillo-del-alma.webp",
     "omos_image2": "",
     "omos_image3": ""

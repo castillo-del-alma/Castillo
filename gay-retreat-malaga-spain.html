@@ -296,6 +296,18 @@ section{padding:8rem 0;}
 .split-img img{width:100%;height:100%;object-fit:cover;}
 
 /* ── LISTE ── */
+/* To ekstra billeder under det store i beliggenheds-sektionen.
+   65/35 i bredden med luft imellem. Det brede sætter rækkens højde, og
+   det smalle strækkes til samme højde, så overkant og underkant flugter. */
+.sted-smaa{display:grid;grid-template-columns:65fr 35fr;gap:1.1rem;margin-top:1.1rem;}
+.sted-img{overflow:hidden;}
+.sted-img img{width:100%;height:100%;object-fit:cover;display:block;transition:transform 1.2s ease;}
+.sted-img:hover img{transform:scale(1.03);}
+.sted-img-bred{aspect-ratio:16/9;}
+/* Er kun det ene uploadet, fylder det hele bredden og får sin egen højde */
+.sted-smaa.enkelt{grid-template-columns:1fr;}
+.sted-smaa.enkelt .sted-img{aspect-ratio:16/9;}
+
 .feature{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:2.6rem;margin-top:3rem;}
 .feature-item{border-top:1px solid rgba(184,138,30,.3);padding-top:1.3rem;}
 .feature-item p{font-size:1.06rem;line-height:1.66;}
@@ -475,6 +487,7 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--gold);outline-offse
   .hero-meta span{padding:.42rem .8rem;font-size:.55rem;letter-spacing:.12em;}
   .hero-scroll{display:none;}
   .split{grid-template-columns:1fr;gap:2.4rem;}
+  .sted-smaa{gap:.8rem;margin-top:.8rem;}
   .foto-stribe{padding:calc(var(--stribe-top,2rem) * .6) 0 calc(var(--stribe-bund,2rem) * .6);}
   /* Inline-stilene fra JS skal vige på mobil, derfor !important */
   .foto-stribe-grid{grid-template-columns:repeat(2,1fr) !important;max-width:none !important;gap:.4rem;}
@@ -670,7 +683,13 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--gold);outline-offse
 <!-- BELIGGENHED -->
 <section id="location">
   <div class="section-inner split">
-    <div class="split-img"><img id="g_sted_image" src="/img/vinmark1.jpg" alt="Vinmarken på ejendommen i Mollina" loading="lazy"></div>
+    <div>
+      <div class="split-img"><img id="g_sted_image" src="/img/vinmark1.jpg" alt="Vinmarken på ejendommen i Mollina" loading="lazy"></div>
+      <div class="sted-smaa" id="g_sted_smaa" style="display:none;">
+        <div class="sted-img sted-img-bred" id="g_sted_img2_wrap"><img id="g_sted_image2" alt="" loading="lazy" style="display:none;"></div>
+        <div class="sted-img sted-img-smal" id="g_sted_img3_wrap"><img id="g_sted_image3" alt="" loading="lazy" style="display:none;"></div>
+      </div>
+    </div>
     <div>
       <span class="eyebrow" id="g_sted_label">Getting here</span>
       <h2 id="g_sted_h2">Inland, on purpose</h2>
@@ -956,6 +975,8 @@ const GAY_SEED = {
     "omos_image2": "",
     "omos_image3": "",
     "sted_image": "/img/vinmark1.jpg",
+    "sted_image2": "",
+    "sted_image3": "",
     "cta_link": "#retreats",
     "strip1_top": "2",
   "strip1_bund": "2",
@@ -1099,6 +1120,20 @@ function applyGayContent() {
   gSet('g_sted_text',  gaySC('sted_text'));
   gSet('g_sted_text2', gaySC('sted_text2'));
   gSetImg('g_sted_image', gayData.sted_image);
+  // De to ekstra under det store. Tomme felter fjernes, og står kun det ene,
+  // fylder det hele bredden i stedet for at efterlade et hul ved siden af sig.
+  [2, 3].forEach(function (n) {
+    const url = gayData['sted_image' + n];
+    gSetImg('g_sted_image' + n, url);
+    const wrap = document.getElementById('g_sted_img' + n + '_wrap');
+    if (wrap) wrap.style.display = url ? '' : 'none';
+  });
+  const _ss = document.getElementById('g_sted_smaa');
+  if (_ss) {
+    const _antal = [gayData.sted_image2, gayData.sted_image3].filter(Boolean).length;
+    _ss.style.display = _antal ? '' : 'none';
+    _ss.classList.toggle('enkelt', _antal === 1);
+  }
   const afs = gListe('sted_afstande', 2);
   if (afs.length) gSet('g_sted_afstande', afs.map(r =>
     '<div><span class="n">' + (r[0] || '') + '</span><span class="l">' + (r[1] || '') + '</span></div>').join(''));
