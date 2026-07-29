@@ -3935,7 +3935,7 @@ feeling more calm – and coming home to yourself again."</textarea></div>
       <div class="fc-block-header" style="display:flex;align-items:center;gap:.8rem;"><span class="fc-block-title">14 · Om os — Michael &amp; Erik</span><button type="button" onclick="oversaetBlok(this)" style="background:rgba(58,110,106,.1);border:1px solid rgba(58,110,106,.35);color:#2a7a74;padding:.3rem .8rem;font-family:Manrope,sans-serif;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;margin-left:auto;" title="Oversæt tomme engelske felter i denne sektion">⇄ Oversæt</button></div>
       <div class="fc-block-body">
         <div style="font-size:.68rem;color:rgba(44,35,24,.55);line-height:1.5;margin-bottom:.9rem;">
-          Samme afsnit som på forsiden, men med jeres egen tekst til gay-siden og plads til <b>to billeder</b> ved siden af hinanden. Uploader du kun ét, fylder det hele bredden af sig selv.<br>
+          Samme afsnit som på forsiden, men med jeres egen tekst til gay-siden og plads til <b>tre billeder</b>: ét stort øverst og to mindre under. Felter du lader stå tomme, fjernes helt fra siden — og uploader du kun det ene lille, fylder det hele bredden af sig selv.<br>
           Rækkefølge og synlighed sætter du i blok <b>0 · Menu og rækkefølge</b>.
         </div>
         <div class="fc-row">
@@ -3960,7 +3960,7 @@ feeling more calm – and coming home to yourself again."</textarea></div>
         </div>
         <div class="fc-row">
           <div>
-            <label class="fc-label fc-label-da">Billede 1</label>
+            <label class="fc-label fc-label-da">Stort billede (øverst)</label>
             <input type="text" id="gay_omos_image1_url" class="fc-input-da" placeholder="URL indsættes automatisk ved upload">
             <label class="fc-label" style="color:#2a7a74;margin-top:.6rem;">📁 Upload</label>
             <div style="display:flex;align-items:center;gap:.6rem;margin-top:.3rem;">
@@ -3970,13 +3970,23 @@ feeling more calm – and coming home to yourself again."</textarea></div>
             </div>
           </div>
           <div>
-            <label class="fc-label fc-label-da">Billede 2</label>
+            <label class="fc-label fc-label-da">Lille billede 1 (nedenunder)</label>
             <input type="text" id="gay_omos_image2_url" class="fc-input-da" placeholder="URL indsættes automatisk ved upload">
             <label class="fc-label" style="color:#2a7a74;margin-top:.6rem;">📁 Upload</label>
             <div style="display:flex;align-items:center;gap:.6rem;margin-top:.3rem;">
               <img id="gay_omos_image2_preview" src="" style="display:none;width:56px;height:56px;object-fit:cover;border:1px solid rgba(184,138,30,.3);">
               <input type="file" id="gay_omos_image2_file" accept="image/*" style="font-size:.76rem;flex:1;">
               <button type="button" onclick="uploadRetreatBillede('gay_omos_image2_file','gay_omos_image2_url','gay_omos_image2_preview')" style="background:#2a7a74;color:#fff;border:none;padding:.45rem 1.1rem;font-family:Manrope,sans-serif;font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;white-space:nowrap;">⬆ Upload</button><button type="button" onclick="fjernBilledeFelt('gay_omos_image2_url','gay_omos_image2_preview')" style="background:rgba(163,51,51,.08);color:#a33;border:1px solid rgba(163,51,51,.35);padding:.45rem .9rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;white-space:nowrap;" title="Fjern billedet helt">🗑 Fjern</button>
+            </div>
+          </div>
+          <div>
+            <label class="fc-label fc-label-da">Lille billede 2 (nedenunder)</label>
+            <input type="text" id="gay_omos_image3_url" class="fc-input-da" placeholder="URL indsættes automatisk ved upload">
+            <label class="fc-label" style="color:#2a7a74;margin-top:.6rem;">📁 Upload</label>
+            <div style="display:flex;align-items:center;gap:.6rem;margin-top:.3rem;">
+              <img id="gay_omos_image3_preview" src="" style="display:none;width:56px;height:56px;object-fit:cover;border:1px solid rgba(184,138,30,.3);">
+              <input type="file" id="gay_omos_image3_file" accept="image/*" style="font-size:.76rem;flex:1;">
+              <button type="button" onclick="uploadRetreatBillede('gay_omos_image3_file','gay_omos_image3_url','gay_omos_image3_preview')" style="background:#2a7a74;color:#fff;border:none;padding:.45rem 1.1rem;font-family:Manrope,sans-serif;font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;white-space:nowrap;">⬆ Upload</button><button type="button" onclick="fjernBilledeFelt('gay_omos_image3_url','gay_omos_image3_preview')" style="background:rgba(163,51,51,.08);color:#a33;border:1px solid rgba(163,51,51,.35);padding:.45rem .9rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;white-space:nowrap;" title="Fjern billedet helt">🗑 Fjern</button>
             </div>
           </div>
         </div>
@@ -10112,7 +10122,7 @@ async function gemUdlejning() {
 // suffiks, engelsk med _en. Siden har egne defaults, så tomme felter betyder
 // "brug sidens standardtekst" — ikke "vis ingenting".
 const GAY_TEXT_KEYS = ["seo_title", "seo_desc", "nav_back", "hero_eyebrow", "hero_h1", "hero_text", "hero_scroll", "intro_label", "intro_h2", "intro_lede", "intro_text", "retreats_label", "retreats_h2", "retreats_intro", "uge_label", "uge_h2", "uge_intro", "ejendom_label", "ejendom_h2", "ejendom_text", "sted_label", "sted_h2", "sted_text", "sted_text2", "faq_label", "faq_h2", "omos_label", "omos_h2", "omos_text", "omos_signatur", "omos_billedlabel", "anmeldelser_label", "anmeldelser_h2", "cta_h2", "cta_text", "cta_btn", "footer_copy"];
-const GAY_IMG_KEYS  = ["social_image", "hero_image", "ejendom_image", "sted_image", "omos_image1", "omos_image2"];
+const GAY_IMG_KEYS  = ["social_image", "hero_image", "ejendom_image", "sted_image", "omos_image1", "omos_image2", "omos_image3"];
 const GAY_SOLO_KEYS = ["cta_link"];
 // Synligheden sættes nu i rækkefølge-editoren (blok 12), ikke som løse flueben
 const GAY_VIS_KEYS  = ["vis_intro", "vis_retreats", "vis_uge", "vis_ejendom", "vis_sted", "vis_faq", "vis_cta"];
@@ -10421,7 +10431,8 @@ const GAY_IMG_DEFAULTS = {
     "ejendom_image": "/img/estate-pool.jpg",
     "sted_image": "/img/vinmark1.jpg",
     "omos_image1": "/img/erik-michael-castillo-del-alma.webp",
-    "omos_image2": ""
+    "omos_image2": "",
+    "omos_image3": ""
   };
 
 

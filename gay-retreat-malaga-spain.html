@@ -321,8 +321,8 @@ section{padding:8rem 0;}
 
 /* ── OM OS ── */
 /* Samme greb som .om-os på forsiden: vinrød etiket, langsom zoom ved hover
-   og tårnet svagt bag teksten. Forskellen er to mindre billeder i stedet
-   for ét portræt, så parret kan vises sammen med stedet. */
+   og tårnet svagt bag teksten. Her står portrættet øverst med to mindre
+   billeder under, så der er plads til stedet ved siden af parret. */
 .omos{background:var(--section-alt);}
 .omos-grid{display:grid;grid-template-columns:1fr 1fr;gap:5.5rem;align-items:center;}
 .omos-text{position:relative;}
@@ -344,12 +344,18 @@ section{padding:8rem 0;}
   font-size:1.12rem;color:var(--text-mid);
 }
 .omos-billeder-wrap{position:relative;padding-bottom:1.8rem;padding-right:1.8rem;}
-.omos-billeder{display:grid;grid-template-columns:1fr 1fr;gap:1.1rem;}
-.omos-img{position:relative;overflow:hidden;border-radius:2px;aspect-ratio:3/4;}
+.omos-img{position:relative;overflow:hidden;border-radius:2px;}
 .omos-img img{width:100%;height:100%;object-fit:cover;object-position:center 28%;display:block;transition:transform 1.2s ease;}
 .omos-img:hover img{transform:scale(1.03);}
-/* Står der kun ét billede, fylder det hele bredden frem for at hænge skævt */
-.omos-billeder.enkelt{grid-template-columns:1fr;}
+/* Portrættet øverst — samme format som på forsiden, så billedet ikke
+   pludselig beskæres anderledes de to steder */
+.omos-img-stor{aspect-ratio:3/4;}
+/* De to mindre under: liggende format, så stakken ikke bliver for høj */
+.omos-smaa{display:grid;grid-template-columns:1fr 1fr;gap:1.1rem;margin-top:1.1rem;}
+.omos-img-lille{aspect-ratio:4/3;}
+.omos-img-lille img{object-position:center;}
+/* Er kun ét af de små uploadet, fylder det hele bredden frem for at hænge skævt */
+.omos-smaa.enkelt{grid-template-columns:1fr;}
 .omos-billedlabel{
   position:absolute;bottom:0;right:0;background:var(--wine);color:#fff;
   font-family:'Manrope',sans-serif;font-size:.6rem;font-weight:500;
@@ -477,7 +483,7 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--gold);outline-offse
   .rcard-avail{left:1.3rem;}
   .retreat-grid{gap:1.2rem;}
   .omos-grid{grid-template-columns:1fr;gap:3rem;}
-  .omos-billeder{gap:.8rem;}
+  .omos-smaa{gap:.8rem;margin-top:.8rem;}
   .omos-billeder-wrap{padding-bottom:1.4rem;padding-right:1.4rem;}
   .omos-text p{font-size:1.22rem;}
   .reviews-grid{grid-template-columns:1fr;gap:1.2rem;margin-top:2.4rem;}
@@ -745,9 +751,10 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--gold);outline-offse
       </div>
       <div>
         <div class="omos-billeder-wrap">
-          <div class="omos-billeder" id="g_omos_billeder">
-            <div class="omos-img" id="g_omos_img1_wrap"><img id="g_omos_image1" alt="" loading="lazy" style="display:none;"></div>
-            <div class="omos-img" id="g_omos_img2_wrap"><img id="g_omos_image2" alt="" loading="lazy" style="display:none;"></div>
+          <div class="omos-img omos-img-stor" id="g_omos_img1_wrap"><img id="g_omos_image1" alt="" loading="lazy" style="display:none;"></div>
+          <div class="omos-smaa" id="g_omos_smaa">
+            <div class="omos-img omos-img-lille" id="g_omos_img2_wrap"><img id="g_omos_image2" alt="" loading="lazy" style="display:none;"></div>
+            <div class="omos-img omos-img-lille" id="g_omos_img3_wrap"><img id="g_omos_image3" alt="" loading="lazy" style="display:none;"></div>
           </div>
           <div class="omos-billedlabel" id="g_omos_billedlabel">Michael &amp; Erik · Hosts</div>
         </div>
@@ -947,6 +954,7 @@ const GAY_SEED = {
     "ejendom_image": "/img/estate-pool.jpg",
     "omos_image1": "/img/erik-michael-castillo-del-alma.webp",
     "omos_image2": "",
+    "omos_image3": "",
     "sted_image": "/img/vinmark1.jpg",
     "cta_link": "#retreats",
     "strip1_top": "2",
@@ -1112,17 +1120,20 @@ function applyGayContent() {
   gSetAfsnit('g_omos_text',  gaySC('omos_text'));
   gSet('g_omos_signatur',    gaySC('omos_signatur'));
   gSet('g_omos_billedlabel', gaySC('omos_billedlabel'));
-  gSetImg('g_omos_image1',   gayData.omos_image1);
-  gSetImg('g_omos_image2',   gayData.omos_image2);
-  // Er der kun ét billede, skal det ikke stå og hænge i den halve bredde
-  const _ob = document.getElementById('g_omos_billeder');
-  if (_ob) {
-    const _antal = [gayData.omos_image1, gayData.omos_image2].filter(Boolean).length;
-    _ob.classList.toggle('enkelt', _antal < 2);
-    const _w1 = document.getElementById('g_omos_img1_wrap');
-    const _w2 = document.getElementById('g_omos_img2_wrap');
-    if (_w1) _w1.style.display = gayData.omos_image1 ? '' : 'none';
-    if (_w2) _w2.style.display = gayData.omos_image2 ? '' : 'none';
+  // Ét stort billede med to mindre under. Tomme felter fjernes helt, og er
+  // kun det ene lille uploadet, fylder det hele bredden i stedet for at
+  // efterlade et hul ved siden af sig.
+  [1, 2, 3].forEach(function (n) {
+    const url = gayData['omos_image' + n];
+    gSetImg('g_omos_image' + n, url);
+    const wrap = document.getElementById('g_omos_img' + n + '_wrap');
+    if (wrap) wrap.style.display = url ? '' : 'none';
+  });
+  const _smaa = document.getElementById('g_omos_smaa');
+  if (_smaa) {
+    const _antal = [gayData.omos_image2, gayData.omos_image3].filter(Boolean).length;
+    _smaa.style.display = _antal ? '' : 'none';
+    _smaa.classList.toggle('enkelt', _antal === 1);
   }
 
   gSet('g_anmeldelser_label', gaySC('anmeldelser_label'));
