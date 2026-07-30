@@ -180,3 +180,33 @@
 [[edge_functions]]
   path = "/index.html"
   function = "social-meta"
+
+# Tosprogede undersider: uden disse ser Googlebot dansk HTML med canonical →
+# den danske adresse på /en/-stien, og den engelske version indekseres aldrig.
+[[edge_functions]]
+  path = "/udlejning"
+  function = "social-meta"
+[[edge_functions]]
+  path = "/udlejning.html"
+  function = "social-meta"
+[[edge_functions]]
+  path = "/en/udlejning"
+  function = "social-meta"
+[[edge_functions]]
+  path = "/ejendommen"
+  function = "social-meta"
+[[edge_functions]]
+  path = "/ejendommen.html"
+  function = "social-meta"
+[[edge_functions]]
+  path = "/en/ejendommen"
+  function = "social-meta"
+[[edge_functions]]
+  path = "/kontakt"
+  function = "social-meta"
+[[edge_functions]]
+  path = "/kontakt.html"
+  function = "social-meta"
+[[edge_functions]]
+  path = "/en/kontakt"
+  function = "social-meta"

@@ -22,6 +22,37 @@ const EN_HOME = {
   desc: 'Exclusive wellness retreats at a Wine Estate in M\u00e1laga, Spain \u2014 tranquility, personal growth and authentic experiences among our own vineyards.'
 };
 
+// SEO (Bølge 4): TOSPROGEDE UNDERSIDER.
+// /udlejning, /ejendommen og /kontakt serveres fra samme fil på begge
+// sprogstier. I den rå HTML står dansk titel, dansk beskrivelse og en
+// canonical der peger på den DANSKE adresse — også når robotten henter
+// /en/<sti>. Googlebot læste derfor "jeg er en dublet af den danske side",
+// konsoliderede /en/-adressen væk og indekserede den aldrig. Rettelsen sker
+// her i den rå HTML, ikke i JavaScript, fordi Google udtrykkeligt fraråder
+// at afgøre canonical og hreflang med JS.
+const TOSPROG_STIER = ['/udlejning', '/ejendommen', '/kontakt'];
+const TOSPROG = {
+  '/udlejning': {
+    title: 'Host Your Own Retreat \u2014 Castillo del Alma, Andalusia',
+    desc: 'Rent all of Castillo del Alma for your own retreat or event \u2014 exclusive access, full catering and a host couple. Fixed base price, tailored quote in 24 hours.'
+  },
+  '/ejendommen': {
+    title: 'The Estate \u2014 Castillo del Alma \u00b7 Wine Estate in Mollina, M\u00e1laga',
+    desc: 'Exclusive Wine Estate in Mollina, M\u00e1laga with 4+ hectares of private vineyards, pool, wellness and room for 16 guests. Explore Castillo del Alma.'
+  },
+  '/kontakt': {
+    title: 'Contact \u2014 Castillo del Alma, Mollina \u00b7 M\u00e1laga',
+    desc: 'Contact Castillo del Alma in Mollina, M\u00e1laga \u2014 questions about retreats, venue rental or visits. We reply quickly in English, Danish and Spanish.'
+  }
+};
+
+// Matcher /udlejning, /udlejning.html, /en/udlejning, /en/udlejning.html osv.
+// Returnerer den rene sti (uden /en og uden .html) eller null.
+export function tosprogSti(pathname) {
+  const m = String(pathname).match(/^(?:\/en)?(\/[a-z-]+)(?:\.html)?\/?$/);
+  return m && TOSPROG_STIER.includes(m[1]) ? m[1] : null;
+}
+
 const escAttr = s => String(s).replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;');
 const stripHtml = s => String(s || '').replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
 
@@ -108,6 +139,21 @@ export default async (request, context) => {
         fjernImgDim: !!g.social_image,
         lang: isEN ? 'en' : 'da',
         hreflang: [['da', GAY_DA], ['en', GAY_EN], ['x-default', GAY_DA]]
+      });
+      haandteret = true;
+    } else if (tosprogSti(url.pathname)) {
+      // Tosprogede undersider: kun canonical, sprog og hreflang skal være
+      // sti-afhængige. Titel og beskrivelse skiftes kun på /en/ — den danske
+      // udgave i den rå HTML er allerede korrekt.
+      const sti = tosprogSti(url.pathname);
+      const DA = 'https://castillodelalma.es' + sti;
+      const EN = 'https://castillodelalma.es/en' + sti;
+      html = transformHtml(html, {
+        title: isEN ? TOSPROG[sti].title : null,
+        desc: isEN ? TOSPROG[sti].desc : null,
+        canonical: isEN ? EN : DA,
+        lang: isEN ? 'en' : 'da',
+        hreflang: [['da', DA], ['en', EN], ['x-default', DA]]
       });
       haandteret = true;
     } else if (erRetreatSide && slug) {
