@@ -192,6 +192,14 @@ for (const k of KLYNGER) {
   r.tjek(enHtml.includes('<html lang="en">'), k.fil + ' /en: lang er ikke en');
   r.tjek(daHtml.includes('<html lang="da">'), k.fil + ' dansk: lang er ikke da');
 
+  // hreflang skal ligge STATISK i filen. transformHtml tilfoejer manglende tags,
+  // men edge-funktionen fyrer kun for kendte robotter (BOT_RE) — alle andre
+  // vaerktoejer og crawlere ser den raa HTML. Derfor tjekkes den foerst.
+  for (const [hl, href] of [['da', DA], ['en', EN], ['x-default', XD]]) {
+    r.tjek(html.includes('<link rel="alternate" hreflang="' + hl + '" href="' + href + '">'),
+      `${k.fil}: statisk hreflang ${hl} mangler eller peger forkert (forventet ${href})`);
+  }
+
   // hreflang skal være GENSIDIG og komplet — ellers ignorerer Google klyngen
   for (const kilde of [enHtml, daHtml]) {
     for (const [hl, href] of [['da', DA], ['en', EN], ['x-default', XD]]) {
@@ -199,7 +207,9 @@ for (const k of KLYNGER) {
       r.tjek(fundet === href, `${k.fil}: hreflang ${hl} = ${fundet} (forventet ${href})`);
     }
     for (const hl of ['da', 'en', 'x-default']) {
-      const n = (kilde.match(new RegExp('hreflang="' + hl + '"', 'g')) || []).length;
+      // Kun rigtige link-tags taelles — ellers taeller en kommentar der naevner
+      // hreflang med, og testen fejler paa noget der ikke findes i <head>
+      const n = (kilde.match(new RegExp('<link[^>]*hreflang="' + hl + '"', 'g')) || []).length;
       r.tjek(n === 1, `${k.fil}: hreflang ${hl} står ${n} gange — skal stå 1`);
     }
   }
@@ -338,6 +348,31 @@ r.overskrift('LAG 3 — sitemap.xml');
         `${s.fil} paa ${sti} med geo=${geo}: lang="${d.documentElement.lang}" forventet "${ventet}" — ${hvorfor}`);
       dom.window.close();
     }
+  }
+
+  // ADRESSEN SKAL FØLGE SPROGET.
+  // Sprogknapperne har return false i onclick, saa navigationen aflyses og JS
+  // bytter indholdet paa stedet. Uden replaceState bliver adressen derfor
+  // staaende: engelsk indhold paa /udlejning, som erklaerer hreflang="da".
+  // Googlebot crawler fra USA, faar engelsk af geo, og ser praecis den
+  // selvmodsigelse. Alle sider skal rette adressen som index.html goer.
+  r.overskrift('LAG 4 — adressen foelger sproget');
+  for (const s of SIDER) {
+    // Start dansk, skift til engelsk → adressen skal blive den engelske
+    const dom = await indlaesSide(s.fil, { url: BASE + s.da, geoSprog: 'da', vent: 900 });
+    const w = dom.window;
+    const saetter = { 'index.html': 'setSiteLang', 'udlejning.html': 'setUlLang',
+                      'ejendommen.html': 'setEjLang', 'kontakt.html': 'setKtLang' }[s.fil];
+    r.tjek(typeof w[saetter] === 'function', s.fil + ': ' + saetter + ' findes ikke');
+    if (typeof w[saetter] === 'function') {
+      w[saetter]('en');
+      r.tjek(w.location.pathname === s.en,
+        `${s.fil}: efter skift til engelsk er adressen ${w.location.pathname} (forventet ${s.en})`);
+      w[saetter]('da');
+      r.tjek(w.location.pathname === s.da,
+        `${s.fil}: efter skift tilbage er adressen ${w.location.pathname} (forventet ${s.da})`);
+    }
+    dom.window.close();
   }
 
   // Sprogskifteren skal vaere rigtige links (Googlebot klikker ikke knapper)

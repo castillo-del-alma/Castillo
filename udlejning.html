@@ -1745,6 +1745,20 @@ function setList(id, val) {
 
 function setUlLang(lang) {
   ulLang = lang;
+  // Hold adressen i sync med sproget, uden side-reload. Samme moenster som
+  // setSiteLang i index.html. Uden dette bliver adressen staaende paa den
+  // danske sti, mens indholdet er engelsk - saa Googlebot (der crawler fra
+  // USA og dermed faar engelsk af geo) ser engelsk indhold paa en adresse
+  // der er erklaeret som dansk i hreflang. Den danske form er uden .html,
+  // saa et klik
+  // ogsaa retter /udlejning.html til /udlejning i adresselinjen.
+  try {
+    const DA_STI = '/udlejning', EN_STI = '/en/venue-hire';
+    const paaEn = /^\/en(\/|$)/.test(location.pathname);
+    const hale = location.search + location.hash;
+    if (lang === 'en' && !paaEn) history.replaceState(null, '', EN_STI + hale);
+    else if (lang === 'da' && paaEn) history.replaceState(null, '', DA_STI + hale);
+  } catch(e) { /* replaceState utilgaengelig -> sproget skifter stadig, kun adressen staar uaendret */ }
   if (window.applySikkerhed) window.applySikkerhed(lang);
   document.documentElement.lang = lang;
   const btnDa = document.getElementById('ul-btn-da');
