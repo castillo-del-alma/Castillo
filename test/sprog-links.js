@@ -13,7 +13,7 @@ const { indlaesSide, rapport } = require('./harness');
 const SIDER = [
   { fil: 'index.html',      da: 'btn-da',         en: 'btn-en',         hDa: '/',           hEn: '/en/',           fn: 'setSiteLang' },
   { fil: 'ejendommen.html', da: 'ej-btn-da',      en: 'ej-btn-en',      hDa: '/ejendommen', hEn: '/en/ejendommen', fn: 'setEjLang' },
-  { fil: 'udlejning.html',  da: 'ul-btn-da',      en: 'ul-btn-en',      hDa: '/udlejning',  hEn: '/en/udlejning',  fn: 'setUlLang' },
+  { fil: 'udlejning.html',  da: 'ul-btn-da',      en: 'ul-btn-en',      hDa: '/udlejning',  hEn: '/en/venue-hire',  fn: 'setUlLang' },
   { fil: 'kontakt.html',    da: 'kt-btn-da',      en: 'kt-btn-en',      hDa: '/kontakt',    hEn: '/en/kontakt',    fn: 'setKtLang' },
   { fil: 'retreat.html',    da: 'retreat-btn-da', en: 'retreat-btn-en', hDa: '/retreat',    hEn: '/en/retreat',    fn: 'setRetreatLang' },
 ];

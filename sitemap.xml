@@ -37,28 +37,28 @@
     <loc>https://castillodelalma.es/ejendommen</loc>
     <xhtml:link rel="alternate" hreflang="da" href="https://castillodelalma.es/ejendommen"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://castillodelalma.es/en/ejendommen"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://castillodelalma.es/ejendommen"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://castillodelalma.es/en/ejendommen"/>
     <changefreq>monthly</changefreq><priority>0.8</priority>
   </url>
   <url>
     <loc>https://castillodelalma.es/en/ejendommen</loc>
     <xhtml:link rel="alternate" hreflang="da" href="https://castillodelalma.es/ejendommen"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://castillodelalma.es/en/ejendommen"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://castillodelalma.es/ejendommen"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://castillodelalma.es/en/ejendommen"/>
     <changefreq>monthly</changefreq><priority>0.8</priority>
   </url>
   <url>
     <loc>https://castillodelalma.es/udlejning</loc>
     <xhtml:link rel="alternate" hreflang="da" href="https://castillodelalma.es/udlejning"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://castillodelalma.es/en/udlejning"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://castillodelalma.es/udlejning"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://castillodelalma.es/en/venue-hire"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://castillodelalma.es/en/venue-hire"/>
     <changefreq>monthly</changefreq><priority>0.8</priority>
   </url>
   <url>
-    <loc>https://castillodelalma.es/en/udlejning</loc>
+    <loc>https://castillodelalma.es/en/venue-hire</loc>
     <xhtml:link rel="alternate" hreflang="da" href="https://castillodelalma.es/udlejning"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://castillodelalma.es/en/udlejning"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://castillodelalma.es/udlejning"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://castillodelalma.es/en/venue-hire"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://castillodelalma.es/en/venue-hire"/>
     <changefreq>monthly</changefreq><priority>0.8</priority>
   </url>
   <url>

@@ -63,16 +63,20 @@ exports.handler = async () => {
   xml += urlEntry(BASE + '/gay-retreat-malaga-spain', { alternates: gayAlt, changefreq: 'monthly', priority: '0.8' });
   xml += urlEntry(BASE + '/en/gay-retreat-malaga-spain', { alternates: gayAlt, changefreq: 'monthly', priority: '0.8' });
 
-  // Øvrige faste sider — dansk + engelsk (/en/) forbundet med hreflang begge veje
+  // Øvrige faste sider — dansk + engelsk forbundet med hreflang begge veje.
+  //   en:       den engelske adresse. Behøver IKKE hedde /en/<dansk slug>.
+  //             Skal holdes i takt med TOSPROG i netlify/edge-functions/social-meta.js.
+  //   xDefault: sproget for brugere uden match. Udlejning og ejendommen sælger
+  //             til udlandet, så en tysker skal have engelsk — ikke dansk.
   const fasteSider = [
-    { path: '/ejendommen', changefreq: 'monthly', priority: '0.8' },
-    { path: '/udlejning',  changefreq: 'monthly', priority: '0.8' },
-    { path: '/kontakt',    changefreq: 'yearly',  priority: '0.5' }
+    { path: '/ejendommen', en: '/en/ejendommen', xDefault: 'en', changefreq: 'monthly', priority: '0.8' },
+    { path: '/udlejning',  en: '/en/venue-hire', xDefault: 'en', changefreq: 'monthly', priority: '0.8' },
+    { path: '/kontakt',    en: '/en/kontakt',    xDefault: 'da', changefreq: 'yearly',  priority: '0.5' }
   ];
   for (const s of fasteSider) {
     const daUrl = BASE + s.path;
-    const enUrl = BASE + '/en' + s.path;
-    const alt = [['da', daUrl], ['en', enUrl], ['x-default', daUrl]];
+    const enUrl = BASE + s.en;
+    const alt = [['da', daUrl], ['en', enUrl], ['x-default', s.xDefault === 'en' ? enUrl : daUrl]];
     xml += urlEntry(daUrl, { alternates: alt, changefreq: s.changefreq, priority: s.priority });
     xml += urlEntry(enUrl, { alternates: alt, changefreq: s.changefreq, priority: s.priority });
   }

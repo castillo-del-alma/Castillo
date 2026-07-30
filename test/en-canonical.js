@@ -25,13 +25,15 @@ if (skaering === -1) { console.log('   ✗ export default ikke fundet i social-m
 const kilde = helKilde.slice(0, skaering).replace(/^export\s+/gm, '');
 const modul = {};
 new Function('exports', kilde +
-  '\nexports.transformHtml = transformHtml; exports.tosprogSti = tosprogSti;')(modul);
-const { transformHtml, tosprogSti } = modul;
+  '\nexports.transformHtml = transformHtml; exports.tosprogSti = tosprogSti; exports.tosprogHreflang = tosprogHreflang;')(modul);
+const { transformHtml, tosprogSti, tosprogHreflang } = modul;
 
+// enSti behøver ikke hedde /en/<dansk slug> — udlejning ligger på
+// /en/venue-hire. xDefault er sproget for brugere uden hreflang-match.
 const SIDER = [
-  { fil: 'udlejning.html',  sti: '/udlejning',  enTitel: 'Host Your Own Retreat' },
-  { fil: 'ejendommen.html', sti: '/ejendommen', enTitel: 'The Estate' },
-  { fil: 'kontakt.html',    sti: '/kontakt',    enTitel: 'Contact' },
+  { fil: 'udlejning.html',  sti: '/udlejning',  enSti: '/en/venue-hire', xDefault: 'en', enTitel: 'Host Your Own Retreat' },
+  { fil: 'ejendommen.html', sti: '/ejendommen', enSti: '/en/ejendommen', xDefault: 'en', enTitel: 'The Estate' },
+  { fil: 'kontakt.html',    sti: '/kontakt',    enSti: '/en/kontakt',    xDefault: 'da', enTitel: 'Contact' },
 ];
 
 const r = rapport('/EN/-CANONICAL');
@@ -40,11 +42,14 @@ const r = rapport('/EN/-CANONICAL');
 r.overskrift('sti-genkendelse');
 for (const s of SIDER) {
   r.tjek(tosprogSti(s.sti) === s.sti, s.sti + ' genkendes ikke');
-  r.tjek(tosprogSti('/en' + s.sti) === s.sti, '/en' + s.sti + ' genkendes ikke');
   r.tjek(tosprogSti(s.sti + '.html') === s.sti, s.sti + '.html genkendes ikke');
+  r.tjek(tosprogSti(s.enSti) === s.sti, s.enSti + ' genkendes ikke');
+  // Den gamle /en/<dansk slug> skal stadig genkendes — robotter kan ramme den
+  // direkte fra gamle links, før 301'et griber
+  r.tjek(tosprogSti('/en' + s.sti) === s.sti, '/en' + s.sti + ' genkendes ikke');
 }
 // Må IKKE fange andre sider — så ville de få forkert canonical
-for (const p of ['/', '/en/', '/retreat', '/en/retreat', '/betal', '/forum', '/gay-retreat-malaga-spain']) {
+for (const p of ['/', '/en/', '/retreat', '/en/retreat', '/betal', '/forum', '/gay-retreat-malaga-spain', '/en/venue', '/venue-hire']) {
   r.tjek(tosprogSti(p) === null, p + ' fanges fejlagtigt som tosproget underside');
 }
 
@@ -52,11 +57,18 @@ for (const p of ['/', '/en/', '/retreat', '/en/retreat', '/betal', '/forum', '/g
 for (const s of SIDER) {
   r.overskrift(s.fil);
   const html = fs.readFileSync(path.join(ROD, s.fil), 'utf8');
-  const DA = 'https://castillodelalma.es' + s.sti;
-  const EN = 'https://castillodelalma.es/en' + s.sti;
+  const BASE = 'https://castillodelalma.es';
+  const DA = BASE + s.sti;
+  const EN = BASE + s.enSti;
+  const XD = s.xDefault === 'en' ? EN : DA;
+
+  // Edge-funktionens hreflang skal matche det testen forventer
+  const fraKode = tosprogHreflang(s.sti, BASE);
+  r.tjek(JSON.stringify(fraKode) === JSON.stringify([['da', DA], ['en', EN], ['x-default', XD]]),
+    'tosprogHreflang giver ' + JSON.stringify(fraKode));
 
   // hreflang skal ligge statisk i filen — ikke sættes af JavaScript
-  for (const [hl, href] of [['da', DA], ['en', EN], ['x-default', DA]]) {
+  for (const [hl, href] of [['da', DA], ['en', EN], ['x-default', XD]]) {
     r.tjek(html.includes('<link rel="alternate" hreflang="' + hl + '" href="' + href + '">'),
       'statisk hreflang ' + hl + ' mangler eller peger forkert');
   }
@@ -71,7 +83,7 @@ for (const s of SIDER) {
     desc: 'English description for testing.',
     canonical: EN,
     lang: 'en',
-    hreflang: [['da', DA], ['en', EN], ['x-default', DA]]
+    hreflang: fraKode
   });
   r.tjek(enHtml.includes('<link rel="canonical" href="' + EN + '">'),
     'canonical rettes ikke til ' + EN);
@@ -92,7 +104,7 @@ for (const s of SIDER) {
   // Den danske sti skal blive dansk
   const daHtml = transformHtml(html, {
     canonical: DA, lang: 'da',
-    hreflang: [['da', DA], ['en', EN], ['x-default', DA]]
+    hreflang: fraKode
   });
   r.tjek(daHtml.includes('<link rel="canonical" href="' + DA + '">'),
     'dansk canonical ændres fejlagtigt');
@@ -104,7 +116,17 @@ r.overskrift('netlify.toml');
 const toml = fs.readFileSync(path.join(ROD, 'netlify.toml'), 'utf8');
 for (const s of SIDER) {
   r.tjek(toml.includes('path = "' + s.sti + '"'), s.sti + ' mangler i edge_functions');
-  r.tjek(toml.includes('path = "/en' + s.sti + '"'), '/en' + s.sti + ' mangler i edge_functions');
+  r.tjek(toml.includes('path = "' + s.enSti + '"'), s.enSti + ' mangler i edge_functions');
+  // Afvigende engelsk slug kræver 301 fra den gamle adresse + 200-rewrite til filen
+  if (s.enSti !== '/en' + s.sti) {
+    r.tjek(new RegExp('from = "/en' + s.sti + '"[\\s\\S]{0,120}?to = "' + s.enSti + '"[\\s\\S]{0,60}?status = 301').test(toml),
+      '301 fra /en' + s.sti + ' til ' + s.enSti + ' mangler');
+    r.tjek(new RegExp('from = "' + s.enSti + '"[\\s\\S]{0,120}?status = 200').test(toml),
+      '200-rewrite for ' + s.enSti + ' mangler');
+    // Rækkefølge: rewrite SKAL stå før /en/* catch-all, ellers → 404
+    r.tjek(toml.indexOf('from = "' + s.enSti + '"') < toml.indexOf('from = "/en/*"'),
+      s.enSti + ' står EFTER /en/* catch-all — giver 404');
+  }
 }
 
 process.exit(r.afslut() === 0 ? 0 : 1);

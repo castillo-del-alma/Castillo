@@ -30,27 +30,52 @@ const EN_HOME = {
 // konsoliderede /en/-adressen væk og indekserede den aldrig. Rettelsen sker
 // her i den rå HTML, ikke i JavaScript, fordi Google udtrykkeligt fraråder
 // at afgøre canonical og hreflang med JS.
-const TOSPROG_STIER = ['/udlejning', '/ejendommen', '/kontakt'];
+//
+//   en:       den engelske adresse. Behøver IKKE hedde /en/<dansk slug> —
+//             udlejning ligger på /en/venue-hire, fordi "udlejning" er
+//             meningsløst for en engelsk søgning. netlify.toml 301'er den
+//             gamle /en/udlejning videre dertil.
+//   xDefault: hvilket sprog brugere UDEN match får. Udlejning og ejendommen
+//             sælger til udlandet, så en tysker eller hollænder skal have
+//             engelsk — ikke dansk.
 const TOSPROG = {
   '/udlejning': {
+    en: '/en/venue-hire',
+    xDefault: 'en',
     title: 'Host Your Own Retreat \u2014 Castillo del Alma, Andalusia',
     desc: 'Rent all of Castillo del Alma for your own retreat or event \u2014 exclusive access, full catering and a host couple. Fixed base price, tailored quote in 24 hours.'
   },
   '/ejendommen': {
+    en: '/en/ejendommen',
+    xDefault: 'en',
     title: 'The Estate \u2014 Castillo del Alma \u00b7 Wine Estate in Mollina, M\u00e1laga',
     desc: 'Exclusive Wine Estate in Mollina, M\u00e1laga with 4+ hectares of private vineyards, pool, wellness and room for 16 guests. Explore Castillo del Alma.'
   },
   '/kontakt': {
+    en: '/en/kontakt',
+    xDefault: 'da',
     title: 'Contact \u2014 Castillo del Alma, Mollina \u00b7 M\u00e1laga',
     desc: 'Contact Castillo del Alma in Mollina, M\u00e1laga \u2014 questions about retreats, venue rental or visits. We reply quickly in English, Danish and Spanish.'
   }
 };
 
-// Matcher /udlejning, /udlejning.html, /en/udlejning, /en/udlejning.html osv.
-// Returnerer den rene sti (uden /en og uden .html) eller null.
+// Oversætter en indkommende sti til nøglen i TOSPROG — uanset om den kom ind
+// som dansk sti, som /en/<dansk sti> (gammel form) eller som den engelske
+// slug. Returnerer null for alt andet, så andre sider ikke får rørt canonical.
 export function tosprogSti(pathname) {
-  const m = String(pathname).match(/^(?:\/en)?(\/[a-z-]+)(?:\.html)?\/?$/);
-  return m && TOSPROG_STIER.includes(m[1]) ? m[1] : null;
+  const p = String(pathname).replace(/\.html$/, '').replace(/\/+$/, '') || '/';
+  for (const da of Object.keys(TOSPROG)) {
+    if (p === da || p === '/en' + da || p === TOSPROG[da].en) return da;
+  }
+  return null;
+}
+
+// Alle tre hreflang-værdier for en side — samme sæt gælder begge adresser.
+export function tosprogHreflang(sti, base) {
+  const cfg = TOSPROG[sti];
+  const DA = base + sti;
+  const EN = base + cfg.en;
+  return [['da', DA], ['en', EN], ['x-default', cfg.xDefault === 'en' ? EN : DA]];
 }
 
 const escAttr = s => String(s).replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;');
@@ -146,14 +171,13 @@ export default async (request, context) => {
       // sti-afhængige. Titel og beskrivelse skiftes kun på /en/ — den danske
       // udgave i den rå HTML er allerede korrekt.
       const sti = tosprogSti(url.pathname);
-      const DA = 'https://castillodelalma.es' + sti;
-      const EN = 'https://castillodelalma.es/en' + sti;
+      const BASE = 'https://castillodelalma.es';
       html = transformHtml(html, {
         title: isEN ? TOSPROG[sti].title : null,
         desc: isEN ? TOSPROG[sti].desc : null,
-        canonical: isEN ? EN : DA,
+        canonical: isEN ? BASE + TOSPROG[sti].en : BASE + sti,
         lang: isEN ? 'en' : 'da',
-        hreflang: [['da', DA], ['en', EN], ['x-default', DA]]
+        hreflang: tosprogHreflang(sti, BASE)
       });
       haandteret = true;
     } else if (erRetreatSide && slug) {

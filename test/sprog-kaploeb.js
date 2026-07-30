@@ -40,7 +40,7 @@ const SIDER = [
 const STIER = {
   'index.html':      ['/en/', '/'],
   'ejendommen.html': ['/en/ejendommen', '/ejendommen'],
-  'udlejning.html':  ['/en/udlejning', '/udlejning'],
+  'udlejning.html':  ['/en/venue-hire', '/udlejning'],
   'retreat.html':    ['/en/retreat/test', '/retreat/test'],
   'kontakt.html':    ['/en/kontakt', '/kontakt'],
 };

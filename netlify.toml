@@ -90,6 +90,33 @@
   to = "/gay-retreat-malaga-spain.html"
   status = 200
 
+# ── ENGELSK SLUG FOR UDLEJNINGSSIDEN ────────────────────────────────────
+# "udlejning" betyder intet for en engelsk søgning. Den engelske udgave ligger
+# derfor på /en/venue-hire. Den danske adresse er uændret.
+# Rækkefølgen er kritisk: begge regler SKAL stå før /en/*, ellers omskriver
+# catch-all'en /en/venue-hire til /venue-hire, som ikke findes → 404.
+
+# Gammel engelsk adresse videre med 301, så intet indekseret eller delt går tabt.
+# Fanger også de interne relative links (…/en/udlejning.html) fra andre sider.
+[[redirects]]
+  from = "/en/udlejning"
+  to = "/en/venue-hire"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/en/udlejning.html"
+  to = "/en/venue-hire"
+  status = 301
+  force = true
+
+# Selve visningen: samme fil som den danske side (status 200 = rewrite,
+# adressen i browseren bevares)
+[[redirects]]
+  from = "/en/venue-hire"
+  to = "/udlejning.html"
+  status = 200
+
 # /en → /en/ (én kanonisk engelsk forside-adresse)
 [[redirects]]
   from = "/en"
@@ -191,6 +218,9 @@
   function = "social-meta"
 [[edge_functions]]
   path = "/en/udlejning"
+  function = "social-meta"
+[[edge_functions]]
+  path = "/en/venue-hire"
   function = "social-meta"
 [[edge_functions]]
   path = "/ejendommen"
