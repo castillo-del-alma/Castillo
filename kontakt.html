@@ -602,6 +602,12 @@ const KT_STATIC_I18N = {
 // Geo-baseret sprogvalg: Danmark → dansk, resten af verden → engelsk.
 // Bruger Netlifys geo-header via egen function (ingen ekstern IP-tjeneste → GDPR-venligt).
 async function determineStartLangKt() {
+  // Stien vinder over geo: er vi paa /en/, ER sproget engelsk. Uden dette kan
+  // en dansk geo-cache (cda_geo_lang) eller en dansk browser vise DANSK
+  // indhold paa en /en/-adresse - stik imod hvad canonical, hreflang og
+  // sitemap fortaeller Google. Samme linje findes i index.html, retreat.html
+  // og gay-retreat-malaga-spain.html.
+  if (/^\/en(\/|$)/.test(location.pathname)) return 'en';
   try {
     const cached = sessionStorage.getItem('cda_geo_lang');
     if (cached === 'da' || cached === 'en') return cached;

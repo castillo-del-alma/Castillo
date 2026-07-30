@@ -59,7 +59,8 @@ exports.handler = async () => {
   xml += urlEntry(BASE + '/en/', { alternates: forsideAlt, changefreq: 'weekly', priority: '0.9' });
 
   // Gay-retreat-landingssiden — dansk og engelsk forbundet
-  const gayAlt = [['da', BASE + '/gay-retreat-malaga-spain'], ['en', BASE + '/en/gay-retreat-malaga-spain'], ['x-default', BASE + '/gay-retreat-malaga-spain']];
+  // x-default = ENGELSK, jf. den statiske HTML og social-meta.js
+  const gayAlt = [['da', BASE + '/gay-retreat-malaga-spain'], ['en', BASE + '/en/gay-retreat-malaga-spain'], ['x-default', BASE + '/en/gay-retreat-malaga-spain']];
   xml += urlEntry(BASE + '/gay-retreat-malaga-spain', { alternates: gayAlt, changefreq: 'monthly', priority: '0.8' });
   xml += urlEntry(BASE + '/en/gay-retreat-malaga-spain', { alternates: gayAlt, changefreq: 'monthly', priority: '0.8' });
 

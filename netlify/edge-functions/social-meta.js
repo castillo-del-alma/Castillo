@@ -163,7 +163,10 @@ export default async (request, context) => {
         canonical: isEN ? GAY_EN : GAY_DA,
         fjernImgDim: !!g.social_image,
         lang: isEN ? 'en' : 'da',
-        hreflang: [['da', GAY_DA], ['en', GAY_EN], ['x-default', GAY_DA]]
+        // x-default = ENGELSK: siden saelger internationalt, og en tysker eller
+        // hollaender uden hreflang-match skal ikke have dansk. Skal matche den
+        // statiske HTML og sitemap.js, ellers ignorerer Google hele klyngen.
+        hreflang: [['da', GAY_DA], ['en', GAY_EN], ['x-default', GAY_EN]]
       });
       haandteret = true;
     } else if (tosprogSti(url.pathname)) {

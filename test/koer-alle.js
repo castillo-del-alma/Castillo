@@ -9,6 +9,7 @@ const TESTS = [
   ['Sprogskifter',  'sprog-links.js'],
   ['Sprog-kapløb',  'sprog-kaploeb.js'],
   ['/en/-canonical', 'en-canonical.js'],
+  ['Sprogsystem',   'en-system.js'],
   ['Nyhedsbrev-slet', 'nyhedsbrev-slet.js'],
   ['Admin-login',   'admin-login.js'],
   ['RLS-antagelser', 'rls-antagelser.js'],
