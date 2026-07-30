@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Medieværktøj — Castillo del Alma</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=Manrope:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --cream: #f8f4ee;
+  --wine: #6b2737;
+  --gold: #c9a96e;
+  --text: #2c2420;
+  --text-muted: #7a6a60;
+  --border: #e0d8ce;
+  --surface: #ffffff;
+  --surface-alt: #f2ede5;
+  --radius: 8px;
+}
+
+body {
+  background: var(--cream);
+  color: var(--text);
+  font-family: 'Manrope', sans-serif;
+  font-weight: 300;
+  min-height: 100vh;
+}
+
+header {
+  background: var(--wine);
+  padding: 1.25rem 2rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+header h1 {
+  font-family: 'Cinzel', serif;
+  font-weight: 400;
+  font-size: 1rem;
+  color: var(--gold);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+header span {
+  color: rgba(201,169,110,0.4);
+  font-size: 1rem;
+}
+
+header p {
+  font-family: 'Manrope', sans-serif;
+  font-size: 0.75rem;
+  color: rgba(248,244,238,0.5);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.container {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 2.5rem 1.5rem;
+}
+
+.drop-zone {
+  border: 1.5px dashed var(--gold);
+  border-radius: 12px;
+  padding: 3rem 2rem;
+  text-align: center;
+  cursor: pointer;
+  transition: background 0.15s;
+  background: var(--surface);
+}
+
+.drop-zone:hover, .drop-zone.drag {
+  background: var(--surface-alt);
+}
+
+.drop-zone input { display: none; }
+
+.drop-icon {
+  width: 48px;
+  height: 48px;
+  margin: 0 auto 1rem;
+  color: var(--gold);
+}
+
+.drop-title {
+  font-family: 'Cinzel', serif;
+  font-size: 0.9rem;
+  letter-spacing: 0.08em;
+  color: var(--text);
+  margin-bottom: 0.4rem;
+}
+
+.drop-sub {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  letter-spacing: 0.04em;
+}
+
+.meta-card {
+  background: var(--surface);
+  border: 0.5px solid var(--border);
+  border-radius: 10px;
+  padding: 1rem 1.25rem;
+  margin: 1.25rem 0;
+  display: none;
+}
+
+.meta-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px 24px;
+}
+
+.meta-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.8rem;
+  padding: 3px 0;
+  border-bottom: 0.5px solid var(--border);
+}
+
+.meta-row:last-child { border-bottom: none; }
+.meta-label { color: var(--text-muted); }
+.meta-val { font-weight: 500; color: var(--text); }
+
+.preview-img {
+  max-width: 100%;
+  max-height: 160px;
+  border-radius: 6px;
+  margin-top: 12px;
+  display: none;
+  object-fit: cover;
+}
+
+.format-tabs {
+  display: none;
+  gap: 10px;
+  margin: 1.25rem 0 0;
+}
+
+.ftab {
+  flex: 1;
+  padding: 8px;
+  font-size: 0.8rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  font-family: 'Cinzel', serif;
+  border: 0.5px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+  cursor: pointer;
+  text-align: center;
+  color: var(--text-muted);
+  transition: all 0.15s;
+}
+
+.ftab.active {
+  background: var(--wine);
+  border-color: var(--wine);
+  color: var(--gold);
+}
+
+.section-label {
+  font-family: 'Cinzel', serif;
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin: 1.25rem 0 0.6rem;
+}
+
+.row {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.row > * { flex: 1; }
+
+.field-group {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.field-group label {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  letter-spacing: 0.04em;
+}
+
+.field-group select,
+.field-group input[type=number] {
+  width: 100%;
+  padding: 8px 10px;
+  border: 0.5px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+  color: var(--text);
+  font-family: 'Manrope', sans-serif;
+  font-size: 0.82rem;
+  font-weight: 400;
+  appearance: none;
+  -webkit-appearance: none;
+  cursor: pointer;
+}
+
+.field-group select:focus,
+.field-group input[type=number]:focus {
+  outline: none;
+  border-color: var(--gold);
+}
+
+.slider-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.slider-row input[type=range] {
+  flex: 1;
+  -webkit-appearance: none;
+  height: 3px;
+  background: var(--border);
+  border-radius: 2px;
+  cursor: pointer;
+}
+
+.slider-row input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--wine);
+  cursor: pointer;
+}
+
+.slider-val {
+  font-size: 0.82rem;
+  font-weight: 500;
+  min-width: 36px;
+  text-align: right;
+  color: var(--wine);
+}
+
+.codec-note {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  margin-top: 5px;
+  font-style: italic;
+}
+
+.img-section, .vid-section { display: none; }
+
+.actions {
+  display: none;
+  gap: 10px;
+  margin-top: 1.5rem;
+}
+
+.btn {
+  flex: 1;
+  padding: 10px 16px;
+  border-radius: var(--radius);
+  font-family: 'Cinzel', serif;
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.15s;
+  border: 0.5px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+}
+
+.btn:hover { background: var(--surface-alt); }
+
+.btn-primary {
+  background: var(--wine);
+  border-color: var(--wine);
+  color: var(--gold);
+}
+
+.btn-primary:hover { background: #7d2e42; }
+
+.result-card {
+  background: #f0f7f0;
+  border: 0.5px solid #b8d8b8;
+  border-radius: 8px;
+  padding: 0.9rem 1.1rem;
+  margin-top: 1rem;
+  display: none;
+}
+
+.result-title {
+  font-size: 0.75rem;
+  color: #3a6b3a;
+  font-weight: 500;
+  margin-bottom: 8px;
+  letter-spacing: 0.04em;
+}
+
+.result-cmd {
+  font-family: 'Courier New', monospace;
+  font-size: 0.75rem;
+  word-break: break-all;
+  color: var(--text);
+  background: rgba(0,0,0,0.04);
+  padding: 8px 10px;
+  border-radius: 4px;
+  line-height: 1.5;
+}
+
+footer {
+  text-align: center;
+  padding: 2rem;
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  letter-spacing: 0.06em;
+  border-top: 0.5px solid var(--border);
+  margin-top: 3rem;
+  font-family: 'Cinzel', serif;
+  text-transform: uppercase;
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div>
+    <h1>Castillo del Alma</h1>
+    <p>Medieværktøj</p>
+  </div>
+</header>
+
+<div class="container">
+
+  <div class="drop-zone" id="dropZone" onclick="document.getElementById('fileInput').click()">
+    <input type="file" id="fileInput" accept="image/*,video/*">
+    <svg class="drop-icon" fill="none" stroke="currentColor" stroke-width="1.2" viewBox="0 0 24 24">
+      <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12"/>
+    </svg>
+    <p class="drop-title">Upload billede eller video</p>
+    <p class="drop-sub">JPG · PNG · WebP · GIF &nbsp;·&nbsp; MP4 · MOV · MKV · AVI · WebM</p>
+  </div>
+
+  <div class="meta-card" id="metaCard">
+    <div class="meta-grid" id="metaGrid"></div>
+    <img class="preview-img" id="previewImg" alt="Forhåndsvisning">
+  </div>
+
+  <div class="format-tabs" id="formatTabs">
+    <div class="ftab active" id="tabImg" onclick="switchTab('img')">Billede</div>
+    <div class="ftab" id="tabVid" onclick="switchTab('vid')">Video</div>
+  </div>
+
+  <!-- BILLEDE INDSTILLINGER -->
+  <div class="img-section" id="imgSection">
+    <p class="section-label">Format</p>
+    <div class="row">
+      <div class="field-group">
+        <label>Outputformat</label>
+        <select id="imgFormat">
+          <option value="webp">WebP — anbefalet til web</option>
+          <option value="jpeg">JPEG</option>
+          <option value="png">PNG</option>
+          <option value="avif">AVIF — bedst komprimering</option>
+        </select>
+      </div>
+    </div>
+
+    <p class="section-label">Størrelse</p>
+    <div class="row">
+      <div class="field-group">
+        <label>Maks. bredde (px)</label>
+        <input type="number" id="imgWidth" placeholder="f.eks. 1200" min="100" max="8000" value="1200">
+      </div>
+      <div class="field-group">
+        <label>DPI</label>
+        <select id="imgDpi">
+          <option value="72">72 — web</option>
+          <option value="96">96</option>
+          <option value="150">150</option>
+          <option value="300">300 — print</option>
+        </select>
+      </div>
+    </div>
+
+    <p class="section-label">Kvalitet</p>
+    <div class="slider-row">
+      <input type="range" id="imgQuality" min="10" max="100" value="80" step="1"
+        oninput="document.getElementById('imgQualVal').textContent=this.value+'%'">
+      <span class="slider-val" id="imgQualVal">80%</span>
+    </div>
+    <p class="codec-note">Lavere = mindre fil &nbsp;·&nbsp; Højere = bedre kvalitet</p>
+  </div>
+
+  <!-- VIDEO INDSTILLINGER -->
+  <div class="vid-section" id="vidSection">
+    <p class="section-label">Kodek og container</p>
+    <div class="row">
+      <div class="field-group">
+        <label>Videokodek</label>
+        <select id="vidCodec" onchange="updateCodecNote()">
+          <option value="h264">H.264 / AVC — bred kompatibilitet</option>
+          <option value="h265">H.265 / HEVC — 40% mindre end H.264</option>
+          <option value="vp9">VP9 — open source, god til web</option>
+          <option value="av1">AV1 — bedst komprimering, langsom</option>
+        </select>
+      </div>
+      <div class="field-group">
+        <label>Container</label>
+        <select id="vidContainer">
+          <option value="mp4">MP4</option>
+          <option value="webm">WebM</option>
+          <option value="mkv">MKV</option>
+        </select>
+      </div>
+    </div>
+    <p class="codec-note" id="codecNote">H.264 er standard — virker overalt inkl. iOS og ældre enheder.</p>
+
+    <p class="section-label">Opløsning og billedhastighed</p>
+    <div class="row">
+      <div class="field-group">
+        <label>Maks. bredde</label>
+        <select id="vidWidth">
+          <option value="">Bevar original</option>
+          <option value="3840">3840 px — 4K</option>
+          <option value="1920">1920 px — 1080p</option>
+          <option value="1280" selected>1280 px — 720p</option>
+          <option value="854">854 px — 480p</option>
+          <option value="640">640 px — 360p</option>
+        </select>
+      </div>
+      <div class="field-group">
+        <label>FPS</label>
+        <select id="vidFps">
+          <option value="">Bevar original</option>
+          <option value="60">60</option>
+          <option value="30" selected>30</option>
+          <option value="25">25</option>
+          <option value="24">24</option>
+        </select>
+      </div>
+    </div>
+
+    <p class="section-label">Kvalitet (CRF)</p>
+    <div class="slider-row">
+      <input type="range" id="vidCrf" min="0" max="51" value="23" step="1"
+        oninput="document.getElementById('vidCrfVal').textContent=this.value">
+      <span class="slider-val" id="vidCrfVal">23</span>
+    </div>
+    <p class="codec-note">Lavere CRF = bedre kvalitet og større fil &nbsp;·&nbsp; 18–28 er typisk godt til web</p>
+
+    <p class="section-label">Lyd</p>
+    <div class="row">
+      <div class="field-group">
+        <label>Lydkodek</label>
+        <select id="audCodec">
+          <option value="aac">AAC — standard</option>
+          <option value="opus">Opus — bedre ved lav bitrate</option>
+          <option value="mp3">MP3</option>
+          <option value="none">Ingen lyd</option>
+        </select>
+      </div>
+      <div class="field-group">
+        <label>Lyd bitrate</label>
+        <select id="audBitrate">
+          <option value="64k">64 kbps</option>
+          <option value="128k" selected>128 kbps</option>
+          <option value="192k">192 kbps</option>
+          <option value="320k">320 kbps</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <div class="actions" id="actionBtns">
+    <button class="btn" onclick="copyCommand()" id="copyBtn">Kopiér FFmpeg-kommando</button>
+    <button class="btn btn-primary" onclick="downloadCmd()">Download kommando</button>
+  </div>
+
+  <div class="result-card" id="resultCard">
+    <p class="result-title">✓ FFmpeg-kommando</p>
+    <pre class="result-cmd" id="resultCmd"></pre>
+  </div>
+
+</div>
+
+<footer>Castillo del Alma &nbsp;·&nbsp; Mollina, Málaga</footer>
+
+<script>
+let fileType = 'img';
+let fileName = '';
+
+const codecNotes = {
+  h264: 'H.264 er standard — virker overalt inkl. iOS og ældre enheder.',
+  h265: 'H.265 giver ca. 40% mindre filer end H.264, men kræver nyere enheder.',
+  vp9: 'VP9 er open source og bruges i WebM — ideelt til Chrome og web.',
+  av1: 'AV1 giver den bedste komprimering, men er meget langsom at enkode.'
+};
+
+function updateCodecNote() {
+  document.getElementById('codecNote').textContent = codecNotes[document.getElementById('vidCodec').value];
+}
+
+function switchTab(t) {
+  fileType = t;
+  document.getElementById('tabImg').className = 'ftab' + (t === 'img' ? ' active' : '');
+  document.getElementById('tabVid').className = 'ftab' + (t === 'vid' ? ' active' : '');
+  document.getElementById('imgSection').style.display = t === 'img' ? 'block' : 'none';
+  document.getElementById('vidSection').style.display = t === 'vid' ? 'block' : 'none';
+}
+
+document.getElementById('fileInput').addEventListener('change', function(e) {
+  const file = e.target.files[0];
+  if (file) handleFile(file);
+});
+
+const dz = document.getElementById('dropZone');
+dz.addEventListener('dragover', e => { e.preventDefault(); dz.classList.add('drag'); });
+dz.addEventListener('dragleave', () => dz.classList.remove('drag'));
+dz.addEventListener('drop', e => {
+  e.preventDefault();
+  dz.classList.remove('drag');
+  const f = e.dataTransfer.files[0];
+  if (f) handleFile(f);
+});
+
+function handleFile(file) {
+  fileName = file.name;
+  const isVideo = file.type.startsWith('video/');
+  const isImage = file.type.startsWith('image/');
+  const mb = (file.size / 1024 / 1024).toFixed(1);
+
+  document.getElementById('metaCard').style.display = 'block';
+  document.getElementById('formatTabs').style.display = 'flex';
+  document.getElementById('actionBtns').style.display = 'flex';
+  document.getElementById('resultCard').style.display = 'none';
+
+  const grid = document.getElementById('metaGrid');
+  grid.innerHTML = `
+    <div class="meta-row"><span class="meta-label">Filnavn</span><span class="meta-val">${file.name}</span></div>
+    <div class="meta-row"><span class="meta-label">Størrelse</span><span class="meta-val">${mb} MB</span></div>
+    <div class="meta-row"><span class="meta-label">Type</span><span class="meta-val">${file.type || 'ukendt'}</span></div>
+    <div class="meta-row" id="dimRow"><span class="meta-label">Dimensioner</span><span class="meta-val" id="dimVal">—</span></div>
+  `;
+
+  if (isImage) {
+    switchTab('img');
+    const url = URL.createObjectURL(file);
+    const img = document.getElementById('previewImg');
+    img.src = url;
+    img.style.display = 'block';
+    const tmp = new Image();
+    tmp.onload = () => {
+      document.getElementById('dimVal').textContent = tmp.naturalWidth + ' × ' + tmp.naturalHeight + ' px';
+      document.getElementById('imgWidth').value = Math.min(tmp.naturalWidth, 1200);
+    };
+    tmp.src = url;
+  } else if (isVideo) {
+    switchTab('vid');
+    document.getElementById('previewImg').style.display = 'none';
+    const url = URL.createObjectURL(file);
+    const v = document.createElement('video');
+    v.onloadedmetadata = () => {
+      document.getElementById('dimVal').textContent = v.videoWidth + ' × ' + v.videoHeight + ' px';
+    };
+    v.src = url;
+  }
+}
+
+function buildImgCmd() {
+  const w = document.getElementById('imgWidth').value;
+  const fmt = document.getElementById('imgFormat').value;
+  const q = document.getElementById('imgQuality').value;
+  const out = fileName.replace(/\.[^.]+$/, '') + '.' + (fmt === 'jpeg' ? 'jpg' : fmt);
+  let cmd = `ffmpeg -i "${fileName}"`;
+  if (w) cmd += ` -vf scale=${w}:-1`;
+  if (fmt === 'webp') cmd += ` -c:v libwebp -quality ${q}`;
+  else if (fmt === 'jpeg') cmd += ` -q:v ${Math.round((100 - q) * 31 / 90 + 2)}`;
+  else if (fmt === 'avif') cmd += ` -c:v libaom-av1 -crf ${Math.round((100 - q) * 63 / 90)} -b:v 0`;
+  cmd += ` "${out}"`;
+  return cmd;
+}
+
+function buildVidCmd() {
+  const codec = document.getElementById('vidCodec').value;
+  const cont = document.getElementById('vidContainer').value;
+  const w = document.getElementById('vidWidth').value;
+  const fps = document.getElementById('vidFps').value;
+  const crf = document.getElementById('vidCrf').value;
+  const aud = document.getElementById('audCodec').value;
+  const abr = document.getElementById('audBitrate').value;
+  const out = fileName.replace(/\.[^.]+$/, '') + '-compressed.' + cont;
+  const codecs = { h264: 'libx264', h265: 'libx265', vp9: 'libvpx-vp9', av1: 'libaom-av1' };
+  let cmd = `ffmpeg -i "${fileName}" -c:v ${codecs[codec]} -crf ${crf}`;
+  const vf = [];
+  if (w) vf.push(`scale=${w}:-2`);
+  if (vf.length) cmd += ` -vf "${vf.join(',')}"`;
+  if (fps) cmd += ` -r ${fps}`;
+  if (aud === 'none') cmd += ' -an';
+  else cmd += ` -c:a ${aud === 'mp3' ? 'libmp3lame' : aud} -b:a ${abr}`;
+  cmd += ` "${out}"`;
+  return cmd;
+}
+
+function getCmd() {
+  return fileType === 'img' ? buildImgCmd() : buildVidCmd();
+}
+
+function copyCommand() {
+  const cmd = getCmd();
+  navigator.clipboard.writeText(cmd).catch(() => {});
+  document.getElementById('resultCard').style.display = 'block';
+  document.getElementById('resultCmd').textContent = cmd;
+  const btn = document.getElementById('copyBtn');
+  btn.textContent = '✓ Kopieret!';
+  setTimeout(() => { btn.textContent = 'Kopiér FFmpeg-kommando'; }, 2000);
+}
+
+function downloadCmd() {
+  const cmd = getCmd();
+  document.getElementById('resultCard').style.display = 'block';
+  document.getElementById('resultCmd').textContent = cmd;
+  const blob = new Blob([cmd], { type: 'text/plain' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'ffmpeg-kommando.txt';
+  a.click();
+}
+</script>
+</body>
+</html>
