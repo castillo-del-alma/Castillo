@@ -2324,7 +2324,7 @@ document.addEventListener('keydown', e => {
     <h2 class="w-modal-title" id="wModalTitle"></h2>
     <div class="w-modal-divider"></div>
     <div class="w-modal-text" id="wModalText"></div>
-    <button class="w-modal-cta" onclick="closeWModal()">LUK VINDUET</button>
+    <button class="w-modal-cta" id="wModalCta" onclick="closeWModal()">LUK VINDUET</button>
   </div>
 </div>
 
@@ -3105,6 +3105,25 @@ function applySiteLang() {
     if (h3) h3.textContent = SC('vingaard_stat' + i + '_tal', orgVal(h3, 'textContent'));
     if (p) p.textContent = SC('vingaard_stat' + i + '_label', orgVal(p, 'textContent'));
   }
+
+  // ─── MODALERNES FASTE TEKSTER ───
+  // Etiket, lukkeknap og aria-label stod hardkodet på dansk og fulgte derfor
+  // ikke sproget. De to lukkeknapper hører til hvert sit modalsystem —
+  // oplevelser og wellness — og begge stod på dansk.
+  // CSS gør knapperne versale, så teksten skrives i normal form her.
+  const modalLukTxt = SC('modal_luk', currentSiteLang === 'en' ? 'Close window' : 'Luk vinduet');
+  const modalLukAria = currentSiteLang === 'en' ? 'Close' : 'Luk';
+  ['expModalCta', 'wModalCta'].forEach(id => {
+    const b = document.getElementById(id);
+    if (b) b.textContent = modalLukTxt;
+  });
+  ['expModalClose', 'wModalClose'].forEach(id => {
+    const b = document.getElementById(id);
+    if (b) b.setAttribute('aria-label', modalLukAria);
+  });
+  const expLabelEl = document.getElementById('expModalLabel');
+  if (expLabelEl) expLabelEl.textContent =
+    SC('modal_label_oplevelse', currentSiteLang === 'en' ? 'Experience' : 'Oplevelse');
 
   // OPLEVELSER
   const oplLabel = document.querySelector('#experiences .section-label');

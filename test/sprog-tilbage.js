@@ -185,5 +185,42 @@ const CORDOBA = 7;
     });
   }
 
+  r.overskrift('Modalernes faste tekster følger sproget');
+  {
+    for (const [url, geo, forventet] of [
+      ['https://castillodelalma.es/', 'da', { luk: 'Luk vinduet', etiket: 'Oplevelse', aria: 'Luk' }],
+      ['https://castillodelalma.es/en/', 'en', { luk: 'Close window', etiket: 'Experience', aria: 'Close' }]
+    ]) {
+      const dom = await indlaesSide('index.html', { url, geoSprog: geo, indhold: [] });
+      const d = dom.window.document;
+      const p = url.indexOf('/en/') !== -1 ? '/en/' : '/';
+      r.tjek(d.getElementById('expModalCta').textContent === forventet.luk,
+        p + ' oplevelses-modalens lukkeknap');
+      r.tjek(d.getElementById('wModalCta').textContent === forventet.luk,
+        p + ' wellness-modalens lukkeknap');
+      r.tjek(d.getElementById('expModalLabel').textContent === forventet.etiket,
+        p + ' etiketten over overskriften');
+      ['expModalClose', 'wModalClose'].forEach(id =>
+        r.tjek(d.getElementById(id).getAttribute('aria-label') === forventet.aria,
+          p + ' aria-label på ' + id));
+    }
+
+    // Og de skal skifte med, når man klikker
+    const dom = await indlaesSide('index.html', {
+      url: 'https://castillodelalma.es/', geoSprog: 'da', indhold: []
+    });
+    const w = dom.window, d = w.document;
+    w.eval("setSiteLang('en')");
+    await new Promise(x => setTimeout(x, 150));
+    r.tjek(d.getElementById('expModalCta').textContent === 'Close window',
+      'lukkeknappen skifter ved klik på EN');
+    w.eval("setSiteLang('da')");
+    await new Promise(x => setTimeout(x, 150));
+    r.tjek(d.getElementById('expModalCta').textContent === 'Luk vinduet',
+      'lukkeknappen skifter tilbage til dansk');
+    r.tjek(d.getElementById('wModalCta').textContent === 'Luk vinduet',
+      'wellness-knappen skifter også tilbage');
+  }
+
   process.exit(r.afslut());
 })();
