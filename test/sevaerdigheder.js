@@ -272,6 +272,40 @@ function tekst(dom) {
     const doc = dom.window.document;
     const linkify = (t) => dom.window.eval('svLinkify(' + JSON.stringify(t) + ')');
 
+    // Bart domæne — Erik skal ikke huske et www. foran
+    const bart = linkify('Købes på den officielle hjemmeside caminitodelrey.info');
+    r.tjek(/href="https:\/\/caminitodelrey\.info"/.test(bart), 'bart domæne bliver et link');
+    r.tjek(/target="_blank"/.test(bart), 'bart domæne åbner i nyt faneblad');
+
+    // E-mail bliver til mailto — og UDEN target, så mailprogrammet åbner
+    // i stedet for et tomt faneblad
+    const mail = linkify('Skriv til booking@castillodelalma.es');
+    r.tjek(/href="mailto:booking@castillodelalma\.es"/.test(mail), 'e-mail bliver til mailto');
+    r.tjek(!/target="_blank"/.test(mail), 'mailto åbner ikke nyt faneblad');
+    r.tjek((mail.match(/<a /g) || []).length === 1,
+      'domænedelen af e-mailen bliver ikke sit eget link');
+    r.tjek(/href="mailto:erik\.rybtke@castillodelalma\.es"/.test(linkify('erik.rybtke@castillodelalma.es')),
+      'e-mail med punktum i navnet virker');
+
+    // Et @-håndtag er ikke en adresse. Uden værnet foran mønsteret ville
+    // "@castillodelalma.es" blive til et link til castillodelalma.es.
+    r.tjek(!/<a /.test(linkify('Følg os @castillodelalma.es')),
+      '@-håndtag bliver ikke til et link');
+    r.tjek(!/<a /.test(linkify('Tag os @castillo.es på Instagram')),
+      '@-håndtag midt i en sætning bliver ikke til et link');
+
+    // Dansk tekst er fuld af punktummer. Intet af dette må blive et link.
+    [
+      'Kører ca. fra kl. 07.40 til 20.00',
+      'Standardbillet ca. 10 €',
+      'Pris 2,50 € pr. person',
+      'Vandretid 2½–4 timer, bl.a. med pauser',
+      '29550 Ardales (Málaga), Spanien',
+      'Minimumsalder 8 år. Mød op 30 min før.',
+      'Samlet længde ca. 7,7 km'
+    ].forEach(t => r.tjek(!/<a /.test(linkify(t)),
+      'ikke link: ' + t.slice(0, 34)));
+
     // Grundtilfældet: Erik skriver bare adressen
     const a = linkify('Se www.caminitodelrey.info');
     r.tjek(/href="https:\/\/www\.caminitodelrey\.info"/.test(a), 'www-adresse får https:// i href');
@@ -304,6 +338,8 @@ function tekst(dom) {
     r.tjek(linkify(ren) === ren, 'tekst uden adresse ændres ikke');
     r.tjek(linkify('Pris 2,50 € kl. 07.40') === 'Pris 2,50 € kl. 07.40',
       'tal og klokkeslæt bliver ikke til links');
+    r.tjek(linkify('Ingen punktummer her') === 'Ingen punktummer her',
+      'tekst uden punktum går uændret igennem');
 
     // Og virker det så i den faktiske sektion?
     const iSiden = doc.querySelector('#sv_praktisk_grupper a[href="https://www.caminitodelrey.info"]');

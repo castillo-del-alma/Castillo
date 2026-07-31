@@ -752,10 +752,34 @@ function svFigur(navn) {
 // i et <a>, Erik selv har skrevet (ellers ville vi bygge links inde i links).
 // Og efterstillet tegnsætning hører til sætningen, ikke til adressen — et
 // punktum efter en URL skal ikke med i href'en.
-const SV_URL = /(https?:\/\/[^\s<>"']+|www\.[a-z0-9-]+(?:\.[a-z0-9-]+)+[^\s<>"']*)/gi;
+// Kendte topdomæner. En allowlist frem for et generisk mønster, fordi dansk
+// tekst er fuld af punktummer: "kl. 07.40", "ca. 10 €", "bl.a.". Kun rigtige
+// domæneendelser bliver til links, så tal og forkortelser går fri.
+const SV_TLD = '(?:com|net|org|info|io|eu|dk|es|se|no|fi|de|fr|it|nl|uk|be|at|ch|pl|pt|ie|' +
+               'travel|guide|tours|shop|app|site|online|blog|club|life)';
 
+// Ét mønster fanger e-mail, fuld adresse, www-adresse og bart domæne.
+// Tegnet foran fanges med, så vi kan afvise adresser midt i et ord og
+// domænedelen af en e-mail (uden lookbehind, som ældre Safari ikke kan).
+const SV_LINK = new RegExp(
+  '(^|[^\\w@\\/.-])(' +
+    '[a-z0-9._%+-]+@[a-z0-9-]+(?:\\.[a-z0-9-]+)+' +
+    '|https?:\\/\\/[^\\s<>"\']+' +
+    '|www\\.[a-z0-9-]+(?:\\.[a-z0-9-]+)+[^\\s<>"\']*' +
+    '|[a-z0-9][a-z0-9-]*(?:\\.[a-z0-9-]+)*\\.' + SV_TLD + '(?:\\/[^\\s<>"\']*)?' +
+  ')', 'gi');
+
+// Adresser skrevet i et tekstfelt bliver automatisk til links, der åbner i
+// et nyt faneblad. Erik skriver bare caminitodelrey.info — han skal hverken
+// skrive HTML eller huske et www. foran.
+//
+// Tre ting passes på: der linkes kun i fri tekst, aldrig inde i et tag eller
+// i et <a> Erik selv har skrevet (ellers ville vi bygge links inde i links).
+// Efterstillet tegnsætning hører til sætningen, ikke adressen — et punktum
+// efter en adresse skal ikke med i href'en. Og e-mail bliver til mailto
+// uden target, så den åbner i mailprogrammet i stedet for et tomt faneblad.
 function svLinkify(t) {
-  if (!t || (t.indexOf('http') === -1 && t.indexOf('www.') === -1)) return t || '';
+  if (!t || String(t).indexOf('.') === -1) return t || '';
   let iLink = false;
   return String(t).split(/(<[^>]*>)/).map(function (del, i) {
     if (i % 2 === 1) {                       // selve tagget
@@ -764,15 +788,18 @@ function svLinkify(t) {
       return del;
     }
     if (iLink) return del;                   // tekst inde i et link, Erik selv har lavet
-    return del.replace(SV_URL, function (m) {
+    return del.replace(SV_LINK, function (hele, foran, adr) {
       let hale = '';
-      const tegn = m.match(/[.,;:!?)\]]+$/);
-      if (tegn) { hale = tegn[0]; m = m.slice(0, m.length - hale.length); }
-      if (!m) return hale;
-      const href = /^https?:\/\//i.test(m) ? m : 'https://' + m;
+      const tegn = adr.match(/[.,;:!?)\]]+$/);
+      if (tegn) { hale = tegn[0]; adr = adr.slice(0, adr.length - hale.length); }
+      if (!adr) return hele;
+      const erMail = adr.indexOf('@') !== -1;
+      const href = erMail ? 'mailto:' + adr
+                 : (/^https?:\/\//i.test(adr) ? adr : 'https://' + adr);
       // Vist tekst = præcis det Erik skrev, minus et https:// der kun støjer
-      const vist = m.replace(/^https?:\/\//i, '');
-      return '<a href="' + href + '" target="_blank" rel="noopener noreferrer">' + vist + '</a>' + hale;
+      const vist = adr.replace(/^https?:\/\//i, '');
+      const maal = erMail ? '' : ' target="_blank" rel="noopener noreferrer"';
+      return foran + '<a href="' + href + '"' + maal + '>' + vist + '</a>' + hale;
     });
   }).join('');
 }
