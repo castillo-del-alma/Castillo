@@ -59,8 +59,8 @@ const RAEKKE = {
     hoej_punkter: JSON.stringify([{ da: ['35 meter lang'], en: ['35 metres long'] }]),
     praktisk_h2: 'Praktisk dansk', praktisk_h2_en: 'Practical English',
     praktisk_grupper: JSON.stringify([
-      { da: ['Billetter', 'Standardbillet | ca. 10 €\nSolide sko er påkrævet'],
-        en: ['Tickets', 'Standard ticket | approx. €10\nSturdy shoes required'] }
+      { da: ['Billetter', 'Standardbillet | ca. 10 €\nSolide sko er påkrævet\nKøbes på | www.caminitodelrey.info\nSe også <a href="https://andet.dk">vores egen side</a>'],
+        en: ['Tickets', 'Standard ticket | approx. €10\nSturdy shoes required\nBuy at | www.caminitodelrey.info\nSee also <a href="https://andet.dk">our own page</a>'] }
     ]),
     afstande_h2: 'Afstande dansk', afstande_h2_en: 'Distances English',
     afstande_items: JSON.stringify([
@@ -261,6 +261,77 @@ function tekst(dom) {
     r.tjek(!!navRent, 'internt menu-link får /en foran');
     const navAnker = doc.querySelector('.sv-navlink a[href="#sec-intro"]');
     r.tjek(!!navAnker, 'ankerlink beholdes uden /en');
+  }
+
+  r.overskrift('Autolink af adresser');
+  {
+    const dom = await indlaesSide('sevaerdighed.html', {
+      url: 'https://castillodelalma.es/sevaerdigheder/test-sted',
+      indhold: [RAEKKE, ANDEN], geoSprog: 'da'
+    });
+    const doc = dom.window.document;
+    const linkify = (t) => dom.window.eval('svLinkify(' + JSON.stringify(t) + ')');
+
+    // Grundtilfældet: Erik skriver bare adressen
+    const a = linkify('Se www.caminitodelrey.info');
+    r.tjek(/href="https:\/\/www\.caminitodelrey\.info"/.test(a), 'www-adresse får https:// i href');
+    r.tjek(/target="_blank"/.test(a), 'åbner i nyt faneblad');
+    r.tjek(/rel="noopener noreferrer"/.test(a), 'rel beskytter mod tabnabbing');
+
+    // Protokol med
+    r.tjek(/href="https:\/\/example\.dk\/side"/.test(linkify('Se https://example.dk/side')),
+      'fuld URL bevares i href');
+    r.tjek(!/>https:\/\//.test(linkify('Se https://example.dk')),
+      'https:// vises ikke i den synlige tekst');
+
+    // Tegnsætning hører til sætningen, ikke adressen
+    const punktum = linkify('Køb på www.billet.es. Husk det.');
+    r.tjek(/href="https:\/\/www\.billet\.es"/.test(punktum), 'punktum kommer ikke med i href');
+    r.tjek(/<\/a>\. Husk/.test(punktum), 'punktummet står stadig i teksten');
+    r.tjek(/href="https:\/\/www\.a\.dk"/.test(linkify('(se www.a.dk)')),
+      'slutparentes kommer ikke med i href');
+
+    // Håndskrevne links må ikke røres
+    const eget = linkify('Se <a href="https://x.dk">min side</a> her');
+    r.tjek((eget.match(/<a /g) || []).length === 1, 'håndskrevet link dobbeltlinkes ikke');
+    const egetUrl = linkify('<a href="https://x.dk">www.x.dk</a>');
+    r.tjek((egetUrl.match(/<a /g) || []).length === 1,
+      'adresse SOM linktekst bliver ikke til et link inde i linket');
+    r.tjek(!/href="[^"]*"[^>]*>[^<]*<a /.test(egetUrl), 'ingen nøstede <a>-elementer');
+
+    // Ingen adresse → teksten skal være helt urørt
+    const ren = 'Solide sko er påkrævet. Minimumsalder 8 år.';
+    r.tjek(linkify(ren) === ren, 'tekst uden adresse ændres ikke');
+    r.tjek(linkify('Pris 2,50 € kl. 07.40') === 'Pris 2,50 € kl. 07.40',
+      'tal og klokkeslæt bliver ikke til links');
+
+    // Og virker det så i den faktiske sektion?
+    const iSiden = doc.querySelector('#sv_praktisk_grupper a[href="https://www.caminitodelrey.info"]');
+    r.tjek(!!iSiden, 'adressen er blevet et link i fakta-gruppen');
+    r.tjek(iSiden && iSiden.getAttribute('target') === '_blank', 'linket i siden åbner nyt faneblad');
+    const alleLinks = doc.querySelectorAll('#sv_praktisk_grupper a');
+    r.tjek(alleLinks.length === 2, 'to links i gruppen: det automatiske og Eriks eget (fik: ' + alleLinks.length + ')');
+
+    // Stylingen skal findes, ellers er linket usynligt.
+    // Assertionen binder til GRUNDREGLEN, ikke til hele blokken: en
+    // hover-regel indeholder samme selektor som understreng, og så ville
+    // testen bestå, selv om grundfarven var væk.
+    // Kommentaren indeholder selv teksten a{color:inherit}, så slicet skal
+    // begynde EFTER kommentaren — ellers findes den første } inde i den.
+    const blok = SIDE.slice(SIDE.indexOf('/* ── LINKS I BRØDTEKST'), SIDE.indexOf('/* ── HERO'));
+    const css = blok.slice(blok.indexOf('*/') + 2);
+    const grundregel = css.slice(0, css.indexOf('}'));
+    ['section p a', 'section li a', '.fakta-linje dd a', '.fakta-punkt a', '.faq-a a', '.kol-liste a']
+      .forEach(sel => r.tjek(grundregel.includes(sel), 'grundreglen styler ' + sel));
+    r.tjek(/color:var\(--wine\)/.test(grundregel), 'links i brødtekst er vinrøde');
+    r.tjek(/text-decoration:underline/.test(grundregel), 'links er understreget');
+
+    // Det mørke bånd har sin egen regel — vinrød ville forsvinde mod charcoal
+    const moerk = css.slice(css.indexOf('.hoej p a'));
+    r.tjek(moerk.indexOf('.hoej p a') === 0, 'det mørke bånd har egen link-regel');
+    r.tjek(/color:var\(--gold-light\)/.test(moerk.slice(0, moerk.indexOf('}'))),
+      'links på mørk bund er guld, ikke vinrøde');
+    r.tjek(/target="_blank"\]::after/.test(css), 'ydre links markeres med pil');
   }
 
   r.overskrift('Ukendt slug');

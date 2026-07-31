@@ -90,6 +90,49 @@ section{padding:8rem 0;}
 .rule{width:56px;height:1px;background:var(--gold);margin:2.2rem 0;}
 .rule.center{margin-left:auto;margin-right:auto;}
 
+/* ── LINKS I BRØDTEKST ────────────────────────────────────────────────────
+   a{color:inherit} ovenfor gælder nav, footer og kort, hvor et link ikke
+   skal skille sig ud. Men i løbende tekst SKAL et link kunne ses, ellers
+   opdager ingen det. Understregningen er dæmpet og lægger sig lidt under
+   grundlinjen, så den ikke skærer gennem bogstavstaver.
+   Pilen ↗ signalerer, at man forlader sitet. */
+section p a, section li a, .fakta-linje dd a, .fakta-punkt a, .faq-a a,
+.kol-liste a, .hoej-punkter a {
+  color:var(--wine);
+  text-decoration:underline;
+  text-decoration-thickness:1px;
+  text-decoration-color:rgba(122,31,53,.32);
+  text-underline-offset:3px;
+  transition:color .25s,text-decoration-color .25s;
+}
+section p a:hover, section li a:hover, .fakta-linje dd a:hover,
+.fakta-punkt a:hover, .faq-a a:hover, .kol-liste a:hover, .hoej-punkter a:hover,
+section p a:focus-visible, section li a:focus-visible {
+  color:var(--wine-light);
+  text-decoration-color:var(--wine-light);
+}
+/* Det mørke bånd: vinrød forsvinder mod charcoal, så her bruges guld */
+.hoej p a, .hoej li a, .hoej-punkter a {
+  color:var(--gold-light);
+  text-decoration-color:rgba(212,168,48,.4);
+}
+.hoej p a:hover, .hoej li a:hover, .hoej-punkter a:hover {
+  color:var(--gold-pale);
+  text-decoration-color:var(--gold-pale);
+}
+.cta-band p a { color:var(--gold-light); text-decoration-color:rgba(212,168,48,.4); }
+.cta-band p a:hover { color:var(--gold-pale); }
+/* Ydre link åbner nyt faneblad — pilen fortæller det på forhånd */
+section a[target="_blank"]::after {
+  content:'\2197';
+  font-family:'Manrope',sans-serif;
+  font-size:.72em;
+  margin-left:.18em;
+  opacity:.65;
+  text-decoration:none;
+  display:inline-block;
+}
+
 /* ── HERO — samme opbygning som gay-retreat-siden ── */
 .hero{
   position:relative;min-height:100svh;display:flex;align-items:flex-end;
@@ -648,7 +691,7 @@ function svSetAfsnit(id, val) {
   const el = document.getElementById(id);
   if (!el) return;
   el.innerHTML = String(val || '').split('\n').map(t => t.trim()).filter(Boolean)
-    .map(t => '<p>' + t + '</p>').join('');
+    .map(t => '<p>' + svLinkify(t) + '</p>').join('');
 }
 function svEsc(t) {
   return String(t == null ? '' : t).replace(/&/g, '&amp;').replace(/</g, '&lt;')
@@ -701,13 +744,47 @@ function svFigur(navn) {
   if (img && url) img.alt = svRent(tekst) || svRent(svSC('hero_h1'));
 }
 
+// Adresser skrevet i et tekstfelt bliver automatisk til links, der åbner i
+// et nyt faneblad. Erik skriver bare www.caminitodelrey.info — han skal ikke
+// skrive HTML for at få et link.
+//
+// To ting passes på: der linkes kun i fri tekst, aldrig inde i et tag eller
+// i et <a>, Erik selv har skrevet (ellers ville vi bygge links inde i links).
+// Og efterstillet tegnsætning hører til sætningen, ikke til adressen — et
+// punktum efter en URL skal ikke med i href'en.
+const SV_URL = /(https?:\/\/[^\s<>"']+|www\.[a-z0-9-]+(?:\.[a-z0-9-]+)+[^\s<>"']*)/gi;
+
+function svLinkify(t) {
+  if (!t || (t.indexOf('http') === -1 && t.indexOf('www.') === -1)) return t || '';
+  let iLink = false;
+  return String(t).split(/(<[^>]*>)/).map(function (del, i) {
+    if (i % 2 === 1) {                       // selve tagget
+      if (/^<a[\s>]/i.test(del)) iLink = true;
+      else if (/^<\/a>/i.test(del)) iLink = false;
+      return del;
+    }
+    if (iLink) return del;                   // tekst inde i et link, Erik selv har lavet
+    return del.replace(SV_URL, function (m) {
+      let hale = '';
+      const tegn = m.match(/[.,;:!?)\]]+$/);
+      if (tegn) { hale = tegn[0]; m = m.slice(0, m.length - hale.length); }
+      if (!m) return hale;
+      const href = /^https?:\/\//i.test(m) ? m : 'https://' + m;
+      // Vist tekst = præcis det Erik skrev, minus et https:// der kun støjer
+      const vist = m.replace(/^https?:\/\//i, '');
+      return '<a href="' + href + '" target="_blank" rel="noopener noreferrer">' + vist + '</a>' + hale;
+    });
+  }).join('');
+}
+
 // Linjer i en fakta-gruppe: "Etiket | Værdi" bliver til to spalter,
 // linjer uden rør bliver almindelige punkter.
 function svFaktaLinjer(raa) {
   return String(raa || '').split('\n').map(l => l.trim()).filter(Boolean).map(l => {
     const i = l.indexOf('|');
-    if (i === -1) return '<div class="fakta-punkt">' + l + '</div>';
-    return '<div class="fakta-linje"><dt>' + l.slice(0, i).trim() + '</dt><dd>' + l.slice(i + 1).trim() + '</dd></div>';
+    if (i === -1) return '<div class="fakta-punkt">' + svLinkify(l) + '</div>';
+    return '<div class="fakta-linje"><dt>' + l.slice(0, i).trim() + '</dt><dd>' +
+      svLinkify(l.slice(i + 1).trim()) + '</dd></div>';
   }).join('');
 }
 
@@ -732,7 +809,7 @@ function applySvContent() {
   // 1 · Hovedsektion
   svSet('sv_intro_label', svSC('intro_label'));
   svSet('sv_intro_h2',    svSC('intro_h2'));
-  svSet('sv_intro_lede',  svSC('intro_lede'));
+  svSet('sv_intro_lede',  svLinkify(svSC('intro_lede')));
   svSetAfsnit('sv_intro_text', svSC('intro_text'));
   svFigur('intro');
 
@@ -751,12 +828,12 @@ function applySvContent() {
   // 4 · Dyreliv & flora
   svSet('sv_lister_label', svSC('lister_label'));
   svSet('sv_lister_h2',    svSC('lister_h2'));
-  svSet('sv_lister_intro', svSC('lister_intro'));
+  svSet('sv_lister_intro', svLinkify(svSC('lister_intro')));
   const grupper = svListe('lister_grupper', 2);
   svSet('sv_lister_grupper', grupper.map(r => {
     const punkter = String(r[1] || '').split('\n').map(x => x.trim()).filter(Boolean);
     return '<div class="kol-liste"><h3>' + (r[0] || '') + '</h3><ul>' +
-      punkter.map(p => '<li>' + p + '</li>').join('') + '</ul></div>';
+      punkter.map(p => '<li>' + svLinkify(p) + '</li>').join('') + '</ul></div>';
   }).join(''));
 
   // 5 · Højdepunktet
@@ -764,13 +841,13 @@ function applySvContent() {
   svSet('sv_hoej_h2',    svSC('hoej_h2'));
   svSetAfsnit('sv_hoej_text', svSC('hoej_text'));
   const hpunkter = svListe('hoej_punkter', 1).map(r => r[0]).filter(Boolean);
-  svSet('sv_hoej_punkter', hpunkter.map(p => '<li>' + p + '</li>').join(''));
+  svSet('sv_hoej_punkter', hpunkter.map(p => '<li>' + svLinkify(p) + '</li>').join(''));
   svFigur('hoej');
 
   // 6 · Praktiske detaljer
   svSet('sv_praktisk_label', svSC('praktisk_label'));
   svSet('sv_praktisk_h2',    svSC('praktisk_h2'));
-  svSet('sv_praktisk_intro', svSC('praktisk_intro'));
+  svSet('sv_praktisk_intro', svLinkify(svSC('praktisk_intro')));
   const fakta = svListe('praktisk_grupper', 2);
   svSet('sv_praktisk_grupper', fakta.map(r =>
     '<div class="fakta-gruppe"><h3>' + (r[0] || '') + '</h3><dl>' + svFaktaLinjer(r[1]) + '</dl></div>'
@@ -779,7 +856,7 @@ function applySvContent() {
   // 7 · Afstande
   svSet('sv_afstande_label', svSC('afstande_label'));
   svSet('sv_afstande_h2',    svSC('afstande_h2'));
-  svSet('sv_afstande_intro', svSC('afstande_intro'));
+  svSet('sv_afstande_intro', svLinkify(svSC('afstande_intro')));
   const afs = svListe('afstande_items', 2);
   svSet('sv_afstande_items', afs.map(r =>
     '<div><span class="n">' + (r[0] || '') + '</span><span class="l">' + (r[1] || '') + '</span></div>').join(''));
@@ -791,19 +868,19 @@ function applySvContent() {
   svSet('sv_faq_items', faq.map((r, i) =>
     '<div class="faq-item' + (i === 0 ? ' open' : '') + '">' +
       '<button class="faq-q" type="button" aria-expanded="' + (i === 0 ? 'true' : 'false') + '">' + (r[0] || '') + '</button>' +
-      '<div class="faq-a"><p>' + (r[1] || '') + '</p></div>' +
+      '<div class="faq-a"><p>' + svLinkify(r[1] || '') + '</p></div>' +
     '</div>').join(''));
   bindSvFaq();
 
   // 9 · Flere seværdigheder
   svSet('sv_flere_label', svSC('flere_label') || ui.flere);
   svSet('sv_flere_h2',    svSC('flere_h2'));
-  svSet('sv_flere_intro', svSC('flere_intro'));
+  svSet('sv_flere_intro', svLinkify(svSC('flere_intro')));
   byggSvFlere();
 
   // 10 · Opfordring
   svSet('sv_cta_h2',   svSC('cta_h2'));
-  svSet('sv_cta_text', svSC('cta_text'));
+  svSet('sv_cta_text', svLinkify(svSC('cta_text')));
   const cta = document.getElementById('sv_cta_btn');
   if (cta) {
     cta.textContent = svSC('cta_btn') || '';
