@@ -393,6 +393,118 @@ function tekst(dom) {
       'uden rækker vises "ikke fundet" i stedet for en tom side');
   }
 
+  r.overskrift('Skabelon — opret ud fra en eksisterende seværdighed');
+  {
+    // Logikken bor i admin. Den hentes ud af filen og køres isoleret, så
+    // testen rammer den kode der faktisk sendes til browseren.
+    function udtraek(start, slut) {
+      const i = ADMIN.indexOf(start);
+      return ADMIN.slice(i, ADMIN.indexOf(slut, i));
+    }
+    const kilde = [
+      udtraek('const SV_IMG_KEYS', 'const SV_SOLO_KEYS'),
+      udtraek('const SV_LISTER = {', 'const SV_SEKTION_DEFS'),
+      udtraek('function svErStruktur', 'function svByggFraSkabelon'),
+      udtraek('function svByggFraSkabelon', 'const SV_PIL_BTN')
+    ].join('\n');
+    const M = new Function(kilde + '; return { svByggFraSkabelon: svByggFraSkabelon, SV_IMG_KEYS: SV_IMG_KEYS };')();
+
+    const J = JSON.stringify;
+    const KILDE = { slug: 'caminito-del-rey', titel: 'Caminito del Rey', indhold: {
+      seo_title: 'Caminito del Rey — guide', seo_desc: 'Alt om Caminito',
+      hero_h1: 'Caminito<br>del Rey', hero_h1_en: 'Caminito<br>del Rey',
+      hero_eyebrow: 'Ardales · Málaga', hero_lede: 'Hængende gangbroer',
+      hero_image: '/img/hero.jpg', intro_image: '/img/intro.jpg',
+      social_image: '/img/social.jpg', historie_image: '/img/hist.jpg',
+      natur_image: '/img/natur.jpg', hoej_image: '/img/hoej.jpg',
+      intro_label: 'Oplevelsen', intro_label_en: 'The experience',
+      intro_h2: 'En uforglemmelig oplevelse', intro_text: 'Solen varmer',
+      intro_billedtekst: 'Caminito del Rey · Ardales',
+      historie_label: 'Historien', historie_h2: 'En sti bygget til arbejdere',
+      cta_btn: 'Se ejendommen', cta_link: '/udlejning', hero_scroll: 'Oplevelsen',
+      nav_links: '[{"tekst":"Oplevelsen","link":"#sec-intro","vis":"1"}]',
+      sektion_orden: '["sec-intro","sec-historie"]',
+      vis_intro: '1', vis_natur: '0', vis_hero_stribe: '1',
+      strip1_images: '["/img/a.jpg","/img/b.jpg"]', strip1_top: '3', strip1_bund: '2',
+      strip2_images: '["/img/c.jpg"]', strip3_images: '[]',
+      footer_copy: '© 2026 Castillo del Alma',
+      hero_meta: J([{ da: ['7,7 km rute'], en: ['7.7 km route'] }]),
+      lister_grupper: J([{ da: ['Dyreliv', 'Gåsegribbe'], en: ['Wildlife', 'Griffon vulture'] }]),
+      praktisk_grupper: J([{ da: ['Billetter', 'Standardbillet | 10 €'], en: ['Tickets', 'Standard | €10'] }]),
+      afstande_items: J([{ da: ['45 min', 'Castillo del Alma'], en: ['45 min', 'Castillo del Alma'] }]),
+      faq_items: J([{ da: ['Hvor lang tid?', '2½–4 timer'], en: ['How long?', '2½–4 hours'] }]),
+      hoej_punkter: J([{ da: ['35 meter lang'], en: ['35 metres long'] }])
+    } };
+
+    // ── Billeder må ALDRIG følge med, uanset tilstand ──
+    ['struktur', 'alt'].forEach(function (t) {
+      const u = M.svByggFraSkabelon(KILDE, t, 'El Torcal', 'El Torcal');
+      const bil = M.SV_IMG_KEYS.filter(k => u[k]);
+      r.tjek(bil.length === 0, t + ': ingen billeder arves (fandt: ' + bil.join(', ') + ')');
+      ['strip1_images', 'strip2_images', 'strip3_images'].forEach(k =>
+        r.tjek(u[k] === '[]', t + ': ' + k + ' er tømt'));
+      r.tjek(u.hero_h1 === 'El Torcal', t + ': overskriften er det nye navn, ikke det gamle');
+      r.tjek(u.hero_h1_en === 'El Torcal', t + ': engelsk overskrift er også det nye navn');
+      // Opbygningen overlever begge tilstande
+      r.tjek(u.sektion_orden === KILDE.indhold.sektion_orden, t + ': sektionsrækkefølge bevares');
+      r.tjek(u.nav_links === KILDE.indhold.nav_links, t + ': menuen bevares');
+      r.tjek(u.vis_natur === '0', t + ': synligheds-flag bevares');
+      r.tjek(u.intro_label === 'Oplevelsen', t + ': overlinjer bevares');
+      r.tjek(u.strip1_top === '3', t + ': stribernes luft bevares');
+      r.tjek(u.cta_link === '/udlejning', t + ': CTA-linket bevares');
+    });
+
+    // ── Kun opbygning: teksterne skal være væk ──
+    {
+      const u = M.svByggFraSkabelon(KILDE, 'struktur', 'El Torcal', 'El Torcal');
+      ['seo_title', 'seo_desc', 'intro_h2', 'intro_text', 'intro_billedtekst',
+       'historie_h2', 'hero_eyebrow', 'hero_lede'].forEach(k =>
+        r.tjek(u[k] === '', 'struktur: ' + k + ' er tømt (fik: ' + J(u[k]) + ')'));
+
+      // Lister: overskrifter er opbygning, linjer er indhold
+      const prak = JSON.parse(u.praktisk_grupper);
+      r.tjek(prak[0].da[0] === 'Billetter', 'struktur: fakta-gruppens overskrift bevares');
+      r.tjek(prak[0].da[1] === '', 'struktur: fakta-gruppens linjer tømmes');
+      const kol = JSON.parse(u.lister_grupper);
+      r.tjek(kol[0].da[0] === 'Dyreliv' && kol[0].da[1] === '', 'struktur: kolonneoverskrift bevares, punkter tømmes');
+      const faq = JSON.parse(u.faq_items);
+      r.tjek(faq[0].da[0] === 'Hvor lang tid?' && faq[0].da[1] === '', 'struktur: FAQ-spørgsmål bevares, svar tømmes');
+
+      // Afstande er omvendt: stednavnet går igen, tallet er stedspecifikt
+      const afs = JSON.parse(u.afstande_items);
+      r.tjek(afs[0].da[0] === '', 'struktur: afstandstallet tømmes');
+      r.tjek(afs[0].da[1] === 'Castillo del Alma', 'struktur: stednavnet bevares');
+
+      // Rene indholdslister ryddes helt
+      r.tjek(u.hero_meta === '[]', 'struktur: hero-firkanter ryddes');
+      r.tjek(u.hoej_punkter === '[]', 'struktur: højdepunktets punkter ryddes');
+    }
+
+    // ── Alt indhold: teksterne følger med ──
+    {
+      const u = M.svByggFraSkabelon(KILDE, 'alt', 'El Torcal', 'El Torcal');
+      r.tjek(u.intro_text === 'Solen varmer', 'alt: brødtekst kopieres');
+      r.tjek(u.seo_title === 'Caminito del Rey — guide', 'alt: SEO-titel kopieres');
+      r.tjek(JSON.parse(u.praktisk_grupper)[0].da[1] === 'Standardbillet | 10 €', 'alt: fakta-linjer kopieres');
+      r.tjek(JSON.parse(u.hero_meta).length === 1, 'alt: hero-firkanter kopieres');
+    }
+
+    // ── Robusthed: kilden kan være tom eller ødelagt ──
+    r.tjek(typeof M.svByggFraSkabelon({}, 'struktur', 'X', 'X') === 'object',
+      'tom kilde vælter ikke');
+    r.tjek(M.svByggFraSkabelon({ indhold: 'ikke json' }, 'struktur', 'X', 'X').hero_h1 === 'X',
+      'ugyldig JSON i kilden vælter ikke');
+    r.tjek(M.svByggFraSkabelon({ indhold: { praktisk_grupper: 'ødelagt' } }, 'struktur', 'X', 'X').praktisk_grupper === '[]',
+      'ødelagt liste bliver til en tom liste');
+
+    // ── Brugerfladen findes ──
+    r.tjek(/id="svSkabelonKilde"/.test(ADMIN), 'vælger til skabelon findes');
+    r.tjek(/id="svSkabelonTilstand"/.test(ADMIN), 'vælger til tilstand findes');
+    r.tjek(/function svFyldSkabelonVaelger/.test(ADMIN), 'vælgeren fyldes fra listen');
+    r.tjek(/svRenderListe\(\) \{\n  svFyldSkabelonVaelger\(\);/.test(ADMIN),
+      'vælgeren opdateres hver gang listen tegnes');
+  }
+
   r.overskrift('Struktur og opsætning');
   {
     // Admin

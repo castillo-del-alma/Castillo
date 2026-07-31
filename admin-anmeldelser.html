@@ -4071,6 +4071,22 @@ feeling more calm – and coming home to yourself again."</textarea></div>
               <button type="button" onclick="opretSevaerdighed()" style="background:#2a7a74;color:#fff;border:none;padding:.6rem 1.6rem;font-family:Manrope,sans-serif;font-size:.66rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;">+ Opret seværdighed</button>
             </div>
           </div>
+          <div class="fc-row">
+            <div>
+              <label class="fc-label">Start fra</label>
+              <select id="svSkabelonKilde" class="fc-input-da" style="cursor:pointer;" onchange="svSkabelonSkift()">
+                <option value="">Tom side (kun standardsektioner)</option>
+              </select>
+            </div>
+            <div id="svSkabelonTilstandFelt" style="display:none;">
+              <label class="fc-label">Hvad skal kopieres?</label>
+              <select id="svSkabelonTilstand" class="fc-input-da" style="cursor:pointer;">
+                <option value="struktur">Kun opbygningen — teksterne tømmes</option>
+                <option value="alt">Alt indhold — teksterne skal rettes</option>
+              </select>
+            </div>
+          </div>
+          <p id="svSkabelonHjaelp" style="display:none;font-family:Manrope,sans-serif;font-size:.68rem;color:#7a6a52;line-height:1.6;margin-top:.4rem;padding:.6rem .8rem;background:rgba(58,110,106,.06);border-left:2px solid #2a7a74;"></p>
           <p style="font-family:Manrope,sans-serif;font-size:.68rem;color:#7a6a52;line-height:1.6;margin-top:.6rem;">
             Slug'en foreslås ud fra navnet — kun små bogstaver, tal og bindestreger. Skriv gerne stednavnet ind i den, fx <code>caminito-del-rey</code> eller <code>el-torcal-antequera</code>.
             Den nye side oprettes med standardsektioner, som du derefter fylder ud.
@@ -11472,15 +11488,15 @@ const SV_IMG_KEYS  = ['social_image','hero_image','intro_image','historie_image'
 const SV_SOLO_KEYS = ['cta_link'];
 
 const SV_LISTER = {
-  hero_meta:        { felter: [{ da: 'Tekst i firkanten', en: 'Text in the box', lang: false }] },
-  lister_grupper:   { felter: [{ da: 'Kolonnens overskrift', en: 'Column heading', lang: false },
+  hero_meta:        { behold: [], felter: [{ da: 'Tekst i firkanten', en: 'Text in the box', lang: false }] },
+  lister_grupper:   { behold: [0], felter: [{ da: 'Kolonnens overskrift', en: 'Column heading', lang: false },
                                { da: 'Punkter — ét pr. linje', en: 'Items — one per line', lang: true }] },
-  hoej_punkter:     { felter: [{ da: 'Punkt', en: 'Item', lang: false }] },
-  praktisk_grupper: { felter: [{ da: 'Gruppens overskrift', en: 'Group heading', lang: false },
+  hoej_punkter:     { behold: [], felter: [{ da: 'Punkt', en: 'Item', lang: false }] },
+  praktisk_grupper: { behold: [0], felter: [{ da: 'Gruppens overskrift', en: 'Group heading', lang: false },
                                { da: 'Linjer — ét punkt pr. linje, brug | til to spalter', en: 'Lines — one per line, use | for two columns', lang: true }] },
-  afstande_items:   { felter: [{ da: 'Tal (fx 45 min)', en: 'Figure (e.g. 45 min)', lang: false },
+  afstande_items:   { behold: [1], felter: [{ da: 'Tal (fx 45 min)', en: 'Figure (e.g. 45 min)', lang: false },
                                { da: 'Stednavn', en: 'Place name', lang: false }] },
-  faq_items:        { felter: [{ da: 'Spørgsmål', en: 'Question', lang: false },
+  faq_items:        { behold: [0], felter: [{ da: 'Spørgsmål', en: 'Question', lang: false },
                                { da: 'Svar', en: 'Answer', lang: true }] }
 };
 
@@ -11509,6 +11525,76 @@ const SV_NAV_DEFAULT = [
   { tekst: 'FAQ',             tekst_en: 'FAQ',             link: '#sec-faq',      vis: '1' },
   { tekst: 'Lej ejendommen',  tekst_en: 'Rent the estate', link: '/udlejning',    vis: '1' }
 ];
+
+// ── Skabelon: opret en ny seværdighed ud fra en eksisterende ─────────────
+// Hardkodet skabelon ville blive forældet, i samme øjeblik en side rettes.
+// I stedet kopieres fra en valgt seværdighed, så den nyeste og bedste altid
+// er tilgængelig som udgangspunkt.
+//
+// Billeder kopieres ALDRIG. Et arvet billede ser ud som et bevidst valg og
+// bliver stående på en forkert side, uden at nogen opdager det.
+//
+// 'struktur' beholder opbygningen — sektionsrækkefølge, menu, overlinjer og
+// overskrifterne på fakta-grupper og kolonner — men tømmer teksterne. Så ser
+// man præcis hvilke felter der skal fyldes, uden at slæbe rundt på fortællingen
+// om et andet sted.
+// 'alt' kopierer teksterne med. Hurtigere, men hvert felt SKAL rettes.
+
+// Nøgler der er opbygning, ikke fortælling. De overlever begge tilstande.
+function svErStruktur(key) {
+  return key === 'nav_links' || key === 'nav_back' || key === 'sektion_orden'
+      || key === 'footer_copy' || key === 'footer_copy_en'
+      || key === 'vis_hero_stribe' || key === 'cta_link'
+      || key === 'hero_scroll' || key === 'hero_scroll_en'
+      || key === 'cta_btn' || key === 'cta_btn_en'
+      || key.indexOf('vis_') === 0
+      || /_label(_en)?$/.test(key)
+      || /^strip[123]_(top|bund)$/.test(key);
+}
+
+function svByggFraSkabelon(kilde, tilstand, nyTitel, nyTitelEn) {
+  let ind = kilde && kilde.indhold;
+  if (typeof ind === 'string') { try { ind = JSON.parse(ind); } catch (e) { ind = {}; } }
+  if (!ind || typeof ind !== 'object') ind = {};
+  const ud = {};
+
+  Object.keys(ind).forEach(function (key) {
+    const v = ind[key];
+
+    // Billeder aldrig med — hverken enkeltbilleder eller striber
+    if (SV_IMG_KEYS.indexOf(key) !== -1) { ud[key] = ''; return; }
+    if (/^strip[123]_images$/.test(key)) { ud[key] = '[]'; return; }
+
+    // Rækkelister: i 'struktur' beholdes kun de felter, der er opbygning
+    const listeKey = key.replace(/_en$/, '');
+    if (SV_LISTER[listeKey]) {
+      if (tilstand === 'alt') { ud[key] = v; return; }
+      const behold = SV_LISTER[listeKey].behold || [];
+      if (!behold.length) { ud[key] = '[]'; return; }
+      let raekker = [];
+      try { raekker = JSON.parse(v || '[]'); } catch (e) { raekker = []; }
+      if (!Array.isArray(raekker)) raekker = [];
+      ud[key] = JSON.stringify(raekker.map(function (r) {
+        const tom = function (arr) {
+          return (arr || []).map(function (felt, i) { return behold.indexOf(i) !== -1 ? felt : ''; });
+        };
+        return { da: tom(r.da), en: tom(r.en) };
+      }).filter(function (r) {
+        return (r.da || []).some(Boolean) || (r.en || []).some(Boolean);
+      }));
+      return;
+    }
+
+    if (tilstand === 'alt' || svErStruktur(key)) { ud[key] = v; return; }
+    ud[key] = '';                                  // fortælling — tømmes
+  });
+
+  // Navnet skal altid være det nye, uanset tilstand. Ellers står der
+  // "Caminito del Rey" som overskrift på El Torcal.
+  ud.hero_h1 = nyTitel;
+  ud.hero_h1_en = nyTitelEn || nyTitel;
+  return ud;
+}
 
 const SV_PIL_BTN = 'background:rgba(184,138,30,.12);border:1px solid rgba(184,138,30,.35);color:#8a6a15;width:22px;height:16px;line-height:1;font-size:.55rem;cursor:pointer;padding:0;';
 
@@ -11571,7 +11657,39 @@ async function loadSevaerdighederAdmin() {
   svRenderListe();
 }
 
+// Vælgeren holdes i takt med listen, så en netop oprettet side straks kan
+// bruges som skabelon for den næste.
+function svFyldSkabelonVaelger() {
+  const sel = document.getElementById('svSkabelonKilde');
+  if (!sel) return;
+  const valgt = sel.value;
+  sel.innerHTML = '<option value="">Tom side (kun standardsektioner)</option>' +
+    svAlle.map(function (r) {
+      return '<option value="' + svEsc(r.slug) + '">Kopiér fra: ' + svEsc(r.titel || r.slug) + '</option>';
+    }).join('');
+  if (valgt && svAlle.some(function (r) { return r.slug === valgt; })) sel.value = valgt;
+  svSkabelonSkift();
+}
+
+function svSkabelonSkift() {
+  const sel = document.getElementById('svSkabelonKilde');
+  const felt = document.getElementById('svSkabelonTilstandFelt');
+  const hjaelp = document.getElementById('svSkabelonHjaelp');
+  if (!sel || !felt || !hjaelp) return;
+  const valgt = !!sel.value;
+  felt.style.display = valgt ? '' : 'none';
+  hjaelp.style.display = valgt ? '' : 'none';
+  if (valgt) {
+    hjaelp.innerHTML = '<b>Billeder kopieres aldrig</b> — hverken hero, sektionsbilleder eller striber. ' +
+      'Et arvet billede ligner et bevidst valg og bliver stående på en forkert side. ' +
+      '<br><b>Kun opbygningen</b> beholder sektionsrækkefølge, menu, overlinjer og overskrifterne på ' +
+      'fakta-grupper, kolonner og FAQ — men tømmer teksterne, så du ser præcis hvilke felter der skal fyldes. ' +
+      'I Afstande beholdes stednavnene, ikke tallene.';
+  }
+}
+
 function svRenderListe() {
+  svFyldSkabelonVaelger();
   const c = document.getElementById('svListe');
   if (!c) return;
   if (!svAlle.length) {
@@ -11638,6 +11756,35 @@ async function opretSevaerdighed() {
   if (!slug) slug = svSlugify(titel);
   if (!slug) { showToast('Navnet giver ingen brugbar slug — skriv en selv', true); return; }
   if (svAlle.some(r => r.slug === slug)) { showToast('Der findes allerede en seværdighed med den slug', true); return; }
+
+  // Er der valgt en skabelon, bygges siden ud fra den — ellers det bare skelet
+  const kildeSlug = (document.getElementById('svSkabelonKilde') || {}).value || '';
+  const tilstand = (document.getElementById('svSkabelonTilstand') || {}).value || 'struktur';
+  if (kildeSlug) {
+    const kilde = svAlle.find(function (r) { return r.slug === kildeSlug; });
+    if (kilde) {
+      try {
+        const fra = svByggFraSkabelon(kilde, tilstand, titel, titelEn);
+        const { data: d2, error: e2 } = await sb.from('sevaerdigheder').insert({
+          slug: slug, titel: titel, titel_en: titelEn || titel,
+          aktiv: false, sort_orden: (svAlle.length + 1) * 10, indhold: fra
+        }).select().single();
+        if (e2) throw e2;
+        svAlle.push(d2);
+        if (tEl) tEl.value = '';
+        if (tEnEl) tEnEl.value = '';
+        if (sEl) { sEl.value = ''; sEl.dataset.rort = ''; }
+        svRenderListe();
+        showToast(tilstand === 'alt'
+          ? '✓ Oprettet ud fra ' + (kilde.titel || kilde.slug) + ' — husk at rette ALLE tekster'
+          : '✓ Oprettet med opbygningen fra ' + (kilde.titel || kilde.slug) + ' — teksterne er tomme');
+        svRediger(svAlle.length - 1);
+      } catch (e) {
+        showToast('Kunne ikke oprette ud fra skabelon: ' + (e.message || e), true);
+      }
+      return;
+    }
+  }
 
   // Skelettet en ny side starter med, så den aldrig står tom eller i stykker
   const indhold = {
