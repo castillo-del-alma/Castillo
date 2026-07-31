@@ -222,5 +222,64 @@ const CORDOBA = 7;
       'wellness-knappen skifter også tilbage');
   }
 
+  r.overskrift('En ÅBEN modal skal også skifte sprog');
+  {
+    // Indholdet blev sat én gang ved klik og lå fast, indtil man lukkede og
+    // åbnede igen. Det så ud, som om sproget slet ikke virkede i modalen.
+    const INDHOLD = [
+      { key: 'opl_olie_titel_da', value: 'Olivenolie Smagning' },
+      { key: 'opl_olie_titel_en', value: 'Olive Oil Tasting' },
+      { key: 'opl_olie_lang_da',  value: 'DANSK-BRØDTEKST' },
+      { key: 'opl_olie_lang_en',  value: 'ENGLISH-BODY' },
+      { key: 'well_breathwork_titel_da', value: 'Åndedrætsarbejde' },
+      { key: 'well_breathwork_titel_en', value: 'Breathwork EN' },
+      { key: 'well_breathwork_lang_da',  value: 'DANSK-WELLNESS' },
+      { key: 'well_breathwork_lang_en',  value: 'ENGLISH-WELLNESS' }
+    ];
+    const dom = await indlaesSide('index.html', {
+      url: 'https://castillodelalma.es/', geoSprog: 'da', indhold: INDHOLD
+    });
+    const w = dom.window, d = w.document;
+    const klik = (el) => el.dispatchEvent(new w.MouseEvent('click', { bubbles: true }));
+    const vent = () => new Promise(x => setTimeout(x, 200));
+
+    klik(d.querySelectorAll('.exp-item.exp-has-modal')[1]);
+    r.tjek(d.getElementById('expModalTitle').textContent === 'Olivenolie Smagning',
+      'modalen åbner på dansk');
+    r.tjek(/DANSK-BRØDTEKST/.test(d.getElementById('expModalText').textContent),
+      'dansk brødtekst i modalen');
+
+    w.eval("setSiteLang('en')"); await vent();
+    r.tjek(d.getElementById('expModalTitle').textContent === 'Olive Oil Tasting',
+      'ÅBEN modal skifter titel til engelsk');
+    r.tjek(/ENGLISH-BODY/.test(d.getElementById('expModalText').textContent),
+      'ÅBEN modal skifter brødtekst til engelsk');
+    r.tjek(!/DANSK-BRØDTEKST/.test(d.getElementById('expModalText').textContent),
+      'ingen dansk tekst tilbage i modalen');
+
+    w.eval("setSiteLang('da')"); await vent();
+    r.tjek(d.getElementById('expModalTitle').textContent === 'Olivenolie Smagning',
+      'ÅBEN modal skifter tilbage til dansk');
+
+    // Wellness-modalen
+    w.eval('closeModal()');
+    klik(d.querySelectorAll('.wellness-has-modal')[0]);
+    r.tjek(d.getElementById('wModalTitle').innerHTML === 'Åndedrætsarbejde',
+      'wellness-modalen åbner på dansk');
+    w.eval("setSiteLang('en')"); await vent();
+    r.tjek(d.getElementById('wModalTitle').innerHTML === 'Breathwork EN',
+      'ÅBEN wellness-modal skifter til engelsk');
+    r.tjek(/ENGLISH-WELLNESS/.test(d.getElementById('wModalText').textContent),
+      'wellness-brødtekst skifter med');
+
+    // En LUKKET modal må ikke tegnes om — så ville den poppe op af sig selv
+    w.eval('closeWModal()');
+    w.eval("setSiteLang('da')"); await vent();
+    r.tjek(!d.getElementById('wModal').classList.contains('active'),
+      'lukket modal åbner ikke af sig selv ved sprogskift');
+    r.tjek(!d.getElementById('expOverlay').classList.contains('active'),
+      'lukket oplevelses-modal forbliver lukket');
+  }
+
   process.exit(r.afslut());
 })();

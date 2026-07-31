@@ -2160,6 +2160,21 @@ document.querySelectorAll('.exp-has-modal').forEach(item=>{
 
   // Click handler
   item.addEventListener('click', ()=>{
+    window.aabentExpKort = item;
+    tegnExpModal(item);
+    overlay.classList.add('active');
+    modal.classList.add('active');
+    document.body.style.overflow = 'hidden';
+  });
+});
+
+// Indholdet tegnes i sin egen funktion, så en ÅBEN modal også kan skifte
+// sprog. Uden det blev teksten sat én gang ved klik og lå fast, indtil man
+// lukkede og åbnede igen — det så ud som om sproget slet ikke virkede.
+window.aabentExpKort = null;
+function tegnExpModal(item){
+  if (!item) return;
+  {
     const title  = item.dataset.title;
     const body   = item.dataset.body;
     const color  = item.dataset.color;
@@ -2190,14 +2205,11 @@ document.querySelectorAll('.exp-has-modal').forEach(item=>{
       imgEl.style.display = 'none';
     }
 
-    // Open
-    overlay.classList.add('active');
-    modal.classList.add('active');
-    document.body.style.overflow = 'hidden';
-  });
-});
+  }
+}
 
 function closeModal(){
+  window.aabentExpKort = null;
   overlay.classList.remove('active');
   modal.classList.remove('active');
   document.body.style.overflow = '';
@@ -2339,6 +2351,19 @@ const wModalImg   = document.getElementById('wModalImg');
 
 document.querySelectorAll('.wellness-has-modal').forEach(card => {
   card.addEventListener('click', () => {
+    window.aabentWKort = card;
+    tegnWModal(card);
+    wOverlay.classList.add('active');
+    wModal.classList.add('active');
+    document.body.style.overflow = 'hidden';
+  });
+});
+
+// Samme greb som i oplevelses-modalen
+window.aabentWKort = null;
+function tegnWModal(card){
+  if (!card) return;
+  {
     const title = card.dataset.title;
     const body  = card.dataset.body;
     const img   = card.dataset.image;
@@ -2353,13 +2378,11 @@ document.querySelectorAll('.wellness-has-modal').forEach(card => {
     } else {
       wModalImg.style.display = 'none';
     }
-    wOverlay.classList.add('active');
-    wModal.classList.add('active');
-    document.body.style.overflow = 'hidden';
-  });
-});
+  }
+}
 
 function closeWModal() {
+  window.aabentWKort = null;
   wOverlay.classList.remove('active');
   wModal.classList.remove('active');
   document.body.style.overflow = '';
@@ -3333,6 +3356,11 @@ function applySiteLang() {
   if (fLegalN) fLegalN.textContent = _legalEN ? 'Legal Notice' : 'Juridisk meddelelse';
 
   applySectionToggles();
+
+  // Står en modal åben, skal DENS indhold også skifte. Kortenes data er
+  // opdateret ovenfor, men den viste tekst blev sat, da modalen blev åbnet.
+  if (window.aabentExpKort && typeof tegnExpModal === 'function') tegnExpModal(window.aabentExpKort);
+  if (window.aabentWKort && typeof tegnWModal === 'function') tegnWModal(window.aabentWKort);
 }
 
 // ── DYNAMISK GALLERI FRA SUPABASE STORAGE ──
