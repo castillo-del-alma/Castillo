@@ -263,6 +263,78 @@ function tekst(dom) {
     r.tjek(!!navAnker, 'ankerlink beholdes uden /en');
   }
 
+  r.overskrift('Ekstra historie-sektioner 5.1–5.4');
+  {
+    // Tomme på testrækken — de må ikke dukke op af sig selv
+    const tom = await indlaesSide('sevaerdighed.html', {
+      url: 'https://castillodelalma.es/sevaerdigheder/test-sted',
+      indhold: [RAEKKE, ANDEN], geoSprog: 'da'
+    });
+    ['historie51','historie52','historie53','historie54'].forEach(k => {
+      const sec = tom.window.document.getElementById('sec-' + k);
+      r.tjek(!!sec, 'sektionen sec-' + k + ' findes i HTML');
+      r.tjek(sec && sec.style.display === 'none',
+        k + ' er skjult, når den er tom');
+    });
+
+    // Med indhold
+    const fyldt = JSON.parse(JSON.stringify(RAEKKE));
+    fyldt.indhold.historie52_label = 'Kalifatet';
+    fyldt.indhold.historie52_label_en = 'The Caliphate';
+    fyldt.indhold.historie52_h2 = 'Da Córdoba var Europas største by';
+    fyldt.indhold.historie52_h2_en = 'When Córdoba was Europe\'s largest city';
+    fyldt.indhold.historie52_text = 'Første afsnit\nAndet afsnit';
+    fyldt.indhold.historie52_text_en = 'First paragraph\nSecond paragraph';
+    fyldt.indhold.historie52_image = '/img/kalifat.jpg';
+    fyldt.indhold.historie52_billedtekst = 'Mezquita · Córdoba';
+    fyldt.indhold.historie52_billedtekst_en = 'Mezquita · Córdoba';
+    // 5.3 har kun et billede — også indhold nok til at vise sektionen
+    fyldt.indhold.historie53_image = '/img/andet.jpg';
+
+    const dom = await indlaesSide('sevaerdighed.html', {
+      url: 'https://castillodelalma.es/sevaerdigheder/test-sted',
+      indhold: [fyldt, ANDEN], geoSprog: 'da'
+    });
+    const d = dom.window.document;
+
+    r.tjek(d.getElementById('sec-historie52').style.display !== 'none',
+      '5.2 vises, når den har indhold');
+    r.tjek(d.getElementById('sec-historie53').style.display !== 'none',
+      '5.3 vises, når den kun har et billede');
+    r.tjek(d.getElementById('sec-historie51').style.display === 'none',
+      '5.1 er stadig skjult');
+    r.tjek(d.getElementById('sv_historie52_h2').textContent === 'Da Córdoba var Europas største by',
+      '5.2 viser overskriften');
+    r.tjek(d.querySelectorAll('#sv_historie52_text p').length === 2,
+      '5.2 deler brødteksten i to afsnit');
+    r.tjek(d.getElementById('sv_historie52_fig').style.display !== 'none', '5.2 viser figuren');
+    r.tjek(d.getElementById('sv_historie52_billedtekst').textContent === 'Mezquita · Córdoba',
+      '5.2 viser den røde billedtekst');
+
+    // Rækkefølgen: lige efter nr. 5, før naturen
+    const alle = Array.from(d.querySelectorAll('#sv_side > section, #sv_side > header'))
+      .map(el => el.id).filter(Boolean);
+    const iHist = alle.indexOf('sec-historie');
+    const iNatur = alle.indexOf('sec-natur');
+    ['historie51','historie52','historie53','historie54'].forEach((k, n) => {
+      const i = alle.indexOf('sec-' + k);
+      r.tjek(i > iHist && i < iNatur, k + ' står mellem Historien og Naturen');
+      if (n > 0) r.tjek(i === alle.indexOf('sec-historie5' + n) + 1,
+        k + ' står lige efter 5.' + n);
+    });
+
+    // Engelsk
+    const en = await indlaesSide('sevaerdighed.html', {
+      url: 'https://castillodelalma.es/en/sevaerdigheder/test-sted',
+      indhold: [fyldt, ANDEN], geoSprog: 'da'
+    });
+    const de = en.window.document;
+    r.tjek(/Europe/.test(de.getElementById('sv_historie52_h2').textContent),
+      '5.2 viser engelsk overskrift på /en/');
+    r.tjek(!/største by/.test(de.getElementById('sv_historie52_h2').textContent),
+      'ingen dansk tekst i 5.2 på /en/');
+  }
+
   r.overskrift('Autolink af adresser');
   {
     const dom = await indlaesSide('sevaerdighed.html', {
@@ -522,7 +594,11 @@ function tekst(dom) {
       ADMIN.indexOf('// Menuen en ny seværdighed starter med'));
     const adminSekt = Array.from(defsBlok.matchAll(/id: '([a-z0-9-]+)',\s+navn: '[^']*',\s+key: '(vis_[a-z0-9]+)'/g))
       .map(m => ({ id: m[1], key: m[2] }));
-    r.tjek(adminSekt.length === 13, 'admin kender 13 sektioner (fik: ' + adminSekt.length + ')');
+    // Tallet må ikke stå hardkodet — så skal det rettes, hver gang der kommer
+    // en sektion til, og fristelsen er at rette tallet i stedet for at
+    // undersøge hvorfor det ændrede sig. Sidens egen liste er facit.
+    r.tjek(adminSekt.length >= 13,
+      'admin kender mindst 13 sektioner (fik: ' + adminSekt.length + ')');
 
     // Sidens egen tabel over sektioner
     const sideBlok = SIDE.slice(SIDE.indexOf('const SV_SEKTIONER = {'),

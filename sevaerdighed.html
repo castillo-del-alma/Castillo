@@ -510,6 +510,74 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--gold);outline-offse
   </div>
 </section>
 
+<!-- 5.1 · HISTORIEN (ekstra) -->
+<section id="sec-historie51" style="display:none;">
+  <div class="section-inner">
+    <div class="split">
+      <div>
+        <span class="eyebrow" id="sv_historie51_label"></span>
+        <h2 id="sv_historie51_h2"></h2>
+        <div id="sv_historie51_text"></div>
+      </div>
+      <figure class="fig fig-4-3" id="sv_historie51_fig" style="display:none;">
+        <img id="sv_historie51_image" alt="" loading="lazy">
+        <figcaption class="fig-label" id="sv_historie51_billedtekst" style="display:none;"></figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<!-- 5.2 · HISTORIEN (ekstra) -->
+<section class="alt" id="sec-historie52" style="display:none;">
+  <div class="section-inner">
+    <div class="split">
+      <figure class="fig fig-3-4" id="sv_historie52_fig" style="display:none;">
+        <img id="sv_historie52_image" alt="" loading="lazy">
+        <figcaption class="fig-label" id="sv_historie52_billedtekst" style="display:none;"></figcaption>
+      </figure>
+      <div>
+        <span class="eyebrow" id="sv_historie52_label"></span>
+        <h2 id="sv_historie52_h2"></h2>
+        <div id="sv_historie52_text"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 5.3 · HISTORIEN (ekstra) -->
+<section id="sec-historie53" style="display:none;">
+  <div class="section-inner">
+    <div class="split">
+      <div>
+        <span class="eyebrow" id="sv_historie53_label"></span>
+        <h2 id="sv_historie53_h2"></h2>
+        <div id="sv_historie53_text"></div>
+      </div>
+      <figure class="fig fig-4-3" id="sv_historie53_fig" style="display:none;">
+        <img id="sv_historie53_image" alt="" loading="lazy">
+        <figcaption class="fig-label" id="sv_historie53_billedtekst" style="display:none;"></figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<!-- 5.4 · HISTORIEN (ekstra) -->
+<section class="alt" id="sec-historie54" style="display:none;">
+  <div class="section-inner">
+    <div class="split">
+      <figure class="fig fig-3-4" id="sv_historie54_fig" style="display:none;">
+        <img id="sv_historie54_image" alt="" loading="lazy">
+        <figcaption class="fig-label" id="sv_historie54_billedtekst" style="display:none;"></figcaption>
+      </figure>
+      <div>
+        <span class="eyebrow" id="sv_historie54_label"></span>
+        <h2 id="sv_historie54_h2"></h2>
+        <div id="sv_historie54_text"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- 3 · NATUREN -->
 <section id="sec-natur">
   <div class="section-inner">
@@ -643,10 +711,14 @@ let svLang = 'da';
 
 // Standardrækkefølgen. Sektioner, der mangler i en gemt rækkefølge, sættes
 // ind på deres plads her, så en ny sektion aldrig forsvinder på gamle sider.
-const SV_STANDARD_ORDEN = ['sec-intro','strip1','sec-historie','sec-natur','sec-lister',
+const SV_STANDARD_ORDEN = ['sec-intro','strip1','sec-historie',
+  'sec-historie51','sec-historie52','sec-historie53','sec-historie54',
+  'sec-natur','sec-lister',
   'strip2','sec-hoejdepunkt','sec-praktisk','sec-afstande','strip3','sec-faq','sec-flere','sec-cta'];
 const SV_SEKTIONER = {
   'sec-intro':'vis_intro', 'strip1':'vis_strip1', 'sec-historie':'vis_historie',
+  'sec-historie51':'vis_historie51', 'sec-historie52':'vis_historie52',
+  'sec-historie53':'vis_historie53', 'sec-historie54':'vis_historie54',
   'sec-natur':'vis_natur', 'sec-lister':'vis_lister', 'strip2':'vis_strip2',
   'sec-hoejdepunkt':'vis_hoejdepunkt', 'sec-praktisk':'vis_praktisk',
   'sec-afstande':'vis_afstande', 'strip3':'vis_strip3', 'sec-faq':'vis_faq',
@@ -845,6 +917,15 @@ function applySvContent() {
   svSet('sv_historie_h2',    svSC('historie_h2'));
   svSetAfsnit('sv_historie_text', svSC('historie_text'));
   svFigur('historie');
+
+  // 5.1–5.4 · Ekstra historie-sektioner. De skjuler sig selv, når de er tomme,
+  // så en side der ikke bruger dem, ikke får en overskrift uden indhold.
+  ['historie51', 'historie52', 'historie53', 'historie54'].forEach(function (k) {
+    svSet('sv_' + k + '_label', svSC(k + '_label'));
+    svSet('sv_' + k + '_h2', svSC(k + '_h2'));
+    svSetAfsnit('sv_' + k + '_text', svSC(k + '_text'));
+    svFigur(k);
+  });
 
   // 3 · Naturen
   svSet('sv_natur_label', svSC('natur_label'));
@@ -1054,6 +1135,14 @@ function applySvSynlighed() {
     if (svData[SV_SEKTIONER[id]] === '0') { el.style.display = 'none'; return; }
     // Striber og krydslinks styrer selv, om de har noget at vise
     if (id === 'strip1' || id === 'strip2' || id === 'strip3' || id === 'sec-flere') return;
+    // De ekstra historie-sektioner vises kun, når de har indhold. Ellers ville
+    // hver seværdighed få fire tomme sektioner, den ikke bruger.
+    if (/^sec-historie5[1-4]$/.test(id)) {
+      const k = id.replace('sec-', '');
+      const harIndhold = !!(svSC(k + '_h2') || svSC(k + '_text') || svData[k + '_image']);
+      el.style.display = harIndhold ? '' : 'none';
+      return;
+    }
     el.style.display = '';
   });
 }
