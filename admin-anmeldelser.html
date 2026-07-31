@@ -541,6 +541,7 @@ body{font-family:'Manrope',sans-serif;background:#f0e8d5;color:#2c2318;min-heigh
       <button class="subtab-btn" onclick="switchSubTab('ejendommen',this)">Ejendommen</button>
       <button class="subtab-btn" onclick="switchSubTab('udlejning',this)">Udlejning</button>
       <button class="subtab-btn" onclick="switchSubTab('gay',this)">Gay Retreat</button>
+      <button class="subtab-btn" onclick="switchSubTab('sevaerdigheder',this)">Seværdigheder</button>
       <button class="subtab-btn" onclick="switchSubTab('kontakt',this)">Kontakt</button>
       <button class="subtab-btn" onclick="switchSubTab('anmeldelser',this)">Se anmeldelser</button>
       <button class="subtab-btn" onclick="switchSubTab('indstillinger',this)">Indstillinger</button>
@@ -4039,6 +4040,520 @@ feeling more calm – and coming home to yourself again."</textarea></div>
     </div>
   </div>
 
+  <div class="subtab-content" id="tab-sevaerdigheder" style="padding:2rem 3rem;max-width:1100px;">
+    <div style="display:flex;align-items:center;gap:1rem;margin-bottom:1.4rem;flex-wrap:wrap;">
+      <h2 style="font-family:Cinzel,serif;font-weight:400;font-size:1.3rem;margin:0;">Seværdigheder</h2>
+      <span id="svValgtNavn" style="font-family:Manrope,sans-serif;font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;color:#7a1f35;"></span>
+      <a href="#" target="_blank" rel="noopener" id="svSeSiden" style="display:none;font-family:Manrope,sans-serif;font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;color:#2a7a74;">Se siden ↗</a>
+      <button type="button" onclick="oversaetHeleSiden(this,'svEditorPanel')" id="svOversaetAlt" style="display:none;background:rgba(58,110,106,.1);border:1px solid rgba(58,110,106,.35);color:#2a7a74;padding:.3rem .8rem;font-family:Manrope,sans-serif;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;margin-left:auto;">⇄ Oversæt hele siden</button>
+      <button type="button" onclick="gemSevaerdighed()" id="svGemBtn" style="display:none;background:#7a1f35;color:#fff;border:none;padding:.6rem 1.6rem;font-family:Manrope,sans-serif;font-size:.66rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;">💾 Gem</button>
+    </div>
+
+    <div id="svAdvarsel" style="display:none;background:rgba(163,51,51,.08);border:1px solid rgba(163,51,51,.35);color:#a33;padding:.8rem 1rem;font-family:Manrope,sans-serif;font-size:.7rem;line-height:1.5;margin-bottom:1.2rem;"></div>
+
+    <!-- ══ LISTE OVER SEVÆRDIGHEDER ══ -->
+    <div id="svListePanel">
+      <div style="font-family:Manrope,sans-serif;font-size:.7rem;color:rgba(44,35,24,.55);line-height:1.6;margin-bottom:1.6rem;">
+        Hver seværdighed får sin egen side på <code>/sevaerdigheder/&lt;slug&gt;</code> (dansk) og <code>/en/sevaerdigheder/&lt;slug&gt;</code> (engelsk).
+        Slug'en er adressen i Google — vælg den med omhu, og <b>lad den stå fast bagefter</b>, så indekserede links ikke dør.
+      </div>
+
+      <div class="fc-block" style="margin-bottom:1.5rem;">
+        <div class="fc-block-header"><span class="fc-block-title">Ny seværdighed</span></div>
+        <div class="fc-block-body">
+          <div class="fc-row">
+            <div><label class="fc-label fc-label-da">Navn (DA)</label><input type="text" id="svNyTitel" class="fc-input-da" placeholder="fx El Torcal de Antequera" oninput="svForeslaaSlug()"></div>
+            <div><label class="fc-label fc-label-en">Name (EN)</label><input type="text" id="svNyTitelEn" class="fc-input-en" placeholder="e.g. El Torcal de Antequera"></div>
+          </div>
+          <div class="fc-row">
+            <div><label class="fc-label">SEO-slug (adressen)</label><input type="text" id="svNySlug" class="fc-input-da" placeholder="el-torcal-de-antequera" oninput="this.dataset.rort='1'"></div>
+            <div style="display:flex;align-items:flex-end;">
+              <button type="button" onclick="opretSevaerdighed()" style="background:#2a7a74;color:#fff;border:none;padding:.6rem 1.6rem;font-family:Manrope,sans-serif;font-size:.66rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;">+ Opret seværdighed</button>
+            </div>
+          </div>
+          <p style="font-family:Manrope,sans-serif;font-size:.68rem;color:#7a6a52;line-height:1.6;margin-top:.6rem;">
+            Slug'en foreslås ud fra navnet — kun små bogstaver, tal og bindestreger. Skriv gerne stednavnet ind i den, fx <code>caminito-del-rey</code> eller <code>el-torcal-antequera</code>.
+            Den nye side oprettes med standardsektioner, som du derefter fylder ud.
+          </p>
+        </div>
+      </div>
+
+      <div class="fc-block">
+        <div class="fc-block-header"><span class="fc-block-title">Alle seværdigheder</span></div>
+        <div class="fc-block-body">
+          <p style="font-family:Manrope,sans-serif;font-size:.72rem;color:#7a6a52;margin-bottom:.8rem;">
+            Rækkefølgen styrer, hvordan de vises i "Flere seværdigheder" på de øvrige sider. <b>Aktiv</b> afgør, om siden er offentlig — slå den fra, mens du skriver.
+          </p>
+          <div id="svListe"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ EDITOR FOR ÉN SEVÆRDIGHED ══ -->
+    <div id="svEditorPanel" style="display:none;">
+      <div style="display:flex;align-items:center;gap:1rem;margin-bottom:1.2rem;flex-wrap:wrap;">
+        <button type="button" onclick="svLukEditor()" style="background:rgba(184,138,30,.12);border:1px solid rgba(184,138,30,.35);color:#8a6a15;padding:.45rem 1.1rem;font-family:Manrope,sans-serif;font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;">← Tilbage til listen</button>
+      </div>
+      <div style="font-family:Manrope,sans-serif;font-size:.7rem;color:rgba(44,35,24,.55);line-height:1.6;margin-bottom:1.6rem;">
+        Inline HTML som <code>&lt;b&gt;</code>, <code>&lt;em&gt;</code> og <code>&lt;br&gt;</code> virker i alle tekstfelter.
+        <b>Husk at klikke 💾 Gem</b> — tekst i felterne er ikke gemt, før du gør det.
+      </div>
+
+      <div class="fc-block" style="margin-bottom:1.5rem;">
+        <div class="fc-block-header"><span class="fc-block-title">Grunddata</span></div>
+        <div class="fc-block-body">
+          <div class="fc-row">
+            <div><label class="fc-label fc-label-da">Navn i admin (DA)</label><input type="text" id="sv_titel_da" class="fc-input-da"></div>
+            <div><label class="fc-label fc-label-en">Name in admin (EN)</label><input type="text" id="sv_titel_en" class="fc-input-en"></div>
+          </div>
+          <div class="fc-row">
+            <div>
+              <label class="fc-label">SEO-slug (adressen)</label>
+              <input type="text" id="sv_slug" class="fc-input-da">
+              <p style="font-family:Manrope,sans-serif;font-size:.66rem;color:#a33;line-height:1.5;margin-top:.3rem;">
+                Ændrer du slug'en, ændres sidens adresse. Gamle links og Googles indeksering peger så på en side, der ikke findes.
+              </p>
+            </div>
+            <div>
+              <label class="fc-label">Rækkefølge (lavest først)</label>
+              <input type="number" id="sv_sort_orden" class="fc-input-da" value="0">
+              <label style="display:flex;align-items:center;gap:.5rem;font-family:Manrope,sans-serif;font-size:.72rem;cursor:pointer;margin-top:.8rem;">
+                <input type="checkbox" id="sv_aktiv" checked style="cursor:pointer;"> Aktiv (siden er offentlig)
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    <div class="fc-block" id="svblok_0" style="margin-bottom:1.5rem;">
+      <div class="fc-block-header" style="display:flex;align-items:center;gap:.8rem;"><span class="fc-block-title">0 · Navigation (menu) &amp; sektionsrækkefølge</span><button type="button" onclick="oversaetBlok(this)" style="background:rgba(58,110,106,.1);border:1px solid rgba(58,110,106,.35);color:#2a7a74;padding:.3rem .8rem;font-family:Manrope,sans-serif;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;margin-left:auto;" title="Oversæt tomme engelske felter i denne sektion">⇄ Oversæt</button></div>
+      <div class="fc-block-body">
+        <p style="font-family:Manrope,sans-serif;font-size:.72rem;color:#7a6a52;line-height:1.6;margin-bottom:.8rem;">Menu-links øverst på siden: navn (DA/EN), link (vælg et ankerpunkt fra listen eller <b>Egen URL</b>), synlighed og rækkefølge med pilene. Ankerpunkterne følger sektionernes ID'er nedenfor.</p>
+        <div id="svNavEditor"></div>
+        <button type="button" onclick="svNavTilfoej()" style="background:#2a7a74;color:#fff;border:none;padding:.45rem 1.1rem;font-family:Manrope,sans-serif;font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;margin-top:.4rem;">+ Tilføj menu-link</button>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Tilbage-link øverst til højre</label><input type="text" id="sv_nav_back_da" class="fc-input-da"></div>
+          <div><label class="fc-label fc-label-en">Back link, top right</label><input type="text" id="sv_nav_back_en" class="fc-input-en"></div>
+        </div>
+        <hr style="border:none;border-top:1px solid rgba(184,138,30,.25);margin:1.4rem 0;">
+        <p style="font-family:Manrope,sans-serif;font-size:.72rem;color:#7a6a52;line-height:1.6;margin-bottom:.8rem;">Sektionernes rækkefølge på siden — flyt med pilene, og slå sektioner til/fra med <b>Synlig</b>.</p>
+        <div id="svOrdenEditor"></div>
+<div style="text-align:right;margin-top:1.2rem;padding-top:1rem;border-top:1px solid rgba(184,138,30,.18);"><button type="button" onclick="gemSevaerdighed()" style="background:var(--wine);color:#fff;border:none;padding:.5rem 1.4rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;">💾 Gem</button><button type="button" onclick="gemSevaerdighedOgSeSiden()" style="background:#2a7a74;color:#fff;border:none;padding:.5rem 1.4rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;margin-left:.6rem;">💾 Gem og se siden</button></div>
+      </div>
+    </div>
+
+    <div class="fc-block" id="svblok_1" style="margin-bottom:1.5rem;">
+      <div class="fc-block-header" style="display:flex;align-items:center;gap:.8rem;"><span class="fc-block-title">1 · SEO og deling</span><button type="button" onclick="oversaetBlok(this)" style="background:rgba(58,110,106,.1);border:1px solid rgba(58,110,106,.35);color:#2a7a74;padding:.3rem .8rem;font-family:Manrope,sans-serif;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;margin-left:auto;" title="Oversæt tomme engelske felter i denne sektion">⇄ Oversæt</button></div>
+      <div class="fc-block-body">
+        <p style="font-family:Manrope,sans-serif;font-size:.72rem;color:#7a6a52;line-height:1.6;margin-bottom:.8rem;">Titel og beskrivelse i Google og på sociale medier. Beskrivelsen bør være 120–160 tegn. Skriv gerne <b>Castillo del Alma</b> ind i teksten — det er hele pointen med siden.</p>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Sidetitel (vises i Google)</label><input type="text" id="sv_seo_title_da" class="fc-input-da"></div>
+          <div><label class="fc-label fc-label-en">Page title (shown in Google)</label><input type="text" id="sv_seo_title_en" class="fc-input-en"></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Beskrivelse (meta description)</label><textarea id="sv_seo_desc_da" class="fc-input-da fc-textarea" rows="3"></textarea></div>
+          <div><label class="fc-label fc-label-en">Description (meta description)</label><textarea id="sv_seo_desc_en" class="fc-input-en fc-textarea" rows="3"></textarea></div>
+        </div>
+        <div class="fc-row">
+          <div>
+            <label class="fc-label fc-label-da">Delebillede (1200×630)</label>
+            <input type="text" id="sv_social_image_url" class="fc-input-da" placeholder="URL indsættes automatisk ved upload">
+            <label class="fc-label" style="color:#2a7a74;margin-top:.6rem;">📁 Upload</label>
+            <div style="display:flex;align-items:center;gap:.6rem;margin-top:.3rem;">
+              <img id="sv_social_image_preview" src="" style="display:none;width:56px;height:56px;object-fit:cover;border:1px solid rgba(184,138,30,.3);">
+              <input type="file" id="sv_social_image_file" accept="image/*" style="font-size:.76rem;flex:1;">
+              <button type="button" onclick="uploadRetreatBillede('sv_social_image_file','sv_social_image_url','sv_social_image_preview')" style="background:#2a7a74;color:#fff;border:none;padding:.45rem 1.1rem;font-family:Manrope,sans-serif;font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;white-space:nowrap;">⬆ Upload</button>
+              <button type="button" onclick="fjernBilledeFelt('sv_social_image_url','sv_social_image_preview')" style="background:rgba(163,51,51,.08);color:#a33;border:1px solid rgba(163,51,51,.35);padding:.45rem .9rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;white-space:nowrap;" title="Fjern billedet helt">🗑 Fjern</button>
+            </div>
+          </div>
+          <div></div>
+        </div>
+<div style="text-align:right;margin-top:1.2rem;padding-top:1rem;border-top:1px solid rgba(184,138,30,.18);"><button type="button" onclick="gemSevaerdighed()" style="background:var(--wine);color:#fff;border:none;padding:.5rem 1.4rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;">💾 Gem</button><button type="button" onclick="gemSevaerdighedOgSeSiden()" style="background:#2a7a74;color:#fff;border:none;padding:.5rem 1.4rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;margin-left:.6rem;">💾 Gem og se siden</button></div>
+      </div>
+    </div>
+
+    <div class="fc-block" id="svblok_2" style="margin-bottom:1.5rem;">
+      <div class="fc-block-header" style="display:flex;align-items:center;gap:.8rem;"><span class="fc-block-title">2 · Hero (øverste billede)</span><button type="button" onclick="oversaetBlok(this)" style="background:rgba(58,110,106,.1);border:1px solid rgba(58,110,106,.35);color:#2a7a74;padding:.3rem .8rem;font-family:Manrope,sans-serif;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;margin-left:auto;" title="Oversæt tomme engelske felter i denne sektion">⇄ Oversæt</button></div>
+      <div class="fc-block-body">
+        <p style="font-family:Manrope,sans-serif;font-size:.72rem;color:#7a6a52;line-height:1.6;margin-bottom:.8rem;">Det store billede øverst med overskrift og de små firkanter. Overlinjen er stedet — fx <i>Ardales · Málaga · 45 minutter fra Castillo del Alma</i>. Brug <code>&lt;br&gt;</code> i overskriften til at styre linjeskiftet.</p>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Overlinje (sted)</label><input type="text" id="sv_hero_eyebrow_da" class="fc-input-da"></div>
+          <div><label class="fc-label fc-label-en">Eyebrow (location)</label><input type="text" id="sv_hero_eyebrow_en" class="fc-input-en"></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Overskrift</label><input type="text" id="sv_hero_h1_da" class="fc-input-da"></div>
+          <div><label class="fc-label fc-label-en">Heading</label><input type="text" id="sv_hero_h1_en" class="fc-input-en"></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Manchet under overskriften</label><textarea id="sv_hero_lede_da" class="fc-input-da fc-textarea" rows="3"></textarea></div>
+          <div><label class="fc-label fc-label-en">Lede below the heading</label><textarea id="sv_hero_lede_en" class="fc-input-en fc-textarea" rows="3"></textarea></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Tekst ved pil nederst</label><input type="text" id="sv_hero_scroll_da" class="fc-input-da"></div>
+          <div><label class="fc-label fc-label-en">Scroll link text</label><input type="text" id="sv_hero_scroll_en" class="fc-input-en"></div>
+        </div>
+        <div class="fc-row">
+          <div>
+            <label class="fc-label fc-label-da">Baggrundsbillede (mindst 2000 px bredt)</label>
+            <input type="text" id="sv_hero_image_url" class="fc-input-da" placeholder="URL indsættes automatisk ved upload">
+            <label class="fc-label" style="color:#2a7a74;margin-top:.6rem;">📁 Upload</label>
+            <div style="display:flex;align-items:center;gap:.6rem;margin-top:.3rem;">
+              <img id="sv_hero_image_preview" src="" style="display:none;width:56px;height:56px;object-fit:cover;border:1px solid rgba(184,138,30,.3);">
+              <input type="file" id="sv_hero_image_file" accept="image/*" style="font-size:.76rem;flex:1;">
+              <button type="button" onclick="uploadRetreatBillede('sv_hero_image_file','sv_hero_image_url','sv_hero_image_preview')" style="background:#2a7a74;color:#fff;border:none;padding:.45rem 1.1rem;font-family:Manrope,sans-serif;font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;white-space:nowrap;">⬆ Upload</button>
+              <button type="button" onclick="fjernBilledeFelt('sv_hero_image_url','sv_hero_image_preview')" style="background:rgba(163,51,51,.08);color:#a33;border:1px solid rgba(163,51,51,.35);padding:.45rem .9rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;white-space:nowrap;" title="Fjern billedet helt">🗑 Fjern</button>
+            </div>
+          </div>
+          <div></div>
+        </div>
+        <label style="display:flex;align-items:center;gap:.5rem;font-family:Manrope,sans-serif;font-size:.72rem;cursor:pointer;margin:.8rem 0 1rem;"><input type="checkbox" id="sv_vis_hero_stribe" checked style="cursor:pointer;"> Vis farvestribe langs bunden af hero'en</label>
+        <p style="font-family:Manrope,sans-serif;font-size:.72rem;color:#7a6a52;line-height:1.6;margin-bottom:.8rem;"><b>Firkanter (nøgletal)</b> — de små kasser under manchetten. Fx <i>7,7 km rute</i> eller <i>45 min fra Castillo del Alma</i>.</p>
+        <div id="svListe_hero_meta"></div>
+        <button type="button" onclick="svListeTilfoej('hero_meta')" style="background:#2a7a74;color:#fff;border:none;padding:.45rem 1.1rem;font-family:Manrope,sans-serif;font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;margin-top:.4rem;">+ Tilføj firkant</button>
+<div style="text-align:right;margin-top:1.2rem;padding-top:1rem;border-top:1px solid rgba(184,138,30,.18);"><button type="button" onclick="gemSevaerdighed()" style="background:var(--wine);color:#fff;border:none;padding:.5rem 1.4rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;">💾 Gem</button><button type="button" onclick="gemSevaerdighedOgSeSiden()" style="background:#2a7a74;color:#fff;border:none;padding:.5rem 1.4rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;margin-left:.6rem;">💾 Gem og se siden</button></div>
+      </div>
+    </div>
+
+    <div class="fc-block" id="svblok_3" style="margin-bottom:1.5rem;">
+      <div class="fc-block-header" style="display:flex;align-items:center;gap:.8rem;"><span class="fc-block-title">3 · Hovedsektionen</span><button type="button" onclick="oversaetBlok(this)" style="background:rgba(58,110,106,.1);border:1px solid rgba(58,110,106,.35);color:#2a7a74;padding:.3rem .8rem;font-family:Manrope,sans-serif;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;margin-left:auto;" title="Oversæt tomme engelske felter i denne sektion">⇄ Oversæt</button></div>
+      <div class="fc-block-body">
+        <p style="font-family:Manrope,sans-serif;font-size:.72rem;color:#7a6a52;line-height:1.6;margin-bottom:.8rem;">Den bærende tekst om seværdigheden. <b>Ét afsnit pr. linje</b> i brødteksten — tryk Enter for nyt afsnit. Billedteksten vises i den røde kasse nederst til højre på billedet.</p>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Overlinje</label><input type="text" id="sv_intro_label_da" class="fc-input-da"></div>
+          <div><label class="fc-label fc-label-en">Eyebrow</label><input type="text" id="sv_intro_label_en" class="fc-input-en"></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Overskrift</label><input type="text" id="sv_intro_h2_da" class="fc-input-da"></div>
+          <div><label class="fc-label fc-label-en">Heading</label><input type="text" id="sv_intro_h2_en" class="fc-input-en"></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Manchet (stor tekst)</label><textarea id="sv_intro_lede_da" class="fc-input-da fc-textarea" rows="3"></textarea></div>
+          <div><label class="fc-label fc-label-en">Lede (large text)</label><textarea id="sv_intro_lede_en" class="fc-input-en fc-textarea" rows="3"></textarea></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Brødtekst (ét afsnit pr. linje)</label><textarea id="sv_intro_text_da" class="fc-input-da fc-textarea" rows="10"></textarea></div>
+          <div><label class="fc-label fc-label-en">Body text (one paragraph per line)</label><textarea id="sv_intro_text_en" class="fc-input-en fc-textarea" rows="10"></textarea></div>
+        </div>
+        <div class="fc-row">
+          <div>
+            <label class="fc-label fc-label-da">Billede</label>
+            <input type="text" id="sv_intro_image_url" class="fc-input-da" placeholder="URL indsættes automatisk ved upload">
+            <label class="fc-label" style="color:#2a7a74;margin-top:.6rem;">📁 Upload</label>
+            <div style="display:flex;align-items:center;gap:.6rem;margin-top:.3rem;">
+              <img id="sv_intro_image_preview" src="" style="display:none;width:56px;height:56px;object-fit:cover;border:1px solid rgba(184,138,30,.3);">
+              <input type="file" id="sv_intro_image_file" accept="image/*" style="font-size:.76rem;flex:1;">
+              <button type="button" onclick="uploadRetreatBillede('sv_intro_image_file','sv_intro_image_url','sv_intro_image_preview')" style="background:#2a7a74;color:#fff;border:none;padding:.45rem 1.1rem;font-family:Manrope,sans-serif;font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;white-space:nowrap;">⬆ Upload</button>
+              <button type="button" onclick="fjernBilledeFelt('sv_intro_image_url','sv_intro_image_preview')" style="background:rgba(163,51,51,.08);color:#a33;border:1px solid rgba(163,51,51,.35);padding:.45rem .9rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;white-space:nowrap;" title="Fjern billedet helt">🗑 Fjern</button>
+            </div>
+          </div>
+          <div></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Billedtekst (rød kasse)</label><input type="text" id="sv_intro_billedtekst_da" class="fc-input-da"></div>
+          <div><label class="fc-label fc-label-en">Caption (red box)</label><input type="text" id="sv_intro_billedtekst_en" class="fc-input-en"></div>
+        </div>
+<div style="text-align:right;margin-top:1.2rem;padding-top:1rem;border-top:1px solid rgba(184,138,30,.18);"><button type="button" onclick="gemSevaerdighed()" style="background:var(--wine);color:#fff;border:none;padding:.5rem 1.4rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;">💾 Gem</button><button type="button" onclick="gemSevaerdighedOgSeSiden()" style="background:#2a7a74;color:#fff;border:none;padding:.5rem 1.4rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;margin-left:.6rem;">💾 Gem og se siden</button></div>
+      </div>
+    </div>
+
+    <div class="fc-block" id="svblok_4" style="margin-bottom:1.5rem;">
+      <div class="fc-block-header" style="display:flex;align-items:center;gap:.8rem;"><span class="fc-block-title">4 · Billedstribe 1</span></div>
+      <div class="fc-block-body">
+        <p style="font-family:Manrope,sans-serif;font-size:.72rem;color:#7a6a52;line-height:1.6;margin-bottom:.8rem;">Op til 5 billeder i en vandret stribe. Er striben tom, vises den ikke på siden.</p>
+        <div id="svStribe1Liste"></div>
+        <button type="button" onclick="svStribeTilfoej(1)" style="background:#2a7a74;color:#fff;border:none;padding:.45rem 1.1rem;font-family:Manrope,sans-serif;font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;margin:.4rem 0 1rem;">+ Tilføj billede</button>
+        <div class="fc-row">
+          <div><label class="fc-label">Luft over striben (rem)</label><input type="number" min="0" max="14" step="0.5" id="sv_strip1_top" class="fc-input-da" value="2"></div>
+          <div><label class="fc-label">Luft under striben (rem)</label><input type="number" min="0" max="14" step="0.5" id="sv_strip1_bund" class="fc-input-da" value="2"></div>
+        </div>
+<div style="text-align:right;margin-top:1.2rem;padding-top:1rem;border-top:1px solid rgba(184,138,30,.18);"><button type="button" onclick="gemSevaerdighed()" style="background:var(--wine);color:#fff;border:none;padding:.5rem 1.4rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;">💾 Gem</button><button type="button" onclick="gemSevaerdighedOgSeSiden()" style="background:#2a7a74;color:#fff;border:none;padding:.5rem 1.4rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;margin-left:.6rem;">💾 Gem og se siden</button></div>
+      </div>
+    </div>
+
+    <div class="fc-block" id="svblok_5" style="margin-bottom:1.5rem;">
+      <div class="fc-block-header" style="display:flex;align-items:center;gap:.8rem;"><span class="fc-block-title">5 · Historien</span><button type="button" onclick="oversaetBlok(this)" style="background:rgba(58,110,106,.1);border:1px solid rgba(58,110,106,.35);color:#2a7a74;padding:.3rem .8rem;font-family:Manrope,sans-serif;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;margin-left:auto;" title="Oversæt tomme engelske felter i denne sektion">⇄ Oversæt</button></div>
+      <div class="fc-block-body">
+        <p style="font-family:Manrope,sans-serif;font-size:.72rem;color:#7a6a52;line-height:1.6;margin-bottom:.8rem;">Stedets historie. Fremhæv gerne underoverskrifter midt i teksten med <code>&lt;b&gt;…&lt;/b&gt;</code> i starten af et afsnit.</p>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Overlinje</label><input type="text" id="sv_historie_label_da" class="fc-input-da"></div>
+          <div><label class="fc-label fc-label-en">Eyebrow</label><input type="text" id="sv_historie_label_en" class="fc-input-en"></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Overskrift</label><input type="text" id="sv_historie_h2_da" class="fc-input-da"></div>
+          <div><label class="fc-label fc-label-en">Heading</label><input type="text" id="sv_historie_h2_en" class="fc-input-en"></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Brødtekst (ét afsnit pr. linje)</label><textarea id="sv_historie_text_da" class="fc-input-da fc-textarea" rows="12"></textarea></div>
+          <div><label class="fc-label fc-label-en">Body text (one paragraph per line)</label><textarea id="sv_historie_text_en" class="fc-input-en fc-textarea" rows="12"></textarea></div>
+        </div>
+        <div class="fc-row">
+          <div>
+            <label class="fc-label fc-label-da">Billede</label>
+            <input type="text" id="sv_historie_image_url" class="fc-input-da" placeholder="URL indsættes automatisk ved upload">
+            <label class="fc-label" style="color:#2a7a74;margin-top:.6rem;">📁 Upload</label>
+            <div style="display:flex;align-items:center;gap:.6rem;margin-top:.3rem;">
+              <img id="sv_historie_image_preview" src="" style="display:none;width:56px;height:56px;object-fit:cover;border:1px solid rgba(184,138,30,.3);">
+              <input type="file" id="sv_historie_image_file" accept="image/*" style="font-size:.76rem;flex:1;">
+              <button type="button" onclick="uploadRetreatBillede('sv_historie_image_file','sv_historie_image_url','sv_historie_image_preview')" style="background:#2a7a74;color:#fff;border:none;padding:.45rem 1.1rem;font-family:Manrope,sans-serif;font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;white-space:nowrap;">⬆ Upload</button>
+              <button type="button" onclick="fjernBilledeFelt('sv_historie_image_url','sv_historie_image_preview')" style="background:rgba(163,51,51,.08);color:#a33;border:1px solid rgba(163,51,51,.35);padding:.45rem .9rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;white-space:nowrap;" title="Fjern billedet helt">🗑 Fjern</button>
+            </div>
+          </div>
+          <div></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Billedtekst (rød kasse)</label><input type="text" id="sv_historie_billedtekst_da" class="fc-input-da"></div>
+          <div><label class="fc-label fc-label-en">Caption (red box)</label><input type="text" id="sv_historie_billedtekst_en" class="fc-input-en"></div>
+        </div>
+<div style="text-align:right;margin-top:1.2rem;padding-top:1rem;border-top:1px solid rgba(184,138,30,.18);"><button type="button" onclick="gemSevaerdighed()" style="background:var(--wine);color:#fff;border:none;padding:.5rem 1.4rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;">💾 Gem</button><button type="button" onclick="gemSevaerdighedOgSeSiden()" style="background:#2a7a74;color:#fff;border:none;padding:.5rem 1.4rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;margin-left:.6rem;">💾 Gem og se siden</button></div>
+      </div>
+    </div>
+
+    <div class="fc-block" id="svblok_6" style="margin-bottom:1.5rem;">
+      <div class="fc-block-header" style="display:flex;align-items:center;gap:.8rem;"><span class="fc-block-title">6 · Naturen og landskabet</span><button type="button" onclick="oversaetBlok(this)" style="background:rgba(58,110,106,.1);border:1px solid rgba(58,110,106,.35);color:#2a7a74;padding:.3rem .8rem;font-family:Manrope,sans-serif;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;margin-left:auto;" title="Oversæt tomme engelske felter i denne sektion">⇄ Oversæt</button></div>
+      <div class="fc-block-body">
+        <p style="font-family:Manrope,sans-serif;font-size:.72rem;color:#7a6a52;line-height:1.6;margin-bottom:.8rem;">Naturen omkring seværdigheden — geologi, landskab, lys og årstider.</p>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Overlinje</label><input type="text" id="sv_natur_label_da" class="fc-input-da"></div>
+          <div><label class="fc-label fc-label-en">Eyebrow</label><input type="text" id="sv_natur_label_en" class="fc-input-en"></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Overskrift</label><input type="text" id="sv_natur_h2_da" class="fc-input-da"></div>
+          <div><label class="fc-label fc-label-en">Heading</label><input type="text" id="sv_natur_h2_en" class="fc-input-en"></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Brødtekst (ét afsnit pr. linje)</label><textarea id="sv_natur_text_da" class="fc-input-da fc-textarea" rows="10"></textarea></div>
+          <div><label class="fc-label fc-label-en">Body text (one paragraph per line)</label><textarea id="sv_natur_text_en" class="fc-input-en fc-textarea" rows="10"></textarea></div>
+        </div>
+        <div class="fc-row">
+          <div>
+            <label class="fc-label fc-label-da">Billede</label>
+            <input type="text" id="sv_natur_image_url" class="fc-input-da" placeholder="URL indsættes automatisk ved upload">
+            <label class="fc-label" style="color:#2a7a74;margin-top:.6rem;">📁 Upload</label>
+            <div style="display:flex;align-items:center;gap:.6rem;margin-top:.3rem;">
+              <img id="sv_natur_image_preview" src="" style="display:none;width:56px;height:56px;object-fit:cover;border:1px solid rgba(184,138,30,.3);">
+              <input type="file" id="sv_natur_image_file" accept="image/*" style="font-size:.76rem;flex:1;">
+              <button type="button" onclick="uploadRetreatBillede('sv_natur_image_file','sv_natur_image_url','sv_natur_image_preview')" style="background:#2a7a74;color:#fff;border:none;padding:.45rem 1.1rem;font-family:Manrope,sans-serif;font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;white-space:nowrap;">⬆ Upload</button>
+              <button type="button" onclick="fjernBilledeFelt('sv_natur_image_url','sv_natur_image_preview')" style="background:rgba(163,51,51,.08);color:#a33;border:1px solid rgba(163,51,51,.35);padding:.45rem .9rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;white-space:nowrap;" title="Fjern billedet helt">🗑 Fjern</button>
+            </div>
+          </div>
+          <div></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Billedtekst (rød kasse)</label><input type="text" id="sv_natur_billedtekst_da" class="fc-input-da"></div>
+          <div><label class="fc-label fc-label-en">Caption (red box)</label><input type="text" id="sv_natur_billedtekst_en" class="fc-input-en"></div>
+        </div>
+<div style="text-align:right;margin-top:1.2rem;padding-top:1rem;border-top:1px solid rgba(184,138,30,.18);"><button type="button" onclick="gemSevaerdighed()" style="background:var(--wine);color:#fff;border:none;padding:.5rem 1.4rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;">💾 Gem</button><button type="button" onclick="gemSevaerdighedOgSeSiden()" style="background:#2a7a74;color:#fff;border:none;padding:.5rem 1.4rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;margin-left:.6rem;">💾 Gem og se siden</button></div>
+      </div>
+    </div>
+
+    <div class="fc-block" id="svblok_7" style="margin-bottom:1.5rem;">
+      <div class="fc-block-header" style="display:flex;align-items:center;gap:.8rem;"><span class="fc-block-title">7 · Dyreliv &amp; flora (kolonnelister)</span><button type="button" onclick="oversaetBlok(this)" style="background:rgba(58,110,106,.1);border:1px solid rgba(58,110,106,.35);color:#2a7a74;padding:.3rem .8rem;font-family:Manrope,sans-serif;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;margin-left:auto;" title="Oversæt tomme engelske felter i denne sektion">⇄ Oversæt</button></div>
+      <div class="fc-block-body">
+        <p style="font-family:Manrope,sans-serif;font-size:.72rem;color:#7a6a52;line-height:1.6;margin-bottom:.8rem;">Kolonner med hver sin overskrift og punktliste — fx <i>Dyreliv</i>, <i>Flora</i> og <i>Landskabet</i>. <b>Ét punkt pr. linje</b> i punktfeltet. Kolonnerne fordeler sig selv, uanset om der er to, tre eller fire.</p>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Overlinje</label><input type="text" id="sv_lister_label_da" class="fc-input-da"></div>
+          <div><label class="fc-label fc-label-en">Eyebrow</label><input type="text" id="sv_lister_label_en" class="fc-input-en"></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Overskrift</label><input type="text" id="sv_lister_h2_da" class="fc-input-da"></div>
+          <div><label class="fc-label fc-label-en">Heading</label><input type="text" id="sv_lister_h2_en" class="fc-input-en"></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Indledning</label><textarea id="sv_lister_intro_da" class="fc-input-da fc-textarea" rows="2"></textarea></div>
+          <div><label class="fc-label fc-label-en">Intro</label><textarea id="sv_lister_intro_en" class="fc-input-en fc-textarea" rows="2"></textarea></div>
+        </div>
+        <div id="svListe_lister_grupper"></div>
+        <button type="button" onclick="svListeTilfoej('lister_grupper')" style="background:#2a7a74;color:#fff;border:none;padding:.45rem 1.1rem;font-family:Manrope,sans-serif;font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;margin-top:.4rem;">+ Tilføj kolonne</button>
+<div style="text-align:right;margin-top:1.2rem;padding-top:1rem;border-top:1px solid rgba(184,138,30,.18);"><button type="button" onclick="gemSevaerdighed()" style="background:var(--wine);color:#fff;border:none;padding:.5rem 1.4rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;">💾 Gem</button><button type="button" onclick="gemSevaerdighedOgSeSiden()" style="background:#2a7a74;color:#fff;border:none;padding:.5rem 1.4rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;margin-left:.6rem;">💾 Gem og se siden</button></div>
+      </div>
+    </div>
+
+    <div class="fc-block" id="svblok_8" style="margin-bottom:1.5rem;">
+      <div class="fc-block-header" style="display:flex;align-items:center;gap:.8rem;"><span class="fc-block-title">8 · Billedstribe 2</span></div>
+      <div class="fc-block-body">
+        <p style="font-family:Manrope,sans-serif;font-size:.72rem;color:#7a6a52;line-height:1.6;margin-bottom:.8rem;">Op til 5 billeder. Er striben tom, vises den ikke på siden.</p>
+        <div id="svStribe2Liste"></div>
+        <button type="button" onclick="svStribeTilfoej(2)" style="background:#2a7a74;color:#fff;border:none;padding:.45rem 1.1rem;font-family:Manrope,sans-serif;font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;margin:.4rem 0 1rem;">+ Tilføj billede</button>
+        <div class="fc-row">
+          <div><label class="fc-label">Luft over striben (rem)</label><input type="number" min="0" max="14" step="0.5" id="sv_strip2_top" class="fc-input-da" value="2"></div>
+          <div><label class="fc-label">Luft under striben (rem)</label><input type="number" min="0" max="14" step="0.5" id="sv_strip2_bund" class="fc-input-da" value="2"></div>
+        </div>
+<div style="text-align:right;margin-top:1.2rem;padding-top:1rem;border-top:1px solid rgba(184,138,30,.18);"><button type="button" onclick="gemSevaerdighed()" style="background:var(--wine);color:#fff;border:none;padding:.5rem 1.4rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;">💾 Gem</button><button type="button" onclick="gemSevaerdighedOgSeSiden()" style="background:#2a7a74;color:#fff;border:none;padding:.5rem 1.4rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;margin-left:.6rem;">💾 Gem og se siden</button></div>
+      </div>
+    </div>
+
+    <div class="fc-block" id="svblok_9" style="margin-bottom:1.5rem;">
+      <div class="fc-block-header" style="display:flex;align-items:center;gap:.8rem;"><span class="fc-block-title">9 · Højdepunktet (mørkt bånd)</span><button type="button" onclick="oversaetBlok(this)" style="background:rgba(58,110,106,.1);border:1px solid rgba(58,110,106,.35);color:#2a7a74;padding:.3rem .8rem;font-family:Manrope,sans-serif;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;margin-left:auto;" title="Oversæt tomme engelske felter i denne sektion">⇄ Oversæt</button></div>
+      <div class="fc-block-body">
+        <p style="font-family:Manrope,sans-serif;font-size:.72rem;color:#7a6a52;line-height:1.6;margin-bottom:.8rem;">Det ene store trækplaster — fx hængebroen. Sektionen står på mørk bund, så den skiller sig ud midt på siden.</p>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Overlinje</label><input type="text" id="sv_hoej_label_da" class="fc-input-da"></div>
+          <div><label class="fc-label fc-label-en">Eyebrow</label><input type="text" id="sv_hoej_label_en" class="fc-input-en"></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Overskrift</label><input type="text" id="sv_hoej_h2_da" class="fc-input-da"></div>
+          <div><label class="fc-label fc-label-en">Heading</label><input type="text" id="sv_hoej_h2_en" class="fc-input-en"></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Brødtekst (ét afsnit pr. linje)</label><textarea id="sv_hoej_text_da" class="fc-input-da fc-textarea" rows="6"></textarea></div>
+          <div><label class="fc-label fc-label-en">Body text (one paragraph per line)</label><textarea id="sv_hoej_text_en" class="fc-input-en fc-textarea" rows="6"></textarea></div>
+        </div>
+        <div class="fc-row">
+          <div>
+            <label class="fc-label fc-label-da">Billede</label>
+            <input type="text" id="sv_hoej_image_url" class="fc-input-da" placeholder="URL indsættes automatisk ved upload">
+            <label class="fc-label" style="color:#2a7a74;margin-top:.6rem;">📁 Upload</label>
+            <div style="display:flex;align-items:center;gap:.6rem;margin-top:.3rem;">
+              <img id="sv_hoej_image_preview" src="" style="display:none;width:56px;height:56px;object-fit:cover;border:1px solid rgba(184,138,30,.3);">
+              <input type="file" id="sv_hoej_image_file" accept="image/*" style="font-size:.76rem;flex:1;">
+              <button type="button" onclick="uploadRetreatBillede('sv_hoej_image_file','sv_hoej_image_url','sv_hoej_image_preview')" style="background:#2a7a74;color:#fff;border:none;padding:.45rem 1.1rem;font-family:Manrope,sans-serif;font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;white-space:nowrap;">⬆ Upload</button>
+              <button type="button" onclick="fjernBilledeFelt('sv_hoej_image_url','sv_hoej_image_preview')" style="background:rgba(163,51,51,.08);color:#a33;border:1px solid rgba(163,51,51,.35);padding:.45rem .9rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;white-space:nowrap;" title="Fjern billedet helt">🗑 Fjern</button>
+            </div>
+          </div>
+          <div></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Billedtekst (rød kasse)</label><input type="text" id="sv_hoej_billedtekst_da" class="fc-input-da"></div>
+          <div><label class="fc-label fc-label-en">Caption (red box)</label><input type="text" id="sv_hoej_billedtekst_en" class="fc-input-en"></div>
+        </div>
+        <p style="font-family:Manrope,sans-serif;font-size:.72rem;color:#7a6a52;line-height:1.6;margin-bottom:.8rem;"><b>Punkter</b> — de korte fakta med guldstreg foran.</p>
+        <div id="svListe_hoej_punkter"></div>
+        <button type="button" onclick="svListeTilfoej('hoej_punkter')" style="background:#2a7a74;color:#fff;border:none;padding:.45rem 1.1rem;font-family:Manrope,sans-serif;font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;margin-top:.4rem;">+ Tilføj punkt</button>
+<div style="text-align:right;margin-top:1.2rem;padding-top:1rem;border-top:1px solid rgba(184,138,30,.18);"><button type="button" onclick="gemSevaerdighed()" style="background:var(--wine);color:#fff;border:none;padding:.5rem 1.4rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;">💾 Gem</button><button type="button" onclick="gemSevaerdighedOgSeSiden()" style="background:#2a7a74;color:#fff;border:none;padding:.5rem 1.4rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;margin-left:.6rem;">💾 Gem og se siden</button></div>
+      </div>
+    </div>
+
+    <div class="fc-block" id="svblok_10" style="margin-bottom:1.5rem;">
+      <div class="fc-block-header" style="display:flex;align-items:center;gap:.8rem;"><span class="fc-block-title">10 · Praktiske detaljer (fakta-grupper)</span><button type="button" onclick="oversaetBlok(this)" style="background:rgba(58,110,106,.1);border:1px solid rgba(58,110,106,.35);color:#2a7a74;padding:.3rem .8rem;font-family:Manrope,sans-serif;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;margin-left:auto;" title="Oversæt tomme engelske felter i denne sektion">⇄ Oversæt</button></div>
+      <div class="fc-block-body">
+        <p style="font-family:Manrope,sans-serif;font-size:.72rem;color:#7a6a52;line-height:1.6;margin-bottom:.8rem;">Hver gruppe bliver en kasse med sin egen overskrift — fx <i>Adresse</i>, <i>Billetter</i>, <i>Parkering</i>. I linjefeltet skriver du <b>ét punkt pr. linje</b>. Skriver du <code>Etiket | Værdi</code> med et rør imellem, sættes linjen op i to spalter (fx <code>Standardbillet | ca. 10 €</code>). Linjer uden rør bliver almindelige punkter.</p>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Overlinje</label><input type="text" id="sv_praktisk_label_da" class="fc-input-da"></div>
+          <div><label class="fc-label fc-label-en">Eyebrow</label><input type="text" id="sv_praktisk_label_en" class="fc-input-en"></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Overskrift</label><input type="text" id="sv_praktisk_h2_da" class="fc-input-da"></div>
+          <div><label class="fc-label fc-label-en">Heading</label><input type="text" id="sv_praktisk_h2_en" class="fc-input-en"></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Indledning</label><textarea id="sv_praktisk_intro_da" class="fc-input-da fc-textarea" rows="3"></textarea></div>
+          <div><label class="fc-label fc-label-en">Intro</label><textarea id="sv_praktisk_intro_en" class="fc-input-en fc-textarea" rows="3"></textarea></div>
+        </div>
+        <div id="svListe_praktisk_grupper"></div>
+        <button type="button" onclick="svListeTilfoej('praktisk_grupper')" style="background:#2a7a74;color:#fff;border:none;padding:.45rem 1.1rem;font-family:Manrope,sans-serif;font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;margin-top:.4rem;">+ Tilføj fakta-gruppe</button>
+<div style="text-align:right;margin-top:1.2rem;padding-top:1rem;border-top:1px solid rgba(184,138,30,.18);"><button type="button" onclick="gemSevaerdighed()" style="background:var(--wine);color:#fff;border:none;padding:.5rem 1.4rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;">💾 Gem</button><button type="button" onclick="gemSevaerdighedOgSeSiden()" style="background:#2a7a74;color:#fff;border:none;padding:.5rem 1.4rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;margin-left:.6rem;">💾 Gem og se siden</button></div>
+      </div>
+    </div>
+
+    <div class="fc-block" id="svblok_11" style="margin-bottom:1.5rem;">
+      <div class="fc-block-header" style="display:flex;align-items:center;gap:.8rem;"><span class="fc-block-title">11 · Afstande</span><button type="button" onclick="oversaetBlok(this)" style="background:rgba(58,110,106,.1);border:1px solid rgba(58,110,106,.35);color:#2a7a74;padding:.3rem .8rem;font-family:Manrope,sans-serif;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;margin-left:auto;" title="Oversæt tomme engelske felter i denne sektion">⇄ Oversæt</button></div>
+      <div class="fc-block-body">
+        <p style="font-family:Manrope,sans-serif;font-size:.72rem;color:#7a6a52;line-height:1.6;margin-bottom:.8rem;">De store tal med stednavn under. Sæt <b>Castillo del Alma øverst</b> — det er den afstand, gæsterne leder efter.</p>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Overlinje</label><input type="text" id="sv_afstande_label_da" class="fc-input-da"></div>
+          <div><label class="fc-label fc-label-en">Eyebrow</label><input type="text" id="sv_afstande_label_en" class="fc-input-en"></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Overskrift</label><input type="text" id="sv_afstande_h2_da" class="fc-input-da"></div>
+          <div><label class="fc-label fc-label-en">Heading</label><input type="text" id="sv_afstande_h2_en" class="fc-input-en"></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Indledning</label><textarea id="sv_afstande_intro_da" class="fc-input-da fc-textarea" rows="3"></textarea></div>
+          <div><label class="fc-label fc-label-en">Intro</label><textarea id="sv_afstande_intro_en" class="fc-input-en fc-textarea" rows="3"></textarea></div>
+        </div>
+        <div id="svListe_afstande_items"></div>
+        <button type="button" onclick="svListeTilfoej('afstande_items')" style="background:#2a7a74;color:#fff;border:none;padding:.45rem 1.1rem;font-family:Manrope,sans-serif;font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;margin-top:.4rem;">+ Tilføj afstand</button>
+<div style="text-align:right;margin-top:1.2rem;padding-top:1rem;border-top:1px solid rgba(184,138,30,.18);"><button type="button" onclick="gemSevaerdighed()" style="background:var(--wine);color:#fff;border:none;padding:.5rem 1.4rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;">💾 Gem</button><button type="button" onclick="gemSevaerdighedOgSeSiden()" style="background:#2a7a74;color:#fff;border:none;padding:.5rem 1.4rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;margin-left:.6rem;">💾 Gem og se siden</button></div>
+      </div>
+    </div>
+
+    <div class="fc-block" id="svblok_12" style="margin-bottom:1.5rem;">
+      <div class="fc-block-header" style="display:flex;align-items:center;gap:.8rem;"><span class="fc-block-title">12 · Billedstribe 3</span></div>
+      <div class="fc-block-body">
+        <p style="font-family:Manrope,sans-serif;font-size:.72rem;color:#7a6a52;line-height:1.6;margin-bottom:.8rem;">Op til 5 billeder. Er striben tom, vises den ikke på siden.</p>
+        <div id="svStribe3Liste"></div>
+        <button type="button" onclick="svStribeTilfoej(3)" style="background:#2a7a74;color:#fff;border:none;padding:.45rem 1.1rem;font-family:Manrope,sans-serif;font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;margin:.4rem 0 1rem;">+ Tilføj billede</button>
+        <div class="fc-row">
+          <div><label class="fc-label">Luft over striben (rem)</label><input type="number" min="0" max="14" step="0.5" id="sv_strip3_top" class="fc-input-da" value="2"></div>
+          <div><label class="fc-label">Luft under striben (rem)</label><input type="number" min="0" max="14" step="0.5" id="sv_strip3_bund" class="fc-input-da" value="2"></div>
+        </div>
+<div style="text-align:right;margin-top:1.2rem;padding-top:1rem;border-top:1px solid rgba(184,138,30,.18);"><button type="button" onclick="gemSevaerdighed()" style="background:var(--wine);color:#fff;border:none;padding:.5rem 1.4rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;">💾 Gem</button><button type="button" onclick="gemSevaerdighedOgSeSiden()" style="background:#2a7a74;color:#fff;border:none;padding:.5rem 1.4rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;margin-left:.6rem;">💾 Gem og se siden</button></div>
+      </div>
+    </div>
+
+    <div class="fc-block" id="svblok_13" style="margin-bottom:1.5rem;">
+      <div class="fc-block-header" style="display:flex;align-items:center;gap:.8rem;"><span class="fc-block-title">13 · FAQ</span><button type="button" onclick="oversaetBlok(this)" style="background:rgba(58,110,106,.1);border:1px solid rgba(58,110,106,.35);color:#2a7a74;padding:.3rem .8rem;font-family:Manrope,sans-serif;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;margin-left:auto;" title="Oversæt tomme engelske felter i denne sektion">⇄ Oversæt</button></div>
+      <div class="fc-block-body">
+        <p style="font-family:Manrope,sans-serif;font-size:.72rem;color:#7a6a52;line-height:1.6;margin-bottom:.8rem;">Spørgsmål og svar. De sendes automatisk til Google som FAQ-schema, så de kan vises direkte i søgeresultatet — meget værd for netop denne slags side.</p>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Overlinje</label><input type="text" id="sv_faq_label_da" class="fc-input-da"></div>
+          <div><label class="fc-label fc-label-en">Eyebrow</label><input type="text" id="sv_faq_label_en" class="fc-input-en"></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Overskrift</label><input type="text" id="sv_faq_h2_da" class="fc-input-da"></div>
+          <div><label class="fc-label fc-label-en">Heading</label><input type="text" id="sv_faq_h2_en" class="fc-input-en"></div>
+        </div>
+        <div id="svListe_faq_items"></div>
+        <button type="button" onclick="svListeTilfoej('faq_items')" style="background:#2a7a74;color:#fff;border:none;padding:.45rem 1.1rem;font-family:Manrope,sans-serif;font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;margin-top:.4rem;">+ Tilføj spørgsmål</button>
+<div style="text-align:right;margin-top:1.2rem;padding-top:1rem;border-top:1px solid rgba(184,138,30,.18);"><button type="button" onclick="gemSevaerdighed()" style="background:var(--wine);color:#fff;border:none;padding:.5rem 1.4rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;">💾 Gem</button><button type="button" onclick="gemSevaerdighedOgSeSiden()" style="background:#2a7a74;color:#fff;border:none;padding:.5rem 1.4rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;margin-left:.6rem;">💾 Gem og se siden</button></div>
+      </div>
+    </div>
+
+    <div class="fc-block" id="svblok_14" style="margin-bottom:1.5rem;">
+      <div class="fc-block-header" style="display:flex;align-items:center;gap:.8rem;"><span class="fc-block-title">14 · Flere seværdigheder</span><button type="button" onclick="oversaetBlok(this)" style="background:rgba(58,110,106,.1);border:1px solid rgba(58,110,106,.35);color:#2a7a74;padding:.3rem .8rem;font-family:Manrope,sans-serif;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;margin-left:auto;" title="Oversæt tomme engelske felter i denne sektion">⇄ Oversæt</button></div>
+      <div class="fc-block-body">
+        <p style="font-family:Manrope,sans-serif;font-size:.72rem;color:#7a6a52;line-height:1.6;margin-bottom:.8rem;">Kortene til de øvrige seværdigheder bygges automatisk — du skriver kun overskrifterne her. Sektionen skjuler sig selv, indtil der findes mindst én anden aktiv seværdighed.</p>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Overlinje</label><input type="text" id="sv_flere_label_da" class="fc-input-da"></div>
+          <div><label class="fc-label fc-label-en">Eyebrow</label><input type="text" id="sv_flere_label_en" class="fc-input-en"></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Overskrift</label><input type="text" id="sv_flere_h2_da" class="fc-input-da"></div>
+          <div><label class="fc-label fc-label-en">Heading</label><input type="text" id="sv_flere_h2_en" class="fc-input-en"></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Indledning</label><textarea id="sv_flere_intro_da" class="fc-input-da fc-textarea" rows="3"></textarea></div>
+          <div><label class="fc-label fc-label-en">Intro</label><textarea id="sv_flere_intro_en" class="fc-input-en fc-textarea" rows="3"></textarea></div>
+        </div>
+<div style="text-align:right;margin-top:1.2rem;padding-top:1rem;border-top:1px solid rgba(184,138,30,.18);"><button type="button" onclick="gemSevaerdighed()" style="background:var(--wine);color:#fff;border:none;padding:.5rem 1.4rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;">💾 Gem</button><button type="button" onclick="gemSevaerdighedOgSeSiden()" style="background:#2a7a74;color:#fff;border:none;padding:.5rem 1.4rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;margin-left:.6rem;">💾 Gem og se siden</button></div>
+      </div>
+    </div>
+
+    <div class="fc-block" id="svblok_15" style="margin-bottom:1.5rem;">
+      <div class="fc-block-header" style="display:flex;align-items:center;gap:.8rem;"><span class="fc-block-title">15 · Opfordring nederst</span><button type="button" onclick="oversaetBlok(this)" style="background:rgba(58,110,106,.1);border:1px solid rgba(58,110,106,.35);color:#2a7a74;padding:.3rem .8rem;font-family:Manrope,sans-serif;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;margin-left:auto;" title="Oversæt tomme engelske felter i denne sektion">⇄ Oversæt</button></div>
+      <div class="fc-block-body">
+        <p style="font-family:Manrope,sans-serif;font-size:.72rem;color:#7a6a52;line-height:1.6;margin-bottom:.8rem;">Det mørke bånd nederst, der fører gæsten videre til en booking.</p>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Overskrift</label><input type="text" id="sv_cta_h2_da" class="fc-input-da"></div>
+          <div><label class="fc-label fc-label-en">Heading</label><input type="text" id="sv_cta_h2_en" class="fc-input-en"></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Tekst</label><textarea id="sv_cta_text_da" class="fc-input-da fc-textarea" rows="4"></textarea></div>
+          <div><label class="fc-label fc-label-en">Text</label><textarea id="sv_cta_text_en" class="fc-input-en fc-textarea" rows="4"></textarea></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Knaptekst</label><input type="text" id="sv_cta_btn_da" class="fc-input-da"></div>
+          <div><label class="fc-label fc-label-en">Button text</label><input type="text" id="sv_cta_btn_en" class="fc-input-en"></div>
+        </div>
+        <div class="fc-row"><div><label class="fc-label">Knappens link (fx /udlejning)</label><input type="text" id="sv_cta_link" class="fc-input-da" placeholder="/udlejning"></div><div></div></div>
+<div style="text-align:right;margin-top:1.2rem;padding-top:1rem;border-top:1px solid rgba(184,138,30,.18);"><button type="button" onclick="gemSevaerdighed()" style="background:var(--wine);color:#fff;border:none;padding:.5rem 1.4rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;">💾 Gem</button><button type="button" onclick="gemSevaerdighedOgSeSiden()" style="background:#2a7a74;color:#fff;border:none;padding:.5rem 1.4rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;margin-left:.6rem;">💾 Gem og se siden</button></div>
+      </div>
+    </div>
+
+    <div class="fc-block" id="svblok_16" style="margin-bottom:1.5rem;">
+      <div class="fc-block-header" style="display:flex;align-items:center;gap:.8rem;"><span class="fc-block-title">16 · Footer</span><button type="button" onclick="oversaetBlok(this)" style="background:rgba(58,110,106,.1);border:1px solid rgba(58,110,106,.35);color:#2a7a74;padding:.3rem .8rem;font-family:Manrope,sans-serif;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;margin-left:auto;" title="Oversæt tomme engelske felter i denne sektion">⇄ Oversæt</button></div>
+      <div class="fc-block-body">
+        <p style="font-family:Manrope,sans-serif;font-size:.72rem;color:#7a6a52;line-height:1.6;margin-bottom:.8rem;">Copyright-linjen nederst.</p>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Copyright-tekst</label><input type="text" id="sv_footer_copy_da" class="fc-input-da"></div>
+          <div><label class="fc-label fc-label-en">Copyright text</label><input type="text" id="sv_footer_copy_en" class="fc-input-en"></div>
+        </div>
+<div style="text-align:right;margin-top:1.2rem;padding-top:1rem;border-top:1px solid rgba(184,138,30,.18);"><button type="button" onclick="gemSevaerdighed()" style="background:var(--wine);color:#fff;border:none;padding:.5rem 1.4rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;">💾 Gem</button><button type="button" onclick="gemSevaerdighedOgSeSiden()" style="background:#2a7a74;color:#fff;border:none;padding:.5rem 1.4rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;margin-left:.6rem;">💾 Gem og se siden</button></div>
+      </div>
+    </div>
+    </div>
+  </div>
+
   <div class="subtab-content" id="tab-kontakt" style="padding:2rem 3rem;max-width:1100px;">
     <h2 style="font-family:Cinzel,serif;font-weight:300;font-size:1.4rem;letter-spacing:.08em;color:#2c2318;margin-bottom:.4rem;">Kontakt (kontakt.html)</h2>
     <p style="font-size:.75rem;color:rgba(44,35,24,.5);margin-bottom:2rem;">Alt indhold på kontaktsiden. DA/EN side om side. Husk 💾 Gem — tekst i felterne er ikke gemt før da.</p>
@@ -5598,6 +6113,7 @@ function loadSubTab(sub) {
   if (sub === 'ejendommen') loadEjendommensAdmin();
   if (sub === 'udlejning') { loadUdlejningAdmin(); loadSikkerhedAdmin(); }
   if (sub === 'gay') loadGayAdmin();
+  if (sub === 'sevaerdigheder') loadSevaerdighederAdmin();
   if (sub === 'kontakt') loadKontaktAdmin();
 }
 
@@ -10926,6 +11442,657 @@ async function gemGay() {
   } finally {
     if (btn) { btn.disabled = false; btn.textContent = '\uD83D\uDCBE Gem'; }
   }
+}
+
+
+// ═══ SEVÆRDIGHEDER ════════════════════════════════════════════════════════
+// Katalog over oplevelser nær ejendommen. Én række pr. side i tabellen
+// `sevaerdigheder`; alle tekster ligger i JSONB-kolonnen `indhold` med samme
+// nøglemønster som gay_content (dansk i nøglen, engelsk i nøgle_en). Derfor
+// virker oversætterknappen og fallback-logikken uændret — men der skal ikke
+// oprettes en ny tabel, hver gang Erik tilføjer en seværdighed.
+
+const SV_TEXT_KEYS = [
+  'seo_title','seo_desc','nav_back',
+  'hero_eyebrow','hero_h1','hero_lede','hero_scroll',
+  'intro_label','intro_h2','intro_lede','intro_text','intro_billedtekst',
+  'historie_label','historie_h2','historie_text','historie_billedtekst',
+  'natur_label','natur_h2','natur_text','natur_billedtekst',
+  'lister_label','lister_h2','lister_intro',
+  'hoej_label','hoej_h2','hoej_text','hoej_billedtekst',
+  'praktisk_label','praktisk_h2','praktisk_intro',
+  'afstande_label','afstande_h2','afstande_intro',
+  'faq_label','faq_h2',
+  'flere_label','flere_h2','flere_intro',
+  'cta_h2','cta_text','cta_btn',
+  'footer_copy'
+];
+const SV_IMG_KEYS  = ['social_image','hero_image','intro_image','historie_image','natur_image','hoej_image'];
+const SV_SOLO_KEYS = ['cta_link'];
+
+const SV_LISTER = {
+  hero_meta:        { felter: [{ da: 'Tekst i firkanten', en: 'Text in the box', lang: false }] },
+  lister_grupper:   { felter: [{ da: 'Kolonnens overskrift', en: 'Column heading', lang: false },
+                               { da: 'Punkter — ét pr. linje', en: 'Items — one per line', lang: true }] },
+  hoej_punkter:     { felter: [{ da: 'Punkt', en: 'Item', lang: false }] },
+  praktisk_grupper: { felter: [{ da: 'Gruppens overskrift', en: 'Group heading', lang: false },
+                               { da: 'Linjer — ét punkt pr. linje, brug | til to spalter', en: 'Lines — one per line, use | for two columns', lang: true }] },
+  afstande_items:   { felter: [{ da: 'Tal (fx 45 min)', en: 'Figure (e.g. 45 min)', lang: false },
+                               { da: 'Stednavn', en: 'Place name', lang: false }] },
+  faq_items:        { felter: [{ da: 'Spørgsmål', en: 'Question', lang: false },
+                               { da: 'Svar', en: 'Answer', lang: true }] }
+};
+
+const SV_SEKTION_DEFS = [
+  { id: 'sec-intro',       navn: 'Hovedsektionen',            key: 'vis_intro' },
+  { id: 'strip1',          navn: 'Billedstribe 1',            key: 'vis_strip1' },
+  { id: 'sec-historie',    navn: 'Historien',                 key: 'vis_historie' },
+  { id: 'sec-natur',       navn: 'Naturen og landskabet',     key: 'vis_natur' },
+  { id: 'sec-lister',      navn: 'Dyreliv & flora',           key: 'vis_lister' },
+  { id: 'strip2',          navn: 'Billedstribe 2',            key: 'vis_strip2' },
+  { id: 'sec-hoejdepunkt', navn: 'Højdepunktet (mørkt bånd)', key: 'vis_hoejdepunkt' },
+  { id: 'sec-praktisk',    navn: 'Praktiske detaljer',        key: 'vis_praktisk' },
+  { id: 'sec-afstande',    navn: 'Afstande',                  key: 'vis_afstande' },
+  { id: 'strip3',          navn: 'Billedstribe 3',            key: 'vis_strip3' },
+  { id: 'sec-faq',         navn: 'FAQ',                       key: 'vis_faq' },
+  { id: 'sec-flere',       navn: 'Flere seværdigheder',       key: 'vis_flere' },
+  { id: 'sec-cta',         navn: 'Opfordring nederst',        key: 'vis_cta' }
+];
+
+// Menuen en ny seværdighed starter med
+const SV_NAV_DEFAULT = [
+  { tekst: 'Oplevelsen',      tekst_en: 'The experience',  link: '#sec-intro',    vis: '1' },
+  { tekst: 'Historien',       tekst_en: 'History',         link: '#sec-historie', vis: '1' },
+  { tekst: 'Naturen',         tekst_en: 'Nature',          link: '#sec-natur',    vis: '1' },
+  { tekst: 'Praktisk',        tekst_en: 'Practical',       link: '#sec-praktisk', vis: '1' },
+  { tekst: 'FAQ',             tekst_en: 'FAQ',             link: '#sec-faq',      vis: '1' },
+  { tekst: 'Lej ejendommen',  tekst_en: 'Rent the estate', link: '/udlejning',    vis: '1' }
+];
+
+const SV_PIL_BTN = 'background:rgba(184,138,30,.12);border:1px solid rgba(184,138,30,.35);color:#8a6a15;width:22px;height:16px;line-height:1;font-size:.55rem;cursor:pointer;padding:0;';
+
+let svAlle = [];            // alle rækker fra databasen
+let svAktuel = null;        // rækken der redigeres
+let svNavState = [];        // [{ tekst, tekst_en, link, vis }]
+let svOrdenState = [];      // [{ id, vis }]
+let svStriber = { 1: [], 2: [], 3: [] };
+let svListeAntal = {};      // antal rækker pr. liste
+
+function svEsc(t) {
+  return String(t == null ? '' : t).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+}
+
+// Slug: kun små bogstaver, tal og bindestreger. Danske og spanske tegn
+// foldes ned, så "El Torcal de Antequera" bliver til el-torcal-de-antequera.
+function svSlugify(t) {
+  return String(t || '')
+    .toLowerCase()
+    .replace(/æ/g, 'ae').replace(/ø/g, 'oe').replace(/å/g, 'aa')
+    .replace(/ñ/g, 'n')
+    .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '')
+    .slice(0, 80);
+}
+
+function svForeslaaSlug() {
+  const t = document.getElementById('svNyTitel');
+  const s = document.getElementById('svNySlug');
+  if (!t || !s) return;
+  if (s.dataset.rort === '1') return;   // Erik har selv skrevet i feltet
+  s.value = svSlugify(t.value);
+}
+
+// ── Liste over seværdigheder ──────────────────────────────────────────────
+async function loadSevaerdighederAdmin() {
+  if (!sb) return;
+  const advarsel = document.getElementById('svAdvarsel');
+  let fejl = null;
+  try {
+    const { data, error } = await sb.from('sevaerdigheder')
+      .select('id,slug,titel,titel_en,aktiv,sort_orden,indhold,updated_at')
+      .order('sort_orden', { ascending: true });
+    if (error) throw error;
+    svAlle = data || [];
+  } catch (e) {
+    fejl = e.message || String(e);
+    svAlle = [];
+    console.warn('loadSevaerdighederAdmin: kunne ikke hente sevaerdigheder:', fejl);
+  }
+  if (advarsel) {
+    if (fejl) {
+      advarsel.style.display = 'block';
+      advarsel.innerHTML = 'Kunne ikke hente seværdighederne. Er tabellen oprettet? Kør <code>sql/2026-07-31-sevaerdigheder.sql</code> i Supabase SQL Editor.<br><span style="opacity:.7;">' + svEsc(fejl) + '</span>';
+    } else {
+      advarsel.style.display = 'none';
+    }
+  }
+  svRenderListe();
+}
+
+function svRenderListe() {
+  const c = document.getElementById('svListe');
+  if (!c) return;
+  if (!svAlle.length) {
+    c.innerHTML = '<div style="font-family:Manrope,sans-serif;font-size:.72rem;color:rgba(44,35,24,.45);padding:.8rem 0;">Ingen seværdigheder endnu — opret den første ovenfor.</div>';
+    return;
+  }
+  c.innerHTML = svAlle.map(function (r, i) {
+    return '<div style="display:flex;gap:.7rem;align-items:center;margin-bottom:.5rem;padding:.6rem .8rem;background:rgba(184,138,30,.05);border:1px solid rgba(184,138,30,.18);flex-wrap:wrap;">' +
+      '<div style="display:flex;flex-direction:column;gap:2px;">' +
+        '<button type="button" onclick="svFlytRaekke(' + i + ',-1)"' + (i === 0 ? ' disabled' : '') + ' style="' + SV_PIL_BTN + '" title="Flyt op">▲</button>' +
+        '<button type="button" onclick="svFlytRaekke(' + i + ',1)"' + (i === svAlle.length - 1 ? ' disabled' : '') + ' style="' + SV_PIL_BTN + '" title="Flyt ned">▼</button>' +
+      '</div>' +
+      '<span style="flex:1.4;min-width:150px;font-family:Manrope,sans-serif;font-size:.76rem;color:#2c2318;font-weight:500;">' + svEsc(r.titel || r.slug) + '</span>' +
+      '<code style="flex:1.4;min-width:150px;font-size:.66rem;color:rgba(44,35,24,.55);">/sevaerdigheder/' + svEsc(r.slug) + '</code>' +
+      '<label style="display:flex;align-items:center;gap:.35rem;font-family:Manrope,sans-serif;font-size:.66rem;cursor:pointer;white-space:nowrap;">' +
+        '<input type="checkbox"' + (r.aktiv ? ' checked' : '') + ' onchange="svSaetAktiv(' + i + ',this.checked)" style="cursor:pointer;"> Aktiv</label>' +
+      '<a href="/sevaerdigheder/' + encodeURIComponent(r.slug) + '" target="_blank" rel="noopener" style="font-family:Manrope,sans-serif;font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;color:#2a7a74;white-space:nowrap;">Se ↗</a>' +
+      '<button type="button" onclick="svRediger(' + i + ')" style="background:#2a7a74;color:#fff;border:none;padding:.4rem 1rem;font-family:Manrope,sans-serif;font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;white-space:nowrap;">✎ Rediger</button>' +
+      '<button type="button" onclick="svSlet(' + i + ')" style="background:rgba(163,51,51,.08);color:#a33;border:1px solid rgba(163,51,51,.35);padding:.4rem .8rem;font-family:Manrope,sans-serif;font-size:.62rem;cursor:pointer;" title="Slet seværdigheden">🗑</button>' +
+    '</div>';
+  }).join('');
+}
+
+async function svFlytRaekke(i, retning) {
+  const j = i + retning;
+  if (j < 0 || j >= svAlle.length) return;
+  const a = svAlle[i], b = svAlle[j];
+  svAlle[i] = b; svAlle[j] = a;
+  svRenderListe();
+  // Rækkefølgen gemmes med det samme — den er ét tal, ikke en hel side
+  try {
+    await Promise.all(svAlle.map((r, n) =>
+      sb.from('sevaerdigheder').update({ sort_orden: (n + 1) * 10 }).eq('id', r.id)));
+    svAlle.forEach((r, n) => { r.sort_orden = (n + 1) * 10; });
+    showToast('✓ Rækkefølgen er gemt');
+  } catch (e) {
+    showToast('Kunne ikke gemme rækkefølgen: ' + (e.message || e), true);
+  }
+}
+
+async function svSaetAktiv(i, aktiv) {
+  const r = svAlle[i];
+  if (!r) return;
+  try {
+    const { error } = await sb.from('sevaerdigheder').update({ aktiv: !!aktiv }).eq('id', r.id);
+    if (error) throw error;
+    r.aktiv = !!aktiv;
+    showToast(aktiv ? '✓ Siden er nu offentlig' : '✓ Siden er skjult');
+  } catch (e) {
+    showToast('Kunne ikke ændre status: ' + (e.message || e), true);
+    svRenderListe();
+  }
+}
+
+async function opretSevaerdighed() {
+  if (!sb) return;
+  const tEl = document.getElementById('svNyTitel');
+  const tEnEl = document.getElementById('svNyTitelEn');
+  const sEl = document.getElementById('svNySlug');
+  const titel = tEl ? tEl.value.trim() : '';
+  const titelEn = tEnEl ? tEnEl.value.trim() : '';
+  let slug = sEl ? svSlugify(sEl.value.trim()) : '';
+  if (!titel) { showToast('Skriv et navn først', true); return; }
+  if (!slug) slug = svSlugify(titel);
+  if (!slug) { showToast('Navnet giver ingen brugbar slug — skriv en selv', true); return; }
+  if (svAlle.some(r => r.slug === slug)) { showToast('Der findes allerede en seværdighed med den slug', true); return; }
+
+  // Skelettet en ny side starter med, så den aldrig står tom eller i stykker
+  const indhold = {
+    nav_links: JSON.stringify(SV_NAV_DEFAULT),
+    nav_back: '← Tilbage til forsiden', nav_back_en: '← Back to home',
+    hero_h1: titel, hero_h1_en: titelEn || titel,
+    hero_scroll: 'Oplevelsen', hero_scroll_en: 'The experience',
+    intro_label: 'Oplevelsen', intro_label_en: 'The experience',
+    historie_label: 'Historien', historie_label_en: 'History',
+    natur_label: 'Naturen', natur_label_en: 'Nature',
+    lister_label: 'Dyreliv og flora', lister_label_en: 'Wildlife and flora',
+    hoej_label: 'Højdepunktet', hoej_label_en: 'The highlight',
+    praktisk_label: 'Praktiske detaljer', praktisk_label_en: 'Practical details',
+    afstande_label: 'Sådan kommer du hertil', afstande_label_en: 'Getting there',
+    faq_label: 'Spørgsmål', faq_label_en: 'Questions',
+    flere_label: 'Flere oplevelser', flere_label_en: 'More experiences',
+    flere_h2: 'Andre seværdigheder i nærheden', flere_h2_en: 'Other places nearby',
+    cta_btn: 'Se ejendommen', cta_btn_en: 'See the estate',
+    cta_link: '/udlejning',
+    footer_copy: '© 2026 Castillo del Alma · Mollina, Málaga · Alle rettigheder forbeholdes',
+    footer_copy_en: '© 2026 Castillo del Alma · Mollina, Málaga · All rights reserved',
+    vis_hero_stribe: '1',
+    sektion_orden: JSON.stringify(SV_SEKTION_DEFS.map(d => d.id))
+  };
+  SV_SEKTION_DEFS.forEach(d => { indhold[d.key] = '1'; });
+  [1, 2, 3].forEach(n => {
+    indhold['strip' + n + '_images'] = '[]';
+    indhold['strip' + n + '_top'] = '2';
+    indhold['strip' + n + '_bund'] = '2';
+  });
+
+  try {
+    const { data, error } = await sb.from('sevaerdigheder').insert({
+      slug: slug, titel: titel, titel_en: titelEn || titel,
+      aktiv: false,                       // starter skjult, så halve sider aldrig går live
+      sort_orden: (svAlle.length + 1) * 10,
+      indhold: indhold
+    }).select().single();
+    if (error) throw error;
+    svAlle.push(data);
+    if (tEl) tEl.value = '';
+    if (tEnEl) tEnEl.value = '';
+    if (sEl) { sEl.value = ''; sEl.dataset.rort = ''; }
+    svRenderListe();
+    showToast('✓ Seværdigheden er oprettet — den er skjult, indtil du sætter flueben i Aktiv');
+    svRediger(svAlle.length - 1);
+  } catch (e) {
+    showToast('Kunne ikke oprette: ' + (e.message || e), true);
+  }
+}
+
+async function svSlet(i) {
+  const r = svAlle[i];
+  if (!r) return;
+  if (!confirm('Slet "' + (r.titel || r.slug) + '" helt?\n\nSiden og alle dens tekster forsvinder. Det kan ikke fortrydes.')) return;
+  try {
+    const { error } = await sb.from('sevaerdigheder').delete().eq('id', r.id);
+    if (error) throw error;
+    svAlle.splice(i, 1);
+    svRenderListe();
+    showToast('✓ Seværdigheden er slettet');
+  } catch (e) {
+    showToast('Kunne ikke slette: ' + (e.message || e), true);
+  }
+}
+
+// ── Editor ────────────────────────────────────────────────────────────────
+function svLukEditor() {
+  svAktuel = null;
+  const l = document.getElementById('svListePanel'), e = document.getElementById('svEditorPanel');
+  if (l) l.style.display = '';
+  if (e) e.style.display = 'none';
+  ['svGemBtn', 'svOversaetAlt', 'svSeSiden'].forEach(id => {
+    const el = document.getElementById(id); if (el) el.style.display = 'none';
+  });
+  const n = document.getElementById('svValgtNavn'); if (n) n.textContent = '';
+  svRenderListe();
+}
+
+function svRediger(i) {
+  const r = svAlle[i];
+  if (!r) return;
+  svAktuel = r;
+  const l = document.getElementById('svListePanel'), e = document.getElementById('svEditorPanel');
+  if (l) l.style.display = 'none';
+  if (e) e.style.display = '';
+  const gem = document.getElementById('svGemBtn'); if (gem) gem.style.display = '';
+  const ov = document.getElementById('svOversaetAlt'); if (ov) ov.style.display = '';
+  const se = document.getElementById('svSeSiden');
+  if (se) { se.style.display = ''; se.setAttribute('href', '/sevaerdigheder/' + encodeURIComponent(r.slug)); }
+  const navn = document.getElementById('svValgtNavn'); if (navn) navn.textContent = r.titel || r.slug;
+
+  let ind = r.indhold;
+  if (typeof ind === 'string') { try { ind = JSON.parse(ind); } catch (err) { ind = {}; } }
+  const map = (ind && typeof ind === 'object') ? ind : {};
+
+  // Grunddata
+  const s = (id, v) => { const el = document.getElementById(id); if (el) el.value = v == null ? '' : v; };
+  s('sv_titel_da', r.titel); s('sv_titel_en', r.titel_en);
+  s('sv_slug', r.slug); s('sv_sort_orden', r.sort_orden == null ? 0 : r.sort_orden);
+  const akt = document.getElementById('sv_aktiv'); if (akt) akt.checked = !!r.aktiv;
+
+  SV_TEXT_KEYS.forEach(key => {
+    s('sv_' + key + '_da', map[key]);
+    s('sv_' + key + '_en', map[key + '_en']);
+  });
+  SV_SOLO_KEYS.forEach(key => s('sv_' + key, map[key]));
+  SV_IMG_KEYS.forEach(key => {
+    const el = document.getElementById('sv_' + key + '_url');
+    if (!el) return;
+    el.value = map[key] || '';
+    const pv = document.getElementById('sv_' + key + '_preview');
+    if (pv) {
+      if (el.value) { pv.src = el.value; pv.style.display = 'inline-block'; }
+      else { pv.removeAttribute('src'); pv.style.display = 'none'; }
+    }
+  });
+  Object.keys(SV_LISTER).forEach(key => {
+    let raekker = [];
+    try {
+      const j = JSON.parse(map[key] || '[]');
+      if (Array.isArray(j) && (!j.length || (j[0] && j[0].da))) raekker = j;
+    } catch (err) { raekker = []; }
+    svListeSkriv(key, raekker);
+  });
+
+  const hs = document.getElementById('sv_vis_hero_stribe');
+  if (hs) hs.checked = map.vis_hero_stribe !== '0';
+
+  // Menu
+  let navRaa = [];
+  try { navRaa = JSON.parse(map.nav_links || '[]'); } catch (err) { navRaa = []; }
+  if (!Array.isArray(navRaa) || !navRaa.length) navRaa = SV_NAV_DEFAULT;
+  svNavState = navRaa.map(l2 => ({
+    tekst: l2.tekst || '', tekst_en: l2.tekst_en || '',
+    link: l2.link || '', vis: l2.vis === '0' ? '0' : '1'
+  }));
+  svRenderNavEditor();
+
+  // Rækkefølge: gemt orden, ellers standard. Sektioner der mangler i den
+  // gemte liste sættes ind på deres standardplads, så de aldrig forsvinder.
+  let gemtOrden = [];
+  try { gemtOrden = JSON.parse(map.sektion_orden || '[]'); } catch (err) { gemtOrden = []; }
+  if (!Array.isArray(gemtOrden)) gemtOrden = [];
+  gemtOrden = gemtOrden.filter(id => SV_SEKTION_DEFS.some(d => d.id === id));
+  SV_SEKTION_DEFS.forEach((def, idx) => {
+    if (gemtOrden.indexOf(def.id) !== -1) return;
+    let hvor = gemtOrden.length;
+    for (let k = idx - 1; k >= 0; k--) {
+      const pos = gemtOrden.indexOf(SV_SEKTION_DEFS[k].id);
+      if (pos !== -1) { hvor = pos + 1; break; }
+    }
+    gemtOrden.splice(hvor, 0, def.id);
+  });
+  svOrdenState = gemtOrden.map(id => {
+    const def = SV_SEKTION_DEFS.find(d => d.id === id);
+    return { id: id, vis: (def && map[def.key] === '0') ? '0' : '1' };
+  });
+  svRenderOrden();
+
+  [1, 2, 3].forEach(nr => {
+    ['top', 'bund'].forEach(hvor => {
+      const el = document.getElementById('sv_strip' + nr + '_' + hvor);
+      const v = map['strip' + nr + '_' + hvor];
+      if (el) el.value = (v !== undefined && v !== '') ? v : '2';
+    });
+    let liste = [];
+    try { liste = JSON.parse(map['strip' + nr + '_images'] || '[]'); } catch (err) { liste = []; }
+    svStriber[nr] = Array.isArray(liste) ? liste.filter(x => typeof x === 'string').slice(0, 5) : [];
+    svRenderStribe(nr);
+  });
+
+  try { document.getElementById('tab-sevaerdigheder').scrollIntoView({ behavior: 'smooth', block: 'start' }); } catch (err) {}
+}
+
+async function gemSevaerdighed() {
+  if (!sb || !svAktuel) return;
+  const btn = document.getElementById('svGemBtn');
+  if (btn) { btn.disabled = true; btn.textContent = 'Gemmer...'; }
+  try {
+    const v = id => { const el = document.getElementById(id); return el ? el.value.trim() : ''; };
+
+    const nySlug = svSlugify(v('sv_slug'));
+    if (!nySlug) throw new Error('Slug må ikke være tom');
+    if (svAlle.some(r => r.slug === nySlug && r.id !== svAktuel.id))
+      throw new Error('En anden seværdighed bruger allerede slug\'en "' + nySlug + '"');
+
+    const indhold = {};
+    SV_TEXT_KEYS.forEach(key => {
+      indhold[key] = v('sv_' + key + '_da');
+      indhold[key + '_en'] = v('sv_' + key + '_en');
+    });
+    SV_SOLO_KEYS.forEach(key => { indhold[key] = v('sv_' + key); });
+    SV_IMG_KEYS.forEach(key => { indhold[key] = v('sv_' + key + '_url'); });
+    Object.keys(SV_LISTER).forEach(key => { indhold[key] = JSON.stringify(svListeLaes(key)); });
+
+    const hs = document.getElementById('sv_vis_hero_stribe');
+    indhold.vis_hero_stribe = (hs && !hs.checked) ? '0' : '1';
+
+    indhold.nav_links = JSON.stringify(svNavState
+      .filter(l => (l.tekst || '').trim() || (l.link || '').trim())
+      .map(l => ({ tekst: (l.tekst || '').trim(), tekst_en: (l.tekst_en || '').trim(),
+                   link: (l.link || '').trim(), vis: l.vis === '0' ? '0' : '1' })));
+
+    if (svOrdenState.length) {
+      indhold.sektion_orden = JSON.stringify(svOrdenState.map(o => o.id));
+      svOrdenState.forEach(o => {
+        const def = SV_SEKTION_DEFS.find(d => d.id === o.id);
+        if (def) indhold[def.key] = o.vis === '0' ? '0' : '1';
+      });
+    }
+
+    [1, 2, 3].forEach(nr => {
+      indhold['strip' + nr + '_images'] = JSON.stringify((svStriber[nr] || []).filter(Boolean));
+      ['top', 'bund'].forEach(hvor => {
+        const el = document.getElementById('sv_strip' + nr + '_' + hvor);
+        if (!el) return;
+        const n = parseFloat(el.value);
+        indhold['strip' + nr + '_' + hvor] = String(isNaN(n) ? 2 : Math.max(0, Math.min(14, n)));
+      });
+    });
+
+    const sortEl = document.getElementById('sv_sort_orden');
+    const aktivEl = document.getElementById('sv_aktiv');
+    const sortTal = sortEl ? parseInt(sortEl.value, 10) : 0;
+
+    const { data, error } = await sb.from('sevaerdigheder').update({
+      slug: nySlug,
+      titel: v('sv_titel_da') || nySlug,
+      titel_en: v('sv_titel_en'),
+      aktiv: aktivEl ? !!aktivEl.checked : true,
+      sort_orden: isNaN(sortTal) ? 0 : sortTal,
+      indhold: indhold
+    }).eq('id', svAktuel.id).select().single();
+    if (error) throw error;
+
+    const i = svAlle.findIndex(r => r.id === svAktuel.id);
+    if (i !== -1) svAlle[i] = data;
+    svAktuel = data;
+    const se = document.getElementById('svSeSiden');
+    if (se) se.setAttribute('href', '/sevaerdigheder/' + encodeURIComponent(data.slug));
+    const navn = document.getElementById('svValgtNavn'); if (navn) navn.textContent = data.titel || data.slug;
+    showToast('✓ Seværdigheden er gemt!');
+  } catch (e) {
+    showToast('Fejl: ' + (e.message || e), true);
+  } finally {
+    if (btn) { btn.disabled = false; btn.textContent = '\uD83D\uDCBE Gem'; }
+  }
+}
+
+async function gemSevaerdighedOgSeSiden() {
+  await gemSevaerdighed();
+  if (svAktuel) window.open('/sevaerdigheder/' + encodeURIComponent(svAktuel.slug), '_blank', 'noopener');
+}
+
+// ── Menu-editor ───────────────────────────────────────────────────────────
+function svRenderNavEditor() {
+  const c = document.getElementById('svNavEditor');
+  if (!c) return;
+  c.innerHTML = svNavState.map((l, i) => {
+    const link = (l.link || '').trim();
+    const erAnker = SV_SEKTION_DEFS.some(d => '#' + d.id === link);
+    const egen = !erAnker && link !== '';
+    const valgt = erAnker ? link : (egen ? '__egen__' : '');
+    const options =
+      '<option value="" disabled ' + (valgt === '' ? 'selected' : '') + '>Vælg ankerpunkt…</option>' +
+      SV_SEKTION_DEFS.map(d => '<option value="#' + d.id + '"' + (valgt === '#' + d.id ? ' selected' : '') + '>' + svEsc(d.navn) + ' (#' + d.id + ')</option>').join('') +
+      '<option value="__egen__"' + (valgt === '__egen__' ? ' selected' : '') + '>Egen URL…</option>';
+    return '<div style="display:flex;gap:.5rem;align-items:center;margin-bottom:.5rem;flex-wrap:wrap;">' +
+      '<div style="display:flex;flex-direction:column;gap:2px;">' +
+        '<button type="button" onclick="svNavFlyt(' + i + ',-1)"' + (i === 0 ? ' disabled' : '') + ' style="' + SV_PIL_BTN + '" title="Flyt op">▲</button>' +
+        '<button type="button" onclick="svNavFlyt(' + i + ',1)"' + (i === svNavState.length - 1 ? ' disabled' : '') + ' style="' + SV_PIL_BTN + '" title="Flyt ned">▼</button>' +
+      '</div>' +
+      '<input type="text" class="fc-input-da" style="flex:1.2;min-width:130px;" placeholder="Navn (DA)" value="' + svEsc(l.tekst || '') + '" oninput="svNavState[' + i + '].tekst=this.value">' +
+      '<input type="text" class="fc-input-en" style="flex:1.2;min-width:130px;" placeholder="Name (EN)" value="' + svEsc(l.tekst_en || '') + '" oninput="svNavState[' + i + '].tekst_en=this.value">' +
+      '<select class="fc-input-da" style="flex:1;min-width:150px;cursor:pointer;" onchange="svNavLinkValg(' + i + ', this)">' + options + '</select>' +
+      '<input type="text" class="fc-input-da svNavEgenUrl" data-idx="' + i + '" style="flex:1;min-width:120px;' + (egen ? '' : 'display:none;') + '" placeholder="fx /kontakt eller https://…" value="' + (egen ? svEsc(link) : '') + '" oninput="svNavState[' + i + '].link=this.value">' +
+      '<label style="display:flex;align-items:center;gap:.35rem;font-family:Manrope,sans-serif;font-size:.66rem;cursor:pointer;white-space:nowrap;"><input type="checkbox"' + (l.vis !== '0' ? ' checked' : '') + ' onchange="svNavState[' + i + '].vis=this.checked?\'1\':\'0\'" style="cursor:pointer;"> Synlig</label>' +
+      '<button type="button" onclick="svNavSlet(' + i + ')" style="background:#a33;color:#fff;border:none;width:24px;height:24px;cursor:pointer;font-size:.7rem;line-height:1;" title="Fjern link">✕</button>' +
+    '</div>';
+  }).join('') || '<p style="font-family:Manrope,sans-serif;font-size:.7rem;color:#7a6a52;">Ingen menu-links — klik "+ Tilføj menu-link".</p>';
+}
+
+function svNavLinkValg(i, sel) {
+  const felt = document.querySelector('.svNavEgenUrl[data-idx="' + i + '"]');
+  if (sel.value === '__egen__') {
+    svNavState[i].link = '';
+    if (felt) { felt.style.display = ''; felt.value = ''; felt.focus(); }
+  } else {
+    svNavState[i].link = sel.value;
+    if (felt) { felt.style.display = 'none'; felt.value = ''; }
+  }
+}
+function svNavFlyt(i, retning) {
+  const j = i + retning;
+  if (j < 0 || j >= svNavState.length) return;
+  const t = svNavState[i]; svNavState[i] = svNavState[j]; svNavState[j] = t;
+  svRenderNavEditor();
+}
+function svNavSlet(i) { svNavState.splice(i, 1); svRenderNavEditor(); }
+function svNavTilfoej() { svNavState.push({ tekst: '', tekst_en: '', link: '', vis: '1' }); svRenderNavEditor(); }
+
+// ── Rækkefølge og synlighed ───────────────────────────────────────────────
+function svRenderOrden() {
+  const c = document.getElementById('svOrdenEditor');
+  if (!c) return;
+  c.innerHTML = svOrdenState.map((o, i) => {
+    const def = SV_SEKTION_DEFS.find(d => d.id === o.id) || { navn: o.id };
+    return '<div style="display:flex;gap:.6rem;align-items:center;margin-bottom:.4rem;padding:.35rem .6rem;background:rgba(184,138,30,.05);border:1px solid rgba(184,138,30,.18);">' +
+      '<div style="display:flex;flex-direction:column;gap:2px;">' +
+        '<button type="button" onclick="svOrdenFlyt(' + i + ',-1)"' + (i === 0 ? ' disabled' : '') + ' style="' + SV_PIL_BTN + '" title="Flyt op">▲</button>' +
+        '<button type="button" onclick="svOrdenFlyt(' + i + ',1)"' + (i === svOrdenState.length - 1 ? ' disabled' : '') + ' style="' + SV_PIL_BTN + '" title="Flyt ned">▼</button>' +
+      '</div>' +
+      '<span style="flex:1;font-family:Manrope,sans-serif;font-size:.72rem;color:#2c2318;">' + svEsc(def.navn) + '</span>' +
+      '<label style="display:flex;align-items:center;gap:.35rem;font-family:Manrope,sans-serif;font-size:.66rem;cursor:pointer;white-space:nowrap;">' +
+        '<input type="checkbox"' + (o.vis !== '0' ? ' checked' : '') + ' onchange="svOrdenState[' + i + '].vis=this.checked?\'1\':\'0\'" style="cursor:pointer;"> Synlig</label>' +
+    '</div>';
+  }).join('');
+}
+
+function svOrdenFlyt(i, retning) {
+  const j = i + retning;
+  if (j < 0 || j >= svOrdenState.length) return;
+  const t = svOrdenState[i]; svOrdenState[i] = svOrdenState[j]; svOrdenState[j] = t;
+  svRenderOrden();
+}
+
+// ── Billedstriber ─────────────────────────────────────────────────────────
+function svRenderStribe(nr) {
+  const c = document.getElementById('svStribe' + nr + 'Liste');
+  if (!c) return;
+  const liste = svStriber[nr] || [];
+  c.innerHTML = liste.map((url, i) =>
+    '<div style="display:flex;gap:.7rem;align-items:center;margin-bottom:.5rem;padding:.5rem .7rem;background:rgba(184,138,30,.04);border:1px solid rgba(184,138,30,.18);">' +
+      '<div style="display:flex;flex-direction:column;gap:3px;">' +
+        '<button type="button" onclick="svStribeFlyt(' + nr + ',' + i + ',-1)"' + (i === 0 ? ' disabled' : '') + ' style="' + SV_PIL_BTN + '" title="Flyt op">▲</button>' +
+        '<button type="button" onclick="svStribeFlyt(' + nr + ',' + i + ',1)"' + (i === liste.length - 1 ? ' disabled' : '') + ' style="' + SV_PIL_BTN + '" title="Flyt ned">▼</button>' +
+      '</div>' +
+      '<img src="' + svEsc(url || '') + '" style="' + (url ? '' : 'display:none;') + 'width:48px;height:48px;object-fit:cover;border:1px solid rgba(184,138,30,.3);">' +
+      '<input type="file" accept="image/*" id="svStribe' + nr + 'Fil' + i + '" style="font-size:.72rem;flex:1;" onchange="svStribeUpload(' + nr + ',' + i + ')">' +
+      '<button type="button" onclick="svStribeFjern(' + nr + ',' + i + ')" style="background:rgba(163,51,51,.08);color:#a33;border:1px solid rgba(163,51,51,.35);padding:.35rem .7rem;font-family:Manrope,sans-serif;font-size:.7rem;cursor:pointer;" title="Fjern billedet">✕</button>' +
+    '</div>').join('') ||
+    '<div style="font-family:Manrope,sans-serif;font-size:.7rem;color:rgba(44,35,24,.45);padding:.6rem 0;">Ingen billeder — striben vises ikke på siden.</div>';
+}
+
+function svStribeTilfoej(nr) {
+  if ((svStriber[nr] || []).length >= 5) { showToast('Der er plads til 5 billeder pr. stribe', true); return; }
+  svStriber[nr].push('');
+  svRenderStribe(nr);
+}
+function svStribeFjern(nr, i) { svStriber[nr].splice(i, 1); svRenderStribe(nr); }
+function svStribeFlyt(nr, i, retning) {
+  const j = i + retning;
+  if (j < 0 || j >= svStriber[nr].length) return;
+  const t = svStriber[nr][i]; svStriber[nr][i] = svStriber[nr][j]; svStriber[nr][j] = t;
+  svRenderStribe(nr);
+}
+async function svStribeUpload(nr, i) {
+  const felt = document.getElementById('svStribe' + nr + 'Fil' + i);
+  const fil = felt && felt.files && felt.files[0];
+  if (!fil) return;
+  try {
+    const url = await uploadRetreatImage(fil);
+    if (url) { svStriber[nr][i] = url; svRenderStribe(nr); showToast('✓ Billede uploadet — husk 💾 Gem'); }
+  } catch (e) {
+    showToast('Upload fejlede: ' + (e.message || e), true);
+  }
+}
+
+// ── Rækkelister (firkanter, kolonner, fakta-grupper, afstande, FAQ) ───────
+// Alt læses fra felterne — ikke fra en mellemliggende state, som
+// oversætterknappen ville kunne overhale.
+function svListeRender(key) {
+  const c = document.getElementById('svListe_' + key);
+  const spec = SV_LISTER[key];
+  if (!c || !spec) return;
+  const n = svListeAntal[key] || 0;
+  if (!n) {
+    c.innerHTML = '<div style="font-family:Manrope,sans-serif;font-size:.7rem;color:rgba(44,35,24,.45);padding:.6rem 0;">Ingen rækker endnu — klik "+ Tilføj" nedenfor.</div>';
+    return;
+  }
+  let ud = '';
+  for (let i = 0; i < n; i++) {
+    ud += '<div style="display:flex;gap:.7rem;align-items:flex-start;margin-bottom:.7rem;padding:.7rem;background:rgba(184,138,30,.04);border:1px solid rgba(184,138,30,.18);">' +
+      '<div style="display:flex;flex-direction:column;gap:3px;padding-top:1.1rem;">' +
+        '<button type="button" onclick="svListeFlyt(\'' + key + '\',' + i + ',-1)"' + (i === 0 ? ' disabled' : '') + ' style="' + SV_PIL_BTN + '" title="Flyt op">▲</button>' +
+        '<button type="button" onclick="svListeFlyt(\'' + key + '\',' + i + ',1)"' + (i === n - 1 ? ' disabled' : '') + ' style="' + SV_PIL_BTN + '" title="Flyt ned">▼</button>' +
+      '</div>' +
+      '<div style="flex:1;display:flex;flex-direction:column;gap:.6rem;">' +
+        spec.felter.map(function (felt, j) {
+          const idDa = 'sv_' + key + '_' + i + '_' + j + '_da';
+          const idEn = 'sv_' + key + '_' + i + '_' + j + '_en';
+          const tag = felt.lang
+            ? ['<textarea rows="5" class="fc-input-da fc-textarea" id="' + idDa + '"></textarea>',
+               '<textarea rows="5" class="fc-input-en fc-textarea" id="' + idEn + '"></textarea>']
+            : ['<input type="text" class="fc-input-da" id="' + idDa + '">',
+               '<input type="text" class="fc-input-en" id="' + idEn + '">'];
+          return '<div class="fc-row">' +
+            '<div><label class="fc-label fc-label-da">' + svEsc(felt.da) + '</label>' + tag[0] + '</div>' +
+            '<div><label class="fc-label fc-label-en">' + svEsc(felt.en) + '</label>' + tag[1] + '</div>' +
+          '</div>';
+        }).join('') +
+      '</div>' +
+      '<button type="button" onclick="svListeFjern(\'' + key + '\',' + i + ')" style="background:rgba(163,51,51,.08);color:#a33;border:1px solid rgba(163,51,51,.35);padding:.35rem .7rem;font-family:Manrope,sans-serif;font-size:.7rem;cursor:pointer;margin-top:1.1rem;" title="Fjern rækken">✕</button>' +
+    '</div>';
+  }
+  c.innerHTML = ud;
+}
+
+function svListeLaes(key) {
+  const spec = SV_LISTER[key];
+  const n = svListeAntal[key] || 0;
+  const ud = [];
+  for (let i = 0; i < n; i++) {
+    const da = [], en = [];
+    spec.felter.forEach(function (_, j) {
+      const a = document.getElementById('sv_' + key + '_' + i + '_' + j + '_da');
+      const b = document.getElementById('sv_' + key + '_' + i + '_' + j + '_en');
+      da.push(a ? a.value.trim() : '');
+      en.push(b ? b.value.trim() : '');
+    });
+    if (da.some(Boolean) || en.some(Boolean)) ud.push({ da: da, en: en });
+  }
+  return ud;
+}
+
+function svListeSkriv(key, raekker) {
+  svListeAntal[key] = raekker.length;
+  svListeRender(key);
+  raekker.forEach(function (r, i) {
+    SV_LISTER[key].felter.forEach(function (_, j) {
+      const a = document.getElementById('sv_' + key + '_' + i + '_' + j + '_da');
+      const b = document.getElementById('sv_' + key + '_' + i + '_' + j + '_en');
+      if (a) a.value = (r.da && r.da[j]) || '';
+      if (b) b.value = (r.en && r.en[j]) || '';
+    });
+  });
+}
+
+function svListeTilfoej(key) {
+  const nu = svListeLaes(key);
+  nu.push({ da: SV_LISTER[key].felter.map(function () { return ''; }),
+            en: SV_LISTER[key].felter.map(function () { return ''; }) });
+  svListeSkriv(key, nu);
+}
+function svListeFjern(key, i) {
+  const nu = svListeLaes(key);
+  nu.splice(i, 1);
+  svListeSkriv(key, nu);
+}
+function svListeFlyt(key, i, retning) {
+  const nu = svListeLaes(key);
+  const j = i + retning;
+  if (j < 0 || j >= nu.length) return;
+  const t = nu[i]; nu[i] = nu[j]; nu[j] = t;
+  svListeSkriv(key, nu);
 }
 
 
