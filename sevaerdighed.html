@@ -1,0 +1,1164 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+<!-- Google Analytics indlæses via cookie-samtykke — først efter accept -->
+<script src="/cookie-consent.js" defer></script>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" type="image/png" href="/img/logo-tower.png">
+
+<title>Seværdigheder nær Castillo del Alma — Mollina, Málaga</title>
+<meta name="description" content="Oplevelser og seværdigheder inden for kort køreafstand fra Castillo del Alma i Mollina, Málaga.">
+<meta name="robots" content="index,follow,max-image-preview:large">
+<meta property="og:site_name" content="Castillo del Alma">
+<meta property="og:type" content="article">
+<meta property="og:image" content="https://castillodelalma.es/img/castillo-del-alma-social-1200.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+
+<link rel="stylesheet" href="/fonts/fonts.css">
+<style>
+:root {
+  --cream:      #faf6ee;
+  --beige:      #f0e8d5;
+  --sand:       #e0d0b0;
+  --stone:      #c8b898;
+  --charcoal:   #2c2318;
+  --text:       #2c2318;
+  --text-mid:   #5c4e3a;
+  --text-light: #9a8c7a;
+  --wine:       #7a1f35;
+  --wine-light: #a03048;
+  --terracotta: #c05c30;
+  --olive:      #6a7240;
+  --gold:       #b88a1e;
+  --gold-light: #d4a830;
+  --gold-pale:  #eedea0;
+  --teal:       #3a6e6a;
+  --section-alt:#ede4d0;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{font-family:'Manrope',sans-serif;background:var(--cream);color:var(--text);overflow-x:hidden;}
+img{max-width:100%;display:block;}
+a{color:inherit;}
+
+/* ── NAV — identisk med gay-retreat-siden ── */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:9999;
+  padding:1.4rem 4rem;
+  display:flex;justify-content:space-between;align-items:center;
+  background:rgba(250,246,238,.96);
+  backdrop-filter:blur(16px);
+  border-bottom:1px solid rgba(184,138,30,.15);
+  box-shadow:0 2px 28px rgba(44,35,24,.06);
+}
+.nav-logo img{height:48px;width:auto;}
+.nav-links{display:flex;gap:2rem;list-style:none;align-items:center;}
+.nav-links a{font-size:.68rem;font-weight:400;letter-spacing:.14em;text-transform:uppercase;color:var(--text-mid);text-decoration:none;transition:color .3s;}
+.nav-links a:hover,.nav-links a:focus-visible{color:var(--wine);}
+.nav-back{
+  font-size:.68rem;font-weight:500;letter-spacing:.15em;text-transform:uppercase;
+  color:var(--wine);text-decoration:none;display:flex;align-items:center;gap:.5rem;
+}
+.nav-burger{display:none;background:none;border:none;cursor:pointer;flex-direction:column;gap:5px;padding:.4rem;position:relative;z-index:9999;}
+.nav-burger span{display:block;width:24px;height:1.5px;background:var(--wine);transition:.3s;}
+.nav-backdrop{display:none;position:fixed;inset:0;background:rgba(44,35,24,.45);z-index:9990;}
+.nav-backdrop.open{display:block;}
+
+/* ── FÆLLES ── */
+.eyebrow{
+  font-family:'Manrope',sans-serif;font-size:.6rem;
+  letter-spacing:.4em;text-transform:uppercase;color:var(--gold);
+  margin-bottom:1.4rem;display:flex;align-items:center;gap:1rem;
+}
+.eyebrow::before{content:'';width:28px;height:1px;background:var(--gold);flex-shrink:0;}
+h1,h2,h3{font-family:'Cinzel',serif;font-weight:400;line-height:1.15;letter-spacing:.01em;}
+h1{font-size:clamp(2.4rem,5.6vw,4.6rem);}
+h2{font-size:clamp(1.7rem,3.4vw,2.7rem);margin-bottom:1.6rem;}
+h3{font-size:1.05rem;letter-spacing:.04em;margin-bottom:.7rem;}
+p{font-family:'Cormorant Garamond',serif;font-size:1.16rem;line-height:1.78;color:var(--text-mid);}
+.lede{font-size:1.36rem;line-height:1.7;color:var(--text);}
+/* Sitets faste geometri — samme som ejendommen, udlejning, retreat og
+   forsiden: 8 rem lodret luft, .section-inner på 1320 px, 4 rem sidemargin. */
+section{padding:8rem 0;}
+.section-inner{max-width:1320px;margin:0 auto;padding:0 4rem;}
+.narrow{max-width:888px;margin:0 auto;padding:0 4rem;}
+.alt{background:var(--section-alt);}
+.rule{width:56px;height:1px;background:var(--gold);margin:2.2rem 0;}
+.rule.center{margin-left:auto;margin-right:auto;}
+
+/* ── HERO — samme opbygning som gay-retreat-siden ── */
+.hero{
+  position:relative;min-height:100svh;display:flex;align-items:flex-end;
+  padding:0 0 4.5rem;margin-top:0;overflow:hidden;
+}
+.hero-bg{position:absolute;inset:0;overflow:hidden;background:var(--charcoal);}
+.hero-bg img{
+  width:100%;height:100%;object-fit:cover;
+  transform:scale(1.06);
+  animation:kenburns 26s ease-out forwards;
+}
+.hero-bg::after{
+  content:'';position:absolute;inset:0;
+  background:
+    linear-gradient(180deg,rgba(44,35,24,.42) 0%,rgba(44,35,24,.14) 38%,rgba(44,35,24,.86) 100%),
+    radial-gradient(120% 90% at 78% 40%,transparent 35%,rgba(44,35,24,.38) 100%);
+}
+.hero-inner{position:relative;z-index:2;width:100%;padding:0 4rem;}
+.hero-content{
+  max-width:1320px;margin:0 auto;
+  display:flex;justify-content:space-between;align-items:flex-end;gap:3rem;
+}
+.hero-text{max-width:680px;}
+.hero h1{color:#fff;text-shadow:0 2px 40px rgba(0,0,0,.45);font-size:clamp(2.6rem,6.2vw,5.2rem);}
+.hero .eyebrow{color:var(--gold-light);}
+.hero p{color:rgba(255,255,255,.93);font-size:1.3rem;margin-top:1.7rem;max-width:610px;text-shadow:0 1px 18px rgba(0,0,0,.45);}
+/* Guldstribe langs bunden — samme greb som pride-striben på gay-siden,
+   her i sitets guld. Slås til og fra i admin under 2 · Hero. */
+.hero-stribe{
+  position:absolute;bottom:0;left:0;right:0;height:4px;z-index:3;
+  background:linear-gradient(90deg,var(--wine),var(--gold),var(--teal));
+  display:none;
+}
+.hero.har-stribe .hero-stribe{display:block;}
+/* Nøgletal i firkanter — samme udtryk som .pill i retreat-siden hero */
+.hero-meta{display:flex;flex-wrap:wrap;gap:.6rem;margin-top:2.2rem;}
+.hero-meta span{
+  font-size:.6rem;font-weight:500;letter-spacing:.15em;text-transform:uppercase;
+  color:rgba(255,255,255,.8);
+  padding:.5rem 1.05rem;
+  border:1px solid rgba(255,255,255,.35);
+  background:rgba(255,255,255,.06);
+  -webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px);
+  white-space:nowrap;
+}
+.hero-scroll{
+  display:flex;flex-direction:column;align-items:center;gap:.7rem;
+  text-decoration:none;color:rgba(255,255,255,.78);flex-shrink:0;padding-bottom:.4rem;
+  font-size:.6rem;letter-spacing:.24em;text-transform:uppercase;
+  transition:color .3s;
+}
+.hero-scroll:hover,.hero-scroll:focus-visible{color:#fff;}
+.hero-scroll i{font-style:normal;font-size:1rem;line-height:1;animation:nudge 2.4s ease-in-out infinite;}
+@keyframes kenburns{to{transform:scale(1.15);}}
+@keyframes riseIn{from{opacity:0;transform:translateY(28px);}to{opacity:1;transform:none;}}
+@keyframes nudge{0%,100%{transform:translateY(0);}50%{transform:translateY(6px);}}
+.hero .eyebrow{animation:riseIn .85s .3s both;}
+.hero h1{animation:riseIn .95s .45s both;}
+.hero-text p{animation:riseIn .95s .65s both;}
+.hero-meta{animation:riseIn .95s .82s both;}
+.hero-scroll{animation:riseIn .95s 1.05s both;}
+
+/* ── BILLEDE MED RØD BILLEDTEKST ──────────────────────────────────────────
+   Den røde kasse er nøjagtig samme udtryk som .omos-billedlabel på
+   gay-siden: vinrød bund, hvid versal-tekst, i billedets nederste højre
+   hjørne. Er billedteksten tom, vises kassen ikke. */
+.fig{position:relative;overflow:hidden;}
+.fig img{width:100%;height:100%;object-fit:cover;display:block;transition:transform 1.2s ease;}
+.fig:hover img{transform:scale(1.03);}
+.fig-label{
+  position:absolute;bottom:0;right:0;background:var(--wine);color:#fff;
+  font-family:'Manrope',sans-serif;font-size:.6rem;font-weight:500;
+  letter-spacing:.22em;text-transform:uppercase;padding:.65rem 1.1rem;
+  max-width:82%;
+}
+.fig-4-3{aspect-ratio:4/3;}
+.fig-3-4{aspect-ratio:3/4;}
+.fig-16-9{aspect-ratio:16/9;}
+
+/* ── TO-KOLONNE ── */
+.split{display:grid;grid-template-columns:1fr 1fr;gap:4.5rem;align-items:center;}
+
+/* ── FOTOSTRIBE — op til 5 billeder ── */
+.foto-stribe{padding:var(--stribe-top,2rem) 0 var(--stribe-bund,2rem);}
+.foto-stribe-grid{display:grid;gap:.6rem;margin:0 auto;}
+.stribe-felt{
+  position:relative;overflow:hidden;aspect-ratio:1/1;
+  background:var(--sand);transition:transform .4s;
+}
+.stribe-felt:hover{transform:scale(1.05);}
+.stribe-felt img{width:100%;height:100%;object-fit:cover;display:block;}
+.stribe-felt .stribe-accent{position:absolute;top:0;left:0;right:0;height:4px;z-index:2;}
+
+/* ── KOLONNELISTER (dyreliv, flora) ──────────────────────────────────────
+   Samme guldstreg over overskriften som .feature-item, men med punkter
+   under. Kolonnerne ombryder af sig selv, så 2, 3 eller 4 lister alle
+   står pænt uden at skulle indstilles. */
+.kol-lister{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:2.6rem;margin-top:3rem;}
+.kol-liste{border-top:1px solid rgba(184,138,30,.3);padding-top:1.3rem;}
+.kol-liste ul{list-style:none;margin-top:.9rem;}
+.kol-liste li{
+  font-family:'Cormorant Garamond',serif;font-size:1.06rem;line-height:1.66;
+  color:var(--text-mid);padding-left:1.1rem;position:relative;margin-bottom:.5rem;
+}
+.kol-liste li::before{content:'·';position:absolute;left:0;color:var(--gold);font-size:1.3rem;line-height:1.2;}
+
+/* ── HØJDEPUNKT — mørkt bånd, så det ene store trækplaster skiller sig ud ── */
+.hoej{background:var(--charcoal);color:var(--cream);}
+.hoej h2{color:var(--cream);}
+.hoej .eyebrow{color:var(--gold-light);}
+.hoej p{color:rgba(250,246,238,.82);}
+.hoej-punkter{list-style:none;margin-top:2rem;}
+.hoej-punkter li{
+  font-family:'Cormorant Garamond',serif;font-size:1.12rem;line-height:1.7;
+  color:rgba(250,246,238,.86);padding-left:1.6rem;position:relative;margin-bottom:.8rem;
+}
+.hoej-punkter li::before{content:'';position:absolute;left:0;top:.75em;width:10px;height:1px;background:var(--gold);}
+
+/* ── PRAKTISKE DETALJER — fakta-grupper ──────────────────────────────────
+   Hver gruppe er en kasse med guldstreg over overskriften. Linjer med et
+   rør (|) sættes som etiket + værdi i to spalter; linjer uden bliver
+   almindelige punkter. Så kan samme felt rumme både "Standardbillet | 10 €"
+   og "Solide lukkede sko er påkrævet". */
+.fakta-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:2.2rem;margin-top:3rem;}
+.fakta-gruppe{
+  background:var(--cream);border-top:2px solid var(--gold);
+  padding:1.8rem 1.8rem 1.6rem;
+}
+.alt .fakta-gruppe{background:#fff;}
+.fakta-gruppe h3{color:var(--wine);margin-bottom:1.1rem;}
+.fakta-gruppe dl{margin:0;}
+.fakta-linje{
+  display:flex;gap:1rem;justify-content:space-between;align-items:baseline;
+  padding:.5rem 0;border-bottom:1px solid rgba(184,138,30,.16);
+}
+.fakta-linje:last-child{border-bottom:none;}
+.fakta-linje dt{
+  font-family:'Manrope',sans-serif;font-size:.64rem;letter-spacing:.12em;
+  text-transform:uppercase;color:var(--text-light);flex:1;
+}
+.fakta-linje dd{
+  font-family:'Cormorant Garamond',serif;font-size:1.06rem;color:var(--text);
+  text-align:right;flex:1;margin:0;
+}
+.fakta-punkt{
+  font-family:'Cormorant Garamond',serif;font-size:1.06rem;line-height:1.62;
+  color:var(--text-mid);padding:.4rem 0 .4rem 1.1rem;position:relative;
+}
+.fakta-punkt::before{content:'·';position:absolute;left:0;color:var(--gold);font-size:1.3rem;line-height:1.1;}
+
+/* ── AFSTANDE ── */
+.dist{display:flex;flex-wrap:wrap;gap:3rem;margin-top:2.4rem;}
+.dist div{min-width:130px;}
+.dist .n{font-family:'Cinzel',serif;font-size:1.7rem;color:var(--wine);display:block;}
+.dist .l{font-size:.63rem;letter-spacing:.16em;text-transform:uppercase;color:var(--text-light);margin-top:.4rem;display:block;}
+
+/* ── FAQ ── */
+.faq-item{border-bottom:1px solid rgba(184,138,30,.24);}
+.faq-q{
+  width:100%;text-align:left;background:none;border:none;cursor:pointer;
+  padding:1.5rem 2.5rem 1.5rem 0;position:relative;
+  font-family:'Cinzel',serif;font-size:1.02rem;color:var(--text);letter-spacing:.02em;
+}
+.faq-q::after{content:'+';position:absolute;right:.2rem;top:50%;transform:translateY(-50%);color:var(--gold);font-family:'Manrope',sans-serif;font-size:1.2rem;}
+.faq-item.open .faq-q::after{content:'–';}
+.faq-a{max-height:0;overflow:hidden;transition:max-height .4s ease;}
+.faq-item.open .faq-a{max-height:900px;}
+.faq-a p{padding-bottom:1.6rem;}
+
+/* ── FLERE SEVÆRDIGHEDER — intern krydslinkning ── */
+.flere-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:1.6rem;margin-top:3rem;}
+.flere-kort{
+  position:relative;min-height:340px;overflow:hidden;
+  display:flex;flex-direction:column;justify-content:flex-end;
+  text-decoration:none;color:inherit;background:var(--charcoal);
+  transition:transform .5s cubic-bezier(.23,1,.32,1),box-shadow .5s;
+}
+.flere-kort:hover,.flere-kort:focus-visible{transform:translateY(-5px);box-shadow:0 18px 52px rgba(44,35,24,.22);}
+.flere-bg{position:absolute;inset:0;background-size:cover;background-position:center;}
+.flere-fade{position:absolute;inset:0;background:linear-gradient(180deg,rgba(44,35,24,.1) 0%,rgba(44,35,24,.35) 45%,rgba(44,35,24,.9) 100%);}
+.flere-accent{position:absolute;top:0;left:0;right:0;height:4px;background:var(--gold);z-index:2;}
+.flere-indhold{position:relative;z-index:2;padding:1.8rem 1.6rem;}
+.flere-indhold h3{color:var(--gold-pale);margin-bottom:.5rem;}
+.flere-indhold p{color:rgba(250,246,238,.8);font-size:1rem;line-height:1.6;
+  display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;}
+.flere-afstand{
+  font-family:'Manrope',sans-serif;font-size:.58rem;letter-spacing:.18em;
+  text-transform:uppercase;color:rgba(250,246,238,.6);margin-top:.9rem;display:block;
+}
+
+/* ── CTA ── */
+.cta-band{background:var(--charcoal);color:var(--cream);text-align:center;}
+.cta-band h2{color:var(--cream);}
+.cta-band p{color:rgba(250,246,238,.8);}
+.btn-wine{
+  display:inline-block;margin-top:2.2rem;
+  font-family:'Manrope',sans-serif;font-size:.7rem;font-weight:500;
+  letter-spacing:.2em;text-transform:uppercase;
+  color:#fff;background:var(--wine);padding:1rem 2.5rem;
+  text-decoration:none;transition:background .3s;
+}
+.btn-wine:hover,.btn-wine:focus-visible{background:var(--wine-light);}
+.nav-links .lang-btn{
+  border-radius:0;font-family:'Manrope',sans-serif;
+  font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;
+  padding:.35rem .7rem;border:none;cursor:pointer;
+  display:inline-block;text-decoration:none;line-height:1.2;
+}
+.nav-links .lang-btn.lang-btn-active{background:var(--wine);color:#fff !important;}
+.nav-links .lang-btn.lang-btn-inactive{background:transparent;color:var(--wine) !important;}
+.nav-links .lang-switcher{display:inline-flex;flex:0 0 auto;}
+.nav-burger span{transform-origin:center;}
+.nav-burger.open span:nth-child(1){transform:translateY(6.5px) rotate(45deg);}
+.nav-burger.open span:nth-child(2){opacity:0;}
+.nav-burger.open span:nth-child(3){transform:translateY(-6.5px) rotate(-45deg);}
+
+/* ── FOOTER ── */
+footer{background:var(--charcoal);color:rgba(250,246,238,.72);padding:3rem 4rem;border-top:1px solid rgba(184,138,30,.2);}
+.footer-bottom{max-width:1180px;margin:0 auto;display:flex;justify-content:space-between;gap:1.6rem;flex-wrap:wrap;align-items:center;font-size:.68rem;letter-spacing:.08em;}
+.footer-bottom a{color:rgba(250,246,238,.72);text-decoration:none;}
+.footer-bottom a:hover,.footer-bottom a:focus-visible{color:var(--gold-light);}
+.footer-bottom p{font-family:'Manrope',sans-serif;font-size:.68rem;color:rgba(250,246,238,.55);}
+
+/* ── FEJLTILSTAND — ukendt slug ── */
+.ikke-fundet{min-height:70svh;display:flex;align-items:center;justify-content:center;text-align:center;padding:8rem 2rem;}
+
+/* ── TILGÆNGELIGHED ── */
+a:focus-visible,button:focus-visible{outline:2px solid var(--gold);outline-offset:3px;}
+@media (prefers-reduced-motion:reduce){
+  *{animation:none !important;transition:none !important;}
+  html{scroll-behavior:auto;}
+}
+
+/* ── MOBIL (kun i media query — påvirker aldrig desktop) ── */
+@media (max-width:900px){
+  nav{padding:1rem 1.5rem;}
+  .nav-burger{display:flex;}
+  .nav-back{display:none;}
+  .nav-links{
+    position:fixed;top:0;right:0;z-index:9995;
+    height:100vh;height:100svh;
+    width:min(82vw,340px);
+    flex-direction:column;align-items:stretch;justify-content:flex-start;
+    gap:0;padding:6rem 2rem 6rem;
+    background:rgba(250,246,238,.99);
+    -webkit-backdrop-filter:blur(20px);backdrop-filter:blur(20px);
+    border-left:1px solid rgba(184,138,30,.2);
+    box-shadow:-16px 0 48px rgba(44,35,24,.16);
+    overflow-y:auto;overscroll-behavior:contain;
+    transform:translateX(100%);
+    transition:transform .35s cubic-bezier(.23,1,.32,1);
+  }
+  .nav-links.open{transform:translateX(0);}
+  .nav-links li{border-bottom:1px solid rgba(184,138,30,.14);}
+  .nav-links a{display:block;padding:1rem 0;font-size:.78rem;}
+  .nav-lang-li{border-bottom:none !important;padding-top:1.2rem;margin-left:0 !important;}
+  section{padding:4.5rem 0;}
+  .section-inner{padding:0 1.4rem;}
+  .narrow{padding:0 1.4rem;}
+  .hero{padding:0 0 2.5rem;min-height:88svh;}
+  .hero-inner{padding:0 1.4rem;}
+  .hero-content{flex-direction:column;align-items:flex-start;gap:1.6rem;}
+  .hero p{font-size:1.12rem;}
+  .hero-meta{margin-top:1.6rem;gap:.45rem;}
+  .hero-meta span{padding:.42rem .8rem;font-size:.55rem;letter-spacing:.12em;}
+  .hero-scroll{display:none;}
+  .foto-stribe{padding:calc(var(--stribe-top,2rem) * .6) 0 calc(var(--stribe-bund,2rem) * .6);}
+  /* Inline-stilene fra JS skal vige på mobil, derfor !important */
+  .foto-stribe-grid{grid-template-columns:repeat(2,1fr) !important;max-width:none !important;gap:.4rem;}
+  .split{grid-template-columns:1fr;gap:2.4rem;}
+  .kol-lister{gap:2rem;margin-top:2.2rem;}
+  .fakta-grid{grid-template-columns:1fr;gap:1.4rem;margin-top:2.2rem;}
+  .fakta-gruppe{padding:1.4rem 1.3rem 1.2rem;}
+  .fakta-linje{flex-direction:column;gap:.1rem;align-items:flex-start;}
+  .fakta-linje dd{text-align:left;}
+  .dist{gap:1.8rem;}
+  .flere-grid{grid-template-columns:1fr;gap:1.2rem;}
+  .flere-kort{min-height:280px;}
+  p{font-size:1.08rem;}
+  .lede{font-size:1.18rem;}
+  footer{padding:2.4rem 1.5rem;}
+  .footer-bottom{flex-direction:column;align-items:flex-start;}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="/" class="nav-logo" id="sv_logo_link">
+    <img src="/img/taarne-hvid-trans.png" alt="Castillo del Alma" width="48" height="48">
+  </a>
+  <button class="nav-burger" id="navBurger" aria-label="Åbn menu" aria-controls="navLinks" aria-expanded="false">
+    <span></span><span></span><span></span>
+  </button>
+  <ul class="nav-links" id="navLinks">
+    <li id="sv_nav_links_holder"></li>
+    <li class="nav-lang-li" style="display:flex;align-items:center;gap:.4rem;margin-left:.8rem;">
+      <div class="lang-switcher" style="display:flex;border:1.5px solid var(--wine);overflow:hidden;">
+        <a id="sv-btn-da" href="#" class="lang-btn lang-btn-active" onclick="setSvLang('da');return false;">DA</a>
+        <a id="sv-btn-en" href="#" class="lang-btn lang-btn-inactive" onclick="setSvLang('en');return false;">EN</a>
+      </div>
+    </li>
+  </ul>
+  <a href="/" class="nav-back" id="sv_nav_back">← Tilbage til forsiden</a>
+</nav>
+<div class="nav-backdrop" id="navBackdrop"></div>
+
+<!-- Vises kun hvis slug'en ikke findes i databasen -->
+<div class="ikke-fundet" id="sv_ikke_fundet" style="display:none;">
+  <div>
+    <span class="eyebrow" style="justify-content:center;">Castillo del Alma</span>
+    <h1 style="font-size:clamp(1.8rem,4vw,3rem);" id="sv_nf_h1">Siden blev ikke fundet</h1>
+    <p style="margin-top:1.4rem;" id="sv_nf_text">Seværdigheden findes ikke — eller er ikke offentliggjort endnu.</p>
+    <a class="btn-wine" href="/" id="sv_nf_btn">Til forsiden</a>
+  </div>
+</div>
+
+<div id="sv_side" style="display:none;">
+
+<!-- HERO -->
+<header class="hero">
+  <div class="hero-bg">
+    <img id="sv_hero_image" alt="" fetchpriority="high" style="display:none;">
+  </div>
+  <div class="hero-inner">
+    <div class="hero-content">
+      <div class="hero-text">
+        <span class="eyebrow" id="sv_hero_eyebrow"></span>
+        <h1 id="sv_hero_h1"></h1>
+        <p id="sv_hero_lede"></p>
+        <div class="hero-meta" id="sv_hero_meta"></div>
+      </div>
+      <a class="hero-scroll" href="#sec-intro"><span id="sv_hero_scroll">Læs mere</span><i aria-hidden="true">↓</i></a>
+    </div>
+  </div>
+  <div class="hero-stribe" aria-hidden="true"></div>
+</header>
+
+<!-- 1 · HOVEDSEKTION -->
+<section id="sec-intro">
+  <div class="section-inner">
+    <div class="split">
+      <div>
+        <span class="eyebrow" id="sv_intro_label"></span>
+        <h2 id="sv_intro_h2"></h2>
+        <p class="lede" id="sv_intro_lede"></p>
+        <div class="rule"></div>
+        <div id="sv_intro_text"></div>
+      </div>
+      <figure class="fig fig-4-3" id="sv_intro_fig" style="display:none;">
+        <img id="sv_intro_image" alt="" loading="lazy">
+        <figcaption class="fig-label" id="sv_intro_billedtekst" style="display:none;"></figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<!-- FOTOSTRIBE 1 -->
+<section class="foto-stribe" id="strip1" style="display:none;"><div class="section-inner"><div class="foto-stribe-grid"></div></div></section>
+
+<!-- 2 · HISTORIEN -->
+<section class="alt" id="sec-historie">
+  <div class="section-inner">
+    <div class="split">
+      <figure class="fig fig-3-4" id="sv_historie_fig" style="display:none;">
+        <img id="sv_historie_image" alt="" loading="lazy">
+        <figcaption class="fig-label" id="sv_historie_billedtekst" style="display:none;"></figcaption>
+      </figure>
+      <div>
+        <span class="eyebrow" id="sv_historie_label"></span>
+        <h2 id="sv_historie_h2"></h2>
+        <div id="sv_historie_text"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 3 · NATUREN -->
+<section id="sec-natur">
+  <div class="section-inner">
+    <div class="split">
+      <div>
+        <span class="eyebrow" id="sv_natur_label"></span>
+        <h2 id="sv_natur_h2"></h2>
+        <div id="sv_natur_text"></div>
+      </div>
+      <figure class="fig fig-4-3" id="sv_natur_fig" style="display:none;">
+        <img id="sv_natur_image" alt="" loading="lazy">
+        <figcaption class="fig-label" id="sv_natur_billedtekst" style="display:none;"></figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<!-- 4 · DYRELIV & FLORA -->
+<section class="alt" id="sec-lister">
+  <div class="section-inner">
+    <span class="eyebrow" id="sv_lister_label"></span>
+    <h2 id="sv_lister_h2"></h2>
+    <p class="narrow" style="margin-left:0;padding-left:0;" id="sv_lister_intro"></p>
+    <div class="kol-lister" id="sv_lister_grupper"></div>
+  </div>
+</section>
+
+<!-- FOTOSTRIBE 2 -->
+<section class="foto-stribe" id="strip2" style="display:none;"><div class="section-inner"><div class="foto-stribe-grid"></div></div></section>
+
+<!-- 5 · HØJDEPUNKTET -->
+<section class="hoej" id="sec-hoejdepunkt">
+  <div class="section-inner">
+    <div class="split">
+      <div>
+        <span class="eyebrow" id="sv_hoej_label"></span>
+        <h2 id="sv_hoej_h2"></h2>
+        <div id="sv_hoej_text"></div>
+        <ul class="hoej-punkter" id="sv_hoej_punkter"></ul>
+      </div>
+      <figure class="fig fig-4-3" id="sv_hoej_fig" style="display:none;">
+        <img id="sv_hoej_image" alt="" loading="lazy">
+        <figcaption class="fig-label" id="sv_hoej_billedtekst" style="display:none;"></figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<!-- 6 · PRAKTISKE DETALJER -->
+<section id="sec-praktisk">
+  <div class="section-inner">
+    <span class="eyebrow" id="sv_praktisk_label"></span>
+    <h2 id="sv_praktisk_h2"></h2>
+    <p class="narrow" style="margin-left:0;padding-left:0;" id="sv_praktisk_intro"></p>
+    <div class="fakta-grid" id="sv_praktisk_grupper"></div>
+  </div>
+</section>
+
+<!-- 7 · AFSTANDE -->
+<section class="alt" id="sec-afstande">
+  <div class="section-inner">
+    <span class="eyebrow" id="sv_afstande_label"></span>
+    <h2 id="sv_afstande_h2"></h2>
+    <p class="narrow" style="margin-left:0;padding-left:0;" id="sv_afstande_intro"></p>
+    <div class="dist" id="sv_afstande_items"></div>
+  </div>
+</section>
+
+<!-- FOTOSTRIBE 3 -->
+<section class="foto-stribe" id="strip3" style="display:none;"><div class="section-inner"><div class="foto-stribe-grid"></div></div></section>
+
+<!-- 8 · FAQ -->
+<section id="sec-faq">
+  <div class="narrow">
+    <span class="eyebrow" id="sv_faq_label"></span>
+    <h2 id="sv_faq_h2"></h2>
+    <div id="sv_faq_items"></div>
+  </div>
+</section>
+
+<!-- 9 · FLERE SEVÆRDIGHEDER — bygges af JS fra de øvrige rækker -->
+<section class="alt" id="sec-flere" style="display:none;">
+  <div class="section-inner">
+    <span class="eyebrow" id="sv_flere_label"></span>
+    <h2 id="sv_flere_h2"></h2>
+    <p class="narrow" style="margin-left:0;padding-left:0;" id="sv_flere_intro"></p>
+    <div class="flere-grid" id="sv_flere_grid"></div>
+  </div>
+</section>
+
+<!-- 10 · OPFORDRING -->
+<section class="cta-band" id="sec-cta">
+  <div class="narrow">
+    <h2 id="sv_cta_h2"></h2>
+    <p id="sv_cta_text"></p>
+    <a class="btn-wine" id="sv_cta_btn" href="/udlejning"></a>
+  </div>
+</section>
+
+</div><!-- /sv_side -->
+
+<footer>
+  <div class="footer-bottom">
+    <p id="sv_footer_copy">© 2026 Castillo del Alma · Mollina, Málaga · Alle rettigheder forbeholdes</p>
+    <div style="display:flex;gap:1.6rem;flex-wrap:wrap;align-items:center;" id="sv_footer_links"></div>
+  </div>
+</footer>
+
+<script type="application/ld+json" id="sv_jsonld">{"@context":"https://schema.org","@graph":[]}</script>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+// ══ SEVÆRDIGHEDER — slug-baseret skabelon ═════════════════════════════════
+// Én HTML-fil betjener alle seværdigheder, præcis som retreat.html gør for
+// retreats. Adressen /sevaerdigheder/<slug> (og /en/sevaerdigheder/<slug>)
+// omskrives af Netlify til denne fil, som selv læser slug'en ud af stien.
+//
+// Indholdet ligger i tabellen `sevaerdigheder`: én række pr. seværdighed med
+// alle tekster i JSONB-kolonnen `indhold`. Nøglerne følger samme mønster som
+// gay_content — dansk i `nøgle`, engelsk i `nøgle_en` — så admin-editoren og
+// oversætterknappen virker uændret.
+const SV_SB_URL = 'https://niniwgiytyqvdqejigxg.supabase.co';
+const SV_SB_KEY = 'sb_publishable_GwrNUpIuWzdg1oswOY5HzA_mKWqhd6y';
+const svSb = (typeof supabase !== 'undefined' && supabase.createClient)
+  ? supabase.createClient(SV_SB_URL, SV_SB_KEY) : null;
+
+let svData = {};        // indhold for den viste seværdighed
+let svRaekke = null;    // hele databaserækken (slug, titel, …)
+let svAndre = [];       // øvrige aktive seværdigheder til krydslinks
+let svLang = 'da';
+
+// Standardrækkefølgen. Sektioner, der mangler i en gemt rækkefølge, sættes
+// ind på deres plads her, så en ny sektion aldrig forsvinder på gamle sider.
+const SV_STANDARD_ORDEN = ['sec-intro','strip1','sec-historie','sec-natur','sec-lister',
+  'strip2','sec-hoejdepunkt','sec-praktisk','sec-afstande','strip3','sec-faq','sec-flere','sec-cta'];
+const SV_SEKTIONER = {
+  'sec-intro':'vis_intro', 'strip1':'vis_strip1', 'sec-historie':'vis_historie',
+  'sec-natur':'vis_natur', 'sec-lister':'vis_lister', 'strip2':'vis_strip2',
+  'sec-hoejdepunkt':'vis_hoejdepunkt', 'sec-praktisk':'vis_praktisk',
+  'sec-afstande':'vis_afstande', 'strip3':'vis_strip3', 'sec-faq':'vis_faq',
+  'sec-flere':'vis_flere', 'sec-cta':'vis_cta'
+};
+// Accentfarver på striberne — samme palet som resten af sitet
+const SV_STRIBE_FARVER = ['var(--wine)','var(--gold)','var(--teal)','var(--terracotta)','var(--olive)'];
+
+// Faste tekster, der ikke redigeres pr. seværdighed
+const SV_UI = {
+  da: { tilbage:'← Tilbage til forsiden', flere:'Flere oplevelser', ikkeFundet:'Siden blev ikke fundet',
+        ikkeFundetText:'Seværdigheden findes ikke — eller er ikke offentliggjort endnu.', tilForsiden:'Til forsiden',
+        kontakt:'Kontakt', privatliv:'Privatliv', udlejning:'Lej ejendommen', hjem:'← Tilbage til forsiden' },
+  en: { tilbage:'← Back to home', flere:'More experiences', ikkeFundet:'Page not found',
+        ikkeFundetText:'This attraction does not exist — or has not been published yet.', tilForsiden:'Go to home page',
+        kontakt:'Contact', privatliv:'Privacy', udlejning:'Rent the estate', hjem:'← Back to home' }
+};
+
+// ── Slug ud af adressen ────────────────────────────────────────────────────
+function svSlugFraUrl() {
+  const m = window.location.pathname.match(/^(?:\/en)?\/sevaerdigheder(?:\.html)?\/([^/]+)\/?$/);
+  if (m && m[1]) { try { return decodeURIComponent(m[1]); } catch (e) { return m[1]; } }
+  const p = new URLSearchParams(window.location.search);
+  return p.get('slug') || '';
+}
+function svPaaEngelskSti() { return /^\/en(\/|$)/.test(window.location.pathname); }
+
+// ── Hjælpere — samme opførsel som på gay-siden ────────────────────────────
+function svSC(key, fallback) {
+  const v = svData[svLang === 'en' ? key + '_en' : key];
+  return (v !== undefined && v !== null && v !== '') ? v : (svData[key] || fallback || '');
+}
+function svSet(id, val) { const el = document.getElementById(id); if (el) el.innerHTML = val || ''; }
+function svSetImg(id, val) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  if (val) { el.src = val; el.style.display = ''; }
+  else { el.removeAttribute('src'); el.style.display = 'none'; }
+}
+// Brødtekst: én tom linje eller ét linjeskift = nyt afsnit
+function svSetAfsnit(id, val) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.innerHTML = String(val || '').split('\n').map(t => t.trim()).filter(Boolean)
+    .map(t => '<p>' + t + '</p>').join('');
+}
+function svEsc(t) {
+  return String(t == null ? '' : t).replace(/&/g, '&amp;').replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+}
+function svRent(t) { return String(t || '').replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim(); }
+
+// Rækkelister fra admin: [{da:[…], en:[…]}, …]. Gammelt rør-format læses
+// stadig, så intet gemt indhold kan gå tabt ved et formatskifte.
+function svListe(key, antalFelter) {
+  const raa = svData[key];
+  try {
+    const j = JSON.parse(raa || '[]');
+    if (Array.isArray(j) && (!j.length || (j[0] && j[0].da))) {
+      return j.map(r => {
+        const valgt = (svLang === 'en' && r.en && r.en.some(Boolean)) ? r.en : (r.da || []);
+        const ud = [];
+        for (let i = 0; i < antalFelter; i++) ud.push(valgt[i] || '');
+        return ud;
+      }).filter(r => r.some(Boolean));
+    }
+  } catch (e) { /* ikke JSON — gammelt rør-format nedenfor */ }
+  const ud = [];
+  String(svSC(key) || '').split('\n').forEach(l => {
+    const t = l.trim();
+    if (!t) return;
+    if (t.indexOf('|') === -1 && ud.length) { ud[ud.length - 1][ud[ud.length - 1].length - 1] += ' ' + t; return; }
+    if (t.indexOf('|') === -1) return;
+    const d = t.split('|').map(x => x.trim());
+    while (d.length < antalFelter) d.push('');
+    ud.push(d.slice(0, antalFelter));
+  });
+  return ud;
+}
+
+// Et billede med rød billedtekst. Er billedet tomt, skjules hele figuren;
+// er kun billedteksten tom, vises billedet uden den røde kasse.
+function svFigur(navn) {
+  const fig = document.getElementById('sv_' + navn + '_fig');
+  const url = svData[navn + '_image'];
+  svSetImg('sv_' + navn + '_image', url);
+  if (fig) fig.style.display = url ? '' : 'none';
+  const cap = document.getElementById('sv_' + navn + '_billedtekst');
+  const tekst = svSC(navn + '_billedtekst');
+  if (cap) {
+    cap.innerHTML = tekst || '';
+    cap.style.display = (url && tekst) ? '' : 'none';
+  }
+  const img = document.getElementById('sv_' + navn + '_image');
+  if (img && url) img.alt = svRent(tekst) || svRent(svSC('hero_h1'));
+}
+
+// Linjer i en fakta-gruppe: "Etiket | Værdi" bliver til to spalter,
+// linjer uden rør bliver almindelige punkter.
+function svFaktaLinjer(raa) {
+  return String(raa || '').split('\n').map(l => l.trim()).filter(Boolean).map(l => {
+    const i = l.indexOf('|');
+    if (i === -1) return '<div class="fakta-punkt">' + l + '</div>';
+    return '<div class="fakta-linje"><dt>' + l.slice(0, i).trim() + '</dt><dd>' + l.slice(i + 1).trim() + '</dd></div>';
+  }).join('');
+}
+
+// ── Tegn hele siden ───────────────────────────────────────────────────────
+function applySvContent() {
+  document.documentElement.lang = svLang;
+  const ui = SV_UI[svLang] || SV_UI.da;
+
+  // Hero
+  svSet('sv_hero_eyebrow', svSC('hero_eyebrow'));
+  svSet('sv_hero_h1',      svSC('hero_h1'));
+  svSet('sv_hero_lede',    svSC('hero_lede'));
+  svSet('sv_hero_scroll',  svSC('hero_scroll'));
+  svSetImg('sv_hero_image', svData.hero_image);
+  { const h = document.querySelector('.hero');
+    if (h) h.classList.toggle('har-stribe', svData.vis_hero_stribe !== '0'); }
+  { const hi = document.getElementById('sv_hero_image');
+    if (hi && svData.hero_image) hi.alt = svRent(svSC('hero_h1')) + ' — Castillo del Alma'; }
+  const meta = svListe('hero_meta', 1).map(r => r[0]).filter(Boolean);
+  svSet('sv_hero_meta', meta.map(m => '<span>' + m + '</span>').join(''));
+
+  // 1 · Hovedsektion
+  svSet('sv_intro_label', svSC('intro_label'));
+  svSet('sv_intro_h2',    svSC('intro_h2'));
+  svSet('sv_intro_lede',  svSC('intro_lede'));
+  svSetAfsnit('sv_intro_text', svSC('intro_text'));
+  svFigur('intro');
+
+  // 2 · Historien
+  svSet('sv_historie_label', svSC('historie_label'));
+  svSet('sv_historie_h2',    svSC('historie_h2'));
+  svSetAfsnit('sv_historie_text', svSC('historie_text'));
+  svFigur('historie');
+
+  // 3 · Naturen
+  svSet('sv_natur_label', svSC('natur_label'));
+  svSet('sv_natur_h2',    svSC('natur_h2'));
+  svSetAfsnit('sv_natur_text', svSC('natur_text'));
+  svFigur('natur');
+
+  // 4 · Dyreliv & flora
+  svSet('sv_lister_label', svSC('lister_label'));
+  svSet('sv_lister_h2',    svSC('lister_h2'));
+  svSet('sv_lister_intro', svSC('lister_intro'));
+  const grupper = svListe('lister_grupper', 2);
+  svSet('sv_lister_grupper', grupper.map(r => {
+    const punkter = String(r[1] || '').split('\n').map(x => x.trim()).filter(Boolean);
+    return '<div class="kol-liste"><h3>' + (r[0] || '') + '</h3><ul>' +
+      punkter.map(p => '<li>' + p + '</li>').join('') + '</ul></div>';
+  }).join(''));
+
+  // 5 · Højdepunktet
+  svSet('sv_hoej_label', svSC('hoej_label'));
+  svSet('sv_hoej_h2',    svSC('hoej_h2'));
+  svSetAfsnit('sv_hoej_text', svSC('hoej_text'));
+  const hpunkter = svListe('hoej_punkter', 1).map(r => r[0]).filter(Boolean);
+  svSet('sv_hoej_punkter', hpunkter.map(p => '<li>' + p + '</li>').join(''));
+  svFigur('hoej');
+
+  // 6 · Praktiske detaljer
+  svSet('sv_praktisk_label', svSC('praktisk_label'));
+  svSet('sv_praktisk_h2',    svSC('praktisk_h2'));
+  svSet('sv_praktisk_intro', svSC('praktisk_intro'));
+  const fakta = svListe('praktisk_grupper', 2);
+  svSet('sv_praktisk_grupper', fakta.map(r =>
+    '<div class="fakta-gruppe"><h3>' + (r[0] || '') + '</h3><dl>' + svFaktaLinjer(r[1]) + '</dl></div>'
+  ).join(''));
+
+  // 7 · Afstande
+  svSet('sv_afstande_label', svSC('afstande_label'));
+  svSet('sv_afstande_h2',    svSC('afstande_h2'));
+  svSet('sv_afstande_intro', svSC('afstande_intro'));
+  const afs = svListe('afstande_items', 2);
+  svSet('sv_afstande_items', afs.map(r =>
+    '<div><span class="n">' + (r[0] || '') + '</span><span class="l">' + (r[1] || '') + '</span></div>').join(''));
+
+  // 8 · FAQ
+  svSet('sv_faq_label', svSC('faq_label'));
+  svSet('sv_faq_h2',    svSC('faq_h2'));
+  const faq = svListe('faq_items', 2);
+  svSet('sv_faq_items', faq.map((r, i) =>
+    '<div class="faq-item' + (i === 0 ? ' open' : '') + '">' +
+      '<button class="faq-q" type="button" aria-expanded="' + (i === 0 ? 'true' : 'false') + '">' + (r[0] || '') + '</button>' +
+      '<div class="faq-a"><p>' + (r[1] || '') + '</p></div>' +
+    '</div>').join(''));
+  bindSvFaq();
+
+  // 9 · Flere seværdigheder
+  svSet('sv_flere_label', svSC('flere_label') || ui.flere);
+  svSet('sv_flere_h2',    svSC('flere_h2'));
+  svSet('sv_flere_intro', svSC('flere_intro'));
+  byggSvFlere();
+
+  // 10 · Opfordring
+  svSet('sv_cta_h2',   svSC('cta_h2'));
+  svSet('sv_cta_text', svSC('cta_text'));
+  const cta = document.getElementById('sv_cta_btn');
+  if (cta) {
+    cta.textContent = svSC('cta_btn') || '';
+    cta.setAttribute('href', svSvUrlPraefiks() + (svData.cta_link || '/udlejning'));
+  }
+
+  svSet('sv_footer_copy', svSC('footer_copy'));
+  byggSvFooter();
+  byggSvNav();
+  byggSvStriber();
+  applySvSektionOrden();
+  applySvSynlighed();
+  applySvMeta();
+  byggSvJsonLd();
+}
+
+// Interne links skal pege på /en/… når man er på engelsk
+function svSvUrlPraefiks() { return svLang === 'en' ? '/en' : ''; }
+
+function byggSvNav() {
+  const ul = document.getElementById('navLinks');
+  const holder = document.getElementById('sv_nav_links_holder');
+  if (!ul || !holder) return;
+  Array.prototype.slice.call(ul.querySelectorAll('.sv-navlink')).forEach(el => el.remove());
+  let links = [];
+  try {
+    const raa = JSON.parse(svData.nav_links || '[]');
+    if (Array.isArray(raa)) links = raa.map(l => ({
+      tekst: (svLang === 'en' ? (l.tekst_en || l.tekst) : l.tekst) || '',
+      link: l.link || '', vis: l.vis
+    }));
+  } catch (e) { links = []; }
+  links = links.filter(l => l.vis !== '0' && l.tekst && l.link);
+  holder.style.display = links.length ? 'none' : '';
+  links.forEach(l => {
+    const li = document.createElement('li');
+    li.className = 'sv-navlink';
+    const a = document.createElement('a');
+    // Ankre bliver stående; interne stier får /en foran på engelsk
+    a.setAttribute('href', l.link.charAt(0) === '/' ? svSvUrlPraefiks() + l.link : l.link);
+    a.textContent = l.tekst;
+    li.appendChild(a);
+    ul.insertBefore(li, holder);
+  });
+  const ui = SV_UI[svLang] || SV_UI.da;
+  const back = document.getElementById('sv_nav_back');
+  if (back) { back.textContent = svSC('nav_back') || ui.tilbage; back.setAttribute('href', svSvUrlPraefiks() + '/'); }
+  const logo = document.getElementById('sv_logo_link');
+  if (logo) logo.setAttribute('href', svSvUrlPraefiks() + '/');
+}
+
+function byggSvFooter() {
+  const c = document.getElementById('sv_footer_links');
+  if (!c) return;
+  const ui = SV_UI[svLang] || SV_UI.da;
+  const p = svSvUrlPraefiks();
+  c.innerHTML =
+    '<a href="' + p + '/udlejning">' + svEsc(ui.udlejning) + '</a>' +
+    '<a href="' + p + '/kontakt">' + svEsc(ui.kontakt) + '</a>' +
+    '<a href="' + p + '/privacidad">' + svEsc(ui.privatliv) + '</a>' +
+    '<a href="' + p + '/">' + svEsc(ui.hjem) + '</a>';
+}
+
+// Op til fem billeder pr. stribe. Er en stribe tom, skjules den helt.
+function byggSvStriber() {
+  ['strip1', 'strip2', 'strip3'].forEach(function (id) {
+    const sec = document.getElementById(id);
+    if (!sec) return;
+    const grid = sec.querySelector('.foto-stribe-grid');
+    if (!grid) return;
+    let billeder = svData[id + '_images'];
+    if (typeof billeder === 'string') { try { billeder = JSON.parse(billeder); } catch (e) { billeder = null; } }
+    billeder = Array.isArray(billeder) ? billeder.filter(Boolean).slice(0, 5) : [];
+    const luftTop = parseFloat(svData[id + '_top']);
+    const luftBund = parseFloat(svData[id + '_bund']);
+    sec.style.setProperty('--stribe-top', (isNaN(luftTop) ? 2 : luftTop) + 'rem');
+    sec.style.setProperty('--stribe-bund', (isNaN(luftBund) ? 2 : luftBund) + 'rem');
+    if (!billeder.length) { sec.style.display = 'none'; grid.innerHTML = ''; return; }
+    // Felterne holder samme størrelse uanset antal: fire billeder fylder
+    // 4/5 af bredden i stedet for at blive strukket ud til fem felters plads.
+    grid.style.gridTemplateColumns = 'repeat(' + billeder.length + ',1fr)';
+    grid.style.maxWidth = (billeder.length / 5 * 100) + '%';
+    grid.innerHTML = billeder.map(function (u, i) {
+      return '<div class="stribe-felt">' +
+        '<span class="stribe-accent" style="background:' + SV_STRIBE_FARVER[i % SV_STRIBE_FARVER.length] + ';"></span>' +
+        '<img src="' + svEsc(u) + '" alt="Castillo del Alma" loading="lazy">' +
+      '</div>';
+    }).join('');
+    sec.style.display = '';
+  });
+}
+
+// Krydslinks til de øvrige seværdigheder — intern linkning, som både gæster
+// og Google har glæde af. Sektionen skjules, hvis der ikke er andre endnu.
+function byggSvFlere() {
+  const sec = document.getElementById('sec-flere');
+  const grid = document.getElementById('sv_flere_grid');
+  if (!sec || !grid) return;
+  if (!svAndre.length) { sec.style.display = 'none'; grid.innerHTML = ''; return; }
+  const p = svSvUrlPraefiks();
+  grid.innerHTML = svAndre.slice(0, 6).map(function (r) {
+    const ind = r.indhold || {};
+    const titel = (svLang === 'en' && ind.hero_h1_en) ? ind.hero_h1_en : (ind.hero_h1 || r.titel || r.slug);
+    const tekst = (svLang === 'en' && ind.hero_lede_en) ? ind.hero_lede_en : (ind.hero_lede || '');
+    const eyebrow = (svLang === 'en' && ind.hero_eyebrow_en) ? ind.hero_eyebrow_en : (ind.hero_eyebrow || '');
+    const bg = ind.hero_image || ind.intro_image || '';
+    return '<a class="flere-kort" href="' + p + '/sevaerdigheder/' + encodeURIComponent(r.slug) + '">' +
+      (bg ? '<div class="flere-bg" style="background-image:url(\'' + svEsc(bg) + '\');"></div>' : '') +
+      '<div class="flere-fade"></div><div class="flere-accent"></div>' +
+      '<div class="flere-indhold"><h3>' + svEsc(svRent(titel)) + '</h3>' +
+      '<p>' + svEsc(svRent(tekst)) + '</p>' +
+      (eyebrow ? '<span class="flere-afstand">' + svEsc(svRent(eyebrow)) + '</span>' : '') +
+      '</div></a>';
+  }).join('');
+  sec.style.display = '';
+}
+
+function applySvSektionOrden() {
+  let orden = [];
+  try { orden = JSON.parse(svData.sektion_orden || '[]'); } catch (e) { orden = []; }
+  if (!Array.isArray(orden) || !orden.length) return;
+  orden = orden.filter(id => SV_STANDARD_ORDEN.indexOf(id) !== -1);
+  SV_STANDARD_ORDEN.forEach(function (id, idx) {
+    if (orden.indexOf(id) !== -1) return;
+    let hvor = orden.length;
+    for (let k = idx - 1; k >= 0; k--) {
+      const pos = orden.indexOf(SV_STANDARD_ORDEN[k]);
+      if (pos !== -1) { hvor = pos + 1; break; }
+    }
+    orden.splice(hvor, 0, id);
+  });
+  const anker = document.getElementById('sv_side');
+  if (!anker) return;
+  orden.forEach(function (id) {
+    const sec = document.getElementById(id);
+    if (sec) anker.appendChild(sec);
+  });
+}
+
+function applySvSynlighed() {
+  Object.keys(SV_SEKTIONER).forEach(id => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    if (svData[SV_SEKTIONER[id]] === '0') { el.style.display = 'none'; return; }
+    // Striber og krydslinks styrer selv, om de har noget at vise
+    if (id === 'strip1' || id === 'strip2' || id === 'strip3' || id === 'sec-flere') return;
+    el.style.display = '';
+  });
+}
+
+function svUrl(sprog, slug) {
+  return 'https://castillodelalma.es' + (sprog === 'en' ? '/en' : '') +
+         '/sevaerdigheder/' + encodeURIComponent(slug || (svRaekke && svRaekke.slug) || '');
+}
+
+function applySvMeta() {
+  const paaEn = svLang === 'en';
+  const url = svUrl(paaEn ? 'en' : 'da');
+  const titel = svSC('seo_title') || svRent(svSC('hero_h1')) + ' — Castillo del Alma';
+  const desc  = svRent(svSC('seo_desc') || svSC('hero_lede'));
+  const img   = svData.social_image || svData.hero_image || 'https://castillodelalma.es/img/castillo-del-alma-social-1200.jpg';
+  document.title = titel;
+  function m(attr, key, val) {
+    if (!val) return;
+    let el = document.head.querySelector('meta[' + attr + '="' + key + '"]');
+    if (!el) { el = document.createElement('meta'); el.setAttribute(attr, key); document.head.appendChild(el); }
+    el.setAttribute('content', val);
+  }
+  m('name', 'description', desc);
+  m('property', 'og:title', titel);
+  m('property', 'og:description', desc);
+  m('property', 'og:url', url);
+  m('property', 'og:image', img);
+  m('property', 'og:locale', paaEn ? 'en_US' : 'da_DK');
+  m('name', 'twitter:title', titel);
+  m('name', 'twitter:description', desc);
+  m('name', 'twitter:image', img);
+  let c = document.head.querySelector('link[rel="canonical"]');
+  if (!c) { c = document.createElement('link'); c.setAttribute('rel', 'canonical'); document.head.appendChild(c); }
+  c.setAttribute('href', url);
+  function alt(hl, href) {
+    let el = document.head.querySelector('link[rel="alternate"][hreflang="' + hl + '"]');
+    if (!el) { el = document.createElement('link'); el.setAttribute('rel', 'alternate'); el.setAttribute('hreflang', hl); document.head.appendChild(el); }
+    el.setAttribute('href', href);
+  }
+  alt('da', svUrl('da')); alt('en', svUrl('en')); alt('x-default', svUrl('da'));
+  // Sprogknapperne peger på den rigtige adresse, også ved højreklik
+  const bDa = document.getElementById('sv-btn-da'), bEn = document.getElementById('sv-btn-en');
+  if (bDa) bDa.setAttribute('href', svUrl('da'));
+  if (bEn) bEn.setAttribute('href', svUrl('en'));
+}
+
+// Struktureret data: TouristAttraction giver Google noget at arbejde med ud
+// over ren tekst, og FAQ-schemaet holdes altid i takt med spørgsmålene på siden.
+function byggSvJsonLd() {
+  const el = document.getElementById('sv_jsonld');
+  if (!el) return;
+  const url = svUrl(svLang === 'en' ? 'en' : 'da');
+  const faq = svListe('faq_items', 2);
+  const navn = svRent(svSC('hero_h1'));
+  const graf = [
+    { '@type': 'WebPage', '@id': url + '#page', url: url, name: svSC('seo_title') || navn,
+      inLanguage: svLang, description: svRent(svSC('seo_desc') || svSC('hero_lede')),
+      isPartOf: { '@type': 'WebSite', name: 'Castillo del Alma', url: 'https://castillodelalma.es' } },
+    { '@type': 'TouristAttraction', name: navn,
+      description: svRent(svSC('intro_lede') || svSC('hero_lede')),
+      image: svData.hero_image || undefined,
+      url: url,
+      isAccessibleForFree: undefined,
+      address: { '@type': 'PostalAddress', addressRegion: 'Andalucía', addressCountry: 'ES' } },
+    { '@type': 'BreadcrumbList', itemListElement: [
+      { '@type': 'ListItem', position: 1, name: svLang === 'en' ? 'Home' : 'Forsiden',
+        item: 'https://castillodelalma.es' + (svLang === 'en' ? '/en/' : '/') },
+      { '@type': 'ListItem', position: 2, name: navn, item: url }
+    ] }
+  ];
+  if (faq.length) graf.push({ '@type': 'FAQPage', mainEntity: faq.map(r => ({
+    '@type': 'Question', name: svRent(r[0]),
+    acceptedAnswer: { '@type': 'Answer', text: svRent(r[1]) }
+  })) });
+  el.textContent = JSON.stringify({ '@context': 'https://schema.org', '@graph': graf });
+}
+
+function setSvLang(lang) {
+  svLang = (lang === 'en') ? 'en' : 'da';
+  const slug = (svRaekke && svRaekke.slug) || svSlugFraUrl();
+  try {
+    const sti = '/sevaerdigheder/' + encodeURIComponent(slug);
+    history.replaceState(null, '', (svLang === 'en' ? '/en' : '') + sti + location.hash);
+  } catch (e) { /* replaceState utilgængelig → sproget skifter stadig */ }
+  const bDa = document.getElementById('sv-btn-da'), bEn = document.getElementById('sv-btn-en');
+  if (bDa) { bDa.classList.toggle('lang-btn-active', svLang === 'da'); bDa.classList.toggle('lang-btn-inactive', svLang !== 'da'); }
+  if (bEn) { bEn.classList.toggle('lang-btn-active', svLang === 'en'); bEn.classList.toggle('lang-btn-inactive', svLang !== 'en'); }
+  if (svRaekke) applySvContent(); else visSvIkkeFundet();
+}
+
+function visSvIkkeFundet() {
+  const ui = SV_UI[svLang] || SV_UI.da;
+  const nf = document.getElementById('sv_ikke_fundet');
+  const side = document.getElementById('sv_side');
+  if (side) side.style.display = 'none';
+  if (nf) nf.style.display = 'flex';
+  svSet('sv_nf_h1', ui.ikkeFundet);
+  svSet('sv_nf_text', ui.ikkeFundetText);
+  const btn = document.getElementById('sv_nf_btn');
+  if (btn) { btn.textContent = ui.tilForsiden; btn.setAttribute('href', svSvUrlPraefiks() + '/'); }
+  document.title = ui.ikkeFundet + ' — Castillo del Alma';
+  byggSvFooter();
+}
+
+// Samme sprogvalg som resten af sitet: adressen vinder, derefter geo, derefter browser
+async function bestemSvStartsprog() {
+  if (svPaaEngelskSti()) return 'en';
+  try {
+    const c = sessionStorage.getItem('cda_geo_lang');
+    if (c === 'da' || c === 'en') return c;
+  } catch (e) { /* sessionStorage utilgængelig */ }
+  try {
+    const ctrl = new AbortController();
+    const t = setTimeout(() => ctrl.abort(), 4000);
+    const res = await fetch('/.netlify/functions/geo-lang', { signal: ctrl.signal });
+    clearTimeout(t);
+    if (res.ok) {
+      const geo = await res.json();
+      if (geo && (geo.lang === 'da' || geo.lang === 'en')) {
+        try { sessionStorage.setItem('cda_geo_lang', geo.lang); } catch (e) {}
+        return geo.lang;
+      }
+    }
+  } catch (e) { /* geo utilgængelig → browsersprog nedenfor */ }
+  try {
+    const langs = (navigator.languages && navigator.languages.length ? navigator.languages : [navigator.language])
+      .filter(Boolean).map(l => l.toLowerCase());
+    if (langs.some(l => l.startsWith('da'))) return 'da';
+    return langs.length ? 'en' : 'da';
+  } catch (e) { return 'da'; }
+}
+
+async function loadSvIndhold() {
+  const slug = svSlugFraUrl();
+  let start = 'da';
+  const svar = await Promise.allSettled([
+    svSb ? svSb.from('sevaerdigheder').select('slug,titel,titel_en,aktiv,sort_orden,indhold').eq('aktiv', true).order('sort_orden', { ascending: true })
+         : Promise.resolve({ data: [] }),
+    bestemSvStartsprog()
+  ]);
+  if (svar[1].status === 'fulfilled') start = svar[1].value;
+
+  let raekker = [];
+  if (svar[0].status === 'fulfilled' && svar[0].value && svar[0].value.data) {
+    raekker = svar[0].value.data || [];
+  } else if (svar[0].status === 'rejected') {
+    console.warn('sevaerdigheder kunne ikke hentes (er tabellen oprettet?):', svar[0].reason);
+  }
+
+  svRaekke = raekker.find(r => r && r.slug === slug) || null;
+  svAndre  = raekker.filter(r => r && r.slug !== slug);
+
+  if (!svRaekke) {
+    svLang = start;
+    visSvIkkeFundet();
+    return;
+  }
+  let ind = svRaekke.indhold;
+  if (typeof ind === 'string') { try { ind = JSON.parse(ind); } catch (e) { ind = {}; } }
+  svData = ind && typeof ind === 'object' ? ind : {};
+  const side = document.getElementById('sv_side');
+  const nf = document.getElementById('sv_ikke_fundet');
+  if (side) side.style.display = '';
+  if (nf) nf.style.display = 'none';
+  setSvLang(start);
+}
+
+function bindSvFaq() {
+  document.querySelectorAll('.faq-q').forEach(function (btn) {
+    if (btn.dataset.svbundet) return;
+    btn.dataset.svbundet = '1';
+    btn.addEventListener('click', function () {
+      const item = btn.closest('.faq-item');
+      const aaben = item.classList.toggle('open');
+      btn.setAttribute('aria-expanded', aaben ? 'true' : 'false');
+    });
+  });
+}
+</script>
+
+<script>
+// ── MOBILMENU — samme opførsel som på de øvrige sider ──
+(function () {
+  var burger = document.getElementById('navBurger');
+  var links = document.getElementById('navLinks');
+  var backdrop = document.getElementById('navBackdrop');
+  if (!burger || !links || !backdrop) return;
+  function luk() {
+    links.classList.remove('open');
+    backdrop.classList.remove('open');
+    burger.classList.remove('open');
+    burger.setAttribute('aria-expanded', 'false');
+    burger.setAttribute('aria-label', 'Åbn menu');
+  }
+  burger.addEventListener('click', function () {
+    var aaben = links.classList.toggle('open');
+    backdrop.classList.toggle('open', aaben);
+    burger.classList.toggle('open', aaben);
+    burger.setAttribute('aria-expanded', aaben ? 'true' : 'false');
+    burger.setAttribute('aria-label', aaben ? 'Luk menu' : 'Åbn menu');
+  });
+  backdrop.addEventListener('click', luk);
+  links.addEventListener('click', function (e) {
+    if (e.target.closest && e.target.closest('.lang-switcher')) return;
+    if (e.target.tagName === 'A') luk();
+  });
+})();
+
+loadSvIndhold();
+</script>
+</body>
+</html>
