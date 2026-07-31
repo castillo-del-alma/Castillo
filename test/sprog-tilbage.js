@@ -281,5 +281,68 @@ const CORDOBA = 7;
       'lukket oplevelses-modal forbliver lukket');
   }
 
+  r.overskrift('ALLE 25 felter — begge veje');
+  {
+    // Enkelttilfælde er ikke nok. Her får hvert eneste kort sin egen markør
+    // på begge sprog, så et kort der viser et andet korts tekst, eller som
+    // ikke skifter, straks kan udpeges ved navn.
+    const OPL = ['vin','olie','vandre','mad','ride','caminito','malaga','cordoba',
+      'antequera','stjerner','flamingo','eltorcal','camorra','ardales','dolmener',
+      'pena','alhambra','sevilla','picasso'];
+    const WELL = ['breathwork','meditation','somatic','healing','massage','pool'];
+    const ind = [];
+    OPL.forEach(k => ['titel','lang'].forEach(f => {
+      ind.push({ key: 'opl_' + k + '_' + f + '_da', value: 'DA-' + f + '-' + k });
+      ind.push({ key: 'opl_' + k + '_' + f + '_en', value: 'EN-' + f + '-' + k });
+    }));
+    WELL.forEach(k => ['titel','lang'].forEach(f => {
+      ind.push({ key: 'well_' + k + '_' + f + '_da', value: 'DA-' + f + '-' + k });
+      ind.push({ key: 'well_' + k + '_' + f + '_en', value: 'EN-' + f + '-' + k });
+    }));
+
+    const dom = await indlaesSide('index.html', {
+      url: 'https://castillodelalma.es/', geoSprog: 'da', indhold: ind
+    });
+    const w = dom.window, d = w.document;
+    const opl = d.querySelectorAll('.exp-item.exp-has-modal');
+    const well = d.querySelectorAll('.wellness-has-modal');
+
+    r.tjek(opl.length === OPL.length,
+      'nøglelisten passer til antallet af oplevelses-kort (' + opl.length + ' vs ' + OPL.length + ')');
+    r.tjek(well.length === WELL.length,
+      'nøglelisten passer til antallet af wellness-kort (' + well.length + ' vs ' + WELL.length + ')');
+
+    function fejlListe(sprog) {
+      const fejl = [];
+      OPL.forEach((k, i) => {
+        if (opl[i].getAttribute('data-title') !== sprog + '-titel-' + k) fejl.push('opl.' + k + ' titel');
+        if (opl[i].getAttribute('data-body') !== sprog + '-lang-' + k) fejl.push('opl.' + k + ' tekst');
+      });
+      WELL.forEach((k, i) => {
+        if (well[i].getAttribute('data-title') !== sprog + '-titel-' + k) fejl.push('well.' + k + ' titel');
+        if (well[i].getAttribute('data-body') !== sprog + '-lang-' + k) fejl.push('well.' + k + ' tekst');
+      });
+      return fejl;
+    }
+
+    let f = fejlListe('DA');
+    r.tjek(f.length === 0, 'alle 25 felter er danske på / : ' + f.slice(0, 6).join(', '));
+
+    w.eval("setSiteLang('en')"); await new Promise(x => setTimeout(x, 300));
+    f = fejlListe('EN');
+    r.tjek(f.length === 0, 'alle 25 skifter til engelsk: ' + f.slice(0, 6).join(', '));
+
+    w.eval("setSiteLang('da')"); await new Promise(x => setTimeout(x, 300));
+    f = fejlListe('DA');
+    r.tjek(f.length === 0, 'alle 25 skifter tilbage til dansk: ' + f.slice(0, 6).join(', '));
+
+    // Rækkefølgen må ikke skride: kort nr. i skal have nøgle nr. i.
+    // Bytter to kort plads i HTML'en, får de hinandens tekster.
+    r.tjek(opl[0].getAttribute('data-title') === 'DA-titel-vin',
+      'første kort er vin — nøglelisten følger DOM-rækkefølgen');
+    r.tjek(opl[18].getAttribute('data-title') === 'DA-titel-picasso',
+      'sidste kort er picasso');
+  }
+
   process.exit(r.afslut());
 })();
