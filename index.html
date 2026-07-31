@@ -2863,9 +2863,26 @@ function SC(key, fallback) {
   return (val !== undefined && val !== '') ? val : (fallback !== undefined ? fallback : '');
 }
 
+// Sidens hårdkodede tekster er bagstop, når et felt er tomt i admin. Men de
+// overskrives i samme sekund, siden første gang lægger et sprog på — og så er
+// originalen væk. Er det ene sprog tomt, bliver det andet derfor stående, og
+// sproget kan ikke skiftes tilbage. Præcis den fejl sad i oplevelses-kortene.
+//
+// Her gemmes den oprindelige værdi, FØRSTE gang et element røres. Derefter kan
+// et tomt felt altid falde tilbage på den rigtige tekst i stedet for på det
+// forrige sprog.
+const ORG_VAERDIER = new WeakMap();
+function orgVal(el, prop) {
+  if (!el) return '';
+  let o = ORG_VAERDIER.get(el);
+  if (!o) { o = {}; ORG_VAERDIER.set(el, o); }
+  if (!(prop in o)) o[prop] = el[prop];
+  return o[prop];
+}
+
 function scSet(id, key, fallback) {
   const el = document.getElementById(id);
-  if (el) el.innerHTML = SC(key, fallback !== undefined ? fallback : el.textContent); // Tillader <b>, <br>, <em> m.fl. fra admin
+  if (el) el.innerHTML = SC(key, fallback !== undefined ? fallback : orgVal(el, 'innerHTML')); // Tillader <b>, <br>, <em> m.fl. fra admin
 }
 
 function scSetHTML(id, key, fallback) {
@@ -2982,13 +2999,13 @@ function applySiteLang() {
   // HERO
   scSet('hero-eyebrow-test', 'hero_eyebrow', undefined);
   const eyebrow = document.querySelector('.hero-eyebrow');
-  if (eyebrow) eyebrow.textContent = SC('hero_eyebrow', eyebrow.textContent);
+  if (eyebrow) eyebrow.textContent = SC('hero_eyebrow', orgVal(eyebrow, 'textContent'));
   const heroL1 = document.querySelector('.hero h1 .l1');
-  if (heroL1) heroL1.textContent = SC('hero_titel1', heroL1.textContent);
+  if (heroL1) heroL1.textContent = SC('hero_titel1', orgVal(heroL1, 'textContent'));
   const heroL2 = document.querySelector('.hero h1 .l2');
-  if (heroL2) heroL2.textContent = SC('hero_titel2', heroL2.textContent);
+  if (heroL2) heroL2.textContent = SC('hero_titel2', orgVal(heroL2, 'textContent'));
   const heroSub = document.querySelector('.hero-sub');
-  if (heroSub) heroSub.textContent = SC('hero_sub', heroSub.textContent);
+  if (heroSub) heroSub.textContent = SC('hero_sub', orgVal(heroSub, 'textContent'));
   const heroBtns = document.querySelectorAll('.hero-btns a');
   if (heroBtns[0]) heroBtns[0].textContent = SC('hero_btn1', heroBtns[0].textContent);
   if (heroBtns[1]) heroBtns[1].textContent = SC('hero_btn2', heroBtns[1].textContent);
@@ -3008,69 +3025,75 @@ function applySiteLang() {
 
   // FILOSOFI
   const filosofiLabel = document.querySelector('#about .section-label');
-  if (filosofiLabel) filosofiLabel.textContent = SC('filosofi_label', filosofiLabel.textContent);
+  if (filosofiLabel) filosofiLabel.textContent = SC('filosofi_label', orgVal(filosofiLabel, 'textContent'));
   const filosofiHeading = document.querySelector('#about h2');
   if (filosofiHeading) {
+    const _org_filosofi_heading = orgVal(filosofiHeading, 'innerHTML');
     let txt = SC('filosofi_heading', null);
-    if (txt) filosofiHeading.innerHTML = txt.replace(/\*(.+?)\*/g, '<em>$1</em>');
+    filosofiHeading.innerHTML = txt ? txt.replace(/\*(.+?)\*/g, '<em>$1</em>') : _org_filosofi_heading;
   }
   const filosofiPs = document.querySelectorAll('#about .reveal.d2 p');
   if (filosofiPs[0]) filosofiPs[0].textContent = SC('filosofi_p1', filosofiPs[0].textContent);
   if (filosofiPs[1]) filosofiPs[1].textContent = SC('filosofi_p2', filosofiPs[1].textContent);
   if (filosofiPs[2]) filosofiPs[2].textContent = SC('filosofi_p3', filosofiPs[2].textContent);
   const filosofiImgLabel = document.querySelector('.intro-img-label');
-  if (filosofiImgLabel) filosofiImgLabel.textContent = SC('filosofi_billedlabel', filosofiImgLabel.textContent);
+  if (filosofiImgLabel) filosofiImgLabel.textContent = SC('filosofi_billedlabel', orgVal(filosofiImgLabel, 'textContent'));
 
   // RETREATS
   const retreatsLabel = document.querySelector('#retreats .section-label');
-  if (retreatsLabel) retreatsLabel.textContent = SC('retreats_label', retreatsLabel.textContent);
+  if (retreatsLabel) retreatsLabel.textContent = SC('retreats_label', orgVal(retreatsLabel, 'textContent'));
   set('retreatsHeading1', 'retreats_heading');
   const retreatsTextEl = document.getElementById('retreatsText');
   if (retreatsTextEl) {
+    const _org_retreats_text = orgVal(retreatsTextEl, 'innerHTML');
     let t = SC('retreats_text', null);
-    if (t) retreatsTextEl.innerHTML = t.split('\n').join('<br>');
+    retreatsTextEl.innerHTML = t ? t.split('\n').join('<br>') : _org_retreats_text;
   }
   set('retreatsHeading2', 'retreats_heading2');
   const retreatsText2El = document.getElementById('retreatsText2');
   if (retreatsText2El) {
+    const _org_retreats_text2 = orgVal(retreatsText2El, 'innerHTML');
     let t2 = SC('retreats_text2', null);
-    if (t2) retreatsText2El.innerHTML = t2.split('\n').join('<br>');
+    retreatsText2El.innerHTML = t2 ? t2.split('\n').join('<br>') : _org_retreats_text2;
   }
   set('retreatsBtn', 'retreats_knap');
 
   // ANMELDELSER (sektions-label og overskrift — hentes fra globale Indstillinger)
   const reviewsLabel = document.getElementById('reviewsLabel');
-  if (reviewsLabel) reviewsLabel.textContent = SC('forside_reviews_label', reviewsLabel.textContent);
+  if (reviewsLabel) reviewsLabel.textContent = SC('forside_reviews_label', orgVal(reviewsLabel, 'textContent'));
   const reviewsHeading = document.getElementById('reviewsHeading');
   if (reviewsHeading) {
+    const _org_forside_reviews_heading = orgVal(reviewsHeading, 'innerHTML');
     const t = SC('forside_reviews_heading', null);
-    if (t) reviewsHeading.innerHTML = t.replace(/(\S+)$/, '<em>$1</em>');
+    reviewsHeading.innerHTML = t ? t.replace(/(\S+)$/, '<em>$1</em>') : _org_forside_reviews_heading;
   }
   renderReviewsIndex(currentSiteLang);
   if (typeof loadRetreatsGrid === 'function') loadRetreatsGrid();
 
   // ESTATE
   const estateLabel = document.querySelector('#estate .section-label');
-  if (estateLabel) estateLabel.textContent = SC('estate_label', estateLabel.textContent);
+  if (estateLabel) estateLabel.textContent = SC('estate_label', orgVal(estateLabel, 'textContent'));
   const estateHeading = document.querySelector('#estate h2');
   if (estateHeading) {
+    const _org_estate_heading = orgVal(estateHeading, 'innerHTML');
     let t = SC('estate_heading', null);
-    if (t) estateHeading.innerHTML = t.replace(/\*(.+?)\*/g, '<em>$1</em>');
+    estateHeading.innerHTML = t ? t.replace(/\*(.+?)\*/g, '<em>$1</em>') : _org_estate_heading;
   }
   const estatePs = document.querySelectorAll('#estate p');
   if (estatePs[0]) estatePs[0].textContent = SC('estate_p1', estatePs[0].textContent);
   if (estatePs[1]) estatePs[1].textContent = SC('estate_p2', estatePs[1].textContent);
   if (estatePs[2]) estatePs[2].textContent = SC('estate_p3', estatePs[2].textContent);
   const estateLink = document.querySelector('#estate .cta-link');
-  if (estateLink) estateLink.textContent = SC('estate_link', estateLink.textContent);
+  if (estateLink) estateLink.textContent = SC('estate_link', orgVal(estateLink, 'textContent'));
 
   // VINGÅRDEN
   const vinLabel = document.querySelector('#vineyard .section-label');
-  if (vinLabel) vinLabel.textContent = SC('vingaard_label', vinLabel.textContent);
+  if (vinLabel) vinLabel.textContent = SC('vingaard_label', orgVal(vinLabel, 'textContent'));
   const vinHeading = document.querySelector('#vineyard h2');
   if (vinHeading) {
+    const _org_vingaard_heading = orgVal(vinHeading, 'innerHTML');
     let t = SC('vingaard_heading', null);
-    if (t) vinHeading.innerHTML = t.replace(/\*(.+?)\*/g, '<em>$1</em>');
+    vinHeading.innerHTML = t ? t.replace(/\*(.+?)\*/g, '<em>$1</em>') : _org_vingaard_heading;
   }
   const vinIntros = document.querySelectorAll('.vineyard-intro');
   if (vinIntros[0]) vinIntros[0].textContent = SC('vingaard_p1', vinIntros[0].textContent);
@@ -3085,14 +3108,15 @@ function applySiteLang() {
 
   // OPLEVELSER
   const oplLabel = document.querySelector('#experiences .section-label');
-  if (oplLabel) oplLabel.textContent = SC('oplevelser_label', oplLabel.textContent);
+  if (oplLabel) oplLabel.textContent = SC('oplevelser_label', orgVal(oplLabel, 'textContent'));
   const oplHeading = document.querySelector('#experiences h2');
   if (oplHeading) {
+    const _org_oplevelser_heading = orgVal(oplHeading, 'innerHTML');
     let t = SC('oplevelser_heading', null);
-    if (t) oplHeading.innerHTML = t.replace(/\*(.+?)\*/g, '<em>$1</em>');
+    oplHeading.innerHTML = t ? t.replace(/\*(.+?)\*/g, '<em>$1</em>') : _org_oplevelser_heading;
   }
   const oplIntro = document.querySelector('.exp-header p');
-  if (oplIntro) oplIntro.textContent = SC('oplevelser_intro', oplIntro.textContent);
+  if (oplIntro) oplIntro.textContent = SC('oplevelser_intro', orgVal(oplIntro, 'textContent'));
 
   const oplKeys = ['vin','olie','vandre','mad','ride','caminito','malaga','cordoba','antequera','stjerner','flamingo','eltorcal','camorra','ardales','dolmener','pena','alhambra','sevilla','picasso'];
   const oplCards = document.querySelectorAll('.exp-item.exp-has-modal');
@@ -3101,45 +3125,56 @@ function applySiteLang() {
     if (!card) return;
     const h4 = card.querySelector('h4');
     const p = card.querySelector('p');
-    const titel = SC('opl_' + key + '_titel', null);
-    const kort = SC('opl_' + key + '_kort', null);
-    const lang = SC('opl_' + key + '_lang', null);
-    if (h4 && titel) h4.textContent = titel;
-    if (p && kort) p.textContent = kort;
-    if (lang) card.setAttribute('data-body', lang);
-    if (titel) card.setAttribute('data-title', titel);
+    // data-body og data-title er attributter, ikke elementer, så de kan ikke
+    // gemmes med orgVal. De lægges til side på kortet, første gang det røres.
+    if (card.dataset.orgGemt !== '1') {
+      card.dataset.orgBody = card.getAttribute('data-body') || '';
+      card.dataset.orgTitle = card.getAttribute('data-title') || '';
+      card.dataset.orgGemt = '1';
+    }
+    const titel = SC('opl_' + key + '_titel', card.dataset.orgTitle);
+    const kort = SC('opl_' + key + '_kort', p ? orgVal(p, 'textContent') : '');
+    const lang = SC('opl_' + key + '_lang', card.dataset.orgBody);
+    // Sættes altid — ikke kun når feltet har indhold. Ellers ville et tomt
+    // dansk felt lade den engelske tekst blive stående i modalen.
+    if (h4) h4.textContent = SC('opl_' + key + '_titel', orgVal(h4, 'textContent'));
+    if (p) p.textContent = kort;
+    card.setAttribute('data-body', lang);
+    card.setAttribute('data-title', titel);
     const uploadedImg = siteContentData['media_opl_' + key + '_img'];
     if (uploadedImg) card.setAttribute('data-image', uploadedImg);
   });
 
   // GALLERI
   const gallLabel = document.querySelector('#gallery .section-label');
-  if (gallLabel) gallLabel.textContent = SC('galleri_label', gallLabel.textContent);
+  if (gallLabel) gallLabel.textContent = SC('galleri_label', orgVal(gallLabel, 'textContent'));
   const gallHeading = document.querySelector('#gallery h2');
   if (gallHeading) {
+    const _org_galleri_heading = orgVal(gallHeading, 'innerHTML');
     let t = SC('galleri_heading', null);
-    if (t) gallHeading.innerHTML = t.replace(/\*(.+?)\*/g, '<em>$1</em>');
+    gallHeading.innerHTML = t ? t.replace(/\*(.+?)\*/g, '<em>$1</em>') : _org_galleri_heading;
   }
   const gallIntro = document.querySelector('.gallery-intro');
-  if (gallIntro) gallIntro.textContent = SC('galleri_intro', gallIntro.textContent);
+  if (gallIntro) gallIntro.textContent = SC('galleri_intro', orgVal(gallIntro, 'textContent'));
 
   // WELLNESS & HEALING
   const wellLabel = document.querySelector('#wellness .section-label');
-  if (wellLabel) wellLabel.textContent = SC('wellness_label', wellLabel.textContent);
+  if (wellLabel) wellLabel.textContent = SC('wellness_label', orgVal(wellLabel, 'textContent'));
   const wellHeading = document.querySelector('#wellness .wellness-intro-text h2');
   if (wellHeading) {
+    const _org_wellness_heading = orgVal(wellHeading, 'innerHTML');
     let t = SC('wellness_heading', null);
-    if (t) wellHeading.innerHTML = t.replace(/\*(.+?)\*/g, '<em>$1</em>');
+    wellHeading.innerHTML = t ? t.replace(/\*(.+?)\*/g, '<em>$1</em>') : _org_wellness_heading;
   }
   const wellLead = document.querySelector('.wellness-lead');
-  if (wellLead) wellLead.textContent = SC('wellness_lead', wellLead.textContent);
+  if (wellLead) wellLead.textContent = SC('wellness_lead', orgVal(wellLead, 'textContent'));
   const wellIntroPs = document.querySelectorAll('.wellness-intro-text p:not(.wellness-lead)');
   if (wellIntroPs[0]) wellIntroPs[0].textContent = SC('wellness_p1', wellIntroPs[0].textContent);
   if (wellIntroPs[1]) wellIntroPs[1].textContent = SC('wellness_p2', wellIntroPs[1].textContent);
   const wellBadgeNum = document.querySelector('.wellness-badge-num');
-  if (wellBadgeNum) wellBadgeNum.textContent = SC('wellness_badge_tal', wellBadgeNum.textContent);
+  if (wellBadgeNum) wellBadgeNum.textContent = SC('wellness_badge_tal', orgVal(wellBadgeNum, 'textContent'));
   const wellBadgeTxt = document.querySelector('.wellness-badge-txt');
-  if (wellBadgeTxt) wellBadgeTxt.textContent = SC('wellness_badge_tekst', wellBadgeTxt.textContent);
+  if (wellBadgeTxt) wellBadgeTxt.textContent = SC('wellness_badge_tekst', orgVal(wellBadgeTxt, 'textContent'));
 
   const wellKeys = ['breathwork','meditation','somatic','healing','massage','pool'];
   const wellCards = document.querySelectorAll('.wellness-service.wellness-has-modal');
@@ -3161,8 +3196,9 @@ function applySiteLang() {
 
   const wellQuote = document.querySelector('.wellness-big-quote');
   if (wellQuote) {
+    const _org_wellness_citat = orgVal(wellQuote, 'innerHTML');
     let t = SC('wellness_citat', null);
-    if (t) wellQuote.innerHTML = t.split('\n').join('<br>');
+    wellQuote.innerHTML = t ? t.split('\n').join('<br>') : _org_wellness_citat;
   }
 
   // "Læs mere" — global tekst, bruges på alle wellness-kort + opdaterer global variabel til exp-kort
@@ -3172,36 +3208,39 @@ function applySiteLang() {
 
   // OM OS
   const omOsLabel = document.querySelector('#om-os .section-label');
-  if (omOsLabel) omOsLabel.textContent = SC('om_os_label', omOsLabel.textContent);
+  if (omOsLabel) omOsLabel.textContent = SC('om_os_label', orgVal(omOsLabel, 'textContent'));
   const omOsHeading = document.querySelector('#om-os h2');
   if (omOsHeading) {
+    const _org_om_os_heading = orgVal(omOsHeading, 'innerHTML');
     let t = SC('om_os_heading', null);
-    if (t) omOsHeading.innerHTML = t.replace(/\*(.+?)\*/g, '<em>$1</em>');
+    omOsHeading.innerHTML = t ? t.replace(/\*(.+?)\*/g, '<em>$1</em>') : _org_om_os_heading;
   }
   const omOsPs = document.querySelectorAll('.om-os-text p');
   for (let i = 1; i <= 4 && i <= omOsPs.length; i++) {
     omOsPs[i-1].textContent = SC('om_os_p' + i, omOsPs[i-1].textContent);
   }
   const omOsSig = document.querySelector('.om-os-signature');
-  if (omOsSig) omOsSig.textContent = SC('om_os_signatur', omOsSig.textContent);
+  if (omOsSig) omOsSig.textContent = SC('om_os_signatur', orgVal(omOsSig, 'textContent'));
   const omOsImgLabel = document.querySelector('.om-os-img-label');
-  if (omOsImgLabel) omOsImgLabel.textContent = SC('om_os_billedlabel', omOsImgLabel.textContent);
+  if (omOsImgLabel) omOsImgLabel.textContent = SC('om_os_billedlabel', orgVal(omOsImgLabel, 'textContent'));
 
   // TESTIMONIAL
   const testQuote = document.querySelector('.testimonial blockquote');
   if (testQuote) {
+    const _org_testimonial_citat = orgVal(testQuote, 'textContent');
     let t = SC('testimonial_citat', null);
-    if (t) testQuote.textContent = '"' + t + '"';
+    testQuote.textContent = t ? '"' + t + '"' : _org_testimonial_citat;
   }
   const testCite = document.querySelector('.testimonial cite');
-  if (testCite) testCite.textContent = SC('testimonial_kilde', testCite.textContent);
+  if (testCite) testCite.textContent = SC('testimonial_kilde', orgVal(testCite, 'textContent'));
 
   // NYHEDSBREV
   set('nlLabel', 'nl_label');
   const nlHeading = document.getElementById('nlHeading');
   if (nlHeading) {
+    const _org_nl_heading = orgVal(nlHeading, 'innerHTML');
     let t = SC('nl_heading', null);
-    if (t) nlHeading.innerHTML = t.replace(/\*(.+?)\*/g, '<em>$1</em>');
+    nlHeading.innerHTML = t ? t.replace(/\*(.+?)\*/g, '<em>$1</em>') : _org_nl_heading;
   }
   set('nlIntro', 'nl_intro');
   set('nlLabelNavn', 'nl_label_navn');
@@ -3235,7 +3274,7 @@ function applySiteLang() {
 
   // FOOTER
   const footerAddrEl = document.getElementById('footerAddress');
-  if (footerAddrEl) footerAddrEl.innerHTML = SC('footer_adresse', footerAddrEl.innerHTML);
+  if (footerAddrEl) footerAddrEl.innerHTML = SC('footer_adresse', orgVal(footerAddrEl, 'innerHTML'));
   set('footerCol1Heading', 'footer_kol1_titel');
   set('footerCol2Heading', 'footer_kol2_titel');
   set('footerCol3Heading', 'footer_kol3_titel');

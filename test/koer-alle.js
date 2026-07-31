@@ -8,6 +8,7 @@ const TESTS = [
   ['Struktur',      'struktur.js'],
   ['Sprogskifter',  'sprog-links.js'],
   ['Sprog-kapløb',  'sprog-kaploeb.js'],
+  ['Sprog tilbage',  'sprog-tilbage.js'],
   ['/en/-canonical', 'en-canonical.js'],
   ['Sprogsystem',   'en-system.js'],
   ['Nyhedsbrev-slet', 'nyhedsbrev-slet.js'],
