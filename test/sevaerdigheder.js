@@ -263,6 +263,89 @@ function tekst(dom) {
     r.tjek(!!navAnker, 'ankerlink beholdes uden /en');
   }
 
+  r.overskrift('Billedets plads — højre, venstre eller intet billede');
+  {
+    // De to standard-tabeller SKAL være ens. Er de uenige, viser admin ét
+    // layout og siden et andet, og et tryk på Gem flytter billedet.
+    function tabel(src) {
+      const i = src.indexOf('const SV_LAYOUT_STANDARD = {');
+      const t = src.slice(i, src.indexOf('};', i));
+      const ud = {};
+      Array.from(t.matchAll(/(\w+):\s*'(\w+)'/g)).forEach(m => { ud[m[1]] = m[2]; });
+      return ud;
+    }
+    const paaSiden = tabel(SIDE), iAdmin = tabel(ADMIN);
+    r.tjek(Object.keys(paaSiden).length === 8, 'otte sektioner har en standard (fik: ' + Object.keys(paaSiden).length + ')');
+    r.tjek(JSON.stringify(paaSiden) === JSON.stringify(iAdmin),
+      'side og admin er enige om standarderne');
+
+    // Standarden skal svare til det, siderne viser i dag
+    r.tjek(paaSiden.intro === 'hoejre' && paaSiden.historie === 'venstre' &&
+           paaSiden.natur === 'hoejre' && paaSiden.hoej === 'hoejre',
+      'standarderne matcher det nuværende udseende');
+
+    const grund = JSON.parse(JSON.stringify(RAEKKE));
+    ['intro','historie','natur','hoej'].forEach(k => { grund.indhold[k + '_image'] = '/img/' + k + '.jpg'; });
+
+    // Uden valg: standarden gælder
+    {
+      const dom = await indlaesSide('sevaerdighed.html', {
+        url: 'https://castillodelalma.es/sevaerdigheder/test-sted',
+        indhold: [grund, ANDEN], geoSprog: 'da'
+      });
+      const d = dom.window.document;
+      const klasse = (id) => d.getElementById(id).parentElement.className;
+      r.tjek(/bil-hoejre/.test(klasse('sv_intro_fig')), 'intro står som før: billede til højre');
+      r.tjek(/bil-venstre/.test(klasse('sv_historie_fig')), 'historien står som før: billede til venstre');
+      r.tjek(/bil-hoejre/.test(klasse('sv_natur_fig')), 'naturen står som før: billede til højre');
+    }
+
+    // Med valg
+    {
+      const valgt = JSON.parse(JSON.stringify(grund));
+      valgt.indhold.intro_layout = 'venstre';
+      valgt.indhold.historie_layout = 'hoejre';
+      valgt.indhold.natur_layout = 'ingen';
+      const dom = await indlaesSide('sevaerdighed.html', {
+        url: 'https://castillodelalma.es/sevaerdigheder/test-sted',
+        indhold: [valgt, ANDEN], geoSprog: 'da'
+      });
+      const d = dom.window.document;
+      const klasse = (id) => d.getElementById(id).parentElement.className;
+      r.tjek(/bil-venstre/.test(klasse('sv_intro_fig')), 'intro kan flyttes til venstre');
+      r.tjek(/bil-hoejre/.test(klasse('sv_historie_fig')), 'historien kan flyttes til højre');
+      r.tjek(/bil-ingen/.test(klasse('sv_natur_fig')), 'naturen kan sættes uden billede');
+      r.tjek(!/bil-venstre|bil-hoejre/.test(klasse('sv_natur_fig')),
+        'kun én opsætnings-klasse ad gangen');
+    }
+
+    // Uden billede gælder 'ingen', uanset hvad der er valgt
+    {
+      const udenBillede = JSON.parse(JSON.stringify(RAEKKE));
+      udenBillede.indhold.natur_image = '';
+      udenBillede.indhold.natur_layout = 'venstre';
+      udenBillede.indhold.vis_natur = '1';
+      const dom = await indlaesSide('sevaerdighed.html', {
+        url: 'https://castillodelalma.es/sevaerdigheder/test-sted',
+        indhold: [udenBillede, ANDEN], geoSprog: 'da'
+      });
+      const d = dom.window.document;
+      r.tjek(/bil-ingen/.test(d.getElementById('sv_natur_fig').parentElement.className),
+        'manglende billede giver fuld bredde, selv om venstre er valgt');
+    }
+
+    // CSS og admin
+    const css = SIDE.slice(SIDE.indexOf('/* ── BILLEDETS PLADS'), SIDE.indexOf('/* ── FOTOSTRIBE'));
+    r.tjek(/\.split\.bil-venstre > \.sv-tekst\{order:2;\}/.test(css), 'venstre bytter om med order');
+    r.tjek(/\.split\.bil-ingen\{grid-template-columns:1fr/.test(css), 'uden billede bliver én spalte');
+    r.tjek(/max-width:888px/.test(css), 'uden billede falder teksten til læsbar bredde');
+    ['intro','historie','historie51','historie52','historie53','historie54','natur','hoej']
+      .forEach(k => r.tjek(ADMIN.includes('id="sv_' + k + '_layout"'), 'admin har vælger for ' + k));
+    r.tjek(/SV_LAYOUT_STANDARD\[key\.replace\('_layout', ''\)\]/.test(ADMIN),
+      'admin bruger standarden, når værdien er tom');
+    r.tjek(/_layout\$\/\.test\(key\)/.test(ADMIN), 'layout regnes som opbygning i skabelonen');
+  }
+
   r.overskrift('Ekstra historie-sektioner 5.1–5.4');
   {
     // Tomme på testrækken — de må ikke dukke op af sig selv

@@ -214,6 +214,19 @@ section a[target="_blank"]::after {
 
 /* ── TO-KOLONNE ── */
 .split{display:grid;grid-template-columns:1fr 1fr;gap:4.5rem;align-items:center;}
+/* ── BILLEDETS PLADS ──────────────────────────────────────────────────────
+   Sektionerne kan sættes op på tre måder fra admin. Rækkefølgen styres med
+   `order` frem for at flytte rundt i HTML'en, så DOM'en er den samme uanset
+   valg — det holder oplæsningsrækkefølgen for skærmlæsere ens og gør, at et
+   skift ikke kræver ny opbygning af siden.
+   Uden billede falder teksten til samme bredde som FAQ. Ren brødtekst over
+   1320 px er svær at læse, fordi øjet mister linjen på vej tilbage. */
+.split > .sv-tekst{order:1;}
+.split > .fig{order:2;}
+.split.bil-venstre > .sv-tekst{order:2;}
+.split.bil-venstre > .fig{order:1;}
+.split.bil-ingen{grid-template-columns:1fr;max-width:888px;margin-left:auto;margin-right:auto;}
+.split.bil-ingen > .fig{display:none;}
 
 /* ── FOTOSTRIBE — op til 5 billeder ── */
 .foto-stribe{padding:var(--stribe-top,2rem) 0 var(--stribe-bund,2rem);}
@@ -475,7 +488,7 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--gold);outline-offse
 <section id="sec-intro">
   <div class="section-inner">
     <div class="split">
-      <div>
+      <div class="sv-tekst">
         <span class="eyebrow" id="sv_intro_label"></span>
         <h2 id="sv_intro_h2"></h2>
         <p class="lede" id="sv_intro_lede"></p>
@@ -501,7 +514,7 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--gold);outline-offse
         <img id="sv_historie_image" alt="" loading="lazy">
         <figcaption class="fig-label" id="sv_historie_billedtekst" style="display:none;"></figcaption>
       </figure>
-      <div>
+      <div class="sv-tekst">
         <span class="eyebrow" id="sv_historie_label"></span>
         <h2 id="sv_historie_h2"></h2>
         <div id="sv_historie_text"></div>
@@ -514,7 +527,7 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--gold);outline-offse
 <section id="sec-historie51" style="display:none;">
   <div class="section-inner">
     <div class="split">
-      <div>
+      <div class="sv-tekst">
         <span class="eyebrow" id="sv_historie51_label"></span>
         <h2 id="sv_historie51_h2"></h2>
         <div id="sv_historie51_text"></div>
@@ -535,7 +548,7 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--gold);outline-offse
         <img id="sv_historie52_image" alt="" loading="lazy">
         <figcaption class="fig-label" id="sv_historie52_billedtekst" style="display:none;"></figcaption>
       </figure>
-      <div>
+      <div class="sv-tekst">
         <span class="eyebrow" id="sv_historie52_label"></span>
         <h2 id="sv_historie52_h2"></h2>
         <div id="sv_historie52_text"></div>
@@ -548,7 +561,7 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--gold);outline-offse
 <section id="sec-historie53" style="display:none;">
   <div class="section-inner">
     <div class="split">
-      <div>
+      <div class="sv-tekst">
         <span class="eyebrow" id="sv_historie53_label"></span>
         <h2 id="sv_historie53_h2"></h2>
         <div id="sv_historie53_text"></div>
@@ -569,7 +582,7 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--gold);outline-offse
         <img id="sv_historie54_image" alt="" loading="lazy">
         <figcaption class="fig-label" id="sv_historie54_billedtekst" style="display:none;"></figcaption>
       </figure>
-      <div>
+      <div class="sv-tekst">
         <span class="eyebrow" id="sv_historie54_label"></span>
         <h2 id="sv_historie54_h2"></h2>
         <div id="sv_historie54_text"></div>
@@ -582,7 +595,7 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--gold);outline-offse
 <section id="sec-natur">
   <div class="section-inner">
     <div class="split">
-      <div>
+      <div class="sv-tekst">
         <span class="eyebrow" id="sv_natur_label"></span>
         <h2 id="sv_natur_h2"></h2>
         <div id="sv_natur_text"></div>
@@ -612,7 +625,7 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--gold);outline-offse
 <section class="hoej" id="sec-hoejdepunkt">
   <div class="section-inner">
     <div class="split">
-      <div>
+      <div class="sv-tekst">
         <span class="eyebrow" id="sv_hoej_label"></span>
         <h2 id="sv_hoej_h2"></h2>
         <div id="sv_hoej_text"></div>
@@ -724,6 +737,15 @@ const SV_SEKTIONER = {
   'sec-afstande':'vis_afstande', 'strip3':'vis_strip3', 'sec-faq':'vis_faq',
   'sec-flere':'vis_flere', 'sec-cta':'vis_cta'
 };
+// Billedets plads pr. sektion. Standarderne er præcis det, siderne viser i
+// dag, så Caminito og Córdoba ikke flytter sig, fordi valget blev muligt.
+const SV_LAYOUT_STANDARD = {
+  intro: 'hoejre', historie: 'venstre',
+  historie51: 'hoejre', historie52: 'venstre',
+  historie53: 'hoejre', historie54: 'venstre',
+  natur: 'hoejre', hoej: 'hoejre'
+};
+
 // Accentfarver på striberne — samme palet som resten af sitet
 const SV_STRIBE_FARVER = ['var(--wine)','var(--gold)','var(--teal)','var(--terracotta)','var(--olive)'];
 
@@ -804,6 +826,17 @@ function svListe(key, antalFelter) {
 function svFigur(navn) {
   const fig = document.getElementById('sv_' + navn + '_fig');
   const url = svData[navn + '_image'];
+
+  // Opsætning: billede til højre, til venstre, eller slet intet billede.
+  // Mangler billedet, gælder 'ingen' uanset valget — ellers ville teksten
+  // stå i den ene halvdel med tom luft ved siden af.
+  const split = fig && fig.parentElement;
+  if (split && split.classList.contains('split')) {
+    let valg = svData[navn + '_layout'] || SV_LAYOUT_STANDARD[navn] || 'hoejre';
+    if (!url) valg = 'ingen';
+    split.classList.remove('bil-hoejre', 'bil-venstre', 'bil-ingen');
+    split.classList.add('bil-' + valg);
+  }
   svSetImg('sv_' + navn + '_image', url);
   if (fig) fig.style.display = url ? '' : 'none';
   const cap = document.getElementById('sv_' + navn + '_billedtekst');
