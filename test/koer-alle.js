@@ -18,6 +18,7 @@ const TESTS = [
   ['Adgang',        'adgang.js'],
   ['Beløb',         'beloeb.js'],
   ['Bilag',         'bilag.js'],
+  ['Seværdigheder', 'sevaerdigheder.js'],
 ];
 
 const resultat = [];
