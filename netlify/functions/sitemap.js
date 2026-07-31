@@ -50,6 +50,20 @@ exports.handler = async () => {
     }
   } catch (e) { /* Supabase utilgængelig → kun faste sider */ }
 
+  // Aktive seværdigheder. Samme fremgangsmåde som retreats: først med
+  // tidsstempel, og falder det væk, hentes slug alene — sitemappet skal
+  // aldrig miste sider over en kolonne, der ikke findes endnu.
+  let sevaerdigheder = [];
+  try {
+    const sGrund = SUPABASE_URL + '/rest/v1/sevaerdigheder?aktiv=eq.true&order=sort_orden.asc&select=';
+    let res = await fetch(sGrund + 'slug,updated_at,created_at', { headers: hoved });
+    if (!res.ok) res = await fetch(sGrund + 'slug', { headers: hoved });
+    if (res.ok) {
+      const data = await res.json();
+      if (Array.isArray(data)) sevaerdigheder = data.filter(r => r && r.slug);
+    }
+  } catch (e) { /* tabellen findes måske ikke endnu → sitemappet er stadig gyldigt */ }
+
   let xml = '<?xml version="1.0" encoding="UTF-8"?>\n' +
     '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">\n';
 
@@ -92,6 +106,21 @@ exports.handler = async () => {
     const alt = [['da', daUrl], ['en', enUrl], ['x-default', daUrl]];
     const lastmod = somDato(r.updated_at) || somDato(r.created_at);
     const o = { alternates: alt, changefreq: 'weekly', priority: '0.9' };
+    if (lastmod) o.lastmod = lastmod;
+    xml += urlEntry(daUrl, o);
+    xml += urlEntry(enUrl, o);
+  }
+
+  // Alle aktive seværdigheder — dansk + engelsk med hreflang begge veje.
+  // x-default = dansk: siderne er skrevet til danske gæster først, og den
+  // engelske udgave er oversættelsen.
+  for (const r of sevaerdigheder) {
+    const p = '/' + encodeURIComponent(r.slug);
+    const daUrl = BASE + '/sevaerdigheder' + p;
+    const enUrl = BASE + '/en/sevaerdigheder' + p;
+    const alt = [['da', daUrl], ['en', enUrl], ['x-default', daUrl]];
+    const lastmod = somDato(r.updated_at) || somDato(r.created_at);
+    const o = { alternates: alt, changefreq: 'monthly', priority: '0.7' };
     if (lastmod) o.lastmod = lastmod;
     xml += urlEntry(daUrl, o);
     xml += urlEntry(enUrl, o);

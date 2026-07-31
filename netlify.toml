@@ -70,6 +70,37 @@
   to = "/retreat.html"
   status = 200
 
+# ── SEVÆRDIGHEDER ────────────────────────────────────────────────────────
+# /sevaerdigheder/<slug> i stedet for /sevaerdighed.html?slug=<slug>.
+# Samme opbygning som retreat-adresserne ovenfor: query-reglerne først, så
+# de gamle former sendes videre med 301, derefter selve visningen. Begge
+# sprogstier serverer samme skabelon, som selv opdager /en/ i adressen.
+# Reglerne SKAL stå før /en/*, ellers vinder catch-all'en.
+
+[[redirects]]
+  from = "/sevaerdighed.html"
+  query = { slug = ":slug" }
+  to = "/sevaerdigheder/:slug"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/en/sevaerdighed.html"
+  query = { slug = ":slug" }
+  to = "/en/sevaerdigheder/:slug"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/sevaerdigheder/*"
+  to = "/sevaerdighed.html"
+  status = 200
+
+[[redirects]]
+  from = "/en/sevaerdigheder/*"
+  to = "/sevaerdighed.html"
+  status = 200
+
 # ── Engelske SEO-adresser (/en/) ─────────────────────────────────────────
 # Samme HTML-filer serveres på /en/-stier; siderne opdager selv /en/ i
 # adressen og starter på engelsk med engelsk titel/meta/canonical.

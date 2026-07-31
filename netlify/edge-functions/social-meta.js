@@ -132,6 +132,12 @@ export default async (request, context) => {
   // Gay-landingssiden serveres fra én fil på to adresser. Titel, beskrivelse
   // og canonical sættes ellers først af JavaScript, som robotter ikke kører.
   const erGaySide = /^(?:\/en)?\/gay-retreat-malaga-spain(?:\.html)?\/?$/.test(url.pathname);
+  // Seværdigheder: /sevaerdigheder/<slug> (også /en/…). Én skabelon, mange
+  // sider — uden dette ville alle dele forsidens billede og tekst.
+  const svSti = url.pathname.match(/^(?:\/en)?\/sevaerdigheder(?:\.html)?\/([^/]+)\/?$/);
+  let svSlug = null;
+  if (svSti) { try { svSlug = decodeURIComponent(svSti[1]); } catch (e) { svSlug = svSti[1]; } }
+  else if (/\/sevaerdighed\.html$/.test(url.pathname)) svSlug = url.searchParams.get('slug');
   let slug = url.searchParams.get('slug');
   if (stiSlug) {
     try { slug = decodeURIComponent(stiSlug[1]); } catch (e) { slug = stiSlug[1]; }
@@ -183,6 +189,40 @@ export default async (request, context) => {
         hreflang: tosprogHreflang(sti, BASE)
       });
       haandteret = true;
+    } else if (svSlug) {
+      // Teksterne ligger i JSONB-kolonnen `indhold` — samme nøgler som på siden
+      const api = SUPABASE_URL + '/rest/v1/sevaerdigheder?select=titel,titel_en,indhold'
+        + '&aktiv=eq.true&slug=eq.' + encodeURIComponent(svSlug) + '&limit=1';
+      let d = null;
+      try {
+        const r = await fetch(api, { headers: { apikey: ANON_KEY, authorization: 'Bearer ' + ANON_KEY } });
+        const rows = r.ok ? await r.json() : [];
+        d = Array.isArray(rows) ? rows[0] : null;
+      } catch (e) { /* uden svar falder vi tilbage til forsidens dele-felter */ }
+      if (d) {
+        const ind = (d.indhold && typeof d.indhold === 'object') ? d.indhold : {};
+        const vaelg = (k) => stripHtml((isEN ? (ind[k + '_en'] || ind[k]) : ind[k]) || '');
+        const titel = vaelg('seo_title')
+          || (stripHtml((isEN ? (d.titel_en || d.titel) : d.titel) || svSlug) + ' \u2014 Castillo del Alma');
+        const beskriv = (vaelg('seo_desc') || vaelg('hero_lede') || vaelg('intro_lede')).slice(0, 200)
+          || (isEN ? EN_HOME.desc : 'Oplevelser og sev\u00e6rdigheder n\u00e6r Castillo del Alma i Mollina, M\u00e1laga.');
+        const billede = ind.social_image || ind.hero_image || ind.intro_image || FALLBACK_IMG;
+        const BASE = 'https://castillodelalma.es';
+        const daUrl = BASE + '/sevaerdigheder/' + encodeURIComponent(svSlug);
+        const enUrl = BASE + '/en/sevaerdigheder/' + encodeURIComponent(svSlug);
+        html = transformHtml(html, {
+          title: titel,
+          desc: beskriv,
+          img: billede,
+          canonical: isEN ? enUrl : daUrl,
+          fjernImgDim: !!(ind.social_image || ind.hero_image || ind.intro_image),
+          lang: isEN ? 'en' : 'da',
+          // x-default = dansk: siderne skrives til danske g\u00e6ster f\u00f8rst.
+          // Skal matche sitemap.js, ellers ignorerer Google hele klyngen.
+          hreflang: [['da', daUrl], ['en', enUrl], ['x-default', daUrl]]
+        });
+        haandteret = true;
+      }
     } else if (erRetreatSide && slug) {
       // Slå retreatet op og indsæt dets egne tekster
       const api = SUPABASE_URL + '/rest/v1/retreats'
