@@ -2888,7 +2888,7 @@ function scSet(id, key, fallback) {
 function scSetHTML(id, key, fallback) {
   const el = document.getElementById(id);
   if (!el) return;
-  let txt = SC(key, fallback !== undefined ? fallback : el.innerHTML);
+  let txt = SC(key, fallback !== undefined ? fallback : orgVal(el, 'innerHTML'));
   // Understøt *fremhævning* -> <em>fremhævning</em>
   txt = txt.replace(/\*(.+?)\*/g, '<em>$1</em>');
   el.innerHTML = txt;
@@ -2994,7 +2994,7 @@ function applySectionToggles() {
 }
 
 function applySiteLang() {
-  const set = (id, key) => { const el = document.getElementById(id); if (el) el.textContent = SC(key, el.textContent); };
+  const set = (id, key) => { const el = document.getElementById(id); if (el) el.textContent = SC(key, orgVal(el, 'textContent')); };
 
   // HERO
   scSet('hero-eyebrow-test', 'hero_eyebrow', undefined);
@@ -3007,15 +3007,15 @@ function applySiteLang() {
   const heroSub = document.querySelector('.hero-sub');
   if (heroSub) heroSub.textContent = SC('hero_sub', orgVal(heroSub, 'textContent'));
   const heroBtns = document.querySelectorAll('.hero-btns a');
-  if (heroBtns[0]) heroBtns[0].textContent = SC('hero_btn1', heroBtns[0].textContent);
-  if (heroBtns[1]) heroBtns[1].textContent = SC('hero_btn2', heroBtns[1].textContent);
+  if (heroBtns[0]) heroBtns[0].textContent = SC('hero_btn1', orgVal(heroBtns[0], 'textContent'));
+  if (heroBtns[1]) heroBtns[1].textContent = SC('hero_btn2', orgVal(heroBtns[1], 'textContent'));
 
   // TOP NAVIGATION
   const navTextOnly = (id, key, fallback) => {
     const el = document.getElementById(id);
     if (!el) return;
     const arrow = el.querySelector('.nav-dd-arrow');
-    el.textContent = SC(key, fallback !== undefined ? fallback : el.textContent);
+    el.textContent = SC(key, fallback !== undefined ? fallback : orgVal(el, 'textContent'));
     if (arrow) el.appendChild(arrow);
   };
   // Menuen renderes dynamisk fra nav_links (redigeres i admin, Forside → blok 0)
@@ -3033,9 +3033,9 @@ function applySiteLang() {
     filosofiHeading.innerHTML = txt ? txt.replace(/\*(.+?)\*/g, '<em>$1</em>') : _org_filosofi_heading;
   }
   const filosofiPs = document.querySelectorAll('#about .reveal.d2 p');
-  if (filosofiPs[0]) filosofiPs[0].textContent = SC('filosofi_p1', filosofiPs[0].textContent);
-  if (filosofiPs[1]) filosofiPs[1].textContent = SC('filosofi_p2', filosofiPs[1].textContent);
-  if (filosofiPs[2]) filosofiPs[2].textContent = SC('filosofi_p3', filosofiPs[2].textContent);
+  if (filosofiPs[0]) filosofiPs[0].textContent = SC('filosofi_p1', orgVal(filosofiPs[0], 'textContent'));
+  if (filosofiPs[1]) filosofiPs[1].textContent = SC('filosofi_p2', orgVal(filosofiPs[1], 'textContent'));
+  if (filosofiPs[2]) filosofiPs[2].textContent = SC('filosofi_p3', orgVal(filosofiPs[2], 'textContent'));
   const filosofiImgLabel = document.querySelector('.intro-img-label');
   if (filosofiImgLabel) filosofiImgLabel.textContent = SC('filosofi_billedlabel', orgVal(filosofiImgLabel, 'textContent'));
 
@@ -3080,9 +3080,9 @@ function applySiteLang() {
     estateHeading.innerHTML = t ? t.replace(/\*(.+?)\*/g, '<em>$1</em>') : _org_estate_heading;
   }
   const estatePs = document.querySelectorAll('#estate p');
-  if (estatePs[0]) estatePs[0].textContent = SC('estate_p1', estatePs[0].textContent);
-  if (estatePs[1]) estatePs[1].textContent = SC('estate_p2', estatePs[1].textContent);
-  if (estatePs[2]) estatePs[2].textContent = SC('estate_p3', estatePs[2].textContent);
+  if (estatePs[0]) estatePs[0].textContent = SC('estate_p1', orgVal(estatePs[0], 'textContent'));
+  if (estatePs[1]) estatePs[1].textContent = SC('estate_p2', orgVal(estatePs[1], 'textContent'));
+  if (estatePs[2]) estatePs[2].textContent = SC('estate_p3', orgVal(estatePs[2], 'textContent'));
   const estateLink = document.querySelector('#estate .cta-link');
   if (estateLink) estateLink.textContent = SC('estate_link', orgVal(estateLink, 'textContent'));
 
@@ -3096,14 +3096,14 @@ function applySiteLang() {
     vinHeading.innerHTML = t ? t.replace(/\*(.+?)\*/g, '<em>$1</em>') : _org_vingaard_heading;
   }
   const vinIntros = document.querySelectorAll('.vineyard-intro');
-  if (vinIntros[0]) vinIntros[0].textContent = SC('vingaard_p1', vinIntros[0].textContent);
-  if (vinIntros[1]) vinIntros[1].textContent = SC('vingaard_p2', vinIntros[1].textContent);
+  if (vinIntros[0]) vinIntros[0].textContent = SC('vingaard_p1', orgVal(vinIntros[0], 'textContent'));
+  if (vinIntros[1]) vinIntros[1].textContent = SC('vingaard_p2', orgVal(vinIntros[1], 'textContent'));
   const vStats = document.querySelectorAll('.v-stat');
   for (let i = 1; i <= 4 && i <= vStats.length; i++) {
     const h3 = vStats[i-1].querySelector('h3');
     const p = vStats[i-1].querySelector('p');
-    if (h3) h3.textContent = SC('vingaard_stat' + i + '_tal', h3.textContent);
-    if (p) p.textContent = SC('vingaard_stat' + i + '_label', p.textContent);
+    if (h3) h3.textContent = SC('vingaard_stat' + i + '_tal', orgVal(h3, 'textContent'));
+    if (p) p.textContent = SC('vingaard_stat' + i + '_label', orgVal(p, 'textContent'));
   }
 
   // OPLEVELSER
@@ -3169,8 +3169,8 @@ function applySiteLang() {
   const wellLead = document.querySelector('.wellness-lead');
   if (wellLead) wellLead.textContent = SC('wellness_lead', orgVal(wellLead, 'textContent'));
   const wellIntroPs = document.querySelectorAll('.wellness-intro-text p:not(.wellness-lead)');
-  if (wellIntroPs[0]) wellIntroPs[0].textContent = SC('wellness_p1', wellIntroPs[0].textContent);
-  if (wellIntroPs[1]) wellIntroPs[1].textContent = SC('wellness_p2', wellIntroPs[1].textContent);
+  if (wellIntroPs[0]) wellIntroPs[0].textContent = SC('wellness_p1', orgVal(wellIntroPs[0], 'textContent'));
+  if (wellIntroPs[1]) wellIntroPs[1].textContent = SC('wellness_p2', orgVal(wellIntroPs[1], 'textContent'));
   const wellBadgeNum = document.querySelector('.wellness-badge-num');
   if (wellBadgeNum) wellBadgeNum.textContent = SC('wellness_badge_tal', orgVal(wellBadgeNum, 'textContent'));
   const wellBadgeTxt = document.querySelector('.wellness-badge-txt');
@@ -3183,13 +3183,23 @@ function applySiteLang() {
     if (!card) return;
     const h3 = card.querySelector('h3');
     const p = card.querySelector('p');
-    const titel = SC('well_' + key + '_titel', null);
-    const kort = SC('well_' + key + '_kort', null);
-    const lang = SC('well_' + key + '_lang', null);
-    if (h3 && titel) h3.textContent = titel;
-    if (p && kort) p.textContent = kort;
-    if (lang) card.setAttribute('data-body', lang);
-    if (titel) card.setAttribute('data-title', titel);
+    // Samme bagstop som oplevelses-kortene: data-body og data-title er
+    // attributter og kan ikke gemmes med orgVal, så de lægges til side på
+    // kortet, første gang det røres.
+    if (card.dataset.orgGemt !== '1') {
+      card.dataset.orgBody = card.getAttribute('data-body') || '';
+      card.dataset.orgTitle = card.getAttribute('data-title') || '';
+      card.dataset.orgGemt = '1';
+    }
+    const titel = SC('well_' + key + '_titel', card.dataset.orgTitle);
+    const kort = SC('well_' + key + '_kort', p ? orgVal(p, 'textContent') : '');
+    const lang = SC('well_' + key + '_lang', card.dataset.orgBody);
+    // Sættes altid — ikke kun når feltet har indhold. Ellers bliver det
+    // forrige sprog stående i modalen, og sproget kan ikke skiftes tilbage.
+    if (h3) h3.textContent = SC('well_' + key + '_titel', orgVal(h3, 'textContent'));
+    if (p) p.textContent = kort;
+    card.setAttribute('data-body', lang);
+    card.setAttribute('data-title', titel);
     const uploadedImg = siteContentData['media_well_' + key + '_img'];
     if (uploadedImg) card.setAttribute('data-image', uploadedImg);
   });
@@ -3217,7 +3227,7 @@ function applySiteLang() {
   }
   const omOsPs = document.querySelectorAll('.om-os-text p');
   for (let i = 1; i <= 4 && i <= omOsPs.length; i++) {
-    omOsPs[i-1].textContent = SC('om_os_p' + i, omOsPs[i-1].textContent);
+    omOsPs[i-1].textContent = SC('om_os_p' + i, orgVal(omOsPs[i-1], 'textContent'));
   }
   const omOsSig = document.querySelector('.om-os-signature');
   if (omOsSig) omOsSig.textContent = SC('om_os_signatur', orgVal(omOsSig, 'textContent'));
