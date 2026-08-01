@@ -4245,7 +4245,16 @@ feeling more calm – and coming home to yourself again."</textarea></div>
             </select>
             <p style="font-family:Manrope,sans-serif;font-size:.66rem;color:#7a6a52;line-height:1.5;margin-top:.3rem;">Uden billede i feltet nedenfor fylder teksten altid hele bredden, uanset valget her.</p>
           </div>
-          <div></div>
+          <div>
+            <label class="fc-label">Billedets bredde</label>
+            <select id="sv_intro_bredde" class="fc-input-da" style="cursor:pointer;">
+              <option value="fuld">Fuld spaltebredde</option>
+              <option value="520">Stor — 520 px</option>
+              <option value="420">Mellem — 420 px</option>
+              <option value="320">Lille — 320 px</option>
+            </select>
+            <p style="font-family:Manrope,sans-serif;font-size:.66rem;color:#7a6a52;line-height:1.5;margin-top:.3rem;">Billedet beholder altid sit eget format — et 16:9-foto bliver liggende, et 9:16-foto stående. Her vælges kun, hvor bredt det må blive; højden følger af formatet. Er billedet smallere end spalten, står det centreret ud for teksten.</p>
+          </div>
         </div>
         <div class="fc-row">
           <div><label class="fc-label fc-label-da">Overlinje</label><input type="text" id="sv_intro_label_da" class="fc-input-da"></div>
@@ -4269,7 +4278,7 @@ feeling more calm – and coming home to yourself again."</textarea></div>
             <input type="text" id="sv_intro_image_url" class="fc-input-da" placeholder="URL indsættes automatisk ved upload">
             <label class="fc-label" style="color:#2a7a74;margin-top:.6rem;">📁 Upload</label>
             <div style="display:flex;align-items:center;gap:.6rem;margin-top:.3rem;">
-              <img id="sv_intro_image_preview" src="" style="display:none;width:56px;height:56px;object-fit:cover;border:1px solid rgba(184,138,30,.3);">
+              <img id="sv_intro_image_preview" src="" onload="svBilledMaal(this)" style="display:none;max-width:120px;max-height:80px;object-fit:contain;border:1px solid rgba(184,138,30,.3);"><span id="sv_intro_image_maal" style="font-family:Manrope,sans-serif;font-size:.62rem;color:#7a6a52;white-space:nowrap;"></span>
               <input type="file" id="sv_intro_image_file" accept="image/*" style="font-size:.76rem;flex:1;">
               <button type="button" onclick="uploadRetreatBillede('sv_intro_image_file','sv_intro_image_url','sv_intro_image_preview')" style="background:#2a7a74;color:#fff;border:none;padding:.45rem 1.1rem;font-family:Manrope,sans-serif;font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;white-space:nowrap;">⬆ Upload</button>
               <button type="button" onclick="fjernBilledeFelt('sv_intro_image_url','sv_intro_image_preview')" style="background:rgba(163,51,51,.08);color:#a33;border:1px solid rgba(163,51,51,.35);padding:.45rem .9rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;white-space:nowrap;" title="Fjern billedet helt">🗑 Fjern</button>
@@ -4313,7 +4322,16 @@ feeling more calm – and coming home to yourself again."</textarea></div>
             </select>
             <p style="font-family:Manrope,sans-serif;font-size:.66rem;color:#7a6a52;line-height:1.5;margin-top:.3rem;">Uden billede i feltet nedenfor fylder teksten altid hele bredden, uanset valget her.</p>
           </div>
-          <div></div>
+          <div>
+            <label class="fc-label">Billedets bredde</label>
+            <select id="sv_historie_bredde" class="fc-input-da" style="cursor:pointer;">
+              <option value="fuld">Fuld spaltebredde</option>
+              <option value="520">Stor — 520 px</option>
+              <option value="420">Mellem — 420 px</option>
+              <option value="320">Lille — 320 px</option>
+            </select>
+            <p style="font-family:Manrope,sans-serif;font-size:.66rem;color:#7a6a52;line-height:1.5;margin-top:.3rem;">Billedet beholder altid sit eget format — et 16:9-foto bliver liggende, et 9:16-foto stående. Her vælges kun, hvor bredt det må blive; højden følger af formatet. Er billedet smallere end spalten, står det centreret ud for teksten.</p>
+          </div>
         </div>
         <div class="fc-row">
           <div><label class="fc-label fc-label-da">Overlinje</label><input type="text" id="sv_historie_label_da" class="fc-input-da"></div>
@@ -4333,7 +4351,7 @@ feeling more calm – and coming home to yourself again."</textarea></div>
             <input type="text" id="sv_historie_image_url" class="fc-input-da" placeholder="URL indsættes automatisk ved upload">
             <label class="fc-label" style="color:#2a7a74;margin-top:.6rem;">📁 Upload</label>
             <div style="display:flex;align-items:center;gap:.6rem;margin-top:.3rem;">
-              <img id="sv_historie_image_preview" src="" style="display:none;width:56px;height:56px;object-fit:cover;border:1px solid rgba(184,138,30,.3);">
+              <img id="sv_historie_image_preview" src="" onload="svBilledMaal(this)" style="display:none;max-width:120px;max-height:80px;object-fit:contain;border:1px solid rgba(184,138,30,.3);"><span id="sv_historie_image_maal" style="font-family:Manrope,sans-serif;font-size:.62rem;color:#7a6a52;white-space:nowrap;"></span>
               <input type="file" id="sv_historie_image_file" accept="image/*" style="font-size:.76rem;flex:1;">
               <button type="button" onclick="uploadRetreatBillede('sv_historie_image_file','sv_historie_image_url','sv_historie_image_preview')" style="background:#2a7a74;color:#fff;border:none;padding:.45rem 1.1rem;font-family:Manrope,sans-serif;font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;white-space:nowrap;">⬆ Upload</button>
               <button type="button" onclick="fjernBilledeFelt('sv_historie_image_url','sv_historie_image_preview')" style="background:rgba(163,51,51,.08);color:#a33;border:1px solid rgba(163,51,51,.35);padding:.45rem .9rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;white-space:nowrap;" title="Fjern billedet helt">🗑 Fjern</button>
@@ -4363,7 +4381,16 @@ feeling more calm – and coming home to yourself again."</textarea></div>
             </select>
             <p style="font-family:Manrope,sans-serif;font-size:.66rem;color:#7a6a52;line-height:1.5;margin-top:.3rem;">Uden billede i feltet nedenfor fylder teksten altid hele bredden, uanset valget her.</p>
           </div>
-          <div></div>
+          <div>
+            <label class="fc-label">Billedets bredde</label>
+            <select id="sv_historie51_bredde" class="fc-input-da" style="cursor:pointer;">
+              <option value="fuld">Fuld spaltebredde</option>
+              <option value="520">Stor — 520 px</option>
+              <option value="420">Mellem — 420 px</option>
+              <option value="320">Lille — 320 px</option>
+            </select>
+            <p style="font-family:Manrope,sans-serif;font-size:.66rem;color:#7a6a52;line-height:1.5;margin-top:.3rem;">Billedet beholder altid sit eget format — et 16:9-foto bliver liggende, et 9:16-foto stående. Her vælges kun, hvor bredt det må blive; højden følger af formatet. Er billedet smallere end spalten, står det centreret ud for teksten.</p>
+          </div>
         </div>
         <div class="fc-row">
           <div><label class="fc-label fc-label-da">Overlinje</label><input type="text" id="sv_historie51_label_da" class="fc-input-da"></div>
@@ -4383,7 +4410,7 @@ feeling more calm – and coming home to yourself again."</textarea></div>
             <input type="text" id="sv_historie51_image_url" class="fc-input-da" placeholder="URL indsættes automatisk ved upload">
             <label class="fc-label" style="color:#2a7a74;margin-top:.6rem;">📁 Upload</label>
             <div style="display:flex;align-items:center;gap:.6rem;margin-top:.3rem;">
-              <img id="sv_historie51_image_preview" src="" style="display:none;width:56px;height:56px;object-fit:cover;border:1px solid rgba(184,138,30,.3);">
+              <img id="sv_historie51_image_preview" src="" onload="svBilledMaal(this)" style="display:none;max-width:120px;max-height:80px;object-fit:contain;border:1px solid rgba(184,138,30,.3);"><span id="sv_historie51_image_maal" style="font-family:Manrope,sans-serif;font-size:.62rem;color:#7a6a52;white-space:nowrap;"></span>
               <input type="file" id="sv_historie51_image_file" accept="image/*" style="font-size:.76rem;flex:1;">
               <button type="button" onclick="uploadRetreatBillede('sv_historie51_image_file','sv_historie51_image_url','sv_historie51_image_preview')" style="background:#2a7a74;color:#fff;border:none;padding:.45rem 1.1rem;font-family:Manrope,sans-serif;font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;white-space:nowrap;">⬆ Upload</button>
               <button type="button" onclick="fjernBilledeFelt('sv_historie51_image_url','sv_historie51_image_preview')" style="background:rgba(163,51,51,.08);color:#a33;border:1px solid rgba(163,51,51,.35);padding:.45rem .9rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;white-space:nowrap;" title="Fjern billedet helt">🗑 Fjern</button>
@@ -4413,7 +4440,16 @@ feeling more calm – and coming home to yourself again."</textarea></div>
             </select>
             <p style="font-family:Manrope,sans-serif;font-size:.66rem;color:#7a6a52;line-height:1.5;margin-top:.3rem;">Uden billede i feltet nedenfor fylder teksten altid hele bredden, uanset valget her.</p>
           </div>
-          <div></div>
+          <div>
+            <label class="fc-label">Billedets bredde</label>
+            <select id="sv_historie52_bredde" class="fc-input-da" style="cursor:pointer;">
+              <option value="fuld">Fuld spaltebredde</option>
+              <option value="520">Stor — 520 px</option>
+              <option value="420">Mellem — 420 px</option>
+              <option value="320">Lille — 320 px</option>
+            </select>
+            <p style="font-family:Manrope,sans-serif;font-size:.66rem;color:#7a6a52;line-height:1.5;margin-top:.3rem;">Billedet beholder altid sit eget format — et 16:9-foto bliver liggende, et 9:16-foto stående. Her vælges kun, hvor bredt det må blive; højden følger af formatet. Er billedet smallere end spalten, står det centreret ud for teksten.</p>
+          </div>
         </div>
         <div class="fc-row">
           <div><label class="fc-label fc-label-da">Overlinje</label><input type="text" id="sv_historie52_label_da" class="fc-input-da"></div>
@@ -4433,7 +4469,7 @@ feeling more calm – and coming home to yourself again."</textarea></div>
             <input type="text" id="sv_historie52_image_url" class="fc-input-da" placeholder="URL indsættes automatisk ved upload">
             <label class="fc-label" style="color:#2a7a74;margin-top:.6rem;">📁 Upload</label>
             <div style="display:flex;align-items:center;gap:.6rem;margin-top:.3rem;">
-              <img id="sv_historie52_image_preview" src="" style="display:none;width:56px;height:56px;object-fit:cover;border:1px solid rgba(184,138,30,.3);">
+              <img id="sv_historie52_image_preview" src="" onload="svBilledMaal(this)" style="display:none;max-width:120px;max-height:80px;object-fit:contain;border:1px solid rgba(184,138,30,.3);"><span id="sv_historie52_image_maal" style="font-family:Manrope,sans-serif;font-size:.62rem;color:#7a6a52;white-space:nowrap;"></span>
               <input type="file" id="sv_historie52_image_file" accept="image/*" style="font-size:.76rem;flex:1;">
               <button type="button" onclick="uploadRetreatBillede('sv_historie52_image_file','sv_historie52_image_url','sv_historie52_image_preview')" style="background:#2a7a74;color:#fff;border:none;padding:.45rem 1.1rem;font-family:Manrope,sans-serif;font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;white-space:nowrap;">⬆ Upload</button>
               <button type="button" onclick="fjernBilledeFelt('sv_historie52_image_url','sv_historie52_image_preview')" style="background:rgba(163,51,51,.08);color:#a33;border:1px solid rgba(163,51,51,.35);padding:.45rem .9rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;white-space:nowrap;" title="Fjern billedet helt">🗑 Fjern</button>
@@ -4463,7 +4499,16 @@ feeling more calm – and coming home to yourself again."</textarea></div>
             </select>
             <p style="font-family:Manrope,sans-serif;font-size:.66rem;color:#7a6a52;line-height:1.5;margin-top:.3rem;">Uden billede i feltet nedenfor fylder teksten altid hele bredden, uanset valget her.</p>
           </div>
-          <div></div>
+          <div>
+            <label class="fc-label">Billedets bredde</label>
+            <select id="sv_historie53_bredde" class="fc-input-da" style="cursor:pointer;">
+              <option value="fuld">Fuld spaltebredde</option>
+              <option value="520">Stor — 520 px</option>
+              <option value="420">Mellem — 420 px</option>
+              <option value="320">Lille — 320 px</option>
+            </select>
+            <p style="font-family:Manrope,sans-serif;font-size:.66rem;color:#7a6a52;line-height:1.5;margin-top:.3rem;">Billedet beholder altid sit eget format — et 16:9-foto bliver liggende, et 9:16-foto stående. Her vælges kun, hvor bredt det må blive; højden følger af formatet. Er billedet smallere end spalten, står det centreret ud for teksten.</p>
+          </div>
         </div>
         <div class="fc-row">
           <div><label class="fc-label fc-label-da">Overlinje</label><input type="text" id="sv_historie53_label_da" class="fc-input-da"></div>
@@ -4483,7 +4528,7 @@ feeling more calm – and coming home to yourself again."</textarea></div>
             <input type="text" id="sv_historie53_image_url" class="fc-input-da" placeholder="URL indsættes automatisk ved upload">
             <label class="fc-label" style="color:#2a7a74;margin-top:.6rem;">📁 Upload</label>
             <div style="display:flex;align-items:center;gap:.6rem;margin-top:.3rem;">
-              <img id="sv_historie53_image_preview" src="" style="display:none;width:56px;height:56px;object-fit:cover;border:1px solid rgba(184,138,30,.3);">
+              <img id="sv_historie53_image_preview" src="" onload="svBilledMaal(this)" style="display:none;max-width:120px;max-height:80px;object-fit:contain;border:1px solid rgba(184,138,30,.3);"><span id="sv_historie53_image_maal" style="font-family:Manrope,sans-serif;font-size:.62rem;color:#7a6a52;white-space:nowrap;"></span>
               <input type="file" id="sv_historie53_image_file" accept="image/*" style="font-size:.76rem;flex:1;">
               <button type="button" onclick="uploadRetreatBillede('sv_historie53_image_file','sv_historie53_image_url','sv_historie53_image_preview')" style="background:#2a7a74;color:#fff;border:none;padding:.45rem 1.1rem;font-family:Manrope,sans-serif;font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;white-space:nowrap;">⬆ Upload</button>
               <button type="button" onclick="fjernBilledeFelt('sv_historie53_image_url','sv_historie53_image_preview')" style="background:rgba(163,51,51,.08);color:#a33;border:1px solid rgba(163,51,51,.35);padding:.45rem .9rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;white-space:nowrap;" title="Fjern billedet helt">🗑 Fjern</button>
@@ -4513,7 +4558,16 @@ feeling more calm – and coming home to yourself again."</textarea></div>
             </select>
             <p style="font-family:Manrope,sans-serif;font-size:.66rem;color:#7a6a52;line-height:1.5;margin-top:.3rem;">Uden billede i feltet nedenfor fylder teksten altid hele bredden, uanset valget her.</p>
           </div>
-          <div></div>
+          <div>
+            <label class="fc-label">Billedets bredde</label>
+            <select id="sv_historie54_bredde" class="fc-input-da" style="cursor:pointer;">
+              <option value="fuld">Fuld spaltebredde</option>
+              <option value="520">Stor — 520 px</option>
+              <option value="420">Mellem — 420 px</option>
+              <option value="320">Lille — 320 px</option>
+            </select>
+            <p style="font-family:Manrope,sans-serif;font-size:.66rem;color:#7a6a52;line-height:1.5;margin-top:.3rem;">Billedet beholder altid sit eget format — et 16:9-foto bliver liggende, et 9:16-foto stående. Her vælges kun, hvor bredt det må blive; højden følger af formatet. Er billedet smallere end spalten, står det centreret ud for teksten.</p>
+          </div>
         </div>
         <div class="fc-row">
           <div><label class="fc-label fc-label-da">Overlinje</label><input type="text" id="sv_historie54_label_da" class="fc-input-da"></div>
@@ -4533,7 +4587,7 @@ feeling more calm – and coming home to yourself again."</textarea></div>
             <input type="text" id="sv_historie54_image_url" class="fc-input-da" placeholder="URL indsættes automatisk ved upload">
             <label class="fc-label" style="color:#2a7a74;margin-top:.6rem;">📁 Upload</label>
             <div style="display:flex;align-items:center;gap:.6rem;margin-top:.3rem;">
-              <img id="sv_historie54_image_preview" src="" style="display:none;width:56px;height:56px;object-fit:cover;border:1px solid rgba(184,138,30,.3);">
+              <img id="sv_historie54_image_preview" src="" onload="svBilledMaal(this)" style="display:none;max-width:120px;max-height:80px;object-fit:contain;border:1px solid rgba(184,138,30,.3);"><span id="sv_historie54_image_maal" style="font-family:Manrope,sans-serif;font-size:.62rem;color:#7a6a52;white-space:nowrap;"></span>
               <input type="file" id="sv_historie54_image_file" accept="image/*" style="font-size:.76rem;flex:1;">
               <button type="button" onclick="uploadRetreatBillede('sv_historie54_image_file','sv_historie54_image_url','sv_historie54_image_preview')" style="background:#2a7a74;color:#fff;border:none;padding:.45rem 1.1rem;font-family:Manrope,sans-serif;font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;white-space:nowrap;">⬆ Upload</button>
               <button type="button" onclick="fjernBilledeFelt('sv_historie54_image_url','sv_historie54_image_preview')" style="background:rgba(163,51,51,.08);color:#a33;border:1px solid rgba(163,51,51,.35);padding:.45rem .9rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;white-space:nowrap;" title="Fjern billedet helt">🗑 Fjern</button>
@@ -4563,7 +4617,16 @@ feeling more calm – and coming home to yourself again."</textarea></div>
             </select>
             <p style="font-family:Manrope,sans-serif;font-size:.66rem;color:#7a6a52;line-height:1.5;margin-top:.3rem;">Uden billede i feltet nedenfor fylder teksten altid hele bredden, uanset valget her.</p>
           </div>
-          <div></div>
+          <div>
+            <label class="fc-label">Billedets bredde</label>
+            <select id="sv_natur_bredde" class="fc-input-da" style="cursor:pointer;">
+              <option value="fuld">Fuld spaltebredde</option>
+              <option value="520">Stor — 520 px</option>
+              <option value="420">Mellem — 420 px</option>
+              <option value="320">Lille — 320 px</option>
+            </select>
+            <p style="font-family:Manrope,sans-serif;font-size:.66rem;color:#7a6a52;line-height:1.5;margin-top:.3rem;">Billedet beholder altid sit eget format — et 16:9-foto bliver liggende, et 9:16-foto stående. Her vælges kun, hvor bredt det må blive; højden følger af formatet. Er billedet smallere end spalten, står det centreret ud for teksten.</p>
+          </div>
         </div>
         <div class="fc-row">
           <div><label class="fc-label fc-label-da">Overlinje</label><input type="text" id="sv_natur_label_da" class="fc-input-da"></div>
@@ -4583,7 +4646,7 @@ feeling more calm – and coming home to yourself again."</textarea></div>
             <input type="text" id="sv_natur_image_url" class="fc-input-da" placeholder="URL indsættes automatisk ved upload">
             <label class="fc-label" style="color:#2a7a74;margin-top:.6rem;">📁 Upload</label>
             <div style="display:flex;align-items:center;gap:.6rem;margin-top:.3rem;">
-              <img id="sv_natur_image_preview" src="" style="display:none;width:56px;height:56px;object-fit:cover;border:1px solid rgba(184,138,30,.3);">
+              <img id="sv_natur_image_preview" src="" onload="svBilledMaal(this)" style="display:none;max-width:120px;max-height:80px;object-fit:contain;border:1px solid rgba(184,138,30,.3);"><span id="sv_natur_image_maal" style="font-family:Manrope,sans-serif;font-size:.62rem;color:#7a6a52;white-space:nowrap;"></span>
               <input type="file" id="sv_natur_image_file" accept="image/*" style="font-size:.76rem;flex:1;">
               <button type="button" onclick="uploadRetreatBillede('sv_natur_image_file','sv_natur_image_url','sv_natur_image_preview')" style="background:#2a7a74;color:#fff;border:none;padding:.45rem 1.1rem;font-family:Manrope,sans-serif;font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;white-space:nowrap;">⬆ Upload</button>
               <button type="button" onclick="fjernBilledeFelt('sv_natur_image_url','sv_natur_image_preview')" style="background:rgba(163,51,51,.08);color:#a33;border:1px solid rgba(163,51,51,.35);padding:.45rem .9rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;white-space:nowrap;" title="Fjern billedet helt">🗑 Fjern</button>
@@ -4649,7 +4712,16 @@ feeling more calm – and coming home to yourself again."</textarea></div>
             </select>
             <p style="font-family:Manrope,sans-serif;font-size:.66rem;color:#7a6a52;line-height:1.5;margin-top:.3rem;">Uden billede i feltet nedenfor fylder teksten altid hele bredden, uanset valget her.</p>
           </div>
-          <div></div>
+          <div>
+            <label class="fc-label">Billedets bredde</label>
+            <select id="sv_hoej_bredde" class="fc-input-da" style="cursor:pointer;">
+              <option value="fuld">Fuld spaltebredde</option>
+              <option value="520">Stor — 520 px</option>
+              <option value="420">Mellem — 420 px</option>
+              <option value="320">Lille — 320 px</option>
+            </select>
+            <p style="font-family:Manrope,sans-serif;font-size:.66rem;color:#7a6a52;line-height:1.5;margin-top:.3rem;">Billedet beholder altid sit eget format — et 16:9-foto bliver liggende, et 9:16-foto stående. Her vælges kun, hvor bredt det må blive; højden følger af formatet. Er billedet smallere end spalten, står det centreret ud for teksten.</p>
+          </div>
         </div>
         <div class="fc-row">
           <div><label class="fc-label fc-label-da">Overlinje</label><input type="text" id="sv_hoej_label_da" class="fc-input-da"></div>
@@ -4669,7 +4741,7 @@ feeling more calm – and coming home to yourself again."</textarea></div>
             <input type="text" id="sv_hoej_image_url" class="fc-input-da" placeholder="URL indsættes automatisk ved upload">
             <label class="fc-label" style="color:#2a7a74;margin-top:.6rem;">📁 Upload</label>
             <div style="display:flex;align-items:center;gap:.6rem;margin-top:.3rem;">
-              <img id="sv_hoej_image_preview" src="" style="display:none;width:56px;height:56px;object-fit:cover;border:1px solid rgba(184,138,30,.3);">
+              <img id="sv_hoej_image_preview" src="" onload="svBilledMaal(this)" style="display:none;max-width:120px;max-height:80px;object-fit:contain;border:1px solid rgba(184,138,30,.3);"><span id="sv_hoej_image_maal" style="font-family:Manrope,sans-serif;font-size:.62rem;color:#7a6a52;white-space:nowrap;"></span>
               <input type="file" id="sv_hoej_image_file" accept="image/*" style="font-size:.76rem;flex:1;">
               <button type="button" onclick="uploadRetreatBillede('sv_hoej_image_file','sv_hoej_image_url','sv_hoej_image_preview')" style="background:#2a7a74;color:#fff;border:none;padding:.45rem 1.1rem;font-family:Manrope,sans-serif;font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;white-space:nowrap;">⬆ Upload</button>
               <button type="button" onclick="fjernBilledeFelt('sv_hoej_image_url','sv_hoej_image_preview')" style="background:rgba(163,51,51,.08);color:#a33;border:1px solid rgba(163,51,51,.35);padding:.45rem .9rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;white-space:nowrap;" title="Fjern billedet helt">🗑 Fjern</button>
@@ -11740,7 +11812,8 @@ const SV_IMG_KEYS  = ['social_image','hero_image','intro_image','historie_image'
   'historie51_image','historie52_image','historie53_image','historie54_image',
   'natur_image','hoej_image'];
 const SV_SOLO_KEYS = ['cta_link',
-  'intro_layout', 'historie_layout', 'historie51_layout', 'historie52_layout', 'historie53_layout', 'historie54_layout', 'natur_layout', 'hoej_layout'];
+  'intro_layout', 'historie_layout', 'historie51_layout', 'historie52_layout', 'historie53_layout', 'historie54_layout', 'natur_layout', 'hoej_layout',
+  'intro_bredde', 'historie_bredde', 'historie51_bredde', 'historie52_bredde', 'historie53_bredde', 'historie54_bredde', 'natur_bredde', 'hoej_bredde'];
 
 // Billedets plads pr. sektion. SKAL stemme med SV_LAYOUT_STANDARD i
 // sevaerdighed.html — ellers ville admin vise noget andet end siden, og et
@@ -11751,6 +11824,40 @@ const SV_LAYOUT_STANDARD = {
   historie53: 'hoejre', historie54: 'venstre',
   natur: 'hoejre', hoej: 'hoejre'
 };
+
+// Hvor bredt billedet må blive. SKAL stemme med SV_BREDDE_STANDARD i
+// sevaerdighed.html — af samme grund som layout-tabellen ovenfor.
+const SV_BREDDE_STANDARD = {
+  intro: 'fuld', historie: 'fuld',
+  historie51: 'fuld', historie52: 'fuld',
+  historie53: 'fuld', historie54: 'fuld',
+  natur: 'fuld', hoej: 'fuld'
+};
+
+// ── Billedets mål ved upload ──────────────────────────────────────────────
+// Siden retter sig nu efter billedets eget format, og så skal man kunne se
+// hvilket format man lige har valgt. Miniaturen vises derfor uden beskæring,
+// og målene skrives ved siden af: "1600 × 900 px · liggende 16:9".
+// Uden det ligner en stående og en liggende udgave af samme motiv hinanden
+// i en 56×56-firkant — og forskellen ses først på den offentlige side.
+function svFormatNavn(b, h) {
+  const r = b / h;
+  const kendte = [[16 / 9, '16:9'], [3 / 2, '3:2'], [4 / 3, '4:3'], [1, '1:1'],
+                  [3 / 4, '3:4'], [2 / 3, '2:3'], [9 / 16, '9:16']];
+  let bedst = kendte[0], afstand = Infinity;
+  kendte.forEach(k => { const d = Math.abs(r - k[0]); if (d < afstand) { afstand = d; bedst = k; } });
+  const form = r > 1.02 ? 'liggende' : (r < 0.98 ? 'stående' : 'kvadratisk');
+  // Sæt kun tal på formatet, når billedet faktisk ligger tæt på et kendt
+  // format. Ellers ville 1600×901 blive kaldt 16:9 og 1500×800 også.
+  return (afstand / bedst[0] < 0.04) ? form + ' ' + bedst[1] : form;
+}
+function svBilledMaal(img) {
+  if (!img) return;
+  const sp = document.getElementById(String(img.id || '').replace('_preview', '_maal'));
+  if (!sp) return;
+  const b = img.naturalWidth, h = img.naturalHeight;
+  sp.textContent = (b && h) ? (b + ' × ' + h + ' px · ' + svFormatNavn(b, h)) : '';
+}
 
 const SV_LISTER = {
   hero_meta:        { behold: [], felter: [{ da: 'Tekst i firkanten', en: 'Text in the box', lang: false }] },
@@ -11819,6 +11926,7 @@ function svErStruktur(key) {
       || key.indexOf('vis_') === 0
       || /_label(_en)?$/.test(key)
       || /_layout$/.test(key)
+      || /_bredde$/.test(key)
       || /^strip[123]_(top|bund)$/.test(key);
 }
 
@@ -12167,6 +12275,7 @@ function svRediger(i) {
     // valgmulighed i rullelisten — og et tryk på Gem ville så flytte
     // billedet, uden at nogen havde valgt det.
     if (!v && /_layout$/.test(key)) v = SV_LAYOUT_STANDARD[key.replace('_layout', '')] || 'hoejre';
+    if (!v && /_bredde$/.test(key)) v = SV_BREDDE_STANDARD[key.replace('_bredde', '')] || 'fuld';
     s('sv_' + key, v);
   });
   SV_IMG_KEYS.forEach(key => {
@@ -12175,6 +12284,8 @@ function svRediger(i) {
     el.value = map[key] || '';
     const pv = document.getElementById('sv_' + key + '_preview');
     if (pv) {
+      const maal = document.getElementById('sv_' + key + '_maal');
+      if (maal) maal.textContent = '';
       if (el.value) { pv.src = el.value; pv.style.display = 'inline-block'; }
       else { pv.removeAttribute('src'); pv.style.display = 'none'; }
     }
@@ -13958,6 +14069,8 @@ function fjernBilledeFelt(urlFieldId, thumbId) {
   if (felt) felt.value = '';
   const thumb = document.getElementById(thumbId);
   if (thumb) { thumb.style.display = 'none'; if (thumb.tagName === 'IMG') thumb.src = ''; }
+  const maal = document.getElementById(String(thumbId || '').replace('_preview', '_maal'));
+  if (maal) maal.textContent = '';
   showToast('Billede fjernet — husk 💾 Gem');
 }
 

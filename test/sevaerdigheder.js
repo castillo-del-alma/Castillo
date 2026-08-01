@@ -346,6 +346,95 @@ function tekst(dom) {
     r.tjek(/_layout\$\/\.test\(key\)/.test(ADMIN), 'layout regnes som opbygning i skabelonen');
   }
 
+  r.overskrift('Billedets format og bredde');
+  {
+    // Billedet skal beholde det format, filen blev uploadet i. Beskæring
+    // ville lave et 9:16-foto om til et liggende udsnit, og så er valget af
+    // motiv taget fra Erik.
+    const figCss = SIDE.slice(SIDE.indexOf('/* ── BILLEDE MED RØD BILLEDTEKST'),
+                              SIDE.indexOf('/* ── TO-KOLONNE'));
+    r.tjek(!/aspect-ratio/.test(figCss), 'figurerne har ingen fast aspect-ratio');
+    r.tjek(!/object-fit:cover/.test(figCss), 'billedet beskæres ikke');
+    r.tjek(/\.fig img\{width:100%;height:auto/.test(figCss), 'højden følger af formatet');
+    r.tjek(/width:fit-content/.test(figCss), 'figuren krymper om billedet, så billedteksten sidder rigtigt');
+    r.tjek(/margin-left:auto;margin-right:auto/.test(figCss), 'et smalt billede centreres i sin spalte');
+    r.tjek(!/class="fig fig-(?:4-3|3-4|16-9)"/.test(SIDE), 'ingen figur har en formatklasse tilbage');
+
+    // De to bredde-tabeller skal være enige, præcis som layout-tabellerne
+    function bTabel(src) {
+      const i = src.indexOf('const SV_BREDDE_STANDARD = {');
+      const t = src.slice(i, src.indexOf('};', i));
+      const ud = {};
+      Array.from(t.matchAll(/(\w+):\s*'(\w+)'/g)).forEach(m => { ud[m[1]] = m[2]; });
+      return ud;
+    }
+    const bSide = bTabel(SIDE), bAdmin = bTabel(ADMIN);
+    r.tjek(Object.keys(bSide).length === 8, 'otte sektioner har en bredde-standard (fik: ' + Object.keys(bSide).length + ')');
+    r.tjek(JSON.stringify(bSide) === JSON.stringify(bAdmin), 'side og admin er enige om bredderne');
+    r.tjek(Object.keys(bSide).every(k => bSide[k] === 'fuld'),
+      'standarden er fuld spaltebredde, så ingen side skifter udseende af sig selv');
+
+    const medBillede = JSON.parse(JSON.stringify(RAEKKE));
+    ['intro', 'historie', 'natur'].forEach(k => { medBillede.indhold[k + '_image'] = '/img/' + k + '.jpg'; });
+
+    // Uden valg: ingen begrænsning
+    {
+      const dom = await indlaesSide('sevaerdighed.html', {
+        url: 'https://castillodelalma.es/sevaerdigheder/test-sted',
+        indhold: [medBillede, ANDEN], geoSprog: 'da'
+      });
+      const d = dom.window.document;
+      r.tjek(d.getElementById('sv_intro_fig').style.maxWidth === '',
+        'uden valg fylder billedet hele spalten');
+    }
+
+    // Med valg: maks-bredde, men aldrig bredere end spalten
+    {
+      const valgt = JSON.parse(JSON.stringify(medBillede));
+      valgt.indhold.intro_bredde = '420';
+      valgt.indhold.historie_bredde = 'fuld';
+      valgt.indhold.natur_bredde = '320';
+      const dom = await indlaesSide('sevaerdighed.html', {
+        url: 'https://castillodelalma.es/sevaerdigheder/test-sted',
+        indhold: [valgt, ANDEN], geoSprog: 'da'
+      });
+      const d = dom.window.document;
+      const mw = id => (d.getElementById(id).style.maxWidth || '').replace(/\s+/g, '');
+      r.tjek(/420px/.test(mw('sv_intro_fig')), 'valgt bredde slår igennem');
+      r.tjek(/min\(100%,420px\)/.test(mw('sv_intro_fig')),
+        'bredden begrænses af spalten, så den ikke stikker ud på mobilen');
+      r.tjek(/320px/.test(mw('sv_natur_fig')), 'hver sektion har sin egen bredde');
+      r.tjek(mw('sv_historie_fig') === '', 'fuld spaltebredde sætter ingen grænse');
+    }
+
+    ['intro','historie','historie51','historie52','historie53','historie54','natur','hoej']
+      .forEach(k => {
+        r.tjek(ADMIN.includes('id="sv_' + k + '_bredde"'), 'admin har bredde-vælger for ' + k);
+        r.tjek(ADMIN.includes('id="sv_' + k + '_image_maal"'), 'admin viser billedets mål for ' + k);
+      });
+    r.tjek(ADMIN.includes("'intro_bredde'") && ADMIN.includes("'hoej_bredde'"),
+      'bredderne gemmes med de øvrige enkeltfelter');
+    r.tjek(/SV_BREDDE_STANDARD\[key\.replace\('_bredde', ''\)\]/.test(ADMIN),
+      'admin bruger bredde-standarden, når værdien er tom');
+    r.tjek(/_bredde\$\/\.test\(key\)/.test(ADMIN), 'bredden regnes som opbygning i skabelonen');
+
+    // Miniaturen må ikke beskære — ellers kan man ikke se, hvilket format
+    // man lige har uploadet
+    r.tjek(!/id="sv_intro_image_preview"[^>]*object-fit:cover/.test(ADMIN),
+      'miniaturen i admin beskærer ikke');
+    r.tjek(/id="sv_intro_image_preview"[^>]*onload="svBilledMaal\(this\)"/.test(ADMIN),
+      'miniaturen aflæser billedets mål');
+
+    // Formatnavnet skal kunne skelne liggende fra stående
+    const fn = new Function(ADMIN.slice(ADMIN.indexOf('function svFormatNavn'),
+                                        ADMIN.indexOf('function svBilledMaal')) +
+                            '; return svFormatNavn;')();
+    r.tjek(fn(1600, 900) === 'liggende 16:9', '1600×900 kaldes liggende 16:9 (fik: ' + fn(1600, 900) + ')');
+    r.tjek(fn(1080, 1920) === 'stående 9:16', '1080×1920 kaldes stående 9:16 (fik: ' + fn(1080, 1920) + ')');
+    r.tjek(fn(800, 800) === 'kvadratisk 1:1', '800×800 kaldes kvadratisk (fik: ' + fn(800, 800) + ')');
+    r.tjek(fn(1500, 800) === 'liggende', 'et skævt format får ikke et tal påklistret (fik: ' + fn(1500, 800) + ')');
+  }
+
   r.overskrift('Ekstra historie-sektioner 5.1–5.4');
   {
     // Tomme på testrækken — de må ikke dukke op af sig selv

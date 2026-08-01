@@ -199,8 +199,17 @@ section a[target="_blank"]::after {
    Den røde kasse er nøjagtig samme udtryk som .omos-billedlabel på
    gay-siden: vinrød bund, hvid versal-tekst, i billedets nederste højre
    hjørne. Er billedteksten tom, vises kassen ikke. */
-.fig{position:relative;overflow:hidden;}
-.fig img{width:100%;height:100%;object-fit:cover;display:block;transition:transform 1.2s ease;}
+/* Billedet beholder sit eget format. Ingen fast højde og ingen
+   beskæring: et 16:9-foto bliver liggende, et 9:16-foto bliver stående,
+   præcis som filen blev uploadet. Figuren krymper om billedet
+   (`width:fit-content`), så den røde billedtekst altid sidder i BILLEDETS
+   hjørne og ikke i et tomt felt ved siden af. `margin` auto centrerer
+   billedet i sin spalte, når det er smallere end spalten. */
+.fig{
+  position:relative;overflow:hidden;
+  width:fit-content;max-width:100%;margin-left:auto;margin-right:auto;
+}
+.fig img{width:100%;height:auto;display:block;transition:transform 1.2s ease;}
 .fig:hover img{transform:scale(1.03);}
 .fig-label{
   position:absolute;bottom:0;right:0;background:var(--wine);color:#fff;
@@ -208,9 +217,7 @@ section a[target="_blank"]::after {
   letter-spacing:.22em;text-transform:uppercase;padding:.65rem 1.1rem;
   max-width:82%;
 }
-.fig-4-3{aspect-ratio:4/3;}
-.fig-3-4{aspect-ratio:3/4;}
-.fig-16-9{aspect-ratio:16/9;}
+
 
 /* ── TO-KOLONNE ── */
 .split{display:grid;grid-template-columns:1fr 1fr;gap:4.5rem;align-items:center;}
@@ -495,7 +502,7 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--gold);outline-offse
         <div class="rule"></div>
         <div id="sv_intro_text"></div>
       </div>
-      <figure class="fig fig-4-3" id="sv_intro_fig" style="display:none;">
+      <figure class="fig" id="sv_intro_fig" style="display:none;">
         <img id="sv_intro_image" alt="" loading="lazy">
         <figcaption class="fig-label" id="sv_intro_billedtekst" style="display:none;"></figcaption>
       </figure>
@@ -510,7 +517,7 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--gold);outline-offse
 <section class="alt" id="sec-historie">
   <div class="section-inner">
     <div class="split">
-      <figure class="fig fig-3-4" id="sv_historie_fig" style="display:none;">
+      <figure class="fig" id="sv_historie_fig" style="display:none;">
         <img id="sv_historie_image" alt="" loading="lazy">
         <figcaption class="fig-label" id="sv_historie_billedtekst" style="display:none;"></figcaption>
       </figure>
@@ -532,7 +539,7 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--gold);outline-offse
         <h2 id="sv_historie51_h2"></h2>
         <div id="sv_historie51_text"></div>
       </div>
-      <figure class="fig fig-4-3" id="sv_historie51_fig" style="display:none;">
+      <figure class="fig" id="sv_historie51_fig" style="display:none;">
         <img id="sv_historie51_image" alt="" loading="lazy">
         <figcaption class="fig-label" id="sv_historie51_billedtekst" style="display:none;"></figcaption>
       </figure>
@@ -544,7 +551,7 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--gold);outline-offse
 <section class="alt" id="sec-historie52" style="display:none;">
   <div class="section-inner">
     <div class="split">
-      <figure class="fig fig-3-4" id="sv_historie52_fig" style="display:none;">
+      <figure class="fig" id="sv_historie52_fig" style="display:none;">
         <img id="sv_historie52_image" alt="" loading="lazy">
         <figcaption class="fig-label" id="sv_historie52_billedtekst" style="display:none;"></figcaption>
       </figure>
@@ -566,7 +573,7 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--gold);outline-offse
         <h2 id="sv_historie53_h2"></h2>
         <div id="sv_historie53_text"></div>
       </div>
-      <figure class="fig fig-4-3" id="sv_historie53_fig" style="display:none;">
+      <figure class="fig" id="sv_historie53_fig" style="display:none;">
         <img id="sv_historie53_image" alt="" loading="lazy">
         <figcaption class="fig-label" id="sv_historie53_billedtekst" style="display:none;"></figcaption>
       </figure>
@@ -578,7 +585,7 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--gold);outline-offse
 <section class="alt" id="sec-historie54" style="display:none;">
   <div class="section-inner">
     <div class="split">
-      <figure class="fig fig-3-4" id="sv_historie54_fig" style="display:none;">
+      <figure class="fig" id="sv_historie54_fig" style="display:none;">
         <img id="sv_historie54_image" alt="" loading="lazy">
         <figcaption class="fig-label" id="sv_historie54_billedtekst" style="display:none;"></figcaption>
       </figure>
@@ -600,7 +607,7 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--gold);outline-offse
         <h2 id="sv_natur_h2"></h2>
         <div id="sv_natur_text"></div>
       </div>
-      <figure class="fig fig-4-3" id="sv_natur_fig" style="display:none;">
+      <figure class="fig" id="sv_natur_fig" style="display:none;">
         <img id="sv_natur_image" alt="" loading="lazy">
         <figcaption class="fig-label" id="sv_natur_billedtekst" style="display:none;"></figcaption>
       </figure>
@@ -631,7 +638,7 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--gold);outline-offse
         <div id="sv_hoej_text"></div>
         <ul class="hoej-punkter" id="sv_hoej_punkter"></ul>
       </div>
-      <figure class="fig fig-4-3" id="sv_hoej_fig" style="display:none;">
+      <figure class="fig" id="sv_hoej_fig" style="display:none;">
         <img id="sv_hoej_image" alt="" loading="lazy">
         <figcaption class="fig-label" id="sv_hoej_billedtekst" style="display:none;"></figcaption>
       </figure>
@@ -746,6 +753,19 @@ const SV_LAYOUT_STANDARD = {
   natur: 'hoejre', hoej: 'hoejre'
 };
 
+// Hvor bredt billedet må blive i sin spalte. 'fuld' = hele spalten, ellers
+// et tal i px. Standarden er 'fuld', fordi det svarer til den bredde
+// billederne havde, før formatet blev bevaret — så ingen eksisterende side
+// skifter udseende af sig selv. Højden følger altid af billedets eget
+// format og sættes aldrig af os.
+// SKAL stemme med SV_BREDDE_STANDARD i admin-anmeldelser.html.
+const SV_BREDDE_STANDARD = {
+  intro: 'fuld', historie: 'fuld',
+  historie51: 'fuld', historie52: 'fuld',
+  historie53: 'fuld', historie54: 'fuld',
+  natur: 'fuld', hoej: 'fuld'
+};
+
 // Accentfarver på striberne — samme palet som resten af sitet
 const SV_STRIBE_FARVER = ['var(--wine)','var(--gold)','var(--teal)','var(--terracotta)','var(--olive)'];
 
@@ -837,6 +857,15 @@ function svFigur(navn) {
     split.classList.remove('bil-hoejre', 'bil-venstre', 'bil-ingen');
     split.classList.add('bil-' + valg);
   }
+
+  // Maks-bredde. `min(100%, …)` frem for et bart pixeltal, så et billede
+  // sat til 520 px aldrig stikker ud af en smallere spalte på mobilen.
+  if (fig) {
+    const b = svData[navn + '_bredde'] || SV_BREDDE_STANDARD[navn] || 'fuld';
+    const px = parseInt(b, 10);
+    fig.style.maxWidth = (b !== 'fuld' && px > 0) ? 'min(100%,' + px + 'px)' : '';
+  }
+
   svSetImg('sv_' + navn + '_image', url);
   if (fig) fig.style.display = url ? '' : 'none';
   const cap = document.getElementById('sv_' + navn + '_billedtekst');
