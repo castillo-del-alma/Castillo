@@ -912,8 +912,44 @@ const SV_LINK = new RegExp(
 // Efterstillet tegnsætning hører til sætningen, ikke adressen — et punktum
 // efter en adresse skal ikke med i href'en. Og e-mail bliver til mailto
 // uden target, så den åbner i mailprogrammet i stedet for et tomt faneblad.
+// Selvvalgt linktekst: [Officiel billetbestilling](www.mezquita-…es/…)
+//
+// Uden det bliver en adresse i fri tekst til et link, hvor HELE adressen står
+// som synlig tekst. På en kort adresse er det fint; på en dyb sti fylder den
+// tre linjer og skubber alt andet ud af form — særligt i en fakta-gruppe,
+// hvor værdien deler linje med sin etiket.
+//
+// Notationen er den samme som i Markdown, og det er sådan Erik i forvejen
+// skriver links. Alternativet — at skrive <a href=…> i feltet — virker også,
+// men kræver at man husker target og rel hver gang.
+//
+// Kører FØR autolink. Resultatet er et <a>-tag, og autolink rører hverken
+// tags eller tekst inde i et link, så den samme adresse bliver ikke linket to
+// gange.
+const SV_MD_LINK = /\[([^\]\n]+)\]\(\s*([^)\s]+)\s*\)/g;
+function svMdLinks(t) {
+  return String(t).replace(SV_MD_LINK, function (hele, tekst, adr) {
+    // E-mail: kun når der hverken er skema eller sti — ellers er @ blot en
+    // del af adressen, fx et brugernavn i en URL.
+    const erMail = adr.indexOf('@') !== -1 && adr.indexOf('/') === -1 && !/^[a-z]+:/i.test(adr);
+    let href, maal = ' target="_blank" rel="noopener noreferrer"';
+    if (erMail) { href = 'mailto:' + adr; maal = ''; }
+    else if (adr.charAt(0) === '#') { href = adr; maal = ''; }
+    else if (adr.charAt(0) === '/') {
+      // Eget site: samme faneblad, og på engelsk skal /en foran — ellers
+      // ville et link fra den engelske side lande på dansk.
+      href = svSvUrlPraefiks() + adr; maal = '';
+    } else {
+      href = /^[a-z]+:/i.test(adr) ? adr : 'https://' + adr;
+    }
+    return '<a href="' + href.replace(/"/g, '%22') + '"' + maal + '>' + tekst + '</a>';
+  });
+}
+
 function svLinkify(t) {
-  if (!t || String(t).indexOf('.') === -1) return t || '';
+  if (!t) return '';
+  t = svMdLinks(t);
+  if (String(t).indexOf('.') === -1) return t;
   let iLink = false;
   return String(t).split(/(<[^>]*>)/).map(function (del, i) {
     if (i % 2 === 1) {                       // selve tagget

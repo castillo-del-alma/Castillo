@@ -261,6 +261,14 @@ function tekst(dom) {
     r.tjek(!!navRent, 'internt menu-link får /en foran');
     const navAnker = doc.querySelector('.sv-navlink a[href="#sec-intro"]');
     r.tjek(!!navAnker, 'ankerlink beholdes uden /en');
+
+    // Et internt link skrevet i et tekstfelt skal også følge sproget —
+    // ellers sender den engelske side læseren til en dansk side.
+    const linkifyEn = (t2) => dom.window.eval('svLinkify(' + JSON.stringify(t2) + ')');
+    r.tjek(/href="\/en\/udlejning"/.test(linkifyEn('[Rent the estate](/udlejning)')),
+      'internt link i brødtekst får /en foran på engelsk');
+    r.tjek(/href="https:\/\/billet\.es"/.test(linkifyEn('[Tickets](billet.es)')),
+      'eksternt link får ikke /en foran');
   }
 
   r.overskrift('Billedets plads — højre, venstre eller intet billede');
@@ -576,6 +584,42 @@ function tekst(dom) {
     r.tjek((egetUrl.match(/<a /g) || []).length === 1,
       'adresse SOM linktekst bliver ikke til et link inde i linket');
     r.tjek(!/href="[^"]*"[^>]*>[^<]*<a /.test(egetUrl), 'ingen nøstede <a>-elementer');
+
+    // Selvvalgt linktekst: [Tekst](adresse)
+    // Uden den ville en dyb sti stå i fuld længde som synlig tekst.
+    {
+      const md = linkify('Billetter: [Officiel billetbestilling — Mezquita de Córdoba](www.mezquita-catedraldecordoba.es/en/organiza-la-visita/entradas-y-horarios)');
+      r.tjek(/>Officiel billetbestilling — Mezquita de Córdoba<\/a>/.test(md),
+        'den valgte tekst står i linket');
+      r.tjek(/href="https:\/\/www\.mezquita-catedraldecordoba\.es\/en\/organiza-la-visita\/entradas-y-horarios"/.test(md),
+        'hele adressen bevares i href');
+      r.tjek(!/mezquita-catedraldecordoba\.es[^"]*</.test(md),
+        'adressen står ikke længere som synlig tekst');
+      r.tjek((md.match(/<a /g) || []).length === 1, 'adressen linkes ikke to gange');
+      r.tjek(/target="_blank"/.test(md) && /rel="noopener noreferrer"/.test(md),
+        'ekstern adresse åbner i nyt faneblad med rel');
+
+      r.tjek(/href="https:\/\/billet\.es\/kob"/.test(linkify('[Køb billet](https://billet.es/kob)')),
+        'adresse med https:// virker også');
+      const mdMail = linkify('[Skriv til os](booking@castillodelalma.es)');
+      r.tjek(/href="mailto:booking@castillodelalma\.es"/.test(mdMail), 'e-mail bliver til mailto');
+      r.tjek(!/target="_blank"/.test(mdMail), 'mailto åbner ikke nyt faneblad');
+
+      // Eget site: samme faneblad, og på engelsk med /en foran
+      const intern = linkify('[Lej ejendommen](/udlejning)');
+      r.tjek(/href="\/udlejning"/.test(intern), 'internt link peger på egen side');
+      r.tjek(!/target="_blank"/.test(intern), 'internt link åbner i samme faneblad');
+      r.tjek(/href="#sec-faq"/.test(linkify('[Se spørgsmål](#sec-faq)')), 'ankerlink bevares');
+
+      // To links i samme afsnit må ikke smelte sammen
+      const to = linkify('Se [et](a.dk) og [to](b.dk).');
+      r.tjek((to.match(/<a /g) || []).length === 2, 'to links i samme linje virker (fik: ' + (to.match(/<a /g) || []).length + ')');
+      r.tjek(/>et<\/a>/.test(to) && /># to|>to<\/a>/.test(to), 'hver linktekst er sin egen');
+
+      // Firkantede parenteser i almindelig tekst må ikke blive links
+      r.tjek(!/<a /.test(linkify('Se [note 3] nederst')), 'løs kantparentes bliver ikke et link');
+      r.tjek(!/<a /.test(linkify('Åbent 10-18 (se skiltning)')), 'løs parentes bliver ikke et link');
+    }
 
     // Ingen adresse → teksten skal være helt urørt
     const ren = 'Solide sko er påkrævet. Minimumsalder 8 år.';
