@@ -483,25 +483,62 @@ function tekst(dom) {
       indhold: [RAEKKE, ANDEN], geoSprog: 'da'
     });
     const d = dom.window.document;
-    const btn = d.getElementById('sv_print_btn');
+    const btn = d.getElementById('sv_print_btn1');
     r.tjek(!!btn, 'print-knappen findes');
     r.tjek(/Print som A4-guide/.test(btn.textContent), 'knappen er på dansk');
     r.tjek(btn.getAttribute('onclick') === 'window.print()', 'knappen åbner printdialogen');
-    r.tjek(d.getElementById('sv_print_linje').style.display !== 'none',
-      'knappen vises som standard');
     r.tjek(/castillodelalma\.es\/sevaerdigheder\/test-sted/.test(
       d.getElementById('sv_print_url').textContent), 'sidefoden viser sidens adresse');
 
-    // Kan slås fra i admin
+    // Fire knapper, så en side kan få printet dér hvor det passer
+    for (let i = 1; i <= 4; i++) {
+      r.tjek(!!d.getElementById('sec-print' + i), 'print-sektion ' + i + ' findes');
+      r.tjek(/Print som A4-guide/.test(d.getElementById('sv_print_btn' + i).textContent),
+        'knap ' + i + ' har tekst');
+    }
+
+    // Standard: kun den øverste er tændt. Fire knapper på hver side ville
+    // være larm, men de tre skal kunne tændes uden at røre koden.
+    r.tjek(d.getElementById('sec-print1').style.display !== 'none',
+      'den øverste knap er tændt som standard');
+    [2, 3, 4].forEach(i => r.tjek(d.getElementById('sec-print' + i).style.display === 'none',
+      'knap ' + i + ' er slukket som standard'));
+
+    // Standarden må ikke tænde sig selv på en gammel side
+    r.tjek(!RAEKKE.indhold.vis_print2,
+      'testrækken har ingen gemt værdi — standarden er dét, der blev målt');
+
+    // Tændes og slukkes hver for sig
     {
-      const uden = JSON.parse(JSON.stringify(RAEKKE));
-      uden.indhold.vis_print = '0';
+      const valgt = JSON.parse(JSON.stringify(RAEKKE));
+      valgt.indhold.vis_print1 = '0';
+      valgt.indhold.vis_print3 = '1';
       const dom2 = await indlaesSide('sevaerdighed.html', {
         url: 'https://castillodelalma.es/sevaerdigheder/test-sted',
-        indhold: [uden, ANDEN], geoSprog: 'da'
+        indhold: [valgt, ANDEN], geoSprog: 'da'
       });
-      r.tjek(dom2.window.document.getElementById('sv_print_linje').style.display === 'none',
-        'knappen kan slås fra i admin');
+      const d2 = dom2.window.document;
+      r.tjek(d2.getElementById('sec-print1').style.display === 'none',
+        'den øverste kan slukkes');
+      r.tjek(d2.getElementById('sec-print3').style.display !== 'none',
+        'en af de andre kan tændes');
+      r.tjek(d2.getElementById('sec-print4').style.display === 'none',
+        'de øvrige bliver slukket');
+    }
+
+    // Kan rokeres som alle andre sektioner
+    {
+      const flyttet = JSON.parse(JSON.stringify(RAEKKE));
+      flyttet.indhold.sektion_orden = JSON.stringify(
+        ['sec-intro', 'sec-print1', 'sec-praktisk', 'sec-faq']);
+      const dom4 = await indlaesSide('sevaerdighed.html', {
+        url: 'https://castillodelalma.es/sevaerdigheder/test-sted',
+        indhold: [flyttet, ANDEN], geoSprog: 'da'
+      });
+      const d4 = dom4.window.document;
+      const raekke = Array.from(d4.getElementById('sv_side').children).map(el => el.id);
+      r.tjek(raekke.indexOf('sec-print1') > raekke.indexOf('sec-intro'),
+        'print-knappen kan rokeres ned under hovedsektionen');
     }
 
     // Engelsk
@@ -510,15 +547,34 @@ function tekst(dom) {
         url: 'https://castillodelalma.es/en/sevaerdigheder/test-sted',
         indhold: [RAEKKE, ANDEN], geoSprog: 'da'
       });
-      r.tjek(/Print as A4 guide/.test(dom3.window.document.getElementById('sv_print_btn').textContent),
+      r.tjek(/Print as A4 guide/.test(dom3.window.document.getElementById('sv_print_btn1').textContent),
         'knappen er på engelsk på /en/');
     }
 
-    r.tjek(ADMIN.includes('id="sv_vis_print"'), 'admin har en til/fra-knap for printet');
-    r.tjek(/indhold\.vis_print = \(pk && !pk\.checked\) \? '0' : '1'/.test(ADMIN),
-      'valget gemmes');
-    r.tjek(/map\.vis_print !== '0'/.test(ADMIN), 'valget læses tilbage, og standarden er til');
-    r.tjek(/key === 'vis_print'/.test(ADMIN), 'printvalget regnes som opbygning i skabelonen');
+    // Baggrunden er hvid, så linjen glider ind uanset hvor den placeres
+    r.tjek(/\.print-linje\{background:#fff/.test(SIDE), 'print-linjen har hvid bund');
+
+    // Admin: de fire står i listen over sektioner, der kan rokeres
+    for (let i = 1; i <= 4; i++) {
+      r.tjek(ADMIN.includes("id: 'sec-print" + i + "'"), 'admin kan rokere print-knap ' + i);
+      r.tjek(ADMIN.includes("key: 'vis_print" + i + "'"), 'admin gemmer valget for knap ' + i);
+    }
+    // De to standard-tabeller skal være enige
+    function pTabel(src) {
+      const i = src.indexOf('const SV_PRINT_STANDARD = {');
+      const t = src.slice(i, src.indexOf('};', i));
+      const ud = {};
+      Array.from(t.matchAll(/'(sec-print\d)':\s*'(\d)'/g)).forEach(m => { ud[m[1]] = m[2]; });
+      return ud;
+    }
+    const pSide = pTabel(SIDE), pAdmin = pTabel(ADMIN);
+    r.tjek(Object.keys(pSide).length === 4, 'fire knapper har en standard');
+    r.tjek(JSON.stringify(pSide) === JSON.stringify(pAdmin),
+      'side og admin er enige om, hvilke knapper der er tændt');
+    r.tjek(pSide['sec-print1'] === '1' && pSide['sec-print4'] === '0',
+      'kun den øverste er tændt fra start');
+    r.tjek(!ADMIN.includes('id="sv_vis_print"'),
+      'den gamle enkelt-afkrydsning er væk');
   }
 
   r.overskrift('Ekstra historie-sektioner 5.1–5.4');

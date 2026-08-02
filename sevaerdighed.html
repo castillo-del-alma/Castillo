@@ -222,9 +222,9 @@ section a[target="_blank"]::after {
 /* Afsender og sidefod hører kun til på papir — se @media print nederst */
 .print-afsender,.print-fod{display:none;}
 
-/* Print-knappen. Diskret linje under opfordringen — den er et tilbud, ikke
-   sidens ærinde, så den står i sandfarve frem for at konkurrere med CTA'en. */
-.print-linje{background:var(--sand);text-align:center;padding:3rem 1.5rem;}
+/* Print-knappen. Hvid bund, så linjen glider ind mellem sektionerne uanset
+   hvor den placeres — den er et tilbud, ikke sidens ærinde. */
+.print-linje{background:#fff;text-align:center;padding:3rem 1.5rem;}
 .print-knap{margin-top:0;border:none;cursor:pointer;background:transparent;
   color:var(--wine);border:1px solid var(--wine);}
 .print-knap:hover,.print-knap:focus-visible{background:var(--wine);color:#fff;}
@@ -583,6 +583,13 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--gold);outline-offse
   <div class="hero-stribe" aria-hidden="true"></div>
 </header>
 
+<!-- PRINT 1  — fire ens knapper, der kan rokeres og tændes hver for sig i admin.
+     Browserens egen printdialog kan både printe og gemme som PDF, så gæsten
+     får en fil, uden at vi skal bygge en. -->
+<div class="print-linje" id="sec-print1" style="display:none;">
+  <button type="button" class="btn-wine print-knap" onclick="window.print()" id="sv_print_btn1">⎙ Print som A4-guide</button>
+</div>
+
 <!-- 1 · HOVEDSEKTION -->
 <section id="sec-intro">
   <div class="section-inner">
@@ -748,6 +755,11 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--gold);outline-offse
   </div>
 </section>
 
+<!-- PRINT 2 -->
+<div class="print-linje" id="sec-print2" style="display:none;">
+  <button type="button" class="btn-wine print-knap" onclick="window.print()" id="sv_print_btn2">⎙ Print som A4-guide</button>
+</div>
+
 <!-- 7 · AFSTANDE -->
 <section class="alt" id="sec-afstande">
   <div class="section-inner">
@@ -770,6 +782,11 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--gold);outline-offse
   </div>
 </section>
 
+<!-- PRINT 3 -->
+<div class="print-linje" id="sec-print3" style="display:none;">
+  <button type="button" class="btn-wine print-knap" onclick="window.print()" id="sv_print_btn3">⎙ Print som A4-guide</button>
+</div>
+
 <!-- 9 · FLERE SEVÆRDIGHEDER — bygges af JS fra de øvrige rækker -->
 <section class="alt" id="sec-flere" style="display:none;">
   <div class="section-inner">
@@ -789,13 +806,9 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--gold);outline-offse
   </div>
 </section>
 
-<!-- PRINT — knappen står efter opfordringen, hvor man er færdig med at læse.
-     Browserens egen dialog kan både printe og gemme som PDF, så gæsten får
-     en fil uden at vi skal bygge en. -->
-<div class="print-linje" id="sv_print_linje">
-  <button type="button" class="btn-wine print-knap" onclick="window.print()" id="sv_print_btn">
-    ⎙ Print som A4-guide
-  </button>
+<!-- PRINT 4 -->
+<div class="print-linje" id="sec-print4" style="display:none;">
+  <button type="button" class="btn-wine print-knap" onclick="window.print()" id="sv_print_btn4">⎙ Print som A4-guide</button>
 </div>
 
 <!-- Kun i print: står nederst på hvert ark -->
@@ -835,10 +848,11 @@ let svLang = 'da';
 
 // Standardrækkefølgen. Sektioner, der mangler i en gemt rækkefølge, sættes
 // ind på deres plads her, så en ny sektion aldrig forsvinder på gamle sider.
-const SV_STANDARD_ORDEN = ['sec-intro','strip1','sec-historie',
+const SV_STANDARD_ORDEN = ['sec-print1','sec-intro','strip1','sec-historie',
   'sec-historie51','sec-historie52','sec-historie53','sec-historie54',
   'sec-natur','sec-lister',
-  'strip2','sec-hoejdepunkt','sec-praktisk','sec-afstande','strip3','sec-faq','sec-flere','sec-cta'];
+  'strip2','sec-hoejdepunkt','sec-praktisk','sec-print2','sec-afstande','strip3','sec-faq',
+  'sec-print3','sec-flere','sec-cta','sec-print4'];
 const SV_SEKTIONER = {
   'sec-intro':'vis_intro', 'strip1':'vis_strip1', 'sec-historie':'vis_historie',
   'sec-historie51':'vis_historie51', 'sec-historie52':'vis_historie52',
@@ -846,7 +860,14 @@ const SV_SEKTIONER = {
   'sec-natur':'vis_natur', 'sec-lister':'vis_lister', 'strip2':'vis_strip2',
   'sec-hoejdepunkt':'vis_hoejdepunkt', 'sec-praktisk':'vis_praktisk',
   'sec-afstande':'vis_afstande', 'strip3':'vis_strip3', 'sec-faq':'vis_faq',
-  'sec-flere':'vis_flere', 'sec-cta':'vis_cta'
+  'sec-flere':'vis_flere', 'sec-cta':'vis_cta',
+  'sec-print1':'vis_print1', 'sec-print2':'vis_print2',
+  'sec-print3':'vis_print3', 'sec-print4':'vis_print4'
+};
+// Hvilke print-knapper der er tændt, når intet er valgt. Kun den øverste.
+// SKAL stemme med SV_PRINT_STANDARD i admin-anmeldelser.html.
+const SV_PRINT_STANDARD = {
+  'sec-print1': '1', 'sec-print2': '0', 'sec-print3': '0', 'sec-print4': '0'
 };
 // Billedets plads pr. sektion. Standarderne er præcis det, siderne viser i
 // dag, så Caminito og Córdoba ikke flytter sig, fordi valget blev muligt.
@@ -1105,12 +1126,13 @@ function applySvContent() {
   { const h = document.querySelector('.hero');
     if (h) h.classList.toggle('har-stribe', svData.vis_hero_stribe !== '0'); }
 
-  // Print-knappen. Sidefoden får sidens adresse, så et ark der bliver væk
-  // fra resten stadig kan føres tilbage til siden.
-  { const pb = document.getElementById('sv_print_btn');
-    if (pb) pb.textContent = '⎙ ' + ui.print;
-    const pl = document.getElementById('sv_print_linje');
-    if (pl) pl.style.display = svData.vis_print === '0' ? 'none' : '';
+  // Print-knapperne. Synligheden styres af sektionsrækkefølgen, så de kan
+  // rokeres og tændes hver for sig som alle andre sektioner. Sidefoden får
+  // sidens adresse, så et ark, der bliver væk fra resten, kan føres tilbage.
+  { for (let i = 1; i <= 4; i++) {
+      const pb = document.getElementById('sv_print_btn' + i);
+      if (pb) pb.textContent = '⎙ ' + ui.print;
+    }
     const pu = document.getElementById('sv_print_url');
     if (pu) pu.textContent = 'Castillo del Alma · ' +
       String(location.host || 'castillodelalma.es') + location.pathname; }
@@ -1346,6 +1368,14 @@ function applySvSynlighed() {
   Object.keys(SV_SEKTIONER).forEach(id => {
     const el = document.getElementById(id);
     if (!el) return;
+    // Print-knapperne er de eneste sektioner, der er SLUKKET som standard —
+    // på nær den første. Fire knapper på hver side ville være larm; de tre
+    // sidste er der, så en side kan få knappen præcis dér, hvor den passer.
+    if (SV_PRINT_STANDARD[id]) {
+      const valgt = svData[SV_SEKTIONER[id]] || SV_PRINT_STANDARD[id];
+      el.style.display = valgt === '0' ? 'none' : '';
+      return;
+    }
     if (svData[SV_SEKTIONER[id]] === '0') { el.style.display = 'none'; return; }
     // Striber og krydslinks styrer selv, om de har noget at vise
     if (id === 'strip1' || id === 'strip2' || id === 'strip3' || id === 'sec-flere') return;

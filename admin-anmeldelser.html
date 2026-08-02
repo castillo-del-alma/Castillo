@@ -4224,8 +4224,7 @@ feeling more calm – and coming home to yourself again."</textarea></div>
           <div></div>
         </div>
         <label style="display:flex;align-items:center;gap:.5rem;font-family:Manrope,sans-serif;font-size:.72rem;cursor:pointer;margin:.8rem 0 1rem;"><input type="checkbox" id="sv_vis_hero_stribe" checked style="cursor:pointer;"> Vis farvestribe langs bunden af hero'en</label>
-        <label style="display:flex;align-items:center;gap:.5rem;font-family:Manrope,sans-serif;font-size:.72rem;cursor:pointer;margin:0 0 .4rem;"><input type="checkbox" id="sv_vis_print" checked style="cursor:pointer;"> Vis knappen "Print som A4-guide" nederst på siden</label>
-        <p style="font-family:Manrope,sans-serif;font-size:.66rem;color:#7a6a52;line-height:1.5;margin-bottom:1rem;">Gæsten får en ren A4-udgave uden menu, fotostriber og opfordringer — kun teksten, de praktiske detaljer, afstandene og spørgsmålene. Adresser skrives ud i fuld længde, så de kan bruges på papir. I printdialogen kan man vælge <i>Gem som PDF</i>.</p>
+
         <p style="font-family:Manrope,sans-serif;font-size:.72rem;color:#7a6a52;line-height:1.6;margin-bottom:.8rem;"><b>Firkanter (nøgletal)</b> — de små kasser under manchetten. Fx <i>7,7 km rute</i> eller <i>45 min fra Castillo del Alma</i>.</p>
         <div id="svListe_hero_meta"></div>
         <button type="button" onclick="svListeTilfoej('hero_meta')" style="background:#2a7a74;color:#fff;border:none;padding:.45rem 1.1rem;font-family:Manrope,sans-serif;font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;margin-top:.4rem;">+ Tilføj firkant</button>
@@ -11874,7 +11873,14 @@ const SV_LISTER = {
                                { da: 'Svar', en: 'Answer', lang: true }] }
 };
 
+// Print-knapperne er de eneste sektioner, der er slukket som standard — på
+// nær den øverste. SKAL stemme med SV_PRINT_STANDARD i sevaerdighed.html.
+const SV_PRINT_STANDARD = {
+  'sec-print1': '1', 'sec-print2': '0', 'sec-print3': '0', 'sec-print4': '0'
+};
+
 const SV_SEKTION_DEFS = [
+  { id: 'sec-print1',      navn: 'Print-knap 1',              key: 'vis_print1' },
   { id: 'sec-intro',       navn: 'Hovedsektionen',            key: 'vis_intro' },
   { id: 'strip1',          navn: 'Billedstribe 1',            key: 'vis_strip1' },
   { id: 'sec-historie',    navn: 'Historien',                 key: 'vis_historie' },
@@ -11887,11 +11893,14 @@ const SV_SEKTION_DEFS = [
   { id: 'strip2',          navn: 'Billedstribe 2',            key: 'vis_strip2' },
   { id: 'sec-hoejdepunkt', navn: 'Højdepunktet (mørkt bånd)', key: 'vis_hoejdepunkt' },
   { id: 'sec-praktisk',    navn: 'Praktiske detaljer',        key: 'vis_praktisk' },
+  { id: 'sec-print2',      navn: 'Print-knap 2',              key: 'vis_print2' },
   { id: 'sec-afstande',    navn: 'Afstande',                  key: 'vis_afstande' },
   { id: 'strip3',          navn: 'Billedstribe 3',            key: 'vis_strip3' },
   { id: 'sec-faq',         navn: 'FAQ',                       key: 'vis_faq' },
+  { id: 'sec-print3',      navn: 'Print-knap 3',              key: 'vis_print3' },
   { id: 'sec-flere',       navn: 'Flere seværdigheder',       key: 'vis_flere' },
-  { id: 'sec-cta',         navn: 'Opfordring nederst',        key: 'vis_cta' }
+  { id: 'sec-cta',         navn: 'Opfordring nederst',        key: 'vis_cta' },
+  { id: 'sec-print4',      navn: 'Print-knap 4',              key: 'vis_print4' }
 ];
 
 // Menuen en ny seværdighed starter med
@@ -11922,7 +11931,7 @@ const SV_NAV_DEFAULT = [
 function svErStruktur(key) {
   return key === 'nav_links' || key === 'nav_back' || key === 'sektion_orden'
       || key === 'footer_copy' || key === 'footer_copy_en'
-      || key === 'vis_hero_stribe' || key === 'vis_print' || key === 'cta_link'
+      || key === 'vis_hero_stribe' || key === 'cta_link'
       || key === 'hero_scroll' || key === 'hero_scroll_en'
       || key === 'cta_btn' || key === 'cta_btn_en'
       || key.indexOf('vis_') === 0
@@ -12187,7 +12196,7 @@ async function opretSevaerdighed() {
     footer_copy: '© 2026 Castillo del Alma · Mollina, Málaga · Alle rettigheder forbeholdes',
     footer_copy_en: '© 2026 Castillo del Alma · Mollina, Málaga · All rights reserved',
     vis_hero_stribe: '1',
-    vis_print: '1',
+    vis_print1: '1', vis_print2: '0', vis_print3: '0', vis_print4: '0',
     sektion_orden: JSON.stringify(SV_SEKTION_DEFS.map(d => d.id))
   };
   SV_SEKTION_DEFS.forEach(d => { indhold[d.key] = '1'; });
@@ -12304,8 +12313,6 @@ function svRediger(i) {
 
   const hs = document.getElementById('sv_vis_hero_stribe');
   if (hs) hs.checked = map.vis_hero_stribe !== '0';
-  const pk = document.getElementById('sv_vis_print');
-  if (pk) pk.checked = map.vis_print !== '0';
 
   // Menu
   let navRaa = [];
@@ -12334,6 +12341,12 @@ function svRediger(i) {
   });
   svOrdenState = gemtOrden.map(id => {
     const def = SV_SEKTION_DEFS.find(d => d.id === id);
+    // Print-knapperne er slukket som standard på nær den første. Uden dette
+    // ville alle fire tænde sig selv på en side, der er gemt før de fandtes.
+    if (SV_PRINT_STANDARD[id]) {
+      const gemt = def ? map[def.key] : undefined;
+      return { id: id, vis: (gemt || SV_PRINT_STANDARD[id]) === '0' ? '0' : '1' };
+    }
     return { id: id, vis: (def && map[def.key] === '0') ? '0' : '1' };
   });
   svRenderOrden();
@@ -12376,8 +12389,6 @@ async function gemSevaerdighed() {
 
     const hs = document.getElementById('sv_vis_hero_stribe');
     indhold.vis_hero_stribe = (hs && !hs.checked) ? '0' : '1';
-    const pk = document.getElementById('sv_vis_print');
-    indhold.vis_print = (pk && !pk.checked) ? '0' : '1';
 
     indhold.nav_links = JSON.stringify(svNavState
       .filter(l => (l.tekst || '').trim() || (l.link || '').trim())
