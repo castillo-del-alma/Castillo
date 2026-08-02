@@ -443,6 +443,84 @@ function tekst(dom) {
     r.tjek(fn(1500, 800) === 'liggende', 'et skævt format får ikke et tal påklistret (fik: ' + fn(1500, 800) + ')');
   }
 
+  r.overskrift('Print — A4-guide');
+  {
+    // Print-CSS er ikke noget jsdom kan udføre, så testen læser reglerne
+    // direkte. Det fanger det, der faktisk går galt: at en skjult ting
+    // bliver synlig igen, fordi nogen omdøbte en klasse.
+    const p = SIDE.slice(SIDE.indexOf('@page{size:A4'), SIDE.indexOf('</style>'));
+    r.tjek(/@page\{size:A4/.test(p), 'papirstørrelsen er A4');
+    r.tjek(/margin:16mm 15mm 18mm/.test(p), 'siden har margener');
+
+    // Alt der kun giver mening på en skærm, skal væk
+    ['nav', '.hero-scroll', '.foto-stribe', '#sec-flere', '.cta-band', '.print-linje']
+      .forEach(sel => r.tjek(p.includes(sel), 'print skjuler ' + sel));
+    r.tjek(/\.hero-bg\{display:none;\}/.test(p),
+      'hero-baggrunden printes ikke — den ville dække et helt ark');
+
+    // Det der SKAL med
+    r.tjek(/\.print-afsender\{display:flex !important/.test(p), 'afsenderen vises i print');
+    r.tjek(/\.print-fod\{display:block !important/.test(p), 'sidefoden vises i print');
+    r.tjek(/\.print-afsender,\.print-fod\{display:none;\}/.test(SIDE),
+      'begge er skjult på skærmen');
+
+    // Adresser skal skrives ud — man kan ikke klikke på papir
+    r.tjek(/a\[href\^="http"\]::after\{content:" \(" attr\(href\) "\)"/.test(p),
+      'adressen skrives ud efter linkteksten');
+
+    // Intet må knække midt i en oplysning
+    r.tjek(/\.fakta-gruppe,\.faq-item,\.dist div,\.kol-liste\{break-inside:avoid;\}/.test(p),
+      'fakta, FAQ og afstande knækker ikke over to sider');
+    r.tjek(/h2,\.hoej h2\{[^}]*break-after:avoid/.test(p),
+      'en overskrift står ikke alene nederst på siden');
+
+    // Mørke bånd ville tømme blækpatronen
+    r.tjek(/section\.alt,\.hoej\{background:#fff !important/.test(p),
+      'de mørke bånd bliver hvide');
+
+    const dom = await indlaesSide('sevaerdighed.html', {
+      url: 'https://castillodelalma.es/sevaerdigheder/test-sted',
+      indhold: [RAEKKE, ANDEN], geoSprog: 'da'
+    });
+    const d = dom.window.document;
+    const btn = d.getElementById('sv_print_btn');
+    r.tjek(!!btn, 'print-knappen findes');
+    r.tjek(/Print som A4-guide/.test(btn.textContent), 'knappen er på dansk');
+    r.tjek(btn.getAttribute('onclick') === 'window.print()', 'knappen åbner printdialogen');
+    r.tjek(d.getElementById('sv_print_linje').style.display !== 'none',
+      'knappen vises som standard');
+    r.tjek(/castillodelalma\.es\/sevaerdigheder\/test-sted/.test(
+      d.getElementById('sv_print_url').textContent), 'sidefoden viser sidens adresse');
+
+    // Kan slås fra i admin
+    {
+      const uden = JSON.parse(JSON.stringify(RAEKKE));
+      uden.indhold.vis_print = '0';
+      const dom2 = await indlaesSide('sevaerdighed.html', {
+        url: 'https://castillodelalma.es/sevaerdigheder/test-sted',
+        indhold: [uden, ANDEN], geoSprog: 'da'
+      });
+      r.tjek(dom2.window.document.getElementById('sv_print_linje').style.display === 'none',
+        'knappen kan slås fra i admin');
+    }
+
+    // Engelsk
+    {
+      const dom3 = await indlaesSide('sevaerdighed.html', {
+        url: 'https://castillodelalma.es/en/sevaerdigheder/test-sted',
+        indhold: [RAEKKE, ANDEN], geoSprog: 'da'
+      });
+      r.tjek(/Print as A4 guide/.test(dom3.window.document.getElementById('sv_print_btn').textContent),
+        'knappen er på engelsk på /en/');
+    }
+
+    r.tjek(ADMIN.includes('id="sv_vis_print"'), 'admin har en til/fra-knap for printet');
+    r.tjek(/indhold\.vis_print = \(pk && !pk\.checked\) \? '0' : '1'/.test(ADMIN),
+      'valget gemmes');
+    r.tjek(/map\.vis_print !== '0'/.test(ADMIN), 'valget læses tilbage, og standarden er til');
+    r.tjek(/key === 'vis_print'/.test(ADMIN), 'printvalget regnes som opbygning i skabelonen');
+  }
+
   r.overskrift('Ekstra historie-sektioner 5.1–5.4');
   {
     // Tomme på testrækken — de må ikke dukke op af sig selv

@@ -4224,6 +4224,8 @@ feeling more calm – and coming home to yourself again."</textarea></div>
           <div></div>
         </div>
         <label style="display:flex;align-items:center;gap:.5rem;font-family:Manrope,sans-serif;font-size:.72rem;cursor:pointer;margin:.8rem 0 1rem;"><input type="checkbox" id="sv_vis_hero_stribe" checked style="cursor:pointer;"> Vis farvestribe langs bunden af hero'en</label>
+        <label style="display:flex;align-items:center;gap:.5rem;font-family:Manrope,sans-serif;font-size:.72rem;cursor:pointer;margin:0 0 .4rem;"><input type="checkbox" id="sv_vis_print" checked style="cursor:pointer;"> Vis knappen "Print som A4-guide" nederst på siden</label>
+        <p style="font-family:Manrope,sans-serif;font-size:.66rem;color:#7a6a52;line-height:1.5;margin-bottom:1rem;">Gæsten får en ren A4-udgave uden menu, fotostriber og opfordringer — kun teksten, de praktiske detaljer, afstandene og spørgsmålene. Adresser skrives ud i fuld længde, så de kan bruges på papir. I printdialogen kan man vælge <i>Gem som PDF</i>.</p>
         <p style="font-family:Manrope,sans-serif;font-size:.72rem;color:#7a6a52;line-height:1.6;margin-bottom:.8rem;"><b>Firkanter (nøgletal)</b> — de små kasser under manchetten. Fx <i>7,7 km rute</i> eller <i>45 min fra Castillo del Alma</i>.</p>
         <div id="svListe_hero_meta"></div>
         <button type="button" onclick="svListeTilfoej('hero_meta')" style="background:#2a7a74;color:#fff;border:none;padding:.45rem 1.1rem;font-family:Manrope,sans-serif;font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;margin-top:.4rem;">+ Tilføj firkant</button>
@@ -11920,7 +11922,7 @@ const SV_NAV_DEFAULT = [
 function svErStruktur(key) {
   return key === 'nav_links' || key === 'nav_back' || key === 'sektion_orden'
       || key === 'footer_copy' || key === 'footer_copy_en'
-      || key === 'vis_hero_stribe' || key === 'cta_link'
+      || key === 'vis_hero_stribe' || key === 'vis_print' || key === 'cta_link'
       || key === 'hero_scroll' || key === 'hero_scroll_en'
       || key === 'cta_btn' || key === 'cta_btn_en'
       || key.indexOf('vis_') === 0
@@ -12185,6 +12187,7 @@ async function opretSevaerdighed() {
     footer_copy: '© 2026 Castillo del Alma · Mollina, Málaga · Alle rettigheder forbeholdes',
     footer_copy_en: '© 2026 Castillo del Alma · Mollina, Málaga · All rights reserved',
     vis_hero_stribe: '1',
+    vis_print: '1',
     sektion_orden: JSON.stringify(SV_SEKTION_DEFS.map(d => d.id))
   };
   SV_SEKTION_DEFS.forEach(d => { indhold[d.key] = '1'; });
@@ -12301,6 +12304,8 @@ function svRediger(i) {
 
   const hs = document.getElementById('sv_vis_hero_stribe');
   if (hs) hs.checked = map.vis_hero_stribe !== '0';
+  const pk = document.getElementById('sv_vis_print');
+  if (pk) pk.checked = map.vis_print !== '0';
 
   // Menu
   let navRaa = [];
@@ -12371,6 +12376,8 @@ async function gemSevaerdighed() {
 
     const hs = document.getElementById('sv_vis_hero_stribe');
     indhold.vis_hero_stribe = (hs && !hs.checked) ? '0' : '1';
+    const pk = document.getElementById('sv_vis_print');
+    indhold.vis_print = (pk && !pk.checked) ? '0' : '1';
 
     indhold.nav_links = JSON.stringify(svNavState
       .filter(l => (l.tekst || '').trim() || (l.link || '').trim())

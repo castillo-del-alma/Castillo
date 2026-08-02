@@ -219,6 +219,16 @@ section a[target="_blank"]::after {
 }
 
 
+/* Afsender og sidefod hører kun til på papir — se @media print nederst */
+.print-afsender,.print-fod{display:none;}
+
+/* Print-knappen. Diskret linje under opfordringen — den er et tilbud, ikke
+   sidens ærinde, så den står i sandfarve frem for at konkurrere med CTA'en. */
+.print-linje{background:var(--sand);text-align:center;padding:3rem 1.5rem;}
+.print-knap{margin-top:0;border:none;cursor:pointer;background:transparent;
+  color:var(--wine);border:1px solid var(--wine);}
+.print-knap:hover,.print-knap:focus-visible{background:var(--wine);color:#fff;}
+
 /* ── TO-KOLONNE ── */
 .split{display:grid;grid-template-columns:1fr 1fr;gap:4.5rem;align-items:center;}
 /* ── BILLEDETS PLADS ──────────────────────────────────────────────────────
@@ -436,6 +446,81 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--gold);outline-offse
   footer{padding:2.4rem 1.5rem;}
   .footer-bottom{flex-direction:column;align-items:flex-start;}
 }
+
+/* ── PRINT — A4-guiden gæsten kan tage med ───────────────────────────────
+   Siden er bygget til en skærm: hero i fuld skærmhøjde, mørke bånd,
+   billeder over hele bredden. Printet ud, som den står, koster den to ark
+   luft, før den første oplysning kommer, og en formue i blæk.
+   Her bliver den til en guide: hvid bund, sort tekst, kompakt titelblok, og
+   kun det man kan bruge, mens man står på stedet — historien, de praktiske
+   detaljer, afstandene og spørgsmålene.
+   Fotostriber, krydslinks og opfordringen falder væk; de hører til på
+   skærmen, hvor det næste klik er formålet.
+   `size:A4` frem for browserens standard, så et amerikansk Letter-format
+   ikke skubber layoutet. */
+@page{size:A4;margin:16mm 15mm 18mm;}
+
+@media print{
+  html,body{background:#fff;color:#000;font-size:10.5pt;}
+
+  /* Skærmens navigation og opfordringer hører ikke til på papir */
+  nav,.nav-backdrop,.hero-scroll,.hero-stribe,.foto-stribe,
+  #sec-flere,.cta-band,#sv_footer_links,.print-linje{display:none !important;}
+
+  /* Afsenderen øverst og adressen nederst — vises kun i print */
+  .print-afsender{display:flex !important;align-items:center;gap:3mm;
+    margin-bottom:5mm;padding-bottom:3mm;border-bottom:.5pt solid #999;}
+  .print-afsender img{width:9mm;height:auto;}
+  .print-afsender span{font-family:'Manrope',sans-serif;font-size:8pt;
+    letter-spacing:.18em;text-transform:uppercase;color:#333;}
+  .print-fod{display:block !important;position:fixed;bottom:0;left:0;right:0;
+    font-family:'Manrope',sans-serif;font-size:7.5pt;color:#555;
+    border-top:.5pt solid #ccc;padding-top:2mm;}
+
+  /* Hero bliver en titelblok. Baggrundsbilledet ville dække et helt ark */
+  .hero{min-height:0;display:block;padding:0 0 4mm;margin:0 0 6mm;
+    border-bottom:1.5pt solid #000;overflow:visible;}
+  .hero-bg{display:none;}
+  .hero-inner{padding:0;}
+  .hero-content{display:block;}
+  .hero h1{font-size:20pt;color:#000;animation:none;margin:0;}
+  .hero-text p{font-size:11pt;color:#222;animation:none;max-width:none;}
+  .hero .eyebrow{color:#555;animation:none;}
+  .hero-meta{animation:none;gap:4mm;margin-top:3mm;}
+  .hero-meta div{background:none;border:.5pt solid #999;color:#000;padding:1.5mm 3mm;}
+
+  section{padding:5mm 0;}
+  section.alt,.hoej{background:#fff !important;color:#000 !important;}
+  .section-inner,.narrow{max-width:none;padding:0;margin:0;}
+  h2,.hoej h2{font-size:13pt;color:#000;break-after:avoid;margin-bottom:2mm;}
+  h3{font-size:11pt;color:#000;break-after:avoid;}
+  p,li,dd,dt{color:#000;font-size:10.5pt;line-height:1.45;}
+  .eyebrow,.hoej .eyebrow{color:#666;}
+  .hoej p,.hoej li{color:#000;}
+  .rule{background:#000;}
+
+  /* Billedet flyder til højre i stedet for at æde en spalte. To smalle
+     spalter brødtekst er svære at læse på papir. */
+  .split{display:block;}
+  .fig{float:right;max-width:52mm;margin:0 0 5mm 5mm;}
+  .fig img{transition:none;}
+  .fig-label{font-size:6pt;padding:1mm 2mm;}
+  .split::after{content:'';display:block;clear:both;}
+
+  /* Intet må knække midt i en oplysning */
+  .fakta-gruppe,.faq-item,.dist div,.kol-liste{break-inside:avoid;}
+  .fakta-gruppe{background:#fff !important;border:.5pt solid #bbb;padding:3mm;}
+  .fakta-gruppe h3{color:#000;}
+
+  /* På papir kan man ikke klikke, så adressen skal skrives ud. Kun i
+     brødteksten — ikke i menuen, som alligevel er skjult. */
+  section a[href^="http"]::after{content:" (" attr(href) ")";
+    font-size:8pt;color:#444;word-break:break-all;}
+  section a{color:#000;text-decoration:underline;}
+
+  footer{background:#fff;color:#555;border-top:.5pt solid #ccc;padding:4mm 0 0;}
+  #sv_footer_copy{color:#555;font-size:8pt;}
+}
 </style>
 </head>
 <body>
@@ -471,6 +556,13 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--gold);outline-offse
 </div>
 
 <div id="sv_side" style="display:none;">
+
+<!-- Kun i print: afsender øverst på første ark. Uden den kan et løst
+     udprintet ark ikke føres tilbage til ejendommen. -->
+<div class="print-afsender" aria-hidden="true">
+  <img src="/img/taarne-hvid-trans.png" alt="">
+  <span>Castillo del Alma · Mollina, Málaga</span>
+</div>
 
 <!-- HERO -->
 <header class="hero">
@@ -697,6 +789,18 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--gold);outline-offse
   </div>
 </section>
 
+<!-- PRINT — knappen står efter opfordringen, hvor man er færdig med at læse.
+     Browserens egen dialog kan både printe og gemme som PDF, så gæsten får
+     en fil uden at vi skal bygge en. -->
+<div class="print-linje" id="sv_print_linje">
+  <button type="button" class="btn-wine print-knap" onclick="window.print()" id="sv_print_btn">
+    ⎙ Print som A4-guide
+  </button>
+</div>
+
+<!-- Kun i print: står nederst på hvert ark -->
+<div class="print-fod" aria-hidden="true"><span id="sv_print_url"></span></div>
+
 </div><!-- /sv_side -->
 
 <footer>
@@ -773,10 +877,12 @@ const SV_STRIBE_FARVER = ['var(--wine)','var(--gold)','var(--teal)','var(--terra
 const SV_UI = {
   da: { tilbage:'← Tilbage til forsiden', flere:'Flere oplevelser', ikkeFundet:'Siden blev ikke fundet',
         ikkeFundetText:'Seværdigheden findes ikke — eller er ikke offentliggjort endnu.', tilForsiden:'Til forsiden',
-        kontakt:'Kontakt', privatliv:'Privatliv', udlejning:'Lej ejendommen', hjem:'← Tilbage til forsiden' },
+        kontakt:'Kontakt', privatliv:'Privatliv', udlejning:'Lej ejendommen', hjem:'← Tilbage til forsiden',
+        print:'Print som A4-guide' },
   en: { tilbage:'← Back to home', flere:'More experiences', ikkeFundet:'Page not found',
         ikkeFundetText:'This attraction does not exist — or has not been published yet.', tilForsiden:'Go to home page',
-        kontakt:'Contact', privatliv:'Privacy', udlejning:'Rent the estate', hjem:'← Back to home' }
+        kontakt:'Contact', privatliv:'Privacy', udlejning:'Rent the estate', hjem:'← Back to home',
+        print:'Print as A4 guide' }
 };
 
 // ── Slug ud af adressen ────────────────────────────────────────────────────
@@ -998,6 +1104,16 @@ function applySvContent() {
   svSetImg('sv_hero_image', svData.hero_image);
   { const h = document.querySelector('.hero');
     if (h) h.classList.toggle('har-stribe', svData.vis_hero_stribe !== '0'); }
+
+  // Print-knappen. Sidefoden får sidens adresse, så et ark der bliver væk
+  // fra resten stadig kan føres tilbage til siden.
+  { const pb = document.getElementById('sv_print_btn');
+    if (pb) pb.textContent = '⎙ ' + ui.print;
+    const pl = document.getElementById('sv_print_linje');
+    if (pl) pl.style.display = svData.vis_print === '0' ? 'none' : '';
+    const pu = document.getElementById('sv_print_url');
+    if (pu) pu.textContent = 'Castillo del Alma · ' +
+      String(location.host || 'castillodelalma.es') + location.pathname; }
   { const hi = document.getElementById('sv_hero_image');
     if (hi && svData.hero_image) hi.alt = svRent(svSC('hero_h1')) + ' — Castillo del Alma'; }
   const meta = svListe('hero_meta', 1).map(r => r[0]).filter(Boolean);
