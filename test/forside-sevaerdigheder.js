@@ -121,6 +121,65 @@ function kort(dom, titel) {
     r.tjek(a && /See the full guide/.test(a.textContent), 'pilen er på engelsk');
   }
 
+  r.overskrift('Flere kort, hver til sin side');
+  {
+    // Fire kort peger på sider. Slug'en bestemmes i admin, så data-slug må
+    // gerne rumme flere gæt — det er dét, der gør, at "Alhambra · Granada"
+    // finder sin side, uanset om den hedder alhambra eller alhambra-granada.
+    const dom = await indlaesSide('index.html', {
+      url: 'https://castillodelalma.es/',
+      geoSprog: 'da',
+      tabeller: { sevaerdigheder: [
+        CORDOBA,
+        { slug: 'caminito-del-rey', titel: 'Caminito del Rey', aktiv: true },
+        { slug: 'el-torcal', titel: 'El Torcal', aktiv: true },
+        { slug: 'alhambra', titel: 'Alhambra', aktiv: true },
+      ] },
+    });
+    const forventet = [
+      ['Caminito del Rey', '/sevaerdigheder/caminito-del-rey'],
+      ['Córdoba', '/sevaerdigheder/cordoba-mezquita'],
+      ['El Torcal', '/sevaerdigheder/el-torcal'],
+      ['Alhambra', '/sevaerdigheder/alhambra'],
+    ];
+    forventet.forEach(function (f) {
+      const c = kort(dom, f[0]);
+      r.tjek(!!c && c.classList.contains('exp-har-side'), f[0] + ' er markeret');
+      r.tjek(!!c && c.dataset.sevUrl === f[1],
+        f[0] + ' fører til sin egen side (fik: ' + (c && c.dataset.sevUrl) + ')');
+    });
+
+    // Hvert kort skal til SIN side — ikke til den første, der blev fundet
+    const urler = forventet.map(f => kort(dom, f[0]).dataset.sevUrl);
+    r.tjek(new Set(urler).size === 4, 'de fire kort fører fire forskellige steder hen');
+
+    // Og resten af sektionen skal være urørt
+    const uden = ['Vinsmagning', 'Rideture', 'Stjernekiggeri', 'Sevilla']
+      .map(t => kort(dom, t)).filter(Boolean);
+    r.tjek(uden.length === 4, 'de øvrige kort findes stadig');
+    r.tjek(uden.every(c => !c.classList.contains('exp-har-side')),
+      'kort uden side markeres ikke');
+    r.tjek(uden.every(c => !c.dataset.sevUrl), 'kort uden side åbner stadig modalen');
+  }
+
+  r.overskrift('Kun de sider der findes, kobles');
+  {
+    // Er kun én af de fire skrevet færdig og sat aktiv, må de tre andre
+    // ikke pludselig linke til noget, der ikke er der.
+    const dom = await indlaesSide('index.html', {
+      url: 'https://castillodelalba.es/'.replace('alba', 'alma'),
+      geoSprog: 'da',
+      tabeller: { sevaerdigheder: [{ slug: 'caminito-del-rey', titel: 'Caminito del Rey', aktiv: true }] },
+    });
+    r.tjek(kort(dom, 'Caminito del Rey').dataset.sevUrl === '/sevaerdigheder/caminito-del-rey',
+      'den færdige side kobles');
+    ['Córdoba', 'El Torcal', 'Alhambra'].forEach(t => {
+      const c = kort(dom, t);
+      r.tjek(c && !c.dataset.sevUrl, t + ' kobles ikke, når siden ikke er aktiv');
+      r.tjek(c && !c.classList.contains('exp-har-side'), t + ' markeres ikke');
+    });
+  }
+
   r.overskrift('Markeringen kan ses uden mouse over');
   {
     // Hele pointen: forskellen skal være synlig, FØR man peger på kortet.
