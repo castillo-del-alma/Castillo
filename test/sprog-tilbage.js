@@ -95,11 +95,11 @@ const CORDOBA = 7;
     }
   }
 
-  r.overskrift('Alle 19 kort, ikke kun Córdoba');
+  r.overskrift('Alle kort, ikke kun Córdoba');
   {
     const NOEGLER = ['vin','olie','vandre','mad','ride','caminito','malaga','cordoba',
       'antequera','stjerner','flamingo','eltorcal','camorra','ardales','dolmener',
-      'pena','alhambra','sevilla','picasso'];
+      'pena','alhambra','sevilla','picasso','alcazaba'];
     const indhold = NOEGLER.map(k => ({ key: 'opl_' + k + '_lang_en', value: 'EN-' + k }));
     const dom = await indlaesSide('index.html', {
       url: 'https://castillodelalma.es/en/', geoSprog: 'en', indhold: indhold
@@ -288,7 +288,7 @@ const CORDOBA = 7;
     // ikke skifter, straks kan udpeges ved navn.
     const OPL = ['vin','olie','vandre','mad','ride','caminito','malaga','cordoba',
       'antequera','stjerner','flamingo','eltorcal','camorra','ardales','dolmener',
-      'pena','alhambra','sevilla','picasso'];
+      'pena','alhambra','sevilla','picasso','alcazaba'];
     const WELL = ['breathwork','meditation','somatic','healing','massage','pool'];
     const ind = [];
     OPL.forEach(k => ['titel','lang'].forEach(f => {

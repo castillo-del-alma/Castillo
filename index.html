@@ -1662,6 +1662,9 @@ body.menu-open .nav-burger span:nth-child(3){ transform:translateY(-9px) rotate(
 
 
 
+      <div class="exp-item exp-has-modal" data-slug="alcazaba-gibralfaro-malaga" data-title="Alcazaba &amp; Gibralfaro · Málaga" data-image="" data-color="var(--olive)" data-body="Málagas vartegn — en maurisk palads-fæstning på bjergsiden og et borganlæg på toppen, forbundet af en dobbelt mur op ad skråningen. Haver, portene med knæk og et boligkvarter fra 1000-tallet nedenfor; murkrone, krudtmagasin og udsigt over havnen og tyrefægterarenaen ovenfor. 55 min. fra Castillo del Alma.">
+        <div class="exp-item-header"><div class="exp-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21 V9 l2-2 2 2 v3 h3 V7 l2-2 2 2 v5 h3 V9 l2-2 2 2 v12 Z"/><path d="M3 21 H21"/><path d="M11 21 v-4 h2 v4"/></svg></div><h4>Alcazaba &amp; Gibralfaro</h4></div><p>Málaga · Maurisk fæstning · 55 min.</p></div>
+
       <!-- ── GASTRONOMISK ── -->
 
 
@@ -3204,7 +3207,7 @@ function applySiteLang() {
   const oplIntro = document.querySelector('.exp-header p');
   if (oplIntro) oplIntro.textContent = SC('oplevelser_intro', orgVal(oplIntro, 'textContent'));
 
-  const oplKeys = ['vin','olie','vandre','mad','ride','caminito','malaga','cordoba','antequera','stjerner','flamingo','eltorcal','camorra','ardales','dolmener','pena','alhambra','sevilla','picasso'];
+  const oplKeys = ['vin','olie','vandre','mad','ride','caminito','malaga','cordoba','antequera','stjerner','flamingo','eltorcal','camorra','ardales','dolmener','pena','alhambra','sevilla','picasso','alcazaba'];
   const oplCards = document.querySelectorAll('.exp-item.exp-has-modal');
   oplKeys.forEach((key, i) => {
     const card = oplCards[i];
