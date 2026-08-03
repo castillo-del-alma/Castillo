@@ -32,6 +32,8 @@ function kaede(raekker) {
  * @param {object} o
  * @param {string} o.url          hele adressen, fx 'https://castillodelalma.es/en/'
  * @param {object[]} o.indhold    rækker som Supabase-forespørgsler skal svare med
+ * @param {object} o.tabeller     svar pr. tabelnavn, fx { sevaerdigheder: [...] }.
+ *                                Tabeller der ikke nævnes, får `indhold`.
  * @param {object[]} o.anmeldelser rækker som /rest/v1/reviews skal svare med
  * @param {string} o.geoSprog     'da' | 'en' — svaret fra geo-funktionen
  * @param {number} o.geoForsinkelse  ms før geo svarer. Høj værdi = sproget
@@ -42,6 +44,7 @@ async function indlaesSide(fil, o = {}) {
   const {
     url = 'https://castillodelalma.es/',
     indhold = [],
+    tabeller = {},
     anmeldelser = [],
     geoSprog = 'en',
     geoForsinkelse = 300,
@@ -63,7 +66,10 @@ async function indlaesSide(fil, o = {}) {
       w.scrollTo = () => {};
       w.supabase = {
         createClient: () => ({
-          from: () => kaede(indhold),
+          // Svar kan gives pr. tabel. Uden det får en forespørgsel mod
+          // `sevaerdigheder` de samme rækker som `site_content`, og en test
+          // af koblingen mellem dem ville aldrig kunne fejle.
+          from: (t) => kaede(Object.prototype.hasOwnProperty.call(tabeller, t) ? tabeller[t] : indhold),
           storage: { from: () => kaede([]) },
           rpc: () => kaede([]),
         }),

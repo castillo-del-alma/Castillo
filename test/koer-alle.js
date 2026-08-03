@@ -20,6 +20,7 @@ const TESTS = [
   ['Beløb',         'beloeb.js'],
   ['Bilag',         'bilag.js'],
   ['Seværdigheder', 'sevaerdigheder.js'],
+  ['Forside → seværdigheder', 'forside-sevaerdigheder.js'],
   ['Billeder',     'billeder.js'],
 ];
 

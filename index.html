@@ -771,6 +771,41 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:5rem
 }
 .exp-has-modal:hover .exp-item-arrow{color:var(--wine);}
 
+/* ── KORT MED EGEN SIDE ──────────────────────────────────────────────────
+   Nogle af stederne har fået deres egen side under /sevaerdigheder/. De
+   kort skal kunne skelnes fra dem, der kun åbner en boks med et par linjer
+   — ellers klikker man i blinde og opdager først forskellen bagefter.
+   Markeringen skal virke UDEN mouse over, så man kan se det med det samme:
+   hvid bund i stedet for cremet, en tynd vinrød kant og båndet i bunden
+   allerede trukket ud. På hover bliver det bare tydeligere. */
+.exp-item.exp-har-side{
+  background:#fff;
+  box-shadow:inset 0 0 0 1px rgba(122,31,53,.28);
+}
+.exp-item.exp-har-side::before{
+  background:var(--wine) !important;
+  transform:scaleX(1);
+  height:3px;
+}
+.exp-item.exp-har-side:hover{
+  background:var(--beige);
+  box-shadow:inset 0 0 0 1px rgba(122,31,53,.55);
+}
+.exp-item.exp-har-side .exp-icon{color:var(--wine) !important;}
+/* Pilen bliver et rigtigt link, så Google også kan følge det videre */
+.exp-item.exp-har-side .exp-item-arrow{
+  color:var(--wine);font-weight:500;text-decoration:none;
+}
+.exp-item.exp-har-side:hover .exp-item-arrow{color:var(--wine-light,#9c2b44);}
+/* Lille mærkat i hjørnet — farven alene siger ikke hvad forskellen er */
+.exp-side-maerkat{
+  position:absolute;top:0;right:0;z-index:2;
+  background:var(--wine);color:#fff;
+  font-family:'Manrope',sans-serif;font-size:.5rem;font-weight:500;
+  letter-spacing:.16em;text-transform:uppercase;
+  padding:.3rem .6rem;
+}
+
 /* Modal overlay */
 .exp-modal-overlay{
   position:fixed;inset:0;
@@ -1588,7 +1623,7 @@ body.menu-open .nav-burger span:nth-child(3){ transform:translateY(-9px) rotate(
       <div class="exp-item exp-has-modal" data-title="Rideture i Andalusien" data-image="img/friends-horseback-riding-mountain.jpg" data-color="var(--wine)" data-body="Det andalusiske landskab set fra hesteryg er en oplevelse for livet. Vi tilbyder guidede rideture gennem vinmarker og olivenlunde, hvor det berømte andalusiske klima og de smukke omgivelser skaber en uforglemmelig oplevelse."><div class="exp-item-header"><div class="exp-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="7" cy="17" r="2"/><circle cx="17" cy="17" r="2"/><path d="M5 17H3v-4l3-5h8l3 5 1 1v3h-2"/><path d="M14 8l1-5h2l1 2"/></svg></div><h4>Rideture</h4></div><p>Andalusisk landskab fra hesteryg</p></div>
       <div class="exp-item exp-has-modal" data-title="Caminito del Rey" data-image="img/caminito-del-rey-tour-from-granada-4-1.jpg" data-color="var(--terracotta)" data-body="En af Spaniens mest spektakulære vandrestier — en smal sti langs de lodrette klippevægge over Guadalhorce-floden. En adrenalinfyldt og smuk oplevelse der er tilgængelig for de fleste gæster med god gangdistance."><div class="exp-item-header"><div class="exp-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 18 Q6 8 12 10 Q18 12 21 6"/><line x1="3" y1="21" x2="21" y2="21"/><path d="M8 21v-4"/><path d="M16 21v-6"/></svg></div><h4>Caminito del Rey</h4></div><p>Spektakulær kløftsti langs klippen</p></div>
       <div class="exp-item exp-has-modal" data-title="Málaga — Kultur & Gastronomi" data-image="img/panoramic-aerial-view-with-plaza-de-toros-port-malaga-city-hall-cathedral-sunset-malaga-andalusia-spain.jpg" data-color="var(--teal)" data-body="Málaga er en af Spaniens mest levende byer — med verdsklasse-gastronomi, Picassos fødeby, smukke strande og en pulserende kultur. Kun en times kørsel fra Castillo del Alma er den den perfekte dagstur."><div class="exp-item-header"><div class="exp-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="10" width="18" height="11" rx="1"/><path d="M3 10l9-7 9 7"/><rect x="9" y="14" width="6" height="7"/></svg></div><h4>Málaga</h4></div><p>Kunst, kultur og gastronomisk scene</p></div>
-      <div class="exp-item exp-has-modal" data-title="Córdoba" data-image="img/low-angle-shot-patterned-columns-lined-up-inside-majestic-cathedral-spain.jpg" data-color="var(--wine)" data-body="Den historiske by Córdoba er en af Andalusiens mest fascinerende kulturelle oplevelser. Byen emmer af historie, smalle brostensgader, blomsterfyldte patioer og en helt særlig stemning fra det gamle Spanien.|I hjertet af Córdoba ligger den verdenskendte Mezquita-Catedral de Córdoba — den tidligere moské, som senere blev ombygget med en kristen katedral midt inde i den oprindelige islamiske arkitektur.|Et besøg i Córdoba er kun en times kørsel væk fra Castillo del Alma."><div class="exp-item-header"><div class="exp-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="11" x2="21" y2="11"/><path d="M5 11V4"/><path d="M19 11V4"/><ellipse cx="12" cy="16" rx="9" ry="4"/><line x1="12" y1="11" x2="12" y2="4"/></svg></div><h4>Córdoba</h4></div><p>Historie, patioer og stemning fra det gamle Spanien</p></div>
+      <div class="exp-item exp-has-modal" data-slug="cordoba-mezquita" data-title="Córdoba" data-image="img/low-angle-shot-patterned-columns-lined-up-inside-majestic-cathedral-spain.jpg" data-color="var(--wine)" data-body="Den historiske by Córdoba er en af Andalusiens mest fascinerende kulturelle oplevelser. Byen emmer af historie, smalle brostensgader, blomsterfyldte patioer og en helt særlig stemning fra det gamle Spanien.|I hjertet af Córdoba ligger den verdenskendte Mezquita-Catedral de Córdoba — den tidligere moské, som senere blev ombygget med en kristen katedral midt inde i den oprindelige islamiske arkitektur.|Et besøg i Córdoba er kun en times kørsel væk fra Castillo del Alma."><div class="exp-item-header"><div class="exp-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="11" x2="21" y2="11"/><path d="M5 11V4"/><path d="M19 11V4"/><ellipse cx="12" cy="16" rx="9" ry="4"/><line x1="12" y1="11" x2="12" y2="4"/></svg></div><h4>Córdoba</h4></div><p>Historie, patioer og stemning fra det gamle Spanien</p></div>
       <div class="exp-item exp-has-modal" data-title="Antequera" data-image="img/visiter-antequera-que-voir-things-to-see-in-antequera-scaled.jpg" data-color="var(--gold)" data-body="Antequera beskrives ofte som hjertet af Andalusien — og med god grund. Med sine imponerende dolmener (UNESCO-verdensarv), majestætiske borg og charmerende gader er det en af regionens mest fascinerende byer. Kun 15 minutter fra Castillo del Alma."><div class="exp-item-header"><div class="exp-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="10" r="4"/><path d="M12 14v7"/><path d="M8 21h8"/><path d="M5 10a7 7 0 0 1 14 0"/></svg></div><h4>Antequera</h4></div><p>Hjertet af Andalusien — 15 min. væk</p></div>
       <div class="exp-item exp-has-modal" data-title="Stjernekiggeri" data-image="img/magnific_cpuple-are-looking-at-sta_1sBaCibr4r.jpg" data-color="var(--wine)" data-body="Langt fra byernes lysstøj åbner nattehimmelen sig over Mollina i al sin pragt. Med det klare andalusiske klima og minimal lysforurening er forholdene ideelle for stjernekiggeri — en stille og meditativ oplevelse der sjældent glemmes."><div class="exp-item-header"><div class="exp-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15 9 22 9 16.5 13.5 18.5 21 12 17 5.5 21 7.5 13.5 2 9 9 9"/></svg></div><h4>Stjernekiggeri</h4></div><p>Nattehimmelen langt fra byernes støj</p></div>
 
@@ -2159,7 +2194,16 @@ document.querySelectorAll('.exp-has-modal').forEach(item=>{
   item.appendChild(arrow);
 
   // Click handler
-  item.addEventListener('click', ()=>{
+  item.addEventListener('click', (e)=>{
+    // Har kortet fået sin egen side, går klikket derhen i stedet for at
+    // åbne modalen. Sættes af koblSevaerdighedssider() når siden er hentet.
+    if (item.dataset.sevUrl) {
+      // Klik på selve linket klarer sig selv — ellers ville vi lægge to
+      // poster i historikken for det samme spring.
+      if (e.target.closest && e.target.closest('a')) return;
+      window.location.href = item.dataset.sevUrl;
+      return;
+    }
     window.aabentExpKort = item;
     tegnExpModal(item);
     overlay.classList.add('active');
@@ -3357,6 +3401,10 @@ function applySiteLang() {
 
   applySectionToggles();
 
+  // Kort med egen side: adressen og pilteksten skal følge sproget, ellers
+  // sender den engelske forside gæsten videre til den danske guide.
+  if (typeof sevTegnKort === 'function') sevTegnKort();
+
   // Står en modal åben, skal DENS indhold også skifte. Kortenes data er
   // opdateret ovenfor, men den viste tekst blev sat, da modalen blev åbnet.
   if (window.aabentExpKort && typeof tegnExpModal === 'function') tegnExpModal(window.aabentExpKort);
@@ -3435,11 +3483,100 @@ document.addEventListener('DOMContentLoaded', async () => {
   await loadSiteContent();
   currentSiteLang = await determineStartLang();
   setSiteLang(currentSiteLang);
+  await koblSevaerdighedssider();
   await loadUploadedGalleryItems();
   initGalleryClicks();
   applyUploadedMedia();
   setTimeout(reanchorHash, 150);
 });
+
+// ══ KORT MED EGEN SEVÆRDIGHEDSSIDE ═══════════════════════════════════════
+// Nogle af stederne i "Oplevelser & Livsnydelse" har fået deres egen side
+// under /sevaerdigheder/. De kort skal føre direkte derhen i stedet for at
+// åbne en boks med tre linjer — og de skal kunne SES udefra, så man ikke
+// klikker i blinde og først opdager forskellen bagefter.
+//
+// Kortet peger på siden med data-slug. Men vi linker ikke i blinde: findes
+// rækken ikke i databasen, eller er den sat på pause i admin, opfører kortet
+// sig præcis som før. Så opgraderer sektionen sig selv, efterhånden som der
+// bliver skrevet flere sider, og et halvfærdigt udkast kommer aldrig frem.
+//
+// Slug'en kan være valgt anderledes i admin, end kortet gætter på. Derfor
+// prøves kortets titel også mod rækkernes navn, før vi giver op.
+let sevKoblede = [];   // [{ kort, slug }]
+
+function sevNormaliser(t) {
+  return String(t || '').toLowerCase()
+    .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+    .replace(/[^a-z0-9]+/g, ' ').trim();
+}
+
+async function koblSevaerdighedssider() {
+  const kort = Array.from(document.querySelectorAll('.exp-item[data-slug]'));
+  if (!kort.length || typeof sbContent === 'undefined' || !sbContent) return;
+
+  let raekker = [];
+  try {
+    const { data, error } = await sbContent
+      .from('sevaerdigheder').select('slug,titel,titel_en,aktiv').eq('aktiv', true);
+    if (error) throw error;
+    raekker = data || [];
+  } catch (e) {
+    // Tabellen findes måske ikke endnu, eller nettet svigter. Kortene
+    // bliver stående som de er — en modal er et fint fald tilbage.
+    return;
+  }
+  if (!raekker.length) return;
+
+  const efterSlug = {};
+  const efterNavn = {};
+  raekker.forEach(r => {
+    efterSlug[r.slug] = r.slug;
+    [r.titel, r.titel_en].forEach(n => {
+      const nk = sevNormaliser(n);
+      if (nk && !efterNavn[nk]) efterNavn[nk] = r.slug;
+    });
+  });
+
+  sevKoblede = [];
+  kort.forEach(k => {
+    const oensket = k.getAttribute('data-slug') || '';
+    const slug = efterSlug[oensket] || efterNavn[sevNormaliser(k.getAttribute('data-title'))];
+    if (!slug) return;
+    k.classList.add('exp-har-side');
+    if (!k.querySelector('.exp-side-maerkat')) {
+      const m = document.createElement('span');
+      m.className = 'exp-side-maerkat';
+      k.appendChild(m);
+    }
+    sevKoblede.push({ kort: k, slug: slug });
+  });
+  sevTegnKort();
+}
+
+// Adressen og teksterne følger sproget. Kaldes også fra applySiteLang, så
+// et skift til engelsk ikke sender gæsten videre til den danske side.
+function sevTegnKort() {
+  const p = currentSiteLang === 'en' ? '/en' : '';
+  const erEn = currentSiteLang === 'en';
+  sevKoblede.forEach(function (x) {
+    const url = p + '/sevaerdigheder/' + encodeURIComponent(x.slug);
+    x.kort.dataset.sevUrl = url;
+    const m = x.kort.querySelector('.exp-side-maerkat');
+    if (m) m.textContent = erEn ? 'Guide' : 'Guide';
+    let a = x.kort.querySelector('a.exp-item-arrow');
+    const gl = x.kort.querySelector('span.exp-item-arrow');
+    if (!a) {
+      // Pilen bliver et rigtigt link. En div med en klikhandler kan Google
+      // ikke følge, og man kan ikke åbne den i et nyt faneblad.
+      a = document.createElement('a');
+      a.className = 'exp-item-arrow';
+      if (gl) gl.replaceWith(a); else x.kort.appendChild(a);
+    }
+    a.href = url;
+    a.textContent = erEn ? 'See the full guide →' : 'Se hele guiden →';
+  });
+}
 
 // ── ERSTAT BILLEDER/VIDEO MED UPLOADEDE FILER ──
 function applyUploadedMedia() {
