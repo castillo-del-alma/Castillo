@@ -21,6 +21,7 @@ const TESTS = [
   ['Bilag',         'bilag.js'],
   ['Seværdigheder', 'sevaerdigheder.js'],
   ['Forside → seværdigheder', 'forside-sevaerdigheder.js'],
+  ['Picasso-museet', 'sevaerdighed-picasso.js'],
   ['Billeder',     'billeder.js'],
 ];
 

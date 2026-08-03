@@ -134,6 +134,7 @@ function kort(dom, titel) {
         { slug: 'caminito-del-rey', titel: 'Caminito del Rey', aktiv: true },
         { slug: 'el-torcal-antequera', titel: 'El Torcal, Antequera', aktiv: true },
         { slug: 'alhambra-granada', titel: 'Alhambra - Granada', aktiv: true },
+        { slug: 'picasso-museum-malaga', titel: 'Picasso-museet, Málaga', aktiv: true },
       ] },
     });
     const forventet = [
@@ -141,6 +142,7 @@ function kort(dom, titel) {
       ['Córdoba', '/sevaerdigheder/cordoba-mezquita'],
       ['El Torcal', '/sevaerdigheder/el-torcal-antequera'],
       ['Alhambra', '/sevaerdigheder/alhambra-granada'],
+      ['Picasso', '/sevaerdigheder/picasso-museum-malaga'],
     ];
     forventet.forEach(function (f) {
       const c = kort(dom, f[0]);
@@ -151,7 +153,7 @@ function kort(dom, titel) {
 
     // Hvert kort skal til SIN side — ikke til den første, der blev fundet
     const urler = forventet.map(f => kort(dom, f[0]).dataset.sevUrl);
-    r.tjek(new Set(urler).size === 4, 'de fire kort fører fire forskellige steder hen');
+    r.tjek(new Set(urler).size === 5, 'de fem kort fører fem forskellige steder hen');
 
     // Og resten af sektionen skal være urørt
     const uden = ['Vinsmagning', 'Rideture', 'Stjernekiggeri', 'Sevilla']
@@ -190,7 +192,7 @@ function kort(dom, titel) {
     });
     r.tjek(kort(dom, 'Caminito del Rey').dataset.sevUrl === '/sevaerdigheder/caminito-del-rey',
       'den færdige side kobles');
-    ['Córdoba', 'El Torcal', 'Alhambra'].forEach(t => {
+    ['Córdoba', 'El Torcal', 'Alhambra', 'Picasso'].forEach(t => {
       const c = kort(dom, t);
       r.tjek(c && !c.dataset.sevUrl, t + ' kobles ikke, når siden ikke er aktiv');
       r.tjek(c && !c.classList.contains('exp-har-side'), t + ' markeres ikke');
