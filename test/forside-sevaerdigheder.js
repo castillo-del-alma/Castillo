@@ -132,15 +132,15 @@ function kort(dom, titel) {
       tabeller: { sevaerdigheder: [
         CORDOBA,
         { slug: 'caminito-del-rey', titel: 'Caminito del Rey', aktiv: true },
-        { slug: 'el-torcal', titel: 'El Torcal', aktiv: true },
-        { slug: 'alhambra', titel: 'Alhambra', aktiv: true },
+        { slug: 'el-torcal-antequera', titel: 'El Torcal, Antequera', aktiv: true },
+        { slug: 'alhambra-granada', titel: 'Alhambra - Granada', aktiv: true },
       ] },
     });
     const forventet = [
       ['Caminito del Rey', '/sevaerdigheder/caminito-del-rey'],
       ['Córdoba', '/sevaerdigheder/cordoba-mezquita'],
-      ['El Torcal', '/sevaerdigheder/el-torcal'],
-      ['Alhambra', '/sevaerdigheder/alhambra'],
+      ['El Torcal', '/sevaerdigheder/el-torcal-antequera'],
+      ['Alhambra', '/sevaerdigheder/alhambra-granada'],
     ];
     forventet.forEach(function (f) {
       const c = kort(dom, f[0]);
@@ -160,6 +160,23 @@ function kort(dom, titel) {
     r.tjek(uden.every(c => !c.classList.contains('exp-har-side')),
       'kort uden side markeres ikke');
     r.tjek(uden.every(c => !c.dataset.sevUrl), 'kort uden side åbner stadig modalen');
+  }
+
+  r.overskrift('Navnet redder koblingen, hvis en slug bliver rettet');
+  {
+    // Slug'en bestemmes i admin. Rettes den, uden at nogen husker at rette
+    // kortet her, skal navnet fange koblingen i stedet for at kortet stille
+    // falder tilbage til modalen.
+    const dom = await indlaesSide('index.html', {
+      url: 'https://castillodelalma.es/',
+      geoSprog: 'da',
+      tabeller: { sevaerdigheder: [
+        { slug: 'el-torcal-de-antequera', titel: 'El Torcal de Antequera', aktiv: true },
+      ] },
+    });
+    const c = kort(dom, 'El Torcal');
+    r.tjek(c && c.dataset.sevUrl === '/sevaerdigheder/el-torcal-de-antequera',
+      'navnet fanger den nye slug (fik: ' + (c && c.dataset.sevUrl) + ')');
   }
 
   r.overskrift('Kun de sider der findes, kobles');
