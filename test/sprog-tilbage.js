@@ -99,7 +99,7 @@ const CORDOBA = 7;
   {
     const NOEGLER = ['vin','olie','vandre','mad','ride','caminito','malaga','cordoba',
       'antequera','stjerner','flamingo','eltorcal','camorra','ardales','dolmener',
-      'pena','alhambra','sevilla','picasso','alcazaba'];
+      'pena','alhambra','ronda','sevilla','picasso','alcazaba'];
     const indhold = NOEGLER.map(k => ({ key: 'opl_' + k + '_lang_en', value: 'EN-' + k }));
     const dom = await indlaesSide('index.html', {
       url: 'https://castillodelalma.es/en/', geoSprog: 'en', indhold: indhold
@@ -288,7 +288,7 @@ const CORDOBA = 7;
     // ikke skifter, straks kan udpeges ved navn.
     const OPL = ['vin','olie','vandre','mad','ride','caminito','malaga','cordoba',
       'antequera','stjerner','flamingo','eltorcal','camorra','ardales','dolmener',
-      'pena','alhambra','sevilla','picasso','alcazaba'];
+      'pena','alhambra','ronda','sevilla','picasso','alcazaba'];
     const WELL = ['breathwork','meditation','somatic','healing','massage','pool'];
     const ind = [];
     OPL.forEach(k => ['titel','lang'].forEach(f => {
@@ -340,8 +340,13 @@ const CORDOBA = 7;
     // Bytter to kort plads i HTML'en, får de hinandens tekster.
     r.tjek(opl[0].getAttribute('data-title') === 'DA-titel-vin',
       'første kort er vin — nøglelisten følger DOM-rækkefølgen');
-    r.tjek(opl[18].getAttribute('data-title') === 'DA-titel-picasso',
-      'sidste kort er picasso');
+    // Slå positionen op i stedet for at hardkode den, så testen ikke skal
+    // rettes hver gang der kommer et kort til midt i rækken.
+    const iPicasso = OPL.indexOf('picasso');
+    r.tjek(opl[iPicasso].getAttribute('data-title') === 'DA-titel-picasso',
+      'kort nr. ' + iPicasso + ' er picasso');
+    r.tjek(opl[OPL.length - 1].getAttribute('data-title') === 'DA-titel-' + OPL[OPL.length - 1],
+      'sidste kort er ' + OPL[OPL.length - 1]);
   }
 
   process.exit(r.afslut());
