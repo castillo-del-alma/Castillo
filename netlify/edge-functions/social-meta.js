@@ -118,11 +118,101 @@ export function transformHtml(html, { title, desc, img, canonical, fjernImgDim, 
   return ud;
 }
 
+
+// ── SERVERGENGIVELSE (SEO Bølge 5) ──────────────────────────────────────
+// Seværdighedssiderne og forsidens oplevelseskort hentede alt sit indhold
+// med JavaScript. Første gang Googlebot besøgte en seværdighed, sagde den
+// rå HTML derfor "Seværdigheden findes ikke", og forsiden havde ikke ét
+// eneste link til undersiderne. Her skrives indholdet ind i HTML'en, FØR
+// den forlader serveren — for alle besøgende, ikke kun robotter. Det er
+// samme indhold som JavaScript ville have tegnet, bare uden ventetiden.
+//
+// Alt herunder er skrevet, så en fejl aldrig kan koste siden: fejler et
+// opslag, returneres HTML'en uændret, og JavaScript overtager som før.
+
+// Tekstfelter, der IKKE skal skrives ind: billeder og rene indstillinger.
+const SV_SPRING_OVER = /(_image\d*|_images|_billede|_link|_orden|_layout|_bredde|_items$|^vis_|^sektion_|^social_|^seo_|^hero_meta$|^strip\d)/;
+
+/** Skriver indhold ind i et TOMT element med id="sv_<nøgle>".
+ *  Elementer, der allerede har tekst, røres ikke. */
+function saetIndhold(html, id, indre) {
+  if (!indre) return html;
+  // Kun tomme elementer: <h1 id="sv_hero_h1"></h1>
+  const re = new RegExp('(<([a-zA-Z0-9]+)\\b[^>]*\\bid="' + id + '"[^>]*>)(<\\/\\2>)');
+  return html.replace(re, (m, aabn, tag, luk) => aabn + indre + luk);
+}
+
+/** Én række fra `sevaerdigheder` gengivet direkte i sidens HTML. */
+export function indsaetSevIndhold(html, raekke, isEN) {
+  try {
+    if (!raekke) return html;
+    const ind = (raekke.indhold && typeof raekke.indhold === 'object') ? raekke.indhold : {};
+    const vaelg = (k) => {
+      const v = isEN ? (ind[k + '_en'] || ind[k]) : ind[k];
+      return (typeof v === 'string') ? v.trim() : '';
+    };
+    // Selve siden er skjult, indtil JavaScript har fundet rækken. Nu ved vi,
+    // at den findes, så den vises med det samme — intet glimt af fejlbesked.
+    let ud = html.replace('<div id="sv_side" style="display:none;">', '<div id="sv_side">');
+
+    Object.keys(ind).forEach((raaKey) => {
+      const key = raaKey.replace(/_en$/, '');
+      if (SV_SPRING_OVER.test(key)) return;
+      const vaerdi = vaelg(key);
+      if (!vaerdi) return;
+      // Lister gemmes som JSON eller som "felt|felt"-linjer og tegnes af
+      // JavaScript. Skrives de ind råt, ville Google se "Spørgsmål|Svar".
+      if (vaerdi.charAt(0) === '[' || vaerdi.charAt(0) === '{' || vaerdi.indexOf('|') !== -1) return;
+      // Brødtekst er ét afsnit pr. linje — præcis som svSetAfsnit på siden
+      const indre = /_text$/.test(key)
+        ? vaerdi.split('\n').filter(Boolean).map((t) => '<p>' + t + '</p>').join('')
+        : vaerdi;
+      ud = saetIndhold(ud, 'sv_' + key, indre);
+    });
+    return ud;
+  } catch (e) {
+    return html;   // hellere siden som før end ingen side
+  }
+}
+
+/** Forsidens oplevelseskort får et rigtigt <a href>, så Google kan følge det.
+ *  Samme link og samme tekst som sevTegnKort() ville have sat med JavaScript. */
+export function indsaetSevLinks(html, raekker, isEN) {
+  try {
+    if (!Array.isArray(raekker) || !raekker.length) return html;
+    const aktive = new Set(raekker.filter((r) => r && r.slug).map((r) => r.slug));
+    const praefiks = isEN ? '/en' : '';
+    const tekst = isEN ? 'See the full guide \u2192' : 'Se hele guiden \u2192';
+    let ud = html;
+    aktive.forEach((slug) => {
+      // Kortets data-slug kan rumme flere gæt adskilt af mellemrum
+      const i = ud.search(new RegExp('data-slug="[^"]*\\b' + slug.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '\\b[^"]*"'));
+      if (i === -1) return;
+      // Kortet slutter ved det første </div> efter afsnittet
+      const slut = ud.indexOf('</p></div>', i);
+      if (slut === -1) return;
+      const link = '</p><a class="exp-item-arrow" href="' + praefiks + '/sevaerdigheder/'
+        + encodeURIComponent(slug) + '">' + tekst + '</a></div>';
+      ud = ud.slice(0, slut) + link + ud.slice(slut + '</p></div>'.length);
+    });
+    return ud;
+  } catch (e) {
+    return html;
+  }
+}
+
 export default async (request, context) => {
   const ua = request.headers.get('user-agent') || '';
-  if (!BOT_RE.test(ua)) return context.next();
+  const erBot = BOT_RE.test(ua);
 
   const url = new URL(request.url);
+  // SEO (Bølge 5): servergengivelsen gælder ALLE besøgende på forsiden og på
+  // seværdighedssiderne — samme HTML til robotter og mennesker. Alt andet
+  // passerer uberørt igennem, medmindre det er en robot der skal have meta.
+  const erForside = /^\/(index\.html)?$|^\/en\/?$|^\/en\/index\.html$/.test(url.pathname);
+  const erSevSti = /^(?:\/en)?\/sevaerdigheder(?:\.html)?\/[^/]+\/?$/.test(url.pathname)
+    || /\/sevaerdighed\.html$/.test(url.pathname);
+  if (!erBot && !erForside && !erSevSti) return context.next();
   const isEN = /^\/en(\/|$)/.test(url.pathname);
   // Ren adresseform: /retreat/<slug> (også /en/retreat/<slug>).
   // Gammel form (?slug=…) bevares som fallback — den 301'er normalt videre,
@@ -154,7 +244,9 @@ export default async (request, context) => {
 
   try {
     let haandteret = false;
-    if (erGaySide) {
+    if (!erBot) {
+      haandteret = true;   // meta-tags røres ikke for almindelige besøgende
+    } else if (erGaySide) {
       const GAY_DA = 'https://castillodelalma.es/gay-retreat-malaga-spain';
       const GAY_EN = 'https://castillodelalma.es/en/gay-retreat-malaga-spain';
       const api = SUPABASE_URL + '/rest/v1/gay_content?select=key,value'
@@ -301,6 +393,25 @@ export default async (request, context) => {
       }
     }
   } catch (e) { /* fallback: uændret HTML — må aldrig vælte serveringen */ }
+
+  // ── Servergengivelse for alle besøgende ────────────────────────────────
+  // Fejler et opslag, står HTML'en uændret tilbage, og JavaScript tegner
+  // siden som hidtil. Der kan altså ikke gå noget i stykker af det her.
+  try {
+    if (erSevSti && svSlug) {
+      const api = SUPABASE_URL + '/rest/v1/sevaerdigheder?select=indhold'
+        + '&aktiv=eq.true&slug=eq.' + encodeURIComponent(svSlug) + '&limit=1';
+      const r = await fetch(api, { headers: { apikey: ANON_KEY, authorization: 'Bearer ' + ANON_KEY } });
+      const raekker = r.ok ? await r.json() : [];
+      const raekke = Array.isArray(raekker) ? raekker[0] : null;
+      if (raekke) html = indsaetSevIndhold(html, raekke, isEN);
+    } else if (erForside) {
+      const api = SUPABASE_URL + '/rest/v1/sevaerdigheder?select=slug&aktiv=eq.true';
+      const r = await fetch(api, { headers: { apikey: ANON_KEY, authorization: 'Bearer ' + ANON_KEY } });
+      const raekker = r.ok ? await r.json() : [];
+      html = indsaetSevLinks(html, raekker, isEN);
+    }
+  } catch (e) { /* uændret HTML — JavaScript overtager som før */ }
 
   return new Response(html, {
     status: res.status === 206 ? 200 : res.status,

@@ -24,6 +24,7 @@ const TESTS = [
   ['Seværdigheds-seeds', 'sevaerdigheder-seed.js'],
   ['Billeder',     'billeder.js'],
   ['Torremolinos', 'torremolinos.js'],
+  ['Servergengivelse', 'servergengivelse.js'],
 ];
 
 const resultat = [];

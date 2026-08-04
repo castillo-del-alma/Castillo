@@ -235,6 +235,15 @@
   path = "/en/gay-retreat-malaga-spain"
   function = "social-meta"
 [[edge_functions]]
+  path = "/sevaerdigheder/*"
+  function = "social-meta"
+[[edge_functions]]
+  path = "/en/sevaerdigheder/*"
+  function = "social-meta"
+[[edge_functions]]
+  path = "/sevaerdighed.html"
+  function = "social-meta"
+[[edge_functions]]
   path = "/gay-torremolinos"
   function = "social-meta"
 [[edge_functions]]
