@@ -34,6 +34,22 @@
     <changefreq>monthly</changefreq><priority>0.8</priority>
   </url>
   <url>
+    <loc>https://castillodelalma.es/gay-torremolinos</loc>
+    <xhtml:link rel="alternate" hreflang="da" href="https://castillodelalma.es/gay-torremolinos"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://castillodelalma.es/en/gay-torremolinos"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://castillodelalma.es/en/gay-torremolinos"/>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://castillodelalma.es/en/gay-torremolinos</loc>
+    <xhtml:link rel="alternate" hreflang="da" href="https://castillodelalma.es/gay-torremolinos"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://castillodelalma.es/en/gay-torremolinos"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://castillodelalma.es/en/gay-torremolinos"/>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://castillodelalma.es/ejendommen</loc>
     <xhtml:link rel="alternate" hreflang="da" href="https://castillodelalma.es/ejendommen"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://castillodelalma.es/en/ejendommen"/>
