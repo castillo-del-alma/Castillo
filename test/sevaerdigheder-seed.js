@@ -51,7 +51,33 @@ const SIDER = [
     antalFaq: 6,
     antalFakta: 8,
   },
+  {
+    // Den første side om en DAG frem for om ét sted. Den bruger de ekstra
+    // sektioner historie51 og historie52 til andet og tredje stop — de står
+    // tomme på alle andre sider, så her skal det bevises, at de faktisk
+    // kommer frem, og at de to ubrugte stadig holder sig skjult.
+    navn: 'Sevilla',
+    fil: 'sql/2026-08-04-sevaerdighed-sevilla.sql',
+    slug: 'sevilla',
+    titel: 'Sevilla',
+    daOverskrift: /Sevilla/,
+    enOverskrift: /A day in\s*Seville/,
+    // "Cuarto Real Alto" og "Puerta del Lagarto" står kun ét sted hver — i
+    // fakta-grupperne. Bliver en gruppe væk, siger de fra med det samme.
+    daTekst: [/Avenida de la Constitución/, /Patio de Banderas/, /13 €/, /15,50 €/,
+              /Cuarto Real Alto/, /Puerta del Lagarto/,
+              /1\. april–30\. september/, /Plaza de España/],
+    enTekst: [/Official ticket sales — Cathedral and Giralda/, /1 April–30 September/],
+    linkVaert: /catedraldesevilla\.servitickets\.es/,
+    linkTekst: /Officiel billetsalg — Katedralen og Giralda/,
+    antalFaq: 6,
+    antalFakta: 8,
+    // Andet og tredje stop ligger i de ekstra sektioner
+    ekstraSektioner: ['sec-historie51', 'sec-historie52'],
+  },
 ];
+const EKSTRA_SEKTIONER = ['sec-historie51', 'sec-historie52',
+                          'sec-historie53', 'sec-historie54'];
 // Træk JSON'en ud af insert-sætningen og vend SQL-escapingen ('' → ')
 function udtraekIndhold(sql) {
   const i = sql.indexOf("   '{") + 4;
@@ -136,10 +162,19 @@ for (const S of SIDER) {
     r.tjek(d.querySelectorAll('.fakta-gruppe').length === S.antalFakta,
       'alle ' + S.antalFakta + ' fakta-grupper er bygget');
 
-    // Sektioner der ikke bruges, må ikke efterlade tomme huller
-    ['sec-historie51', 'sec-historie52', 'sec-historie53', 'sec-historie54'].forEach(id => {
+    // Sektioner der ikke bruges, må ikke efterlade tomme huller. De sider,
+    // der HAR taget en ekstra sektion i brug, skal omvendt vise den — ellers
+    // ville et helt afsnit forsvinde, uden at nogen opdagede det.
+    const brugte = S.ekstraSektioner || [];
+    EKSTRA_SEKTIONER.forEach(id => {
       const el = d.getElementById(id);
-      r.tjek(el && el.style.display === 'none', id + ' er skjult');
+      if (brugte.indexOf(id) !== -1) {
+        r.tjek(el && el.style.display !== 'none', id + ' vises');
+        r.tjek(el && el.textContent.trim().length > 200,
+          id + ' har fået sin tekst med');
+      } else {
+        r.tjek(el && el.style.display === 'none', id + ' er skjult');
+      }
     });
 
     // Til sidst: den SYNLIGE tekst. Sidens script ligger i body, så
