@@ -121,6 +121,14 @@
   to = "/gay-retreat-malaga-spain.html"
   status = 200
 
+# Torremolinos-guiden er tosproget som resten af sitet: dansk på
+# /gay-torremolinos, engelsk på /en/gay-torremolinos.
+# Skal stå før /en/* så adressen bevares i browseren.
+[[redirects]]
+  from = "/en/gay-torremolinos"
+  to = "/gay-torremolinos.html"
+  status = 200
+
 # ── ENGELSK SLUG FOR UDLEJNINGSSIDEN ────────────────────────────────────
 # "udlejning" betyder intet for en engelsk søgning. Den engelske udgave ligger
 # derfor på /en/venue-hire. Den danske adresse er uændret.
@@ -225,6 +233,15 @@
   function = "social-meta"
 [[edge_functions]]
   path = "/en/gay-retreat-malaga-spain"
+  function = "social-meta"
+[[edge_functions]]
+  path = "/gay-torremolinos"
+  function = "social-meta"
+[[edge_functions]]
+  path = "/gay-torremolinos.html"
+  function = "social-meta"
+[[edge_functions]]
+  path = "/en/gay-torremolinos"
   function = "social-meta"
 [[edge_functions]]
   path = "/en"

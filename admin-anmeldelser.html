@@ -541,6 +541,7 @@ body{font-family:'Manrope',sans-serif;background:#f0e8d5;color:#2c2318;min-heigh
       <button class="subtab-btn" onclick="switchSubTab('ejendommen',this)">Ejendommen</button>
       <button class="subtab-btn" onclick="switchSubTab('udlejning',this)">Udlejning</button>
       <button class="subtab-btn" onclick="switchSubTab('gay',this)">Gay Retreat</button>
+      <button class="subtab-btn" onclick="switchSubTab('torremolinos',this)">Torremolinos</button>
       <button class="subtab-btn" onclick="switchSubTab('sevaerdigheder',this)">Seværdigheder</button>
       <button class="subtab-btn" onclick="switchSubTab('kontakt',this)">Kontakt</button>
       <button class="subtab-btn" onclick="switchSubTab('anmeldelser',this)">Se anmeldelser</button>
@@ -4070,6 +4071,442 @@ feeling more calm – and coming home to yourself again."</textarea></div>
     </div>
   </div>
 
+
+  <!-- FANE: TORREMOLINOS -->
+  <div class="subtab-content" id="tab-torremolinos" style="padding:2rem 3rem;max-width:1100px;">
+    <div style="display:flex;align-items:center;gap:1rem;margin-bottom:1.4rem;flex-wrap:wrap;">
+      <h2 style="font-family:Cinzel,serif;font-weight:400;font-size:1.3rem;margin:0;">Torremolinos — guideside</h2>
+      <a href="/gay-torremolinos" target="_blank" rel="noopener" style="font-family:Manrope,sans-serif;font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;color:#2a7a74;">Se siden ↗</a>
+      <button type="button" onclick="oversaetHeleSiden(this,'tab-torremolinos')" style="background:rgba(58,110,106,.1);border:1px solid rgba(58,110,106,.35);color:#2a7a74;padding:.3rem .8rem;font-family:Manrope,sans-serif;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;margin-left:auto;">⇄ Oversæt hele siden</button>
+      <button type="button" onclick="gemTor()" id="torGemBtn" style="background:#7a1f35;color:#fff;border:none;padding:.6rem 1.6rem;font-family:Manrope,sans-serif;font-size:.66rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;">💾 Gem</button>
+    </div>
+    <div id="torAdvarsel" style="display:none;background:rgba(163,51,51,.08);border:1px solid rgba(163,51,51,.35);color:#a33;padding:.8rem 1rem;font-family:Manrope,sans-serif;font-size:.7rem;line-height:1.5;margin-bottom:1.2rem;"></div>
+    <div style="font-family:Manrope,sans-serif;font-size:.7rem;color:rgba(44,35,24,.55);line-height:1.6;margin-bottom:1.6rem;">
+      Siden findes på dansk (<code>/gay-torremolinos</code>) og engelsk (<code>/en/gay-torremolinos</code>).
+      Inline HTML som <code>&lt;b&gt;</code>, <code>&lt;em&gt;</code> og <code>&lt;br&gt;</code> virker i alle tekstfelter.
+      <b>Husk at klikke 💾 Gem</b> — tekst i felterne er ikke gemt, før du gør det.
+    </div>
+
+    <div class="fc-block" id="torblok_0" style="margin-bottom:1.5rem;">
+      <div class="fc-block-header" style="display:flex;align-items:center;gap:.8rem;"><span class="fc-block-title">0 · Navigation (menu) &amp; sektionsrækkefølge</span><button type="button" onclick="oversaetBlok(this)" style="background:rgba(58,110,106,.1);border:1px solid rgba(58,110,106,.35);color:#2a7a74;padding:.3rem .8rem;font-family:Manrope,sans-serif;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;margin-left:auto;" title="Oversæt tomme engelske felter i denne sektion">⇄ Oversæt</button></div>
+      <div class="fc-block-body">
+        <p style="font-family:Manrope,sans-serif;font-size:.72rem;color:#7a6a52;margin-bottom:.8rem;">Menu-links på siden: navn (DA/EN), link, synlighed og rækkefølge med pilene.</p>
+        <div id="torNavEditor"></div>
+        <button type="button" onclick="torNavTilfoej()" style="background:#2a7a74;color:#fff;border:none;padding:.45rem 1.1rem;font-family:Manrope,sans-serif;font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;margin-top:.4rem;">+ Tilføj menu-link</button>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Tilbage-link øverst til højre</label><input type="text" id="tor_nav_back_da" class="fc-input-da"></div>
+          <div><label class="fc-label fc-label-en">Back link, top right</label><input type="text" id="tor_nav_back_en" class="fc-input-en"></div>
+        </div>
+        <hr style="border:none;border-top:1px solid rgba(184,138,30,.25);margin:1.4rem 0;">
+        <p style="font-family:Manrope,sans-serif;font-size:.72rem;color:#7a6a52;margin-bottom:.8rem;">Sektionernes rækkefølge på siden — flyt med pilene, og slå sektioner til/fra med <b>Synlig</b>.</p>
+        <div id="torOrdenEditor"></div>
+        <div style="text-align:right;margin-top:1.2rem;padding-top:1rem;border-top:1px solid rgba(184,138,30,.18);"><button type="button" onclick="gemTor()" style="background:var(--wine);color:#fff;border:none;padding:.5rem 1.4rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;">💾 Gem</button><button type="button" onclick="gemTorOgSeSiden()" style="background:#2a7a74;color:#fff;border:none;padding:.5rem 1.4rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;margin-left:.6rem;">💾 Gem og se siden</button></div>
+      </div>
+    </div>
+
+    <div class="fc-block" id="torblok_1" style="margin-bottom:1.5rem;">
+      <div class="fc-block-header" style="display:flex;align-items:center;gap:.8rem;"><span class="fc-block-title">1 · SEO og deling</span><button type="button" onclick="oversaetBlok(this)" style="background:rgba(58,110,106,.1);border:1px solid rgba(58,110,106,.35);color:#2a7a74;padding:.3rem .8rem;font-family:Manrope,sans-serif;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;margin-left:auto;" title="Oversæt tomme engelske felter i denne sektion">⇄ Oversæt</button></div>
+      <div class="fc-block-body">
+        <div style="font-size:.68rem;color:rgba(44,35,24,.55);line-height:1.5;margin-bottom:.8rem;">Titel og beskrivelse i Google og på sociale medier. Beskrivelsen bør være 120–160 tegn.</div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Sidetitel (vises i Google)</label><input type="text" id="tor_seo_title_da" class="fc-input-da"></div>
+          <div><label class="fc-label fc-label-en">Page title (shown in Google)</label><input type="text" id="tor_seo_title_en" class="fc-input-en"></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Beskrivelse (meta description)</label><textarea id="tor_seo_desc_da" class="fc-input-da fc-textarea" rows="3"></textarea></div>
+          <div><label class="fc-label fc-label-en">Description (meta description)</label><textarea id="tor_seo_desc_en" class="fc-input-en fc-textarea" rows="3"></textarea></div>
+        </div>
+        <hr style="border:none;border-top:1px solid rgba(184,138,30,.25);margin:1.2rem 0;">
+        <label class="fc-label">Delebillede (1200×630 px)</label>
+        <input type="text" id="tor_social_image_url" class="fc-input-da" placeholder="URL indsættes automatisk ved upload">
+        <label class="fc-label" style="color:#2a7a74;margin-top:.6rem;">📁 Upload</label>
+        <div style="display:flex;align-items:center;gap:.6rem;margin-top:.3rem;">
+          <img id="tor_social_image_preview" src="" style="display:none;width:56px;height:56px;object-fit:cover;border:1px solid rgba(184,138,30,.3);">
+          <input type="file" id="tor_social_image_file" accept="image/*" style="font-size:.76rem;flex:1;">
+          <button type="button" onclick="uploadRetreatBillede('tor_social_image_file','tor_social_image_url','tor_social_image_preview')" style="background:#2a7a74;color:#fff;border:none;padding:.45rem 1.1rem;font-family:Manrope,sans-serif;font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;white-space:nowrap;">⬆ Upload</button><button type="button" onclick="fjernBilledeFelt('tor_social_image_url','tor_social_image_preview')" style="background:rgba(163,51,51,.08);color:#a33;border:1px solid rgba(163,51,51,.35);padding:.45rem .9rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;white-space:nowrap;" title="Fjern billedet helt">🗑 Fjern</button>
+        </div>
+        <div style="text-align:right;margin-top:1.2rem;padding-top:1rem;border-top:1px solid rgba(184,138,30,.18);"><button type="button" onclick="gemTor()" style="background:var(--wine);color:#fff;border:none;padding:.5rem 1.4rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;">💾 Gem</button><button type="button" onclick="gemTorOgSeSiden()" style="background:#2a7a74;color:#fff;border:none;padding:.5rem 1.4rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;margin-left:.6rem;">💾 Gem og se siden</button></div>
+      </div>
+    </div>
+
+    <div class="fc-block" id="torblok_2" style="margin-bottom:1.5rem;">
+      <div class="fc-block-header" style="display:flex;align-items:center;gap:.8rem;"><span class="fc-block-title">2 · Hero (øverst)</span><button type="button" onclick="oversaetBlok(this)" style="background:rgba(58,110,106,.1);border:1px solid rgba(58,110,106,.35);color:#2a7a74;padding:.3rem .8rem;font-family:Manrope,sans-serif;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;margin-left:auto;" title="Oversæt tomme engelske felter i denne sektion">⇄ Oversæt</button></div>
+      <div class="fc-block-body">
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Overlinje</label><input type="text" id="tor_hero_eyebrow_da" class="fc-input-da"></div>
+          <div><label class="fc-label fc-label-en">Eyebrow</label><input type="text" id="tor_hero_eyebrow_en" class="fc-input-en"></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Overskrift (H1)</label><input type="text" id="tor_hero_h1_da" class="fc-input-da"></div>
+          <div><label class="fc-label fc-label-en">Heading (H1)</label><input type="text" id="tor_hero_h1_en" class="fc-input-en"></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Tekst</label><textarea id="tor_hero_text_da" class="fc-input-da fc-textarea" rows="3"></textarea></div>
+          <div><label class="fc-label fc-label-en">Text</label><textarea id="tor_hero_text_en" class="fc-input-en fc-textarea" rows="3"></textarea></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Tekst ved pil ned</label><input type="text" id="tor_hero_scroll_da" class="fc-input-da"></div>
+          <div><label class="fc-label fc-label-en">Scroll label</label><input type="text" id="tor_hero_scroll_en" class="fc-input-en"></div>
+        </div>
+        <p style="font-family:Manrope,sans-serif;font-size:.72rem;color:#7a6a52;margin:1rem 0 .6rem;">De små nøgletal under teksten — én pr. række.</p>
+        <div id="torListe_hero_meta"></div>
+        <button type="button" onclick="torListeTilfoej('hero_meta')" style="background:#2a7a74;color:#fff;border:none;padding:.45rem 1.1rem;font-family:Manrope,sans-serif;font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;margin-top:.4rem;">+ Tilføj række</button>
+        <div style="margin-top:1rem;"><label class="fc-label" style="display:flex;align-items:center;gap:.5rem;cursor:pointer;"><input type="checkbox" id="tor_vis_pride_stribe"> Vis regnbuestribe nederst i hero</label></div>
+        <hr style="border:none;border-top:1px solid rgba(184,138,30,.25);margin:1.2rem 0;">
+        <label class="fc-label">Baggrundsbillede i hero</label>
+        <input type="text" id="tor_hero_image_url" class="fc-input-da" placeholder="URL indsættes automatisk ved upload">
+        <label class="fc-label" style="color:#2a7a74;margin-top:.6rem;">📁 Upload</label>
+        <div style="display:flex;align-items:center;gap:.6rem;margin-top:.3rem;">
+          <img id="tor_hero_image_preview" src="" style="display:none;width:56px;height:56px;object-fit:cover;border:1px solid rgba(184,138,30,.3);">
+          <input type="file" id="tor_hero_image_file" accept="image/*" style="font-size:.76rem;flex:1;">
+          <button type="button" onclick="uploadRetreatBillede('tor_hero_image_file','tor_hero_image_url','tor_hero_image_preview')" style="background:#2a7a74;color:#fff;border:none;padding:.45rem 1.1rem;font-family:Manrope,sans-serif;font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;white-space:nowrap;">⬆ Upload</button><button type="button" onclick="fjernBilledeFelt('tor_hero_image_url','tor_hero_image_preview')" style="background:rgba(163,51,51,.08);color:#a33;border:1px solid rgba(163,51,51,.35);padding:.45rem .9rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;white-space:nowrap;" title="Fjern billedet helt">🗑 Fjern</button>
+        </div>
+        <div style="text-align:right;margin-top:1.2rem;padding-top:1rem;border-top:1px solid rgba(184,138,30,.18);"><button type="button" onclick="gemTor()" style="background:var(--wine);color:#fff;border:none;padding:.5rem 1.4rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;">💾 Gem</button><button type="button" onclick="gemTorOgSeSiden()" style="background:#2a7a74;color:#fff;border:none;padding:.5rem 1.4rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;margin-left:.6rem;">💾 Gem og se siden</button></div>
+      </div>
+    </div>
+
+    <div class="fc-block" id="torblok_3" style="margin-bottom:1.5rem;">
+      <div class="fc-block-header" style="display:flex;align-items:center;gap:.8rem;"><span class="fc-block-title">3 · Intro</span><button type="button" onclick="oversaetBlok(this)" style="background:rgba(58,110,106,.1);border:1px solid rgba(58,110,106,.35);color:#2a7a74;padding:.3rem .8rem;font-family:Manrope,sans-serif;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;margin-left:auto;" title="Oversæt tomme engelske felter i denne sektion">⇄ Oversæt</button></div>
+      <div class="fc-block-body">
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Overlinje</label><input type="text" id="tor_intro_label_da" class="fc-input-da"></div>
+          <div><label class="fc-label fc-label-en">Eyebrow</label><input type="text" id="tor_intro_label_en" class="fc-input-en"></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Overskrift</label><input type="text" id="tor_intro_h2_da" class="fc-input-da"></div>
+          <div><label class="fc-label fc-label-en">Heading</label><input type="text" id="tor_intro_h2_en" class="fc-input-en"></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Manchet</label><textarea id="tor_intro_lede_da" class="fc-input-da fc-textarea" rows="3"></textarea></div>
+          <div><label class="fc-label fc-label-en">Lede</label><textarea id="tor_intro_lede_en" class="fc-input-en fc-textarea" rows="3"></textarea></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Brødtekst (ét afsnit pr. linje)</label><textarea id="tor_intro_text_da" class="fc-input-da fc-textarea" rows="5"></textarea></div>
+          <div><label class="fc-label fc-label-en">Body text (one paragraph per line)</label><textarea id="tor_intro_text_en" class="fc-input-en fc-textarea" rows="5"></textarea></div>
+        </div>
+        <div style="text-align:right;margin-top:1.2rem;padding-top:1rem;border-top:1px solid rgba(184,138,30,.18);"><button type="button" onclick="gemTor()" style="background:var(--wine);color:#fff;border:none;padding:.5rem 1.4rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;">💾 Gem</button><button type="button" onclick="gemTorOgSeSiden()" style="background:#2a7a74;color:#fff;border:none;padding:.5rem 1.4rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;margin-left:.6rem;">💾 Gem og se siden</button></div>
+      </div>
+    </div>
+
+    <div class="fc-block" id="torblok_4" style="margin-bottom:1.5rem;">
+      <div class="fc-block-header" style="display:flex;align-items:center;gap:.8rem;"><span class="fc-block-title">4 · Historien — Pasaje Begoña</span><button type="button" onclick="oversaetBlok(this)" style="background:rgba(58,110,106,.1);border:1px solid rgba(58,110,106,.35);color:#2a7a74;padding:.3rem .8rem;font-family:Manrope,sans-serif;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;margin-left:auto;" title="Oversæt tomme engelske felter i denne sektion">⇄ Oversæt</button></div>
+      <div class="fc-block-body">
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Overlinje</label><input type="text" id="tor_historie_label_da" class="fc-input-da"></div>
+          <div><label class="fc-label fc-label-en">Eyebrow</label><input type="text" id="tor_historie_label_en" class="fc-input-en"></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Overskrift</label><input type="text" id="tor_historie_h2_da" class="fc-input-da"></div>
+          <div><label class="fc-label fc-label-en">Heading</label><input type="text" id="tor_historie_h2_en" class="fc-input-en"></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Brødtekst (ét afsnit pr. linje)</label><textarea id="tor_historie_text_da" class="fc-input-da fc-textarea" rows="7"></textarea></div>
+          <div><label class="fc-label fc-label-en">Body text (one paragraph per line)</label><textarea id="tor_historie_text_en" class="fc-input-en fc-textarea" rows="7"></textarea></div>
+        </div>
+        <hr style="border:none;border-top:1px solid rgba(184,138,30,.25);margin:1.2rem 0;">
+        <label class="fc-label">Billede ved siden af teksten</label>
+        <input type="text" id="tor_historie_image_url" class="fc-input-da" placeholder="URL indsættes automatisk ved upload">
+        <label class="fc-label" style="color:#2a7a74;margin-top:.6rem;">📁 Upload</label>
+        <div style="display:flex;align-items:center;gap:.6rem;margin-top:.3rem;">
+          <img id="tor_historie_image_preview" src="" style="display:none;width:56px;height:56px;object-fit:cover;border:1px solid rgba(184,138,30,.3);">
+          <input type="file" id="tor_historie_image_file" accept="image/*" style="font-size:.76rem;flex:1;">
+          <button type="button" onclick="uploadRetreatBillede('tor_historie_image_file','tor_historie_image_url','tor_historie_image_preview')" style="background:#2a7a74;color:#fff;border:none;padding:.45rem 1.1rem;font-family:Manrope,sans-serif;font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;white-space:nowrap;">⬆ Upload</button><button type="button" onclick="fjernBilledeFelt('tor_historie_image_url','tor_historie_image_preview')" style="background:rgba(163,51,51,.08);color:#a33;border:1px solid rgba(163,51,51,.35);padding:.45rem .9rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;white-space:nowrap;" title="Fjern billedet helt">🗑 Fjern</button>
+        </div>
+        <div style="text-align:right;margin-top:1.2rem;padding-top:1rem;border-top:1px solid rgba(184,138,30,.18);"><button type="button" onclick="gemTor()" style="background:var(--wine);color:#fff;border:none;padding:.5rem 1.4rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;">💾 Gem</button><button type="button" onclick="gemTorOgSeSiden()" style="background:#2a7a74;color:#fff;border:none;padding:.5rem 1.4rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;margin-left:.6rem;">💾 Gem og se siden</button></div>
+      </div>
+    </div>
+
+    <div class="fc-block" id="torblok_5" style="margin-bottom:1.5rem;">
+      <div class="fc-block-header" style="display:flex;align-items:center;gap:.8rem;"><span class="fc-block-title">5 · Razziaen 1971</span><button type="button" onclick="oversaetBlok(this)" style="background:rgba(58,110,106,.1);border:1px solid rgba(58,110,106,.35);color:#2a7a74;padding:.3rem .8rem;font-family:Manrope,sans-serif;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;margin-left:auto;" title="Oversæt tomme engelske felter i denne sektion">⇄ Oversæt</button></div>
+      <div class="fc-block-body">
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Overlinje</label><input type="text" id="tor_razzia_label_da" class="fc-input-da"></div>
+          <div><label class="fc-label fc-label-en">Eyebrow</label><input type="text" id="tor_razzia_label_en" class="fc-input-en"></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Overskrift</label><input type="text" id="tor_razzia_h2_da" class="fc-input-da"></div>
+          <div><label class="fc-label fc-label-en">Heading</label><input type="text" id="tor_razzia_h2_en" class="fc-input-en"></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Manchet</label><textarea id="tor_razzia_lede_da" class="fc-input-da fc-textarea" rows="3"></textarea></div>
+          <div><label class="fc-label fc-label-en">Lede</label><textarea id="tor_razzia_lede_en" class="fc-input-en fc-textarea" rows="3"></textarea></div>
+        </div>
+        <p style="font-family:Manrope,sans-serif;font-size:.72rem;color:#7a6a52;margin:1rem 0 .6rem;">Kortene med fakta om razziaen.</p>
+        <div id="torListe_razzia_items"></div>
+        <button type="button" onclick="torListeTilfoej('razzia_items')" style="background:#2a7a74;color:#fff;border:none;padding:.45rem 1.1rem;font-family:Manrope,sans-serif;font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;margin-top:.4rem;">+ Tilføj række</button>
+        <div style="text-align:right;margin-top:1.2rem;padding-top:1rem;border-top:1px solid rgba(184,138,30,.18);"><button type="button" onclick="gemTor()" style="background:var(--wine);color:#fff;border:none;padding:.5rem 1.4rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;">💾 Gem</button><button type="button" onclick="gemTorOgSeSiden()" style="background:#2a7a74;color:#fff;border:none;padding:.5rem 1.4rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;margin-left:.6rem;">💾 Gem og se siden</button></div>
+      </div>
+    </div>
+
+    <div class="fc-block" id="torblok_6" style="margin-bottom:1.5rem;">
+      <div class="fc-block-header" style="display:flex;align-items:center;gap:.8rem;"><span class="fc-block-title">6 · Efterspillet — fra glemsel til anerkendelse</span><button type="button" onclick="oversaetBlok(this)" style="background:rgba(58,110,106,.1);border:1px solid rgba(58,110,106,.35);color:#2a7a74;padding:.3rem .8rem;font-family:Manrope,sans-serif;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;margin-left:auto;" title="Oversæt tomme engelske felter i denne sektion">⇄ Oversæt</button></div>
+      <div class="fc-block-body">
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Overlinje</label><input type="text" id="tor_arv_label_da" class="fc-input-da"></div>
+          <div><label class="fc-label fc-label-en">Eyebrow</label><input type="text" id="tor_arv_label_en" class="fc-input-en"></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Overskrift</label><input type="text" id="tor_arv_h2_da" class="fc-input-da"></div>
+          <div><label class="fc-label fc-label-en">Heading</label><input type="text" id="tor_arv_h2_en" class="fc-input-en"></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Brødtekst (ét afsnit pr. linje)</label><textarea id="tor_arv_text_da" class="fc-input-da fc-textarea" rows="4"></textarea></div>
+          <div><label class="fc-label fc-label-en">Body text (one paragraph per line)</label><textarea id="tor_arv_text_en" class="fc-input-en fc-textarea" rows="4"></textarea></div>
+        </div>
+        <p style="font-family:Manrope,sans-serif;font-size:.72rem;color:#7a6a52;margin:1rem 0 .6rem;">Milepælene — årstal og hvad der skete.</p>
+        <div id="torListe_arv_items"></div>
+        <button type="button" onclick="torListeTilfoej('arv_items')" style="background:#2a7a74;color:#fff;border:none;padding:.45rem 1.1rem;font-family:Manrope,sans-serif;font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;margin-top:.4rem;">+ Tilføj række</button>
+        <div style="text-align:right;margin-top:1.2rem;padding-top:1rem;border-top:1px solid rgba(184,138,30,.18);"><button type="button" onclick="gemTor()" style="background:var(--wine);color:#fff;border:none;padding:.5rem 1.4rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;">💾 Gem</button><button type="button" onclick="gemTorOgSeSiden()" style="background:#2a7a74;color:#fff;border:none;padding:.5rem 1.4rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;margin-left:.6rem;">💾 Gem og se siden</button></div>
+      </div>
+    </div>
+
+    <div class="fc-block" id="torblok_7" style="margin-bottom:1.5rem;">
+      <div class="fc-block-header" style="display:flex;align-items:center;gap:.8rem;"><span class="fc-block-title">7 · Anekdoter</span><button type="button" onclick="oversaetBlok(this)" style="background:rgba(58,110,106,.1);border:1px solid rgba(58,110,106,.35);color:#2a7a74;padding:.3rem .8rem;font-family:Manrope,sans-serif;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;margin-left:auto;" title="Oversæt tomme engelske felter i denne sektion">⇄ Oversæt</button></div>
+      <div class="fc-block-body">
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Overlinje</label><input type="text" id="tor_anekdoter_label_da" class="fc-input-da"></div>
+          <div><label class="fc-label fc-label-en">Eyebrow</label><input type="text" id="tor_anekdoter_label_en" class="fc-input-en"></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Overskrift</label><input type="text" id="tor_anekdoter_h2_da" class="fc-input-da"></div>
+          <div><label class="fc-label fc-label-en">Heading</label><input type="text" id="tor_anekdoter_h2_en" class="fc-input-en"></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Introtekst</label><textarea id="tor_anekdoter_intro_da" class="fc-input-da fc-textarea" rows="2"></textarea></div>
+          <div><label class="fc-label fc-label-en">Intro text</label><textarea id="tor_anekdoter_intro_en" class="fc-input-en fc-textarea" rows="2"></textarea></div>
+        </div>
+        <div id="torListe_anekdoter_items"></div>
+        <button type="button" onclick="torListeTilfoej('anekdoter_items')" style="background:#2a7a74;color:#fff;border:none;padding:.45rem 1.1rem;font-family:Manrope,sans-serif;font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;margin-top:.4rem;">+ Tilføj række</button>
+        <div style="text-align:right;margin-top:1.2rem;padding-top:1rem;border-top:1px solid rgba(184,138,30,.18);"><button type="button" onclick="gemTor()" style="background:var(--wine);color:#fff;border:none;padding:.5rem 1.4rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;">💾 Gem</button><button type="button" onclick="gemTorOgSeSiden()" style="background:#2a7a74;color:#fff;border:none;padding:.5rem 1.4rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;margin-left:.6rem;">💾 Gem og se siden</button></div>
+      </div>
+    </div>
+
+    <div class="fc-block" id="torblok_8" style="margin-bottom:1.5rem;">
+      <div class="fc-block-header" style="display:flex;align-items:center;gap:.8rem;"><span class="fc-block-title">8 · Byen i dag</span><button type="button" onclick="oversaetBlok(this)" style="background:rgba(58,110,106,.1);border:1px solid rgba(58,110,106,.35);color:#2a7a74;padding:.3rem .8rem;font-family:Manrope,sans-serif;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;margin-left:auto;" title="Oversæt tomme engelske felter i denne sektion">⇄ Oversæt</button></div>
+      <div class="fc-block-body">
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Overlinje</label><input type="text" id="tor_idag_label_da" class="fc-input-da"></div>
+          <div><label class="fc-label fc-label-en">Eyebrow</label><input type="text" id="tor_idag_label_en" class="fc-input-en"></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Overskrift</label><input type="text" id="tor_idag_h2_da" class="fc-input-da"></div>
+          <div><label class="fc-label fc-label-en">Heading</label><input type="text" id="tor_idag_h2_en" class="fc-input-en"></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Introtekst</label><textarea id="tor_idag_intro_da" class="fc-input-da fc-textarea" rows="2"></textarea></div>
+          <div><label class="fc-label fc-label-en">Intro text</label><textarea id="tor_idag_intro_en" class="fc-input-en fc-textarea" rows="2"></textarea></div>
+        </div>
+        <p style="font-family:Manrope,sans-serif;font-size:.72rem;color:#7a6a52;margin:1rem 0 .6rem;">Kortene om byen i dag — La Nogalera, strand, promenade, Pride …</p>
+        <div id="torListe_idag_items"></div>
+        <button type="button" onclick="torListeTilfoej('idag_items')" style="background:#2a7a74;color:#fff;border:none;padding:.45rem 1.1rem;font-family:Manrope,sans-serif;font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;margin-top:.4rem;">+ Tilføj række</button>
+        <div style="text-align:right;margin-top:1.2rem;padding-top:1rem;border-top:1px solid rgba(184,138,30,.18);"><button type="button" onclick="gemTor()" style="background:var(--wine);color:#fff;border:none;padding:.5rem 1.4rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;">💾 Gem</button><button type="button" onclick="gemTorOgSeSiden()" style="background:#2a7a74;color:#fff;border:none;padding:.5rem 1.4rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;margin-left:.6rem;">💾 Gem og se siden</button></div>
+      </div>
+    </div>
+
+    <div class="fc-block" id="torblok_9" style="margin-bottom:1.5rem;">
+      <div class="fc-block-header" style="display:flex;align-items:center;gap:.8rem;"><span class="fc-block-title">9 · Kombinér med retreat</span><button type="button" onclick="oversaetBlok(this)" style="background:rgba(58,110,106,.1);border:1px solid rgba(58,110,106,.35);color:#2a7a74;padding:.3rem .8rem;font-family:Manrope,sans-serif;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;margin-left:auto;" title="Oversæt tomme engelske felter i denne sektion">⇄ Oversæt</button></div>
+      <div class="fc-block-body">
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Overlinje</label><input type="text" id="tor_kombiner_label_da" class="fc-input-da"></div>
+          <div><label class="fc-label fc-label-en">Eyebrow</label><input type="text" id="tor_kombiner_label_en" class="fc-input-en"></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Overskrift</label><input type="text" id="tor_kombiner_h2_da" class="fc-input-da"></div>
+          <div><label class="fc-label fc-label-en">Heading</label><input type="text" id="tor_kombiner_h2_en" class="fc-input-en"></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Introtekst</label><textarea id="tor_kombiner_intro_da" class="fc-input-da fc-textarea" rows="3"></textarea></div>
+          <div><label class="fc-label fc-label-en">Intro text</label><textarea id="tor_kombiner_intro_en" class="fc-input-en fc-textarea" rows="3"></textarea></div>
+        </div>
+        <p style="font-family:Manrope,sans-serif;font-size:.72rem;color:#7a6a52;margin:1rem 0 .6rem;">Afstandene ved siden af teksten — tal og tekst.</p>
+        <div id="torListe_afstande"></div>
+        <button type="button" onclick="torListeTilfoej('afstande')" style="background:#2a7a74;color:#fff;border:none;padding:.45rem 1.1rem;font-family:Manrope,sans-serif;font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;margin-top:.4rem;">+ Tilføj række</button>
+        <p style="font-family:Manrope,sans-serif;font-size:.72rem;color:#7a6a52;margin:1rem 0 .6rem;">Kortene med forslag til hvordan kyst og retreat kombineres.</p>
+        <div id="torListe_kombiner_items"></div>
+        <button type="button" onclick="torListeTilfoej('kombiner_items')" style="background:#2a7a74;color:#fff;border:none;padding:.45rem 1.1rem;font-family:Manrope,sans-serif;font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;margin-top:.4rem;">+ Tilføj række</button>
+        <hr style="border:none;border-top:1px solid rgba(184,138,30,.25);margin:1.2rem 0;">
+        <label class="fc-label">Billede ved siden af teksten</label>
+        <input type="text" id="tor_idag_image_url" class="fc-input-da" placeholder="URL indsættes automatisk ved upload">
+        <label class="fc-label" style="color:#2a7a74;margin-top:.6rem;">📁 Upload</label>
+        <div style="display:flex;align-items:center;gap:.6rem;margin-top:.3rem;">
+          <img id="tor_idag_image_preview" src="" style="display:none;width:56px;height:56px;object-fit:cover;border:1px solid rgba(184,138,30,.3);">
+          <input type="file" id="tor_idag_image_file" accept="image/*" style="font-size:.76rem;flex:1;">
+          <button type="button" onclick="uploadRetreatBillede('tor_idag_image_file','tor_idag_image_url','tor_idag_image_preview')" style="background:#2a7a74;color:#fff;border:none;padding:.45rem 1.1rem;font-family:Manrope,sans-serif;font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;white-space:nowrap;">⬆ Upload</button><button type="button" onclick="fjernBilledeFelt('tor_idag_image_url','tor_idag_image_preview')" style="background:rgba(163,51,51,.08);color:#a33;border:1px solid rgba(163,51,51,.35);padding:.45rem .9rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;white-space:nowrap;" title="Fjern billedet helt">🗑 Fjern</button>
+        </div>
+        <div style="text-align:right;margin-top:1.2rem;padding-top:1rem;border-top:1px solid rgba(184,138,30,.18);"><button type="button" onclick="gemTor()" style="background:var(--wine);color:#fff;border:none;padding:.5rem 1.4rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;">💾 Gem</button><button type="button" onclick="gemTorOgSeSiden()" style="background:#2a7a74;color:#fff;border:none;padding:.5rem 1.4rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;margin-left:.6rem;">💾 Gem og se siden</button></div>
+      </div>
+    </div>
+
+    <div class="fc-block" id="torblok_10" style="margin-bottom:1.5rem;">
+      <div class="fc-block-header" style="display:flex;align-items:center;gap:.8rem;"><span class="fc-block-title">10 · Massage</span><button type="button" onclick="oversaetBlok(this)" style="background:rgba(58,110,106,.1);border:1px solid rgba(58,110,106,.35);color:#2a7a74;padding:.3rem .8rem;font-family:Manrope,sans-serif;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;margin-left:auto;" title="Oversæt tomme engelske felter i denne sektion">⇄ Oversæt</button></div>
+      <div class="fc-block-body">
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Overlinje</label><input type="text" id="tor_massage_label_da" class="fc-input-da"></div>
+          <div><label class="fc-label fc-label-en">Eyebrow</label><input type="text" id="tor_massage_label_en" class="fc-input-en"></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Overskrift</label><input type="text" id="tor_massage_h2_da" class="fc-input-da"></div>
+          <div><label class="fc-label fc-label-en">Heading</label><input type="text" id="tor_massage_h2_en" class="fc-input-en"></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Brødtekst (ét afsnit pr. linje)</label><textarea id="tor_massage_text_da" class="fc-input-da fc-textarea" rows="4"></textarea></div>
+          <div><label class="fc-label fc-label-en">Body text (one paragraph per line)</label><textarea id="tor_massage_text_en" class="fc-input-en fc-textarea" rows="4"></textarea></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Knaptekst</label><input type="text" id="tor_massage_btn_da" class="fc-input-da"></div>
+          <div><label class="fc-label fc-label-en">Button text</label><input type="text" id="tor_massage_btn_en" class="fc-input-en"></div>
+        </div>
+        <div class="fc-row"><div><label class="fc-label">Knappens link</label><input type="text" id="tor_massage_link" class="fc-input-da" placeholder="https://kahunamassage.dk"></div><div></div></div>
+        <div style="text-align:right;margin-top:1.2rem;padding-top:1rem;border-top:1px solid rgba(184,138,30,.18);"><button type="button" onclick="gemTor()" style="background:var(--wine);color:#fff;border:none;padding:.5rem 1.4rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;">💾 Gem</button><button type="button" onclick="gemTorOgSeSiden()" style="background:#2a7a74;color:#fff;border:none;padding:.5rem 1.4rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;margin-left:.6rem;">💾 Gem og se siden</button></div>
+      </div>
+    </div>
+
+    <div class="fc-block" id="torblok_11" style="margin-bottom:1.5rem;">
+      <div class="fc-block-header" style="display:flex;align-items:center;gap:.8rem;"><span class="fc-block-title">11 · Praktisk</span><button type="button" onclick="oversaetBlok(this)" style="background:rgba(58,110,106,.1);border:1px solid rgba(58,110,106,.35);color:#2a7a74;padding:.3rem .8rem;font-family:Manrope,sans-serif;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;margin-left:auto;" title="Oversæt tomme engelske felter i denne sektion">⇄ Oversæt</button></div>
+      <div class="fc-block-body">
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Overlinje</label><input type="text" id="tor_praktisk_label_da" class="fc-input-da"></div>
+          <div><label class="fc-label fc-label-en">Eyebrow</label><input type="text" id="tor_praktisk_label_en" class="fc-input-en"></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Overskrift</label><input type="text" id="tor_praktisk_h2_da" class="fc-input-da"></div>
+          <div><label class="fc-label fc-label-en">Heading</label><input type="text" id="tor_praktisk_h2_en" class="fc-input-en"></div>
+        </div>
+        <div id="torListe_praktisk_items"></div>
+        <button type="button" onclick="torListeTilfoej('praktisk_items')" style="background:#2a7a74;color:#fff;border:none;padding:.45rem 1.1rem;font-family:Manrope,sans-serif;font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;margin-top:.4rem;">+ Tilføj række</button>
+        <div style="text-align:right;margin-top:1.2rem;padding-top:1rem;border-top:1px solid rgba(184,138,30,.18);"><button type="button" onclick="gemTor()" style="background:var(--wine);color:#fff;border:none;padding:.5rem 1.4rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;">💾 Gem</button><button type="button" onclick="gemTorOgSeSiden()" style="background:#2a7a74;color:#fff;border:none;padding:.5rem 1.4rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;margin-left:.6rem;">💾 Gem og se siden</button></div>
+      </div>
+    </div>
+
+    <div class="fc-block" id="torblok_12" style="margin-bottom:1.5rem;">
+      <div class="fc-block-header" style="display:flex;align-items:center;gap:.8rem;"><span class="fc-block-title">12 · Byens steder (partnere)</span><button type="button" onclick="oversaetBlok(this)" style="background:rgba(58,110,106,.1);border:1px solid rgba(58,110,106,.35);color:#2a7a74;padding:.3rem .8rem;font-family:Manrope,sans-serif;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;margin-left:auto;" title="Oversæt tomme engelske felter i denne sektion">⇄ Oversæt</button></div>
+      <div class="fc-block-body">
+        <div style="font-size:.68rem;color:rgba(44,35,24,.6);line-height:1.6;margin-bottom:.8rem;background:rgba(184,138,30,.06);border:1px solid rgba(184,138,30,.25);padding:.7rem .9rem;">Sektionen er <b>slået fra</b> som udgangspunkt. Tilføj steder her, og slå den til i blok 0, når der er aftaler i hus. Er listen tom, vises sektionen ikke — heller ikke selvom den er slået til.</div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Overlinje</label><input type="text" id="tor_partnere_label_da" class="fc-input-da"></div>
+          <div><label class="fc-label fc-label-en">Eyebrow</label><input type="text" id="tor_partnere_label_en" class="fc-input-en"></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Overskrift</label><input type="text" id="tor_partnere_h2_da" class="fc-input-da"></div>
+          <div><label class="fc-label fc-label-en">Heading</label><input type="text" id="tor_partnere_h2_en" class="fc-input-en"></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Introtekst</label><textarea id="tor_partnere_intro_da" class="fc-input-da fc-textarea" rows="2"></textarea></div>
+          <div><label class="fc-label fc-label-en">Intro text</label><textarea id="tor_partnere_intro_en" class="fc-input-en fc-textarea" rows="2"></textarea></div>
+        </div>
+        <p style="font-family:Manrope,sans-serif;font-size:.72rem;color:#7a6a52;margin:1rem 0 .6rem;">Ét sted pr. række. Uden link vises kortet stadig — bare uden "Besøg ↗".</p>
+        <div id="torListe_partner_items"></div>
+        <button type="button" onclick="torListeTilfoej('partner_items')" style="background:#2a7a74;color:#fff;border:none;padding:.45rem 1.1rem;font-family:Manrope,sans-serif;font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;margin-top:.4rem;">+ Tilføj række</button>
+        <div style="text-align:right;margin-top:1.2rem;padding-top:1rem;border-top:1px solid rgba(184,138,30,.18);"><button type="button" onclick="gemTor()" style="background:var(--wine);color:#fff;border:none;padding:.5rem 1.4rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;">💾 Gem</button><button type="button" onclick="gemTorOgSeSiden()" style="background:#2a7a74;color:#fff;border:none;padding:.5rem 1.4rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;margin-left:.6rem;">💾 Gem og se siden</button></div>
+      </div>
+    </div>
+
+    <div class="fc-block" id="torblok_13" style="margin-bottom:1.5rem;">
+      <div class="fc-block-header" style="display:flex;align-items:center;gap:.8rem;"><span class="fc-block-title">13 · FAQ</span><button type="button" onclick="oversaetBlok(this)" style="background:rgba(58,110,106,.1);border:1px solid rgba(58,110,106,.35);color:#2a7a74;padding:.3rem .8rem;font-family:Manrope,sans-serif;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;margin-left:auto;" title="Oversæt tomme engelske felter i denne sektion">⇄ Oversæt</button></div>
+      <div class="fc-block-body">
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Overlinje</label><input type="text" id="tor_faq_label_da" class="fc-input-da"></div>
+          <div><label class="fc-label fc-label-en">Eyebrow</label><input type="text" id="tor_faq_label_en" class="fc-input-en"></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Overskrift</label><input type="text" id="tor_faq_h2_da" class="fc-input-da"></div>
+          <div><label class="fc-label fc-label-en">Heading</label><input type="text" id="tor_faq_h2_en" class="fc-input-en"></div>
+        </div>
+        <p style="font-family:Manrope,sans-serif;font-size:.72rem;color:#7a6a52;margin:1rem 0 .6rem;">Spørgsmålene kommer også med i Googles FAQ-skema.</p>
+        <div id="torListe_faq_items"></div>
+        <button type="button" onclick="torListeTilfoej('faq_items')" style="background:#2a7a74;color:#fff;border:none;padding:.45rem 1.1rem;font-family:Manrope,sans-serif;font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;margin-top:.4rem;">+ Tilføj række</button>
+        <div style="text-align:right;margin-top:1.2rem;padding-top:1rem;border-top:1px solid rgba(184,138,30,.18);"><button type="button" onclick="gemTor()" style="background:var(--wine);color:#fff;border:none;padding:.5rem 1.4rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;">💾 Gem</button><button type="button" onclick="gemTorOgSeSiden()" style="background:#2a7a74;color:#fff;border:none;padding:.5rem 1.4rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;margin-left:.6rem;">💾 Gem og se siden</button></div>
+      </div>
+    </div>
+
+    <div class="fc-block" id="torblok_14" style="margin-bottom:1.5rem;">
+      <div class="fc-block-header" style="display:flex;align-items:center;gap:.8rem;"><span class="fc-block-title">14 · Kilder</span><button type="button" onclick="oversaetBlok(this)" style="background:rgba(58,110,106,.1);border:1px solid rgba(58,110,106,.35);color:#2a7a74;padding:.3rem .8rem;font-family:Manrope,sans-serif;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;margin-left:auto;" title="Oversæt tomme engelske felter i denne sektion">⇄ Oversæt</button></div>
+      <div class="fc-block-body">
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Overlinje</label><input type="text" id="tor_kilder_label_da" class="fc-input-da"></div>
+          <div><label class="fc-label fc-label-en">Eyebrow</label><input type="text" id="tor_kilder_label_en" class="fc-input-en"></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Overskrift</label><input type="text" id="tor_kilder_h2_da" class="fc-input-da"></div>
+          <div><label class="fc-label fc-label-en">Heading</label><input type="text" id="tor_kilder_h2_en" class="fc-input-en"></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Introtekst</label><textarea id="tor_kilder_intro_da" class="fc-input-da fc-textarea" rows="3"></textarea></div>
+          <div><label class="fc-label fc-label-en">Intro text</label><textarea id="tor_kilder_intro_en" class="fc-input-en fc-textarea" rows="3"></textarea></div>
+        </div>
+        <p style="font-family:Manrope,sans-serif;font-size:.72rem;color:#7a6a52;margin:1rem 0 .6rem;">Kilderne bag historien. Links åbner i nyt vindue og er sat til nofollow.</p>
+        <div id="torListe_kilder_items"></div>
+        <button type="button" onclick="torListeTilfoej('kilder_items')" style="background:#2a7a74;color:#fff;border:none;padding:.45rem 1.1rem;font-family:Manrope,sans-serif;font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;margin-top:.4rem;">+ Tilføj række</button>
+        <div style="text-align:right;margin-top:1.2rem;padding-top:1rem;border-top:1px solid rgba(184,138,30,.18);"><button type="button" onclick="gemTor()" style="background:var(--wine);color:#fff;border:none;padding:.5rem 1.4rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;">💾 Gem</button><button type="button" onclick="gemTorOgSeSiden()" style="background:#2a7a74;color:#fff;border:none;padding:.5rem 1.4rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;margin-left:.6rem;">💾 Gem og se siden</button></div>
+      </div>
+    </div>
+
+    <div class="fc-block" id="torblok_15" style="margin-bottom:1.5rem;">
+      <div class="fc-block-header" style="display:flex;align-items:center;gap:.8rem;"><span class="fc-block-title">15 · Opfordring nederst</span><button type="button" onclick="oversaetBlok(this)" style="background:rgba(58,110,106,.1);border:1px solid rgba(58,110,106,.35);color:#2a7a74;padding:.3rem .8rem;font-family:Manrope,sans-serif;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;margin-left:auto;" title="Oversæt tomme engelske felter i denne sektion">⇄ Oversæt</button></div>
+      <div class="fc-block-body">
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Overskrift</label><input type="text" id="tor_cta_h2_da" class="fc-input-da"></div>
+          <div><label class="fc-label fc-label-en">Heading</label><input type="text" id="tor_cta_h2_en" class="fc-input-en"></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Tekst</label><textarea id="tor_cta_text_da" class="fc-input-da fc-textarea" rows="3"></textarea></div>
+          <div><label class="fc-label fc-label-en">Text</label><textarea id="tor_cta_text_en" class="fc-input-en fc-textarea" rows="3"></textarea></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Knaptekst</label><input type="text" id="tor_cta_btn_da" class="fc-input-da"></div>
+          <div><label class="fc-label fc-label-en">Button text</label><input type="text" id="tor_cta_btn_en" class="fc-input-en"></div>
+        </div>
+        <div class="fc-row"><div><label class="fc-label">Knappens link</label><input type="text" id="tor_cta_link" class="fc-input-da" placeholder="/gay-retreat-malaga-spain"></div><div></div></div>
+        <div style="text-align:right;margin-top:1.2rem;padding-top:1rem;border-top:1px solid rgba(184,138,30,.18);"><button type="button" onclick="gemTor()" style="background:var(--wine);color:#fff;border:none;padding:.5rem 1.4rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;">💾 Gem</button><button type="button" onclick="gemTorOgSeSiden()" style="background:#2a7a74;color:#fff;border:none;padding:.5rem 1.4rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;margin-left:.6rem;">💾 Gem og se siden</button></div>
+      </div>
+    </div>
+
+    <div class="fc-block" id="torblok_16" style="margin-bottom:1.5rem;">
+      <div class="fc-block-header" style="display:flex;align-items:center;gap:.8rem;"><span class="fc-block-title">16 · Footer</span><button type="button" onclick="oversaetBlok(this)" style="background:rgba(58,110,106,.1);border:1px solid rgba(58,110,106,.35);color:#2a7a74;padding:.3rem .8rem;font-family:Manrope,sans-serif;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;margin-left:auto;" title="Oversæt tomme engelske felter i denne sektion">⇄ Oversæt</button></div>
+      <div class="fc-block-body">
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Copyright-linje</label><input type="text" id="tor_footer_copy_da" class="fc-input-da"></div>
+          <div><label class="fc-label fc-label-en">Copyright line</label><input type="text" id="tor_footer_copy_en" class="fc-input-en"></div>
+        </div>
+        <div style="text-align:right;margin-top:1.2rem;padding-top:1rem;border-top:1px solid rgba(184,138,30,.18);"><button type="button" onclick="gemTor()" style="background:var(--wine);color:#fff;border:none;padding:.5rem 1.4rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;">💾 Gem</button><button type="button" onclick="gemTorOgSeSiden()" style="background:#2a7a74;color:#fff;border:none;padding:.5rem 1.4rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;margin-left:.6rem;">💾 Gem og se siden</button></div>
+      </div>
+    </div>
+
+    <div class="fc-block" id="torblok_17" style="margin-bottom:1.5rem;">
+      <div class="fc-block-header" style="display:flex;align-items:center;gap:.8rem;"><span class="fc-block-title">17 · Billedstribe 1</span></div>
+      <div class="fc-block-body">
+        <p style="font-family:Manrope,sans-serif;font-size:.72rem;color:#7a6a52;margin-bottom:.8rem;">Op til fem billeder. Er striben tom, vises den ikke på siden.</p>
+        <div id="torStribe1Liste"></div>
+        <button type="button" onclick="torStribeTilfoej(1)" style="background:#2a7a74;color:#fff;border:none;padding:.45rem 1.1rem;font-family:Manrope,sans-serif;font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;margin-top:.4rem;">+ Tilføj billede</button>
+        <div class="fc-row" style="margin-top:1rem;"><div><label class="fc-label">Luft over (rem)</label><input type="number" step="0.5" min="0" max="14" id="tor_strip1_top" class="fc-input-da" value="2"></div><div><label class="fc-label">Luft under (rem)</label><input type="number" step="0.5" min="0" max="14" id="tor_strip1_bund" class="fc-input-da" value="2"></div></div>
+        <div style="text-align:right;margin-top:1.2rem;padding-top:1rem;border-top:1px solid rgba(184,138,30,.18);"><button type="button" onclick="gemTor()" style="background:var(--wine);color:#fff;border:none;padding:.5rem 1.4rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;">💾 Gem</button><button type="button" onclick="gemTorOgSeSiden()" style="background:#2a7a74;color:#fff;border:none;padding:.5rem 1.4rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;margin-left:.6rem;">💾 Gem og se siden</button></div>
+      </div>
+    </div>
+
+    <div class="fc-block" id="torblok_18" style="margin-bottom:1.5rem;">
+      <div class="fc-block-header" style="display:flex;align-items:center;gap:.8rem;"><span class="fc-block-title">18 · Billedstribe 2</span></div>
+      <div class="fc-block-body">
+        <p style="font-family:Manrope,sans-serif;font-size:.72rem;color:#7a6a52;margin-bottom:.8rem;">Op til fem billeder. Er striben tom, vises den ikke på siden.</p>
+        <div id="torStribe2Liste"></div>
+        <button type="button" onclick="torStribeTilfoej(2)" style="background:#2a7a74;color:#fff;border:none;padding:.45rem 1.1rem;font-family:Manrope,sans-serif;font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;margin-top:.4rem;">+ Tilføj billede</button>
+        <div class="fc-row" style="margin-top:1rem;"><div><label class="fc-label">Luft over (rem)</label><input type="number" step="0.5" min="0" max="14" id="tor_strip2_top" class="fc-input-da" value="2"></div><div><label class="fc-label">Luft under (rem)</label><input type="number" step="0.5" min="0" max="14" id="tor_strip2_bund" class="fc-input-da" value="2"></div></div>
+        <div style="text-align:right;margin-top:1.2rem;padding-top:1rem;border-top:1px solid rgba(184,138,30,.18);"><button type="button" onclick="gemTor()" style="background:var(--wine);color:#fff;border:none;padding:.5rem 1.4rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;">💾 Gem</button><button type="button" onclick="gemTorOgSeSiden()" style="background:#2a7a74;color:#fff;border:none;padding:.5rem 1.4rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;margin-left:.6rem;">💾 Gem og se siden</button></div>
+      </div>
+    </div>
+
+    <div class="fc-block" id="torblok_19" style="margin-bottom:1.5rem;">
+      <div class="fc-block-header" style="display:flex;align-items:center;gap:.8rem;"><span class="fc-block-title">19 · Billedstribe 3</span></div>
+      <div class="fc-block-body">
+        <p style="font-family:Manrope,sans-serif;font-size:.72rem;color:#7a6a52;margin-bottom:.8rem;">Op til fem billeder. Er striben tom, vises den ikke på siden.</p>
+        <div id="torStribe3Liste"></div>
+        <button type="button" onclick="torStribeTilfoej(3)" style="background:#2a7a74;color:#fff;border:none;padding:.45rem 1.1rem;font-family:Manrope,sans-serif;font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;margin-top:.4rem;">+ Tilføj billede</button>
+        <div class="fc-row" style="margin-top:1rem;"><div><label class="fc-label">Luft over (rem)</label><input type="number" step="0.5" min="0" max="14" id="tor_strip3_top" class="fc-input-da" value="2"></div><div><label class="fc-label">Luft under (rem)</label><input type="number" step="0.5" min="0" max="14" id="tor_strip3_bund" class="fc-input-da" value="2"></div></div>
+        <div style="text-align:right;margin-top:1.2rem;padding-top:1rem;border-top:1px solid rgba(184,138,30,.18);"><button type="button" onclick="gemTor()" style="background:var(--wine);color:#fff;border:none;padding:.5rem 1.4rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;">💾 Gem</button><button type="button" onclick="gemTorOgSeSiden()" style="background:#2a7a74;color:#fff;border:none;padding:.5rem 1.4rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;margin-left:.6rem;">💾 Gem og se siden</button></div>
+      </div>
+    </div>
+
+    <div style="text-align:right;margin-top:2rem;padding-top:1.2rem;border-top:1px solid rgba(184,138,30,.25);"><button type="button" onclick="gemTor()" style="background:#7a1f35;color:#fff;border:none;padding:.6rem 1.6rem;font-family:Manrope,sans-serif;font-size:.66rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;">💾 Gem</button></div>
+  </div>
   <div class="subtab-content" id="tab-sevaerdigheder" style="padding:2rem 3rem;max-width:1100px;">
     <div style="display:flex;align-items:center;gap:1rem;margin-bottom:1.4rem;flex-wrap:wrap;">
       <h2 style="font-family:Cinzel,serif;font-weight:400;font-size:1.3rem;margin:0;">Seværdigheder</h2>
@@ -6481,6 +6918,7 @@ function loadSubTab(sub) {
   if (sub === 'ejendommen') loadEjendommensAdmin();
   if (sub === 'udlejning') { loadUdlejningAdmin(); loadSikkerhedAdmin(); }
   if (sub === 'gay') loadGayAdmin();
+  if (sub === 'torremolinos') loadTorAdmin();
   if (sub === 'sevaerdigheder') loadSevaerdighederAdmin();
   if (sub === 'kontakt') loadKontaktAdmin();
 }
@@ -11812,6 +12250,1082 @@ async function gemGay() {
   }
 }
 
+
+
+// ═══ TORREMOLINOS — GUIDESIDE (torremolinos_content) ═══════════════════════
+// Samme mønster som gay-retreat-siden: nøgle/værdi i torremolinos_content,
+// dansk uden suffiks, engelsk med _en. Siden har egne defaults, så tomme
+// felter betyder "brug sidens standardtekst" — ikke "vis ingenting".
+const TOR_TEXT_KEYS = ["seo_title", "seo_desc", "nav_back", "hero_eyebrow", "hero_h1", "hero_text", "hero_scroll", "intro_label", "intro_h2", "intro_lede", "intro_text", "historie_label", "historie_h2", "historie_text", "razzia_label", "razzia_h2", "razzia_lede", "arv_label", "arv_h2", "arv_text", "anekdoter_label", "anekdoter_h2", "anekdoter_intro", "idag_label", "idag_h2", "idag_intro", "kombiner_label", "kombiner_h2", "kombiner_intro", "massage_label", "massage_h2", "massage_text", "massage_btn", "praktisk_label", "praktisk_h2", "partnere_label", "partnere_h2", "partnere_intro", "faq_label", "faq_h2", "kilder_label", "kilder_h2", "kilder_intro", "cta_h2", "cta_text", "cta_btn", "footer_copy"];
+const TOR_IMG_KEYS  = ["social_image", "hero_image", "historie_image", "idag_image"];
+const TOR_SOLO_KEYS = ["cta_link", "massage_link"];
+
+// Standardtekster = præcis det, siden viser i dag. Kilden er
+// sql/2026-08-04-torremolinos-content.sql — de to må ikke skride fra
+// hinanden, så begge steder genereres fra samme fil.
+const TOR_ADM_DEFAULTS = {
+  "seo_title": "Gay Torremolinos: historien, strandene og nattelivet",
+  "seo_desc": "Fra Pasaje Begoña og razziaen i 1971 til La Nogalera i dag. Guide til gay Torremolinos — og hvordan kysten passer sammen med en uge på vores gay retreat nær Málaga.",
+  "nav_back": "← Tilbage til forsiden",
+  "hero_eyebrow": "Torremolinos · Costa del Sol · Málaga",
+  "hero_h1": "Gay<br>Torremolinos",
+  "hero_text": "En smal gyde i Torremolinos blev Spaniens første frirum for homoseksuelle — syv år før Stonewall. Her er historien, byen som den er i dag, og hvordan kysten passer sammen med en uge hos os inde i landet.",
+  "hero_scroll": "Historien",
+  "intro_label": "Hvorfor denne by",
+  "intro_h2": "Et frirum midt i diktaturet",
+  "intro_lede": "De fleste kender Torremolinos som en badeby med højhuse og engelsk morgenmad. Men i 1960'erne var byen noget helt andet: det eneste sted i Spanien, hvor man kunne være åbent homoseksuel uden at gemme sig — mens resten af landet levede under Franco.",
+  "intro_text": "Det varede ni år. Så lukkede det på én nat.\nHistorien er ikke ret godt kendt uden for Spanien, og den fortjener bedre. Den forklarer også, hvorfor Torremolinos den dag i dag stadig er kystens homoby — og hvorfor et par gader her betyder noget for mange mennesker.",
+  "historie_label": "1962–1971",
+  "historie_h2": "Pasaje Begoña",
+  "historie_text": "Pasaje Begoña er en lille L-formet gyde midt i Torremolinos. I de sidste måneder af 1962 åbnede de første barer der, som homoseksuelle frit kunne komme på — de første af deres slags i hele Spanien.\nPå under ti år voksede det til mindst halvtreds barer og livemusiksteder i den ene gyde: flamenco, jazz, rock og folk side om side. Turister kom fra hele Europa og USA. Hollywood-stjerner, forfattere og europæisk kongelighed gik rundt i de samme gader.\nAt det overhovedet kunne lade sig gøre, skyldtes ikke tolerance. Det skyldtes valuta. Turismen bragte penge ind i et fattigt land, og regimet ville gerne vise verden et moderne Spanien. Så længe det blev inden for Torremolinos, kiggede myndighederne den anden vej.",
+  "razzia_label": "24. juni 1971",
+  "razzia_h2": "Natten det hele lukkede",
+  "razzia_lede": "Sankt Hans-nat 1971 slog politiet til mod Pasaje Begoña. Det blev enden på ni års frihed, og eftervirkningerne varede i årtier.",
+  "arv_label": "Efterspillet",
+  "arv_h2": "Fra glemsel til anerkendelse",
+  "arv_text": "I årtier stod historien stille. Gyden blev omdøbt i 80'erne, barerne var væk, og mens Stonewall blev et verdensbegreb, forfaldt Pasaje Begoña i stilhed.\nDet ændrede sig, da en lokal forening begyndte at grave i arkiverne og opsøge dem, der havde været der. I dag er stedet officielt anerkendt som historisk mindested og som vuggen for LGBTI-rettigheder i Spanien.",
+  "anekdoter_label": "Småting fra dengang",
+  "anekdoter_h2": "Fem detaljer, der bliver hængende",
+  "anekdoter_intro": "Historier fra en by, hvor alt var muligt i ni år.",
+  "idag_label": "Byen i dag",
+  "idag_h2": "La Nogalera og kysten",
+  "idag_intro": "Miljøet ligger stadig i Torremolinos, bare et par hundrede meter fra hvor det startede. Alt ligger tæt: barer, strand og promenade kan gås på et kvarter.",
+  "kombiner_label": "Kombinér",
+  "kombiner_h2": "En uge i bakkerne, en dag ved havet",
+  "kombiner_intro": "Castillo del Alma ligger en times kørsel inde i landet fra Torremolinos. Tæt nok til en dagstur eller en aften i byen — langt nok væk til at ugen faktisk føles som et retreat.",
+  "massage_label": "Massage",
+  "massage_h2": "Massage — hos os og på kysten",
+  "massage_text": "Massage kan tilkøbes under opholdet på ejendommen, både som klassisk wellness-behandling og som tantrisk massage. Det aftales i ro og mag inden ugen begynder.\nVi driver også Kahuna Massage på kysten, så leder du efter gay massage i Torremolinos-området uden for et retreat, finder du behandlinger og priser der.",
+  "massage_btn": "Se Kahuna Massage",
+  "praktisk_label": "Praktisk",
+  "praktisk_h2": "Før du tager afsted",
+  "partnere_label": "Byens steder",
+  "partnere_h2": "Vores favoritter i Torremolinos",
+  "partnere_intro": "Steder vi selv kommer, og gerne sender gæster videre til.",
+  "faq_label": "Spørgsmål",
+  "faq_h2": "Det folk plejer at spørge om",
+  "kilder_label": "Kilder",
+  "kilder_h2": "Hvor historien kommer fra",
+  "kilder_intro": "Historien på denne side bygger på foreningen bag Pasaje Begoña og på spansk presse. Tallene fra 1971 varierer en smule fra kilde til kilde; vi har brugt dem, der går igen.",
+  "cta_h2": "Vil du opleve begge dele?",
+  "cta_text": "To retreats om året, seksten mænd, syv dage på en vinejendom i bakkerne — og kysten en time væk, hvis du vil have en dag eller en nat i byen.",
+  "cta_btn": "Se vores gay retreats",
+  "footer_copy": "© 2026 Castillo del Alma · Mollina, Málaga · Alle rettigheder forbeholdes"
+};
+const TOR_ADM_DEFAULTS_EN = {
+  "seo_title": "Gay Torremolinos: History, Beaches and Nightlife",
+  "seo_desc": "From Pasaje Begoña and the 1971 raid to La Nogalera today. A guide to gay Torremolinos — and how the coast fits with a week at our gay retreat near Málaga.",
+  "nav_back": "← Back to home",
+  "hero_eyebrow": "Torremolinos · Costa del Sol · Málaga",
+  "hero_h1": "Gay<br>Torremolinos",
+  "hero_text": "A narrow alley in Torremolinos became Spain's first free space for gay people — seven years before Stonewall. Here is the history, the town as it is today, and how the coast fits with a week with us inland.",
+  "hero_scroll": "The history",
+  "intro_label": "Why this town",
+  "intro_h2": "A free space in the middle of a dictatorship",
+  "intro_lede": "Most people know Torremolinos as a beach town of tower blocks and English breakfasts. In the 1960s it was something else entirely: the one place in Spain where you could be openly gay without hiding — while the rest of the country lived under Franco.",
+  "intro_text": "It lasted nine years. Then it closed in a single night.\nThe story is not well known outside Spain, and it deserves better. It also explains why Torremolinos is still the gay town of this coastline — and why a couple of streets here matter to a lot of people.",
+  "historie_label": "1962–1971",
+  "historie_h2": "Pasaje Begoña",
+  "historie_text": "Pasaje Begoña is a small L-shaped alley in the middle of Torremolinos. In the closing months of 1962 the first bars opened there where gay people could gather freely — the first of their kind anywhere in Spain.\nIn under a decade it grew to at least fifty bars and live music venues in that single alley: flamenco, jazz, rock and folk side by side. Tourists came from across Europe and the United States. Hollywood stars, writers and European royalty walked the same streets.\nThat it was possible at all had nothing to do with tolerance. It had to do with foreign currency. Tourism brought money into a poor country, and the regime wanted to show the world a modern Spain. As long as it stayed inside Torremolinos, the authorities looked the other way.",
+  "razzia_label": "24 June 1971",
+  "razzia_h2": "The night it all closed",
+  "razzia_lede": "On the night of San Juan in 1971, police raided Pasaje Begoña. It ended nine years of freedom, and the aftermath lasted for decades.",
+  "arv_label": "The aftermath",
+  "arv_h2": "From oblivion to recognition",
+  "arv_text": "For decades the story stood still. The alley was renamed in the 1980s, the bars were gone, and while Stonewall became a global reference, Pasaje Begoña quietly fell into disrepair.\nThat changed when a local association began digging through archives and tracking down the people who had been there. Today the site is officially recognised as a place of historical memory and as the birthplace of LGBTI rights in Spain.",
+  "anekdoter_label": "Small things from back then",
+  "anekdoter_h2": "Five details that stay with you",
+  "anekdoter_intro": "Stories from a town where, for nine years, anything was possible.",
+  "idag_label": "The town today",
+  "idag_h2": "La Nogalera and the coast",
+  "idag_intro": "The scene is still in Torremolinos, a couple of hundred metres from where it began. Everything sits close together: bars, beach and promenade are a fifteen-minute walk apart.",
+  "kombiner_label": "Combine",
+  "kombiner_h2": "A week in the hills, a day by the sea",
+  "kombiner_intro": "Castillo del Alma is an hour's drive inland from Torremolinos. Close enough for a day trip or an evening out — far enough away that the week actually feels like a retreat.",
+  "massage_label": "Massage",
+  "massage_h2": "Massage — with us and on the coast",
+  "massage_text": "Massage can be added to your stay at the estate, both as a classic wellness treatment and as tantric massage. It is arranged calmly before the week begins.\nWe also run Kahuna Massage on the coast, so if you are looking for gay massage in the Torremolinos area outside a retreat, you will find treatments and prices there.",
+  "massage_btn": "Visit Kahuna Massage",
+  "praktisk_label": "Practical",
+  "praktisk_h2": "Before you go",
+  "partnere_label": "Around town",
+  "partnere_h2": "Our favourites in Torremolinos",
+  "partnere_intro": "Places we go ourselves, and happily send guests to.",
+  "faq_label": "Questions",
+  "faq_h2": "What people usually ask",
+  "kilder_label": "Sources",
+  "kilder_h2": "Where the history comes from",
+  "kilder_intro": "The history on this page draws on the association behind Pasaje Begoña and on Spanish press coverage. The 1971 figures vary slightly between sources; we have used the ones that recur.",
+  "cta_h2": "Want both?",
+  "cta_text": "Two retreats a year, sixteen men, seven days on a wine estate in the hills — and the coast an hour away if you want a day, or a night, in town.",
+  "cta_btn": "See our gay retreats",
+  "footer_copy": "© 2026 Castillo del Alma · Mollina, Málaga · All rights reserved"
+};
+const TOR_IMG_DEFAULTS = {};
+const TOR_LISTE_DEFAULTS = {
+  "hero_meta": [
+    {
+      "da": [
+        "1962 · de første barer"
+      ],
+      "en": [
+        "1962 · the first bars"
+      ]
+    },
+    {
+      "da": [
+        "1971 · razziaen"
+      ],
+      "en": [
+        "1971 · the raid"
+      ]
+    },
+    {
+      "da": [
+        "1 time fra ejendommen"
+      ],
+      "en": [
+        "1 hour from the estate"
+      ]
+    }
+  ],
+  "razzia_items": [
+    {
+      "da": [
+        "Over 300 mennesker",
+        "Razziaen ramte mere end tre hundrede mennesker på én nat. Det var ikke en enkelt bar, men hele gyden."
+      ],
+      "en": [
+        "More than 300 people",
+        "The raid caught over three hundred people in a single night. It was not one bar, but the whole alley."
+      ]
+    },
+    {
+      "da": [
+        "114 anholdt",
+        "De anholdte blev ført til Málaga. Vidner husker dem i gården ved Palacio de la Aduana — i dag byens museum."
+      ],
+      "en": [
+        "114 arrested",
+        "Those arrested were taken to Málaga. Witnesses remember them in the courtyard of the Palacio de la Aduana — today the city museum."
+      ]
+    },
+    {
+      "da": [
+        "Udvist fra landet",
+        "Snesevis af udlændinge blev sat ud af Spanien. Frihed havde tiltrukket dem; nu var den grunden til at de blev sendt hjem."
+      ],
+      "en": [
+        "Deported",
+        "Dozens of foreigners were expelled from Spain. Freedom had drawn them there; now it was the reason they were sent home."
+      ]
+    },
+    {
+      "da": [
+        "Mapper og overvågning",
+        "Alle, der blev identificeret, fik oprettet en politimappe og besked om at de var under opsyn. Det fulgte folk i årevis."
+      ],
+      "en": [
+        "Files and surveillance",
+        "Everyone identified had a police file opened on them and was told they were being watched. It followed people for years."
+      ]
+    },
+    {
+      "da": [
+        "Loven bag",
+        "Grundlaget var <em>Ley de Peligrosidad Social</em>, som havde afløst den gamle lov om løsgængeri og gjorde homoseksualitet til et spørgsmål om 'farlighed'."
+      ],
+      "en": [
+        "The law behind it",
+        "The basis was the <em>Ley de Peligrosidad Social</em>, which had replaced the old vagrancy law and turned homosexuality into a question of 'social danger'."
+      ]
+    },
+    {
+      "da": [
+        "Barerne kom aldrig igen",
+        "Mange lokaler blev lukket for altid. En del af miljøet gik tilbage i skjul, og byens gyldne turistår tog samtidig et knæk."
+      ],
+      "en": [
+        "The bars never came back",
+        "Many venues were closed for good. Part of the scene went back into hiding, and the town's golden tourist years took a blow at the same time."
+      ]
+    }
+  ],
+  "arv_items": [
+    {
+      "da": [
+        "1980'erne",
+        "Gyden bliver omdøbt til Pasaje Gil Vicente. Navnet Begoña forsvinder fra kortet — og historien med det."
+      ],
+      "en": [
+        "The 1980s",
+        "The alley is renamed Pasaje Gil Vicente. The name Begoña disappears from the map — and the history with it."
+      ]
+    },
+    {
+      "da": [
+        "2018",
+        "Asociación Pasaje Begoña stiftes og går i gang med at samle vidnesbyrd og arkivmateriale."
+      ],
+      "en": [
+        "2018",
+        "Asociación Pasaje Begoña is founded and begins gathering testimony and archive material."
+      ]
+    },
+    {
+      "da": [
+        "2019",
+        "Under WorldPride i New York indgår foreningen venskabsforbund med Stonewall Inn Foundation."
+      ],
+      "en": [
+        "2019",
+        "During WorldPride in New York the association forms a twinning with the Stonewall Inn Foundation."
+      ]
+    },
+    {
+      "da": [
+        "2021",
+        "Endnu et venskabsforbund, denne gang med onePULSE Foundation i Orlando."
+      ],
+      "en": [
+        "2021",
+        "Another twinning follows, this time with the onePULSE Foundation in Orlando."
+      ]
+    },
+    {
+      "da": [
+        "Anerkendelsen",
+        "Kongressen og det andalusiske parlament anerkender Pasaje Begoña som historisk mindested og som vuggen for LGBTI-rettigheder i Spanien."
+      ],
+      "en": [
+        "The recognition",
+        "The Spanish Congress and the Andalusian Parliament recognise Pasaje Begoña as a place of historical memory and the birthplace of LGBTI rights in Spain."
+      ]
+    }
+  ],
+  "anekdoter_items": [
+    {
+      "da": [
+        "Lennon på terrassen",
+        "Vidner fra dengang fortæller, at John Lennon sad på en af terrasserne i gyden sammen med Beatles-manageren Brian Epstein og så folk gå forbi. Historien er mundtligt overleveret — men den bliver fortalt af folk, der var der."
+      ],
+      "en": [
+        "Lennon on the terrace",
+        "Witnesses from the time recall John Lennon sitting on one of the alley's terraces with Beatles manager Brian Epstein, watching people go by. The story is oral history — but it is told by people who were there."
+      ]
+    },
+    {
+      "da": [
+        "Navnet",
+        "Pasaje Begoña er opkaldt efter datteren til manden, der byggede ejendommen. Ingen politisk gestus — bare en far med en datter."
+      ],
+      "en": [
+        "The name",
+        "Pasaje Begoña is named after the daughter of the man who built the block. No political gesture — just a father and his daughter."
+      ]
+    },
+    {
+      "da": [
+        "Halvtreds barer i én gyde",
+        "Det er en gyde, man kan gå igennem på et halvt minut. På ni år nåede der at være mindst halvtreds lokaler i den."
+      ],
+      "en": [
+        "Fifty bars in one alley",
+        "It is an alley you can walk through in half a minute. In nine years it held at least fifty venues."
+      ]
+    },
+    {
+      "da": [
+        "De fire s'er",
+        "Tidens turisme blev solgt på sun, sea, sand og sex. Det sidste s var grunden til, at nogen overhovedet turde rejse hertil."
+      ],
+      "en": [
+        "The four S's",
+        "The tourism of the era was sold on sun, sea, sand and sex. The last S was the reason some people dared to travel here at all."
+      ]
+    },
+    {
+      "da": [
+        "Spaniens Stonewall",
+        "Spansk presse kalder ofte stedet Spaniens Stonewall. Kronologisk var Torremolinos først: barerne åbnede i 1962, syv år før optøjerne i New York."
+      ],
+      "en": [
+        "Spain's Stonewall",
+        "The Spanish press often calls the site Spain's Stonewall. Chronologically Torremolinos came first: the bars opened in 1962, seven years before the New York riots."
+      ]
+    }
+  ],
+  "idag_items": [
+    {
+      "da": [
+        "La Nogalera",
+        "Hjertet i miljøet. Et åbent butikskompleks midt i byen, hvor barer og klubber ligger tæt i en firkant omkring pladsen. Det meste af nattelivet foregår her."
+      ],
+      "en": [
+        "La Nogalera",
+        "The heart of the scene. An open shopping complex in the middle of town where bars and clubs are packed into a square around the plaza. Most of the nightlife happens here."
+      ]
+    },
+    {
+      "da": [
+        "Det andet område",
+        "Tværs over vejen, omkring Calle Danza Invisible og Calle Casablanca, ligger en mindre klynge af steder. Få minutters gang fra La Nogalera."
+      ],
+      "en": [
+        "The second area",
+        "Across the road, around Calle Danza Invisible and Calle Casablanca, sits a smaller cluster of venues. A few minutes' walk from La Nogalera."
+      ]
+    },
+    {
+      "da": [
+        "Stranden",
+        "Der er to gay-strandklubber ved kysten, og de kan nås til fods fra centrum. Solsenge, mad og musik hele dagen — det er her eftermiddagen går."
+      ],
+      "en": [
+        "The beach",
+        "There are two gay beach clubs on the shore, both walkable from the centre. Sunbeds, food and music all day — this is where the afternoon goes."
+      ]
+    },
+    {
+      "da": [
+        "Promenaden",
+        "Paseo Marítimo løber langs vandet fra Bajondillo til fiskerkvarteret La Carihuela, hvor de gamle strandrestauranter ligger. Gå den ved solnedgang."
+      ],
+      "en": [
+        "The promenade",
+        "The Paseo Marítimo runs along the water from Bajondillo to the old fishing quarter of La Carihuela, where the classic beach restaurants are. Walk it at sunset."
+      ]
+    },
+    {
+      "da": [
+        "Calle San Miguel",
+        "Byens gågade, fem minutter fra La Nogalera. Butikker, is og folk der ser på folk — dagens modsætning til aftenens."
+      ],
+      "en": [
+        "Calle San Miguel",
+        "The town's pedestrian street, five minutes from La Nogalera. Shops, ice cream and people watching people — the daytime opposite of the evening."
+      ]
+    },
+    {
+      "da": [
+        "Pride og sommerens festivaler",
+        "Torremolinos Pride fylder byen, og hen over sommeren kommer flere store gay-festivaler til. Datoerne flytter sig fra år til år — tjek det officielle program, før du booker fly."
+      ],
+      "en": [
+        "Pride and the summer festivals",
+        "Torremolinos Pride fills the town, and several large gay festivals follow across the summer. The dates move from year to year — check the official programme before booking flights."
+      ]
+    }
+  ],
+  "kombiner_items": [
+    {
+      "da": [
+        "Dagsturen",
+        "En time i bil hver vej. Kør ved frokosttid, tag stranden og en tidlig aften i La Nogalera, og vær hjemme igen samme nat."
+      ],
+      "en": [
+        "The day trip",
+        "An hour's drive each way. Leave around midday, take the beach and an early evening in La Nogalera, and be back the same night."
+      ]
+    },
+    {
+      "da": [
+        "Nat i byen",
+        "Vil man blive til nattelivet, giver det bedst mening at overnatte i Torremolinos. Byen er lille og alt ligger inden for gåafstand."
+      ],
+      "en": [
+        "A night in town",
+        "If you want to stay for the nightlife, it makes more sense to sleep in Torremolinos. The town is small and everything is walkable."
+      ]
+    },
+    {
+      "da": [
+        "Forlæng ugen",
+        "Mange lægger to-tre dage på kysten før eller efter retreatet. Lufthavnen ligger et kvarter fra Torremolinos, så det koster ingen ekstra rejsetid."
+      ],
+      "en": [
+        "Extend the week",
+        "Many people add two or three days on the coast before or after the retreat. The airport is fifteen minutes from Torremolinos, so it costs no extra travel time."
+      ]
+    },
+    {
+      "da": [
+        "Ro først, fest bagefter",
+        "Vores erfaring: læg ugen hos os først og kysten bagefter. Omvendt rækkefølge betyder som regel, at man sover de første to dage af retreatet væk."
+      ],
+      "en": [
+        "Quiet first, party after",
+        "Our experience: put the week with us first and the coast after. The other way round usually means sleeping through the first two days of the retreat."
+      ]
+    }
+  ],
+  "afstande": [
+    {
+      "da": [
+        "1 time",
+        "i bil til Torremolinos"
+      ],
+      "en": [
+        "1 hour",
+        "by car to Torremolinos"
+      ]
+    },
+    {
+      "da": [
+        "15 min.",
+        "fra Málaga lufthavn til Torremolinos"
+      ],
+      "en": [
+        "15 min",
+        "from Málaga airport to Torremolinos"
+      ]
+    },
+    {
+      "da": [
+        "45 min.",
+        "fra Málaga lufthavn til ejendommen"
+      ],
+      "en": [
+        "45 min",
+        "from Málaga airport to the estate"
+      ]
+    }
+  ],
+  "praktisk_items": [
+    {
+      "da": [
+        "Sådan kommer du frem",
+        "Lejebil er nemmest, hvis du kombinerer kyst og ejendom. Skal du kun til Torremolinos, kører kysttoget (Cercanías C-1) fra Málaga via lufthavnen og til byen."
+      ],
+      "en": [
+        "Getting there",
+        "A rental car is easiest if you are combining coast and estate. For Torremolinos alone, the coastal train (Cercanías C-1) runs from Málaga via the airport into town."
+      ]
+    },
+    {
+      "da": [
+        "Hvornår",
+        "Juni til september er højsæson, varmt og fyldt. Maj og oktober er stadig badevejr med halvt så mange mennesker — og markant billigere fly."
+      ],
+      "en": [
+        "When to go",
+        "June to September is high season: hot and busy. May and October still give you swimming weather with half the crowds — and markedly cheaper flights."
+      ]
+    },
+    {
+      "da": [
+        "Døgnrytmen",
+        "Byen vågner sent. Middag spises fra kl. 21, og barerne fyldes efter midnat. Planlægger du efter dansk aftensmad, står du alene i lokalet."
+      ],
+      "en": [
+        "The rhythm of the day",
+        "The town wakes late. Dinner starts around 9pm and the bars fill after midnight. Plan around a northern European supper and you will have the room to yourself."
+      ]
+    },
+    {
+      "da": [
+        "Sprog",
+        "Spansk er hovedsproget, men engelsk klarer stort set alt i turistområdet. Et par ord spansk bliver bemærket positivt."
+      ],
+      "en": [
+        "Language",
+        "Spanish is the main language, but English covers almost everything in the tourist area. A few words of Spanish are noticed and appreciated."
+      ]
+    },
+    {
+      "da": [
+        "Pasaje Begoña i dag",
+        "Gyden ligger i centrum, få minutter fra La Nogalera. Der er mindeplader, men det er ikke et museum — regn med et kvarter, ikke en formiddag."
+      ],
+      "en": [
+        "Pasaje Begoña today",
+        "The alley is in the centre, minutes from La Nogalera. There are memorial plaques, but it is not a museum — allow a quarter of an hour, not a morning."
+      ]
+    }
+  ],
+  "partner_items": [],
+  "faq_items": [
+    {
+      "da": [
+        "Hvor ligger homomiljøet i Torremolinos?",
+        "I og omkring La Nogalera, et åbent butikskompleks midt i byen. Der ligger desuden en mindre klynge af steder omkring Calle Danza Invisible og Calle Casablanca et par minutters gang derfra."
+      ],
+      "en": [
+        "Where is the gay area in Torremolinos?",
+        "In and around La Nogalera, an open shopping complex in the centre of town. There is also a smaller cluster of venues around Calle Danza Invisible and Calle Casablanca, a couple of minutes' walk away."
+      ]
+    },
+    {
+      "da": [
+        "Hvad skete der i Pasaje Begoña i 1971?",
+        "Natten til den 24. juni 1971 gennemførte politiet en razzia mod gyden. Mere end tre hundrede mennesker blev berørt, 114 blev anholdt, og snesevis af udlændinge blev udvist af Spanien. Mange af barerne åbnede aldrig igen."
+      ],
+      "en": [
+        "What happened at Pasaje Begoña in 1971?",
+        "On the night of 24 June 1971 police raided the alley. More than three hundred people were affected, 114 were arrested and dozens of foreigners were expelled from Spain. Many of the bars never reopened."
+      ]
+    },
+    {
+      "da": [
+        "Hvornår er Torremolinos Pride?",
+        "Datoerne flytter sig fra år til år, og kilderne på nettet er ikke altid enige. Tjek det officielle program, før du booker fly og hotel — byen bliver hurtigt udsolgt i Pride-ugen."
+      ],
+      "en": [
+        "When is Torremolinos Pride?",
+        "The dates move from year to year, and sources online do not always agree. Check the official programme before booking flights and a hotel — the town sells out fast during Pride week."
+      ]
+    },
+    {
+      "da": [
+        "Hvor langt er der fra Castillo del Alma til Torremolinos?",
+        "Cirka en times kørsel. Ejendommen ligger i Mollina inde i landet, nord for Málaga, og Torremolinos ligger på kysten sydvest for byen."
+      ],
+      "en": [
+        "How far is Castillo del Alma from Torremolinos?",
+        "About an hour's drive. The estate is in Mollina, inland and north of Málaga, and Torremolinos sits on the coast to the south-west of the city."
+      ]
+    },
+    {
+      "da": [
+        "Kan man kombinere et retreat med et par dage på kysten?",
+        "Ja, og en del gør det. De fleste lægger kystdagene efter retreatet og flyver hjem fra Málaga, som ligger et kvarter fra Torremolinos."
+      ],
+      "en": [
+        "Can I combine a retreat with a few days on the coast?",
+        "Yes, and plenty of people do. Most add the coast after the retreat and fly home from Málaga, fifteen minutes from Torremolinos."
+      ]
+    },
+    {
+      "da": [
+        "Hvor finder jeg gay massage i Torremolinos?",
+        "Vi driver selv Kahuna Massage på kysten — behandlinger og priser står på kahunamassage.dk. Under et retreat hos os kan massage tilkøbes direkte på ejendommen."
+      ],
+      "en": [
+        "Where can I find gay massage in Torremolinos?",
+        "We run Kahuna Massage on the coast ourselves — treatments and prices are at kahunamassage.dk. During a retreat with us, massage can be added at the estate itself."
+      ]
+    }
+  ],
+  "kilder_items": [
+    {
+      "da": [
+        "Asociación Pasaje Begoña",
+        "https://pasajebegona.com"
+      ],
+      "en": [
+        "Asociación Pasaje Begoña",
+        "https://pasajebegona.com"
+      ]
+    },
+    {
+      "da": [
+        "eldiario.es — Pasaje Begoña: fortid, nutid og fremtid",
+        "https://www.eldiario.es/andalucia/pasaporte/pasaje-begona-torremolinos-lgtbi-pasaje-begona_1_1444845.html"
+      ],
+      "en": [
+        "eldiario.es — Pasaje Begoña: past, present and future",
+        "https://www.eldiario.es/andalucia/pasaporte/pasaje-begona-torremolinos-lgtbi-pasaje-begona_1_1444845.html"
+      ]
+    },
+    {
+      "da": [
+        "Newtral — Det spanske Stonewall",
+        "https://www.newtral.es/pasaje-begona-stonewall-espanol-correos-lgtbi/20200628/"
+      ],
+      "en": [
+        "Newtral — The Spanish Stonewall",
+        "https://www.newtral.es/pasaje-begona-stonewall-espanol-correos-lgtbi/20200628/"
+      ]
+    },
+    {
+      "da": [
+        "Andalucía.org — Pasaje Begoña",
+        "https://www.andalucia.org/listing/pasaje-bego%C3%B1a/18260102/"
+      ],
+      "en": [
+        "Andalucía.org — Pasaje Begoña",
+        "https://www.andalucia.org/listing/pasaje-bego%C3%B1a/18260102/"
+      ]
+    }
+  ]
+};
+
+const TOR_VIS_FRA = ["vis_partnere"];
+const TOR_SOLO_DEFAULTS = {"cta_link": "/gay-retreat-malaga-spain", "massage_link": "https://kahunamassage.dk"};
+
+function torEsc(t) {
+  return String(t == null ? '' : t).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
+
+const TOR_LISTER = {
+  hero_meta:       { felter: [{ da: 'Tekst', en: 'Text', lang: false }] },
+  razzia_items:    { felter: [{ da: 'Overskrift', en: 'Heading', lang: false },
+                              { da: 'Tekst', en: 'Text', lang: true }] },
+  arv_items:       { felter: [{ da: 'Årstal / overskrift', en: 'Year / heading', lang: false },
+                              { da: 'Tekst', en: 'Text', lang: true }] },
+  anekdoter_items: { felter: [{ da: 'Overskrift', en: 'Heading', lang: false },
+                              { da: 'Tekst', en: 'Text', lang: true }] },
+  idag_items:      { felter: [{ da: 'Overskrift', en: 'Heading', lang: false },
+                              { da: 'Tekst', en: 'Text', lang: true }] },
+  kombiner_items:  { felter: [{ da: 'Overskrift', en: 'Heading', lang: false },
+                              { da: 'Tekst', en: 'Text', lang: true }] },
+  afstande:        { felter: [{ da: 'Tal (fx 1 time)', en: 'Figure', lang: false },
+                              { da: 'Tekst', en: 'Label', lang: false }] },
+  praktisk_items:  { felter: [{ da: 'Overskrift', en: 'Heading', lang: false },
+                              { da: 'Tekst', en: 'Text', lang: true }] },
+  partner_items:   { felter: [{ da: 'Navn på stedet', en: 'Name of the place', lang: false },
+                              { da: 'Kategori (fx Bar, Strand)', en: 'Category (e.g. Bar, Beach)', lang: false },
+                              { da: 'Beskrivelse', en: 'Description', lang: true },
+                              { da: 'Link (https://…)', en: 'Link (https://…)', lang: false }] },
+  faq_items:       { felter: [{ da: 'Spørgsmål', en: 'Question', lang: false },
+                              { da: 'Svar', en: 'Answer', lang: true }] },
+  kilder_items:    { felter: [{ da: 'Kildens navn', en: 'Name of the source', lang: false },
+                              { da: 'Link (https://…)', en: 'Link (https://…)', lang: false }] }
+};
+// Antal rækker pr. liste. Selve teksterne læses fra felterne ved gem, så
+// oversætterknappen (der skriver direkte i felterne) ikke kan blive overhalet.
+let torListeAntal = {};
+
+function torListeRender(key) {
+  const c = document.getElementById('torListe_' + key);
+  const spec = TOR_LISTER[key];
+  if (!c || !spec) return;
+  const n = torListeAntal[key] || 0;
+  if (!n) {
+    c.innerHTML = '<div style="font-family:Manrope,sans-serif;font-size:.7rem;color:rgba(44,35,24,.45);padding:.6rem 0;">Ingen rækker endnu — klik "+ Tilføj række".</div>';
+    return;
+  }
+  let ud = '';
+  for (let i = 0; i < n; i++) {
+    ud += '<div style="display:flex;gap:.7rem;align-items:flex-start;margin-bottom:.7rem;padding:.7rem;background:rgba(184,138,30,.04);border:1px solid rgba(184,138,30,.18);">' +
+      '<div style="display:flex;flex-direction:column;gap:3px;padding-top:1.1rem;">' +
+        '<button type="button" onclick="torListeFlyt(\'' + key + '\',' + i + ',-1)"' + (i === 0 ? ' disabled' : '') + ' style="' + TOR_PIL_BTN + '" title="Flyt op">▲</button>' +
+        '<button type="button" onclick="torListeFlyt(\'' + key + '\',' + i + ',1)"' + (i === n - 1 ? ' disabled' : '') + ' style="' + TOR_PIL_BTN + '" title="Flyt ned">▼</button>' +
+      '</div>' +
+      '<div style="flex:1;display:flex;flex-direction:column;gap:.6rem;">' +
+        spec.felter.map(function (felt, j) {
+          const idDa = 'tor_' + key + '_' + i + '_' + j + '_da';
+          const idEn = 'tor_' + key + '_' + i + '_' + j + '_en';
+          const tag = felt.lang
+            ? ['<textarea rows="3" class="fc-input-da fc-textarea" id="' + idDa + '"></textarea>',
+               '<textarea rows="3" class="fc-input-en fc-textarea" id="' + idEn + '"></textarea>']
+            : ['<input type="text" class="fc-input-da" id="' + idDa + '">',
+               '<input type="text" class="fc-input-en" id="' + idEn + '">'];
+          return '<div class="fc-row">' +
+            '<div><label class="fc-label fc-label-da">' + torEsc(felt.da) + '</label>' + tag[0] + '</div>' +
+            '<div><label class="fc-label fc-label-en">' + torEsc(felt.en) + '</label>' + tag[1] + '</div>' +
+          '</div>';
+        }).join('') +
+      '</div>' +
+      '<button type="button" onclick="torListeFjern(\'' + key + '\',' + i + ')" style="background:rgba(163,51,51,.08);color:#a33;border:1px solid rgba(163,51,51,.35);padding:.35rem .7rem;font-family:Manrope,sans-serif;font-size:.7rem;cursor:pointer;margin-top:1.1rem;" title="Fjern rækken">✕</button>' +
+    '</div>';
+  }
+  c.innerHTML = ud;
+}
+
+// Læs alt fra felterne — ikke fra en mellemliggende state, som oversætteren
+// ville kunne overhale.
+function torListeLaes(key) {
+  const spec = TOR_LISTER[key];
+  const n = torListeAntal[key] || 0;
+  const ud = [];
+  for (let i = 0; i < n; i++) {
+    const da = [], en = [];
+    spec.felter.forEach(function (_, j) {
+      const a = document.getElementById('tor_' + key + '_' + i + '_' + j + '_da');
+      const b = document.getElementById('tor_' + key + '_' + i + '_' + j + '_en');
+      da.push(a ? a.value.trim() : '');
+      en.push(b ? b.value.trim() : '');
+    });
+    if (da.some(Boolean) || en.some(Boolean)) ud.push({ da: da, en: en });
+  }
+  return ud;
+}
+
+function torListeSkriv(key, raekker) {
+  torListeAntal[key] = raekker.length;
+  torListeRender(key);
+  raekker.forEach(function (r, i) {
+    TOR_LISTER[key].felter.forEach(function (_, j) {
+      const a = document.getElementById('tor_' + key + '_' + i + '_' + j + '_da');
+      const b = document.getElementById('tor_' + key + '_' + i + '_' + j + '_en');
+      if (a) a.value = (r.da && r.da[j]) || '';
+      if (b) b.value = (r.en && r.en[j]) || '';
+    });
+  });
+}
+
+function torListeTilfoej(key) {
+  const nu = torListeLaes(key);
+  nu.push({ da: TOR_LISTER[key].felter.map(function () { return ''; }),
+            en: TOR_LISTER[key].felter.map(function () { return ''; }) });
+  torListeSkriv(key, nu);
+}
+function torListeFjern(key, i) {
+  const nu = torListeLaes(key);
+  nu.splice(i, 1);
+  torListeSkriv(key, nu);
+}
+function torListeFlyt(key, i, retning) {
+  const nu = torListeLaes(key);
+  const j = i + retning;
+  if (j < 0 || j >= nu.length) return;
+  const t = nu[i]; nu[i] = nu[j]; nu[j] = t;
+  torListeSkriv(key, nu);
+}
+
+// Læser både det nye format og de gamle "Tekst|Tekst"-linjer, så intet
+// gemt indhold går tabt.
+function torListeFraDb(key, raa, raaEn) {
+  const antal = TOR_LISTER[key].felter.length;
+  try {
+    const j = JSON.parse(raa || '[]');
+    if (Array.isArray(j) && (!j.length || (j[0] && j[0].da))) return j;
+  } catch (e) { /* ikke JSON — så er det gammelt rør-format */ }
+  const del = function (v) {
+    return String(v || '').split('\n').map(function (l) { return l.trim(); }).filter(Boolean)
+      .map(function (l) {
+        const d = l.split('|').map(function (x) { return x.trim(); });
+        while (d.length < antal) d.push('');
+        return d.slice(0, antal);
+      });
+  };
+  const da = del(raa), en = del(raaEn);
+  const ud = [];
+  for (let i = 0; i < Math.max(da.length, en.length); i++) {
+    ud.push({ da: da[i] || [], en: en[i] || [] });
+  }
+  return ud;
+}
+
+// ── Menu-links (blok 0) — samme editor som på udlejningssiden ──
+const TOR_NAV_DEFAULT = [
+  {
+    "tekst": "Historien",
+    "tekst_en": "History",
+    "link": "#historie",
+    "vis": "1"
+  },
+  {
+    "tekst": "I dag",
+    "tekst_en": "Today",
+    "link": "#idag",
+    "vis": "1"
+  },
+  {
+    "tekst": "Kombinér",
+    "tekst_en": "Combine",
+    "link": "#kombiner",
+    "vis": "1"
+  },
+  {
+    "tekst": "Gay retreat",
+    "tekst_en": "Gay retreat",
+    "link": "/gay-retreat-malaga-spain",
+    "vis": "1"
+  }
+];
+let torNavState = [];   // [{ tekst, tekst_en, link, vis }]
+
+function torRenderNavEditor() {
+  const c = document.getElementById('torNavEditor');
+  if (!c) return;
+  c.innerHTML = torNavState.map((l, i) => {
+    const link = (l.link || '').trim();
+    const erAnker = TOR_SEKTION_DEFS.some(d => '#' + d.id === link);
+    const egen = !erAnker && link !== '';
+    const valgt = erAnker ? link : (egen ? '__egen__' : '');
+    const options =
+      '<option value="" disabled ' + (valgt === '' ? 'selected' : '') + '>Vælg ankerpunkt…</option>' +
+      TOR_SEKTION_DEFS.map(d => '<option value="#' + d.id + '"' + (valgt === '#' + d.id ? ' selected' : '') + '>' + torEsc(d.navn) + ' (#' + d.id + ')</option>').join('') +
+      '<option value="__egen__"' + (valgt === '__egen__' ? ' selected' : '') + '>Egen URL…</option>';
+    return '<div style="display:flex;gap:.5rem;align-items:center;margin-bottom:.5rem;flex-wrap:wrap;">' +
+      '<div style="display:flex;flex-direction:column;gap:2px;">' +
+        '<button type="button" onclick="torNavFlyt(' + i + ',-1)"' + (i === 0 ? ' disabled' : '') + ' style="' + TOR_PIL_BTN + '" title="Flyt op">▲</button>' +
+        '<button type="button" onclick="torNavFlyt(' + i + ',1)"' + (i === torNavState.length - 1 ? ' disabled' : '') + ' style="' + TOR_PIL_BTN + '" title="Flyt ned">▼</button>' +
+      '</div>' +
+      '<input type="text" class="fc-input-da" style="flex:1.2;min-width:130px;" placeholder="Navn (DA)" value="' + torEsc(l.tekst || '') + '" oninput="torNavState[' + i + '].tekst=this.value">' +
+      '<input type="text" class="fc-input-en" style="flex:1.2;min-width:130px;" placeholder="Name (EN)" value="' + torEsc(l.tekst_en || '') + '" oninput="torNavState[' + i + '].tekst_en=this.value">' +
+      '<select class="fc-input-da" style="flex:1;min-width:150px;cursor:pointer;" onchange="torNavLinkValg(' + i + ', this)">' + options + '</select>' +
+      '<input type="text" class="fc-input-da torNavEgenUrl" data-idx="' + i + '" style="flex:1;min-width:120px;' + (egen ? '' : 'display:none;') + '" placeholder="fx /kontakt eller https://…" value="' + (egen ? torEsc(link) : '') + '" oninput="torNavState[' + i + '].link=this.value">' +
+      '<label style="display:flex;align-items:center;gap:.35rem;font-family:Manrope,sans-serif;font-size:.66rem;cursor:pointer;white-space:nowrap;"><input type="checkbox"' + (l.vis !== '0' ? ' checked' : '') + ' onchange="torNavState[' + i + '].vis=this.checked?\'1\':\'0\'" style="cursor:pointer;"> Synlig</label>' +
+      '<button type="button" onclick="torNavSlet(' + i + ')" style="background:#a33;color:#fff;border:none;width:24px;height:24px;cursor:pointer;font-size:.7rem;line-height:1;" title="Fjern link">✕</button>' +
+    '</div>';
+  }).join('') || '<p style="font-family:Manrope,sans-serif;font-size:.7rem;color:#7a6a52;">Ingen menu-links — klik "+ Tilføj menu-link".</p>';
+}
+
+function torNavLinkValg(i, sel) {
+  const felt = document.querySelector('.torNavEgenUrl[data-idx="' + i + '"]');
+  if (sel.value === '__egen__') {
+    torNavState[i].link = '';
+    if (felt) { felt.style.display = ''; felt.value = ''; felt.focus(); }
+  } else {
+    torNavState[i].link = sel.value;
+    if (felt) { felt.style.display = 'none'; felt.value = ''; }
+  }
+}
+function torNavFlyt(i, retning) {
+  const j = i + retning;
+  if (j < 0 || j >= torNavState.length) return;
+  const t = torNavState[i]; torNavState[i] = torNavState[j]; torNavState[j] = t;
+  torRenderNavEditor();
+}
+function torNavSlet(i) { torNavState.splice(i, 1); torRenderNavEditor(); }
+function torNavTilfoej() { torNavState.push({ tekst: '', tekst_en: '', link: '', vis: '1' }); torRenderNavEditor(); }
+
+// ── Rækkefølge og synlighed (blok 0) ──
+const TOR_SEKTION_DEFS = [
+  { id: 'sec-intro', navn: 'Intro', key: 'vis_intro' },
+  { id: 'historie', navn: 'Historien — Pasaje Begoña', key: 'vis_historie' },
+  { id: 'strip1', navn: 'Billedstribe 1', key: 'vis_strip1' },
+  { id: 'razzia', navn: 'Razziaen 1971', key: 'vis_razzia' },
+  { id: 'arv', navn: 'Efterspillet', key: 'vis_arv' },
+  { id: 'anekdoter', navn: 'Anekdoter', key: 'vis_anekdoter' },
+  { id: 'strip2', navn: 'Billedstribe 2', key: 'vis_strip2' },
+  { id: 'idag', navn: 'Byen i dag', key: 'vis_idag' },
+  { id: 'kombiner', navn: 'Kombinér med retreat', key: 'vis_kombiner' },
+  { id: 'massage', navn: 'Massage', key: 'vis_massage' },
+  { id: 'praktisk', navn: 'Praktisk', key: 'vis_praktisk' },
+  { id: 'strip3', navn: 'Billedstribe 3', key: 'vis_strip3' },
+  { id: 'partnere', navn: 'Byens steder (partnere)', key: 'vis_partnere' },
+  { id: 'faq', navn: 'FAQ', key: 'vis_faq' },
+  { id: 'kilder', navn: 'Kilder', key: 'vis_kilder' },
+  { id: 'sec-cta', navn: 'Opfordring', key: 'vis_cta' }
+];
+let torOrdenState = [];                 // [{ id, vis }] i den rækkefølge sektionerne vises
+let torStriber = { 1: [], 2: [], 3: [] }; // billed-URL'er pr. stribe
+
+const TOR_PIL_BTN = 'background:rgba(184,138,30,.12);border:1px solid rgba(184,138,30,.35);color:#8a6a15;width:22px;height:16px;line-height:1;font-size:.55rem;cursor:pointer;padding:0;';
+
+function torRenderOrden() {
+  const c = document.getElementById('torOrdenEditor');
+  if (!c) return;
+  c.innerHTML = torOrdenState.map((o, i) => {
+    const def = TOR_SEKTION_DEFS.find(d => d.id === o.id) || { navn: o.id };
+    return '<div style="display:flex;gap:.6rem;align-items:center;margin-bottom:.4rem;padding:.35rem .6rem;background:rgba(184,138,30,.05);border:1px solid rgba(184,138,30,.18);">' +
+      '<div style="display:flex;flex-direction:column;gap:2px;">' +
+        '<button type="button" onclick="torOrdenFlyt(' + i + ',-1)"' + (i === 0 ? ' disabled' : '') + ' style="' + TOR_PIL_BTN + '" title="Flyt op">▲</button>' +
+        '<button type="button" onclick="torOrdenFlyt(' + i + ',1)"' + (i === torOrdenState.length - 1 ? ' disabled' : '') + ' style="' + TOR_PIL_BTN + '" title="Flyt ned">▼</button>' +
+      '</div>' +
+      '<span style="flex:1;font-family:Manrope,sans-serif;font-size:.72rem;color:#2c2318;">' + torEsc(def.navn) + '</span>' +
+      '<label style="display:flex;align-items:center;gap:.35rem;font-family:Manrope,sans-serif;font-size:.66rem;cursor:pointer;white-space:nowrap;">' +
+        '<input type="checkbox"' + (o.vis !== '0' ? ' checked' : '') + ' onchange="torOrdenState[' + i + '].vis=this.checked?\'1\':\'0\'" style="cursor:pointer;"> Synlig</label>' +
+    '</div>';
+  }).join('');
+}
+
+function torOrdenFlyt(i, retning) {
+  const j = i + retning;
+  if (j < 0 || j >= torOrdenState.length) return;
+  const t = torOrdenState[i]; torOrdenState[i] = torOrdenState[j]; torOrdenState[j] = t;
+  torRenderOrden();
+}
+
+// ── Billedstriber (blok 13–15) ──
+function torRenderStribe(nr) {
+  const c = document.getElementById('torStribe' + nr + 'Liste');
+  if (!c) return;
+  const liste = torStriber[nr] || [];
+  c.innerHTML = liste.map((url, i) =>
+    '<div style="display:flex;gap:.7rem;align-items:center;margin-bottom:.5rem;padding:.5rem .7rem;background:rgba(184,138,30,.04);border:1px solid rgba(184,138,30,.18);">' +
+      '<div style="display:flex;flex-direction:column;gap:3px;">' +
+        '<button type="button" onclick="torStribeFlyt(' + nr + ',' + i + ',-1)"' + (i === 0 ? ' disabled' : '') + ' style="' + TOR_PIL_BTN + '" title="Flyt op">▲</button>' +
+        '<button type="button" onclick="torStribeFlyt(' + nr + ',' + i + ',1)"' + (i === liste.length - 1 ? ' disabled' : '') + ' style="' + TOR_PIL_BTN + '" title="Flyt ned">▼</button>' +
+      '</div>' +
+      '<img src="' + torEsc(url || '') + '" style="' + (url ? '' : 'display:none;') + 'width:48px;height:60px;object-fit:cover;border:1px solid rgba(184,138,30,.3);">' +
+      '<input type="file" accept="image/*" id="torStribe' + nr + 'Fil' + i + '" style="font-size:.72rem;flex:1;" onchange="torStribeUpload(' + nr + ',' + i + ')">' +
+      '<button type="button" onclick="torStribeFjern(' + nr + ',' + i + ')" style="background:rgba(163,51,51,.08);color:#a33;border:1px solid rgba(163,51,51,.35);padding:.35rem .7rem;font-family:Manrope,sans-serif;font-size:.7rem;cursor:pointer;" title="Fjern billedet">✕</button>' +
+    '</div>').join('') ||
+    '<div style="font-family:Manrope,sans-serif;font-size:.7rem;color:rgba(44,35,24,.45);padding:.6rem 0;">Ingen billeder — striben vises ikke på siden.</div>';
+}
+
+function torStribeTilfoej(nr) {
+  if ((torStriber[nr] || []).length >= 5) { showToast('Der er plads til 5 billeder pr. stribe', true); return; }
+  torStriber[nr].push('');
+  torRenderStribe(nr);
+}
+function torStribeFjern(nr, i) { torStriber[nr].splice(i, 1); torRenderStribe(nr); }
+function torStribeFlyt(nr, i, retning) {
+  const j = i + retning;
+  if (j < 0 || j >= torStriber[nr].length) return;
+  const t = torStriber[nr][i]; torStriber[nr][i] = torStriber[nr][j]; torStriber[nr][j] = t;
+  torRenderStribe(nr);
+}
+async function torStribeUpload(nr, i) {
+  const felt = document.getElementById('torStribe' + nr + 'Fil' + i);
+  const fil = felt && felt.files && felt.files[0];
+  if (!fil) return;
+  try {
+    const url = await uploadRetreatImage(fil);   // samme upload som resten af admin
+    if (url) { torStriber[nr][i] = url; torRenderStribe(nr); showToast('✓ Billede uploadet — husk 💾 Gem'); }
+  } catch (e) {
+    showToast('Upload fejlede: ' + (e.message || e), true);
+  }
+}
+
+async function gemTorOgSeSiden() {
+  await gemTor();
+  window.open('/gay-torremolinos', '_blank', 'noopener');
+}
+
+async function loadTorAdmin() {
+  if (!sb) return;
+  const advarsel = document.getElementById('torAdvarsel');
+  let map = {}, fejl = null;
+  try {
+    const { data, error } = await sb.from('torremolinos_content').select('key,value');
+    if (error) throw error;
+    (data || []).forEach(r => { map[r.key] = r.value; });
+  } catch (e) {
+    fejl = e.message || String(e);
+    console.warn('loadTorAdmin: kunne ikke hente torremolinos_content (er tabellen oprettet?):', fejl);
+  }
+  if (advarsel) {
+    if (fejl) {
+      advarsel.style.display = 'block';
+      advarsel.innerHTML = 'Kunne ikke hente indholdet. Er tabellen oprettet? Kør <code>sql/2026-08-04-torremolinos-content.sql</code> i Supabase SQL Editor.<br><span style="opacity:.7;">' + torEsc(fejl) + '</span>';
+    } else {
+      advarsel.style.display = 'none';
+    }
+  }
+  TOR_TEXT_KEYS.forEach(key => {
+    ['da', 'en'].forEach(lang => {
+      const el = document.getElementById('tor_' + key + '_' + lang);
+      if (!el) return;
+      let val = map[lang === 'da' ? key : key + '_en'];
+      if (!val) val = (lang === 'da' ? TOR_ADM_DEFAULTS[key] : TOR_ADM_DEFAULTS_EN[key]) || '';
+      el.value = val;
+    });
+  });
+  TOR_SOLO_KEYS.forEach(key => {
+    const el = document.getElementById('tor_' + key);
+    if (el) el.value = (map[key] !== undefined && map[key] !== null && map[key] !== '')
+      ? map[key] : (TOR_SOLO_DEFAULTS[key] || '');
+  });
+  TOR_IMG_KEYS.forEach(key => {
+    const el = document.getElementById('tor_' + key + '_url');
+    if (!el) return;
+    const val = map[key] || TOR_IMG_DEFAULTS[key] || '';
+    el.value = val;
+    const pv = document.getElementById('tor_' + key + '_preview');
+    if (pv) {
+      if (val) { pv.src = val; pv.style.display = 'inline-block'; }
+      else { pv.removeAttribute('src'); pv.style.display = 'none'; }
+    }
+  });
+  Object.keys(TOR_LISTER).forEach(function (key) {
+    let raekker = torListeFraDb(key, map[key], map[key + '_en']);
+    // Partnerlisten er tom med vilje — den må ikke få standardrækker
+    if (!raekker.length && key !== 'partner_items') raekker = TOR_LISTE_DEFAULTS[key] || [];
+    torListeSkriv(key, raekker);
+  });
+
+  { const _ps = document.getElementById('tor_vis_pride_stribe');
+    if (_ps) _ps.checked = map.vis_pride_stribe !== '0'; }
+
+  let navRaa = [];
+  try { navRaa = JSON.parse(map.nav_links || '[]'); } catch (e) { navRaa = []; }
+  if (!Array.isArray(navRaa) || !navRaa.length) navRaa = TOR_NAV_DEFAULT;
+  torNavState = navRaa.map(l => ({
+    tekst: l.tekst || '', tekst_en: l.tekst_en || '',
+    link: l.link || '', vis: l.vis === '0' ? '0' : '1'
+  }));
+  torRenderNavEditor();
+
+  // Rækkefølge: gemt orden hvis den findes, ellers standardrækkefølgen.
+  // Sektioner der mangler i den gemte liste sættes ind på deres standardplads,
+  // så de aldrig forsvinder.
+  let gemtOrden = [];
+  try { gemtOrden = JSON.parse(map.sektion_orden || '[]'); } catch (e) { gemtOrden = []; }
+  if (!Array.isArray(gemtOrden)) gemtOrden = [];
+  gemtOrden = gemtOrden.filter(id => TOR_SEKTION_DEFS.some(d => d.id === id));
+  TOR_SEKTION_DEFS.forEach((def, idx) => {
+    if (gemtOrden.indexOf(def.id) !== -1) return;
+    let hvor = gemtOrden.length;
+    for (let k = idx - 1; k >= 0; k--) {
+      const pos = gemtOrden.indexOf(TOR_SEKTION_DEFS[k].id);
+      if (pos !== -1) { hvor = pos + 1; break; }
+    }
+    gemtOrden.splice(hvor, 0, def.id);
+  });
+  torOrdenState = gemtOrden.map(id => {
+    const def = TOR_SEKTION_DEFS.find(d => d.id === id);
+    // Partner-sektionen er slået fra som udgangspunkt, indtil der er aftaler
+    const standardFra = def && TOR_VIS_FRA.indexOf(def.key) !== -1;
+    const gemt = def ? map[def.key] : undefined;
+    const fra = (gemt === undefined || gemt === null || gemt === '') ? standardFra : (gemt === '0');
+    return { id: id, vis: fra ? '0' : '1' };
+  });
+  torRenderOrden();
+
+  [1, 2, 3].forEach(nr => {
+    ['top', 'bund'].forEach(hvor => {
+      const el = document.getElementById('tor_strip' + nr + '_' + hvor);
+      if (el) el.value = (map['strip' + nr + '_' + hvor] !== undefined && map['strip' + nr + '_' + hvor] !== '')
+        ? map['strip' + nr + '_' + hvor] : '2';
+    });
+    let liste = [];
+    try { liste = JSON.parse(map['strip' + nr + '_images'] || '[]'); } catch (e) { liste = []; }
+    torStriber[nr] = Array.isArray(liste) ? liste.filter(x => typeof x === 'string').slice(0, 5) : [];
+    torRenderStribe(nr);
+  });
+}
+
+async function gemTor() {
+  if (!sb) return;
+  const btn = document.getElementById('torGemBtn');
+  if (btn) { btn.disabled = true; btn.textContent = 'Gemmer...'; }
+  const upserts = [];
+  TOR_TEXT_KEYS.forEach(key => {
+    const da = document.getElementById('tor_' + key + '_da');
+    const en = document.getElementById('tor_' + key + '_en');
+    if (da) upserts.push({ key: key, value: da.value.trim() });
+    if (en) upserts.push({ key: key + '_en', value: en.value.trim() });
+  });
+  TOR_SOLO_KEYS.forEach(key => {
+    const el = document.getElementById('tor_' + key);
+    if (el) upserts.push({ key: key, value: el.value.trim() });
+  });
+  TOR_IMG_KEYS.forEach(key => {
+    const el = document.getElementById('tor_' + key + '_url');
+    if (el) upserts.push({ key: key, value: el.value.trim() });
+  });
+  Object.keys(TOR_LISTER).forEach(function (key) {
+    upserts.push({ key: key, value: JSON.stringify(torListeLaes(key)) });
+    upserts.push({ key: key + '_en', value: '' });   // gammelt felt ryddes
+  });
+  { const _ps = document.getElementById('tor_vis_pride_stribe');
+    if (_ps) upserts.push({ key: 'vis_pride_stribe', value: _ps.checked ? '1' : '0' }); }
+  upserts.push({ key: 'nav_links', value: JSON.stringify(torNavState
+    .filter(l => (l.tekst || '').trim() || (l.link || '').trim())
+    .map(l => ({ tekst: (l.tekst || '').trim(), tekst_en: (l.tekst_en || '').trim(),
+                 link: (l.link || '').trim(), vis: l.vis === '0' ? '0' : '1' }))) });
+  if (torOrdenState.length) {
+    upserts.push({ key: 'sektion_orden', value: JSON.stringify(torOrdenState.map(o => o.id)) });
+    torOrdenState.forEach(o => {
+      const def = TOR_SEKTION_DEFS.find(d => d.id === o.id);
+      if (def) upserts.push({ key: def.key, value: o.vis === '0' ? '0' : '1' });
+    });
+  }
+  [1, 2, 3].forEach(nr => {
+    upserts.push({ key: 'strip' + nr + '_images', value: JSON.stringify((torStriber[nr] || []).filter(Boolean)) });
+    ['top', 'bund'].forEach(hvor => {
+      const el = document.getElementById('tor_strip' + nr + '_' + hvor);
+      if (!el) return;
+      const n = parseFloat(el.value);
+      upserts.push({ key: 'strip' + nr + '_' + hvor, value: String(isNaN(n) ? 2 : Math.max(0, Math.min(14, n))) });
+    });
+  });
+  try {
+    const { error } = await sb.from('torremolinos_content').upsert(upserts, { onConflict: 'key' });
+    if (error) throw error;
+    showToast('\u2713 Torremolinos-siden gemt!');
+  } catch (e) {
+    showToast('Fejl: ' + (e.message || e), true);
+  } finally {
+    if (btn) { btn.disabled = false; btn.textContent = '\uD83D\uDCBE Gem'; }
+  }
+}
 
 // ═══ SEVÆRDIGHEDER ════════════════════════════════════════════════════════
 // Katalog over oplevelser nær ejendommen. Én række pr. side i tabellen

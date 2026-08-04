@@ -15,6 +15,7 @@ const { rapport, ROD } = require('./harness');
 const SIDER = [
   'index.html', 'ejendommen.html', 'udlejning.html', 'retreat.html',
   'kontakt.html', 'betingelser.html', '404.html',
+  'gay-retreat-malaga-spain.html', 'gay-torremolinos.html',
   'admin-anmeldelser.html', 'admin-newsletter.html', 'min-booking.html',
   'bilag.html',
 ];

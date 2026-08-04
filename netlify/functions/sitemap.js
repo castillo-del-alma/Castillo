@@ -78,6 +78,12 @@ exports.handler = async () => {
   xml += urlEntry(BASE + '/gay-retreat-malaga-spain', { alternates: gayAlt, changefreq: 'monthly', priority: '0.8' });
   xml += urlEntry(BASE + '/en/gay-retreat-malaga-spain', { alternates: gayAlt, changefreq: 'monthly', priority: '0.8' });
 
+  // Torremolinos-guiden — dansk og engelsk forbundet.
+  // x-default = ENGELSK, jf. den statiske HTML og social-meta.js
+  const torAlt = [['da', BASE + '/gay-torremolinos'], ['en', BASE + '/en/gay-torremolinos'], ['x-default', BASE + '/en/gay-torremolinos']];
+  xml += urlEntry(BASE + '/gay-torremolinos', { alternates: torAlt, changefreq: 'monthly', priority: '0.7' });
+  xml += urlEntry(BASE + '/en/gay-torremolinos', { alternates: torAlt, changefreq: 'monthly', priority: '0.7' });
+
   // Øvrige faste sider — dansk + engelsk forbundet med hreflang begge veje.
   //   en:       den engelske adresse. Behøver IKKE hedde /en/<dansk slug>.
   //             Skal holdes i takt med TOSPROG i netlify/edge-functions/social-meta.js.

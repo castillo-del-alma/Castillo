@@ -23,6 +23,7 @@ const TESTS = [
   ['Forside → seværdigheder', 'forside-sevaerdigheder.js'],
   ['Seværdigheds-seeds', 'sevaerdigheder-seed.js'],
   ['Billeder',     'billeder.js'],
+  ['Torremolinos', 'torremolinos.js'],
 ];
 
 const resultat = [];

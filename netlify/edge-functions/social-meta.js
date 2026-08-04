@@ -132,6 +132,8 @@ export default async (request, context) => {
   // Gay-landingssiden serveres fra én fil på to adresser. Titel, beskrivelse
   // og canonical sættes ellers først af JavaScript, som robotter ikke kører.
   const erGaySide = /^(?:\/en)?\/gay-retreat-malaga-spain(?:\.html)?\/?$/.test(url.pathname);
+  // Torremolinos-guiden: samme situation — én fil, to adresser.
+  const erTorSide = /^(?:\/en)?\/gay-torremolinos(?:\.html)?\/?$/.test(url.pathname);
   // Seværdigheder: /sevaerdigheder/<slug> (også /en/…). Én skabelon, mange
   // sider — uden dette ville alle dele forsidens billede og tekst.
   const svSti = url.pathname.match(/^(?:\/en)?\/sevaerdigheder(?:\.html)?\/([^/]+)\/?$/);
@@ -173,6 +175,28 @@ export default async (request, context) => {
         // hollaender uden hreflang-match skal ikke have dansk. Skal matche den
         // statiske HTML og sitemap.js, ellers ignorerer Google hele klyngen.
         hreflang: [['da', GAY_DA], ['en', GAY_EN], ['x-default', GAY_EN]]
+      });
+      haandteret = true;
+    } else if (erTorSide) {
+      const TOR_DA = 'https://castillodelalma.es/gay-torremolinos';
+      const TOR_EN = 'https://castillodelalma.es/en/gay-torremolinos';
+      const api = SUPABASE_URL + '/rest/v1/torremolinos_content?select=key,value'
+        + '&key=in.(seo_title,seo_desc,seo_title_en,seo_desc_en,social_image)';
+      const t = {};
+      try {
+        const r = await fetch(api, { headers: { apikey: ANON_KEY, authorization: 'Bearer ' + ANON_KEY } });
+        (r.ok ? await r.json() : []).forEach(x => { t[x.key] = x.value; });
+      } catch (e) { /* uden svar beholdes den statiske engelske tekst */ }
+      html = transformHtml(html, {
+        title: (isEN ? t.seo_title_en : t.seo_title) || null,
+        desc: stripHtml(isEN ? t.seo_desc_en : t.seo_desc) || null,
+        img: t.social_image || null,
+        canonical: isEN ? TOR_EN : TOR_DA,
+        fjernImgDim: !!t.social_image,
+        lang: isEN ? 'en' : 'da',
+        // x-default = ENGELSK, som paa gay-siden. Skal matche den statiske
+        // HTML og sitemap.js, ellers ignorerer Google hele klyngen.
+        hreflang: [['da', TOR_DA], ['en', TOR_EN], ['x-default', TOR_EN]]
       });
       haandteret = true;
     } else if (tosprogSti(url.pathname)) {
