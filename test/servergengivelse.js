@@ -131,6 +131,48 @@ const RAEKKE = {
       'div-balancen er den samme som før');
   }
 
+  // ── 3b) Indholdet skal blive INDE i sit element ────────────────────────
+  // Fejl set i produktion: cta_text ender på _text og blev pakket i <p>,
+  // men elementet er selv et <p>. Browseren lukkede det ydre afsnit, og
+  // teksten havnede udenfor — hvor sidens JavaScript aldrig fandt den igen.
+  // Resultatet var at både dansk og engelsk stod på siden samtidig.
+  r.overskrift('Teksten bliver inde i sit element');
+  {
+    const seedFiler = ['dolmenes-antequera', 'laguna-fuente-de-piedra', 'ronda'];
+    let fejl = [];
+    seedFiler.forEach((navn) => {
+      const sql = fs.readFileSync(path.join(ROD, 'sql/2026-08-04-sevaerdighed-' + navn + '.sql'), 'utf8');
+      const a = sql.indexOf("'{"), b = sql.lastIndexOf("}'");
+      const ind = JSON.parse(sql.slice(a + 1, b + 1).replace(/''/g, "'"));
+      [true, false].forEach((isEN) => {
+        const ud = mod.indsaetSevIndhold(sevHtml, { indhold: ind }, isEN);
+        const d = new JSDOM(ud).window.document;
+        const sprog = isEN ? 'EN' : 'DA';
+        // Ingen indlejrede afsnit — det er dét, der sparker teksten ud
+        if (/<p[^>]*>\s*<p[\s>]/.test(ud)) fejl.push(navn + ' ' + sprog + ': <p> inde i <p>');
+        // Hvert felt vi skriver, skal kunne findes inde i sit eget element
+        Object.keys(ind).forEach((raaKey) => {
+          const key = raaKey.replace(/_en$/, '');
+          const el = d.getElementById('sv_' + key);
+          if (!el) return;
+          const vaerdi = (isEN ? (ind[key + '_en'] || ind[key]) : ind[key]) || '';
+          if (typeof vaerdi !== 'string' || !vaerdi.trim()) return;
+          if (vaerdi.charAt(0) === '[' || vaerdi.charAt(0) === '{' || vaerdi.indexOf('|') !== -1) return;
+          if (/(_image|_layout|_bredde|_items$|^vis_|^strip|^seo_|^social_)/.test(key)) return;
+          if (!el.textContent.trim()) fejl.push(navn + ' ' + sprog + ': sv_' + key + ' er tom');
+        });
+        // Opfordringen nederst må have præcis ét afsnit
+        const cta = d.getElementById('sec-cta');
+        if (cta && cta.querySelectorAll('p').length !== 1) {
+          fejl.push(navn + ' ' + sprog + ': ' + cta.querySelectorAll('p').length + ' afsnit i opfordringen');
+        }
+      });
+    });
+    r.note(`${seedFiler.length} seværdigheder × 2 sprog gennemgået`);
+    r.tjek(fejl.length === 0, 'alt indhold står inde i sit eget element'
+      + (fejl.length ? ': ' + fejl.slice(0, 6).join(' | ') : ''));
+  }
+
   // ── 4) Robusthed: intet må kunne vælte en side ─────────────────────────
   r.overskrift('Robusthed');
   {

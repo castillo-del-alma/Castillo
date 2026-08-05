@@ -134,12 +134,27 @@ export function transformHtml(html, { title, desc, img, canonical, fjernImgDim, 
 const SV_SPRING_OVER = /(_image\d*|_images|_billede|_link|_orden|_layout|_bredde|_items$|^vis_|^sektion_|^social_|^seo_|^hero_meta$|^strip\d)/;
 
 /** Skriver indhold ind i et TOMT element med id="sv_<nøgle>".
- *  Elementer, der allerede har tekst, røres ikke. */
-function saetIndhold(html, id, indre) {
-  if (!indre) return html;
+ *  Elementer, der allerede har tekst, røres ikke.
+ *
+ *  `erAfsnit` betyder "ét afsnit pr. linje". Om det bliver til <p>-tags
+ *  eller <br> afgøres af, HVILKET element vi skriver ind i: er målet selv
+ *  et <p>, må der ikke komme <p> indeni. Gør der det, lukker browseren
+ *  det ydre afsnit, og teksten havner uden for elementet — hvor sidens
+ *  JavaScript aldrig finder den igen, så begge sprog kommer til at stå. */
+function saetIndhold(html, id, vaerdi, erAfsnit) {
+  if (!vaerdi) return html;
   // Kun tomme elementer: <h1 id="sv_hero_h1"></h1>
   const re = new RegExp('(<([a-zA-Z0-9]+)\\b[^>]*\\bid="' + id + '"[^>]*>)(<\\/\\2>)');
-  return html.replace(re, (m, aabn, tag, luk) => aabn + indre + luk);
+  return html.replace(re, (m, aabn, tag, luk) => {
+    let indre = vaerdi;
+    if (erAfsnit) {
+      const linjer = vaerdi.split('\n').filter(Boolean);
+      indre = tag.toLowerCase() === 'p'
+        ? linjer.join('<br>')
+        : linjer.map((t) => '<p>' + t + '</p>').join('');
+    }
+    return aabn + indre + luk;
+  });
 }
 
 /** Én række fra `sevaerdigheder` gengivet direkte i sidens HTML. */
@@ -164,10 +179,7 @@ export function indsaetSevIndhold(html, raekke, isEN) {
       // JavaScript. Skrives de ind råt, ville Google se "Spørgsmål|Svar".
       if (vaerdi.charAt(0) === '[' || vaerdi.charAt(0) === '{' || vaerdi.indexOf('|') !== -1) return;
       // Brødtekst er ét afsnit pr. linje — præcis som svSetAfsnit på siden
-      const indre = /_text$/.test(key)
-        ? vaerdi.split('\n').filter(Boolean).map((t) => '<p>' + t + '</p>').join('')
-        : vaerdi;
-      ud = saetIndhold(ud, 'sv_' + key, indre);
+      ud = saetIndhold(ud, 'sv_' + key, vaerdi, /_text$/.test(key));
     });
     return ud;
   } catch (e) {
