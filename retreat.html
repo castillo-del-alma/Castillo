@@ -7,6 +7,14 @@
 
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script>
+/* SEO: soegerobotter maa ALDRIG faa geo-sproget eller faa adressen skrevet om.
+   Googlebot henter siden fra USA og fik derfor engelsk paa de danske adresser,
+   hvorefter replaceState skrev adressen om til /en/. Google saa to identiske
+   sider og indekserede ingen af dem. Flaget saettes i <head>, saa det er klar,
+   foer sprogvalget koerer. */
+window.CDA_ROBOT = /bot|crawler|spider|crawling|slurp|lighthouse|headlesschrome|pagespeed|inspectiontool/i.test(navigator.userAgent || '');
+</script>
 <link rel="icon" type="image/png" href="/img/logo-tower.png">
 <title id="pageTitle">Castillo del Alma</title>
 <meta name="description" content="Eksklusive wellness retreats på en vingård i Málaga, Spanien — ro, personlig udvikling og autentiske oplevelser omgivet af egne vinmarker.">
@@ -1540,6 +1548,10 @@ let retreatLang = 'da';
 async function determineStartLang() {
   // SEO (Bølge 2): /en/-adresser starter ALTID på engelsk — uanset geo og cache
   if (/^\/en(\/|$)/.test(location.pathname)) return 'en';
+  // SEO: en soegerobot faar ALTID det sprog, adressen lover. Uden dette
+  // svarede geo-lang 'en' til Googlebot (som henter fra USA), og de danske
+  // adresser blev gengivet paa engelsk — identisk med /en/-udgaven.
+  if (window.CDA_ROBOT) return 'da';
   // Samme geo-svar genbruges på tværs af sider i samme besøg (hurtigere + konsistent sprog)
   try {
     const cached = sessionStorage.getItem('cda_geo_lang');
@@ -1719,7 +1731,8 @@ function setRetreatLang(lang) {
     // Slug'en ligger nu i stien, ikke i ?slug= — den skal med over, ellers
     // ender sprogskiftet på en retreat-side uden valgt retreat.
     const _s = getSlugFromUrl();
-    if (lang === 'en' && !onEn) history.replaceState(null, '', retreatSti(_s, 'en') + location.hash);
+    if (window.CDA_ROBOT) { /* robot: adressen skal staa, som den blev crawlet */ }
+    else if (lang === 'en' && !onEn) history.replaceState(null, '', retreatSti(_s, 'en') + location.hash);
     else if (lang === 'da' && onEn) history.replaceState(null, '', retreatSti(_s, 'da') + location.hash);
   } catch(e) { /* replaceState utilgængelig → sproget skifter stadig, kun adressen står uændret */ }
   if (window.applySikkerhed) window.applySikkerhed(lang);

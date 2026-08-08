@@ -6,6 +6,14 @@
 
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script>
+/* SEO: soegerobotter maa ALDRIG faa geo-sproget eller faa adressen skrevet om.
+   Googlebot henter siden fra USA og fik derfor engelsk paa de danske adresser,
+   hvorefter replaceState skrev adressen om til /en/. Google saa to identiske
+   sider og indekserede ingen af dem. Flaget saettes i <head>, saa det er klar,
+   foer sprogvalget koerer. */
+window.CDA_ROBOT = /bot|crawler|spider|crawling|slurp|lighthouse|headlesschrome|pagespeed|inspectiontool/i.test(navigator.userAgent || '');
+</script>
 <link rel="icon" type="image/png" href="/img/logo-tower.png">
 
 <title>Seværdigheder nær Castillo del Alma — Mollina, Málaga</title>
@@ -1469,7 +1477,8 @@ function setSvLang(lang) {
   const slug = (svRaekke && svRaekke.slug) || svSlugFraUrl();
   try {
     const sti = '/sevaerdigheder/' + encodeURIComponent(slug);
-    history.replaceState(null, '', (svLang === 'en' ? '/en' : '') + sti + location.hash);
+    /* robot: adressen skal staa, som den blev crawlet */
+    if (!window.CDA_ROBOT) history.replaceState(null, '', (svLang === 'en' ? '/en' : '') + sti + location.hash);
   } catch (e) { /* replaceState utilgængelig → sproget skifter stadig */ }
   const bDa = document.getElementById('sv-btn-da'), bEn = document.getElementById('sv-btn-en');
   if (bDa) { bDa.classList.toggle('lang-btn-active', svLang === 'da'); bDa.classList.toggle('lang-btn-inactive', svLang !== 'da'); }
@@ -1494,6 +1503,10 @@ function visSvIkkeFundet() {
 // Samme sprogvalg som resten af sitet: adressen vinder, derefter geo, derefter browser
 async function bestemSvStartsprog() {
   if (svPaaEngelskSti()) return 'en';
+  // SEO: en soegerobot faar ALTID det sprog, adressen lover. Uden dette
+  // svarede geo-lang 'en' til Googlebot (som henter fra USA), og de danske
+  // adresser blev gengivet paa engelsk — identisk med /en/-udgaven.
+  if (window.CDA_ROBOT) return 'da';
   try {
     const c = sessionStorage.getItem('cda_geo_lang');
     if (c === 'da' || c === 'en') return c;

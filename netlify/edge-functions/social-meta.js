@@ -101,9 +101,17 @@ export function transformHtml(html, { title, desc, img, canonical, fjernImgDim, 
   if (img) ud = ud
     .replace(/(<meta property="og:image" content=")[^"]*(")/, `$1${escAttr(img)}$2`)
     .replace(/(<meta name="twitter:image" content=")[^"]*(")/, `$1${escAttr(img)}$2`);
-  if (canonical) ud = ud
-    .replace(/(<meta property="og:url" content=")[^"]*(")/, `$1${escAttr(canonical)}$2`)
-    .replace(/(<link rel="canonical" href=")[^"]*(")/, `$1${escAttr(canonical)}$2`);
+  if (canonical) {
+    ud = ud
+      .replace(/(<meta property="og:url" content=")[^"]*(")/, `$1${escAttr(canonical)}$2`)
+      .replace(/(<link rel="canonical" href=")[^"]*(")/, `$1${escAttr(canonical)}$2`);
+    // Findes tagget slet ikke i den rå HTML (sevaerdighed.html sætter det først
+    // med JavaScript), rammer erstatningen ovenfor ingenting, og robotten får
+    // en side helt uden canonical. Så indsættes den her i stedet.
+    if (!/<link\s+rel="canonical"/i.test(ud)) {
+      ud = ud.replace(/<\/head>/, `<link rel="canonical" href="${escAttr(canonical)}">\n</head>`);
+    }
+  }
   if (fjernImgDim) ud = ud
     .replace(/<meta property="og:image:width"[^>]*>\s*/, '')
     .replace(/<meta property="og:image:height"[^>]*>\s*/, '');

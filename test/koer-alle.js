@@ -11,6 +11,7 @@ const TESTS = [
   ['Sprog tilbage',  'sprog-tilbage.js'],
   ['/en/-canonical', 'en-canonical.js'],
   ['Sprogsystem',   'en-system.js'],
+  ['Robot-sprog',   'robot-sprog.js'],
   ['Nyhedsbrev-slet', 'nyhedsbrev-slet.js'],
   ['Admin-login',   'admin-login.js'],
   ['RLS-antagelser', 'rls-antagelser.js'],

@@ -7,6 +7,14 @@
 
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script>
+/* SEO: soegerobotter maa ALDRIG faa geo-sproget eller faa adressen skrevet om.
+   Googlebot henter siden fra USA og fik derfor engelsk paa de danske adresser,
+   hvorefter replaceState skrev adressen om til /en/. Google saa to identiske
+   sider og indekserede ingen af dem. Flaget saettes i <head>, saa det er klar,
+   foer sprogvalget koerer. */
+window.CDA_ROBOT = /bot|crawler|spider|crawling|slurp|lighthouse|headlesschrome|pagespeed|inspectiontool/i.test(navigator.userAgent || '');
+</script>
 <link rel="icon" type="image/png" href="img/logo-tower.png">
 <title>Kontakt — Castillo del Alma, Mollina · Málaga</title>
 <meta name="description" content="Kontakt Castillo del Alma i Mollina, Málaga — spørgsmål om retreats, udlejning eller besøg. Vi svarer hurtigt på dansk, engelsk og spansk.">
@@ -608,6 +616,10 @@ async function determineStartLangKt() {
   // sitemap fortaeller Google. Samme linje findes i index.html, retreat.html
   // og gay-retreat-malaga-spain.html.
   if (/^\/en(\/|$)/.test(location.pathname)) return 'en';
+  // SEO: en soegerobot faar ALTID det sprog, adressen lover. Uden dette
+  // svarede geo-lang 'en' til Googlebot (som henter fra USA), og de danske
+  // adresser blev gengivet paa engelsk — identisk med /en/-udgaven.
+  if (window.CDA_ROBOT) return 'da';
   try {
     const cached = sessionStorage.getItem('cda_geo_lang');
     if (cached === 'da' || cached === 'en') return cached;
@@ -662,7 +674,8 @@ function setKtLang(lang) {
     const DA_STI = '/kontakt', EN_STI = '/en/kontakt';
     const paaEn = /^\/en(\/|$)/.test(location.pathname);
     const hale = location.search + location.hash;
-    if (lang === 'en' && !paaEn) history.replaceState(null, '', EN_STI + hale);
+    if (window.CDA_ROBOT) { /* robot: adressen skal staa, som den blev crawlet */ }
+    else if (lang === 'en' && !paaEn) history.replaceState(null, '', EN_STI + hale);
     else if (lang === 'da' && paaEn) history.replaceState(null, '', DA_STI + hale);
   } catch(e) { /* replaceState utilgaengelig -> sproget skifter stadig, kun adressen staar uaendret */ }
   document.documentElement.lang = lang;

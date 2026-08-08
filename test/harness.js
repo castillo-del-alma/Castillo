@@ -39,6 +39,9 @@ function kaede(raekker) {
  * @param {number} o.geoForsinkelse  ms før geo svarer. Høj værdi = sproget
  *                                   afgøres SENT, hvilket er det værste kapløb.
  * @param {number} o.vent         ms der ventes på at siden bliver færdig
+ * @param {string} o.userAgent    browserstreng. Sæt den til en robot for at
+ *                                efterligne Googlebot — siderne skal da vælge
+ *                                sprog efter ADRESSEN, ikke efter geo.
  */
 async function indlaesSide(fil, o = {}) {
   const {
@@ -49,6 +52,7 @@ async function indlaesSide(fil, o = {}) {
     geoSprog = 'en',
     geoForsinkelse = 300,
     vent = 1600,
+    userAgent,
   } = o;
 
   let html = fs.readFileSync(path.join(ROD, fil), 'utf8');
@@ -60,6 +64,11 @@ async function indlaesSide(fil, o = {}) {
     url,
     pretendToBeVisual: true,
     beforeParse(w) {
+      // jsdom har ikke userAgent som topniveau-option, så den sættes her —
+      // FØR sidens scripts kører, ellers ser robot-flaget den forkerte streng.
+      if (userAgent) {
+        Object.defineProperty(w.navigator, 'userAgent', { value: userAgent, configurable: true });
+      }
       w.HTMLCanvasElement.prototype.getContext = () => new Proxy({}, { get: () => () => {} });
       w.IntersectionObserver = class { observe() {} unobserve() {} disconnect() {} };
       w.matchMedia = () => ({ matches: false, addEventListener() {}, addListener() {} });
