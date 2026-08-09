@@ -3,7 +3,6 @@ const { buildEmail, getLang, texts } = require('./email-template');
 exports.handler = async (event) => {
   if (event.httpMethod !== 'POST') return { statusCode: 405, body: 'Method Not Allowed' };
   const { bookingId, kundeNavn, kundeEmail, retreatNavn, gaestNavn, nationalitet } = JSON.parse(event.body);
-  console.log('nationalitet:', nationalitet);
   const RESEND_KEY = process.env.RESEND_API_KEY;
   const fornavn = kundeNavn.split(' ')[0];
   const navn = gaestNavn || kundeNavn;
