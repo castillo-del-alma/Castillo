@@ -2,10 +2,11 @@ const { buildEmail, getLang, texts } = require('./email-template');
 
 exports.handler = async (event) => {
   if (event.httpMethod !== 'POST') return { statusCode: 405, body: 'Method Not Allowed' };
-  const { bookingId, kundeNavn, kundeEmail, retreatNavn } = JSON.parse(event.body);
+  const { bookingId, kundeNavn, kundeEmail, retreatNavn, gaestNavn } = JSON.parse(event.body);
   const RESEND_KEY = process.env.RESEND_API_KEY;
   const fornavn = kundeNavn.split(' ')[0];
-  const link = `https://castillodelalma.es/anmeldelse.html?booking=${bookingId}`;
+  const navn = gaestNavn || kundeNavn;
+  const link = `https://castillodelalma.es/anmeldelse.html?booking=${bookingId}${gaestNavn ? '&navn=' + encodeURIComponent(gaestNavn) : ''}`;
 
   // Sprog fra kundens land: Danmark → dansk, resten → engelsk
   let lang = 'en';

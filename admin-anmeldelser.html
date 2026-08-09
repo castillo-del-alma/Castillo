@@ -7422,7 +7422,7 @@ async function sendAnmeldelsesLink() {
       if (g.email) {
         await fetch('/.netlify/functions/send-review-link', {
           method:'POST', headers:{'Content-Type':'application/json'},
-          body: JSON.stringify({ bookingId: booking.id, kundeNavn: g.name || g.navn || 'Gæst', kundeEmail: g.email, retreatNavn })
+          body: JSON.stringify({ bookingId: booking.id, kundeNavn: g.navn || g.name || 'Gæst', kundeEmail: g.email, retreatNavn, gaestNavn: g.navn || g.name || null })
         });
       }
     }

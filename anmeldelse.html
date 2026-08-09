@@ -567,6 +567,7 @@ function getStarValue(name) {
 async function prefillFromBooking() {
   const params = new URLSearchParams(window.location.search);
   const bookingId = params.get('booking');
+  const navnParam = params.get('navn');
   if (!bookingId) return;
 
   try {
@@ -581,8 +582,9 @@ async function prefillFromBooking() {
     if (!b) return;
 
     const kunde = { full_name: b.navn, nationality: b.nationality };
-    if (kunde.full_name) {
-      const parts = kunde.full_name.trim().split(' ');
+    const visNavn = navnParam || kunde.full_name;
+    if (visNavn) {
+      const parts = visNavn.trim().split(' ');
       const el = document.getElementById('fname');
       if (el) el.value = parts[0];
       const el2 = document.getElementById('lname');
