@@ -1553,8 +1553,12 @@ body.menu-open .nav-burger span:nth-child(3){ transform:translateY(-9px) rotate(
       <span class="section-label" id="reviewsLabel">Gæsternes oplevelser</span>
       <h2 class="split-h" id="reviewsHeading">Hvad siger vores <em>gæster</em></h2>
     </div>
-    <div class="reviews-grid reveal d1" id="reviewsGrid">
+    <div style="position:relative;margin-top:4rem;">
+      <button id="reviewPrev" onclick="scrollReviews(-1)" style="position:absolute;left:-2.5rem;top:50%;transform:translateY(-50%);background:rgba(240,232,213,.95);border:1px solid rgba(184,138,30,.3);color:#7a5c14;width:2.8rem;height:2.8rem;border-radius:50%;font-size:1.4rem;cursor:pointer;z-index:10;display:none;">&#8249;</button>
+      <button id="reviewNext" onclick="scrollReviews(1)" style="position:absolute;right:-2.5rem;top:50%;transform:translateY(-50%);background:rgba(240,232,213,.95);border:1px solid rgba(184,138,30,.3);color:#7a5c14;width:2.8rem;height:2.8rem;border-radius:50%;font-size:1.4rem;cursor:pointer;z-index:10;">&#8250;</button>
+      <div class="reviews-grid" id="reviewsGrid">
       <div style="grid-column:1/-1;text-align:center;padding:2rem;color:rgba(44,35,24,.4);font-size:.85rem;">Henter anmeldelser…</div>
+    </div>
     </div>
   </div>
 </section>
@@ -2487,7 +2491,7 @@ async function loadReviews() {
       headers: { 'apikey': SUPABASE_ANON_KEY, 'Authorization': `Bearer ${SUPABASE_ANON_KEY}` }
     });
     const alle = await res.json();
-    const reviews = Array.isArray(alle) ? alle.filter(r => r.vis_forside !== false).slice(0, 3) : [];
+    const reviews = Array.isArray(alle) ? alle.filter(r => r.vis_forside !== false) : [];
     const sektion = document.getElementById('reviews');
     if (!reviews.length) {
       grid.innerHTML = '';
@@ -2500,11 +2504,31 @@ async function loadReviews() {
   } catch(e) { console.log('Reviews fejl:', e); }
 }
 
+let reviewCurrentPage = 0;
+const reviewsPerPage = 3;
+
+function scrollReviews(dir) {
+  const maxPage = Math.ceil(allReviewsDataIndex.length / reviewsPerPage) - 1;
+  reviewCurrentPage = Math.max(0, Math.min(maxPage, reviewCurrentPage + dir));
+  renderReviewsIndex(currentSiteLang);
+}
+
+function updateReviewNav() {
+  const maxPage = Math.ceil(allReviewsDataIndex.length / reviewsPerPage) - 1;
+  const prev = document.getElementById('reviewPrev');
+  const next = document.getElementById('reviewNext');
+  if (prev) prev.style.display = reviewCurrentPage > 0 ? 'block' : 'none';
+  if (next) next.style.display = reviewCurrentPage < maxPage ? 'block' : 'none';
+}
+
 function renderReviewsIndex(lang) {
   const grid = document.getElementById('reviewsGrid');
   if (!grid || !allReviewsDataIndex.length) return;
   const isEN = lang === 'en';
-  grid.innerHTML = allReviewsDataIndex.map(r => {
+  const start = reviewCurrentPage * reviewsPerPage;
+  const pageReviews = allReviewsDataIndex.slice(start, start + reviewsPerPage);
+  updateReviewNav();
+  grid.innerHTML = pageReviews.map(r => {
     const vals = [r.r1_modtagelse,r.r2_vaerelse,r.r3_mad,r.r4_omgivelser,r.r5_program,r.r6_terapeuter,r.r7_faellesskab,r.r8_personlig,r.r9_ro,r.r10_samlet].filter(Boolean);
     const avg = vals.length ? Math.round(vals.reduce((a,b)=>a+b,0)/vals.length*10)/10 : 0;
     const stars = '★'.repeat(Math.round(avg)) + '☆'.repeat(5-Math.round(avg));

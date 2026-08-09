@@ -8066,7 +8066,10 @@ async function flytAnmeldelse(idx, dir) {
 
 async function godkendAnmeldelse(id, btn) {
   btn.disabled = true; btn.textContent = '…';
-  const { error } = await sb.from('reviews').update({ approved: true }).eq('id', id);
+  // Find laveste sort_order for at placere øverst
+  const { data: existing } = await sb.from('reviews').select('sort_order').eq('approved', true).order('sort_order', { ascending: true }).limit(1);
+  const minOrder = existing && existing.length > 0 ? (existing[0].sort_order || 0) - 1 : 0;
+  const { error } = await sb.from('reviews').update({ approved: true, sort_order: minOrder }).eq('id', id);
   if (error) { btn.textContent = 'Fejl'; return; }
   btn.remove();
   // Listen tegnes om, så anmeldelsen flytter ned til de godkendte og får
