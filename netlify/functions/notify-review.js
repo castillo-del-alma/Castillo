@@ -1,6 +1,6 @@
 exports.handler = async (event) => {
   if (event.httpMethod !== 'POST') return { statusCode: 405, body: 'Method Not Allowed' };
-  const { fname, lname, retreat, samlet, anbefaling, bedste } = JSON.parse(event.body);
+  const { fname, lname, retreat, samlet, anbefaling, bedste, samtykke, markedsfoering } = JSON.parse(event.body);
   const RESEND_KEY = process.env.RESEND_API_KEY;
   const stars = n => `${n}/5 (${'●'.repeat(n)}${'○'.repeat(5-n)})`;
 
@@ -21,7 +21,9 @@ exports.handler = async (event) => {
     <tr><td style="padding:6px 0;color:#7a5c14;width:140px;">Retreat</td><td>${retreat}</td></tr>
     <tr><td style="padding:6px 0;color:#7a5c14;">Samlet oplevelse</td><td>${stars(samlet)}</td></tr>
     <tr><td style="padding:6px 0;color:#7a5c14;">Anbefaling</td><td>${stars(anbefaling)}</td></tr>
+    <tr><td style="padding:6px 0;color:#7a5c14;font-weight:bold;">Samtykke</td><td style="font-weight:bold;color:${samtykke==='ja'?'#2c6e3f':samtykke==='anonymt'?'#7a5c14':'#7a1f35'};">${samtykke==='ja'?'✓ Ja — må bruges med navn':samtykke==='anonymt'?'~ Ja, men kun anonymt':'✗ Nej — må ikke bruges'}</td></tr>
   </table>
+  ${markedsfoering ? `<div style="margin-top:12px;padding:12px 16px;background:rgba(184,138,30,.08);border-left:2px solid #b88a1e;"><p style="font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:#7a5c14;margin:0 0 6px;">Markedsføringscitat</p><p style="font-size:13px;line-height:1.7;margin:0;font-style:italic;">"${markedsfoering}"</p></div>` : ''}
   ${bedste ? `<div style="margin-top:20px;padding:16px;background:rgba(184,138,30,.08);border-left:2px solid #b88a1e;">
     <p style="font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:#7a5c14;margin:0 0 8px;">Det bedste ved opholdet</p>
     <p style="font-size:13px;line-height:1.7;margin:0;">${bedste}</p>

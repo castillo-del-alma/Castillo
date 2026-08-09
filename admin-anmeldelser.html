@@ -7933,7 +7933,7 @@ function anmeldelseKortFane(r, isApproved, idx, total) {
     '<div style="flex:1;">' +
     '<span style="font-family:Cinzel,serif;font-size:.9rem;color:#2c2318;">' + navn + '</span>' +
     '<span style="font-size:.65rem;color:rgba(44,35,24,.5);margin-left:.8rem;">' + (r.retreat_navn||'') + ' · ' + dato + '</span>' +
-    (r.markedsfoering ? '<div style="font-size:.78rem;font-style:italic;color:rgba(44,35,24,.7);margin-top:.3rem;">“' + r.markedsfoering + '”</div>' : '') +
+    ('<div style="margin-top:.4rem;font-size:.62rem;padding:.2rem .5rem;display:inline-block;background:' + (r.samtykke==='ja'?'rgba(44,110,63,.12)':r.samtykke==='anonymt'?'rgba(184,138,30,.12)':'rgba(122,31,53,.1)') + ';color:' + (r.samtykke==='ja'?'#2c6e3f':r.samtykke==='anonymt'?'#7a5c14':'#7a1f35') + ';">' + (r.samtykke==='ja'?'✓ Må bruges med navn':r.samtykke==='anonymt'?'~ Kun anonymt':'✗ Må ikke bruges') + '</div>') + (r.markedsfoering ? ('<div style="font-size:.78rem;font-style:italic;color:rgba(44,35,24,.7);margin-top:.3rem;">"' + r.markedsfoering + '"</div>') : '') +
     // Gæstens tre fritekstsvar. Forbedringsforslaget vises kun her — det er
     // ikke med i oversætter-panelet, fordi det aldrig skal på hjemmesiden.
     [['Bedste', r.bedste], ['Forandring', r.forandring], ['Forbedring', r.forbedringsforslag]]
