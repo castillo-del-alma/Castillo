@@ -243,8 +243,8 @@ body{font-family:'Manrope',sans-serif;background:var(--cream);color:var(--text);
 <!-- HEADER -->
 <div class="page-header">
   <img src="img/logo-castillo-hvid_transperant.png" alt="Castillo del Alma">
-  <h1>Del din <em>oplevelse</em></h1>
-  <p>Tak fordi du besøgte os. Din feedback er uvurderlig og hjælper os med at skabe endnu bedre retreats fremover.</p>
+  <h1 data-key="hero_title">Del din <em>oplevelse</em></h1>
+  <p data-key="hero_sub">Tak fordi du besøgte os. Din feedback er uvurderlig og hjælper os med at skabe endnu bedre retreats fremover.</p>
 </div>
 
 <!-- FORM -->
@@ -252,10 +252,10 @@ body{font-family:'Manrope',sans-serif;background:var(--cream);color:var(--text);
 
   <!-- Steps -->
   <div class="steps" id="stepsBar">
-    <div class="step active" data-step="1">Oplevelsen</div>
-    <div class="step" data-step="2">Personlig</div>
-    <div class="step" data-step="3">Anbefaling</div>
-    <div class="step" data-step="4">Om dig</div>
+    <div class="step active" data-step="1" data-key="step1">Oplevelsen</div>
+    <div class="step" data-step="2" data-key="step2">Personlig</div>
+    <div class="step" data-step="3" data-key="step3">Anbefaling</div>
+    <div class="step" data-step="4" data-key="step4">Om dig</div>
   </div>
 
   <!-- Progress -->
@@ -645,7 +645,12 @@ function applyFormTexts() {
   // Alle elementer med data-key attribut
   document.querySelectorAll('[data-key]').forEach(el => {
     const key = el.dataset.key;
-    if (anmTexts[key]) el.textContent = anmTexts[key];
+    if (!anmTexts[key]) return;
+    if (el.tagName === 'H1') {
+      el.innerHTML = anmTexts[key].replace('experience', '<em>experience</em>').replace('oplevelse', '<em>oplevelse</em>');
+    } else {
+      el.textContent = anmTexts[key];
+    }
   });
   // Samtykke
   if (anmTexts['consent_q']) { const el = document.querySelector('.consent-box p'); if (el) el.textContent = anmTexts['consent_q']; }
