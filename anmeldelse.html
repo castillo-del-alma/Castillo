@@ -425,17 +425,17 @@ body{font-family:'Manrope',sans-serif;background:var(--cream);color:var(--text);
         <label class="radio-opt">
           <input type="radio" name="consent" value="ja">
           <span class="radio-box"></span>
-          Ja, I må bruge min anmeldelse
+          <span data-key="consent_ja">Ja, I må bruge min anmeldelse</span>
         </label>
         <label class="radio-opt">
           <input type="radio" name="consent" value="anonymt">
           <span class="radio-box"></span>
-          Ja, men kun anonymt
+          <span data-key="consent_anonymt">Ja, men kun anonymt</span>
         </label>
         <label class="radio-opt">
           <input type="radio" name="consent" value="nej">
           <span class="radio-box"></span>
-          Nej tak
+          <span data-key="consent_nej">Nej tak</span>
         </label>
       </div>
     </div>
@@ -462,14 +462,14 @@ body{font-family:'Manrope',sans-serif;background:var(--cream);color:var(--text);
     <p class="section-sub" data-key="page4_sub">Valgfrit — men hjælper os med at forstå vores gæster bedre</p>
 
     <div class="input-row">
-      <div class="input-field"><label>Fornavn</label><input type="text" id="fname" placeholder="Dit fornavn"></div>
-      <div class="input-field"><label>Efternavn (valgfrit)</label><input type="text" id="lname" placeholder="Vises kun ved samtykke"></div>
+      <div class="input-field"><label data-key="fname_label">Fornavn</label><input type="text" id="fname" data-placeholder-key="fname_placeholder" placeholder="Dit fornavn"></div>
+      <div class="input-field"><label data-key="lname_label">Efternavn (valgfrit)</label><input type="text" id="lname" data-placeholder-key="lname_placeholder" placeholder="Vises kun ved samtykke"></div>
     </div>
     <div class="input-row">
       <div class="input-field">
-        <label>Hvilket retreat deltog du i?</label>
+        <label data-key="retreat_label">Hvilket retreat deltog du i?</label>
         <select id="retreatName">
-          <option value="">Vælg retreat</option>
+          <option value="" data-key="retreat_select">Vælg retreat</option>
           <option>Kunsten at sænke tempoet</option>
           <option>Kultur & Udflugter</option>
           <option>Rejsen til dit indre</option>
@@ -482,15 +482,15 @@ body{font-family:'Manrope',sans-serif;background:var(--cream);color:var(--text);
         </select>
       </div>
       <div class="input-field">
-        <label>Hvornår var du her?</label>
+        <label data-key="date_label">Hvornår var du her?</label>
         <input type="month" id="visitDate">
       </div>
     </div>
     <div class="input-row">
       <div class="input-field">
-        <label>Land</label>
+        <label data-key="country_label">Land</label>
         <select id="country">
-          <option value="">Vælg land</option>
+          <option value="" data-key="country_select">Vælg land</option>
           <option>Danmark</option>
           <option>Sverige</option>
           <option>Norge</option>
@@ -503,19 +503,19 @@ body{font-family:'Manrope',sans-serif;background:var(--cream);color:var(--text);
         </select>
       </div>
       <div class="input-field">
-        <label>Kom du alene eller med andre?</label>
+        <label data-key="group_label">Kom du alene eller med andre?</label>
         <select id="group">
-          <option value="">Vælg</option>
-          <option>Alene</option>
-          <option>Med partner</option>
-          <option>Med venner</option>
-          <option>Med kolleger</option>
+          <option value="" data-key="group_select">Vælg</option>
+          <option data-key="group_alene">Alene</option>
+          <option data-key="group_partner">Med partner</option>
+          <option data-key="group_venner">Med venner</option>
+          <option data-key="group_kolleger">Med kolleger</option>
         </select>
       </div>
     </div>
 
     <div class="form-nav">
-      <button class="btn-prev" onclick="goTo(3)">← Tilbage</button>
+      <button class="btn-prev" data-key="btn_back" onclick="goTo(3)">← Tilbage</button>
       <button class="btn-next" data-key="btn_send" onclick="submitReview()">Send anmeldelse ✓</button>
     </div>
   </div>
@@ -523,11 +523,11 @@ body{font-family:'Manrope',sans-serif;background:var(--cream);color:var(--text);
   <!-- THANK YOU -->
   <div class="thankyou" id="thankyou">
     <div class="thankyou-icon">🌿</div>
-    <h2>Tusind tak for din <em>feedback</em></h2>
+    <h2 data-key="thankyou_title">Tusind tak for din <em>feedback</em></h2>
     <p>Din anmeldelse er modtaget og betyder meget for os. Vi læser hver eneste tilbagemelding med stor opmærksomhed og ægte taknemmelighed.</p>
     <p style="margin-top:1rem;">Vi ses forhåbentlig igen på Castillo del Alma — snart.</p>
     <br>
-    <a href="index.html">← Gå til hjemmesiden</a>
+    <a href="index.html" data-key="thankyou_link">← Gå til hjemmesiden</a>
   </div>
 
 </div><!-- end form-wrap -->
@@ -646,8 +646,8 @@ function applyFormTexts() {
   document.querySelectorAll('[data-key]').forEach(el => {
     const key = el.dataset.key;
     if (!anmTexts[key]) return;
-    if (el.tagName === 'H1') {
-      el.innerHTML = anmTexts[key].replace('experience', '<em>experience</em>').replace('oplevelse', '<em>oplevelse</em>');
+    if (el.tagName === 'H1' || el.tagName === 'H2') {
+      el.innerHTML = anmTexts[key].replace('feedback', '<em>feedback</em>');
     } else {
       el.textContent = anmTexts[key];
     }
@@ -665,7 +665,12 @@ function applyFormTexts() {
       if (nodes.length) nodes[nodes.length-1].textContent = anmTexts[sKey];
     }
   });
-  // Placeholders
+  // Placeholders via data-placeholder-key
+  document.querySelectorAll('[data-placeholder-key]').forEach(el => {
+    const key = el.dataset.placeholderKey;
+    if (anmTexts[key]) el.placeholder = anmTexts[key];
+  });
+  // Placeholders via id
   const pMap = { 'bedste_placeholder': '#bedste', 'forandring_placeholder': '#forandring', 'forbedring_placeholder': '#forbedringsforslag', 'marketing_placeholder': '#markedsfoering' };
   Object.entries(pMap).forEach(([key, sel]) => {
     const el = document.querySelector(sel);
