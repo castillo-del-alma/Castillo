@@ -7407,14 +7407,29 @@ async function sendAnmeldelsesLink() {
   const btn = event.target;
   btn.disabled = true; btn.textContent = 'Sender…';
   try {
+    const retreatNavn = booking.retreat_name || 'Castillo del Alma';
+    // Send til kunden selv
     const res = await fetch('/.netlify/functions/send-review-link', {
       method:'POST', headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({ bookingId: booking.id, kundeNavn: kunde.full_name, kundeEmail: kunde.email, retreatNavn: booking.retreat_name||'Castillo del Alma' })
+      body: JSON.stringify({ bookingId: booking.id, kundeNavn: kunde.full_name, kundeEmail: kunde.email, retreatNavn })
     });
     const data = await res.json();
     if (!res.ok || data.error) throw new Error(data.error);
-    btn.textContent = '✓ Sendt';
-    setTimeout(() => { btn.disabled = false; btn.textContent = '✉ Anmeldelseslink'; }, 3000);
+
+    // Send til ekstra gæster
+    const ekstraGaester = booking.extra_guests || [];
+    for (const g of ekstraGaester) {
+      if (g.email) {
+        await fetch('/.netlify/functions/send-review-link', {
+          method:'POST', headers:{'Content-Type':'application/json'},
+          body: JSON.stringify({ bookingId: booking.id, kundeNavn: g.name || g.navn || 'Gæst', kundeEmail: g.email, retreatNavn })
+        });
+      }
+    }
+
+    const antalSendt = 1 + ekstraGaester.filter(g => g.email).length;
+    btn.textContent = '✓ Sendt til ' + antalSendt + (antalSendt > 1 ? ' gæster' : ' gæst');
+    setTimeout(() => { btn.disabled = false; btn.textContent = '✉ Anmeldelseslink'; }, 4000);
   } catch(e) { alert('Fejl: ' + e.message); btn.disabled = false; btn.textContent = '✉ Anmeldelseslink'; }
 }
 
