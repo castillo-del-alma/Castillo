@@ -16378,11 +16378,18 @@ async function foMedlemmer() {
       const link = location.origin + '/forum.html?t=' + encodeURIComponent(m.access_token);
       const mod = m.role === 'moderator' ? ' <span style="color:#b88a1e;">◆ moderator</span>' : '';
       const mute = m.muted ? '<span style="color:#7a1f35;font-size:.68rem;"> · kan ikke skrive</span>' : '';
+      const push = (m.push_devices > 0)
+        ? `<span style="color:#2e7d32;font-size:.68rem;">🔔 ${m.push_devices} enhed${m.push_devices > 1 ? 'er' : ''}</span>`
+        : `<span style="color:#b56a00;font-size:.68rem;">🔕 ingen push-enhed — får kun e-mail</span>`;
+      const set = m.last_read_at
+        ? 'Sidst i forummet ' + foDato(m.last_read_at)
+        : 'Har ikke åbnet forummet endnu';
       return `
         <div style="background:#fff;border:1px solid #e0d0b0;padding:.8rem 1rem;margin-bottom:.5rem;display:flex;justify-content:space-between;align-items:center;gap:1rem;">
           <div style="min-width:0;">
             <div style="font-size:.85rem;color:#2c2318;">${foEsc(m.display_name)}${mod}${mute}</div>
             <div style="font-size:.7rem;color:rgba(44,35,24,.5);">${foEsc(m.email || 'ingen e-mail — send linket manuelt')}</div>
+            <div style="font-size:.68rem;margin-top:.25rem;display:flex;gap:.6rem;flex-wrap:wrap;align-items:center;">${push}<span style="color:rgba(44,35,24,.45);">${set}</span></div>
           </div>
           <div style="flex:0 0 auto;display:flex;gap:.3rem;flex-wrap:wrap;justify-content:flex-end;">
             ${m.email ? `<button class="kunde-btn" onclick="foSendLink('${m.id}','${foEsc(m.email)}')">Send link pr. mail</button>` : ''}

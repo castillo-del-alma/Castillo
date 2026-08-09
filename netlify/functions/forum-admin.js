@@ -163,6 +163,22 @@ exports.handler = async (event) => {
     const members = await sbGet(
       `forum_members?channel_id=eq.${chId}&select=id,display_name,email,avatar_url,role,muted,access_token,last_read_at&order=role.desc,display_name`
     );
+    // Antal registrerede push-enheder pr. medlem, så admin kan se hvem der
+    // faktisk kan modtage en notifikation på telefonen.
+    if (members.length) {
+      const ids = members.map(m => m.id).join(',');
+      const subs = await sbGet(`forum_push_subs?member_id=in.(${ids})&select=member_id,created_at`);
+      const tal = {};
+      const sidst = {};
+      (subs || []).forEach(s => {
+        tal[s.member_id] = (tal[s.member_id] || 0) + 1;
+        if (!sidst[s.member_id] || s.created_at > sidst[s.member_id]) sidst[s.member_id] = s.created_at;
+      });
+      members.forEach(m => {
+        m.push_devices = tal[m.id] || 0;
+        m.push_last = sidst[m.id] || null;
+      });
+    }
     return json(200, { members });
   }
 

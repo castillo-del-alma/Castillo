@@ -34,7 +34,7 @@ async function gemTilmelding(member_id, sub) {
   if (!sub || !sub.endpoint || !sub.keys) return false;
   const row = {
     member_id,
-    endpoint: String(sub.endpoint).slice(0, 800),
+    endpoint: String(sub.endpoint),
     p256dh: String(sub.keys.p256dh || ''),
     auth: String(sub.keys.auth || '')
   };
