@@ -7980,6 +7980,7 @@ function anmeldelseKortFane(r, isApproved, idx, total) {
     '<div><label style="font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;color:#2a7a74;display:block;margin-bottom:.3rem;">🇬🇧 Change</label>' +
     '<textarea id="anm_forandring_en_' + r.id + '" style="width:100%;min-height:60px;padding:.5rem .7rem;border:1px solid #7fb3af;background:#e8f4f3;font-family:Manrope,sans-serif;font-size:.8rem;outline:none;resize:vertical;">' + (r.forandring_en || '') + '</textarea></div>' +
     '</div>' +
+    '<button onclick="autoOversaetAnmeldelse(\'' + r.id + '\')" style="background:rgba(58,110,106,.15);color:#2a7a74;border:1px solid rgba(58,110,106,.4);padding:.5rem 1.2rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.15em;text-transform:uppercase;cursor:pointer;margin-right:.5rem;">⇄ Auto-oversæt</button>' +
     '<button onclick="gemAnmeldelseOversaet(\'' + r.id + '\')" style="background:#2a7a74;color:#fff;border:none;padding:.5rem 1.2rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.15em;text-transform:uppercase;cursor:pointer;">💾 Gem oversættelse</button>' +
     '</div>' +
     '</div></div>';
@@ -7994,6 +7995,29 @@ function anmeldelseKortFane(r, isApproved, idx, total) {
 function toggleAnmeldelseOversaet(id) {
   const el = document.getElementById('anm_trans_' + id);
   if (el) el.style.display = el.style.display === 'none' ? 'block' : 'none';
+}
+
+async function autoOversaetAnmeldelse(id) {
+  const fields = [
+    ['anm_da_' + id, 'anm_en_' + id],
+    ['anm_bedste_da_' + id, 'anm_bedste_en_' + id],
+    ['anm_forandring_da_' + id, 'anm_forandring_en_' + id],
+  ];
+  showToast('Oversætter…');
+  for (const [daId, enId] of fields) {
+    const daEl = document.getElementById(daId);
+    const enEl = document.getElementById(enId);
+    if (!daEl || !enEl) continue;
+    const daText = (daEl.value || '').trim();
+    if (!daText) continue;
+    try {
+      enEl.value = await translateText(daText);
+    } catch(e) {
+      showToast('Fejl: ' + e.message, true);
+      return;
+    }
+  }
+  showToast('✓ Alt oversat — husk at gem');
 }
 
 async function gemAnmeldelseOversaet(id) {
