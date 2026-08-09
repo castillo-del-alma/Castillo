@@ -17,7 +17,7 @@ exports.handler = async (event) => {
       headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
     });
     const cArr = await cRes.json();
-    lang = getLang(Array.isArray(cArr) && cArr[0] ? cArr[0].nationality : null);
+    lang = getLang(nationalitet || (Array.isArray(cArr) && cArr[0] ? cArr[0].nationality : null));
   } catch(e) { /* fallback: engelsk */ }
   const t = texts[lang];
   try {
