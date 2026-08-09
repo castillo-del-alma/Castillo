@@ -798,7 +798,11 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--gold);outline-offse
   <div class="section-inner">
     <span class="eyebrow" id="g_anmeldelser_label">Guest experiences</span>
     <h2 id="g_anmeldelser_h2">What our <em>guests</em> say</h2>
-    <div class="reviews-grid" id="gayReviewsGrid"></div>
+    <div style="position:relative;margin-top:4rem;">
+      <button id="gayReviewPrev" onclick="scrollGayReviews(-1)" style="position:absolute;left:-2.5rem;top:50%;transform:translateY(-50%);background:rgba(240,232,213,.95);border:1px solid rgba(184,138,30,.3);color:#7a5c14;width:2.8rem;height:2.8rem;border-radius:50%;font-size:1.4rem;cursor:pointer;z-index:10;display:none;">&#8249;</button>
+      <button id="gayReviewNext" onclick="scrollGayReviews(1)" style="position:absolute;right:-2.5rem;top:50%;transform:translateY(-50%);background:rgba(240,232,213,.95);border:1px solid rgba(184,138,30,.3);color:#7a5c14;width:2.8rem;height:2.8rem;border-radius:50%;font-size:1.4rem;cursor:pointer;z-index:10;">&#8250;</button>
+      <div class="reviews-grid" id="gayReviewsGrid"></div>
+    </div>
   </div>
 </section>
 
@@ -1645,7 +1649,10 @@ window.gayReviewsData = [];
     var grid = document.getElementById('gayReviewsGrid');
     if (!grid) return;
     var paaEn = (typeof gayLang !== 'undefined' && gayLang === 'en');
-    grid.innerHTML = window.gayReviewsData.map(function (r) {
+    var start = window.gayReviewPage * GAY_RPP;
+    var side = window.gayReviewsData.slice(start, start + GAY_RPP);
+    updateGayNav();
+    grid.innerHTML = side.map(function (r) {
       var avg = gennemsnit(r);
       var stjerner = '★'.repeat(Math.round(avg)) + '☆'.repeat(5 - Math.round(avg));
       var navn = navnPaa(r, paaEn);
@@ -1664,6 +1671,23 @@ window.gayReviewsData = [];
     }).join('');
     if (typeof gayAnmeldelserSynlighed === 'function') gayAnmeldelserSynlighed();
   }
+  var GAY_RPP = 3;
+  window.gayReviewPage = 0;
+
+  window.scrollGayReviews = function(dir) {
+    var maxPage = Math.ceil(window.gayReviewsData.length / GAY_RPP) - 1;
+    window.gayReviewPage = Math.max(0, Math.min(maxPage, window.gayReviewPage + dir));
+    tegn();
+  };
+
+  function updateGayNav() {
+    var maxPage = Math.ceil(window.gayReviewsData.length / GAY_RPP) - 1;
+    var prev = document.getElementById('gayReviewPrev');
+    var next = document.getElementById('gayReviewNext');
+    if (prev) prev.style.display = window.gayReviewPage > 0 ? 'block' : 'none';
+    if (next) next.style.display = window.gayReviewPage < maxPage ? 'block' : 'none';
+  }
+
   window.gayRenderReviews = tegn;
 
   window.gayVisReviewDetalje = function (pakket) {
@@ -1712,7 +1736,8 @@ window.gayReviewsData = [];
   })
     .then(function (res) { return res.ok ? res.json() : []; })
     .then(function (alle) {
-      window.gayReviewsData = Array.isArray(alle) ? alle.filter(function (r) { return r.vis_gay === true; }).slice(0, 3) : [];
+      window.gayReviewsData = Array.isArray(alle) ? alle.filter(function (r) { return r.vis_gay === true; }) : [];
+      window.gayReviewPage = 0;
       tegn();
     })
     .catch(function () { /* netværksfejl — sektionen bliver bare stående skjult */ });

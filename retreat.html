@@ -1159,7 +1159,10 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:3rem
       <span class="section-label" id="reviewsLabel">Gæsternes oplevelser</span>
       <h2 class="split-h" id="reviewsHeading">Hvad siger vores <em>gæster</em></h2>
     </div>
-    <div class="reviews-grid reveal d1" id="reviewsGrid">
+    <div style="position:relative;margin-top:4rem;">
+      <button id="reviewPrev" onclick="scrollReviewsR(-1)" style="position:absolute;left:-2.5rem;top:50%;transform:translateY(-50%);background:rgba(240,232,213,.95);border:1px solid rgba(184,138,30,.3);color:#7a5c14;width:2.8rem;height:2.8rem;border-radius:50%;font-size:1.4rem;cursor:pointer;z-index:10;display:none;">&#8249;</button>
+      <button id="reviewNext" onclick="scrollReviewsR(1)" style="position:absolute;right:-2.5rem;top:50%;transform:translateY(-50%);background:rgba(240,232,213,.95);border:1px solid rgba(184,138,30,.3);color:#7a5c14;width:2.8rem;height:2.8rem;border-radius:50%;font-size:1.4rem;cursor:pointer;z-index:10;">&#8250;</button>
+      <div class="reviews-grid" id="reviewsGrid">
       <div style="grid-column:1/-1;text-align:center;padding:2rem;color:rgba(44,35,24,.4);font-size:.85rem;">Henter anmeldelser…</div>
     </div>
   </div>
@@ -1441,7 +1444,7 @@ async function loadReviews() {
       headers: { 'apikey': SUPABASE_ANON_KEY, 'Authorization': `Bearer ${SUPABASE_ANON_KEY}` }
     });
     const alle = await res.json();
-    REVIEWS_CACHE_R = Array.isArray(alle) ? alle.filter(r => r.vis_retreat !== false).slice(0, 3) : [];
+    REVIEWS_CACHE_R = Array.isArray(alle) ? alle.filter(r => r.vis_retreat !== false) : [];
     const sektion = document.getElementById('anmeldelser');
     if (sektion) sektion.style.display = REVIEWS_CACHE_R.length ? '' : 'none';
     // Menupunktet skal ikke pege på en sektion, der ikke er der
@@ -1451,11 +1454,31 @@ async function loadReviews() {
   } catch(e) { console.log('Reviews fejl:', e); }
 }
 
+let reviewPageR = 0;
+const reviewsPerPageR = 3;
+
+function scrollReviewsR(dir) {
+  const maxPage = Math.ceil(REVIEWS_CACHE_R.length / reviewsPerPageR) - 1;
+  reviewPageR = Math.max(0, Math.min(maxPage, reviewPageR + dir));
+  renderReviewsRetreat();
+}
+
+function updateReviewNavR() {
+  const maxPage = Math.ceil(REVIEWS_CACHE_R.length / reviewsPerPageR) - 1;
+  const prev = document.getElementById('reviewPrev');
+  const next = document.getElementById('reviewNext');
+  if (prev) prev.style.display = reviewPageR > 0 ? 'block' : 'none';
+  if (next) next.style.display = reviewPageR < maxPage ? 'block' : 'none';
+}
+
 function renderReviewsRetreat() {
   const grid = document.getElementById('reviewsGrid');
   if (!grid || !REVIEWS_CACHE_R.length) { if (grid) grid.innerHTML = ''; return; }
   const isEN = retreatLang === 'en';
-  grid.innerHTML = REVIEWS_CACHE_R.map(r => {
+  const startR = reviewPageR * reviewsPerPageR;
+  const pageReviewsR = REVIEWS_CACHE_R.slice(startR, startR + reviewsPerPageR);
+  updateReviewNavR();
+  grid.innerHTML = pageReviewsR.map(r => {
     const vals = [r.r1_modtagelse,r.r2_vaerelse,r.r3_mad,r.r4_omgivelser,r.r5_program,r.r6_terapeuter,r.r7_faellesskab,r.r8_personlig,r.r9_ro,r.r10_samlet].filter(Boolean);
     const avg = vals.length ? Math.round(vals.reduce((a,b)=>a+b,0)/vals.length*10)/10 : 0;
     const stars = '★'.repeat(Math.round(avg)) + '☆'.repeat(5-Math.round(avg));
