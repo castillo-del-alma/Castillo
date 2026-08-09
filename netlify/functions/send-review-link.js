@@ -6,7 +6,8 @@ exports.handler = async (event) => {
   const RESEND_KEY = process.env.RESEND_API_KEY;
   const fornavn = kundeNavn.split(' ')[0];
   const navn = gaestNavn || kundeNavn;
-  const link = `https://castillodelalma.es/anmeldelse.html?booking=${bookingId}${gaestNavn ? '&navn=' + encodeURIComponent(gaestNavn) : ''}`;
+  const langParam = getLang(nationalitet) === 'en' ? '&lang=en' : '';
+  const link = `https://castillodelalma.es/anmeldelse.html?booking=${bookingId}${gaestNavn ? '&navn=' + encodeURIComponent(gaestNavn) : ''}${langParam}`;
 
   // Sprog fra kundens land: Danmark → dansk, resten → engelsk
   let lang = 'en';

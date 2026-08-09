@@ -420,7 +420,7 @@ body{font-family:'Manrope',sans-serif;background:var(--cream);color:var(--text);
     </div>
 
     <div class="consent-box">
-      <p>Må vi bruge din udtalelse og din bedømmelse på vores hjemmeside og sociale medier? Vi viser aldrig dit fulde navn uden tilladelse.</p>
+      <p>Må vi bruge din udtalelse og din bedømmelse på vores hjemmeside og sociale medier?</p>
       <div class="radio-options">
         <label class="radio-opt">
           <input type="radio" name="consent" value="ja">
@@ -619,7 +619,69 @@ async function prefillFromBooking() {
   } catch(e) { console.log('Prefill fejl:', e); }
 }
 
-document.addEventListener('DOMContentLoaded', prefillFromBooking);
+const ANMELDELSE_SB_URL = 'https://niniwgiytyqvdqejigxg.supabase.co';
+const ANMELDELSE_SB_KEY = 'sb_publishable_GwrNUpIuWzdg1oswOY5HzA_mKWqhd6y';
+let anmLang = 'da';
+let anmTexts = {};
+
+async function loadFormTexts() {
+  const params = new URLSearchParams(window.location.search);
+  anmLang = params.get('lang') === 'en' ? 'en' : 'da';
+  const res = await fetch(`${ANMELDELSE_SB_URL}/rest/v1/form_texts?select=key,da,en`, {
+    headers: { 'apikey': ANMELDELSE_SB_KEY, 'Authorization': `Bearer ${ANMELDELSE_SB_KEY}` }
+  });
+  const data = await res.json();
+  if (Array.isArray(data)) {
+    data.forEach(r => { anmTexts[r.key] = anmLang === 'en' ? (r.en || r.da) : r.da; });
+  }
+  applyFormTexts();
+}
+
+function t(key, fallback) {
+  return anmTexts[key] || fallback || key;
+}
+
+function applyFormTexts() {
+  const map = {
+    'page1_title': '#page1 .section-title',
+    'page1_sub': '#page1 .section-sub',
+    'page2_title': '#page2 .section-title',
+    'page2_sub': '#page2 .section-sub',
+    'page3_title': '#page3 .section-title',
+    'page3_sub': '#page3 .section-sub',
+    'page4_title': '#page4 .section-title',
+    'page4_sub': '#page4 .section-sub',
+  };
+  Object.entries(map).forEach(([key, sel]) => {
+    const el = document.querySelector(sel);
+    if (el && anmTexts[key]) el.textContent = anmTexts[key];
+  });
+  // Knapper
+  document.querySelectorAll('.btn-next:not([data-final])').forEach(b => { if (anmTexts['btn_next']) b.textContent = anmTexts['btn_next']; });
+  document.querySelectorAll('.btn-back').forEach(b => { if (anmTexts['btn_back']) b.textContent = anmTexts['btn_back']; });
+  const sendBtn = document.querySelector('#page4 .btn-next');
+  if (sendBtn && anmTexts['btn_send']) sendBtn.textContent = anmTexts['btn_send'];
+  // Samtykke
+  if (anmTexts['consent_q']) { const el = document.querySelector('.consent-box p'); if (el) el.textContent = anmTexts['consent_q']; }
+  // Labels
+  [['r1','r1_label','r1_sub'],['r2','r2_label','r2_sub'],['r3','r3_label','r3_sub'],
+   ['r4','r4_label','r4_sub'],['r5','r5_label','r5_sub'],['r6','r6_label','r6_sub'],
+   ['r7','r7_label','r7_sub'],['r8','r8_label','r8_sub'],['r9','r9_label','r9_sub'],
+   ['r10','r10_label','r10_sub'],['r11','r11_label','r11_sub']].forEach(([id, lKey, sKey]) => {
+    const el = document.querySelector(`[name="${id}"]`)?.closest('.rq-item')?.querySelector('.rq-label strong');
+    if (el && anmTexts[lKey]) el.textContent = anmTexts[lKey];
+  });
+  // Placeholders
+  const pMap = { 'bedste_placeholder': '#bedste', 'forandring_placeholder': '#forandring', 'forbedring_placeholder': '#forbedringsforslag', 'marketing_placeholder': '#markedsfoering' };
+  Object.entries(pMap).forEach(([key, sel]) => {
+    const el = document.querySelector(sel);
+    if (el && anmTexts[key]) el.placeholder = anmTexts[key];
+  });
+  // HTML lang
+  document.documentElement.lang = anmLang;
+}
+
+document.addEventListener('DOMContentLoaded', () => { loadFormTexts(); prefillFromBooking(); });
 
 async function submitReview() {
   const btn = document.querySelector('#page4 .btn-next');
