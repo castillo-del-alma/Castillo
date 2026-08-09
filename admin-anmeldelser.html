@@ -7515,11 +7515,8 @@ async function loadAnmFormular() {
     const r = anmFormData[f.key] || {};
     return '<div class="fc-block" style="margin-bottom:1rem;">' +
       '<div class="fc-block-header"><span class="fc-block-title">' + f.label + '</span>' +
-      '<button onclick="oversaetAnmFelt('anmf_da_' + f.key + '','anmf_en_' + f.key + '',this)" style="background:rgba(58,110,106,.1);border:1px solid rgba(58,110,106,.35);color:#2a7a74;padding:.2rem .6rem;font-family:Manrope,sans-serif;font-size:.55rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;">⇄ Oversæt</button></div>' +
-      '<div class="fc-block-body"><div class="fc-row">' +
-      '<div><label class="fc-label fc-label-da">Dansk</label><input type="text" id="anmf_da_' + f.key + '" class="fc-input-da" value="' + (r.da||'').replace(/"/g,'&quot;') + '"></div>' +
-      '<div><label class="fc-label fc-label-en">Engelsk</label><input type="text" id="anmf_en_' + f.key + '" class="fc-input-en" value="' + (r.en||'').replace(/"/g,'&quot;') + '"></div>' +
-      '</div></div></div>';
+      `<button onclick="oversaetAnmFelt('anmf_da_${f.key}','anmf_en_${f.key}',this)" style="background:rgba(58,110,106,.1);border:1px solid rgba(58,110,106,.35);color:#2a7a74;padding:.2rem .6rem;font-family:Manrope,sans-serif;font-size:.55rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;">⇄ Oversæt</button></div>` +
+      `<div class="fc-block-body"><div class="fc-row"><div><label class="fc-label fc-label-da">Dansk</label><input type="text" id="anmf_da_${f.key}" class="fc-input-da" value="${(r.da||'').replace(/"/g,'&quot;')}"></div><div><label class="fc-label fc-label-en">Engelsk</label><input type="text" id="anmf_en_${f.key}" class="fc-input-en" value="${(r.en||'').replace(/"/g,'&quot;')}"></div></div></div></div>`;
   }).join('');
 }
 
