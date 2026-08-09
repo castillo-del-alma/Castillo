@@ -388,17 +388,17 @@ body{font-family:'Manrope',sans-serif;background:var(--cream);color:var(--text);
     </div>
 
     <div class="text-question">
-      <label><strong>Hvad var det bedste ved dit ophold?</strong>Beskriv hvad der betød mest for dig</label>
-      <textarea id="best" placeholder="Del det øjeblik, den oplevelse eller den følelse der har sat sig mest..."></textarea>
+      <label data-key="bedste_label"><strong>Hvad var det bedste ved dit ophold?</strong>Beskriv hvad der betød mest for dig</label>
+      <textarea id="best" data-placeholder-key="bedste_placeholder" placeholder="Del det øjeblik, den oplevelse eller den følelse der har sat sig mest..."></textarea>
     </div>
 
     <div class="text-question">
-      <label><strong>Hvilken forandring har opholdet skabt for dig?</strong>Hvad har du taget med dig hjem?</label>
-      <textarea id="change" placeholder="Beskriv hvad der har ændret sig — i kroppen, tankerne eller hverdagen..."></textarea>
+      <label data-key="forandring_label"><strong>Hvilken forandring har opholdet skabt for dig?</strong>Hvad har du taget med dig hjem?</label>
+      <textarea id="change" data-placeholder-key="forandring_placeholder" placeholder="Beskriv hvad der har ændret sig — i kroppen, tankerne eller hverdagen..."></textarea>
     </div>
 
     <div class="form-nav">
-      <button class="btn-prev" onclick="goTo(1)">← Tilbage</button>
+      <button class="btn-prev" data-key="btn_back" onclick="goTo(1)">← Tilbage</button>
       <button class="btn-next" data-key="btn_next" onclick="goTo(3)">Næste →</button>
     </div>
   </div>
@@ -451,7 +451,7 @@ body{font-family:'Manrope',sans-serif;background:var(--cream);color:var(--text);
     </div>
 
     <div class="form-nav">
-      <button class="btn-prev" onclick="goTo(2)">← Tilbage</button>
+      <button class="btn-prev" data-key="btn_back" onclick="goTo(2)">← Tilbage</button>
       <button class="btn-next" data-key="btn_next" onclick="goTo(4)">Næste →</button>
     </div>
   </div>
@@ -648,6 +648,9 @@ function applyFormTexts() {
     if (!anmTexts[key]) return;
     if (el.tagName === 'H1' || el.tagName === 'H2') {
       el.innerHTML = anmTexts[key].replace('feedback', '<em>feedback</em>');
+    } else if (el.tagName === 'LABEL' && el.querySelector('strong')) {
+      const parts = anmTexts[key].split('|');
+      el.innerHTML = parts.length > 1 ? '<strong>' + parts[0] + '</strong>' + parts[1] : anmTexts[key];
     } else {
       el.textContent = anmTexts[key];
     }
