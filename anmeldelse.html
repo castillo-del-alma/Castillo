@@ -263,8 +263,8 @@ body{font-family:'Manrope',sans-serif;background:var(--cream);color:var(--text);
 
   <!-- PAGE 1: Ratings 1-9 -->
   <div class="form-page active" id="page1">
-    <p class="section-title">Din samlede oplevelse</p>
-    <p class="section-sub">Bedøm de forskellige aspekter af dit ophold på Castillo del Alma</p>
+    <p class="section-title" data-key="page1_title">Din samlede oplevelse</p>
+    <p class="section-sub" data-key="page1_sub">Bedøm de forskellige aspekter af dit ophold på Castillo del Alma</p>
 
     <div class="rating-question">
       <span class="rq-label" data-label-key="r1_label" data-sub-key="r1_sub"><strong>1 · Modtagelse & tryghed</strong>Hvor tilfreds var du med modtagelsen og den tryghed, du oplevede under opholdet?</span>
@@ -345,14 +345,14 @@ body{font-family:'Manrope',sans-serif;background:var(--cream);color:var(--text);
 
     <div class="form-nav">
       <span></span>
-      <button class="btn-next" onclick="goTo(2)">Næste →</button>
+      <button class="btn-next" data-key="btn_next" onclick="goTo(2)">Næste →</button>
     </div>
   </div>
 
   <!-- PAGE 2: Personal ratings + free text -->
   <div class="form-page" id="page2">
-    <p class="section-title">Personlig udvikling & ro</p>
-    <p class="section-sub">De vigtigste målinger for os — og for dig</p>
+    <p class="section-title" data-key="page2_title">Personlig udvikling & ro</p>
+    <p class="section-sub" data-key="page2_sub">De vigtigste målinger for os — og for dig</p>
 
     <div class="rating-question">
       <span class="rq-label" data-label-key="r8_label" data-sub-key="r8_sub"><strong>8 · Personlig udvikling</strong>I hvilken grad oplevede du, at opholdet hjalp dig personligt?</span>
@@ -399,14 +399,14 @@ body{font-family:'Manrope',sans-serif;background:var(--cream);color:var(--text);
 
     <div class="form-nav">
       <button class="btn-prev" onclick="goTo(1)">← Tilbage</button>
-      <button class="btn-next" onclick="goTo(3)">Næste →</button>
+      <button class="btn-next" data-key="btn_next" onclick="goTo(3)">Næste →</button>
     </div>
   </div>
 
   <!-- PAGE 3: Recommendation + consent -->
   <div class="form-page" id="page3">
-    <p class="section-title">Vil du anbefale os?</p>
-    <p class="section-sub">Den vigtigste måling af alt</p>
+    <p class="section-title" data-key="page3_title">Vil du anbefale os?</p>
+    <p class="section-sub" data-key="page3_sub">Den vigtigste måling af alt</p>
 
     <div class="rating-question">
       <span class="rq-label" data-label-key="r11_label" data-sub-key="r11_sub"><strong>Vil du anbefale Castillo del Alma til andre?</strong>Hvor sandsynligt er det at du vil anbefale os til venner, familie eller kolleger?</span>
@@ -452,14 +452,14 @@ body{font-family:'Manrope',sans-serif;background:var(--cream);color:var(--text);
 
     <div class="form-nav">
       <button class="btn-prev" onclick="goTo(2)">← Tilbage</button>
-      <button class="btn-next" onclick="goTo(4)">Næste →</button>
+      <button class="btn-next" data-key="btn_next" onclick="goTo(4)">Næste →</button>
     </div>
   </div>
 
   <!-- PAGE 4: About you -->
   <div class="form-page" id="page4">
-    <p class="section-title">Lidt om dig</p>
-    <p class="section-sub">Valgfrit — men hjælper os med at forstå vores gæster bedre</p>
+    <p class="section-title" data-key="page4_title">Lidt om dig</p>
+    <p class="section-sub" data-key="page4_sub">Valgfrit — men hjælper os med at forstå vores gæster bedre</p>
 
     <div class="input-row">
       <div class="input-field"><label>Fornavn</label><input type="text" id="fname" placeholder="Dit fornavn"></div>
@@ -516,7 +516,7 @@ body{font-family:'Manrope',sans-serif;background:var(--cream);color:var(--text);
 
     <div class="form-nav">
       <button class="btn-prev" onclick="goTo(3)">← Tilbage</button>
-      <button class="btn-next" onclick="submitReview()">Send anmeldelse ✓</button>
+      <button class="btn-next" data-key="btn_send" onclick="submitReview()">Send anmeldelse ✓</button>
     </div>
   </div>
 
@@ -642,25 +642,11 @@ function t(key, fallback) {
 }
 
 function applyFormTexts() {
-  const map = {
-    'page1_title': '#page1 .section-title',
-    'page1_sub': '#page1 .section-sub',
-    'page2_title': '#page2 .section-title',
-    'page2_sub': '#page2 .section-sub',
-    'page3_title': '#page3 .section-title',
-    'page3_sub': '#page3 .section-sub',
-    'page4_title': '#page4 .section-title',
-    'page4_sub': '#page4 .section-sub',
-  };
-  Object.entries(map).forEach(([key, sel]) => {
-    const el = document.querySelector(sel);
-    if (el && anmTexts[key]) el.textContent = anmTexts[key];
+  // Alle elementer med data-key attribut
+  document.querySelectorAll('[data-key]').forEach(el => {
+    const key = el.dataset.key;
+    if (anmTexts[key]) el.textContent = anmTexts[key];
   });
-  // Knapper
-  document.querySelectorAll('.btn-next:not([data-final])').forEach(b => { if (anmTexts['btn_next']) b.textContent = anmTexts['btn_next']; });
-  document.querySelectorAll('.btn-back').forEach(b => { if (anmTexts['btn_back']) b.textContent = anmTexts['btn_back']; });
-  const sendBtn = document.querySelector('#page4 .btn-next');
-  if (sendBtn && anmTexts['btn_send']) sendBtn.textContent = anmTexts['btn_send'];
   // Samtykke
   if (anmTexts['consent_q']) { const el = document.querySelector('.consent-box p'); if (el) el.textContent = anmTexts['consent_q']; }
   // Labels
