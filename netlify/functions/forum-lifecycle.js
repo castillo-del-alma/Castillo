@@ -107,6 +107,39 @@ function digestMail(lang, name, title, count, link) {
   };
 }
 
+function warnMail(lang, name, title, dage, link) {
+  const fornavn = String(name || '').split(/\s+/)[0] || name;
+  const T = lang === 'da' ? {
+    subject: `Forummet lukker snart — ${title}`,
+    title: 'Forummet lukker snart',
+    intro: [
+      `Forummet for ${title} er afsluttet og bliver lukket permanent om ${dage === 1 ? 'ét døgn' : dage + ' dage'}.`,
+      'Når det sker, slettes alle beskeder og billeder — det kan ikke fortrydes. Vil du gemme noget fra forummet, så gør det inden da.',
+      'Du behøver ikke foretage dig noget, hvis du ikke ønsker at gemme noget.'
+    ],
+    btn: 'Åbn forummet',
+    note: 'Du modtager kun denne mail én gang.'
+  } : {
+    subject: `The forum is closing soon — ${title}`,
+    title: 'The forum is closing soon',
+    intro: [
+      `The forum for ${title} has ended and will be permanently closed in ${dage === 1 ? 'one day' : dage + ' days'}.`,
+      'When that happens, all messages and images will be deleted — this cannot be undone. If there is anything you would like to keep, please save it before then.',
+      'You do not need to do anything if there is nothing you wish to keep.'
+    ],
+    btn: 'Open the forum',
+    note: 'You will only receive this email once.'
+  };
+  return {
+    subject: T.subject,
+    html: buildEmail({
+      lang, title: T.title, greetingName: fornavn, intro: T.intro,
+      buttons: [{ label: T.btn, url: link }],
+      note: T.note
+    })
+  };
+}
+
 // ---------- Slet billeder for en kanal ----------
 async function purgeImages(channelId) {
   const listRes = await fetch(`${SUPABASE_URL}/storage/v1/object/list/forum-images`, {
@@ -129,7 +162,7 @@ async function purgeImages(channelId) {
 exports.handler = async () => {
   const resend = new Resend(process.env.RESEND_API_KEY);
   const now = new Date().toISOString();
-  const log = { created: 0, synced: 0, opened: 0, open_mails: 0, digests: 0, purged: 0, invited: 0 };
+  const log = { created: 0, synced: 0, opened: 0, open_mails: 0, digests: 0, warned: 0, purged: 0, invited: 0 };
 
   // ---------- 0a) OPRET FORA for hold, der ankommer inden for 14 dage ----------
   // Status 'planlagt' — du kan nå at rette titel og skrive velkomstbeskeden,
@@ -221,6 +254,38 @@ exports.handler = async () => {
         console.error('forum-lifecycle: digest fejlede', m.email, e.message);
       }
     }
+  }
+
+  // ---------- 2b) ADVAR FØR SLETNING (~3 dage før purge_at) ----------
+  // Sender én mail til alle medlemmer med e-mail, inden et arkiveret forum
+  // slettes permanent. purge_warned_at sikrer, at det kun sker én gang.
+  const om3dage = new Date(Date.now() + 3 * 24 * 60 * 60 * 1000).toISOString();
+  const advares = await sbGet(
+    `forum_channels?status=eq.arkiveret&purge_warned_at=is.null` +
+    `&purge_at=lte.${om3dage}&purge_at=gt.${now}&select=id,title,purge_at`
+  );
+
+  for (const ch of advares) {
+    // Rundet antal dage til sletning (mindst 1)
+    const dage = Math.max(1, Math.ceil((new Date(ch.purge_at).getTime() - Date.now()) / 86400000));
+    const members = await sbGet(
+      `forum_members?channel_id=eq.${ch.id}` +
+      '&select=id,display_name,email,nationality,access_token'
+    );
+    for (const m of members) {
+      if (!m.email) continue;
+      const lang = getLang(m.nationality);
+      const mail = warnMail(lang, m.display_name, ch.title, dage, forumLink(m.access_token));
+      try {
+        await resend.emails.send({ from: FROM, to: m.email, subject: mail.subject, html: mail.html });
+        log.warned++;
+      } catch (e) {
+        console.error('forum-lifecycle: sletteadvarsel fejlede', m.email, e.message);
+      }
+    }
+    // Markér forummet som advaret — også hvis nogle mails fejlede, så vi
+    // ikke spammer hver nat. Enkeltfejl fanges i loggen ovenfor.
+    await sbPatch(`forum_channels?id=eq.${ch.id}`, { purge_warned_at: new Date().toISOString() });
   }
 
   // ---------- 3) SLET ARKIVEREDE FORA (purge_at passeret) ----------
