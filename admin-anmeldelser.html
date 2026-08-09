@@ -230,6 +230,7 @@ body{font-family:'Manrope',sans-serif;background:#f0e8d5;color:#2c2318;min-heigh
     <button class="tab-btn" onclick="switchTab('sprog',this)">Sprog &amp; Indhold</button>
     <button class="tab-btn" onclick="switchTab('newsletter',this)">Nyhedsbrev</button>
     <button class="tab-btn" onclick="switchTab('faktura-historik',this)">Faktura historik</button>
+    <button class="tab-btn" onclick="switchTab('anm-formular',this)">Anmeldelsesformular</button>
     <button class="tab-btn" onclick="switchTab('bilag',this)">Bilag</button>
   </div>
 
@@ -371,6 +372,20 @@ body{font-family:'Manrope',sans-serif;background:#f0e8d5;color:#2c2318;min-heigh
       </div>
     </div>
 
+  </div>
+
+  <!-- FANE: ANMELDELSESFORMULAR -->
+  <div class="tab-content" id="tab-anm-formular" style="padding:2rem 3rem;max-width:900px;">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.5rem;">
+      <h3 style="font-family:'Cinzel',serif;font-weight:300;font-size:1.1rem;color:#2c2318;margin:0;">Anmeldelsesformular tekster</h3>
+      <div style="display:flex;gap:.6rem;">
+        <button onclick="oversaetAnmFormular(this)" style="background:rgba(58,110,106,.1);border:1px solid rgba(58,110,106,.35);color:#2a7a74;padding:.4rem .9rem;font-family:Manrope,sans-serif;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;">⇄ Oversæt alle</button>
+        <button onclick="gemAnmFormular()" style="background:#2a7a74;color:#fff;border:none;padding:.4rem .9rem;font-family:Manrope,sans-serif;font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;">💾 Gem alle</button>
+      </div>
+    </div>
+    <div id="anmFormularEditor">
+      <p style="font-size:.75rem;color:rgba(44,35,24,.4);">Henter...</p>
+    </div>
   </div>
 
   <!-- FANE: FAKTURA HISTORIK -->
@@ -6893,6 +6908,7 @@ function switchTab(tab, btn) {
   if (tab === 'forum') foInit();
   if (tab === 'newsletter') loadNewsletter();
   if (tab === 'faktura-historik') loadFakturaHistorik();
+  if (tab === 'anm-formular') loadAnmFormular();
   if (tab === 'bilag') blInit();
   if (tab === 'faktura') { if (!document.querySelector('#mf-linjer [id^="mf-linje-"]')) mfTilfoejLinje(); loadKunderTilFaktura(); }
   if (tab === 'sprog') {
@@ -7434,6 +7450,112 @@ async function sendAnmeldelsesLink() {
 }
 
 let _alleAnmeldelser = [];
+
+const ANM_FORM_KEYS = [
+  { key:'page1_title', label:'Side 1 — Titel' },
+  { key:'page1_sub', label:'Side 1 — Undertitel' },
+  { key:'r1_label', label:'Spørgsmål 1 — Modtagelse (titel)' },
+  { key:'r1_sub', label:'Spørgsmål 1 — Modtagelse (beskrivelse)' },
+  { key:'r2_label', label:'Spørgsmål 2 — Værelse (titel)' },
+  { key:'r2_sub', label:'Spørgsmål 2 — Værelse (beskrivelse)' },
+  { key:'r3_label', label:'Spørgsmål 3 — Mad (titel)' },
+  { key:'r3_sub', label:'Spørgsmål 3 — Mad (beskrivelse)' },
+  { key:'r4_label', label:'Spørgsmål 4 — Omgivelser (titel)' },
+  { key:'r4_sub', label:'Spørgsmål 4 — Omgivelser (beskrivelse)' },
+  { key:'r5_label', label:'Spørgsmål 5 — Program (titel)' },
+  { key:'r5_sub', label:'Spørgsmål 5 — Program (beskrivelse)' },
+  { key:'r6_label', label:'Spørgsmål 6 — Terapeuter (titel)' },
+  { key:'r6_sub', label:'Spørgsmål 6 — Terapeuter (beskrivelse)' },
+  { key:'r7_label', label:'Spørgsmål 7 — Fællesskab (titel)' },
+  { key:'r7_sub', label:'Spørgsmål 7 — Fællesskab (beskrivelse)' },
+  { key:'r8_label', label:'Spørgsmål 8 — Personlig (titel)' },
+  { key:'r8_sub', label:'Spørgsmål 8 — Personlig (beskrivelse)' },
+  { key:'r9_label', label:'Spørgsmål 9 — Ro (titel)' },
+  { key:'r9_sub', label:'Spørgsmål 9 — Ro (beskrivelse)' },
+  { key:'page2_title', label:'Side 2 — Titel' },
+  { key:'page2_sub', label:'Side 2 — Undertitel' },
+  { key:'r10_label', label:'Samlet oplevelse (titel)' },
+  { key:'r10_sub', label:'Samlet oplevelse (beskrivelse)' },
+  { key:'r11_label', label:'Anbefaling (titel)' },
+  { key:'r11_sub', label:'Anbefaling (beskrivelse)' },
+  { key:'bedste_label', label:'Det bedste (label)' },
+  { key:'bedste_placeholder', label:'Det bedste (placeholder)' },
+  { key:'forandring_label', label:'Forandring (label)' },
+  { key:'forandring_placeholder', label:'Forandring (placeholder)' },
+  { key:'forbedring_label', label:'Forbedringsforslag (label)' },
+  { key:'forbedring_placeholder', label:'Forbedringsforslag (placeholder)' },
+  { key:'page3_title', label:'Side 3 — Titel' },
+  { key:'page3_sub', label:'Side 3 — Undertitel' },
+  { key:'consent_q', label:'Samtykke — spørgsmål' },
+  { key:'consent_ja', label:'Samtykke — Ja' },
+  { key:'consent_anonymt', label:'Samtykke — Anonymt' },
+  { key:'consent_nej', label:'Samtykke — Nej' },
+  { key:'marketing_label', label:'Markedsføring (label)' },
+  { key:'marketing_placeholder', label:'Markedsføring (placeholder)' },
+  { key:'page4_title', label:'Side 4 — Titel' },
+  { key:'page4_sub', label:'Side 4 — Undertitel' },
+  { key:'fname_label', label:'Fornavn (label)' },
+  { key:'lname_label', label:'Efternavn (label)' },
+  { key:'lname_sub', label:'Efternavn (hjælpetekst)' },
+  { key:'btn_next', label:'Næste knap' },
+  { key:'btn_back', label:'Tilbage knap' },
+  { key:'btn_send', label:'Send knap' },
+  { key:'send_title', label:'Tak-side titel' },
+  { key:'send_sub', label:'Tak-side undertitel' },
+];
+
+let anmFormData = {};
+
+async function loadAnmFormular() {
+  const el = document.getElementById('anmFormularEditor');
+  el.innerHTML = '<p style="font-size:.75rem;color:rgba(44,35,24,.4);">Henter…</p>';
+  const { data } = await sb.from('form_texts').select('*');
+  if (data) data.forEach(r => { anmFormData[r.key] = r; });
+  el.innerHTML = ANM_FORM_KEYS.map(f => {
+    const r = anmFormData[f.key] || {};
+    return '<div class="fc-block" style="margin-bottom:1rem;">' +
+      '<div class="fc-block-header"><span class="fc-block-title">' + f.label + '</span>' +
+      '<button onclick="oversaetAnmFelt('anmf_da_' + f.key + '','anmf_en_' + f.key + '',this)" style="background:rgba(58,110,106,.1);border:1px solid rgba(58,110,106,.35);color:#2a7a74;padding:.2rem .6rem;font-family:Manrope,sans-serif;font-size:.55rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;">⇄ Oversæt</button></div>' +
+      '<div class="fc-block-body"><div class="fc-row">' +
+      '<div><label class="fc-label fc-label-da">Dansk</label><input type="text" id="anmf_da_' + f.key + '" class="fc-input-da" value="' + (r.da||'').replace(/"/g,'&quot;') + '"></div>' +
+      '<div><label class="fc-label fc-label-en">Engelsk</label><input type="text" id="anmf_en_' + f.key + '" class="fc-input-en" value="' + (r.en||'').replace(/"/g,'&quot;') + '"></div>' +
+      '</div></div></div>';
+  }).join('');
+}
+
+async function oversaetAnmFelt(daId, enId, btn) {
+  const daEl = document.getElementById(daId);
+  const enEl = document.getElementById(enId);
+  if (!daEl || !enEl || !daEl.value.trim()) return;
+  const orig = btn.textContent; btn.disabled = true; btn.textContent = '…';
+  try { enEl.value = await translateText(daEl.value); btn.textContent = '✓'; }
+  catch(e) { showToast('Fejl: ' + e.message, true); }
+  setTimeout(() => { btn.textContent = orig; btn.disabled = false; }, 2000);
+}
+
+async function oversaetAnmFormular(btn) {
+  const orig = btn.textContent; btn.disabled = true; btn.textContent = 'Oversætter…';
+  for (const f of ANM_FORM_KEYS) {
+    const daEl = document.getElementById('anmf_da_' + f.key);
+    const enEl = document.getElementById('anmf_en_' + f.key);
+    if (daEl && enEl && daEl.value.trim() && !enEl.value.trim()) {
+      try { enEl.value = await translateText(daEl.value); } catch(e) {}
+    }
+  }
+  btn.textContent = '✓ Oversat'; btn.disabled = false;
+  setTimeout(() => { btn.textContent = orig; }, 2000);
+}
+
+async function gemAnmFormular() {
+  const updates = ANM_FORM_KEYS.map(f => ({
+    key: f.key,
+    da: document.getElementById('anmf_da_' + f.key)?.value || '',
+    en: document.getElementById('anmf_en_' + f.key)?.value || ''
+  }));
+  const { error } = await sb.from('form_texts').upsert(updates, { onConflict: 'key' });
+  if (error) showToast('Fejl: ' + error.message, true);
+  else showToast('✓ Formular tekster gemt');
+}
 
 async function loadFakturaHistorik() {
   const tbody = document.getElementById('fhTbody');
