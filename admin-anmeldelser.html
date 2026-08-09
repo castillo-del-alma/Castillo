@@ -7411,7 +7411,7 @@ async function sendAnmeldelsesLink() {
     // Send til kunden selv
     const res = await fetch('/.netlify/functions/send-review-link', {
       method:'POST', headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({ bookingId: booking.id, kundeNavn: kunde.full_name, kundeEmail: kunde.email, retreatNavn })
+      body: JSON.stringify({ bookingId: booking.id, kundeNavn: kunde.full_name, kundeEmail: kunde.email, retreatNavn, nationalitet: kunde.nationality || 'Danmark' })
     });
     const data = await res.json();
     if (!res.ok || data.error) throw new Error(data.error);
@@ -7422,7 +7422,7 @@ async function sendAnmeldelsesLink() {
       if (g.email) {
         await fetch('/.netlify/functions/send-review-link', {
           method:'POST', headers:{'Content-Type':'application/json'},
-          body: JSON.stringify({ bookingId: booking.id, kundeNavn: g.navn || g.name || 'Gæst', kundeEmail: g.email, retreatNavn, gaestNavn: g.navn || g.name || null })
+          body: JSON.stringify({ bookingId: booking.id, kundeNavn: g.navn || g.name || 'Gæst', kundeEmail: g.email, retreatNavn, gaestNavn: g.navn || g.name || null, nationalitet: kunde.nationality || 'Danmark' })
         });
       }
     }
