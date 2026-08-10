@@ -194,11 +194,267 @@
   [headers.values]
     Cache-Control = "public, max-age=0, must-revalidate"
 
+# ── INGEN INDEKSERING AF ADMIN-, MEDLEMS- OG BETALINGSSIDER ─────────────
+# robots.txt blokerer kun den præcise sti, den nævner. De samme sider kan nås
+# på fire måder (/x.html, /x, /en/x.html, /en/x), fordi Netlify serverer rene
+# adresser og fordi catch-all'en /en/* henter alt fra roden. En header virker
+# uanset stavemåde — og noindex FJERNER siden fra Googles indeks, hvor
+# robots.txt kun beder om at den ikke besøges. Derfor er det headeren, der er
+# den egentlige spærre; robots.txt er kun et supplement.
+# Admin-siderne får desuden DENY mod indlejring i iframe og no-store, så
+# hverken browser eller mellemled gemmer en kopi.
+
 [[headers]]
   for = "/admin-anmeldelser.html"
   [headers.values]
+    X-Robots-Tag = "noindex, nofollow, noarchive"
     X-Frame-Options = "DENY"
     Cache-Control = "no-store"
+
+[[headers]]
+  for = "/admin-anmeldelser"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow, noarchive"
+    X-Frame-Options = "DENY"
+    Cache-Control = "no-store"
+
+[[headers]]
+  for = "/en/admin-anmeldelser.html"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow, noarchive"
+    X-Frame-Options = "DENY"
+    Cache-Control = "no-store"
+
+[[headers]]
+  for = "/en/admin-anmeldelser"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow, noarchive"
+    X-Frame-Options = "DENY"
+    Cache-Control = "no-store"
+
+[[headers]]
+  for = "/admin-newsletter.html"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow, noarchive"
+    X-Frame-Options = "DENY"
+    Cache-Control = "no-store"
+
+[[headers]]
+  for = "/admin-newsletter"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow, noarchive"
+    X-Frame-Options = "DENY"
+    Cache-Control = "no-store"
+
+[[headers]]
+  for = "/en/admin-newsletter.html"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow, noarchive"
+    X-Frame-Options = "DENY"
+    Cache-Control = "no-store"
+
+[[headers]]
+  for = "/en/admin-newsletter"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow, noarchive"
+    X-Frame-Options = "DENY"
+    Cache-Control = "no-store"
+
+[[headers]]
+  for = "/admin-betaling.html"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow, noarchive"
+    X-Frame-Options = "DENY"
+    Cache-Control = "no-store"
+
+[[headers]]
+  for = "/admin-betaling"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow, noarchive"
+    X-Frame-Options = "DENY"
+    Cache-Control = "no-store"
+
+[[headers]]
+  for = "/en/admin-betaling.html"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow, noarchive"
+    X-Frame-Options = "DENY"
+    Cache-Control = "no-store"
+
+[[headers]]
+  for = "/en/admin-betaling"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow, noarchive"
+    X-Frame-Options = "DENY"
+    Cache-Control = "no-store"
+
+[[headers]]
+  for = "/video-tekster.html"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow, noarchive"
+    X-Frame-Options = "DENY"
+    Cache-Control = "no-store"
+
+[[headers]]
+  for = "/video-tekster"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow, noarchive"
+    X-Frame-Options = "DENY"
+    Cache-Control = "no-store"
+
+[[headers]]
+  for = "/en/video-tekster.html"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow, noarchive"
+    X-Frame-Options = "DENY"
+    Cache-Control = "no-store"
+
+[[headers]]
+  for = "/en/video-tekster"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow, noarchive"
+    X-Frame-Options = "DENY"
+    Cache-Control = "no-store"
+
+[[headers]]
+  for = "/min-booking.html"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow, noarchive"
+
+[[headers]]
+  for = "/min-booking"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow, noarchive"
+
+[[headers]]
+  for = "/en/min-booking.html"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow, noarchive"
+
+[[headers]]
+  for = "/en/min-booking"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow, noarchive"
+
+[[headers]]
+  for = "/anmeldelse.html"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow, noarchive"
+
+[[headers]]
+  for = "/anmeldelse"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow, noarchive"
+
+[[headers]]
+  for = "/en/anmeldelse.html"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow, noarchive"
+
+[[headers]]
+  for = "/en/anmeldelse"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow, noarchive"
+
+[[headers]]
+  for = "/betal.html"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow, noarchive"
+
+[[headers]]
+  for = "/betal"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow, noarchive"
+
+[[headers]]
+  for = "/en/betal.html"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow, noarchive"
+
+[[headers]]
+  for = "/en/betal"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow, noarchive"
+
+[[headers]]
+  for = "/betal-success.html"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow, noarchive"
+
+[[headers]]
+  for = "/betal-success"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow, noarchive"
+
+[[headers]]
+  for = "/en/betal-success.html"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow, noarchive"
+
+[[headers]]
+  for = "/en/betal-success"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow, noarchive"
+
+[[headers]]
+  for = "/betaling-tak.html"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow, noarchive"
+
+[[headers]]
+  for = "/betaling-tak"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow, noarchive"
+
+[[headers]]
+  for = "/en/betaling-tak.html"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow, noarchive"
+
+[[headers]]
+  for = "/en/betaling-tak"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow, noarchive"
+
+[[headers]]
+  for = "/forum.html"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow, noarchive"
+
+[[headers]]
+  for = "/forum"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow, noarchive"
+
+[[headers]]
+  for = "/en/forum.html"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow, noarchive"
+
+[[headers]]
+  for = "/en/forum"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow, noarchive"
+
+[[headers]]
+  for = "/bilag.html"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow, noarchive"
+
+[[headers]]
+  for = "/bilag"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow, noarchive"
+
+[[headers]]
+  for = "/en/bilag.html"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow, noarchive"
+
+[[headers]]
+  for = "/en/bilag"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow, noarchive"
 
 [build.environment]
   SECRETS_SCAN_OMIT_KEYS = "SUPABASE_URL,SUPABASE_ANON_KEY,SUPABASE_SERVICE_KEY,RESEND_API_KEY,STRIPE_SECRET_KEY,STRIPE_PUBLISHABLE_KEY,STRIPE_WEBHOOK_SECRET,FORUM_ADMIN_KEY,VAPID_PUBLIC_KEY,VAPID_PRIVATE_KEY,ADMIN_EMAIL"
