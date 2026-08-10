@@ -1,17 +1,24 @@
 User-agent: *
 Allow: /
 
-# Admin, kundeportal og transaktionssider skal ikke indekseres
-Disallow: /admin-anmeldelser.html
-Disallow: /admin-newsletter.html
-Disallow: /admin-betaling.html
-Disallow: /video-tekster.html
-Disallow: /min-booking.html
-Disallow: /anmeldelse.html
-Disallow: /betal.html
-Disallow: /betal-success.html
-Disallow: /betaling-tak.html
-Disallow: /forum.html
-Disallow: /bilag.html
+# Admin-, medlems- og betalingssider holdes ude af søgeresultaterne med
+# X-Robots-Tag: noindex (sat i netlify.toml), IKKE med Disallow herunder.
+#
+# Grunden: en Disallow forbyder Google at hente siden — og så ser Google
+# heller aldrig noindex-headeren. En adresse, der allerede er indekseret
+# eller linket til udefra, ville derfor blive liggende i indekset. Ved at
+# lade siderne være crawlbare kan Google læse noindex og fjerne dem
+# rigtigt. Siderne er i forvejen beskyttet af login, så der er intet
+# indhold at hente for en robot.
+#
+# Omfattet af noindex: admin-anmeldelser, admin-newsletter, admin-betaling,
+# video-tekster, min-booking, anmeldelse, betal, betal-success,
+# betaling-tak, forum og bilag — alle fire adresseformer hver.
+
+# Scannere, der udelukkende leder efter lækkede nøgler. De adlyder sjældent
+# robots.txt, men linjerne koster intet.
+Disallow: /.env
+Disallow: /.git/
+Disallow: /.aws/
 
 Sitemap: https://castillodelalma.es/sitemap.xml
