@@ -48,11 +48,27 @@ async function buildPDF(data) {
       .text('BELØB',450,y+7,{align:'right',width:90});
     y+=22;
     doc.rect(50,y,495,0.5).fill('#e0d0b0'); y+=8;
+    // Rabatten skal stå som sin EGEN linje. `total_price` er allerede den
+    // nedsatte pris, så ydelseslinjen viser fuld pris og rabatten trækkes
+    // fra nedenunder — ellers står der bare et lavere beløb uden forklaring,
+    // og et bilag skal kunne forklare sit eget tal.
+    const fakturaRabat = parseFloat(booking.rabat_beloeb) || 0;
+    const harFakturaRabat = !!booking.rabatkode && fakturaRabat > 0;
+    const ydelsesbeloeb = parseFloat(booking.total_price||0) + (harFakturaRabat ? fakturaRabat : 0);
+
     doc.fontSize(9).font('Helvetica').fillColor(DARK)
       .text(booking.retreat_name||'Retreat',55,y,{width:225})
       .text(`${fmtDate(booking.arrival_date)} – ${fmtDate(booking.departure_date)}`,285,y)
-      .text(`€${parseFloat(booking.total_price||0).toFixed(2)}`,450,y,{align:'right',width:90});
+      .text(`€${ydelsesbeloeb.toFixed(2)}`,450,y,{align:'right',width:90});
     y+=25;
+
+    if (harFakturaRabat) {
+      doc.fontSize(9).font('Helvetica').fillColor(DARK)
+        .text(`Rabat / Discount (${booking.rabatkode}${booking.rabat_pct ? ' · ' + booking.rabat_pct + '%' : ''})`,55,y,{width:225})
+        .text('',285,y)
+        .text(`− €${fakturaRabat.toFixed(2)}`,450,y,{align:'right',width:90});
+      y+=25;
+    }
 
     doc.rect(50,y,495,0.5).fill(BG); y+=10;
     doc.fontSize(7).font('Helvetica-Bold').fillColor(GOLD).text('BETALINGER / PAYMENTS',55,y); y+=14;
@@ -88,6 +104,15 @@ async function buildPDF(data) {
 function buildHTML(data) {
   const { invoiceNumber, invoiceDate, customer, booking, paidPayments, totalPaid } = data;
   const vatAmt = (totalPaid/1.1*0.1).toFixed(2);
+  // Samme regel som i PDF'en: ydelseslinjen viser fuld pris, og rabatten
+  // står som sin egen linje nedenunder.
+  const hRabat = parseFloat(booking.rabat_beloeb) || 0;
+  const hHarRabat = !!booking.rabatkode && hRabat > 0;
+  const hYdelse = parseFloat(booking.total_price||0) + (hHarRabat ? hRabat : 0);
+  const rabatRaekke = hHarRabat
+    ? `<tr><td>Rabat / Discount (${booking.rabatkode}${booking.rabat_pct ? ' &middot; ' + booking.rabat_pct + '%' : ''})</td><td></td><td style="text-align:right">&minus; &euro;${hRabat.toFixed(2)}</td></tr>`
+    : '';
+
   const rows = paidPayments.map(p => {
     const label = p.type==='deposit'?'Depositum':p.type==='final'?'Slutbetaling':p.type==='full'?'Fuld betaling':'Betaling';
     return `<tr><td>${label}</td><td>${fmtDate(p.paid_at)}</td><td style="text-align:right">€${parseFloat(p.amount).toFixed(2)}</td></tr>`;
@@ -151,7 +176,8 @@ td:last-child{text-align:right;}
   <table>
     <thead><tr><th>Beskrivelse</th><th>Periode</th><th>Beløb</th></tr></thead>
     <tbody>
-      <tr><td>${booking.retreat_name||'Retreat'}</td><td>${fmtDate(booking.arrival_date)} – ${fmtDate(booking.departure_date)}</td><td style="text-align:right">€${parseFloat(booking.total_price||0).toFixed(2)}</td></tr>
+      <tr><td>${booking.retreat_name||'Retreat'}</td><td>${fmtDate(booking.arrival_date)} – ${fmtDate(booking.departure_date)}</td><td style="text-align:right">€${hYdelse.toFixed(2)}</td></tr>
+      ${rabatRaekke}
     </tbody>
   </table>
   <p class="section-label">Betalinger / Payments</p>

@@ -286,6 +286,29 @@ global.fetch = async (url, o = {}) => {
   r.tjek(!/max_brug/.test(tjek), 'tjek-rabatkode lækker maks. antal brug');
   r.tjek(!/gyldig_til|gyldig_fra/.test(tjek), 'tjek-rabatkode lækker gyldighedsdatoerne');
 
+  const gi = udenKommentar(fs.readFileSync(path.join(F, 'generate-invoice.js'), 'utf8'));
+  // Fakturaen er bilaget. Viser den kun den nedsatte total, står der et tal
+  // uden forklaring — rabatten skal fremgå som sin egen linje, både i PDF
+  // og i HTML-udgaven.
+  r.tjek(/rabat_beloeb/.test(gi), 'fakturaen viser ikke rabatten');
+  // PDF og HTML er to separate udgaver af samme bilag. Begge skal vise
+  // rabatten — det er ikke nok, at ordet står i den ene.
+  r.tjek(/Rabat \/ Discount \(\$\{booking\.rabatkode\}/.test(gi.split('function buildHTML')[0]),
+    'rabatlinjen mangler i PDF-udgaven af fakturaen');
+  r.tjek(/\$\{rabatRaekke\}/.test(gi) && /Rabat \/ Discount \(\$\{booking\.rabatkode\}/.test(gi.split('function buildHTML')[1] || ''),
+    'rabatlinjen mangler i HTML-udgaven af fakturaen');
+  r.tjek(!/€\$\{parseFloat\(booking\.total_price\|\|0\)\.toFixed\(2\)\}/.test(gi),
+    'fakturaens ydelseslinje viser den rabatterede pris uden at vise rabatten');
+
+  // HTML-filen læses RÅ. Kommentar-strippen ovenfor er skrevet til rene
+  // JS-filer: i en HTML-fil finder et /* fra CSS sin afslutning langt nede
+  // i script-blokken og æder alt derimellem.
+  const admin = fs.readFileSync(path.join(ROD, 'admin-anmeldelser.html'), 'utf8');
+  r.tjek(/booking\.rabat_beloeb/.test(admin),
+    'admin viser ikke rabatten på bookingen');
+  r.tjek(/rkEsc\(booking\.rabatkode\)/.test(admin),
+    'admin indsætter rabatkoden i HTML uden at escape den');
+
   const sql = fs.readFileSync(path.join(ROD, 'sql', '2026-08-11-rabatkoder.sql'), 'utf8');
   r.tjek(/ENABLE ROW LEVEL SECURITY/.test(sql), 'rabatkoder-tabellen mangler RLS');
   r.tjek(/REVOKE ALL ON public\.rabatkoder FROM anon/.test(sql),

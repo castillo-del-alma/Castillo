@@ -8332,9 +8332,23 @@ async function visDetalje(kundeId) {
       <p style="color:rgba(44,35,24,.5);font-size:.75rem;">Henter…</p>
     </div>`;
 
+    // Rabatlinjen. `total_price` ER den rabatterede pris — rabatten blev
+    // trukket fra i create-booking. Uden en fuld-pris-linje ovenover ville
+    // en lavere total stå uforklaret, og det er præcis den forklaring José
+    // skal bruge i regnskabet.
+    const rabatBeloeb = parseFloat(booking.rabat_beloeb) || 0;
+    const harRabat = !!booking.rabatkode && rabatBeloeb > 0;
+
     html += `<div class="detalje-section">
-      <h4>Økonomi</h4>
-      <div class="detalje-row"><span class="detalje-key">Retreat pris</span><span class="detalje-val">€${parseFloat(booking.total_price).toFixed(2)}</span></div>
+      <h4>Økonomi</h4>`;
+
+    if (harRabat) {
+      const fuldPris = parseFloat(booking.total_price) + rabatBeloeb;
+      html += `<div class="detalje-row"><span class="detalje-key">Fuld pris</span><span class="detalje-val" style="color:rgba(44,35,24,.5);">€${fuldPris.toFixed(2)}</span></div>
+      <div class="detalje-row"><span class="detalje-key">Rabat</span><span class="detalje-val" style="color:#2a7a74;">${rkEsc(booking.rabatkode)}${booking.rabat_pct ? ' · ' + booking.rabat_pct + '%' : ''} − €${rabatBeloeb.toFixed(2)}</span></div>`;
+    }
+
+    html += `<div class="detalje-row"><span class="detalje-key">Retreat pris</span><span class="detalje-val">€${parseFloat(booking.total_price).toFixed(2)}</span></div>
       <div class="detalje-row"><span class="detalje-key">Depositum</span><span class="detalje-val">€${parseFloat(booking.deposit_amount).toFixed(2)}</span></div>`;
 
     if (booking.charges && booking.charges.length > 0) {
