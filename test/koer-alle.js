@@ -19,6 +19,7 @@ const TESTS = [
   ['Min booking',   'min-booking-portal.js'],
   ['Adgang',        'adgang.js'],
   ['Beløb',         'beloeb.js'],
+  ['Rabatkoder',    'rabat.js'],
   ['Bilag',         'bilag.js'],
   ['Seværdigheder', 'sevaerdigheder.js'],
   ['Forside → seværdigheder', 'forside-sevaerdigheder.js'],

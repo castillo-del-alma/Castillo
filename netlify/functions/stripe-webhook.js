@@ -54,6 +54,19 @@ exports.handler = async (event) => {
 
       console.log('Booking opdateret og betaling registreret:', bookingId);
 
+      // Rabatkodens forbrug tælles op FØRST nu — ikke da gæsten tastede den.
+      // Ellers kunne en kode med max_brug = 20 brændes af ved, at tyve
+      // mennesker tastede den uden nogensinde at booke. Databasefunktionen
+      // sørger for, at hver booking kun tæller én gang, også hvis Stripe
+      // sender webhooken to gange eller gæsten betaler i to omgange.
+      try {
+        const { registrerBrug } = require('./rabat');
+        const brugtKode = await registrerBrug(bookingId);
+        if (brugtKode) console.log('Rabatkode registreret som brugt:', brugtKode);
+      } catch (e) {
+        console.error('stripe-webhook: optælling af rabatkode fejlede:', e.message);
+      }
+
       // Bookingen er betalt — nu må de medrejsende gæster inviteres til
       // Min booking. Fejler det, må det ikke vælte betalingsbehandlingen.
       try {

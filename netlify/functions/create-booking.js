@@ -1,5 +1,6 @@
 const { buildEmail, getLang, fmtDate, texts } = require('./email-template');
 const { retreatPris, beregnBookingpris } = require('./beloeb');
+const { hentRabat } = require('./rabat');
 
 exports.handler = async (event) => {
   if (event.httpMethod !== 'POST') {
@@ -15,7 +16,10 @@ exports.handler = async (event) => {
     // kroppen. Siderne sender dem stadig, men alt der handler om penge og
     // antal regnes ud herinde. Står de ikke her, kan de heller ikke snige sig
     // ind i en beregning ved et uheld senere.
-    const { fornavn, efternavn, email, telefon, nationalitet, vaerelse, addon_foer, addon_efter, addon_massage, selected_addons, kommentar, ekstra_gaester, retreat_id, retreat_name, arrival_date, departure_date, direct_payment, betingelser_accepteret } = JSON.parse(event.body);
+    //
+    // Det samme gælder rabatten: `rabatkode` læses, men en medsendt
+    // `rabat_pct` gør det ikke. Procenten slås op i rabatkoder-tabellen.
+    const { fornavn, efternavn, email, telefon, nationalitet, vaerelse, addon_foer, addon_efter, addon_massage, selected_addons, kommentar, ekstra_gaester, retreat_id, retreat_name, arrival_date, departure_date, direct_payment, betingelser_accepteret, rabatkode } = JSON.parse(event.body);
 
     if (!fornavn || !email) {
       return { statusCode: 400, body: JSON.stringify({ error: 'Fornavn og email er påkrævet' }) };
@@ -50,9 +54,26 @@ exports.handler = async (event) => {
       console.warn(`create-booking: ingen pris fundet for retreat ${retreat_id} — forespørgsel oprettes med beløb 0`);
     }
 
-    const { totalPrice, depositAmount } = priser
-      ? beregnBookingpris(priser.pris, priser.pct, antalGaesterTotal)
-      : { totalPrice: 0, depositAmount: 0 };
+    // ── RABATKODEN ───────────────────────────────────────────────────────
+    // Slås op nu, med samme regler som da gæsten tastede den. Er den nået
+    // at udløbe eller blive opbrugt i mellemtiden, oprettes bookingen til
+    // fuld pris — ikke med en fejl. Gæsten har udfyldt hele formularen, og
+    // en afvist booking her ville koste en tilmelding for at spare en
+    // rabat, vi selv har annonceret.
+    let rabat = null;
+    if (rabatkode) {
+      const svar = await hentRabat(rabatkode);
+      if (svar && !svar.fejl) {
+        rabat = svar;
+      } else {
+        console.warn(`create-booking: rabatkode "${(svar && svar.kode) || ''}" ikke anvendt (${(svar && svar.fejl) || 'ukendt'})`);
+      }
+    }
+
+    const beregnet = priser
+      ? beregnBookingpris(priser.pris, priser.pct, antalGaesterTotal, rabat ? rabat.procent : 0)
+      : { totalPrice: 0, depositAmount: 0, rabatPct: 0, rabatBeloeb: 0 };
+    const { totalPrice, depositAmount } = beregnet;
 
     const headers = {
       'Content-Type': 'application/json',
@@ -160,7 +181,13 @@ exports.handler = async (event) => {
         addon_foer: addon_foer || false,
         addon_efter: addon_efter || false,
         addon_massage: addon_massage || false,
-        notes: kommentar || null
+        notes: kommentar || null,
+        // Rabatten skal kunne ses på bookingen bagefter. Uden de her tre
+        // felter står der bare en lavere total uden forklaring — hverken
+        // godt for regnskabet eller for at måle hvilken kampagne der virkede.
+        rabatkode: rabat ? rabat.kode : null,
+        rabat_pct: rabat ? beregnet.rabatPct : null,
+        rabat_beloeb: rabat ? beregnet.rabatBeloeb : null
       })
     });
     const bookingData = await bookingRes.json();
@@ -287,6 +314,7 @@ exports.handler = async (event) => {
               [t.label_guests, String(antalGaesterTotal)],
               [t.label_room, vaerelse || null],
               [t.label_addons, (selected_addons||[]).length > 0 ? (selected_addons.map(a=>a.text).join(', ') + ' (' + t.addons_note + ')') : null],
+              [t.label_rabat, rabat ? `${beregnet.rabatPct}% (${rabat.kode}) − €${beregnet.rabatBeloeb.toFixed(2)}` : null],
               [t.label_deposit, '€' + depositAmount.toFixed(2)],
               [t.label_total, '€' + totalPrice.toFixed(2)],
             ]
@@ -358,7 +386,8 @@ exports.handler = async (event) => {
                <h3>Ekstra gæster</h3>
                ${ekstraGaesterHtml}
                <h3>Særlige ønsker</h3>
-               <p>${kommentar || '—'}</p>`
+               <p>${kommentar || '—'}</p>
+               ${rabat ? `<h3>Rabatkode</h3><p><strong>${rabat.kode}</strong> — ${beregnet.rabatPct}% (−€${beregnet.rabatBeloeb.toFixed(2)})</p>` : ''}`
       })
     });
     const adminEmailData = await adminEmailRes.json();

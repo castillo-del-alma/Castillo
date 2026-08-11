@@ -50,12 +50,28 @@ async function retreatPris(retreatId) {
 
 // Prisen på en ny booking. Antal gæster tælles også her: browseren sendte
 // både `gaester` og listen over medrejsende, og de to kunne være uenige.
-function beregnBookingpris(pris, pct, antalGaester) {
+//
+// `rabatPct` kommer ALDRIG fra kroppen. Den er slået op i rabatkoder-tabellen
+// af create-booking, gennem rabat.js. Rabatten lægges på hele ordren, og
+// depositummet regnes af den rabatterede total — ellers ville gæsten skulle
+// lægge depositum af en pris hun ikke betaler.
+function beregnBookingpris(pris, pct, antalGaester, rabatPct = 0) {
   const antal = Math.max(1, parseInt(antalGaester, 10) || 1);
+  const fuldPris = Math.round(pris * antal);
+
+  const p = Number(rabatPct);
+  const gyldigRabat = isFinite(p) && p >= 1 && p <= 100 ? Math.round(p) : 0;
+  const totalPrice = gyldigRabat
+    ? Math.round(fuldPris * (100 - gyldigRabat) / 100)
+    : fuldPris;
+
   return {
     antalGaester: antal,
-    totalPrice: Math.round(pris * antal),
-    depositAmount: Math.round(pris * antal * pct),
+    fuldPris,
+    rabatPct: gyldigRabat,
+    rabatBeloeb: fuldPris - totalPrice,
+    totalPrice,
+    depositAmount: Math.round(totalPrice * pct),
   };
 }
 

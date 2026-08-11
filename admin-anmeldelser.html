@@ -5623,6 +5623,43 @@ feeling more calm – and coming home to yourself again."</textarea></div>
     </div>
 
     <div style="background:rgba(184,138,30,.06);border:1px solid rgba(184,138,30,.2);padding:1.5rem;margin-bottom:2rem;">
+      <h3 style="font-family:Cinzel,serif;font-weight:300;font-size:1rem;letter-spacing:.08em;color:#2c2318;margin-bottom:1rem;">🎟️ Rabatkoder</h3>
+      <p style="font-size:.72rem;color:rgba(44,35,24,.5);margin-bottom:1.5rem;">Gæsten taster koden i bookingformularen på retreat-siden. Rabatten trækkes fra hele ordren, og depositummet regnes af den nedsatte pris. Forbruget tælles først op, når bookingen er <strong>betalt</strong> — ikke når koden tastes.<br>Udlejning har ingen bookingformular, så dér skriver du bare rabatten direkte på den manuelle faktura.</p>
+
+      <div style="display:grid;grid-template-columns:1.1fr .6fr 1fr 1fr .8fr auto;gap:.6rem;align-items:end;padding:1rem;background:rgba(255,255,255,.5);border:1px solid rgba(184,138,30,.18);margin-bottom:1.5rem;">
+        <div>
+          <label style="display:block;font-size:.58rem;letter-spacing:.14em;text-transform:uppercase;color:#b88a1e;font-weight:600;margin-bottom:.3rem;">Kode</label>
+          <input type="text" id="rk-kode" placeholder="SOMMER25" style="width:100%;padding:.5rem;border:1px solid rgba(44,35,24,.2);font-family:Manrope,sans-serif;font-size:.78rem;text-transform:uppercase;">
+        </div>
+        <div>
+          <label style="display:block;font-size:.58rem;letter-spacing:.14em;text-transform:uppercase;color:#b88a1e;font-weight:600;margin-bottom:.3rem;">Rabat %</label>
+          <input type="number" id="rk-procent" min="1" max="100" placeholder="10" style="width:100%;padding:.5rem;border:1px solid rgba(44,35,24,.2);font-family:Manrope,sans-serif;font-size:.78rem;">
+        </div>
+        <div>
+          <label style="display:block;font-size:.58rem;letter-spacing:.14em;text-transform:uppercase;color:#b88a1e;font-weight:600;margin-bottom:.3rem;">Gyldig fra</label>
+          <input type="date" id="rk-fra" style="width:100%;padding:.5rem;border:1px solid rgba(44,35,24,.2);font-family:Manrope,sans-serif;font-size:.78rem;">
+        </div>
+        <div>
+          <label style="display:block;font-size:.58rem;letter-spacing:.14em;text-transform:uppercase;color:#b88a1e;font-weight:600;margin-bottom:.3rem;">Gyldig til</label>
+          <input type="date" id="rk-til" style="width:100%;padding:.5rem;border:1px solid rgba(44,35,24,.2);font-family:Manrope,sans-serif;font-size:.78rem;">
+        </div>
+        <div>
+          <label style="display:block;font-size:.58rem;letter-spacing:.14em;text-transform:uppercase;color:#b88a1e;font-weight:600;margin-bottom:.3rem;">Maks. brug</label>
+          <input type="number" id="rk-maks" min="1" placeholder="∞" style="width:100%;padding:.5rem;border:1px solid rgba(44,35,24,.2);font-family:Manrope,sans-serif;font-size:.78rem;">
+        </div>
+        <div>
+          <button onclick="opretRabatkode()" style="background:var(--wine);color:#fff;border:none;padding:.62rem 1.4rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;white-space:nowrap;">+ Opret</button>
+        </div>
+        <div style="grid-column:1 / -1;">
+          <label style="display:block;font-size:.58rem;letter-spacing:.14em;text-transform:uppercase;color:#b88a1e;font-weight:600;margin-bottom:.3rem;">Intern note (vises aldrig for gæsten)</label>
+          <input type="text" id="rk-beskrivelse" placeholder="Fx: Instagram-kampagne oktober" style="width:100%;padding:.5rem;border:1px solid rgba(44,35,24,.2);font-family:Manrope,sans-serif;font-size:.78rem;">
+        </div>
+      </div>
+
+      <div id="rk-liste" style="font-size:.78rem;color:rgba(44,35,24,.5);">Indlæser…</div>
+    </div>
+
+    <div style="background:rgba(184,138,30,.06);border:1px solid rgba(184,138,30,.2);padding:1.5rem;margin-bottom:2rem;">
       <h3 style="font-family:Cinzel,serif;font-weight:300;font-size:1rem;letter-spacing:.08em;color:#2c2318;margin-bottom:1rem;">🧹 Oprydning i billedlager</h3>
       <p style="font-size:.72rem;color:rgba(44,35,24,.5);margin-bottom:1rem;">Scanner Supabase-lageret og finder billeder, der ikke længere bruges på nogen side (retreats, forside, ejendommen, udlejning). Galleriet er ikke omfattet — dets billeder styres under fanen Forside. Ubrugte filer kan slettes her for at spare lagerplads.</p>
       <button onclick="findUbrugteBilleder()" style="background:#2a7a74;color:#fff;border:none;padding:.55rem 1.6rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;">🔍 Find ubrugte billeder</button>
@@ -6929,7 +6966,7 @@ function switchSubTab(sub, btn) {
 
 function loadSubTab(sub) {
   if (sub === 'anmeldelser') loadAnmeldelserFane();
-  if (sub === 'indstillinger') loadSettings();
+  if (sub === 'indstillinger') { loadSettings(); loadRabatkoder(); }
   if (sub === 'forside') loadForside();
   if (sub === 'ejendommen') loadEjendommensAdmin();
   if (sub === 'udlejning') { loadUdlejningAdmin(); loadSikkerhedAdmin(); }
@@ -16042,6 +16079,187 @@ async function gemSettings() {
   const msg = document.getElementById('settingsSavedMsg');
   if (msg) { msg.style.display = 'inline'; setTimeout(() => msg.style.display = 'none', 3000); }
   showToast('Indstillinger gemt ✓');
+}
+
+/* ── RABATKODER ───────────────────────────────────────────────────────────
+   Tabellen ligger bag RLS og er lukket for anon. Kaldene herfra bærer den
+   indloggede admins token med (sb kommer fra admin-auth.js), så de går
+   igennem; en browser uden login får ingenting.
+
+   Bemærk at antal_brugt IKKE kan redigeres her. Det tal sættes af
+   stripe-webhook, når en booking er betalt — kunne man skrue på det i
+   hånden, ville "12 af 20 brugt" ikke betyde noget. */
+let RABATKODER = [];
+
+function rkDatoTekst(d) {
+  if (!d) return '';
+  const [aar, maaned, dag] = String(d).slice(0, 10).split('-');
+  return `${dag}.${maaned}.${aar}`;
+}
+
+// Hvorfor er koden ikke i brug lige nu? Samme regler som rabat.js bruger
+// serverside — står de to og siger noget forskelligt, er det admin der har
+// vist forkert, ikke gæsten der har tastet forkert.
+function rkStatus(k) {
+  if (!k.aktiv) return { tekst: 'Slået fra', farve: 'rgba(44,35,24,.4)' };
+  const idag = new Date().toISOString().slice(0, 10);
+  if (k.gyldig_fra && String(k.gyldig_fra).slice(0, 10) > idag) {
+    return { tekst: 'Starter ' + rkDatoTekst(k.gyldig_fra), farve: '#b88a1e' };
+  }
+  if (k.gyldig_til && String(k.gyldig_til).slice(0, 10) < idag) {
+    return { tekst: 'Udløbet', farve: '#c05c30' };
+  }
+  if (k.max_brug > 0 && (k.antal_brugt || 0) >= k.max_brug) {
+    return { tekst: 'Opbrugt', farve: '#c05c30' };
+  }
+  return { tekst: 'Aktiv', farve: '#2a7a74' };
+}
+
+async function loadRabatkoder() {
+  const boks = document.getElementById('rk-liste');
+  if (!boks || !sb) return;
+  boks.textContent = 'Indlæser…';
+
+  const { data, error } = await sb.from('rabatkoder')
+    .select('id,kode,procent,beskrivelse,gyldig_fra,gyldig_til,max_brug,antal_brugt,aktiv')
+    .order('created_at', { ascending: false });
+
+  if (error) {
+    boks.innerHTML = '<span style="color:#c05c30;">Kunne ikke hente rabatkoder: ' + error.message
+      + '<br><small>Er sql/2026-08-11-rabatkoder.sql kørt i Supabase?</small></span>';
+    return;
+  }
+
+  RABATKODER = data || [];
+  if (!RABATKODER.length) {
+    boks.innerHTML = '<span style="color:rgba(44,35,24,.45);">Ingen rabatkoder endnu.</span>';
+    return;
+  }
+
+  boks.innerHTML = `
+    <table style="width:100%;border-collapse:collapse;font-family:Manrope,sans-serif;font-size:.74rem;">
+      <thead>
+        <tr style="text-align:left;color:#b88a1e;font-size:.58rem;letter-spacing:.14em;text-transform:uppercase;">
+          <th style="padding:.5rem .4rem;border-bottom:1px solid rgba(184,138,30,.25);">Kode</th>
+          <th style="padding:.5rem .4rem;border-bottom:1px solid rgba(184,138,30,.25);">Rabat</th>
+          <th style="padding:.5rem .4rem;border-bottom:1px solid rgba(184,138,30,.25);">Gyldighed</th>
+          <th style="padding:.5rem .4rem;border-bottom:1px solid rgba(184,138,30,.25);">Brugt</th>
+          <th style="padding:.5rem .4rem;border-bottom:1px solid rgba(184,138,30,.25);">Status</th>
+          <th style="padding:.5rem .4rem;border-bottom:1px solid rgba(184,138,30,.25);"></th>
+        </tr>
+      </thead>
+      <tbody>
+        ${RABATKODER.map(k => {
+          const s = rkStatus(k);
+          const periode = (k.gyldig_fra || k.gyldig_til)
+            ? `${rkDatoTekst(k.gyldig_fra) || '—'} → ${rkDatoTekst(k.gyldig_til) || '—'}`
+            : 'Altid';
+          const brug = k.max_brug > 0 ? `${k.antal_brugt || 0} / ${k.max_brug}` : `${k.antal_brugt || 0}`;
+          return `<tr style="border-bottom:1px solid rgba(44,35,24,.08);">
+            <td style="padding:.6rem .4rem;">
+              <strong style="letter-spacing:.06em;">${rkEsc(k.kode)}</strong>
+              ${k.beskrivelse ? `<br><span style="color:rgba(44,35,24,.45);font-size:.68rem;">${rkEsc(k.beskrivelse)}</span>` : ''}
+            </td>
+            <td style="padding:.6rem .4rem;">${k.procent}%</td>
+            <td style="padding:.6rem .4rem;color:rgba(44,35,24,.6);">${periode}</td>
+            <td style="padding:.6rem .4rem;color:rgba(44,35,24,.6);">${brug}</td>
+            <td style="padding:.6rem .4rem;color:${s.farve};">${s.tekst}</td>
+            <td style="padding:.6rem .4rem;text-align:right;white-space:nowrap;">
+              <button onclick="skiftRabatkode('${k.id}')" style="background:transparent;border:1px solid rgba(44,35,24,.25);color:rgba(44,35,24,.7);padding:.3rem .7rem;font-family:Manrope,sans-serif;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;margin-right:.3rem;">${k.aktiv ? 'Slå fra' : 'Slå til'}</button>
+              <button onclick="sletRabatkode('${k.id}')" style="background:transparent;border:1px solid rgba(192,92,48,.35);color:#c05c30;padding:.3rem .7rem;font-family:Manrope,sans-serif;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;">Slet</button>
+            </td>
+          </tr>`;
+        }).join('')}
+      </tbody>
+    </table>`;
+}
+
+// Koden vises inde i HTML og kan indeholde hvad som helst, admin har tastet.
+function rkEsc(s) {
+  return String(s == null ? '' : s)
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+}
+
+async function opretRabatkode() {
+  if (!sb) return;
+  const kode = (document.getElementById('rk-kode')?.value || '')
+    .trim().replace(/\s+/g, '').toUpperCase();
+  const procent = parseInt(document.getElementById('rk-procent')?.value, 10);
+
+  if (!kode) { showToast('Skriv en kode', true); return; }
+  if (!/^[A-Z0-9ÆØÅ_-]+$/.test(kode)) {
+    showToast('Koden må kun indeholde bogstaver, tal, bindestreg og understreg', true);
+    return;
+  }
+  if (!isFinite(procent) || procent < 1 || procent > 100) {
+    showToast('Rabatten skal være mellem 1 og 100 %', true);
+    return;
+  }
+
+  const fra = document.getElementById('rk-fra')?.value || null;
+  const til = document.getElementById('rk-til')?.value || null;
+  if (fra && til && fra > til) { showToast('"Gyldig til" ligger før "Gyldig fra"', true); return; }
+
+  const maksRaa = parseInt(document.getElementById('rk-maks')?.value, 10);
+  const maks = isFinite(maksRaa) && maksRaa > 0 ? maksRaa : null;
+
+  const { error } = await sb.from('rabatkoder').insert({
+    kode,
+    procent,
+    beskrivelse: document.getElementById('rk-beskrivelse')?.value.trim() || null,
+    gyldig_fra: fra,
+    gyldig_til: til,
+    max_brug: maks,
+    aktiv: true
+  });
+
+  if (error) {
+    // Det unikke indeks på upper(kode) er den typiske årsag — samme kode findes.
+    const dublet = /duplicate|unik|unique/i.test(error.message || '');
+    showToast(dublet ? `Koden "${kode}" findes allerede` : 'Fejl: ' + error.message, true);
+    return;
+  }
+
+  ['rk-kode', 'rk-procent', 'rk-fra', 'rk-til', 'rk-maks', 'rk-beskrivelse']
+    .forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; });
+
+  showToast(`Rabatkode ${kode} oprettet ✓`);
+  loadRabatkoder();
+}
+
+async function skiftRabatkode(id) {
+  if (!sb) return;
+  const k = RABATKODER.find(r => String(r.id) === String(id));
+  if (!k) return;
+  const { error } = await sb.from('rabatkoder').update({ aktiv: !k.aktiv }).eq('id', id);
+  if (error) { showToast('Fejl: ' + error.message, true); return; }
+  showToast(k.aktiv ? `${k.kode} slået fra` : `${k.kode} slået til`);
+  loadRabatkoder();
+}
+
+async function sletRabatkode(id) {
+  if (!sb) return;
+  const k = RABATKODER.find(r => String(r.id) === String(id));
+  if (!k) return;
+
+  // Er koden brugt, står den på bookinger som forklaring på en lavere pris.
+  // Slettes den, mangler forklaringen i regnskabet — så tilbyder vi at slå
+  // den fra i stedet, hvilket har præcis samme virkning fremadrettet.
+  if ((k.antal_brugt || 0) > 0) {
+    await visBekraeft('Koden er i brug',
+      `<strong>${rkEsc(k.kode)}</strong> er brugt på ${k.antal_brugt} booking(er) og forklarer prisen på dem.<br><br>`
+      + 'Slå den hellere <em>fra</em> — så kan ingen bruge den mere, men historikken bevares.');
+    return;
+  }
+
+  await visBekraeft('Slet rabatkode',
+    `Slet <strong>${rkEsc(k.kode)}</strong>? Handlingen kan ikke fortrydes.`);
+
+  const { error } = await sb.from('rabatkoder').delete().eq('id', id);
+  if (error) { showToast('Fejl: ' + error.message, true); return; }
+  showToast(`${k.kode} slettet`);
+  loadRabatkoder();
 }
 
 // Hent settings ved opstart så de er tilgængelige i review popup
