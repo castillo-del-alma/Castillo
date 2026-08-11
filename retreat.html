@@ -1163,7 +1163,8 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:3rem
       <button id="reviewPrev" onclick="scrollReviewsR(-1)" style="position:absolute;left:-2.5rem;top:50%;transform:translateY(-50%);background:rgba(240,232,213,.95);border:1px solid rgba(184,138,30,.3);color:#7a5c14;width:2.8rem;height:2.8rem;border-radius:50%;font-size:1.4rem;cursor:pointer;z-index:10;display:none;">&#8249;</button>
       <button id="reviewNext" onclick="scrollReviewsR(1)" style="position:absolute;right:-2.5rem;top:50%;transform:translateY(-50%);background:rgba(240,232,213,.95);border:1px solid rgba(184,138,30,.3);color:#7a5c14;width:2.8rem;height:2.8rem;border-radius:50%;font-size:1.4rem;cursor:pointer;z-index:10;">&#8250;</button>
       <div class="reviews-grid" id="reviewsGrid">
-      <div style="grid-column:1/-1;text-align:center;padding:2rem;color:rgba(44,35,24,.4);font-size:.85rem;">Henter anmeldelser…</div>
+        <div style="grid-column:1/-1;text-align:center;padding:2rem;color:rgba(44,35,24,.4);font-size:.85rem;">Henter anmeldelser…</div>
+      </div>
     </div>
   </div>
 </section>
@@ -1294,6 +1295,14 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:3rem
           <div class="form-field">
             <label id="labelOensker">Særlige ønsker</label>
             <textarea id="f-kommentar" placeholder="Skriv dine særlige ønsker eller behov"></textarea>
+          </div>
+          <div class="form-field">
+            <label id="labelRabatkode">Rabatkode</label>
+            <div style="display:flex;gap:.6rem;align-items:stretch;">
+              <input id="f-rabatkode" type="text" placeholder="" autocomplete="off" spellcheck="false" style="flex:1;text-transform:uppercase;">
+              <button type="button" id="btnRabatkode" onclick="tjekRabatkode()" style="flex:0 0 auto;white-space:nowrap;background:transparent;border:1px solid rgba(122,31,53,.35);color:var(--wine);padding:0 1.4rem;font-family:'Manrope',sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;">Anvend</button>
+            </div>
+            <div id="rabat-besked" style="display:none;font-size:.78rem;margin-top:.4rem;"></div>
           </div>
           <div id="form-error" style="display:none;font-size:.78rem;color:#c05c30;margin-top:.2rem;"></div>
           <label class="addon-item" style="align-items:flex-start;margin-top:.2rem;">
@@ -1630,6 +1639,11 @@ const STATIC_I18N = {
     labelVaerelse: 'Værelses-præference', optVaelgVaerelse: 'Vælg værelse', optDeltDobbelt: 'Delt dobbeltværelse',
     optDobbelt: 'Dobbeltværelse', optEnkeltForesp: 'Forespørg på enkeltværelse',
     labelOensker: 'Særlige ønsker', placeholderOensker: 'Skriv dine særlige ønsker eller behov',
+    labelRabatkode: 'Rabatkode', placeholderRabatkode: 'Har du en kode?', btnRabatkode: 'Anvend', btnRabatFjern: 'Fjern',
+    rabatOk: 'Rabatkoden er anvendt', rabatUkendt: 'Vi kan ikke finde den kode. Tjek stavemåden.',
+    rabatUdloebet: 'Den kode er desværre udløbet.', rabatIkkeStartet: 'Den kode gælder først senere.',
+    rabatOpbrugt: 'Den kode er desværre brugt op.', rabatTjekker: 'Tjekker…', rabatFejl: 'Koden kunne ikke tjekkes lige nu. Prøv igen.',
+    bvRabatLabel: 'Rabat',
     btnReserverPlads: 'Reserver din plads', btnBookBetal: 'Book og betal', btnBookNuBetal: 'Book nu og betal',
     btnHeroReserver: 'Reserver', btnHeroBook: 'Book nu',
     bvTitle: 'Vælg betalingsform', bvSub: 'Hvor meget ønsker du at betale nu?',
@@ -1652,6 +1666,11 @@ const STATIC_I18N = {
     labelVaerelse: 'Room preference', optVaelgVaerelse: 'Select room', optDeltDobbelt: 'Shared double room',
     optDobbelt: 'Double room', optEnkeltForesp: 'Inquire about single room',
     labelOensker: 'Special requests', placeholderOensker: 'Write any special requests or needs',
+    labelRabatkode: 'Discount code', placeholderRabatkode: 'Got a code?', btnRabatkode: 'Apply', btnRabatFjern: 'Remove',
+    rabatOk: 'Discount code applied', rabatUkendt: "We can't find that code. Please check the spelling.",
+    rabatUdloebet: 'That code has expired.', rabatIkkeStartet: 'That code is not valid yet.',
+    rabatOpbrugt: 'That code has been fully used.', rabatTjekker: 'Checking…', rabatFejl: "The code couldn't be checked right now. Please try again.",
+    bvRabatLabel: 'Discount',
     btnReserverPlads: 'Reserve your spot', btnBookBetal: 'Book and pay', btnBookNuBetal: 'Book now and pay',
     btnHeroReserver: 'Reserve', btnHeroBook: 'Book now',
     bvTitle: 'Choose payment method', bvSub: 'How much would you like to pay now?',
@@ -1707,6 +1726,14 @@ function applyStaticLabels() {
   setText('optEnkeltForesp', SI18N('optEnkeltForesp'));
   setText('labelOensker', SI18N('labelOensker'));
   const oensker = document.getElementById('f-kommentar'); if (oensker) oensker.placeholder = SI18N('placeholderOensker');
+  setText('labelRabatkode', SI18N('labelRabatkode'));
+  const rk = document.getElementById('f-rabatkode'); if (rk) rk.placeholder = SI18N('placeholderRabatkode');
+  // Knappen kan stå på "Fjern", hvis en kode allerede er anvendt. Sproget må
+  // ikke sætte den tilbage til "Anvend" og efterlade en aktiv rabat med en
+  // knap der ikke kan fjerne den.
+  const rkBtn = document.getElementById('btnRabatkode');
+  if (rkBtn) rkBtn.textContent = SI18N(AKTIV_RABAT ? 'btnRabatFjern' : 'btnRabatkode');
+  if (AKTIV_RABAT) visRabatBesked('ok');
   setText('btnReserverPlads', SI18N('btnReserverPlads'));
   setText('btnHeroReserver', SI18N('btnHeroReserver'));
   setText('btnHeroBook', SI18N('btnHeroBook'));
@@ -3000,6 +3027,9 @@ async function sendForespørgsel() {
         nationalitet: document.getElementById('f-land') ? document.getElementById('f-land').value : '',
         kommentar: document.getElementById('f-kommentar') ? document.getElementById('f-kommentar').value : '',
         ekstra_gaester: ekstraGaesterListe,
+        // Kun en kode serveren allerede har sagt god for. Procenten sendes
+        // ikke med — den slås op igen i create-booking.
+        rabatkode: AKTIV_RABAT ? AKTIV_RABAT.kode : null,
         betingelser_accepteret: true
       })
     });
@@ -3038,10 +3068,28 @@ function visBetalingsvalg() {
   showFormError('');
   const ekstraGaesterListe = laesEkstraGaester();
   _bvAntalGaester = 1 + ekstraGaesterListe.length;
-  _bvDepositum = Math.round(RETREAT_PRICE * DEPOSIT_PCT * _bvAntalGaester);
-  _bvFuldt = Math.round(RETREAT_PRICE * _bvAntalGaester);
+
+  // Rabatten trækkes fra HELE ordren, og depositummet regnes af den
+  // rabatterede total. Samme regnestykke som beregnBookingpris() laver
+  // serverside — tallene her skal stemme med det gæsten møder hos Stripe.
+  const fuldPris = Math.round(RETREAT_PRICE * _bvAntalGaester);
+  _bvFuldt = AKTIV_RABAT
+    ? Math.round(fuldPris * (100 - AKTIV_RABAT.procent) / 100)
+    : fuldPris;
+  _bvDepositum = Math.round(_bvFuldt * DEPOSIT_PCT);
+
   document.getElementById('bv-deposit-amount').textContent = _bvDepositum.toLocaleString('da-DK');
   document.getElementById('bv-full-amount').textContent = _bvFuldt.toLocaleString('da-DK');
+
+  const bvRabat = document.getElementById('bv-rabat');
+  if (bvRabat) {
+    if (AKTIV_RABAT) {
+      bvRabat.textContent = `${SI18N('bvRabatLabel')}: ${AKTIV_RABAT.kode} — ${AKTIV_RABAT.procent}% (−€${(fuldPris - _bvFuldt).toLocaleString('da-DK')})`;
+      bvRabat.style.display = 'block';
+    } else {
+      bvRabat.style.display = 'none';
+    }
+  }
   document.getElementById('betalingsvalg-overlay').style.display = 'flex';
 }
 
@@ -3104,6 +3152,7 @@ async function betalDepositum(paymentType = 'deposit', oensketBeloeb = null) {
         departure_date: window.SELECTED_DEPARTURE || CURRENT_RETREAT?.departure_date || '',
         price_per_guest: RETREAT_PRICE,
         deposit_pct: DEPOSIT_PCT,
+        rabatkode: AKTIV_RABAT ? AKTIV_RABAT.kode : null,
         direct_payment: true,
         betingelser_accepteret: true
       }),
@@ -3202,13 +3251,112 @@ function updatePriceDisplay() {
   if (btn && !btn.disabled) {
     btn.textContent = SI18N('btnBookNuBetal');
   }
+  if (AKTIV_RABAT) visRabatBesked('ok');
 }
+
+/* ── RABATKODE ────────────────────────────────────────────────────────────
+   Alt herinde er visning. Hvad rabatten rent faktisk bliver, afgøres i
+   create-booking, som slår koden op i databasen igen — også selvom feltet
+   her har lyst grønt i et kvarter imens gæsten fyldte resten ud. En kode
+   der udløber undervejs giver derfor fuld pris, ikke en fejl.
+
+   AKTIV_RABAT holder KUN den kode der er bekræftet af serveren. Rå tekst i
+   feltet tæller ikke — så en gæst kan ikke skrive noget, lade være med at
+   trykke Anvend, og alligevel få det sendt med som gyldigt. */
+let AKTIV_RABAT = null;   // { kode, procent } når serveren har sagt god for den
+
+function rabatGrundTekst(grund) {
+  const nøgler = {
+    ukendt: 'rabatUkendt',
+    udloebet: 'rabatUdloebet',
+    ikke_startet: 'rabatIkkeStartet',
+    opbrugt: 'rabatOpbrugt',
+    tom: 'rabatUkendt',
+  };
+  return SI18N(nøgler[grund] || 'rabatFejl');
+}
+
+function visRabatBesked(art, tekst) {
+  const boks = document.getElementById('rabat-besked');
+  if (!boks) return;
+  if (!art) { boks.style.display = 'none'; boks.textContent = ''; return; }
+
+  if (art === 'ok' && AKTIV_RABAT) {
+    const antalGaester = 1 + document.querySelectorAll('.guest-row').length;
+    const fuld = Math.round(RETREAT_PRICE * antalGaester);
+    const spar = fuld - Math.round(fuld * (100 - AKTIV_RABAT.procent) / 100);
+    boks.style.color = '#2a7a74';
+    boks.textContent = `✓ ${SI18N('rabatOk')}: ${AKTIV_RABAT.kode} — ${AKTIV_RABAT.procent}% (−€${spar.toLocaleString('da-DK')})`;
+  } else {
+    boks.style.color = art === 'venter' ? 'rgba(44,35,24,.5)' : '#c05c30';
+    boks.textContent = tekst || '';
+  }
+  boks.style.display = 'block';
+}
+
+function fjernRabat() {
+  AKTIV_RABAT = null;
+  const felt = document.getElementById('f-rabatkode');
+  if (felt) { felt.value = ''; felt.disabled = false; }
+  const btn = document.getElementById('btnRabatkode');
+  if (btn) { btn.textContent = SI18N('btnRabatkode'); btn.disabled = false; }
+  visRabatBesked(null);
+}
+
+async function tjekRabatkode() {
+  const felt = document.getElementById('f-rabatkode');
+  const btn = document.getElementById('btnRabatkode');
+  if (!felt) return;
+
+  if (AKTIV_RABAT) { fjernRabat(); return; }
+
+  const kode = felt.value.trim();
+  if (!kode) { visRabatBesked(null); return; }
+
+  if (btn) btn.disabled = true;
+  visRabatBesked('venter', SI18N('rabatTjekker'));
+
+  try {
+    const res = await fetch('/.netlify/functions/tjek-rabatkode', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ kode }),
+    });
+    const data = await res.json();
+
+    if (data && data.gyldig) {
+      AKTIV_RABAT = { kode: data.kode, procent: data.procent };
+      felt.value = data.kode;
+      felt.disabled = true;
+      if (btn) { btn.textContent = SI18N('btnRabatFjern'); btn.disabled = false; }
+      visRabatBesked('ok');
+    } else {
+      AKTIV_RABAT = null;
+      if (btn) btn.disabled = false;
+      visRabatBesked('fejl', rabatGrundTekst(data && data.grund));
+    }
+  } catch (e) {
+    AKTIV_RABAT = null;
+    if (btn) btn.disabled = false;
+    visRabatBesked('fejl', SI18N('rabatFejl'));
+  }
+}
+
+// Enter i feltet skal anvende koden, ikke sende formularen.
+document.addEventListener('DOMContentLoaded', () => {
+  const felt = document.getElementById('f-rabatkode');
+  if (!felt) return;
+  felt.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') { e.preventDefault(); tjekRabatkode(); }
+  });
+});
 </script>
 <div id="betalingsvalg-overlay">
   <div class="bv-box">
     <p class="bv-eyebrow">Castillo del Alma</p>
     <h3 class="bv-title" id="bvTitle">Vælg betalingsform</h3>
     <p class="bv-sub" id="bvSub">Hvor meget ønsker du at betale nu?</p>
+    <p id="bv-rabat" style="display:none;font-size:.74rem;color:#2a7a74;margin:0 0 .8rem;"></p>
     <button class="bv-btn bv-btn-primary" onclick="gennemfoerBetaling('deposit')"><span id="bvDepositLabel">Depositum (30%) —</span> €<span id="bv-deposit-amount">—</span></button>
     <button class="bv-btn bv-btn-secondary" onclick="gennemfoerBetaling('full')"><span id="bvFullLabel">Fuldt beløb —</span> €<span id="bv-full-amount">—</span></button>
     <hr class="bv-divider">
