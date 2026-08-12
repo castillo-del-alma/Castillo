@@ -968,7 +968,7 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:3rem
   <div class="section-inner">
     <div class="overview-grid">
       <div class="overview-text reveal-left">
-        <span class="section-label">Om retreatet</span>
+        <span class="section-label" id="aboutLabel">Om retreatet</span>
         <h2 id="aboutHeading">Et frirum fra hverdagens tempo</h2>
         <div id="aboutTextContainer"></div>
       </div>
@@ -1026,8 +1026,8 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:3rem
 <section class="program" id="program">
   <div class="section-inner">
     <div class="reveal">
-      <span class="section-label">Program</span>
-      <h2>En uge for dig selv</h2>
+      <span class="section-label" id="programLabel">Program</span>
+      <h2 id="programHeading">En uge for dig selv</h2>
     </div>
     <div class="program-days reveal d1" id="programDaysContainer"></div>
   </div>
@@ -1630,6 +1630,7 @@ const STATIC_I18N = {
   da: {
     reviewsLabel: 'Gæsternes oplevelser', reviewsHeading: 'Hvad siger vores <em>gæster</em>',
     includedLabel: 'Hvad er inkluderet', includedHeading: 'Alt hvad du behøver',
+    aboutLabel: 'Om retreatet', programLabel: 'Program', programHeading: 'En uge for dig selv',
     includedYesHeading: '<span>✓</span> Inkluderet i prisen', includedNoHeading: '<span>✗</span> Ikke inkluderet',
     faqLabel: 'Ofte stillede spørgsmål',
     bookLabel: 'Book dit retreat', bookIntro2: 'Har du spørgsmål inden du tilmelder dig, er du altid velkommen til at skrive eller ringe.',
@@ -1657,6 +1658,7 @@ const STATIC_I18N = {
   en: {
     reviewsLabel: "Guests' experiences", reviewsHeading: 'What our <em>guests</em> say',
     includedLabel: "What's included", includedHeading: 'Everything you need',
+    aboutLabel: 'About the retreat', programLabel: 'Programme', programHeading: 'A week for yourself',
     includedYesHeading: '<span>✓</span> Included in the price', includedNoHeading: '<span>✗</span> Not included',
     faqLabel: 'Frequently asked questions',
     bookLabel: 'Book your retreat', bookIntro2: 'If you have questions before signing up, feel free to write or call us anytime.',
@@ -1692,17 +1694,21 @@ function applyStaticLabels() {
   setText('rt_footer_terms', retreatLang === 'en' ? 'Terms of Sale & Booking' : 'Salgsbetingelser');
   setText('rt_footer_privacy', retreatLang === 'en' ? 'Privacy Policy' : 'Persondatapolitik');
   setText('rt_footer_legal', retreatLang === 'en' ? 'Legal Notice' : 'Juridisk meddelelse');
-  setText('rt_footer_back', retreatLang === 'en' ? '← Back to the front page' : '← Tilbage til forsiden');
-  setText('reviewsLabel', SI18N('reviewsLabel'));
-  const rh = document.getElementById('reviewsHeading'); if (rh) rh.innerHTML = SI18N('reviewsHeading');
-  setText('includedLabel', SI18N('includedLabel'));
-  setText('includedHeading', SI18N('includedHeading'));
-  const iy = document.getElementById('includedYesHeading'); if (iy) iy.innerHTML = SI18N('includedYesHeading');
-  const inh = document.getElementById('includedNoHeading'); if (inh) inh.innerHTML = SI18N('includedNoHeading');
-  setText('faqLabel', SI18N('faqLabel'));
+  setText('rt_footer_back', rSC('ui_back_link', retreatLang === 'en' ? '← Back to the front page' : '← Tilbage til forsiden'));
+  // Sektion-labels og overskrifter: admin-felt først, statisk DA/EN som fallback
+  setText('reviewsLabel', rSC('ui_label_reviews', SI18N('reviewsLabel')));
+  const rh = document.getElementById('reviewsHeading'); if (rh) rh.innerHTML = rSC('ui_reviews_heading', SI18N('reviewsHeading'));
+  setText('includedLabel', rSC('ui_label_included', SI18N('includedLabel')));
+  setText('includedHeading', rSC('ui_included_section_heading', SI18N('includedHeading')));
+  const iy = document.getElementById('includedYesHeading'); if (iy) iy.innerHTML = rSC('ui_included_heading', SI18N('includedYesHeading'));
+  const inh = document.getElementById('includedNoHeading'); if (inh) inh.innerHTML = rSC('ui_excluded_heading', SI18N('includedNoHeading'));
+  setText('aboutLabel', rSC('ui_label_about', SI18N('aboutLabel')));
+  setText('programLabel', rSC('ui_label_program', SI18N('programLabel')));
+  setText('programHeading', rSC('ui_program_heading', SI18N('programHeading')));
+  setText('faqLabel', rSC('ui_label_faq', SI18N('faqLabel')));
   document.querySelectorAll('.retreat-cta-heading').forEach(el => el.textContent = SI18N('ctaHeading'));
   document.querySelectorAll('.retreat-cta-btn').forEach(el => el.textContent = SI18N('ctaBtn'));
-  setText('bookLabel', SI18N('bookLabel'));
+  setText('bookLabel', rSC('ui_label_booking', SI18N('bookLabel')));
   setText('bookIntro2', SI18N('bookIntro2'));
   setText('labelRetreat', SI18N('labelRetreat'));
   setText('labelFornavn', SI18N('labelFornavn'));
@@ -1761,13 +1767,13 @@ function applyStaticLabels() {
   setText('barDurationLabel', rSC('ui_label_duration', SI18N('barDurationLabel')));
   setText('barArrivalLabel', rSC('ui_label_arrival', SI18N('barArrivalLabel')));
   setText('barDepartureLabel', rSC('ui_label_departure', SI18N('barDepartureLabel')));
-  setText('barFraLabel', SI18N('barFraLabel'));
-  setText('barPerLabel', SI18N('barPerLabel'));
+  setText('barFraLabel', rSC('ui_price_from', SI18N('barFraLabel')));
+  setText('barPerLabel', rSC('ui_price_per_person', SI18N('barPerLabel')));
 
   // Quick-facts boks (samme Varighed-felt genbruges)
-  setText('quickFactsHeading', SI18N('quickFactsHeading'));
+  setText('quickFactsHeading', rSC('ui_retreat_info_heading', SI18N('quickFactsHeading')));
   setText('factDurationLabel', rSC('ui_label_duration', SI18N('factDurationLabel')));
-  setText('factMaxGuestsLabel', SI18N('factMaxGuestsLabel'));
+  setText('factMaxGuestsLabel', rSC('ui_label_guests', SI18N('factMaxGuestsLabel')));
   setText('factLevelLabel', SI18N('factLevelLabel'));
   setText('factLanguagesLabel', SI18N('factLanguagesLabel'));
   setText('factLocationLabel', SI18N('factLocationLabel'));

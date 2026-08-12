@@ -6365,14 +6365,11 @@ feeling more calm – and coming home to yourself again."</textarea></div>
     <div class="fc-block" id="ra_vaerelser" style="margin-bottom:1.5rem;">
       <div class="fc-block-header" style="display:flex;align-items:center;gap:.8rem;"><span class="fc-block-title">9 · Værelser & priser</span><button type="button" onclick="oversaetBlok(this)" style="background:rgba(58,110,106,.1);border:1px solid rgba(58,110,106,.35);color:#2a7a74;padding:.3rem .8rem;font-family:Manrope,sans-serif;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;margin-left:auto;" title="Oversæt tomme engelske felter i denne sektion">⇄ Oversæt</button></div>
       <div class="fc-block-body">
-        <div class="fc-row">
-          <div><label class="fc-label fc-label-da">Sektionsoverskrift (DA)</label><input type="text" id="ui_rooms_heading" class="fc-input-da" placeholder="Vælg dit værelse"></div>
-          <div><label class="fc-label fc-label-en">Section heading (EN)</label><input type="text" id="ui_rooms_heading_en" class="fc-input-en" placeholder="Choose Your Room"></div>
-        </div>
-        <div class="fc-row">
-          <div><label class="fc-label fc-label-da">Rum-intro tekst (DA)</label><textarea id="ui_rooms_intro" class="fc-input-da fc-textarea" rows="2" placeholder="Alle værelser har eget badeværelse og er fuldt inkluderet i retreatprisen."></textarea></div>
-          <div><label class="fc-label fc-label-en">Rooms intro text (EN)</label><textarea id="ui_rooms_intro_en" class="fc-input-en fc-textarea" rows="2" placeholder="All rooms have en-suite bathrooms and are fully included in the retreat price."></textarea></div>
-        </div>
+        <p style="font-size:.7rem;color:rgba(44,35,24,.45);margin-bottom:1rem;padding:.6rem .8rem;background:rgba(184,138,30,.06);border-left:2px solid rgba(184,138,30,.35);">Overskrift og intro over værelserne redigeres under <strong>Ejendommen</strong> &rarr; blok 4 &middot; Værelserne, fordi retreat-siderne viser ejendommens 7 værelser. Herunder sættes kun priserne for dette retreat.</p>
+        <input type="text" id="ui_rooms_heading" style="display:none">
+        <input type="text" id="ui_rooms_heading_en" style="display:none">
+        <textarea id="ui_rooms_intro" style="display:none"></textarea>
+        <textarea id="ui_rooms_intro_en" style="display:none"></textarea>
         <p style="font-size:.7rem;color:rgba(44,35,24,.4);margin:1rem 0 .5rem;">Værelsetyper og priser — tilføj op til 6 typer:</p>
         <div id="roomPricingListe" style="display:flex;flex-direction:column;gap:.5rem;"></div>
         <button type="button" onclick="tilfoejVaerelse()" style="margin-top:.6rem;background:rgba(42,122,116,.08);border:1px solid rgba(42,122,116,.2);color:#2a7a74;padding:.5rem 1rem;font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;width:100%;">+ Tilføj værelses-type</button>
