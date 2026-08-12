@@ -5782,24 +5782,16 @@ feeling more calm – and coming home to yourself again."</textarea></div>
     <!-- Skjulte felter bruges af udfyldRetreatForm og gemRetreat -->
     <input type="number" id="retreat_room_double_price" style="display:none">
     <input type="number" id="retreat_room_single_price" style="display:none">
-    <input type="text" id="ui_teacher_heading_en" style="display:none">
     <input type="text" id="ui_label_guests" style="display:none">
-    <input type="text" id="ui_retreat_info_heading" style="display:none">
     <input type="text" id="ui_label_guests_en" style="display:none">
-    <input type="text" id="ui_retreat_info_heading_en" style="display:none">
     <input type="number" id="ui_price_from" style="display:none">
     <input type="number" id="ui_price_from_en" style="display:none">
     <input type="number" id="ui_price_per_person" style="display:none">
     <input type="number" id="ui_price_per_person_en" style="display:none">
-    <input type="text" id="ui_excluded_heading" style="display:none">
-    <input type="text" id="ui_excluded_heading_en" style="display:none">
-    <input type="text" id="ui_rooms_heading" style="display:none">
-    <input type="text" id="ui_rooms_heading_en" style="display:none">
     <input type="text" id="ui_room_double_heading" style="display:none">
     <input type="text" id="ui_room_double_heading_en" style="display:none">
     <input type="text" id="ui_room_single_heading" style="display:none">
     <input type="text" id="ui_room_single_heading_en" style="display:none">
-    <input type="text" id="ui_teacher_heading" style="display:none">
     <input type="text" id="ui_book_label_retreat" style="display:none">
     <input type="text" id="ui_book_label_country" style="display:none">
     <input type="text" id="ui_book_label_date" style="display:none">
@@ -5849,8 +5841,6 @@ feeling more calm – and coming home to yourself again."</textarea></div>
       <input type="text" id="ui_form_reserve_btn_en" style="display:none">
       <input type="text" id="ui_form_select_country" style="display:none">
       <input type="text" id="ui_form_select_country_en" style="display:none">
-      <input type="text" id="ui_included_section_heading" style="display:none">
-      <input type="text" id="ui_included_section_heading_en" style="display:none">
       <input type="text" id="ui_label_booking" style="display:none">
       <input type="text" id="ui_label_booking_en" style="display:none">
       <input type="text" id="ui_label_faq" style="display:none">
@@ -5871,10 +5861,6 @@ feeling more calm – and coming home to yourself again."</textarea></div>
       <input type="text" id="ui_payment_sub_en" style="display:none">
       <input type="text" id="ui_policy_note" style="display:none">
       <input type="text" id="ui_policy_note_en" style="display:none">
-      <input type="text" id="ui_reviews_heading" style="display:none">
-      <input type="text" id="ui_reviews_heading_en" style="display:none">
-      <input type="text" id="ui_reviews_subheading" style="display:none">
-      <input type="text" id="ui_reviews_subheading_en" style="display:none">
       <input type="text" id="retreat_teacher_name" style="display:none">
       <input type="text" id="ui_highlight1_title" style="display:none">
       <input type="text" id="ui_highlight1_title_en" style="display:none">
@@ -6262,6 +6248,10 @@ feeling more calm – and coming home to yourself again."</textarea></div>
       <div class="fc-block-body">
         <p style="font-size:.7rem;color:rgba(44,35,24,.4);margin-bottom:1rem;">Labels i den farvet info-bar øverst på retreat-siden.</p>
         <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Info-boks overskrift (DA)</label><input type="text" id="ui_retreat_info_heading" class="fc-input-da" placeholder="Retreat info"></div>
+          <div><label class="fc-label fc-label-en">Info box heading (EN)</label><input type="text" id="ui_retreat_info_heading_en" class="fc-input-en" placeholder="Retreat Info"></div>
+        </div>
+        <div class="fc-row">
           <div><label class="fc-label fc-label-da">Varighed-label (DA)</label><input type="text" id="ui_label_duration" class="fc-input-da" placeholder="Varighed"></div>
           <div><label class="fc-label fc-label-en">Duration label (EN)</label><input type="text" id="ui_label_duration_en" class="fc-input-en" placeholder="Duration"></div>
         </div>
@@ -6346,8 +6336,16 @@ feeling more calm – and coming home to yourself again."</textarea></div>
       <div class="fc-block-header" style="display:flex;align-items:center;gap:.8rem;"><span class="fc-block-title">8 · Inkluderet / Ikke inkluderet</span><button type="button" onclick="oversaetBlok(this)" style="background:rgba(58,110,106,.1);border:1px solid rgba(58,110,106,.35);color:#2a7a74;padding:.3rem .8rem;font-family:Manrope,sans-serif;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;margin-left:auto;" title="Oversæt tomme engelske felter i denne sektion">⇄ Oversæt</button></div>
       <div class="fc-block-body">
         <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Sektionsoverskrift (DA)</label><input type="text" id="ui_included_section_heading" class="fc-input-da" placeholder="Alt hvad du behøver"></div>
+          <div><label class="fc-label fc-label-en">Section heading (EN)</label><input type="text" id="ui_included_section_heading_en" class="fc-input-en" placeholder="Everything you need"></div>
+        </div>
+        <div class="fc-row">
           <div><label class="fc-label fc-label-da">Inkluderet-overskrift (DA)</label><input type="text" id="ui_included_heading" class="fc-input-da" placeholder="✓ Inkluderet i prisen"></div>
           <div><label class="fc-label fc-label-en">Included heading (EN)</label><input type="text" id="ui_included_heading_en" class="fc-input-en" placeholder="✓ Included in the price"></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Ikke inkluderet-overskrift (DA)</label><input type="text" id="ui_excluded_heading" class="fc-input-da" placeholder="✗ Ikke inkluderet"></div>
+          <div><label class="fc-label fc-label-en">Not included heading (EN)</label><input type="text" id="ui_excluded_heading_en" class="fc-input-en" placeholder="✗ Not included"></div>
         </div>
         <div class="fc-row">
           <div><label class="fc-label fc-label-da">Inkluderet (DA) — ét punkt per linje</label><textarea id="retreat_included" class="fc-input-da fc-textarea" rows="5" placeholder="6 overnatninger&#10;Alle måltider&#10;Morgen breathwork og yoga&#10;Guidede meditationer&#10;Sauna og saunagus&#10;Fri WiFi"></textarea></div>
@@ -6367,6 +6365,10 @@ feeling more calm – and coming home to yourself again."</textarea></div>
     <div class="fc-block" id="ra_vaerelser" style="margin-bottom:1.5rem;">
       <div class="fc-block-header" style="display:flex;align-items:center;gap:.8rem;"><span class="fc-block-title">9 · Værelser & priser</span><button type="button" onclick="oversaetBlok(this)" style="background:rgba(58,110,106,.1);border:1px solid rgba(58,110,106,.35);color:#2a7a74;padding:.3rem .8rem;font-family:Manrope,sans-serif;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;margin-left:auto;" title="Oversæt tomme engelske felter i denne sektion">⇄ Oversæt</button></div>
       <div class="fc-block-body">
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Sektionsoverskrift (DA)</label><input type="text" id="ui_rooms_heading" class="fc-input-da" placeholder="Vælg dit værelse"></div>
+          <div><label class="fc-label fc-label-en">Section heading (EN)</label><input type="text" id="ui_rooms_heading_en" class="fc-input-en" placeholder="Choose Your Room"></div>
+        </div>
         <div class="fc-row">
           <div><label class="fc-label fc-label-da">Rum-intro tekst (DA)</label><textarea id="ui_rooms_intro" class="fc-input-da fc-textarea" rows="2" placeholder="Alle værelser har eget badeværelse og er fuldt inkluderet i retreatprisen."></textarea></div>
           <div><label class="fc-label fc-label-en">Rooms intro text (EN)</label><textarea id="ui_rooms_intro_en" class="fc-input-en fc-textarea" rows="2" placeholder="All rooms have en-suite bathrooms and are fully included in the retreat price."></textarea></div>
@@ -6418,6 +6420,10 @@ feeling more calm – and coming home to yourself again."</textarea></div>
         </label>
       <button type="button" onclick="event.stopPropagation(); oversaetBlok(this)" style="background:rgba(58,110,106,.1);border:1px solid rgba(58,110,106,.35);color:#2a7a74;padding:.3rem .8rem;font-family:Manrope,sans-serif;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;margin-left:auto;flex-shrink:0;" title="Oversæt tomme engelske felter i denne sektion">⇄ Oversæt</button></div>
       <div class="fc-block-body">
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Sektionsoverskrift (DA)</label><input type="text" id="ui_teacher_heading" class="fc-input-da" placeholder="Din guide på rejsen"></div>
+          <div><label class="fc-label fc-label-en">Section heading (EN)</label><input type="text" id="ui_teacher_heading_en" class="fc-input-en" placeholder="Your Guide on the Journey"></div>
+        </div>
         <div class="fc-row">
           <div><label class="fc-label fc-label-da">Titel/rolle (DA)</label><input type="text" id="ui_facilitator_role" class="fc-input-da" placeholder="Wellness Facilitator · Breathwork Practitioner"></div>
           <div><label class="fc-label fc-label-en">Title/role (EN)</label><input type="text" id="ui_facilitator_role_en" class="fc-input-en" placeholder="Wellness Facilitator · Breathwork Practitioner"></div>
@@ -6475,7 +6481,25 @@ feeling more calm – and coming home to yourself again."</textarea></div>
       </div>
     </div>
 
-    <!-- 12 · HIGHLIGHTS -->
+    <!-- 12 · ANMELDELSER (overskrifter) -->
+    <div class="fc-block" id="ra_anmeldelser_tekst" style="margin-bottom:1.5rem;">
+      <div class="fc-block-header" style="display:flex;align-items:center;gap:.8rem;"><span class="fc-block-title">12 &middot; Anmeldelser (overskrifter)</span><button type="button" onclick="oversaetBlok(this)" style="background:rgba(58,110,106,.1);border:1px solid rgba(58,110,106,.35);color:#2a7a74;padding:.3rem .8rem;font-family:Manrope,sans-serif;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;margin-left:auto;" title="Oversæt tomme engelske felter i denne sektion">⇄ Oversæt</button></div>
+      <div class="fc-block-body">
+        <p style="font-size:.7rem;color:rgba(44,35,24,.4);margin-bottom:1rem;">Overskrifterne over anmeldelserne på retreat-siden. Selve anmeldelserne redigeres under &quot;Se anmeldelser&quot;.</p>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Sektionsoverskrift (DA)</label><input type="text" id="ui_reviews_heading" class="fc-input-da" placeholder="Hvad siger vores gæster"></div>
+          <div><label class="fc-label fc-label-en">Section heading (EN)</label><input type="text" id="ui_reviews_heading_en" class="fc-input-en" placeholder="What our guests say"></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Underoverskrift (DA)</label><input type="text" id="ui_reviews_subheading" class="fc-input-da" placeholder="Gæsternes oplevelser"></div>
+          <div><label class="fc-label fc-label-en">Subheading (EN)</label><input type="text" id="ui_reviews_subheading_en" class="fc-input-en" placeholder="Guest Experiences"></div>
+        </div>
+        <div style="text-align:right;margin-top:1rem;padding-top:.8rem;border-top:1px solid rgba(184,138,30,.12);">
+          <button type="button" onclick="gemRetreat()" style="background:var(--wine);color:#fff;border:none;padding:.5rem 1.4rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;">💾 Gem retreat</button><button type="button" onclick="gemRetreatOgLuk()" style="background:#2a7a74;color:#fff;border:none;padding:.5rem 1.4rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;margin-left:.6rem;">💾 Gem og luk</button>
+        </div>
+      </div>
+    </div>
+
 
     <!-- 13 · BOOKING-SEKTION -->
     <div class="fc-block" id="ra_booking" style="margin-bottom:1.5rem;">
