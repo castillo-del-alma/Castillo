@@ -304,6 +304,34 @@ section{padding:8rem 0;}
 .split-img{aspect-ratio:4/3;overflow:hidden;}
 .split-img img{width:100%;height:100%;object-fit:cover;}
 
+/* ── INTRO MED BILLEDER ──
+   Uden billeder står intro'en som i dag: én smal tekstspalte. Er der
+   uploadet billeder i admin, får wrapperen .med-billeder og bliver to
+   kolonner i den almindelige bredde (1320 px) — tekst til venstre og en
+   collage til højre, hvor det lille billede lapper ind over det store.
+   En tynd guldramme bag det store billede binder det til sidens streger. */
+.intro-wrap.med-billeder{
+  max-width:1320px;display:grid;
+  grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);
+  gap:5.5rem;align-items:center;
+}
+.intro-billeder{position:relative;padding:0 0 16% 14%;}
+.intro-img{overflow:hidden;background:var(--sand);}
+.intro-img img{width:100%;height:100%;object-fit:cover;display:block;transition:transform 1.2s ease;}
+.intro-img:hover img{transform:scale(1.03);}
+.intro-img-1{position:relative;aspect-ratio:4/5;}
+.intro-img-2{
+  position:absolute;left:0;bottom:0;width:54%;aspect-ratio:4/3;z-index:2;
+  border:10px solid var(--cream);box-shadow:0 18px 40px rgba(44,35,24,.18);
+}
+.intro-billeder::before{
+  content:'';position:absolute;top:-1.4rem;right:-1.4rem;width:55%;height:55%;
+  border:1px solid var(--gold);opacity:.55;pointer-events:none;
+}
+/* Kun ét billede: ingen collage, bare ét rent billede */
+.intro-billeder.enkelt{padding:0;}
+.intro-billeder.enkelt .intro-img-2{position:relative;width:100%;border:none;box-shadow:none;}
+
 /* ── LISTE ── */
 /* To ekstra billeder under det store i beliggenheds-sektionen.
    65/35 i bredden med luft imellem. Det brede sætter rækkens højde, og
@@ -497,6 +525,11 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--gold);outline-offse
   .hero-scroll{display:none;}
   .split{grid-template-columns:1fr;gap:2.4rem;}
   .sted-smaa{gap:.8rem;margin-top:.8rem;}
+  .intro-wrap.med-billeder{grid-template-columns:1fr;gap:3rem;}
+  .intro-billeder{padding:0 0 18% 10%;}
+  .intro-img-1{aspect-ratio:1/1;}
+  .intro-img-2{border-width:6px;}
+  .intro-billeder::before{top:-.8rem;right:-.8rem;}
   .foto-stribe{padding:calc(var(--stribe-top,2rem) * .6) 0 calc(var(--stribe-bund,2rem) * .6);}
   /* Inline-stilene fra JS skal vige på mobil, derfor !important */
   .foto-stribe-grid{grid-template-columns:repeat(2,1fr) !important;max-width:none !important;gap:.4rem;}
@@ -568,7 +601,8 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--gold);outline-offse
 
 <!-- INTRO -->
 <section id="sec-intro">
-  <div class="narrow">
+  <div class="narrow intro-wrap" id="g_intro_wrap">
+   <div class="intro-tekst">
     <span class="eyebrow" id="g_intro_label">What this is</span>
     <h2 id="g_intro_h2">A wine estate, not a hotel</h2>
     <p class="lede" id="g_intro_lede">Castillo del Alma is a restored estate with more than four hectares of vineyard, set in the hills above Mollina in the province of Málaga. Twice a year we close it entirely and hand it to one group of gay men.</p>
@@ -577,6 +611,12 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--gold);outline-offse
       <p>Nobody is passing through. There is no lobby, no other guests, no schedule you have to share with strangers. Sixteen men, one house, one week — which is what makes the difference between a holiday and a retreat.</p>
       <p>The days hold real content: sauna rituals, cacao ceremonies, breathwork, tantra, bodywork and long conversations that go somewhere. They also hold a pool, a vineyard, a shared table and enough silence to hear yourself think. Both retreats are led in a way that leaves room for men who have never done any of this before.</p>
     </div>
+   </div>
+   <!-- To billeder, der lapper ind over hinanden. Styres i admin (blok 3). -->
+   <div class="intro-billeder" id="g_intro_billeder" style="display:none;">
+     <div class="intro-img intro-img-1" id="g_intro_img1_wrap"><img id="g_intro_image1" alt="" loading="lazy" style="display:none;"></div>
+     <div class="intro-img intro-img-2" id="g_intro_img2_wrap"><img id="g_intro_image2" alt="" loading="lazy" style="display:none;"></div>
+   </div>
   </div>
 </section>
 
@@ -989,6 +1029,8 @@ const GAY_SEED = {
     "omos_image2": "",
     "omos_image3": "",
     "sted_image": "/img/vinmark1.jpg",
+    "intro_image1": "",
+    "intro_image2": "",
     "sted_image2": "",
     "sted_image3": "",
     "cta_link": "#retreats",
@@ -1112,6 +1154,24 @@ function applyGayContent() {
   gSet('g_intro_h2',    gaySC('intro_h2'));
   gSet('g_intro_lede',  gaySC('intro_lede'));
   gSetAfsnit('g_intro_text', gaySC('intro_text'));
+  // To billeder til højre for teksten. Ingen billeder = den smalle tekstspalte
+  // som før. Kun ét = ét rent billede uden overlap.
+  (function () {
+    const u1 = gayData.intro_image1, u2 = gayData.intro_image2;
+    const alt = String(gaySC('intro_h2') || 'Castillo del Alma').replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
+    [[1, u1], [2, u2]].forEach(function (p) {
+      gSetImg('g_intro_image' + p[0], p[1]);
+      const img = document.getElementById('g_intro_image' + p[0]);
+      if (img) img.alt = p[1] ? alt : '';
+      const wrap = document.getElementById('g_intro_img' + p[0] + '_wrap');
+      if (wrap) wrap.style.display = p[1] ? '' : 'none';
+    });
+    const antal = [u1, u2].filter(Boolean).length;
+    const bil = document.getElementById('g_intro_billeder');
+    if (bil) { bil.style.display = antal ? '' : 'none'; bil.classList.toggle('enkelt', antal === 1); }
+    const iw = document.getElementById('g_intro_wrap');
+    if (iw) iw.classList.toggle('med-billeder', antal > 0);
+  })();
 
   gSet('g_retreats_label', gaySC('retreats_label'));
   gSet('g_retreats_h2',    gaySC('retreats_h2'));
