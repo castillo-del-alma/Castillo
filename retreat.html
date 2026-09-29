@@ -412,7 +412,7 @@ body.menu-open .nav-burger span:nth-child(3){ transform:translateY(-9px) rotate(
   max-height:0;overflow:hidden;
   transition:max-height .5s cubic-bezier(.23,1,.32,1);
 }
-.program-day.open .program-day-body{max-height:500px;}
+.program-day.open .program-day-body{max-height:none;}
 .program-day-content{
   padding:0 2rem 2rem;
   border-top:1px solid rgba(184,138,30,.1);
@@ -629,7 +629,7 @@ body.menu-open .nav-burger span:nth-child(3){ transform:translateY(-9px) rotate(
   max-height:0;overflow:hidden;
   transition:max-height .4s cubic-bezier(.23,1,.32,1);
 }
-.faq-item.open .faq-a{max-height:300px;}
+.faq-item.open .faq-a{max-height:none;}
 .faq-a p{
   padding:0 1.8rem 1.5rem;
   font-family:'Cormorant Garamond',serif;font-size:1rem;
@@ -1428,15 +1428,29 @@ function setHeroImage(url) {
 }
 
 // Program accordion
+// Accordion: højde måles ud fra indholdet, så lange tekster aldrig klippes (mobil)
+function accToggle(item, bodySel){
+  const b = item.querySelector(bodySel);
+  if (!b) { item.classList.toggle('open'); return; }
+  if (item.classList.contains('open')) {
+    b.style.maxHeight = b.scrollHeight + 'px';
+    void b.offsetHeight;
+    item.classList.remove('open');
+    b.style.maxHeight = '0px';
+  } else {
+    item.classList.add('open');
+    b.style.maxHeight = b.scrollHeight + 'px';
+    const done = e => { if (e.propertyName === 'max-height' && item.classList.contains('open')) b.style.maxHeight = 'none'; b.removeEventListener('transitionend', done); };
+    b.addEventListener('transitionend', done);
+  }
+}
 function toggleDay(header){
-  const day = header.parentElement;
-  day.classList.toggle('open');
+  accToggle(header.parentElement, '.program-day-body');
 }
 
 // FAQ accordion
 function toggleFaq(q){
-  const item = q.parentElement;
-  item.classList.toggle('open');
+  accToggle(q.parentElement, '.faq-a');
 }
 
 let REVIEWS_CACHE_R = [];
