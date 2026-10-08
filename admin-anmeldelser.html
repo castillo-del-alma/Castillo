@@ -3759,6 +3759,58 @@ feeling more calm – and coming home to yourself again."</textarea></div>
               <div style="text-align:right;margin-top:1.2rem;padding-top:1rem;border-top:1px solid rgba(184,138,30,.18);"><button type="button" onclick="gemGay()" style="background:var(--wine);color:#fff;border:none;padding:.5rem 1.4rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;">💾 Gem</button><button type="button" onclick="gemGayOgSeSiden()" style="background:#2a7a74;color:#fff;border:none;padding:.5rem 1.4rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;margin-left:.6rem;">💾 Gem og se siden</button></div>
 </div>
     </div>
+    <div class="fc-block" id="gayblok_3b" style="margin-bottom:1.5rem;">
+      <div class="fc-block-header" style="display:flex;align-items:center;gap:.8rem;"><span class="fc-block-title">3b · The ALMA Model (billede + fem temaer)</span><button type="button" onclick="oversaetBlok(this)" style="background:rgba(58,110,106,.1);border:1px solid rgba(58,110,106,.35);color:#2a7a74;padding:.3rem .8rem;font-family:Manrope,sans-serif;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;margin-left:auto;" title="Oversæt tomme engelske felter i denne sektion">⇄ Oversæt</button></div>
+      <div class="fc-block-body">
+        <div style="font-size:.68rem;color:rgba(44,35,24,.55);line-height:1.6;margin-bottom:.8rem;">
+          Ligger under Intro. Billedet i den ene kolonne, tekst og temaer i den anden. Synlighed og placering på siden styres i <b>blok 0</b>.<br>
+          <b>Temaer:</b> én linje pr. punkt — <code>ikon | NAVN | tekst</code>. Ikoner: <code>glas</code> 🍷, <code>lotus</code> 🪷, <code>flamme</code> 🔥, <code>spiral</code> 🌀, <code>blad</code> 🍃.<br>
+          Uden ikon (<code>NAVN | tekst</code>) eller bare én tekst på linjen bliver det en almindelig bullet med guldprik. &lt;b&gt; og &lt;em&gt; virker.
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Overlinje</label><input type="text" id="gay_alma_label_da" class="fc-input-da"></div>
+          <div><label class="fc-label fc-label-en">Eyebrow</label><input type="text" id="gay_alma_label_en" class="fc-input-en"></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Overskrift</label><input type="text" id="gay_alma_h2_da" class="fc-input-da"></div>
+          <div><label class="fc-label fc-label-en">Heading</label><input type="text" id="gay_alma_h2_en" class="fc-input-en"></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Manchet (stor tekst)</label><textarea id="gay_alma_lede_da" class="fc-input-da fc-textarea" rows="3"></textarea></div>
+          <div><label class="fc-label fc-label-en">Lede (large text)</label><textarea id="gay_alma_lede_en" class="fc-input-en fc-textarea" rows="3"></textarea></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Temaer — ikon | NAVN | tekst</label><textarea id="gay_alma_items_da" class="fc-input-da fc-textarea" rows="7"></textarea></div>
+          <div><label class="fc-label fc-label-en">Themes — icon | NAME | text</label><textarea id="gay_alma_items_en" class="fc-input-en fc-textarea" rows="7"></textarea></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Afsluttende linje (kursiv)</label><input type="text" id="gay_alma_close_da" class="fc-input-da"></div>
+          <div><label class="fc-label fc-label-en">Closing line (italic)</label><input type="text" id="gay_alma_close_en" class="fc-input-en"></div>
+        </div>
+        <div class="fc-row">
+          <div style="grid-column:1 / -1;">
+            <label class="fc-label">Billede</label>
+            <input type="text" id="gay_alma_image_url" class="fc-input-da" placeholder="URL indsættes automatisk ved upload">
+            <div style="display:flex;gap:.6rem;align-items:center;margin-top:.5rem;">
+              <img id="gay_alma_image_preview" src="" style="display:none;width:56px;height:56px;object-fit:contain;border:1px solid rgba(184,138,30,.3);">
+              <input type="file" id="gay_alma_image_file" accept="image/*" style="font-size:.76rem;flex:1;">
+              <button type="button" onclick="uploadRetreatBillede('gay_alma_image_file','gay_alma_image_url','gay_alma_image_preview')" style="background:#2a7a74;color:#fff;border:none;padding:.45rem 1.1rem;font-family:Manrope,sans-serif;font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;white-space:nowrap;">⬆ Upload</button><button type="button" onclick="fjernBilledeFelt('gay_alma_image_url','gay_alma_image_preview')" style="background:rgba(163,51,51,.08);color:#a33;border:1px solid rgba(163,51,51,.35);padding:.45rem .9rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;white-space:nowrap;" title="Fjern billedet helt">🗑 Fjern</button>
+            </div>
+            <div style="font-size:.64rem;color:rgba(44,35,24,.45);line-height:1.5;margin-top:.4rem;">PNG/WebP med gennemsigtig baggrund ser bedst ud. Uden billede fylder teksten hele bredden.</div>
+          </div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label">Billedets placering</label>
+            <select id="gay_alma_side" class="fc-input-da"><option value="venstre">Venstre (tekst til højre)</option><option value="hoejre">Højre (tekst til venstre)</option></select>
+          </div>
+          <div><label class="fc-label">Billedets størrelse — <span id="gay_alma_size_vis">46</span> % af bredden</label>
+            <input type="range" id="gay_alma_size" min="25" max="65" step="1" value="46" oninput="var _v=document.getElementById('gay_alma_size_vis');if(_v)_v.textContent=this.value;" style="width:100%;">
+            <div style="font-size:.64rem;color:rgba(44,35,24,.45);line-height:1.5;">På mobil står billedet altid øverst i fuld bredde.</div>
+          </div>
+        </div>
+              <div style="text-align:right;margin-top:1.2rem;padding-top:1rem;border-top:1px solid rgba(184,138,30,.18);"><button type="button" onclick="gemGay()" style="background:var(--wine);color:#fff;border:none;padding:.5rem 1.4rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;">💾 Gem</button><button type="button" onclick="gemGayOgSeSiden()" style="background:#2a7a74;color:#fff;border:none;padding:.5rem 1.4rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;margin-left:.6rem;">💾 Gem og se siden</button></div>
+</div>
+    </div>
     <div class="fc-block" id="gayblok_4" style="margin-bottom:1.5rem;">
       <div class="fc-block-header" style="display:flex;align-items:center;gap:.8rem;"><span class="fc-block-title">4 · Retreats (overskrift over kortene)</span><button type="button" onclick="oversaetBlok(this)" style="background:rgba(58,110,106,.1);border:1px solid rgba(58,110,106,.35);color:#2a7a74;padding:.3rem .8rem;font-family:Manrope,sans-serif;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;margin-left:auto;" title="Oversæt tomme engelske felter i denne sektion">⇄ Oversæt</button></div>
       <div class="fc-block-body">
@@ -11719,9 +11771,11 @@ async function gemUdlejning() {
 // Samme mønster som udlejningssiden: nøgle/værdi i gay_content, dansk uden
 // suffiks, engelsk med _en. Siden har egne defaults, så tomme felter betyder
 // "brug sidens standardtekst" — ikke "vis ingenting".
-const GAY_TEXT_KEYS = ["seo_title", "seo_desc", "nav_back", "hero_eyebrow", "hero_h1", "hero_text", "hero_scroll", "intro_label", "intro_h2", "intro_lede", "intro_text", "retreats_label", "retreats_h2", "retreats_intro", "uge_label", "uge_h2", "uge_intro", "ejendom_label", "ejendom_h2", "ejendom_text", "sted_label", "sted_h2", "sted_text", "sted_text2", "faq_label", "faq_h2", "omos_label", "omos_h2", "omos_text", "omos_signatur", "omos_billedlabel", "anmeldelser_label", "anmeldelser_h2", "cta_h2", "cta_text", "cta_btn", "footer_copy"];
-const GAY_IMG_KEYS  = ["social_image", "hero_image", "ejendom_image", "sted_image", "sted_image2", "sted_image3", "intro_image1", "intro_image2", "omos_image1", "omos_image2", "omos_image3"];
-const GAY_SOLO_KEYS = ["cta_link"];
+const GAY_TEXT_KEYS = ["seo_title", "seo_desc", "nav_back", "hero_eyebrow", "hero_h1", "hero_text", "hero_scroll", "intro_label", "intro_h2", "intro_lede", "intro_text", "alma_label", "alma_h2", "alma_lede", "alma_items", "alma_close", "retreats_label", "retreats_h2", "retreats_intro", "uge_label", "uge_h2", "uge_intro", "ejendom_label", "ejendom_h2", "ejendom_text", "sted_label", "sted_h2", "sted_text", "sted_text2", "faq_label", "faq_h2", "omos_label", "omos_h2", "omos_text", "omos_signatur", "omos_billedlabel", "anmeldelser_label", "anmeldelser_h2", "cta_h2", "cta_text", "cta_btn", "footer_copy"];
+const GAY_IMG_KEYS  = ["social_image", "hero_image", "ejendom_image", "sted_image", "sted_image2", "sted_image3", "intro_image1", "intro_image2", "alma_image", "omos_image1", "omos_image2", "omos_image3"];
+const GAY_SOLO_KEYS = ["cta_link", "alma_side", "alma_size"];
+// Standard for felter uden gemt værdi (ellers står vælgeren tom)
+const GAY_SOLO_DEFAULTS = { alma_side: "venstre", alma_size: "46" };
 // Synligheden sættes nu i rækkefølge-editoren (blok 12), ikke som løse flueben
 const GAY_VIS_KEYS  = ["vis_intro", "vis_retreats", "vis_uge", "vis_ejendom", "vis_sted", "vis_faq", "vis_cta"];
 
@@ -11935,6 +11989,11 @@ const GAY_LISTE_DEFAULTS = {
 };
 
 const GAY_ADM_DEFAULTS = {
+    "alma_label": "ALMA-modellen",
+    "alma_h2": "Fem veje hjem til dig selv",
+    "alma_lede": "Hvert retreat på Castillo del Alma er vævet af de samme fem tråde. Du vælger selv, hvor dybt du går ind i hver af dem.",
+    "alma_items": "glas | TASTE | Lange borde, vin fra vores egne stokke og mad, der smager af Andalusien.\\nlotus | RESTORE | Sauna, pool, kropsarbejde og stilhed nok til, at nervesystemet kan lande.\\nflamme | PLAY | Latter, leg og den lethed, de fleste af os har glemt, at vi måtte have.\\nspiral | CONNECT | Breathwork, tantra og ærlige cirkler — nærhed mellem mænd, uden pres.\\nblad | EXPLORE | Vandreture, hvide landsbyer og kløfterne i Málaga-provinsen.",
+    "alma_close": "Intet er obligatorisk. Alt er tilbudt.",
     "seo_title": "Gay Retreat i Spanien — wellness og vin nær Málaga, Andalusien",
     "seo_desc": "Gay retreats for mænd på en vinejendom i Mollina, 45 minutter fra Málaga. Saunaritualer, kakaoceremonier, breathwork og fællesskab — syv dage i de andalusiske bakker.",
     "_nav_links_gammel": "Retreats|#retreats\nUgen|#week\nEjendommen|#estate\nSådan kommer du hertil|#location\nFAQ|#faq",
@@ -11980,6 +12039,11 @@ const GAY_ADM_DEFAULTS = {
   };
 
 const GAY_ADM_DEFAULTS_EN = {
+    "alma_label": "The ALMA Model",
+    "alma_h2": "Five ways to come home to yourself",
+    "alma_lede": "Every retreat at Castillo del Alma is woven from the same five threads. You choose how deep you go into each.",
+    "alma_items": "glas | TASTE | Long tables, wine from our own vines and food that tastes of Andalusia.\\nlotus | RESTORE | Sauna, pool, bodywork and enough silence to let the nervous system land.\\nflamme | PLAY | Laughter, games and the lightness most of us forgot we were allowed.\\nspiral | CONNECT | Breathwork, tantra and honest circles — closeness between men, without pressure.\\nblad | EXPLORE | Hikes, white villages and the gorges of Málaga province.",
+    "alma_close": "Nothing is mandatory. Everything is offered.",
     "seo_title": "Gay Retreat in Spain — Wellness & Wine Estate near Málaga, Andalusia",
     "seo_desc": "Gay retreats for men on a working wine estate in Mollina, 45 minutes from Málaga. Sauna rituals, cacao ceremonies, breathwork and community — seven days in the Andalusian hills.",
     "nav_links": "Retreats|#retreats\nThe week|#week\nThe estate|#estate\nGetting here|#location\nFAQ|#faq",
@@ -12032,6 +12096,7 @@ const GAY_IMG_DEFAULTS = {
     "sted_image3": "",
     "intro_image1": "",
     "intro_image2": "",
+    "alma_image": "/img/alma-model-castillo.webp",
     "omos_image1": "/img/erik-michael-castillo-del-alma.webp",
     "omos_image2": "",
     "omos_image3": ""
@@ -12258,6 +12323,7 @@ function gayNavTilfoej() { gayNavState.push({ tekst: '', tekst_en: '', link: '',
 // ── Rækkefølge og synlighed (blok 0) ──
 const GAY_SEKTION_DEFS = [
   { id: 'sec-intro', navn: 'Intro — "En vinejendom, ikke et hotel"', key: 'vis_intro' },
+  { id: 'alma',      navn: 'The ALMA Model — billede + fem temaer',   key: 'vis_alma' },
   { id: 'strip1',    navn: 'Billedstribe 1',                          key: 'vis_strip1' },
   { id: 'retreats',  navn: 'Retreats (kortene)',                      key: 'vis_retreats' },
   { id: 'week',      navn: 'Ugen',                                    key: 'vis_uge' },
@@ -12378,12 +12444,15 @@ async function loadGayAdmin() {
   });
   GAY_SOLO_KEYS.forEach(key => {
     const el = document.getElementById('gay_' + key);
-    if (el) el.value = map[key] || '';
+    if (el) el.value = map[key] || GAY_SOLO_DEFAULTS[key] || '';
   });
+  { const _sv = document.getElementById('gay_alma_size_vis'), _s = document.getElementById('gay_alma_size');
+    if (_sv && _s) _sv.textContent = _s.value; }
   GAY_IMG_KEYS.forEach(key => {
     const el = document.getElementById('gay_' + key + '_url');
     if (!el) return;
-    const val = map[key] || GAY_IMG_DEFAULTS[key] || ''; // Fallback: dagens billede
+    // alma_image: en gemt tom værdi betyder "fjernet" — ikke "brug standard"
+    const val = (key === 'alma_image' && map[key] !== undefined && map[key] !== null) ? map[key] : (map[key] || GAY_IMG_DEFAULTS[key] || '');
     el.value = val;
     const pv = document.getElementById('gay_' + key + '_preview');
     if (pv) {

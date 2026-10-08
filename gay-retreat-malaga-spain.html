@@ -551,6 +551,29 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--gold);outline-offse
   footer{padding:2.4rem 1.5rem;}
   .footer-bottom{flex-direction:column;align-items:flex-start;}
 }
+
+/* ── ALMA-MODELLEN — billede + fem temaer med ikoner ── */
+#alma{padding-top:3rem;}
+.alma-wrap{max-width:1180px;margin:0 auto;padding:0 4rem;display:grid;grid-template-columns:var(--alma-w,46%) 1fr;gap:clamp(2.5rem,5vw,5rem);align-items:center;}
+.alma-wrap.billede-hoejre{grid-template-columns:1fr var(--alma-w,46%);}
+.alma-wrap.billede-hoejre .alma-billede{order:2;}
+.alma-wrap.uden-billede{grid-template-columns:1fr;max-width:888px;}
+.alma-billede img{width:100%;height:auto;display:block;filter:drop-shadow(0 18px 30px rgba(44,35,24,.18));}
+.alma-liste{list-style:none;padding:0;margin:0;display:grid;gap:1.25rem;}
+.alma-liste li{display:grid;grid-template-columns:auto 1fr;gap:1.1rem;align-items:start;}
+.alma-ikon{width:46px;height:46px;border:1px solid rgba(184,138,30,.45);border-radius:50%;display:grid;place-items:center;color:var(--gold);flex-shrink:0;}
+.alma-ikon svg{width:24px;height:24px;}
+.alma-ikon.prik{width:46px;height:auto;border:0;padding-top:.75rem;}
+.alma-ikon.prik::before{content:'';width:7px;height:7px;border-radius:50%;background:var(--gold);}
+.alma-navn{display:block;font-family:'Cinzel',serif;font-weight:500;font-size:.95rem;letter-spacing:.16em;color:var(--wine);margin:.15rem 0 .2rem;}
+.alma-liste p{font-size:1.15rem;line-height:1.55;color:var(--text-mid);margin:0;}
+.alma-liste li.uden-navn p{padding-top:.55rem;}
+.alma-afslut{margin-top:1.8rem;font-style:italic;font-size:1.2rem;color:var(--text-mid);}
+@media (max-width:900px){
+  .alma-wrap,.alma-wrap.billede-hoejre{grid-template-columns:1fr;padding:0 1.5rem;}
+  .alma-wrap.billede-hoejre .alma-billede{order:0;}
+  .alma-billede{max-width:460px;width:100%;margin:0 auto;}
+}
 </style>
 </head>
 <body>
@@ -617,6 +640,27 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--gold);outline-offse
      <div class="intro-img intro-img-1" id="g_intro_img1_wrap"><img id="g_intro_image1" alt="" loading="lazy" style="display:none;"></div>
      <div class="intro-img intro-img-2" id="g_intro_img2_wrap"><img id="g_intro_image2" alt="" loading="lazy" style="display:none;"></div>
    </div>
+  </div>
+</section>
+
+<!-- ALMA-MODELLEN — billede + fem temaer. Styres i admin (blok 3b). -->
+<section id="alma">
+  <div class="alma-wrap" id="g_alma_wrap">
+    <div class="alma-billede" id="g_alma_billede"><img id="g_alma_image" src="/img/alma-model-castillo.webp" alt="The ALMA Model: Taste, Restore, Play, Connect, Explore" width="774" height="824" loading="lazy"></div>
+    <div class="alma-tekst">
+      <span class="eyebrow" id="g_alma_label">The ALMA Model</span>
+      <h2 id="g_alma_h2">Five ways to come home to yourself</h2>
+      <p class="lede" id="g_alma_lede">Every retreat at Castillo del Alma is woven from the same five threads. You choose how deep you go into each.</p>
+      <div class="rule"></div>
+      <ul class="alma-liste" id="g_alma_items">
+      <li><span class="alma-ikon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 3h10c0 5-2 8-5 8s-5-3-5-8z"/><path d="M7.5 6.5h9"/><path d="M12 11v8M8 21h8"/></svg></span><div><span class="alma-navn">TASTE</span><p>Long tables, wine from our own vines and food that tastes of Andalusia.</p></div></li>
+      <li><span class="alma-ikon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5c2 2.5 2 7 0 10c-2-3-2-7.5 0-10z"/><path d="M12 15c-3-.5-5-3-5.5-6.5c2.5.3 4.5 2 5.5 4.5M12 15c3-.5 5-3 5.5-6.5c-2.5.3-4.5 2-5.5 4.5"/><path d="M12 15c-4 0-7-1.5-9-4c2.5-.5 4.5 0 6 1M12 15c4 0 7-1.5 9-4c-2.5-.5-4.5 0-6 1"/><path d="M7 18.5h10"/></svg></span><div><span class="alma-navn">RESTORE</span><p>Sauna, pool, bodywork and enough silence to let the nervous system land.</p></div></li>
+      <li><span class="alma-ikon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3c1 3 5 5.5 5 10a5 5 0 0 1-10 0c0-2.5 1.5-4 2.5-5c0 2 1 3 2 3c-.5-3 0-5.5.5-8z"/><path d="M12 20.5a2.2 2.2 0 0 1-2.2-2.2c0-1.5 1.2-2.3 2.2-3.8c1 1.5 2.2 2.3 2.2 3.8a2.2 2.2 0 0 1-2.2 2.2z"/></svg></span><div><span class="alma-navn">PLAY</span><p>Laughter, games and the lightness most of us forgot we were allowed.</p></div></li>
+      <li><span class="alma-ikon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 12c0-.8.7-1.2 1.3-1c1 .3 1.3 1.6.7 2.4c-.9 1.2-2.9 1.1-3.8-.1c-1.2-1.6-.6-3.9 1-4.9c2.1-1.3 4.9-.5 6 1.6c1.4 2.6.3 5.9-2.3 7.2c-3.1 1.5-6.9.2-8.3-2.9c-1.6-3.5 0-7.6 3.4-9.1c3.9-1.7 8.4.1 10 3.9"/></svg></span><div><span class="alma-navn">CONNECT</span><p>Breathwork, tantra and honest circles — closeness between men, without pressure.</p></div></li>
+      <li><span class="alma-ikon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20c0-9 6-15 16-16c0 10-6 16-16 16z"/><path d="M4 20L16 8M9 15l-.3-3.5M12 12l3.3.2"/></svg></span><div><span class="alma-navn">EXPLORE</span><p>Hikes, white villages and the gorges of Málaga province.</p></div></li>
+      </ul>
+      <p class="alma-afslut" id="g_alma_close">Nothing is mandatory. Everything is offered.</p>
+    </div>
   </div>
 </section>
 
@@ -1043,8 +1087,22 @@ const GAY_SEED = {
   "strip1_images": "[]",
     "strip2_images": "[]",
     "strip3_images": "[]",
-    "sektion_orden": "[\"sec-intro\",\"strip1\",\"retreats\",\"week\",\"estate\",\"strip2\",\"location\",\"faq\",\"strip3\",\"omos\",\"anmeldelser\",\"sec-cta\"]",
+    "sektion_orden": "[\"sec-intro\",\"alma\",\"strip1\",\"retreats\",\"week\",\"estate\",\"strip2\",\"location\",\"faq\",\"strip3\",\"omos\",\"anmeldelser\",\"sec-cta\"]",
     "vis_pride_stribe": "1",
+    "alma_label": "ALMA-modellen",
+    "alma_h2": "Fem veje hjem til dig selv",
+    "alma_lede": "Hvert retreat på Castillo del Alma er vævet af de samme fem tråde. Du vælger selv, hvor dybt du går ind i hver af dem.",
+    "alma_items": "glas | TASTE | Lange borde, vin fra vores egne stokke og mad, der smager af Andalusien.\nlotus | RESTORE | Sauna, pool, kropsarbejde og stilhed nok til, at nervesystemet kan lande.\nflamme | PLAY | Latter, leg og den lethed, de fleste af os har glemt, at vi måtte have.\nspiral | CONNECT | Breathwork, tantra og ærlige cirkler — nærhed mellem mænd, uden pres.\nblad | EXPLORE | Vandreture, hvide landsbyer og kløfterne i Málaga-provinsen.",
+    "alma_close": "Intet er obligatorisk. Alt er tilbudt.",
+    "alma_label_en": "The ALMA Model",
+    "alma_h2_en": "Five ways to come home to yourself",
+    "alma_lede_en": "Every retreat at Castillo del Alma is woven from the same five threads. You choose how deep you go into each.",
+    "alma_items_en": "glas | TASTE | Long tables, wine from our own vines and food that tastes of Andalusia.\nlotus | RESTORE | Sauna, pool, bodywork and enough silence to let the nervous system land.\nflamme | PLAY | Laughter, games and the lightness most of us forgot we were allowed.\nspiral | CONNECT | Breathwork, tantra and honest circles — closeness between men, without pressure.\nblad | EXPLORE | Hikes, white villages and the gorges of Málaga province.",
+    "alma_close_en": "Nothing is mandatory. Everything is offered.",
+    "alma_image": "/img/alma-model-castillo.webp",
+    "alma_side": "venstre",
+    "alma_size": "46",
+    "vis_alma": "1",
     "vis_intro": "1",
     "vis_strip1": "1",
     "vis_strip2": "1",
@@ -1061,14 +1119,14 @@ const GAY_SEED = {
 
 // Sektionens id på siden ← nøglen der styrer synlighed
 const GAY_SEKTIONER = {
-  'sec-intro': 'vis_intro', 'strip1': 'vis_strip1', 'retreats': 'vis_retreats',
+  'sec-intro': 'vis_intro', 'alma': 'vis_alma', 'strip1': 'vis_strip1', 'retreats': 'vis_retreats',
   'week': 'vis_uge', 'estate': 'vis_ejendom', 'strip2': 'vis_strip2',
   'location': 'vis_sted', 'faq': 'vis_faq', 'strip3': 'vis_strip3',
   'omos': 'vis_omos', 'anmeldelser': 'vis_anmeldelser', 'sec-cta': 'vis_cta'
 };
 // Standardrækkefølgen. Admin kan bytte om, men nye sektioner falder altid
 // tilbage på deres plads her, så en gemt rækkefølge ikke taber dem.
-const GAY_STANDARD_ORDEN = ['sec-intro','strip1','retreats','week','estate','strip2','location','faq','strip3','omos','anmeldelser','sec-cta'];
+const GAY_STANDARD_ORDEN = ['sec-intro','alma','strip1','retreats','week','estate','strip2','location','faq','strip3','omos','anmeldelser','sec-cta'];
 // Accentfarver på striberne — samme palet som resten af sitet
 const GAY_STRIBE_FARVER = ['var(--wine)','var(--gold)','var(--teal)','var(--terracotta)','var(--olive)'];
 
@@ -1128,6 +1186,61 @@ function gEsc(t) {
     .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 }
 
+
+// ── ALMA-modellen: én linje pr. tema, "ikon | NAVN | tekst". Ikon og navn
+// kan udelades; en linje uden kendt ikon får en guldprik som bullet.
+const GAY_ALMA_IKONER = {
+  glas: '<path d="M7 3h10c0 5-2 8-5 8s-5-3-5-8z"/><path d="M7.5 6.5h9"/><path d="M12 11v8M8 21h8"/>',
+  lotus: '<path d="M12 5c2 2.5 2 7 0 10c-2-3-2-7.5 0-10z"/><path d="M12 15c-3-.5-5-3-5.5-6.5c2.5.3 4.5 2 5.5 4.5M12 15c3-.5 5-3 5.5-6.5c-2.5.3-4.5 2-5.5 4.5"/><path d="M12 15c-4 0-7-1.5-9-4c2.5-.5 4.5 0 6 1M12 15c4 0 7-1.5 9-4c-2.5-.5-4.5 0-6 1"/><path d="M7 18.5h10"/>',
+  flamme: '<path d="M12 3c1 3 5 5.5 5 10a5 5 0 0 1-10 0c0-2.5 1.5-4 2.5-5c0 2 1 3 2 3c-.5-3 0-5.5.5-8z"/><path d="M12 20.5a2.2 2.2 0 0 1-2.2-2.2c0-1.5 1.2-2.3 2.2-3.8c1 1.5 2.2 2.3 2.2 3.8a2.2 2.2 0 0 1-2.2 2.2z"/>',
+  spiral: '<path d="M12 12c0-.8.7-1.2 1.3-1c1 .3 1.3 1.6.7 2.4c-.9 1.2-2.9 1.1-3.8-.1c-1.2-1.6-.6-3.9 1-4.9c2.1-1.3 4.9-.5 6 1.6c1.4 2.6.3 5.9-2.3 7.2c-3.1 1.5-6.9.2-8.3-2.9c-1.6-3.5 0-7.6 3.4-9.1c3.9-1.7 8.4.1 10 3.9"/>',
+  blad: '<path d="M4 20c0-9 6-15 16-16c0 10-6 16-16 16z"/><path d="M4 20L16 8M9 15l-.3-3.5M12 12l3.3.2"/>'
+};
+function gayAlmaIkon(k) {
+  return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + GAY_ALMA_IKONER[k] + '</svg>';
+}
+function applyGayAlma() {
+  gSet('g_alma_label', gaySC('alma_label'));
+  gSet('g_alma_h2',    gaySC('alma_h2'));
+  gSet('g_alma_lede',  gaySC('alma_lede'));
+  const afslut = document.getElementById('g_alma_close');
+  if (afslut) { const v = gaySC('alma_close'); afslut.innerHTML = v || ''; afslut.style.display = v ? '' : 'none'; }
+  const ul = document.getElementById('g_alma_items');
+  if (ul) {
+    const raekker = String(gaySC('alma_items') || '').split('\n').map(l => l.trim()).filter(Boolean).map(l => {
+      const f = l.split('|').map(x => x.trim());
+      let ikon = '';
+      if (f.length > 1 && GAY_ALMA_IKONER[f[0].toLowerCase()]) ikon = f.shift().toLowerCase();
+      const tekst = f.pop() || '';
+      const navn = f.join(' ');
+      return { ikon: ikon, navn: navn, tekst: tekst };
+    });
+    ul.innerHTML = raekker.map(r =>
+      '<li' + (r.navn ? '' : ' class="uden-navn"') + '>' +
+        (r.ikon ? '<span class="alma-ikon">' + gayAlmaIkon(r.ikon) + '</span>' : '<span class="alma-ikon prik"></span>') +
+        '<div>' + (r.navn ? '<span class="alma-navn">' + r.navn + '</span>' : '') + '<p>' + r.tekst + '</p></div>' +
+      '</li>').join('');
+    ul.style.display = raekker.length ? '' : 'none';
+  }
+  const wrap = document.getElementById('g_alma_wrap');
+  const img = document.getElementById('g_alma_image');
+  const bil = document.getElementById('g_alma_billede');
+  const url = gayData.alma_image;
+  if (img) {
+    if (url) { img.src = url; img.alt = String(gaySC('alma_label') || 'The ALMA Model').replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim() + ' — Castillo del Alma'; }
+    else img.removeAttribute('src');
+  }
+  if (bil) bil.style.display = url ? '' : 'none';
+  if (wrap) {
+    wrap.classList.toggle('uden-billede', !url);
+    wrap.classList.toggle('billede-hoejre', gayData.alma_side === 'hoejre');
+    let st = parseFloat(gayData.alma_size);
+    if (isNaN(st)) st = 46;
+    st = Math.max(25, Math.min(65, st));
+    wrap.style.setProperty('--alma-w', st + '%');
+  }
+}
+
 function applyGayContent() {
   document.documentElement.lang = gayLang;
 
@@ -1172,6 +1285,8 @@ function applyGayContent() {
     const iw = document.getElementById('g_intro_wrap');
     if (iw) iw.classList.toggle('med-billeder', antal > 0);
   })();
+
+  applyGayAlma();
 
   gSet('g_retreats_label', gaySC('retreats_label'));
   gSet('g_retreats_h2',    gaySC('retreats_h2'));
@@ -1487,7 +1602,8 @@ async function loadGayContent() {
     bestemGayStartsprog()
   ]);
   if (svar[0].status === 'fulfilled' && svar[0].value && svar[0].value.data) {
-    svar[0].value.data.forEach(r => { if (r.value !== null && r.value !== '') gayData[r.key] = r.value; });
+    // alma_image må gerne være tom: så har Erik fjernet billedet med vilje
+    svar[0].value.data.forEach(r => { if (r.value !== null && (r.value !== '' || r.key === 'alma_image')) gayData[r.key] = r.value; });
   } else if (svar[0].status === 'rejected') {
     console.warn('gay_content hentning fejlede (er tabellen oprettet?):', svar[0].reason);
   }
