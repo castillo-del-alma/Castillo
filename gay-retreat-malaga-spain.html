@@ -1207,7 +1207,7 @@ function applyGayAlma() {
   if (afslut) { const v = gaySC('alma_close'); afslut.innerHTML = v || ''; afslut.style.display = v ? '' : 'none'; }
   const ul = document.getElementById('g_alma_items');
   if (ul) {
-    const raekker = String(gaySC('alma_items') || '').split('\n').map(l => l.trim()).filter(Boolean).map(l => {
+    const raekker = String(gaySC('alma_items') || '').split(/\r?\n|\\n/).map(l => l.trim()).filter(Boolean).map(l => {
       const f = l.split('|').map(x => x.trim());
       let ikon = '';
       if (f.length > 1 && GAY_ALMA_IKONER[f[0].toLowerCase()]) ikon = f.shift().toLowerCase();

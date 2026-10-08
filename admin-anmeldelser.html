@@ -11992,7 +11992,7 @@ const GAY_ADM_DEFAULTS = {
     "alma_label": "ALMA-modellen",
     "alma_h2": "Fem veje hjem til dig selv",
     "alma_lede": "Hvert retreat på Castillo del Alma er vævet af de samme fem tråde. Du vælger selv, hvor dybt du går ind i hver af dem.",
-    "alma_items": "glas | TASTE | Lange borde, vin fra vores egne stokke og mad, der smager af Andalusien.\\nlotus | RESTORE | Sauna, pool, kropsarbejde og stilhed nok til, at nervesystemet kan lande.\\nflamme | PLAY | Latter, leg og den lethed, de fleste af os har glemt, at vi måtte have.\\nspiral | CONNECT | Breathwork, tantra og ærlige cirkler — nærhed mellem mænd, uden pres.\\nblad | EXPLORE | Vandreture, hvide landsbyer og kløfterne i Málaga-provinsen.",
+    "alma_items": "glas | TASTE | Lange borde, vin fra vores egne stokke og mad, der smager af Andalusien.\nlotus | RESTORE | Sauna, pool, kropsarbejde og stilhed nok til, at nervesystemet kan lande.\nflamme | PLAY | Latter, leg og den lethed, de fleste af os har glemt, at vi måtte have.\nspiral | CONNECT | Breathwork, tantra og ærlige cirkler — nærhed mellem mænd, uden pres.\nblad | EXPLORE | Vandreture, hvide landsbyer og kløfterne i Málaga-provinsen.",
     "alma_close": "Intet er obligatorisk. Alt er tilbudt.",
     "seo_title": "Gay Retreat i Spanien — wellness og vin nær Málaga, Andalusien",
     "seo_desc": "Gay retreats for mænd på en vinejendom i Mollina, 45 minutter fra Málaga. Saunaritualer, kakaoceremonier, breathwork og fællesskab — syv dage i de andalusiske bakker.",
@@ -12042,7 +12042,7 @@ const GAY_ADM_DEFAULTS_EN = {
     "alma_label": "The ALMA Model",
     "alma_h2": "Five ways to come home to yourself",
     "alma_lede": "Every retreat at Castillo del Alma is woven from the same five threads. You choose how deep you go into each.",
-    "alma_items": "glas | TASTE | Long tables, wine from our own vines and food that tastes of Andalusia.\\nlotus | RESTORE | Sauna, pool, bodywork and enough silence to let the nervous system land.\\nflamme | PLAY | Laughter, games and the lightness most of us forgot we were allowed.\\nspiral | CONNECT | Breathwork, tantra and honest circles — closeness between men, without pressure.\\nblad | EXPLORE | Hikes, white villages and the gorges of Málaga province.",
+    "alma_items": "glas | TASTE | Long tables, wine from our own vines and food that tastes of Andalusia.\nlotus | RESTORE | Sauna, pool, bodywork and enough silence to let the nervous system land.\nflamme | PLAY | Laughter, games and the lightness most of us forgot we were allowed.\nspiral | CONNECT | Breathwork, tantra and honest circles — closeness between men, without pressure.\nblad | EXPLORE | Hikes, white villages and the gorges of Málaga province.",
     "alma_close": "Nothing is mandatory. Everything is offered.",
     "seo_title": "Gay Retreat in Spain — Wellness & Wine Estate near Málaga, Andalusia",
     "seo_desc": "Gay retreats for men on a working wine estate in Mollina, 45 minutes from Málaga. Sauna rituals, cacao ceremonies, breathwork and community — seven days in the Andalusian hills.",
@@ -12439,6 +12439,7 @@ async function loadGayAdmin() {
       let val = map[lang === 'da' ? key : key + '_en'];
       // Fallback: dagens tekst fra siden, hvis databasen er tom
       if (!val) val = (lang === 'da' ? GAY_ADM_DEFAULTS[key] : GAY_ADM_DEFAULTS_EN[key]) || '';
+      if (key === 'alma_items') val = String(val).replace(/\\n/g, '\n');   // gammel fejl: "\n" som tekst
       el.value = val;
     });
   });
