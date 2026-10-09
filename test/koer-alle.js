@@ -27,6 +27,7 @@ const TESTS = [
   ['Billeder',     'billeder.js'],
   ['Torremolinos', 'torremolinos.js'],
   ['Servergengivelse', 'servergengivelse.js'],
+  ['AI-søgning', 'ai-soegning.js'],
 ];
 
 const resultat = [];

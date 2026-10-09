@@ -15,7 +15,14 @@ const FALLBACK_IMG = 'https://castillodelalma.es/img/castillo-del-alma-social-12
 // danske HTML på /en/ (inkl. canonical → /), tolkede /en/ som dublet af
 // forsiden og indekserede den aldrig. Nu får Google/Bing m.fl. engelsk
 // titel, beskrivelse, canonical og lang="en" direkte i den rå HTML.
-const BOT_RE = /facebookexternalhit|facebot|twitterbot|linkedinbot|whatsapp|slackbot|telegrambot|discordbot|pinterest|embedly|quora link preview|skypeuripreview|vkshare|redditbot|applebot|googlebot|bingbot|duckduckbot|yandex|baiduspider/i;
+// AI-SØGNING (Bølge 6): ChatGPT, Claude, Perplexity m.fl. henter også den rå
+// HTML uden at køre JavaScript. Uden dem på listen fik de dansk titel og en
+// canonical mod den danske side på /en/-adresserne — og læste derfor den
+// engelske side som en dublet. Både træningsrobotter (GPTBot, ClaudeBot) og
+// de robotter, der henter sider live under et svar (ChatGPT-User,
+// Claude-User, Perplexity-User), er med.
+const BOT_RE = /facebookexternalhit|facebot|twitterbot|linkedinbot|whatsapp|slackbot|telegrambot|discordbot|pinterest|embedly|quora link preview|skypeuripreview|vkshare|redditbot|applebot|googlebot|bingbot|duckduckbot|yandex|baiduspider|gptbot|oai-searchbot|chatgpt-user|claudebot|claude-searchbot|claude-user|anthropic-ai|perplexitybot|perplexity-user|ccbot|amazonbot|meta-externalagent|meta-externalfetcher|mistralai-user|cohere-ai|duckassistbot|youbot/i;
+export { BOT_RE };
 
 const EN_HOME = {
   title: 'Castillo del Alma \u2014 Wellness & Wine Estate in Andalusia',
@@ -221,6 +228,200 @@ export function indsaetSevLinks(html, raekker, isEN) {
   }
 }
 
+// ── AI-SØGNING (Bølge 6): RETREATS OG UDLEJNINGS-FAQ I DEN RÅ HTML ──────
+// Retreat-siderne sagde "Indlæser…" i den rå HTML, og udlejningens FAQ var
+// en tom <div>. AI-robotter kører ikke JavaScript, så de så hverken retreatets
+// tekst, datoer, pris eller FAQ-svarene. Her skrives indholdet ind på
+// serveren — for alle besøgende, ligesom seværdighederne. Sidens JavaScript
+// overskriver bagefter de samme elementer med præcis samme indhold (og skifter
+// sprog som før), så intet ændrer sig for gæsten.
+//
+// Alt er skrevet, så en fejl aldrig kan koste siden: fejler noget, returneres
+// HTML'en uændret, og JavaScript tegner siden som hidtil.
+
+const escHtml = s => String(s == null ? '' : s)
+  .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+
+/** Admin-tekster må indeholde enkel formatering (<b>, <em>, <br> …), men
+ *  intet andet: alt escapes, og kun de rene formaterings-tags slippes igennem
+ *  igen — uden attributter. Så kan en tekst aldrig blive til et script i den
+ *  rå HTML (sidens JavaScript bruger innerHTML, der ikke kører scripts). */
+const tilladHtml = s => escHtml(s).replace(/&lt;(\/?)(b|strong|em|i|u|br|small)\s*\/?&gt;/gi, '<$1$2>');
+
+/** JSON til et <script type="application/ld+json">. "</" må aldrig stå råt. */
+const ldJson = obj => '<script type="application/ld+json">' + JSON.stringify(obj).replace(/</g, '\\u003c') + '</script>';
+
+/** Erstatter indholdet i elementet med id="<id>" (første forekomst).
+ *  Kun til elementer uden indlejrede elementer af samme tag — det gælder
+ *  alle de felter, der bruges herunder. */
+function erstatIndhold(html, id, indre) {
+  if (indre == null || indre === '') return html;
+  const re = new RegExp('(<([a-zA-Z0-9]+)\\b[^>]*\\bid="' + id + '"[^>]*>)([\\s\\S]*?)(<\\/\\2>)');
+  return html.replace(re, (m, aabn, tag, gl, luk) => aabn + indre + luk);
+}
+
+const RT_BASE = 'https://castillodelalma.es';
+
+/** Én retreat-række (select=*) gengivet direkte i retreat.html + Event-schema. */
+export function indsaetRetreatIndhold(html, d, isEN) {
+  try {
+    if (!d || !d.slug) return html;
+    // Samme regel som sidens rSC(): engelsk felt hvis EN og udfyldt, ellers dansk
+    const v = (k) => {
+      const x = isEN ? (d[k + '_en'] || d[k]) : d[k];
+      return (typeof x === 'string') ? x.trim() : '';
+    };
+    const titel = v('title');
+    if (!titel) return html;
+    let ud = html;
+    ud = erstatIndhold(ud, 'retreatTitle', tilladHtml(titel).replace(' &amp; ', '<br>&amp; '));
+    ud = erstatIndhold(ud, 'retreatCategory', escHtml(v('subtitle')));
+    ud = erstatIndhold(ud, 'retreatSubtitle', escHtml(v('description')));
+
+    // Varighed og datoer — samme formler som siden
+    let varighed = '';
+    if (d.arrival_date && d.departure_date) {
+      const n = Math.round((new Date(d.departure_date) - new Date(d.arrival_date)) / 86400000);
+      if (n > 0) varighed = isEN ? `${n} nights · ${n + 1} days` : `${n} nætter · ${n + 1} dage`;
+    }
+    const dato = (x) => {
+      if (!x) return '';
+      const t = new Date(x);
+      return isNaN(t) ? '' : t.toLocaleDateString(isEN ? 'en-GB' : 'da-DK', { day: 'numeric', month: 'long', year: 'numeric' });
+    };
+    const pris = parseFloat(d.price) || 0;
+    if (varighed) {
+      ud = erstatIndhold(ud, 'pillNights', varighed);
+      ud = erstatIndhold(ud, 'barDuration', varighed);
+      ud = erstatIndhold(ud, 'factDuration', varighed);
+    }
+    ud = erstatIndhold(ud, 'barArrival', escHtml(dato(d.arrival_date)));
+    ud = erstatIndhold(ud, 'barDeparture', escHtml(dato(d.departure_date)));
+    if (pris) ud = erstatIndhold(ud, 'barPrice', '€' + pris.toLocaleString(isEN ? 'en-US' : 'da-DK'));
+    if (v('languages')) {
+      ud = erstatIndhold(ud, 'pillLanguages', escHtml(v('languages')));
+      ud = erstatIndhold(ud, 'factLanguages', escHtml(v('languages')));
+    }
+    if (v('level')) ud = erstatIndhold(ud, 'factLevel', escHtml(v('level')));
+    if (d.max_guests) ud = erstatIndhold(ud, 'factMaxGuests', `${d.max_guests} ${isEN ? 'guests' : 'personer'}`);
+
+    // Om retreatet — admin-tekst må indeholde <b>, <br>, <em> (siden bruger innerHTML)
+    if (v('about_heading')) ud = erstatIndhold(ud, 'aboutHeading', escHtml(v('about_heading')));
+    let om = '';
+    if (v('about_text')) om += v('about_text').split('\n').map(x => x.trim()).filter(Boolean).map(x => `<p>${tilladHtml(x)}</p>`).join('');
+    if (v('about_quote')) om += `<blockquote>"${tilladHtml(v('about_quote'))}"</blockquote>`;
+    if (om) ud = erstatIndhold(ud, 'aboutTextContainer', om);
+
+    // Programmet — engelske dage hvis EN og udfyldt, ellers danske
+    const dage = (isEN && Array.isArray(d.program_days_en) && d.program_days_en.length) ? d.program_days_en : d.program_days;
+    if (Array.isArray(dage) && dage.length) {
+      ud = erstatIndhold(ud, 'programDaysContainer', dage.map((x, i) => `
+      <div class="program-day${i === 0 ? ' open' : ''}">
+        <div class="program-day-header" onclick="toggleDay(this)">
+          <span class="program-day-num">${tilladHtml((x && x.num) || '')}</span>
+          <span class="program-day-title">${tilladHtml((x && x.title) || '')}</span>
+          <span class="program-day-toggle">↓</span>
+        </div>
+        <div class="program-day-body">
+          <div class="program-day-content">
+            <p>${tilladHtml((x && x.text) || '')}</p>
+          </div>
+        </div>
+      </div>
+    `).join(''));
+    }
+
+    // Event-schema: kun med en rigtig startdato — ellers er det ikke et event
+    if (d.arrival_date) {
+      const url = RT_BASE + (isEN ? '/en' : '') + '/retreat/' + encodeURIComponent(d.slug);
+      const beskriv = stripHtml(v('description') || v('about_text') || v('subtitle')).slice(0, 500);
+      const ev = {
+        '@context': 'https://schema.org',
+        '@type': 'Event',
+        name: stripHtml(titel),
+        startDate: String(d.arrival_date).slice(0, 10),
+        eventStatus: 'https://schema.org/EventScheduled',
+        eventAttendanceMode: 'https://schema.org/OfflineEventAttendanceMode',
+        inLanguage: isEN ? 'en' : 'da',
+        url,
+        location: {
+          '@type': 'Place',
+          name: 'Castillo del Alma',
+          address: { '@type': 'PostalAddress', addressLocality: 'Mollina', addressRegion: 'Málaga', postalCode: '29532', addressCountry: 'ES' }
+        },
+        organizer: { '@type': 'Organization', name: 'Castillo del Alma', url: RT_BASE + '/' }
+      };
+      if (d.departure_date) ev.endDate = String(d.departure_date).slice(0, 10);
+      if (beskriv) ev.description = beskriv;
+      const billede = d.social_image || d.hero_image;
+      if (billede) ev.image = [billede];
+      if (d.max_guests) ev.maximumAttendeeCapacity = Number(d.max_guests) || undefined;
+      if (pris) ev.offers = { '@type': 'Offer', price: String(pris), priceCurrency: 'EUR', availability: 'https://schema.org/InStock', url };
+      ud = ud.replace(/<\/head>/, ldJson(ev) + '\n</head>');
+    }
+    return ud;
+  } catch (e) {
+    return html;
+  }
+}
+
+/** Læser en enkelt-citeret JS-streng fra sidens UL_SEED, fx ulfaq_liste: '…'. */
+export function laesSeed(html, noegle) {
+  const m = html.match(new RegExp('\\b' + noegle + ":\\s*'((?:[^'\\\\]|\\\\.)*)'"));
+  if (!m) return '';
+  return m[1].replace(/\\(.)/g, (x, c) => (c === 'n' ? '\n' : c === 't' ? '\t' : c));
+}
+
+/** FAQ på udlejningssiden: samme kilde-rækkefølge som sidens renderUlFaq():
+ *  faq_items (JSON) → ulfaq_liste (database, ellers sidens standardtekst). */
+export function byggUlFaq(html, data, isEN) {
+  try {
+    data = data || {};
+    if (String(data.vis_ulfaq) === '0') return html;   // sektionen er skjult
+    const parseLinjer = (txt) => String(txt || '').split('\n').map(l => l.trim()).filter(Boolean).map(l => {
+      const i = l.indexOf('|');
+      return i === -1 ? { q: l, a: '' } : { q: l.slice(0, i).trim(), a: l.slice(i + 1).trim() };
+    });
+    const harIndhold = (arr) => Array.isArray(arr) && arr.some(x => x && (String(x.q || '').trim() || String(x.a || '').trim()));
+    let da = [], en = [];
+    try { da = JSON.parse(data.faq_items || '[]'); } catch (e) { da = []; }
+    try { en = JSON.parse(data.faq_items_en || '[]'); } catch (e) { en = []; }
+    if (!harIndhold(da)) da = parseLinjer(data.ulfaq_liste || laesSeed(html, 'ulfaq_liste'));
+    if (!harIndhold(en)) en = parseLinjer(data.ulfaq_liste_en || laesSeed(html, 'ulfaq_liste_en'));
+    if (!harIndhold(da)) return html;
+
+    const par = da.map((f, i) => {
+      const e = (Array.isArray(en) && en[i]) ? en[i] : {};
+      const q = isEN ? ((e.q || '').trim() || f.q) : f.q;
+      const a = isEN ? ((e.a || '').trim() || f.a) : f.a;
+      return { q: String(q || '').trim(), a: String(a || '').trim() };
+    }).filter(x => x.q);
+    if (!par.length) return html;
+
+    let ud = erstatIndhold(html, 'ulfaqList', par.map((x, i) => `<div class="faq-item${i === 0 ? ' open' : ''}">
+      <div class="faq-q" onclick="toggleFaq(this)"><span>${escHtml(x.q)}</span><i>▼</i></div>
+      <div class="faq-a"><p>${escHtml(x.a)}</p></div>
+    </div>`).join(''));
+
+    const medSvar = par.filter(x => x.a);
+    if (medSvar.length) {
+      ud = ud.replace(/<\/head>/, ldJson({
+        '@context': 'https://schema.org',
+        '@type': 'FAQPage',
+        inLanguage: isEN ? 'en' : 'da',
+        mainEntity: medSvar.map(x => ({
+          '@type': 'Question',
+          name: stripHtml(x.q),
+          acceptedAnswer: { '@type': 'Answer', text: stripHtml(x.a) }
+        }))
+      }) + '\n</head>');
+    }
+    return ud;
+  } catch (e) {
+    return html;
+  }
+}
+
 export default async (request, context) => {
   const ua = request.headers.get('user-agent') || '';
   const erBot = BOT_RE.test(ua);
@@ -232,7 +433,12 @@ export default async (request, context) => {
   const erForside = /^\/(index\.html)?$|^\/en\/?$|^\/en\/index\.html$/.test(url.pathname);
   const erSevSti = /^(?:\/en)?\/sevaerdigheder(?:\.html)?\/[^/]+\/?$/.test(url.pathname)
     || /\/sevaerdighed\.html$/.test(url.pathname);
-  if (!erBot && !erForside && !erSevSti) return context.next();
+  // AI-SØGNING (Bølge 6): retreat-siderne og udlejningens FAQ gengives også
+  // på serveren for alle besøgende.
+  const erRetreatIndhold = /^(?:\/en)?\/retreat(?:\.html)?\/[^/]+\/?$/.test(url.pathname)
+    || (/\/retreat(\.html)?$/.test(url.pathname) && url.searchParams.has('slug'));
+  const erUdlejning = tosprogSti(url.pathname) === '/udlejning';
+  if (!erBot && !erForside && !erSevSti && !erRetreatIndhold && !erUdlejning) return context.next();
   const isEN = /^\/en(\/|$)/.test(url.pathname);
   // Ren adresseform: /retreat/<slug> (også /en/retreat/<slug>).
   // Gammel form (?slug=…) bevares som fallback — den 301'er normalt videre,
@@ -430,6 +636,21 @@ export default async (request, context) => {
       const r = await fetch(api, { headers: { apikey: ANON_KEY, authorization: 'Bearer ' + ANON_KEY } });
       const raekker = r.ok ? await r.json() : [];
       html = indsaetSevLinks(html, raekker, isEN);
+    } else if (erRetreatIndhold && slug) {
+      const api = SUPABASE_URL + '/rest/v1/retreats?select=*&slug=eq.' + encodeURIComponent(slug) + '&limit=1';
+      const r = await fetch(api, { headers: { apikey: ANON_KEY, authorization: 'Bearer ' + ANON_KEY } });
+      const raekker = r.ok ? await r.json() : [];
+      const d = Array.isArray(raekker) ? raekker[0] : null;
+      if (d) html = indsaetRetreatIndhold(html, d, isEN);
+    } else if (erUdlejning) {
+      const api = SUPABASE_URL + '/rest/v1/udlejning_content?select=key,value'
+        + '&key=in.(faq_items,faq_items_en,ulfaq_liste,ulfaq_liste_en,vis_ulfaq)';
+      const data = {};
+      try {
+        const r = await fetch(api, { headers: { apikey: ANON_KEY, authorization: 'Bearer ' + ANON_KEY } });
+        (r.ok ? await r.json() : []).forEach(x => { if (x && x.value !== null && x.value !== '') data[x.key] = x.value; });
+      } catch (e) { /* uden svar bruges sidens egne standardtekster */ }
+      html = byggUlFaq(html, data, isEN);
     }
   } catch (e) { /* uændret HTML — JavaScript overtager som før */ }
 

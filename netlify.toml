@@ -23,6 +23,15 @@
   status = 200
   force = true
 
+# ── llms.txt: kort beskrivelse af stedet til AI-søgning (ChatGPT, Claude,
+# Perplexity). Genereres af Netlify-funktion med aktive retreats og
+# seværdigheder, ligesom sitemappet.
+[[redirects]]
+  from = "/llms.txt"
+  to = "/.netlify/functions/llms"
+  status = 200
+  force = true
+
 # ── RENE RETREAT-ADRESSER ────────────────────────────────────────────────
 # /retreat/<slug> i stedet for /retreat?slug=<slug>.
 # Slug'en er uændret — den er stadig præcis den, der oprettes i admin.

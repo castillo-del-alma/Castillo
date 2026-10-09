@@ -195,7 +195,7 @@ const RAEKKE = {
     r.tjek(/path = "\/en\/sevaerdigheder\/\*"/.test(toml), 'edge-funktionen kører på /en/sevaerdigheder/*');
     r.tjek(/path = "\/"/.test(toml) && /path = "\/index\.html"/.test(toml), 'edge-funktionen kører på forsiden');
     // Almindelige besøgende må stadig passere uberørt på alle andre sider
-    r.tjek(/if \(!erBot && !erForside && !erSevSti\) return context\.next\(\);/.test(kilde),
+    r.tjek(/if \(!erBot && !erForside && !erSevSti && !erRetreatIndhold && !erUdlejning\) return context\.next\(\);/.test(kilde),
       'alle andre sider serveres uberørt til almindelige besøgende');
     r.tjek(/if \(!erBot\) \{\s*\n\s*haandteret = true;/.test(kilde),
       'meta-tags omskrives fortsat kun for robotter');
