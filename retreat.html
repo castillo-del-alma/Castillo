@@ -2295,7 +2295,7 @@ function applyRetreatContent() {
 
   // Om retreatet
   const aboutHeadingEl = document.getElementById('aboutHeading');
-  if (aboutHeadingEl) aboutHeadingEl.textContent = rSC('about_heading', retreatLang === 'en' ? 'A break from everyday pace' : 'Et frirum fra hverdagens tempo');
+  if (aboutHeadingEl) aboutHeadingEl.innerHTML = rSC('about_heading', retreatLang === 'en' ? 'A break from everyday pace' : 'Et frirum fra hverdagens tempo');
   const aboutIconEl = document.getElementById('aboutIcon');
   if (aboutIconEl) {
     const iconUrl = CURRENT_RETREAT && CURRENT_RETREAT.about_icon;
