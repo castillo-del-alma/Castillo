@@ -5986,6 +5986,8 @@ feeling more calm – and coming home to yourself again."</textarea></div>
         <a href="#ra_hurtiginfo" style="font-size:.72rem;color:#7a5c14;background:#fffef8;border:1px solid rgba(184,138,30,.3);padding:.35rem .8rem;text-decoration:none;">6 · Hurtig-info</a>
         <a href="#ra_program" style="font-size:.72rem;color:#7a5c14;background:#fffef8;border:1px solid rgba(184,138,30,.3);padding:.35rem .8rem;text-decoration:none;">7 · Program</a>
         <a href="#ra_fritekst" style="font-size:.72rem;color:#7a5c14;background:#fffef8;border:1px solid rgba(184,138,30,.3);padding:.35rem .8rem;text-decoration:none;">7b · Fritekst</a>
+        <a href="#ra_fritekst2" style="font-size:.72rem;color:#7a5c14;background:#fffef8;border:1px solid rgba(184,138,30,.3);padding:.35rem .8rem;text-decoration:none;">7c · Fritekst 2</a>
+        <a href="#ra_fritekst3" style="font-size:.72rem;color:#7a5c14;background:#fffef8;border:1px solid rgba(184,138,30,.3);padding:.35rem .8rem;text-decoration:none;">7d · Fritekst 3</a>
         <a href="#ra_inkluderet" style="font-size:.72rem;color:#7a5c14;background:#fffef8;border:1px solid rgba(184,138,30,.3);padding:.35rem .8rem;text-decoration:none;">8 · Inkluderet</a>
         <a href="#ra_vaerelser" style="font-size:.72rem;color:#7a5c14;background:#fffef8;border:1px solid rgba(184,138,30,.3);padding:.35rem .8rem;text-decoration:none;">9 · Værelser</a>
         <a href="#ra_mad" style="font-size:.72rem;color:#7a5c14;background:#fffef8;border:1px solid rgba(184,138,30,.3);padding:.35rem .8rem;text-decoration:none;">10 · Mad</a>
@@ -6415,6 +6417,107 @@ feeling more calm – and coming home to yourself again."</textarea></div>
         <div class="fc-row" style="margin-top:1rem;">
           <div><label class="fc-label fc-label-da">Brødtekst (DA)</label><textarea id="ui_freetext_body" class="fc-input-da fc-textarea" rows="7" style="resize:vertical;"></textarea></div>
           <div><label class="fc-label fc-label-en">Body text (EN)</label><textarea id="ui_freetext_body_en" class="fc-input-en fc-textarea" rows="7" style="resize:vertical;"></textarea></div>
+        </div>
+        <div style="margin-top:1.2rem;padding-top:1rem;border-top:1px dashed rgba(184,138,30,.3);">
+          <label class="fc-label" style="color:#2a7a74;">🖼 Billede ved teksten (valgfrit, fælles DA/EN)</label>
+          <input type="text" id="ft1_img" class="fc-input-da" placeholder="URL indsættes automatisk ved upload — tom = kun tekst i fuld bredde" oninput="ftAdmPreview(1)">
+          <div style="display:flex;align-items:center;gap:.6rem;margin-top:.4rem;flex-wrap:wrap;">
+            <img id="ft1_img_preview" src="" style="display:none;width:56px;height:56px;object-fit:cover;border:1px solid rgba(184,138,30,.3);">
+            <input type="file" id="ft1_img_file" accept="image/*" style="font-size:.76rem;flex:1;min-width:180px;">
+            <button type="button" onclick="uploadRetreatBillede('ft1_img_file','ft1_img','ft1_img_preview')" style="background:#2a7a74;color:#fff;border:none;padding:.45rem 1.1rem;font-family:Manrope,sans-serif;font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;white-space:nowrap;">⬆ Upload</button><button type="button" onclick="fjernBilledeFelt('ft1_img','ft1_img_preview')" style="background:rgba(163,51,51,.08);color:#a33;border:1px solid rgba(163,51,51,.35);padding:.45rem .9rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;white-space:nowrap;" title="Fjern billedet">🗑 Fjern</button>
+          </div>
+          <div style="display:flex;align-items:flex-end;gap:1rem;margin-top:.8rem;flex-wrap:wrap;">
+            <div><label class="fc-label">Billedets placering</label>
+              <select id="ft1_pos" class="fc-input-da" style="cursor:pointer;min-width:150px;"><option value="right">Til højre for teksten</option><option value="left">Til venstre for teksten</option></select></div>
+            <div><button type="button" onclick="ftAdmByt(1)" style="background:#fffef8;color:#7a5c14;border:1px solid rgba(184,138,30,.45);padding:.45rem .9rem;font-family:Manrope,sans-serif;font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;white-space:nowrap;" title="Byt om på tekst- og billedkolonnen">⇄ Byt kolonner</button></div>
+            <div style="flex:1;min-width:220px;"><label class="fc-label">Billedkolonnens bredde: <b id="ft1_width_val">40</b> %</label>
+              <input type="range" id="ft1_width" min="15" max="70" step="5" value="40" oninput="document.getElementById('ft1_width_val').textContent=this.value" style="width:100%;cursor:pointer;"></div>
+          </div>
+          <div style="font-family:Manrope,sans-serif;font-size:.66rem;color:#7a6a52;margin-top:.4rem;">Teksten fylder resten. På mobil vises billedet over teksten i fuld bredde.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 7c · FRITEKST 2 -->
+    <div class="fc-block" id="ra_fritekst2" style="margin-bottom:1.5rem;">
+      <div class="fc-block-header" style="display:flex;align-items:center;justify-content:space-between;">
+        <span class="fc-block-title">7c · Fritekst-sektion 2 (#fritekst2)</span>
+        <label style="display:flex;align-items:center;gap:.4rem;font-size:.65rem;color:rgba(44,35,24,.7);cursor:pointer;">
+          <input type="checkbox" id="ft2_vis" checked onchange="ftAdmVisSync(2, this.checked)" style="cursor:pointer;"> Synlig på siden
+        </label>
+      <button type="button" onclick="event.stopPropagation(); oversaetBlok(this)" style="background:rgba(58,110,106,.1);border:1px solid rgba(58,110,106,.35);color:#2a7a74;padding:.3rem .8rem;font-family:Manrope,sans-serif;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;margin-left:auto;flex-shrink:0;" title="Oversæt tomme engelske felter i denne sektion">⇄ Oversæt</button></div>
+      <div class="fc-block-body">
+        <p style="font-size:.68rem;color:rgba(44,35,24,.55);margin:0 0 1rem;">Vises kun, når der er brødtekst eller et billede. Placér sektionen hvor du vil under <b>5 · Sektionsrækkefølge</b>. Tom linje = nyt afsnit. Inline HTML (&lt;b&gt;, &lt;em&gt;, &lt;br&gt;) virker.</p>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Lille overskrift / label (DA)</label><input type="text" id="ft2_label" class="fc-input-da" placeholder="fx Om ugen"></div>
+          <div><label class="fc-label fc-label-en">Small heading / label (EN)</label><input type="text" id="ft2_label_en" class="fc-input-en" placeholder="e.g. About the week"></div>
+        </div>
+        <div class="fc-row" style="margin-top:1rem;">
+          <div><label class="fc-label fc-label-da">Overskrift (DA)</label><input type="text" id="ft2_heading" class="fc-input-da"></div>
+          <div><label class="fc-label fc-label-en">Heading (EN)</label><input type="text" id="ft2_heading_en" class="fc-input-en"></div>
+        </div>
+        <div class="fc-row" style="margin-top:1rem;">
+          <div><label class="fc-label fc-label-da">Brødtekst (DA)</label><textarea id="ft2_body" class="fc-input-da fc-textarea" rows="7" style="resize:vertical;"></textarea></div>
+          <div><label class="fc-label fc-label-en">Body text (EN)</label><textarea id="ft2_body_en" class="fc-input-en fc-textarea" rows="7" style="resize:vertical;"></textarea></div>
+        </div>
+        <div style="margin-top:1.2rem;padding-top:1rem;border-top:1px dashed rgba(184,138,30,.3);">
+          <label class="fc-label" style="color:#2a7a74;">🖼 Billede ved teksten (valgfrit, fælles DA/EN)</label>
+          <input type="text" id="ft2_img" class="fc-input-da" placeholder="URL indsættes automatisk ved upload — tom = kun tekst i fuld bredde" oninput="ftAdmPreview(2)">
+          <div style="display:flex;align-items:center;gap:.6rem;margin-top:.4rem;flex-wrap:wrap;">
+            <img id="ft2_img_preview" src="" style="display:none;width:56px;height:56px;object-fit:cover;border:1px solid rgba(184,138,30,.3);">
+            <input type="file" id="ft2_img_file" accept="image/*" style="font-size:.76rem;flex:1;min-width:180px;">
+            <button type="button" onclick="uploadRetreatBillede('ft2_img_file','ft2_img','ft2_img_preview')" style="background:#2a7a74;color:#fff;border:none;padding:.45rem 1.1rem;font-family:Manrope,sans-serif;font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;white-space:nowrap;">⬆ Upload</button><button type="button" onclick="fjernBilledeFelt('ft2_img','ft2_img_preview')" style="background:rgba(163,51,51,.08);color:#a33;border:1px solid rgba(163,51,51,.35);padding:.45rem .9rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;white-space:nowrap;" title="Fjern billedet">🗑 Fjern</button>
+          </div>
+          <div style="display:flex;align-items:flex-end;gap:1rem;margin-top:.8rem;flex-wrap:wrap;">
+            <div><label class="fc-label">Billedets placering</label>
+              <select id="ft2_pos" class="fc-input-da" style="cursor:pointer;min-width:150px;"><option value="right">Til højre for teksten</option><option value="left">Til venstre for teksten</option></select></div>
+            <div><button type="button" onclick="ftAdmByt(2)" style="background:#fffef8;color:#7a5c14;border:1px solid rgba(184,138,30,.45);padding:.45rem .9rem;font-family:Manrope,sans-serif;font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;white-space:nowrap;" title="Byt om på tekst- og billedkolonnen">⇄ Byt kolonner</button></div>
+            <div style="flex:1;min-width:220px;"><label class="fc-label">Billedkolonnens bredde: <b id="ft2_width_val">40</b> %</label>
+              <input type="range" id="ft2_width" min="15" max="70" step="5" value="40" oninput="document.getElementById('ft2_width_val').textContent=this.value" style="width:100%;cursor:pointer;"></div>
+          </div>
+          <div style="font-family:Manrope,sans-serif;font-size:.66rem;color:#7a6a52;margin-top:.4rem;">Teksten fylder resten. På mobil vises billedet over teksten i fuld bredde.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 7d · FRITEKST 3 -->
+    <div class="fc-block" id="ra_fritekst3" style="margin-bottom:1.5rem;">
+      <div class="fc-block-header" style="display:flex;align-items:center;justify-content:space-between;">
+        <span class="fc-block-title">7d · Fritekst-sektion 3 (#fritekst3)</span>
+        <label style="display:flex;align-items:center;gap:.4rem;font-size:.65rem;color:rgba(44,35,24,.7);cursor:pointer;">
+          <input type="checkbox" id="ft3_vis" checked onchange="ftAdmVisSync(3, this.checked)" style="cursor:pointer;"> Synlig på siden
+        </label>
+      <button type="button" onclick="event.stopPropagation(); oversaetBlok(this)" style="background:rgba(58,110,106,.1);border:1px solid rgba(58,110,106,.35);color:#2a7a74;padding:.3rem .8rem;font-family:Manrope,sans-serif;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;margin-left:auto;flex-shrink:0;" title="Oversæt tomme engelske felter i denne sektion">⇄ Oversæt</button></div>
+      <div class="fc-block-body">
+        <p style="font-size:.68rem;color:rgba(44,35,24,.55);margin:0 0 1rem;">Vises kun, når der er brødtekst eller et billede. Placér sektionen hvor du vil under <b>5 · Sektionsrækkefølge</b>. Tom linje = nyt afsnit. Inline HTML (&lt;b&gt;, &lt;em&gt;, &lt;br&gt;) virker.</p>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Lille overskrift / label (DA)</label><input type="text" id="ft3_label" class="fc-input-da" placeholder="fx Om ugen"></div>
+          <div><label class="fc-label fc-label-en">Small heading / label (EN)</label><input type="text" id="ft3_label_en" class="fc-input-en" placeholder="e.g. About the week"></div>
+        </div>
+        <div class="fc-row" style="margin-top:1rem;">
+          <div><label class="fc-label fc-label-da">Overskrift (DA)</label><input type="text" id="ft3_heading" class="fc-input-da"></div>
+          <div><label class="fc-label fc-label-en">Heading (EN)</label><input type="text" id="ft3_heading_en" class="fc-input-en"></div>
+        </div>
+        <div class="fc-row" style="margin-top:1rem;">
+          <div><label class="fc-label fc-label-da">Brødtekst (DA)</label><textarea id="ft3_body" class="fc-input-da fc-textarea" rows="7" style="resize:vertical;"></textarea></div>
+          <div><label class="fc-label fc-label-en">Body text (EN)</label><textarea id="ft3_body_en" class="fc-input-en fc-textarea" rows="7" style="resize:vertical;"></textarea></div>
+        </div>
+        <div style="margin-top:1.2rem;padding-top:1rem;border-top:1px dashed rgba(184,138,30,.3);">
+          <label class="fc-label" style="color:#2a7a74;">🖼 Billede ved teksten (valgfrit, fælles DA/EN)</label>
+          <input type="text" id="ft3_img" class="fc-input-da" placeholder="URL indsættes automatisk ved upload — tom = kun tekst i fuld bredde" oninput="ftAdmPreview(3)">
+          <div style="display:flex;align-items:center;gap:.6rem;margin-top:.4rem;flex-wrap:wrap;">
+            <img id="ft3_img_preview" src="" style="display:none;width:56px;height:56px;object-fit:cover;border:1px solid rgba(184,138,30,.3);">
+            <input type="file" id="ft3_img_file" accept="image/*" style="font-size:.76rem;flex:1;min-width:180px;">
+            <button type="button" onclick="uploadRetreatBillede('ft3_img_file','ft3_img','ft3_img_preview')" style="background:#2a7a74;color:#fff;border:none;padding:.45rem 1.1rem;font-family:Manrope,sans-serif;font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;white-space:nowrap;">⬆ Upload</button><button type="button" onclick="fjernBilledeFelt('ft3_img','ft3_img_preview')" style="background:rgba(163,51,51,.08);color:#a33;border:1px solid rgba(163,51,51,.35);padding:.45rem .9rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;white-space:nowrap;" title="Fjern billedet">🗑 Fjern</button>
+          </div>
+          <div style="display:flex;align-items:flex-end;gap:1rem;margin-top:.8rem;flex-wrap:wrap;">
+            <div><label class="fc-label">Billedets placering</label>
+              <select id="ft3_pos" class="fc-input-da" style="cursor:pointer;min-width:150px;"><option value="right">Til højre for teksten</option><option value="left">Til venstre for teksten</option></select></div>
+            <div><button type="button" onclick="ftAdmByt(3)" style="background:#fffef8;color:#7a5c14;border:1px solid rgba(184,138,30,.45);padding:.45rem .9rem;font-family:Manrope,sans-serif;font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;white-space:nowrap;" title="Byt om på tekst- og billedkolonnen">⇄ Byt kolonner</button></div>
+            <div style="flex:1;min-width:220px;"><label class="fc-label">Billedkolonnens bredde: <b id="ft3_width_val">40</b> %</label>
+              <input type="range" id="ft3_width" min="15" max="70" step="5" value="40" oninput="document.getElementById('ft3_width_val').textContent=this.value" style="width:100%;cursor:pointer;"></div>
+          </div>
+          <div style="font-family:Manrope,sans-serif;font-size:.66rem;color:#7a6a52;margin-top:.4rem;">Teksten fylder resten. På mobil vises billedet over teksten i fuld bredde.</div>
         </div>
       </div>
     </div>
@@ -9172,6 +9275,7 @@ function openNytRetreat() {
   document.getElementById('ui_visible_faq').checked = true;
   { const _e = document.getElementById('ui_visible_freetext'); if (_e) _e.checked = true; }
   ['ui_freetext_label','ui_freetext_label_en','ui_freetext_heading','ui_freetext_heading_en','ui_freetext_body','ui_freetext_body_en'].forEach(id => { const _e = document.getElementById(id); if (_e) _e.value = ''; });
+  ftAdmLoad({});
   { const _p = document.getElementById('retreat_pride'); if (_p) _p.checked = false; }
   document.getElementById('retreat_title').value = '';
   document.getElementById('retreat_title_en').value = '';
@@ -9484,6 +9588,7 @@ function udfyldRetreatForm(r) {
   { const _e = document.getElementById('ui_freetext_heading_en'); if (_e) _e.value = r.freetext_heading_en || ''; }
   { const _e = document.getElementById('ui_freetext_body'); if (_e) _e.value = r.freetext_body || ''; }
   { const _e = document.getElementById('ui_freetext_body_en'); if (_e) _e.value = r.freetext_body_en || ''; }
+  ftAdmLoad(r);
   { const _p = document.getElementById('retreat_pride'); if (_p) _p.checked = r.pride === true; }
   document.getElementById('retreat_title').value = r.title || '';
   document.getElementById('retreat_title_en').value = r.title_en || '';
@@ -10300,6 +10405,8 @@ async function gemRetreat() {
       if (heroUrl) payload.hero_image = heroUrl;
     }
 
+    payload.freetext_extra = await ftAdmPayload();
+
     const aboutIconFile = document.getElementById('retreat_about_icon_file')?.files[0];
     if (aboutIconFile) {
       payload.about_icon = await uploadRetreatImage(aboutIconFile);
@@ -10317,21 +10424,21 @@ async function gemRetreat() {
 
     if (id) {
       let { error } = await sb.from('retreats').update(payload).eq('id', id);
-      if (error && /nav_links|sektion_orden|retreat_images5_2|retreat_images5_3|jsonld_extra|stribe_luft|about_icon/.test(error.message || '')) {
+      if (error && /nav_links|sektion_orden|retreat_images5_2|retreat_images5_3|jsonld_extra|stribe_luft|about_icon|freetext_extra/.test(error.message || '')) {
         // Kolonnerne findes ikke endnu (SQL ikke kørt) — gem resten og advar
         delete payload.nav_links; delete payload.sektion_orden;
-        delete payload.retreat_images5_2; delete payload.retreat_images5_3; delete payload.jsonld_extra; delete payload.stribe_luft; delete payload.about_icon;
+        delete payload.retreat_images5_2; delete payload.retreat_images5_3; delete payload.jsonld_extra; delete payload.stribe_luft; delete payload.about_icon; delete payload.freetext_extra;
         ({ error } = await sb.from('retreats').update(payload).eq('id', id));
-        if (!error) showToast('⚠ Gemt, men menu/rækkefølge/fotostriber kræver at SQL-opdateringen køres først', true);
+        if (!error) showToast('⚠ Gemt, men nogle nye felter (fx fritekst 2–3, billeder, ikon) kræver at SQL-opdateringen køres først', true);
       }
       if (error) throw error;
     } else {
       let { error } = await sb.from('retreats').insert(payload);
-      if (error && /nav_links|sektion_orden|retreat_images5_2|retreat_images5_3|jsonld_extra|stribe_luft|about_icon/.test(error.message || '')) {
+      if (error && /nav_links|sektion_orden|retreat_images5_2|retreat_images5_3|jsonld_extra|stribe_luft|about_icon|freetext_extra/.test(error.message || '')) {
         delete payload.nav_links; delete payload.sektion_orden;
-        delete payload.retreat_images5_2; delete payload.retreat_images5_3; delete payload.jsonld_extra; delete payload.stribe_luft; delete payload.about_icon;
+        delete payload.retreat_images5_2; delete payload.retreat_images5_3; delete payload.jsonld_extra; delete payload.stribe_luft; delete payload.about_icon; delete payload.freetext_extra;
         ({ error } = await sb.from('retreats').insert(payload));
-        if (!error) showToast('⚠ Gemt, men menu/rækkefølge/fotostriber kræver at SQL-opdateringen køres først', true);
+        if (!error) showToast('⚠ Gemt, men nogle nye felter (fx fritekst 2–3, billeder, ikon) kræver at SQL-opdateringen køres først', true);
       }
       if (error) throw error;
     }
@@ -11198,6 +11305,8 @@ const RT_SEKTION_DEFS = [
   { id: 'highlights',   navn: 'Highlights' },
   { id: 'program',      navn: 'Program',      legacyVis: 'program' },
   { id: 'fritekst',     navn: 'Fritekst-sektion', legacyVis: 'freetext' },
+  { id: 'fritekst2',    navn: 'Fritekst-sektion 2', ftVis: 2 },
+  { id: 'fritekst3',    navn: 'Fritekst-sektion 3', ftVis: 3 },
   { id: 'inkluderet',   navn: 'Inkluderet / ikke inkluderet' },
   { id: 'vaerelser',    navn: 'Værelser & priser' },
   { id: 'forplejning',  navn: 'Mad & køkken' },
@@ -11336,6 +11445,62 @@ function rtOrdenVisToggle(i, checked) {
     const cb = document.getElementById('ui_visible_' + def.legacyVis);
     if (cb) cb.checked = checked;
   }
+  if (def && def.ftVis) {
+    const cb = document.getElementById('ft' + def.ftVis + '_vis');
+    if (cb) cb.checked = checked;
+  }
+}
+
+// ── FRITEKST 1–3: billede, placering, bredde (gemmes i retreats.freetext_extra som JSON) ──
+const FT_TEKSTFELTER = ['label','label_en','heading','heading_en','body','body_en'];
+function ftAdmPreview(n) {
+  const u = document.getElementById('ft' + n + '_img');
+  saetBilledPreview('ft' + n + '_img_preview', u ? u.value.trim() : '');
+}
+function ftAdmByt(n) {
+  const sel = document.getElementById('ft' + n + '_pos');
+  if (!sel) return;
+  sel.value = sel.value === 'left' ? 'right' : 'left';
+  showToast('Billedet står nu til ' + (sel.value === 'left' ? 'venstre' : 'højre') + ' — husk 💾 Gem');
+}
+function ftAdmVisSync(n, checked) {
+  const o = (rtOrdenState || []).find(x => x.id === 'fritekst' + n);
+  if (o) { o.vis = checked ? '1' : '0'; renderRtOrdenEditor(); }
+}
+function ftAdmLoad(r) {
+  let ftx = (r && r.freetext_extra) || {};
+  if (typeof ftx === 'string') { try { ftx = JSON.parse(ftx); } catch(e) { ftx = {}; } }
+  [1, 2, 3].forEach(n => {
+    const c = ftx[String(n)] || {};
+    if (n > 1) {
+      FT_TEKSTFELTER.forEach(f => { const el = document.getElementById('ft' + n + '_' + f); if (el) el.value = c[f] || ''; });
+      const v = document.getElementById('ft' + n + '_vis'); if (v) v.checked = c.vis !== '0';
+    }
+    const im = document.getElementById('ft' + n + '_img'); if (im) im.value = c.img || '';
+    const fi = document.getElementById('ft' + n + '_img_file'); if (fi) fi.value = '';
+    const ps = document.getElementById('ft' + n + '_pos'); if (ps) ps.value = c.pos === 'left' ? 'left' : 'right';
+    const w = Math.min(70, Math.max(15, parseInt(c.width, 10) || 40));
+    const wi = document.getElementById('ft' + n + '_width'); if (wi) wi.value = w;
+    const wv = document.getElementById('ft' + n + '_width_val'); if (wv) wv.textContent = w;
+    ftAdmPreview(n);
+  });
+}
+async function ftAdmPayload() {
+  const ud = {};
+  for (const n of [1, 2, 3]) {
+    const c = {};
+    if (n > 1) {
+      FT_TEKSTFELTER.forEach(f => { const el = document.getElementById('ft' + n + '_' + f); const v = el ? el.value.trim() : ''; if (v) c[f] = v; });
+      c.vis = document.getElementById('ft' + n + '_vis')?.checked === false ? '0' : '1';
+    }
+    const fil = document.getElementById('ft' + n + '_img_file')?.files[0];
+    const img = fil ? await uploadRetreatImage(fil) : (document.getElementById('ft' + n + '_img')?.value.trim() || '');
+    if (img) c.img = img;
+    c.pos = document.getElementById('ft' + n + '_pos')?.value === 'left' ? 'left' : 'right';
+    c.width = parseInt(document.getElementById('ft' + n + '_width')?.value, 10) || 40;
+    ud[String(n)] = c;
+  }
+  return ud;
 }
 function rtOrdenFlyt(i, retning) {
   const j = i + retning;

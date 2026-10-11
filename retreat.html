@@ -449,6 +449,15 @@ section h2 em{color:var(--wine);font-style:normal;}
   font-weight:300;line-height:1.95;color:var(--text-mid);margin:0 0 1.4rem;
 }
 .freetext-body p:last-child{margin-bottom:0;}
+/* Fritekst med billede: kolonnebredde styres pr. sektion via --ft-img-w (admin) */
+.ft-grid.has-img{display:grid;grid-template-columns:minmax(0,1fr) var(--ft-img-w,40%);gap:4rem;align-items:center;}
+.ft-grid.has-img.img-left{grid-template-columns:var(--ft-img-w,40%) minmax(0,1fr);}
+.ft-grid.img-left .ft-img{order:-1;}
+.ft-img img{display:block;width:100%;height:auto;}
+@media (max-width:768px){
+  .ft-grid.has-img,.ft-grid.has-img.img-left{grid-template-columns:1fr;gap:2rem;}
+  .ft-grid.has-img .ft-img{order:-1;}
+}
 .included{background:var(--section-alt);padding:7rem 0;}
 .included h2{
   font-family:'Cinzel',serif;font-weight:300;
@@ -1052,11 +1061,50 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:3rem
 <section class="freetext has-canvas" id="fritekst" style="display:none;">
   <canvas class="section-canvas" data-palette="warm"></canvas>
   <div class="section-inner">
-    <div class="reveal">
-      <span class="section-label" id="freetextLabel"></span>
-      <h2 id="freetextHeading"></h2>
+    <div class="ft-grid">
+      <div class="ft-text">
+        <div class="reveal">
+          <span class="section-label ft-label" id="freetextLabel"></span>
+          <h2 class="ft-heading" id="freetextHeading"></h2>
+        </div>
+        <div class="freetext-body ft-body reveal d1" id="freetextBody"></div>
+      </div>
+      <div class="ft-img reveal d2" style="display:none;"><img src="" alt="" loading="lazy"></div>
     </div>
-    <div class="freetext-body reveal d1" id="freetextBody"></div>
+  </div>
+</section>
+
+<!-- FRITEKST 2 -->
+<section class="freetext has-canvas" id="fritekst2" style="display:none;">
+  <canvas class="section-canvas" data-palette="warm"></canvas>
+  <div class="section-inner">
+    <div class="ft-grid">
+      <div class="ft-text">
+        <div class="reveal">
+          <span class="section-label ft-label" id="freetext2Label"></span>
+          <h2 class="ft-heading" id="freetext2Heading"></h2>
+        </div>
+        <div class="freetext-body ft-body reveal d1" id="freetext2Body"></div>
+      </div>
+      <div class="ft-img reveal d2" style="display:none;"><img src="" alt="" loading="lazy"></div>
+    </div>
+  </div>
+</section>
+
+<!-- FRITEKST 3 -->
+<section class="freetext has-canvas" id="fritekst3" style="display:none;">
+  <canvas class="section-canvas" data-palette="warm"></canvas>
+  <div class="section-inner">
+    <div class="ft-grid">
+      <div class="ft-text">
+        <div class="reveal">
+          <span class="section-label ft-label" id="freetext3Label"></span>
+          <h2 class="ft-heading" id="freetext3Heading"></h2>
+        </div>
+        <div class="freetext-body ft-body reveal d1" id="freetext3Body"></div>
+      </div>
+      <div class="ft-img reveal d2" style="display:none;"><img src="" alt="" loading="lazy"></div>
+    </div>
   </div>
 </section>
 
@@ -2339,27 +2387,46 @@ function applyRetreatContent() {
     document.getElementById('program').style.display = 'none';
   }
 
-  // Fritekst-sektion (fuld bredde tekst før Inkluderet)
+  // Fritekst-sektioner 1–3 (tekst + valgfrit billede venstre/højre). Sektion 1 bruger de gamle
+  // freetext_*-kolonner; 2 og 3 ligger i freetext_extra (JSON) — billedvalg for alle tre ligger dér.
   {
-    const ftVis = (data.visible_sections || {}).freetext !== false;
-    const ftLabel = retreatLang === 'en' ? (data.freetext_label_en || data.freetext_label) : data.freetext_label;
-    const ftHeading = retreatLang === 'en' ? (data.freetext_heading_en || data.freetext_heading) : data.freetext_heading;
-    const ftBody = retreatLang === 'en' ? (data.freetext_body_en || data.freetext_body) : data.freetext_body;
-    const ftSection = document.getElementById('fritekst');
-    if (ftSection) {
-      if (ftVis && ftBody && ftBody.trim()) {
-        document.getElementById('freetextLabel').textContent = ftLabel || '';
-        document.getElementById('freetextHeading').innerHTML = ftHeading || '';
-        // Tomme linjer adskiller afsnit; enkelte linjeskift bliver <br>; inline HTML bevares
-        document.getElementById('freetextBody').innerHTML = ftBody.trim()
-          .split(/\n\s*\n/)
-          .map(p => '<p>' + p.trim().replace(/\n/g, '<br>') + '</p>')
-          .join('');
-        ftSection.style.display = '';
-      } else {
-        ftSection.style.display = 'none';
+    let ftx = data.freetext_extra || {};
+    if (typeof ftx === 'string') { try { ftx = JSON.parse(ftx); } catch(e) { ftx = {}; } }
+    const en = retreatLang === 'en';
+    const vaelg = (da, eng) => (en ? (eng || da) : da) || '';
+    [1, 2, 3].forEach(n => {
+      const c = ftx[String(n)] || {};
+      const sec = document.getElementById(n === 1 ? 'fritekst' : 'fritekst' + n);
+      if (!sec) return;
+      const vis = n === 1 ? (data.visible_sections || {}).freetext !== false : c.vis !== '0';
+      const label = n === 1 ? vaelg(data.freetext_label, data.freetext_label_en) : vaelg(c.label, c.label_en);
+      const heading = n === 1 ? vaelg(data.freetext_heading, data.freetext_heading_en) : vaelg(c.heading, c.heading_en);
+      const body = n === 1 ? vaelg(data.freetext_body, data.freetext_body_en) : vaelg(c.body, c.body_en);
+      const img = (c.img || '').trim();
+      if (!vis || !((body && body.trim()) || img)) { sec.style.display = 'none'; return; }
+      const q = sel => sec.querySelector(sel);
+      if (q('.ft-label')) q('.ft-label').textContent = label;
+      if (q('.ft-heading')) q('.ft-heading').innerHTML = heading;
+      // Tomme linjer adskiller afsnit; enkelte linjeskift bliver <br>; inline HTML bevares
+      if (q('.ft-body')) q('.ft-body').innerHTML = (body || '').trim()
+        ? body.trim().split(/\n\s*\n/).map(p => '<p>' + p.trim().replace(/\n/g, '<br>') + '</p>').join('')
+        : '';
+      const grid = q('.ft-grid'), box = q('.ft-img'), im = q('.ft-img img');
+      if (grid && box && im) {
+        if (img) {
+          const w = Math.min(70, Math.max(15, parseInt(c.width, 10) || 40));
+          im.src = img; im.alt = (heading || '').replace(/<[^>]*>/g, '');
+          box.style.display = '';
+          grid.classList.add('has-img');
+          grid.classList.toggle('img-left', c.pos === 'left');
+          grid.style.setProperty('--ft-img-w', w + '%');
+        } else {
+          box.style.display = 'none'; im.removeAttribute('src');
+          grid.classList.remove('has-img', 'img-left');
+        }
       }
-    }
+      sec.style.display = '';
+    });
   }
 
   // Inkluderet / ikke inkluderet
@@ -2637,7 +2704,7 @@ function renderRetreatNav() {
 }
 
 // ── SEKTIONSRÆKKEFØLGE — pr. retreat, gemmes som JSON i retreats.sektion_orden ([{id, vis}]) ──
-const RT_SEKTION_STANDARD_ORDEN = ['om','fotostribe','fotostribe2','fotostribe3','highlights','program','fritekst','inkluderet','vaerelser','forplejning','underviser','anmeldelser','faq','booking','delRetreat','sikkerhed','cta1','cta2','cta3'];
+const RT_SEKTION_STANDARD_ORDEN = ['om','fotostribe','fotostribe2','fotostribe3','highlights','program','fritekst','fritekst2','fritekst3','inkluderet','vaerelser','forplejning','underviser','anmeldelser','faq','booking','delRetreat','sikkerhed','cta1','cta2','cta3'];
 const RT_CTA_IDS = ['cta1','cta2','cta3']; // skjult i HTML som standard — vises kun ved vis='1' i sektion_orden
 let rtOrdenAnvendt = false;
 function applyRetreatSektionOrden() {
