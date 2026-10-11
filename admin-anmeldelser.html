@@ -6208,6 +6208,18 @@ feeling more calm – and coming home to yourself again."</textarea></div>
           <div><label class="fc-label fc-label-en">Heading (EN)</label><input type="text" id="retreat_about_heading_en" class="fc-input-en" placeholder="The Art of Slowing Down"></div>
         </div>
         <div class="fc-row">
+          <div style="grid-column:1/-1;">
+            <label class="fc-label" style="color:#2a7a74;">🖼 Ikon ved overskriften (fælles DA/EN)</label>
+            <input type="text" id="retreat_about_icon" class="fc-input-da" placeholder="URL indsættes automatisk ved upload — tom = intet ikon">
+            <div style="display:flex;align-items:center;gap:.6rem;margin-top:.4rem;">
+              <img id="retreat_about_icon_preview" src="" style="display:none;width:56px;height:56px;object-fit:contain;border:1px solid rgba(184,138,30,.3);background:#f5efe3;">
+              <input type="file" id="retreat_about_icon_file" accept="image/*" style="font-size:.76rem;flex:1;">
+              <button type="button" onclick="uploadRetreatBillede('retreat_about_icon_file','retreat_about_icon','retreat_about_icon_preview')" style="background:#2a7a74;color:#fff;border:none;padding:.45rem 1.1rem;font-family:Manrope,sans-serif;font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;white-space:nowrap;">⬆ Upload</button><button type="button" onclick="fjernBilledeFelt('retreat_about_icon','retreat_about_icon_preview')" style="background:rgba(163,51,51,.08);color:#a33;border:1px solid rgba(163,51,51,.35);padding:.45rem .9rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;white-space:nowrap;" title="Fjern ikonet">🗑 Fjern</button>
+            </div>
+            <div style="font-family:Manrope,sans-serif;font-size:.66rem;color:#7a6a52;margin-top:.4rem;">Vises til højre for overskriften og fylder maks. 30 % af tekstkolonnen. Brug gerne en kvadratisk PNG med transparent baggrund.</div>
+          </div>
+        </div>
+        <div class="fc-row">
           <div><label class="fc-label fc-label-da">Beskrivelse (DA)</label><textarea id="retreat_about_text" class="fc-input-da fc-textarea" rows="5" placeholder="Et retreat designet til at bringe dit nervesystem tilbage i balance. Gennem breathwork, bevægelse, stilhed og fællesskab skabes et rum, hvor du kan slippe presset og finde ro."></textarea></div>
           <div><label class="fc-label fc-label-en">Description (EN)</label><textarea id="retreat_about_text_en" class="fc-input-en fc-textarea" rows="5" placeholder="A retreat designed to bring your nervous system back into balance. Through breathwork, movement, silence and community, we create space for you to release pressure and find calm."></textarea></div>
         </div>
@@ -9416,6 +9428,8 @@ function openNytRetreat() {
   // Billeder/datoer
   document.getElementById('retreat_hero_image').value = '';
   document.getElementById('retreat_card_image').value = '';
+  { const _ai = document.getElementById('retreat_about_icon'); if (_ai) _ai.value = ''; }
+  saetBilledPreview('retreat_about_icon_preview', '');
   { const _si = document.getElementById('retreat_social_image'); if (_si) _si.value = ''; }
   { const _st = document.getElementById('retreat_social_text'); if (_st) _st.value = ''; }
   { const _ste = document.getElementById('retreat_social_text_en'); if (_ste) _ste.value = ''; }
@@ -9495,7 +9509,7 @@ function udfyldRetreatForm(r) {
   saetBilledPreview('retreat_card_preview', r.card_image);
   { const _hf = document.getElementById('retreat_hero_file'); if (_hf) _hf.value = ''; }
   { const _cf = document.getElementById('retreat_card_file'); if (_cf) _cf.value = ''; }
-  retreatOrigImages = { hero: r.hero_image || '', card: r.card_image || '', food: r.ui_food_img || '', social: r.social_image || '' };
+  retreatOrigImages = { hero: r.hero_image || '', card: r.card_image || '', food: r.ui_food_img || '', social: r.social_image || '', icon: r.about_icon || '' };
   document.getElementById('retreat_location').value = r.location || '';
   document.getElementById('retreat_languages_en').value = r.languages_en || '';
   document.getElementById('retreat_level_en').value = r.level_en || '';
@@ -9506,6 +9520,9 @@ function udfyldRetreatForm(r) {
   document.getElementById('retreat_about_text_en').value = r.about_text_en || '';
   document.getElementById('retreat_about_quote').value = r.about_quote || '';
   document.getElementById('retreat_about_quote_en').value = r.about_quote_en || '';
+  { const _ai = document.getElementById('retreat_about_icon'); if (_ai) _ai.value = r.about_icon || ''; }
+  saetBilledPreview('retreat_about_icon_preview', r.about_icon);
+  { const _aif = document.getElementById('retreat_about_icon_file'); if (_aif) _aif.value = ''; }
   document.getElementById('retreat_program_days').value = r.program_days ? JSON.stringify(r.program_days, null, 2) : '';
   document.getElementById('retreat_program_days_en').value = r.program_days_en ? JSON.stringify(r.program_days_en, null, 2) : '';
   document.getElementById('retreat_included').value = (r.included_items || []).join('\n');
@@ -10283,6 +10300,13 @@ async function gemRetreat() {
       if (heroUrl) payload.hero_image = heroUrl;
     }
 
+    const aboutIconFile = document.getElementById('retreat_about_icon_file')?.files[0];
+    if (aboutIconFile) {
+      payload.about_icon = await uploadRetreatImage(aboutIconFile);
+    } else {
+      payload.about_icon = document.getElementById('retreat_about_icon')?.value.trim() || null;
+    }
+
     const cardFile = document.getElementById('retreat_card_file').files[0];
     if (cardFile) {
       payload.card_image = await uploadRetreatImage(cardFile);
@@ -10293,19 +10317,19 @@ async function gemRetreat() {
 
     if (id) {
       let { error } = await sb.from('retreats').update(payload).eq('id', id);
-      if (error && /nav_links|sektion_orden|retreat_images5_2|retreat_images5_3|jsonld_extra|stribe_luft/.test(error.message || '')) {
+      if (error && /nav_links|sektion_orden|retreat_images5_2|retreat_images5_3|jsonld_extra|stribe_luft|about_icon/.test(error.message || '')) {
         // Kolonnerne findes ikke endnu (SQL ikke kørt) — gem resten og advar
         delete payload.nav_links; delete payload.sektion_orden;
-        delete payload.retreat_images5_2; delete payload.retreat_images5_3; delete payload.jsonld_extra; delete payload.stribe_luft;
+        delete payload.retreat_images5_2; delete payload.retreat_images5_3; delete payload.jsonld_extra; delete payload.stribe_luft; delete payload.about_icon;
         ({ error } = await sb.from('retreats').update(payload).eq('id', id));
         if (!error) showToast('⚠ Gemt, men menu/rækkefølge/fotostriber kræver at SQL-opdateringen køres først', true);
       }
       if (error) throw error;
     } else {
       let { error } = await sb.from('retreats').insert(payload);
-      if (error && /nav_links|sektion_orden|retreat_images5_2|retreat_images5_3|jsonld_extra|stribe_luft/.test(error.message || '')) {
+      if (error && /nav_links|sektion_orden|retreat_images5_2|retreat_images5_3|jsonld_extra|stribe_luft|about_icon/.test(error.message || '')) {
         delete payload.nav_links; delete payload.sektion_orden;
-        delete payload.retreat_images5_2; delete payload.retreat_images5_3; delete payload.jsonld_extra; delete payload.stribe_luft;
+        delete payload.retreat_images5_2; delete payload.retreat_images5_3; delete payload.jsonld_extra; delete payload.stribe_luft; delete payload.about_icon;
         ({ error } = await sb.from('retreats').insert(payload));
         if (!error) showToast('⚠ Gemt, men menu/rækkefølge/fotostriber kræver at SQL-opdateringen køres først', true);
       }
@@ -10319,15 +10343,16 @@ async function gemRetreat() {
       const nyCard = ('card_image' in payload) ? payload.card_image : retreatOrigImages.card;
       const nyFood = ('ui_food_img' in payload) ? payload.ui_food_img : retreatOrigImages.food;
       const nySocial = ('social_image' in payload) ? payload.social_image : retreatOrigImages.social;
-      const iBrugNu = [nyHero, nyCard, nyFood, nySocial].filter(Boolean);
+      const nyIcon = ('about_icon' in payload) ? payload.about_icon : retreatOrigImages.icon;
+      const iBrugNu = [nyHero, nyCard, nyFood, nySocial, nyIcon].filter(Boolean);
       const andreJson = JSON.stringify((allRetreats || []).filter(x => String(x.id) !== String(id || '')));
-      for (const gammel of [retreatOrigImages.hero, retreatOrigImages.card, retreatOrigImages.food, retreatOrigImages.social]) {
+      for (const gammel of [retreatOrigImages.hero, retreatOrigImages.card, retreatOrigImages.food, retreatOrigImages.social, retreatOrigImages.icon]) {
         if (!gammel) continue;
         if (iBrugNu.includes(gammel)) continue;
         if (andreJson.includes(gammel)) continue;
         await cdaSletStorageFil(gammel);
       }
-      retreatOrigImages = { hero: nyHero || '', card: nyCard || '', food: nyFood || '', social: nySocial || '' };
+      retreatOrigImages = { hero: nyHero || '', card: nyCard || '', food: nyFood || '', social: nySocial || '', icon: nyIcon || '' };
     } catch(_) { /* oprydning er best-effort */ }
 
     // Bliv på siden — vis gem-bekræftelse øverst

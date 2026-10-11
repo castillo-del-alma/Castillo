@@ -301,6 +301,12 @@ body.menu-open .nav-burger span:nth-child(3){ transform:translateY(-9px) rotate(
   color:var(--charcoal);margin-bottom:1.8rem;line-height:1.2;
 }
 .overview-text h2 em{color:var(--wine);font-style:normal;}
+/* Ikon ved "Om retreatet"-overskriften (about_icon) — maks. 30 % af tekstkolonnen */
+.about-head{display:flex;align-items:center;justify-content:space-between;gap:2rem;margin-bottom:1.8rem;}
+.about-head-text{flex:1 1 auto;min-width:0;}
+.about-head-text h2{margin-bottom:0;}
+.about-icon{flex:0 0 auto;width:30%;max-width:30%;height:auto;object-fit:contain;}
+@media (max-width:600px){.about-head{gap:1rem;}.about-icon{width:28%;max-width:28%;}}
 .overview-text p{
   font-family:'Cormorant Garamond',serif;font-size:1.1rem;
   font-weight:300;line-height:1.95;color:var(--text-mid);margin-bottom:1.4rem;
@@ -968,8 +974,13 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:3rem
   <div class="section-inner">
     <div class="overview-grid">
       <div class="overview-text reveal-left">
-        <span class="section-label" id="aboutLabel">Om retreatet</span>
-        <h2 id="aboutHeading">Et frirum fra hverdagens tempo</h2>
+        <div class="about-head">
+          <div class="about-head-text">
+            <span class="section-label" id="aboutLabel">Om retreatet</span>
+            <h2 id="aboutHeading">Et frirum fra hverdagens tempo</h2>
+          </div>
+          <img id="aboutIcon" class="about-icon" src="" alt="" style="display:none;">
+        </div>
         <div id="aboutTextContainer"></div>
       </div>
       <div class="quick-facts reveal-right d2">
@@ -2285,6 +2296,12 @@ function applyRetreatContent() {
   // Om retreatet
   const aboutHeadingEl = document.getElementById('aboutHeading');
   if (aboutHeadingEl) aboutHeadingEl.textContent = rSC('about_heading', retreatLang === 'en' ? 'A break from everyday pace' : 'Et frirum fra hverdagens tempo');
+  const aboutIconEl = document.getElementById('aboutIcon');
+  if (aboutIconEl) {
+    const iconUrl = CURRENT_RETREAT && CURRENT_RETREAT.about_icon;
+    if (iconUrl) { aboutIconEl.src = iconUrl; aboutIconEl.alt = (aboutHeadingEl ? aboutHeadingEl.textContent : '') || ''; aboutIconEl.style.display = ''; }
+    else { aboutIconEl.removeAttribute('src'); aboutIconEl.style.display = 'none'; }
+  }
   const aboutContainer = document.getElementById('aboutTextContainer');
   let aboutHtml = '';
   const aboutText = rSC('about_text');
