@@ -141,7 +141,12 @@ section{padding:8rem 0;}
 }
 .hero-text{max-width:680px;}
 .hero h1{color:#fff;text-shadow:0 2px 40px rgba(0,0,0,.45);font-size:clamp(2.6rem,6.2vw,5.2rem);}
-.hero .eyebrow{color:var(--gold-light);}
+/* Hero-eyebrow: lys champagne + blød mørk glød, så den kan læses oven på fotoet */
+.hero .eyebrow{
+  color:#f3e6c4;font-size:.75rem;font-weight:500;letter-spacing:.32em;
+  text-shadow:0 0 10px rgba(30,22,12,.85),0 0 3px rgba(30,22,12,.7);
+}
+.hero .eyebrow::before{background:#f3e6c4;box-shadow:0 0 6px rgba(30,22,12,.7);}
 .hero p{color:rgba(255,255,255,.93);font-size:1.3rem;margin-top:1.7rem;max-width:610px;text-shadow:0 1px 18px rgba(0,0,0,.45);}
 /* Regnbuestribe langs bunden af hero'en — samme som .booking-bar-pride på
    retreat-siden, hvor den markerer overgangen fra hero til booking-baren.
