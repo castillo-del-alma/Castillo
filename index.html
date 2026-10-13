@@ -445,6 +445,9 @@ section{position:relative;z-index:1;}
 ══════════════════════════════ */
 .retreats{background:var(--section-alt);padding:9rem 0;}
 .retreats-header{text-align:center;margin-bottom:5rem;}
+/* Knap under brødteksten i retreats-sektionen (tekst + link styres i admin; skjult når teksten er tom) */
+.retreats-header-cta{margin-top:2.4rem;}
+.retreats-header-cta .btn-wine{display:inline-block;}
 .retreats-header h2{
   font-family:'Cinzel',serif;font-weight:300;
   font-size:clamp(2rem,4vw,3.2rem);letter-spacing:.1em;
@@ -1536,6 +1539,7 @@ body.menu-open .nav-burger span:nth-child(3){ transform:translateY(-9px) rotate(
       <span class="section-label">Retreats</span>
       <h2 id="retreatsHeading1">Eksklusive Retreats</h2>
       <p id="retreatsText">Uanset om du søger ro, personlig udvikling, fællesskab eller autentiske oplevelser, finder du et retreat, der passer til din rejse.<br>På Castillo del Alma har vi samlet nøje udvalgte retreats, der skaber plads til fordybelse, livsglæde og nye perspektiver i hjertet af Andalusien.</p>
+      <div class="retreats-header-cta" id="retreatsCtaWrap" style="display:none;"><a href="#retreatsGrid" class="btn-wine" id="retreatsCta"></a></div>
     </div>
     <div class="retreats-grid reveal d1" id="retreatsGrid">
       <div class="loading-retreats" style="grid-column:1/-1;text-align:center;padding:3rem;color:rgba(255,255,255,.4);">Henter retreats...</div>
@@ -3202,6 +3206,21 @@ function applySiteLang() {
     const _org_retreats_text = orgVal(retreatsTextEl, 'innerHTML');
     let t = SC('retreats_text', null);
     retreatsTextEl.innerHTML = t ? t.split('\n').join('<br>') : _org_retreats_text;
+  }
+  // Knap under brødteksten — vises kun, når der er skrevet en knap-tekst i admin
+  const retreatsCtaWrap = document.getElementById('retreatsCtaWrap');
+  const retreatsCta = document.getElementById('retreatsCta');
+  if (retreatsCtaWrap && retreatsCta) {
+    const _sprog = currentSiteLang === 'en' ? 'en' : 'da';
+    const ctaTekst = (siteContentData['retreats_cta_' + _sprog] || '').trim();
+    const ctaLink = (siteContentData['retreats_cta_link_' + _sprog] || siteContentData['retreats_cta_link_da'] || '').trim();
+    if (ctaTekst) {
+      retreatsCta.innerHTML = ctaTekst;
+      retreatsCta.setAttribute('href', ctaLink || '#retreatsGrid');
+      retreatsCtaWrap.style.display = '';
+    } else {
+      retreatsCtaWrap.style.display = 'none';
+    }
   }
   set('retreatsHeading2', 'retreats_heading2');
   const retreatsText2El = document.getElementById('retreatsText2');

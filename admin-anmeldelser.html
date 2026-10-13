@@ -768,6 +768,14 @@ På Castillo del Alma har vi samlet nøje udvalgte retreats, der skaber plads ti
 At Castillo del Alma we have curated a selection of retreats that create space for depth, joy and new perspectives in the heart of Andalusia.</textarea></div>
         </div>
         <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Knap under brødteksten (tom = ingen knap)</label><input type="text" id="retreats_cta_da" class="fc-input-da" value="" placeholder="Fx: Se alle retreats"></div>
+          <div><label class="fc-label fc-label-en">Button below body text (empty = no button)</label><input type="text" id="retreats_cta_en" class="fc-input-en" value="" placeholder="E.g.: See all retreats"></div>
+        </div>
+        <div class="fc-row">
+          <div><label class="fc-label fc-label-da">Knappens link</label><input type="text" id="retreats_cta_link_da" class="fc-input-da" value="" placeholder="Fx: /kontakt.html eller https://…"></div>
+          <div><label class="fc-label fc-label-en">Button link (empty = same as Danish)</label><input type="text" id="retreats_cta_link_en" class="fc-input-en" value="" placeholder="E.g.: /en/kontakt"></div>
+        </div>
+        <div class="fc-row">
           <div><label class="fc-label fc-label-da">Overskrift 2 (Lej hele huset)</label><input type="text" id="retreats_heading2_da" class="fc-input-da" value="Lej hele huset"></div>
           <div><label class="fc-label fc-label-en">Heading 2 (Rent the whole house)</label><input type="text" id="retreats_heading2_en" class="fc-input-en" value="Rent the whole house"></div>
         </div>
@@ -16057,6 +16065,7 @@ function findDaEnPar(container) {
   container.querySelectorAll('input[type="text"], textarea').forEach(da => {
     const id = da.id || '';
     if (!id || id.endsWith('_en')) return;
+    if (id.startsWith('retreats_cta_link')) return; // URL'er skal ikke oversættes
     if (da.closest('#fsNavEditor, #fsOrdenEditor, #ulNavEditor, #ulOrdenEditor, #rtNavEditor, #rtOrdenEditor, #ulFaqListe')) return;
     const enId = id.endsWith('_da') ? id.slice(0, -3) + '_en' : id + '_en';
     const en = document.getElementById(enId);
