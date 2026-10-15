@@ -215,7 +215,8 @@ body.menu-open .nav-burger span:nth-child(3){ transform:translateY(-9px) rotate(
 }
 .page-hero h1 em{color:transparent;-webkit-text-stroke:1px rgba(255,255,255,.7);font-style:normal;}
 /* Hero-slideshow: langsom zoom (Ken Burns) + dissolve mellem billederne */
-.page-hero-img.hero-slides{opacity:1;transform:none;transition:none;}
+.page-hero-img.hero-slides{opacity:1;transform:none;transition:none;z-index:0;isolation:isolate;}
+.page-hero-img.hero-slides ~ .page-hero-overlay{z-index:1;background:linear-gradient(to bottom,rgba(44,35,24,.12) 0%,rgba(44,35,24,.08) 45%,rgba(44,35,24,.45) 100%);}
 .hero-slide{position:absolute;inset:0;opacity:0;transition:opacity 2.2s ease-in-out;}
 .hero-slide.active{opacity:1;z-index:1;}
 .hero-slide img{width:100%;height:100%;max-width:none;display:block;object-fit:cover;
@@ -900,7 +901,7 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:3rem
   <div class="page-hero-img hero-slides" id="heroImg" data-slideshow="1">
     <div class="hero-slide active zoom" style="--o:50% 26%;--to:48% 50%"><img src="/img/udlejning-hero/hero-1-ejendom.jpg" alt="" fetchpriority="high" decoding="async"></div>
     <div class="hero-slide" style="--o:50% 36%"><img src="/img/udlejning-hero/hero-2-maaltid.jpg" alt="" loading="lazy" decoding="async"></div>
-    <div class="hero-slide" style="--o:50% 50%;--to:50% 8%;--s:1.05"><img src="/img/udlejning-hero/hero-3-vinmark.jpg" alt="" loading="lazy" decoding="async"></div>
+    <div class="hero-slide" style="--o:50% 50%;--to:50% 30%;--s:1.05"><img src="/img/udlejning-hero/hero-3-vinmark.jpg" alt="" loading="lazy" decoding="async"></div>
     <div class="hero-slide" style="--o:55% 42%"><img src="/img/udlejning-hero/hero-4-gruppe.jpg" alt="" loading="lazy" decoding="async"></div>
     <div class="hero-slide" style="--o:60% 82%;--to:60% 90%;--s:1.08"><img src="/img/udlejning-hero/hero-5-pool.jpg" alt="" loading="lazy" decoding="async"></div>
     <div class="hero-slide" style="--o:58% 58%"><img src="/img/udlejning-hero/hero-6-stjerner.jpg" alt="" loading="lazy" decoding="async"></div>
