@@ -357,6 +357,11 @@
             <div class="rangerow"><input type="range" id="subY" min="40" max="80" step="1" value="72"><span id="subYv"></span></div>
             <p class="hint">Teksten holdes over Instagrams bund-zone (profilnavn og billedtekst). 72 % er et godt udgangspunkt.</p>
           </div>
+          <div>
+            <label class="lbl" for="subOffset">Timing</label>
+            <div class="rangerow"><input type="range" id="subOffset" min="-1" max="1" step="0.05" value="0"><span id="subOffsetv"></span></div>
+            <p class="hint">Kommer teksten for tidligt, så træk mod højre. Kommer den for sent, så træk mod venstre. Gælder alle linjer.</p>
+          </div>
           <details class="more">
             <summary>Flere indstillinger</summary>
             <div class="grid3">
@@ -441,7 +446,7 @@ const SUB_STYLES = {
 
 /* ---------- State ---------- */
 const S = {
-  color: 'bordeaux', lang: 'da', flow: 'words', size: 'large', style: 'creme', guides: false
+  color: 'bordeaux', lang: 'da', flow: 'words', size: 'large', style: 'creme', guides: false, offset: 0
 };
 let videoFile = null, videoW = 1080, videoH = 1920, videoDur = 0;
 let segments = [];   // { start, end, da, en }
@@ -468,6 +473,7 @@ function restore() {
   try { d = JSON.parse(localStorage.getItem(STORE_KEY) || 'null'); } catch (e) { d = null; }
   if (!d) return;
   ['color', 'lang', 'flow', 'size', 'style'].forEach(k => { if (d[k]) S[k] = d[k]; });
+  if (typeof d.offset === 'number') S.offset = Math.max(-1, Math.min(1, d.offset));
   if (!BOX[S.color]) S.color = 'bordeaux';
   if (typeof d.kicker === 'string') $('kicker').value = d.kicker;
   if (d.boxY) $('boxY').value = d.boxY;
@@ -674,7 +680,7 @@ $('btnTranscribe').addEventListener('click', async () => {
     const data = await res.json().catch(() => ({}));
     if (!res.ok || data.error) throw new Error(data.error || 'Transskriptionen fejlede');
     fill.style.width = '100%';
-    segments = (data.segments || []).map(s => ({ start: +s.start || 0, end: +s.end || 0, da: s.da || '', en: s.en || '' }));
+    segments = (data.segments || []).map(s => ({ start: +s.start || 0, end: +s.end || 0, da: s.da || '', en: s.en || '', words: Array.isArray(s.words) && s.words.length ? s.words : null }));
     if (!segments.length) setStatus('transStatus', 'Der blev ikke fundet tale i videoen. Du kan tilføje linjer selv nedenfor.', 'err');
     else if (data.translateError || segments.every(s => !s.en)) setStatus('transStatus', `${segments.length} linjer fundet, men oversættelsen fejlede. Klik «Oversæt dansk til engelsk igen».`, 'err');
     else setStatus('transStatus', `Færdig: ${segments.length} linjer. Læs dem igennem, og ret hvis nødvendigt.`, 'ok');
@@ -715,7 +721,16 @@ function renderLines() {
 }
 $('lines').addEventListener('input', e => {
   const i = e.target.dataset.i, f = e.target.dataset.f; if (i === undefined || !f) return;
-  segments[i][f] = (f === 'start' || f === 'end') ? (parseFloat(e.target.value) || 0) : e.target.value;
+  const seg = segments[i];
+  if (f === 'start' || f === 'end') {
+    const os = seg.start, oe = seg.end;
+    seg[f] = parseFloat(e.target.value) || 0;
+    // Flyt/skalér ord-tiderne med, så de passer til det nye tidsrum
+    if (seg.words && oe > os && seg.end > seg.start) {
+      const k = (seg.end - seg.start) / (oe - os);
+      seg.words = seg.words.map(w => ({ w: w.w, s: seg.start + (w.s - os) * k, e: seg.start + (w.e - os) * k }));
+    }
+  } else seg[f] = e.target.value;
   if (f === 'start') { const b = e.target.parentElement.querySelector('[data-act=jump]'); if (b) b.textContent = '▶ ' + fmtTime(segments[i].start); }
 });
 $('lines').addEventListener('click', e => {
@@ -764,6 +779,7 @@ $('styleCards').addEventListener('click', e => {
   updateSubStyle(); save();
 });
 ['stFont', 'stCaps', 'stAnim', 'stColor', 'stOutColor', 'stOutSize', 'stBg', 'subY'].forEach(id => $(id).addEventListener('input', () => { updateSubStyle(); save(); }));
+$('subOffset').addEventListener('input', () => { S.offset = parseFloat($('subOffset').value) || 0; updateSubStyle(); save(); });
 
 function currentFont() { return FONTS[$('stFont').value] || FONTS.cinzel; }
 function sizePx() { return Math.round(videoH * ({ medium: 0.050, large: 0.062, xl: 0.076 }[S.size] || 0.062)); }
@@ -787,6 +803,7 @@ function updateSubStyle() {
   ov.style.background = 'transparent'; ov.style.padding = '0';
   ov.dataset.box = boxMode ? '1' : '';
   $('subYv').textContent = Math.round(subYFrac() * 100) + ' %';
+  const o = S.offset || 0; $('subOffsetv').textContent = (o === 0 ? '0' : (o > 0 ? '+' : '−') + Math.abs(o).toFixed(2).replace('.', ',')) + ' s';
   ov.dataset.key = ''; tick();
 }
 window.addEventListener('resize', updateSubStyle);
@@ -803,25 +820,64 @@ function splitIntoN(words, n) {
   for (let k = 0; k < n; k++) { const take = base + (rem > 0 ? 1 : 0); if (rem > 0) rem--; out.push(words.slice(i, i + take).join(' ')); i += take; }
   return out;
 }
+/* Tider pr. ord i den (evt. redigerede) danske tekst.
+   Matcher antallet af ord Whispers ord, bruges tiderne direkte;
+   ellers fordeles teksten over Whispers ord-tidslinje. */
+function wordTimes(seg, n) {
+  const W = seg.words;
+  if (!W || !W.length || !n) return null;
+  if (W.length === n) return W.map(w => [w.s, w.e]);
+  const out = [];
+  for (let i = 0; i < n; i++) {
+    const a = Math.min(W.length - 1, Math.floor(i * W.length / n));
+    const b = Math.min(W.length - 1, Math.max(a, Math.floor((i + 1) * W.length / n) - 1));
+    out.push([W[a].s, W[b].e]);
+  }
+  return out;
+}
 function getCues() {
   if (S.lang === 'none') return [];
-  const cues = [];
+  const raw = [];
   for (const s of segments) {
     if (s.end <= s.start) continue;
-    if (S.flow === 'classic') { cues.push({ start: s.start, end: s.end, da: s.da, en: s.en }); continue; }
-    const maxW = S.flow === 'word1' ? 1 : 3;
     const daW = wordsOf(s.da), enW = wordsOf(s.en);
-    let daC, enC;
-    if (S.lang === 'da') { daC = chunkList(daW, maxW); enC = daC.map(() => ''); }
-    else if (S.lang === 'en') { enC = chunkList(enW, maxW); daC = enC.map(() => ''); }
-    else { daC = chunkList(daW, maxW); enC = enW.length && daC.length ? splitIntoN(enW, daC.length) : daC.map(() => ''); }
-    const n = Math.max(daC.length, enC.length); if (!n) continue;
-    const lens = []; let total = 0;
-    for (let k = 0; k < n; k++) { const L = ((daC[k] || '') + (enC[k] || '')).length || 1; lens.push(L); total += L; }
-    let t = s.start; const dur = s.end - s.start;
-    for (let k = 0; k < n; k++) { const d = dur * lens[k] / total; cues.push({ start: t, end: Math.min(s.end, t + d), da: daC[k] || '', en: enC[k] || '' }); t += d; }
+    const wt = wordTimes(s, daW.length);
+    const spanS = wt ? wt[0][0] : s.start, spanE = wt ? wt[wt.length - 1][1] : s.end;
+    if (S.flow === 'classic') { raw.push({ start: spanS, end: spanE, da: s.da, en: s.en, seg: true }); continue; }
+    const maxW = S.flow === 'word1' ? 1 : 3;
+    if (S.lang !== 'en' && daW.length) {
+      // Dansk styrer timingen: hver bid starter når dens første ord siges
+      const daC = chunkList(daW, maxW);
+      const enC = S.lang === 'both' && enW.length ? splitIntoN(enW, daC.length) : daC.map(() => '');
+      let idx = 0;
+      daC.forEach((c, k) => {
+        const n = wordsOf(c).length;
+        let st, en;
+        if (wt) { st = wt[idx][0]; en = wt[idx + n - 1][1]; }
+        else { const d = (s.end - s.start) / daW.length; st = s.start + idx * d; en = st + n * d; }
+        raw.push({ start: st, end: en, da: c, en: enC[k] || '' });
+        idx += n;
+      });
+    } else if (enW.length) {
+      // Kun engelsk: ingen ord-tider for oversættelsen, så den fordeles over talens tidsrum
+      const enC = chunkList(enW, maxW);
+      const lens = enC.map(c => c.length || 1), total = lens.reduce((x, y) => x + y, 0);
+      let t = spanS;
+      enC.forEach((c, k) => { const d = (spanE - spanS) * lens[k] / total; raw.push({ start: t, end: t + d, da: '', en: c }); t += d; });
+    }
   }
-  return cues;
+  raw.sort((x, y) => x.start - y.start);
+  // Visningstid: bliv stående til næste bid ved korte pauser (ingen blinken),
+  // men forsvind kort efter sidste ord ved længere pauser (ingen hængende tekst).
+  const off = S.offset || 0, MIN = 0.25, TAIL = 0.3, BRIDGE = 0.6;
+  return raw.map((c, i) => {
+    const next = raw[i + 1];
+    let end = c.end + TAIL;
+    if (next) { if (next.start - c.end <= BRIDGE) end = next.start; else end = Math.min(end, next.start); }
+    end = Math.max(end, c.start + MIN);
+    if (next) end = Math.min(end, Math.max(next.start, c.start + 0.05));
+    return { start: Math.max(0, c.start + off), end: Math.max(0.05, end + off), da: c.da, en: c.en };
+  }).filter(c => c.end > c.start);
 }
 
 /* Live forhåndsvisning af undertekster + markering af aktiv linje */
@@ -946,6 +1002,7 @@ setPressed($('swatches'), S.color);
 setPressed($('langSeg'), S.lang); setPressed($('flowSeg'), S.flow); setPressed($('sizeSeg'), S.size); setPressed($('styleCards'), S.style);
 $('subsArea').classList.toggle('hidden', S.lang === 'none');
 $('boxFields').classList.toggle('hidden', !$('boxOn').checked);
+$('subOffset').value = S.offset || 0;
 renderLines();
 updateSubStyle();
 Promise.all([loadImg('img/taarn-hvid.png'), loadImg('img/taarne-hvid-trans.png')]).then(([w, r]) => { towers.white = w; towers.red = r; updateOverlayPreview(); }).catch(() => updateOverlayPreview());

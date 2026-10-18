@@ -104,6 +104,9 @@ exports.handler = async (event) => {
     form.append('model', 'whisper-1');
     form.append('language', 'da');
     form.append('response_format', 'verbose_json');
+    // Ord-tider giver præcis timing, når teksten vises 1-3 ord ad gangen
+    form.append('timestamp_granularities[]', 'word');
+    form.append('timestamp_granularities[]', 'segment');
 
     const whisperRes = await fetch('https://api.openai.com/v1/audio/transcriptions', {
       method: 'POST',
@@ -122,11 +125,24 @@ exports.handler = async (event) => {
     }
 
     const whisperData = await whisperRes.json();
-    const segments = (whisperData.segments || []).map((s) => ({
-      start: Math.max(0, Math.round(s.start * 100) / 100),
-      end: Math.round(s.end * 100) / 100,
-      da: (s.text || '').trim(),
-    }));
+    const r2 = (n) => Math.max(0, Math.round(n * 100) / 100);
+    const allWords = (whisperData.words || [])
+      .map((w) => ({ w: String(w.word || '').trim(), s: r2(w.start), e: r2(w.end) }))
+      .filter((w) => w.w);
+    const rawSegs = whisperData.segments || [];
+    const segments = rawSegs.map((s, i) => {
+      const next = rawSegs[i + 1];
+      // Ord hører til det segment, hvis tidsrum deres start ligger i
+      const words = allWords.filter((w) => w.s >= s.start - 0.05 && (next ? w.s < next.start - 0.05 : true));
+      const seg = { start: r2(s.start), end: r2(s.end), da: (s.text || '').trim() };
+      if (words.length) {
+        seg.words = words;
+        // Stram segmentet ind til den faktiske tale (Whisper medtager ofte stilhed)
+        seg.start = words[0].s;
+        seg.end = Math.max(words[words.length - 1].e, seg.start + 0.2);
+      }
+      return seg;
+    }).filter((s) => s.da);
 
     if (segments.length === 0) {
       return {
