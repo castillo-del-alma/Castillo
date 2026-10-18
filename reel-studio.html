@@ -1,0 +1,957 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" type="image/png" href="img/logo-tower.png">
+<meta name="robots" content="noindex, nofollow">
+<title>Reel-studie · Castillo del Alma</title>
+<link rel="stylesheet" href="fonts/fonts.css">
+<style>
+  @font-face{font-family:'Cormorant Garamond';font-style:italic;font-weight:600;font-display:swap;src:url('fonts/cormorant-600i.woff2') format('woff2');}
+  :root {
+    --cream: #faf6ee;
+    --paper: #ffffff;
+    --ink: #2c2318;
+    --mid: #5c4e3a;
+    --muted: #9a8c7a;
+    --line: #e8dcc8;
+    --soft: #f3ecdf;
+    --gold: #b88a1e;
+    --gold-light: #d4a830;
+    --wine: #7a1f35;
+    --wine-light: #a03048;
+    --ok: #4f7a4f;
+    --err: #a3402e;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: var(--cream); }
+  body { color: var(--ink); font-family: 'Manrope', system-ui, sans-serif; font-size: 15px; line-height: 1.5; }
+  .hidden { display: none !important; }
+  button, input, select, textarea { font: inherit; color: inherit; }
+  button { cursor: pointer; }
+  :focus-visible { outline: 2px solid var(--gold-light); outline-offset: 2px; }
+
+  /* Top bar */
+  .top { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap;
+         padding: 18px max(20px, env(safe-area-inset-left)) 16px; border-bottom: 1px solid var(--line); background: var(--paper); }
+  .brand { display: flex; align-items: center; gap: 12px; }
+  .brand img { width: 38px; height: 38px; }
+  .brand h1 { font-family: 'Cinzel', serif; font-weight: 500; font-size: 20px; letter-spacing: .08em; }
+  .brand p { font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 17px; color: var(--mid); line-height: 1.1; }
+  .progress-steps { display: flex; gap: 6px; flex-wrap: wrap; }
+  .pstep { font-size: 12px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--muted);
+           border: 1px solid var(--line); border-radius: 999px; padding: 6px 12px; background: transparent; }
+  .pstep.done { color: var(--ok); border-color: #cfe0cf; background: #f2f8f2; }
+  .pstep.now { color: var(--paper); background: var(--wine); border-color: var(--wine); }
+
+  /* Layout */
+  .layout { display: grid; grid-template-columns: minmax(0, 400px) minmax(0, 1fr); gap: 36px; max-width: 1240px;
+            margin: 0 auto; padding: 28px max(20px, env(safe-area-inset-right)) 80px max(20px, env(safe-area-inset-left)); align-items: start; }
+  @media (max-width: 900px) { .layout { grid-template-columns: minmax(0, 1fr); gap: 24px; } }
+
+  /* Preview phone */
+  .stage { position: sticky; top: 16px; display: flex; flex-direction: column; align-items: center; gap: 12px; }
+  @media (max-width: 900px) { .stage { position: static; } }
+  .phone { width: min(100%, 360px); aspect-ratio: 9 / 16; background: #0d0a07; border-radius: 30px; padding: 9px;
+           box-shadow: 0 24px 50px rgba(44,35,24,.25), 0 0 0 1px rgba(0,0,0,.2); }
+  .screen { position: relative; width: 100%; height: 100%; border-radius: 22px; overflow: hidden;
+            background: linear-gradient(160deg, #3a2f22, #1a140e); }
+  .screen video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+  .screen .layer { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+  .empty { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center;
+           gap: 8px; color: #cbbd9f; text-align: center; padding: 24px; font-size: 14px; }
+  .empty b { font-family: 'Cinzel', serif; font-weight: 500; color: #efe4cc; letter-spacing: .06em; font-size: 15px; }
+  #subOverlay { position: absolute; left: 6%; right: 6%; text-align: center; pointer-events: none; font-weight: 800; line-height: 1.25; }
+  #subOverlay.pop { animation: subpop .18s cubic-bezier(.34,1.56,.64,1); }
+  @keyframes subpop { 0% { transform: scale(.6); } 70% { transform: scale(1.06); } 100% { transform: scale(1); } }
+  #subOverlay.fadein { animation: subfade .22s ease-out; }
+  @keyframes subfade { from { opacity: 0; } to { opacity: 1; } }
+  .stage-tools { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; }
+  .pill { font-size: 13px; font-weight: 700; border: 1px solid var(--line); background: var(--paper); color: var(--mid);
+          border-radius: 999px; padding: 8px 14px; }
+  .pill:hover { border-color: var(--gold); }
+  .pill[aria-pressed="true"] { background: var(--ink); color: var(--cream); border-color: var(--ink); }
+  .tip { font-size: 12px; color: var(--muted); text-align: center; max-width: 340px; }
+
+  /* Step cards */
+  .steps { display: flex; flex-direction: column; gap: 16px; min-width: 0; }
+  .step { background: var(--paper); border: 1px solid var(--line); border-radius: 14px; overflow: hidden; }
+  .step-head { width: 100%; display: flex; align-items: center; gap: 14px; padding: 18px 22px; background: none; border: 0; text-align: left; }
+  .num { flex: 0 0 auto; width: 30px; height: 30px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center;
+         font-weight: 700; font-size: 13px; background: var(--soft); color: var(--mid); }
+  .step.open .num { background: var(--wine); color: #fff; }
+  .step.complete .num { background: var(--ok); color: #fff; }
+  .step-title { flex: 1; min-width: 0; }
+  .step-title h2 { font-family: 'Cinzel', serif; font-weight: 500; font-size: 17px; letter-spacing: .05em; }
+  .step-title .summary { font-size: 13px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .chev { color: var(--muted); transition: transform .2s; }
+  .step.open .chev { transform: rotate(180deg); }
+  .step-body { padding: 4px 22px 22px; display: none; }
+  .step.open .step-body { display: flex; }
+  .step:not(.open) .step-body { display: none !important; }
+  .stack { display: flex; flex-direction: column; gap: 16px; }
+
+  .drop { border: 2px dashed var(--line); border-radius: 12px; padding: 34px 18px; text-align: center; color: var(--muted); cursor: pointer; background: #fdfbf7; }
+  .drop:hover, .drop.over { border-color: var(--gold); background: #fbf6ea; }
+  .drop strong { color: var(--ink); display: block; font-size: 16px; margin-bottom: 4px; }
+  .fileinfo { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap;
+              background: var(--soft); border-radius: 10px; padding: 12px 14px; font-size: 14px; }
+
+  label.lbl { display: block; font-size: 12px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--mid); margin-bottom: 7px; }
+  .hint { font-size: 13px; color: var(--muted); margin-top: 6px; }
+  input[type=text], input[type=number], textarea, select {
+    width: 100%; background: #fdfbf7; border: 1px solid var(--line); border-radius: 9px; padding: 10px 12px; font-size: 15px; }
+  input[type=text]:focus, textarea:focus, select:focus, input[type=number]:focus { border-color: var(--gold); outline: none; box-shadow: 0 0 0 3px rgba(212,168,48,.2); }
+  textarea { resize: vertical; min-height: 44px; line-height: 1.4; }
+  .two { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+  @media (max-width: 560px) { .two { grid-template-columns: minmax(0, 1fr); } }
+  .linefield { position: relative; }
+  .count { position: absolute; right: 10px; top: 11px; font-size: 12px; color: var(--muted); font-variant-numeric: tabular-nums; }
+  .count.warn { color: var(--err); }
+  .linefield input { padding-right: 52px; }
+
+  .seg { display: inline-flex; flex-wrap: wrap; background: var(--soft); border-radius: 10px; padding: 3px; gap: 2px; }
+  .seg button { border: 0; background: transparent; border-radius: 8px; padding: 8px 14px; font-size: 14px; font-weight: 600; color: var(--mid); }
+  .seg button[aria-pressed="true"] { background: var(--paper); color: var(--ink); box-shadow: 0 1px 3px rgba(44,35,24,.15); }
+
+  .swatches { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 8px; }
+  @media (max-width: 460px) { .swatches { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+  .swatch { display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 8px 4px; border: 1px solid var(--line);
+            border-radius: 10px; background: var(--paper); font-size: 12px; font-weight: 600; color: var(--mid); }
+  .swatch i { width: 100%; max-width: 58px; aspect-ratio: 3 / 2; border-radius: 4px; box-shadow: inset 0 0 0 1px rgba(0,0,0,.08); }
+  .swatch[aria-pressed="true"] { border-color: var(--wine); box-shadow: inset 0 0 0 1px var(--wine); color: var(--ink); }
+
+  .switch { display: inline-flex; align-items: center; gap: 10px; font-weight: 600; font-size: 14px; cursor: pointer; }
+  .switch input { appearance: none; width: 42px; height: 24px; border-radius: 999px; background: #d9cdb8; position: relative; cursor: pointer; transition: background .15s; }
+  .switch input::after { content: ""; position: absolute; top: 3px; left: 3px; width: 18px; height: 18px; border-radius: 50%; background: #fff; transition: left .15s; box-shadow: 0 1px 2px rgba(0,0,0,.2); }
+  .switch input:checked { background: var(--wine); }
+  .switch input:checked::after { left: 21px; }
+
+  input[type=range] { width: 100%; accent-color: var(--wine); }
+  .rangerow { display: flex; align-items: center; gap: 12px; }
+  .rangerow span { font-size: 13px; color: var(--muted); min-width: 64px; text-align: right; font-variant-numeric: tabular-nums; }
+
+  .btn { border: 0; border-radius: 10px; padding: 12px 20px; font-weight: 700; font-size: 14px; letter-spacing: .04em; background: var(--wine); color: #fff; }
+  .btn:hover { background: var(--wine-light); }
+  .btn:disabled { background: #cdbfa8; cursor: not-allowed; }
+  .btn.ghost { background: transparent; color: var(--mid); border: 1px solid var(--line); }
+  .btn.ghost:hover { border-color: var(--gold); background: #fbf6ea; }
+  .btn.big { padding: 16px 26px; font-size: 15px; text-transform: uppercase; letter-spacing: .1em; }
+  .btn.small { padding: 7px 12px; font-size: 13px; }
+  .btnrow { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+
+  .bar { height: 8px; background: var(--soft); border-radius: 5px; overflow: hidden; }
+  .bar > div { height: 100%; width: 0; background: var(--gold); transition: width .3s; }
+  .status { font-size: 14px; color: var(--mid); min-height: 20px; }
+  .status.ok { color: var(--ok); }
+  .status.err { color: var(--err); }
+
+  /* Subtitle lines */
+  .lines { display: flex; flex-direction: column; gap: 8px; }
+  .line { display: grid; grid-template-columns: 92px minmax(0, 1fr) minmax(0, 1fr) 30px; gap: 8px; align-items: start;
+          padding: 8px; border-radius: 10px; border: 1px solid transparent; }
+  .line.active { background: #fbf3e0; border-color: #ecd9a8; }
+  .line.only-da, .line.only-en { grid-template-columns: 92px minmax(0, 1fr) 30px; }
+  .line.only-da .en, .line.only-en .da { display: none; }
+  @media (max-width: 620px) { .line, .line.only-da, .line.only-en { grid-template-columns: 92px minmax(0, 1fr) 30px; }
+    .line .en { grid-column: 2 / 3; } }
+  .time { display: flex; flex-direction: column; gap: 4px; }
+  .time button { border: 1px solid var(--line); background: var(--paper); border-radius: 8px; padding: 6px 4px; font-size: 13px; font-weight: 700; color: var(--mid); font-variant-numeric: tabular-nums; }
+  .time button:hover { border-color: var(--gold); }
+  .time input { padding: 4px 6px; font-size: 12px; text-align: center; }
+  .line textarea { min-height: 62px; font-size: 14px; }
+  .line .del { border: 0; background: transparent; color: var(--muted); font-size: 20px; line-height: 1; padding: 6px 4px; }
+  .line .del:hover { color: var(--err); }
+  .colhead { display: grid; grid-template-columns: 92px minmax(0, 1fr) minmax(0, 1fr) 30px; gap: 8px; padding: 0 8px;
+             font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+  .colhead.only-da, .colhead.only-en { grid-template-columns: 92px minmax(0, 1fr) 30px; }
+  .colhead.only-da .en, .colhead.only-en .da { display: none; }
+  @media (max-width: 620px) { .colhead { display: none; } }
+
+  .styles { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+  @media (max-width: 520px) { .styles { grid-template-columns: minmax(0, 1fr); } }
+  .stylecard { border: 1px solid var(--line); border-radius: 10px; padding: 0; overflow: hidden; background: var(--paper); text-align: center; }
+  .stylecard .sample { height: 64px; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #6c7a62, #3a4a52); font-weight: 800; font-size: 18px; letter-spacing: .05em; }
+  .stylecard span { display: block; padding: 8px; font-size: 13px; font-weight: 600; color: var(--mid); }
+  .stylecard[aria-pressed="true"] { border-color: var(--wine); box-shadow: inset 0 0 0 1px var(--wine); }
+  details.more { border-top: 1px solid var(--line); padding-top: 14px; }
+  details.more summary { cursor: pointer; font-weight: 700; font-size: 13px; color: var(--mid); letter-spacing: .04em; }
+  details.more .grid3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin-top: 14px; }
+  @media (max-width: 560px) { details.more .grid3 { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  input[type=color] { width: 100%; height: 42px; padding: 3px; border: 1px solid var(--line); border-radius: 9px; background: #fdfbf7; }
+
+  .result { display: flex; flex-direction: column; gap: 10px; background: #f2f8f2; border: 1px solid #cfe0cf; border-radius: 12px; padding: 16px; }
+  .dl { display: inline-block; text-align: center; text-decoration: none; background: var(--ok); color: #fff; border-radius: 10px; padding: 14px 22px; font-weight: 700; letter-spacing: .06em; }
+  @media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="brand">
+    <img src="img/taarne-hvid-trans.png" alt="">
+    <div>
+      <h1>Reel-studie</h1>
+      <p>Overskrift, undertekster og oversættelse i én arbejdsgang</p>
+    </div>
+  </div>
+  <nav class="progress-steps" aria-label="Fremskridt">
+    <span class="pstep now" id="ps1">1 Video</span>
+    <span class="pstep" id="ps2">2 Kassen</span>
+    <span class="pstep" id="ps3">3 Undertekster</span>
+    <span class="pstep" id="ps4">4 Hent</span>
+  </nav>
+</header>
+
+<main class="layout">
+  <!-- ===== PREVIEW ===== -->
+  <aside class="stage">
+    <div class="phone">
+      <div class="screen" id="screen">
+        <video id="video" playsinline preload="metadata"></video>
+        <div class="empty" id="emptyState"><b>Ingen video endnu</b>Vælg en video i trin 1. Kassen kan du allerede se her.</div>
+        <img class="layer" id="ovPrev" alt="">
+        <div id="subOverlay"></div>
+        <canvas class="layer hidden" id="guidePrev" width="1080" height="1920"></canvas>
+      </div>
+    </div>
+    <div class="stage-tools">
+      <button class="pill" id="btnPlay" disabled>▶ Afspil</button>
+      <button class="pill" id="btnRestart" disabled>⟲ Fra start</button>
+      <button class="pill" id="btnGuides" aria-pressed="false">Safe-zoner</button>
+    </div>
+    <p class="tip">Det du ser her, er det der brændes ind. Klik på en tid ved en undertekst for at hoppe dertil.</p>
+  </aside>
+
+  <!-- ===== STEPS ===== -->
+  <section class="steps">
+
+    <!-- 1 VIDEO -->
+    <article class="step open" id="step1">
+      <button class="step-head" data-step="1" aria-expanded="true">
+        <span class="num">1</span>
+        <span class="step-title"><h2>Vælg video</h2><span class="summary" id="sum1">MP4 eller MOV, optaget lodret</span></span>
+        <span class="chev">⌄</span>
+      </button>
+      <div class="step-body stack">
+        <div class="drop" id="dropZone" role="button" tabindex="0">
+          <strong>Klik her, eller træk videoen ind</strong>
+          MP4 / MOV · lodret 9:16 · maks. ca. 100 MB
+        </div>
+        <input type="file" id="fileInput" accept="video/*" class="hidden">
+        <div class="fileinfo hidden" id="fileInfo">
+          <span id="fileText"></span>
+          <button class="btn ghost small" id="btnChange">Skift video</button>
+        </div>
+        <div class="status" id="fileStatus"></div>
+      </div>
+    </article>
+
+    <!-- 2 KASSEN -->
+    <article class="step" id="step2">
+      <button class="step-head" data-step="2" aria-expanded="false">
+        <span class="num">2</span>
+        <span class="step-title"><h2>Overskrift i kassen</h2><span class="summary" id="sum2"></span></span>
+        <span class="chev">⌄</span>
+      </button>
+      <div class="step-body stack">
+        <label class="switch"><input type="checkbox" id="boxOn" checked> Vis kassen på videoen</label>
+        <div id="boxFields" class="stack">
+          <div>
+            <label class="lbl" for="l1">Overskrift · 2 linjer</label>
+            <div class="stack" style="gap:8px">
+              <div class="linefield"><input type="text" id="l1" maxlength="40" value="Høsten er i hus."><span class="count" id="c1"></span></div>
+              <div class="linefield"><input type="text" id="l2" maxlength="40" value="20 tons af de fineste druer"><span class="count" id="c2"></span></div>
+            </div>
+            <p class="hint">Under ca. 28 tegn pr. linje giver den største skrift. Længere linjer bliver automatisk mindre.</p>
+          </div>
+          <div>
+            <label class="lbl" for="kicker">Lille tekst over overskriften</label>
+            <input type="text" id="kicker" maxlength="40" value="Castillo del Alma">
+            <p class="hint">Lad feltet stå tomt, hvis I ikke vil have den.</p>
+          </div>
+          <div>
+            <label class="lbl">Farve</label>
+            <div class="swatches" id="swatches"></div>
+          </div>
+          <div>
+            <label class="lbl" for="boxY">Højde i billedet</label>
+            <div class="rangerow"><input type="range" id="boxY" min="110" max="420" step="2" value="190"><span id="boxYv"></span></div>
+            <p class="hint">Standard ligger tæt under toppen. Instagrams menu fylder de øverste 250 px, men den dækker kun lidt af kassen.</p>
+          </div>
+          <div class="btnrow">
+            <button class="btn ghost" id="btnPng">Hent kun kassen som PNG</button>
+            <span class="hint" style="margin:0">Til brug i CapCut eller andre programmer.</span>
+          </div>
+        </div>
+        <div class="btnrow"><button class="btn" data-next="3">Videre til undertekster</button></div>
+      </div>
+    </article>
+
+    <!-- 3 UNDERTEKSTER -->
+    <article class="step" id="step3">
+      <button class="step-head" data-step="3" aria-expanded="false">
+        <span class="num">3</span>
+        <span class="step-title"><h2>Undertekster</h2><span class="summary" id="sum3">Automatisk på dansk og engelsk</span></span>
+        <span class="chev">⌄</span>
+      </button>
+      <div class="step-body stack">
+        <div>
+          <label class="lbl">Sprog på videoen</label>
+          <div class="seg" id="langSeg">
+            <button data-v="da" aria-pressed="true">Dansk</button>
+            <button data-v="en" aria-pressed="false">Engelsk</button>
+            <button data-v="both" aria-pressed="false">Begge</button>
+            <button data-v="none" aria-pressed="false">Ingen</button>
+          </div>
+        </div>
+
+        <div id="subsArea" class="stack">
+          <div class="stack" style="gap:10px" id="transBox">
+            <div class="btnrow">
+              <button class="btn" id="btnTranscribe" disabled>Lav undertekster automatisk</button>
+              <span class="hint" style="margin:0" id="transHint">Vælg først en video.</span>
+            </div>
+            <div class="bar hidden" id="transBar"><div></div></div>
+            <div class="status" id="transStatus"></div>
+          </div>
+
+          <div id="editArea" class="stack hidden">
+            <div class="colhead" id="colhead"><span>Tid</span><span class="da">Dansk</span><span class="en">Engelsk</span><span></span></div>
+            <div class="lines" id="lines"></div>
+            <div class="btnrow">
+              <button class="btn ghost small" id="btnAdd">+ Tilføj linje ved afspilleren</button>
+              <button class="btn ghost small" id="btnRetranslate">Oversæt dansk til engelsk igen</button>
+            </div>
+            <div class="status" id="editStatus"></div>
+          </div>
+
+          <div>
+            <label class="lbl">Udseende</label>
+            <div class="styles" id="styleCards">
+              <button class="stylecard" data-style="creme" aria-pressed="true"><div class="sample" style="font-family:Cinzel,serif;color:#F5EBDD;-webkit-text-stroke:1px #3A2E1F">CASTILLO</div><span>Castillo creme</span></button>
+              <button class="stylecard" data-style="hvid" aria-pressed="false"><div class="sample" style="font-family:Poppins,sans-serif;color:#fff;-webkit-text-stroke:1px #000">KLASSISK</div><span>Klassisk hvid</span></button>
+              <button class="stylecard" data-style="boks" aria-pressed="false"><div class="sample"><span style="font-family:Poppins,sans-serif;color:#fff;background:rgba(0,0,0,.5);padding:2px 8px;border-radius:6px;font-weight:800;font-size:18px">MØRK BOKS</span></div><span>Mørk boks</span></button>
+            </div>
+          </div>
+          <div class="two">
+            <div>
+              <label class="lbl">Visning</label>
+              <div class="seg" id="flowSeg">
+                <button data-v="word1" aria-pressed="false">1 ord</button>
+                <button data-v="words" aria-pressed="true">2–3 ord</button>
+                <button data-v="classic" aria-pressed="false">Sætning</button>
+              </div>
+            </div>
+            <div>
+              <label class="lbl">Størrelse</label>
+              <div class="seg" id="sizeSeg">
+                <button data-v="medium" aria-pressed="false">M</button>
+                <button data-v="large" aria-pressed="true">L</button>
+                <button data-v="xl" aria-pressed="false">XL</button>
+              </div>
+            </div>
+          </div>
+          <div>
+            <label class="lbl" for="subY">Placering</label>
+            <div class="rangerow"><input type="range" id="subY" min="40" max="80" step="1" value="72"><span id="subYv"></span></div>
+            <p class="hint">Teksten holdes over Instagrams bund-zone (profilnavn og billedtekst). 72 % er et godt udgangspunkt.</p>
+          </div>
+          <details class="more">
+            <summary>Flere indstillinger</summary>
+            <div class="grid3">
+              <div><label class="lbl" for="stFont">Skrift</label>
+                <select id="stFont"><option value="cinzel">Cinzel</option><option value="poppins">Poppins</option></select></div>
+              <div><label class="lbl" for="stCaps">Versaler</label>
+                <select id="stCaps"><option value="upper">Ja</option><option value="normal">Nej</option></select></div>
+              <div><label class="lbl" for="stAnim">Animation</label>
+                <select id="stAnim"><option value="pop">Pop</option><option value="fade">Fade</option><option value="none">Ingen</option></select></div>
+              <div><label class="lbl" for="stColor">Tekstfarve</label><input type="color" id="stColor" value="#F5EBDD"></div>
+              <div><label class="lbl" for="stOutColor">Kantfarve</label><input type="color" id="stOutColor" value="#3A2E1F"></div>
+              <div><label class="lbl" for="stOutSize">Kant</label>
+                <select id="stOutSize"><option value="none">Ingen</option><option value="thin">Tynd</option><option value="medium">Mellem</option><option value="thick">Tyk</option></select></div>
+              <div><label class="lbl" for="stBg">Baggrund</label>
+                <select id="stBg"><option value="outline">Kant</option><option value="box">Boks</option></select></div>
+            </div>
+          </details>
+        </div>
+        <div class="btnrow"><button class="btn" data-next="4">Videre til hent</button></div>
+      </div>
+    </article>
+
+    <!-- 4 HENT -->
+    <article class="step" id="step4">
+      <button class="step-head" data-step="4" aria-expanded="false">
+        <span class="num">4</span>
+        <span class="step-title"><h2>Lav færdig video</h2><span class="summary" id="sum4">Brændes ind direkte i din browser</span></span>
+        <span class="chev">⌄</span>
+      </button>
+      <div class="step-body stack">
+        <div class="btnrow">
+          <button class="btn big" id="btnBurn" disabled>Lav færdig video</button>
+          <button class="btn ghost" id="btnPreview" disabled>▶ Se forhåndsvisning først</button>
+        </div>
+        <div class="bar hidden" id="burnBar"><div></div></div>
+        <div class="status" id="burnStatus"></div>
+        <div class="result hidden" id="result">
+          <a class="dl" id="dlLink" download="castillo-reel.mp4">Download færdig video</a>
+          <span class="hint" style="margin:0" id="resultInfo"></span>
+        </div>
+        <p class="hint">Videoen forlader aldrig din computer. Kun lyden sendes til transskription. Indbrændingen tager typisk 1–3 minutter for en reel på 30 sekunder.</p>
+      </div>
+    </article>
+  </section>
+</main>
+
+<script src="/ffmpeg/ffmpeg.js"></script>
+<script>
+/* ============================================================
+   Reel-studie · Castillo del Alma
+   Samler "Video-tekster" (transskription, oversættelse, ASS-brænding
+   med ffmpeg.wasm) med den nye "Kassen"-overskrift.
+   ============================================================ */
+const $ = (id) => document.getElementById(id);
+const FN_URL = '/.netlify/functions/transcribe-video';
+const CORE_URL = '/ffmpeg/ffmpeg-core.js';
+const WASM_URL = '/ffmpeg/ffmpeg-core.wasm';
+const FONTS = {
+  cinzel:  { name: 'Cinzel ExtraBold',  urls: ['/ffmpeg/Cinzel-ExtraBold.ttf'],  css: "'Cinzel', serif", scale: 1.348 },
+  poppins: { name: 'Poppins ExtraBold', urls: ['/ffmpeg/Poppins-ExtraBold.ttf'], css: "'Poppins','Inter',sans-serif", scale: 1.76 }
+};
+const STORE_KEY = 'castillo-reel-studio-v1';
+
+/* ---------- Kassen: palette fra castillodelalma.es ---------- */
+const BOX = {
+  bordeaux:   { name: 'Bordeaux',   bg: '#7a1f35', text: '#faf6ee', kick: '#eedea0', line: 'rgba(212,168,48,0.85)',  med: '#faf6ee', tower: 'red' },
+  rubin:      { name: 'Rubin',      bg: '#a03048', text: '#faf6ee', kick: '#eedea0', line: 'rgba(238,222,160,0.85)', med: '#faf6ee', tower: 'red' },
+  terracotta: { name: 'Terracotta', bg: '#c05c30', text: '#faf6ee', kick: '#faf6ee', line: 'rgba(250,246,238,0.75)', med: '#faf6ee', tower: 'red' },
+  guld:       { name: 'Guld',       bg: '#b88a1e', text: '#faf6ee', kick: '#2c2318', line: 'rgba(250,246,238,0.8)',  med: '#faf6ee', tower: 'red' },
+  oliven:     { name: 'Oliven',     bg: '#6a7240', text: '#faf6ee', kick: '#eedea0', line: 'rgba(238,222,160,0.8)',  med: '#faf6ee', tower: 'red' },
+  teal:       { name: 'Teal',       bg: '#3a6e6a', text: '#faf6ee', kick: '#eedea0', line: 'rgba(212,168,48,0.85)',  med: '#faf6ee', tower: 'red' },
+  kul:        { name: 'Kul',        bg: '#2c2318', text: '#faf6ee', kick: '#d4a830', line: 'rgba(212,168,48,0.85)',  med: '#faf6ee', tower: 'red' },
+  sten:       { name: 'Sten',       bg: '#c8b898', text: '#2c2318', kick: '#7a1f35', line: 'rgba(122,31,53,0.55)',   med: '#7a1f35', tower: 'white' },
+  sand:       { name: 'Sand',       bg: '#e0d0b0', text: '#2c2318', kick: '#7a1f35', line: 'rgba(184,138,30,0.9)',   med: '#7a1f35', tower: 'white' },
+  creme:      { name: 'Creme',      bg: '#faf6ee', text: '#2c2318', kick: '#b88a1e', line: 'rgba(184,138,30,0.9)',   med: '#7a1f35', tower: 'white' }
+};
+const SUB_STYLES = {
+  creme: { font: 'cinzel',  color: '#F5EBDD', outColor: '#3A2E1F', outSize: 'medium', bg: 'outline' },
+  hvid:  { font: 'poppins', color: '#FFFFFF', outColor: '#000000', outSize: 'medium', bg: 'outline' },
+  boks:  { font: 'poppins', color: '#FFFFFF', outColor: '#000000', outSize: 'none',   bg: 'box' }
+};
+
+/* ---------- State ---------- */
+const S = {
+  color: 'bordeaux', lang: 'da', flow: 'words', size: 'large', style: 'creme', guides: false
+};
+let videoFile = null, videoW = 1080, videoH = 1920, videoDur = 0;
+let segments = [];   // { start, end, da, en }
+let ffmpeg = null, ffmpegLoaded = false;
+const towers = {};
+
+/* ---------- Helpers ---------- */
+function setStatus(id, msg, cls) { const el = $(id); if (!el) return; el.textContent = msg; el.className = 'status' + (cls ? ' ' + cls : ''); }
+function escapeHtml(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
+function fmtTime(t) { t = Math.max(0, t || 0); const m = Math.floor(t / 60); const s = (t - m * 60).toFixed(1).padStart(4, '0'); return `${m}:${s.replace('.', ',')}`; }
+function loadImg(src) { return new Promise((res, rej) => { const i = new Image(); i.onload = () => res(i); i.onerror = rej; i.src = src; }); }
+function setPressed(container, val) { container.querySelectorAll('button').forEach(b => b.setAttribute('aria-pressed', b.dataset.v === val || b.dataset.style === val || b.dataset.c === val)); }
+function save() {
+  try {
+    localStorage.setItem(STORE_KEY, JSON.stringify({
+      ...S, guides: false, kicker: $('kicker').value, boxY: $('boxY').value, boxOn: $('boxOn').checked, subY: $('subY').value,
+      stFont: $('stFont').value, stCaps: $('stCaps').value, stAnim: $('stAnim').value, stColor: $('stColor').value,
+      stOutColor: $('stOutColor').value, stOutSize: $('stOutSize').value, stBg: $('stBg').value
+    }));
+  } catch (e) { /* privat vindue */ }
+}
+function restore() {
+  let d = null;
+  try { d = JSON.parse(localStorage.getItem(STORE_KEY) || 'null'); } catch (e) { d = null; }
+  if (!d) return;
+  ['color', 'lang', 'flow', 'size', 'style'].forEach(k => { if (d[k]) S[k] = d[k]; });
+  if (!BOX[S.color]) S.color = 'bordeaux';
+  if (typeof d.kicker === 'string') $('kicker').value = d.kicker;
+  if (d.boxY) $('boxY').value = d.boxY;
+  if (typeof d.boxOn === 'boolean') $('boxOn').checked = d.boxOn;
+  if (d.subY) $('subY').value = d.subY;
+  ['stFont', 'stCaps', 'stAnim', 'stColor', 'stOutColor', 'stOutSize', 'stBg'].forEach(k => { if (d[k] && $(k)) $(k).value = d[k]; });
+}
+
+/* ---------- Kassen-renderer (1080×1920) ---------- */
+function spaced(ctx, text, x, y, spacing) {
+  if ('letterSpacing' in ctx) { ctx.letterSpacing = spacing + 'px'; ctx.fillText(text, x, y); ctx.letterSpacing = '0px'; return; }
+  let sx = x; for (const ch of text) { ctx.fillText(ch, sx, y); sx += ctx.measureText(ch).width + spacing; }
+}
+function drawTower(ctx, img, cx, top, h) { if (!img) return; const w = img.width / img.height * h; ctx.drawImage(img, cx - w / 2, top, w, h); }
+function drawBox(ctx, opt) {
+  const P = BOX[opt.color] || BOX.bordeaux;
+  const lines = opt.lines.map(s => (s || '').trim()).filter(Boolean).slice(0, 2);
+  if (!lines.length) return;
+  const x = 64, top = opt.top, cw = 912, padX = 62;
+  const hasK = !!(opt.kicker || '').trim();
+  let size = 80;
+  const fontFn = s => `italic 600 ${s}px "Cormorant Garamond"`;
+  while (size > 44) { ctx.font = fontFn(size); if (lines.every(l => ctx.measureText(l).width <= cw - 2 * padX - 8)) break; size--; }
+  ctx.font = fontFn(size);
+  const lh = size * 1.04;
+  const ch = 62 + (hasK ? 52 : 0) + lh * lines.length + 50;
+
+  ctx.save();
+  ctx.shadowColor = 'rgba(0,0,0,0.28)'; ctx.shadowBlur = 30; ctx.shadowOffsetY = 8;
+  ctx.globalAlpha = 0.96; ctx.fillStyle = P.bg; ctx.fillRect(x, top, cw, ch);
+  ctx.restore();
+  ctx.strokeStyle = P.line; ctx.lineWidth = 1.6; ctx.strokeRect(x + 14, top + 14, cw - 28, ch - 28);
+
+  const mx = x + cw - 82, my = top;
+  ctx.save(); ctx.shadowColor = 'rgba(0,0,0,0.25)'; ctx.shadowBlur = 14; ctx.shadowOffsetY = 3;
+  ctx.fillStyle = P.med; ctx.beginPath(); ctx.arc(mx, my, 60, 0, Math.PI * 2); ctx.fill(); ctx.restore();
+  ctx.strokeStyle = '#d4a830'; ctx.lineWidth = 2; ctx.beginPath(); ctx.arc(mx, my, 50, 0, Math.PI * 2); ctx.stroke();
+  drawTower(ctx, P.tower === 'white' ? towers.white : towers.red, mx, my - 39, 78);
+
+  let y = top + 62;
+  ctx.textBaseline = 'top'; ctx.textAlign = 'left';
+  if (hasK) { ctx.fillStyle = P.kick; ctx.font = '700 20px Manrope'; spaced(ctx, opt.kicker.toUpperCase(), x + padX, y, 6); y += 52; }
+  ctx.fillStyle = P.text; ctx.font = fontFn(size);
+  lines.forEach((l, i) => ctx.fillText(l, x + padX, y + i * lh));
+}
+function boxOptions() {
+  return { color: S.color, lines: [$('l1').value, $('l2').value], kicker: $('kicker').value, top: parseInt($('boxY').value, 10) || 190 };
+}
+/* Overlay-lag i 1080×1920 (null hvis kassen er slået fra eller tom) */
+function renderOverlayCanvas() {
+  if (!$('boxOn').checked) return null;
+  const o = boxOptions();
+  if (!o.lines.some(l => l.trim())) return null;
+  const c = document.createElement('canvas'); c.width = 1080; c.height = 1920;
+  drawBox(c.getContext('2d'), o);
+  return c;
+}
+function updateOverlayPreview() {
+  const c = renderOverlayCanvas();
+  const img = $('ovPrev');
+  if (!c) { img.classList.add('hidden'); img.removeAttribute('src'); }
+  else { img.src = c.toDataURL('image/png'); img.classList.remove('hidden'); }
+  // Tegntællere + resumé
+  [['l1', 'c1'], ['l2', 'c2']].forEach(([i, c2]) => { const n = $(i).value.trim().length; const el = $(c2); el.textContent = n ? n : ''; el.classList.toggle('warn', n > 28); });
+  const l = [$('l1').value.trim(), $('l2').value.trim()].filter(Boolean).join(' / ');
+  $('sum2').textContent = $('boxOn').checked ? (l ? `${BOX[S.color].name} · ${l}` : 'Ingen tekst endnu') : 'Ingen kasse';
+  $('boxYv').textContent = $('boxY').value + ' px';
+}
+
+/* ---------- Safe-zone guide ---------- */
+function drawGuides() {
+  const c = $('guidePrev'), g = c.getContext('2d');
+  g.clearRect(0, 0, 1080, 1920);
+  g.fillStyle = 'rgba(220,40,60,0.22)';
+  g.fillRect(0, 0, 1080, 250); g.fillRect(0, 1560, 1080, 360); g.fillRect(930, 1000, 150, 560);
+  g.fillStyle = '#fff'; g.font = '700 30px Manrope'; g.textBaseline = 'top'; g.shadowColor = '#000'; g.shadowBlur = 6;
+  g.fillText('Instagram-menu', 30, 110);
+  g.fillText('Profilnavn · billedtekst · lyd', 30, 1700);
+}
+
+/* ---------- Trin-navigation ---------- */
+function openStep(n) {
+  document.querySelectorAll('.step').forEach(s => {
+    const on = s.id === 'step' + n;
+    s.classList.toggle('open', on);
+    s.querySelector('.step-head').setAttribute('aria-expanded', on);
+  });
+  for (let i = 1; i <= 4; i++) $('ps' + i).classList.toggle('now', i === n);
+  const el = $('step' + n);
+  if (el && el.getBoundingClientRect().top < 0) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+function markDone(n, done = true) { $('step' + n).classList.toggle('complete', done); $('ps' + n).classList.toggle('done', done); }
+document.querySelectorAll('.step-head').forEach(h => h.addEventListener('click', () => {
+  const n = +h.dataset.step; const st = $('step' + n);
+  if (st.classList.contains('open')) { st.classList.remove('open'); h.setAttribute('aria-expanded', 'false'); }
+  else openStep(n);
+}));
+document.querySelectorAll('[data-next]').forEach(b => b.addEventListener('click', () => {
+  const n = +b.dataset.next; markDone(n - 1); openStep(n);
+}));
+
+/* ---------- Trin 1: video ---------- */
+const dropZone = $('dropZone');
+dropZone.addEventListener('click', () => $('fileInput').click());
+dropZone.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); $('fileInput').click(); } });
+dropZone.addEventListener('dragover', e => { e.preventDefault(); dropZone.classList.add('over'); });
+dropZone.addEventListener('dragleave', () => dropZone.classList.remove('over'));
+dropZone.addEventListener('drop', e => { e.preventDefault(); dropZone.classList.remove('over'); if (e.dataTransfer.files.length) handleFile(e.dataTransfer.files[0]); });
+$('fileInput').addEventListener('change', e => { if (e.target.files.length) handleFile(e.target.files[0]); });
+$('btnChange').addEventListener('click', () => $('fileInput').click());
+
+function handleFile(file) {
+  if (!file.type.startsWith('video/')) { setStatus('fileStatus', 'Filen ser ikke ud til at være en video. Vælg en MP4 eller MOV.', 'err'); return; }
+  if (file.size > 120 * 1024 * 1024) { setStatus('fileStatus', 'Videoen er for stor (maks. ca. 100 MB). Eksportér den i lavere kvalitet og prøv igen.', 'err'); return; }
+  videoFile = file;
+  $('fileText').textContent = `${file.name} · ${(file.size / 1048576).toFixed(1)} MB`;
+  $('sum1').textContent = file.name;
+  segments = []; renderLines(); $('editArea').classList.add('hidden'); markDone(3, false);
+  $('result').classList.add('hidden');
+  const v = $('video');
+  v.src = URL.createObjectURL(file);
+  v.onloadedmetadata = () => {
+    videoW = v.videoWidth; videoH = v.videoHeight; videoDur = v.duration || 0;
+    const ratio = videoW / videoH;
+    const warn = Math.abs(ratio - 9 / 16) > 0.02 ? ' · Bemærk: videoen er ikke 9:16, så den kan blive beskåret på Instagram.' : '';
+    $('fileText').textContent = `${file.name} · ${(file.size / 1048576).toFixed(1)} MB · ${fmtTime(videoDur)} · ${videoW}×${videoH}`;
+    $('sum1').textContent = `${file.name} · ${fmtTime(videoDur)}`;
+    setStatus('fileStatus', warn ? warn.slice(3) : '', warn ? 'err' : '');
+    updateSubStyle();
+  };
+  $('emptyState').classList.add('hidden');
+  dropZone.classList.add('hidden');
+  $('fileInfo').classList.remove('hidden');
+  ['btnPlay', 'btnRestart', 'btnTranscribe', 'btnBurn', 'btnPreview'].forEach(id => $(id).disabled = false);
+  $('transHint').textContent = 'Lyden sendes til transskription og oversættes til engelsk. Tager ca. ½–1 minut.';
+  markDone(1); openStep(2);
+}
+
+/* ---------- Afspiller ---------- */
+const video = $('video');
+$('btnPlay').addEventListener('click', () => { if (video.paused) video.play(); else video.pause(); });
+$('btnRestart').addEventListener('click', () => { video.currentTime = 0; video.play(); });
+video.addEventListener('play', () => $('btnPlay').textContent = '❚❚ Pause');
+video.addEventListener('pause', () => $('btnPlay').textContent = '▶ Afspil');
+$('screen').addEventListener('click', () => { if (videoFile) { if (video.paused) video.play(); else video.pause(); } });
+$('btnGuides').addEventListener('click', () => {
+  S.guides = !S.guides; $('btnGuides').setAttribute('aria-pressed', S.guides);
+  $('guidePrev').classList.toggle('hidden', !S.guides); if (S.guides) drawGuides();
+});
+
+/* ---------- Trin 2: kassen ---------- */
+Object.entries(BOX).forEach(([k, p]) => {
+  const b = document.createElement('button');
+  b.className = 'swatch'; b.dataset.c = k; b.type = 'button';
+  b.innerHTML = '<i></i><span></span>';
+  b.querySelector('i').style.background = p.bg; b.querySelector('span').textContent = p.name;
+  b.addEventListener('click', () => { S.color = k; setPressed($('swatches'), k); updateOverlayPreview(); save(); });
+  $('swatches').appendChild(b);
+});
+['l1', 'l2', 'kicker', 'boxY'].forEach(id => $(id).addEventListener('input', () => { updateOverlayPreview(); save(); }));
+$('boxOn').addEventListener('change', () => { $('boxFields').classList.toggle('hidden', !$('boxOn').checked); updateOverlayPreview(); save(); });
+$('btnPng').addEventListener('click', () => {
+  const c = renderOverlayCanvas(); if (!c) return;
+  c.toBlob(b => {
+    const a = document.createElement('a'); a.href = URL.createObjectURL(b);
+    const slug = ($('l1').value || 'kasse').toLowerCase().replace(/æ/g, 'ae').replace(/ø/g, 'oe').replace(/å/g, 'aa').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 40);
+    a.download = `castillo-kasse-${S.color}-${slug || 'overlay'}.png`; document.body.appendChild(a); a.click(); a.remove();
+  }, 'image/png');
+});
+
+/* ---------- ffmpeg ---------- */
+async function getFFmpeg(progressCb) {
+  if (!ffmpeg) { const { FFmpeg } = FFmpegWASM; ffmpeg = new FFmpeg(); }
+  if (progressCb) ffmpeg.on('progress', progressCb);
+  if (!ffmpegLoaded) { await ffmpeg.load({ coreURL: CORE_URL, wasmURL: WASM_URL }); ffmpegLoaded = true; }
+  return ffmpeg;
+}
+async function fileToUint8(file) { return new Uint8Array(await file.arrayBuffer()); }
+async function fetchUint8(urls) {
+  for (const url of urls) { try { const r = await fetch(url); if (r.ok) return new Uint8Array(await r.arrayBuffer()); } catch (e) { /* næste */ } }
+  throw new Error('Kunne ikke hente skrifttypen');
+}
+function uint8ToBase64(u8) { let s = ''; for (let i = 0; i < u8.length; i += 0x8000) s += String.fromCharCode.apply(null, u8.subarray(i, i + 0x8000)); return btoa(s); }
+
+/* ---------- Trin 3: transskription ---------- */
+$('btnTranscribe').addEventListener('click', async () => {
+  if (!videoFile) return;
+  const btn = $('btnTranscribe'); btn.disabled = true;
+  const bar = $('transBar'), fill = bar.firstElementChild; bar.classList.remove('hidden'); fill.style.width = '5%';
+  try {
+    setStatus('transStatus', 'Indlæser videomotoren (første gang tager det lidt tid)…');
+    const ff = await getFFmpeg(); fill.style.width = '20%';
+    setStatus('transStatus', 'Henter lyden ud af videoen…');
+    await ff.writeFile('input.mp4', await fileToUint8(videoFile));
+    await ff.exec(['-i', 'input.mp4', '-vn', '-ac', '1', '-ar', '16000', '-b:a', '64k', 'audio.mp3']);
+    let audio = await ff.readFile('audio.mp3'); fill.style.width = '45%';
+    if (audio.length > 4.2 * 1024 * 1024) {
+      setStatus('transStatus', 'Lyden er lang, komprimerer…');
+      await ff.exec(['-i', 'audio.mp3', '-ac', '1', '-ar', '16000', '-b:a', '32k', 'audio2.mp3']);
+      audio = await ff.readFile('audio2.mp3');
+    }
+    setStatus('transStatus', 'Skriver dansk tekst og oversætter til engelsk…'); fill.style.width = '60%';
+    const res = await fetch(FN_URL, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ audioBase64: uint8ToBase64(audio) }) });
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok || data.error) throw new Error(data.error || 'Transskriptionen fejlede');
+    fill.style.width = '100%';
+    segments = (data.segments || []).map(s => ({ start: +s.start || 0, end: +s.end || 0, da: s.da || '', en: s.en || '' }));
+    if (!segments.length) setStatus('transStatus', 'Der blev ikke fundet tale i videoen. Du kan tilføje linjer selv nedenfor.', 'err');
+    else if (data.translateError || segments.every(s => !s.en)) setStatus('transStatus', `${segments.length} linjer fundet, men oversættelsen fejlede. Klik «Oversæt dansk til engelsk igen».`, 'err');
+    else setStatus('transStatus', `Færdig: ${segments.length} linjer. Læs dem igennem, og ret hvis nødvendigt.`, 'ok');
+    $('editArea').classList.remove('hidden');
+    renderLines(); markDone(3);
+    btn.textContent = 'Lav underteksterne forfra';
+  } catch (err) {
+    console.error(err);
+    setStatus('transStatus', 'Det gik galt: ' + err.message + '. Prøv igen om lidt.', 'err');
+  } finally {
+    btn.disabled = false;
+    setTimeout(() => bar.classList.add('hidden'), 800);
+  }
+});
+
+/* ---------- Linje-editor ---------- */
+function langClass() { return S.lang === 'da' ? 'only-da' : S.lang === 'en' ? 'only-en' : ''; }
+function renderLines() {
+  const list = $('lines'); list.innerHTML = '';
+  const lc = langClass();
+  $('colhead').className = 'colhead ' + lc;
+  segments.forEach((s, i) => {
+    const row = document.createElement('div');
+    row.className = 'line ' + lc; row.dataset.i = i;
+    row.innerHTML = `
+      <div class="time">
+        <button type="button" data-act="jump" data-i="${i}" title="Afspil fra her">▶ ${fmtTime(s.start)}</button>
+        <input type="number" step="0.1" min="0" value="${(+s.start).toFixed(1)}" data-i="${i}" data-f="start" aria-label="Start i sekunder">
+        <input type="number" step="0.1" min="0" value="${(+s.end).toFixed(1)}" data-i="${i}" data-f="end" aria-label="Slut i sekunder">
+      </div>
+      <textarea class="da" data-i="${i}" data-f="da" aria-label="Dansk tekst">${escapeHtml(s.da)}</textarea>
+      <textarea class="en" data-i="${i}" data-f="en" aria-label="Engelsk tekst">${escapeHtml(s.en)}</textarea>
+      <button type="button" class="del" data-act="del" data-i="${i}" title="Slet linje" aria-label="Slet linje">×</button>`;
+    list.appendChild(row);
+  });
+  const n = segments.length;
+  $('sum3').textContent = S.lang === 'none' ? 'Ingen undertekster' : n ? `${n} linjer · ${{ da: 'dansk', en: 'engelsk', both: 'dansk + engelsk' }[S.lang]}` : 'Automatisk på dansk og engelsk';
+}
+$('lines').addEventListener('input', e => {
+  const i = e.target.dataset.i, f = e.target.dataset.f; if (i === undefined || !f) return;
+  segments[i][f] = (f === 'start' || f === 'end') ? (parseFloat(e.target.value) || 0) : e.target.value;
+  if (f === 'start') { const b = e.target.parentElement.querySelector('[data-act=jump]'); if (b) b.textContent = '▶ ' + fmtTime(segments[i].start); }
+});
+$('lines').addEventListener('click', e => {
+  const t = e.target.closest('[data-act]'); if (!t) return;
+  const i = +t.dataset.i;
+  if (t.dataset.act === 'del') { segments.splice(i, 1); renderLines(); }
+  if (t.dataset.act === 'jump') { video.currentTime = segments[i].start + 0.01; video.play(); }
+});
+$('btnAdd').addEventListener('click', () => {
+  const t = Math.round((video.currentTime || 0) * 10) / 10;
+  segments.push({ start: t, end: Math.min(t + 2, videoDur || t + 2), da: '', en: '' });
+  segments.sort((a, b) => a.start - b.start);
+  $('editArea').classList.remove('hidden'); renderLines();
+  const idx = segments.findIndex(s => s.start === t && !s.da);
+  const ta = $('lines').querySelector(`[data-i="${idx}"].${S.lang === 'en' ? 'en' : 'da'}`); if (ta) ta.focus();
+});
+$('btnRetranslate').addEventListener('click', async () => {
+  if (!segments.length) return;
+  const btn = $('btnRetranslate'); btn.disabled = true; setStatus('editStatus', 'Oversætter til engelsk…');
+  try {
+    const res = await fetch(FN_URL, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ translateLines: segments.map(s => s.da) }) });
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok || data.error) throw new Error(data.error || 'Oversættelsen fejlede');
+    if (data.translateError) throw new Error(data.translateError);
+    segments.forEach((s, i) => { s.en = (data.lines || [])[i] || ''; });
+    renderLines(); setStatus('editStatus', 'Den engelske tekst er opdateret.', 'ok');
+  } catch (err) { setStatus('editStatus', 'Det gik galt: ' + err.message, 'err'); }
+  finally { btn.disabled = false; }
+});
+
+/* ---------- Undertekst-stil ---------- */
+function bindSeg(id, key, after) {
+  $(id).addEventListener('click', e => {
+    const b = e.target.closest('button'); if (!b) return;
+    S[key] = b.dataset.v; setPressed($(id), S[key]); if (after) after(); updateSubStyle(); save();
+  });
+}
+bindSeg('langSeg', 'lang', () => { $('subsArea').classList.toggle('hidden', S.lang === 'none'); renderLines(); });
+bindSeg('flowSeg', 'flow');
+bindSeg('sizeSeg', 'size');
+$('styleCards').addEventListener('click', e => {
+  const b = e.target.closest('[data-style]'); if (!b) return;
+  S.style = b.dataset.style; setPressed($('styleCards'), S.style);
+  const p = SUB_STYLES[S.style];
+  $('stFont').value = p.font; $('stColor').value = p.color; $('stOutColor').value = p.outColor; $('stOutSize').value = p.outSize; $('stBg').value = p.bg;
+  updateSubStyle(); save();
+});
+['stFont', 'stCaps', 'stAnim', 'stColor', 'stOutColor', 'stOutSize', 'stBg', 'subY'].forEach(id => $(id).addEventListener('input', () => { updateSubStyle(); save(); }));
+
+function currentFont() { return FONTS[$('stFont').value] || FONTS.cinzel; }
+function sizePx() { return Math.round(videoH * ({ medium: 0.050, large: 0.062, xl: 0.076 }[S.size] || 0.062)); }
+function outlineFactor() { return { none: 0, thin: 0.04, medium: 0.07, thick: 0.11 }[$('stOutSize').value] || 0; }
+function subYFrac() { return Math.max(0.3, Math.min(0.85, (parseFloat($('subY').value) || 72) / 100)); }
+function applyCaps(t) { return $('stCaps').value === 'upper' ? String(t).toUpperCase() : String(t); }
+
+function updateSubStyle() {
+  const ov = $('subOverlay'), scale = $('screen').clientWidth / videoW || 0.3;
+  ov.style.fontSize = Math.max(9, sizePx() * scale) + 'px';
+  ov.style.color = $('stColor').value;
+  ov.style.fontFamily = currentFont().css;
+  ov.style.letterSpacing = '0.05em';
+  // Tekstens midte placeres på subY (som i ASS med \an5)
+  ov.style.top = (subYFrac() * 100) + '%';
+  ov.style.transformOrigin = 'center';
+  ov.style.translate = '0 -50%';
+  const boxMode = $('stBg').value === 'box', of = outlineFactor();
+  if (!boxMode && of > 0) { ov.style.webkitTextStroke = Math.max(1, sizePx() * of * scale) + 'px ' + $('stOutColor').value; ov.style.textShadow = '0 0 6px rgba(0,0,0,.5)'; }
+  else { ov.style.webkitTextStroke = '0px transparent'; ov.style.textShadow = boxMode ? 'none' : '0 0 4px rgba(0,0,0,.9), 0 0 8px rgba(0,0,0,.6)'; }
+  ov.style.background = 'transparent'; ov.style.padding = '0';
+  ov.dataset.box = boxMode ? '1' : '';
+  $('subYv').textContent = Math.round(subYFrac() * 100) + ' %';
+  ov.dataset.key = ''; tick();
+}
+window.addEventListener('resize', updateSubStyle);
+
+/* Opdeling i bidder (fra Video-tekster) */
+function wordsOf(t) { return String(t).trim().split(/\s+/).filter(Boolean); }
+function chunkList(words, maxW = 3) {
+  const out = []; let i = 0;
+  while (i < words.length) { let take = Math.min(maxW, words.length - i); if (maxW > 1 && words.length - i === maxW + 1) take = 2; out.push(words.slice(i, i + take).join(' ')); i += take; }
+  return out;
+}
+function splitIntoN(words, n) {
+  const out = []; const base = Math.floor(words.length / n); let rem = words.length % n, i = 0;
+  for (let k = 0; k < n; k++) { const take = base + (rem > 0 ? 1 : 0); if (rem > 0) rem--; out.push(words.slice(i, i + take).join(' ')); i += take; }
+  return out;
+}
+function getCues() {
+  if (S.lang === 'none') return [];
+  const cues = [];
+  for (const s of segments) {
+    if (s.end <= s.start) continue;
+    if (S.flow === 'classic') { cues.push({ start: s.start, end: s.end, da: s.da, en: s.en }); continue; }
+    const maxW = S.flow === 'word1' ? 1 : 3;
+    const daW = wordsOf(s.da), enW = wordsOf(s.en);
+    let daC, enC;
+    if (S.lang === 'da') { daC = chunkList(daW, maxW); enC = daC.map(() => ''); }
+    else if (S.lang === 'en') { enC = chunkList(enW, maxW); daC = enC.map(() => ''); }
+    else { daC = chunkList(daW, maxW); enC = enW.length && daC.length ? splitIntoN(enW, daC.length) : daC.map(() => ''); }
+    const n = Math.max(daC.length, enC.length); if (!n) continue;
+    const lens = []; let total = 0;
+    for (let k = 0; k < n; k++) { const L = ((daC[k] || '') + (enC[k] || '')).length || 1; lens.push(L); total += L; }
+    let t = s.start; const dur = s.end - s.start;
+    for (let k = 0; k < n; k++) { const d = dur * lens[k] / total; cues.push({ start: t, end: Math.min(s.end, t + d), da: daC[k] || '', en: enC[k] || '' }); t += d; }
+  }
+  return cues;
+}
+
+/* Live forhåndsvisning af undertekster + markering af aktiv linje */
+function tick() {
+  const t = video.currentTime || 0;
+  const cue = getCues().find(c => t >= c.start && t <= c.end);
+  const ov = $('subOverlay');
+  let html = '';
+  if (cue) {
+    const wrap = (s) => ov.dataset.box ? `<span style="background:rgba(0,0,0,.45);border-radius:.25em;padding:.08em .3em;box-decoration-break:clone;-webkit-box-decoration-break:clone">${s}</span>` : s;
+    if (S.lang === 'da' || S.lang === 'both') html += wrap(escapeHtml(applyCaps(cue.da)));
+    if (S.lang === 'both' && cue.en) html += '<br><span style="font-size:.8em;font-style:italic">' + wrap(escapeHtml(applyCaps(cue.en))) + '</span>';
+    if (S.lang === 'en') html = wrap(escapeHtml(applyCaps(cue.en)));
+  }
+  const key = cue ? cue.start + '|' + html : '';
+  if (ov.dataset.key !== key) {
+    ov.dataset.key = key; ov.innerHTML = html;
+    ov.classList.remove('pop', 'fadein');
+    if (html) { const a = $('stAnim').value; if (a !== 'none') { void ov.offsetWidth; ov.classList.add(a === 'pop' ? 'pop' : 'fadein'); } }
+  }
+  const idx = segments.findIndex(s => t >= s.start && t <= s.end);
+  document.querySelectorAll('.line').forEach(r => r.classList.toggle('active', +r.dataset.i === idx));
+}
+video.addEventListener('timeupdate', tick);
+video.addEventListener('seeked', tick);
+(function loop() { if (!video.paused) tick(); requestAnimationFrame(loop); })();
+
+/* ---------- ASS ---------- */
+function hexToAss(hex) { const h = hex.replace('#', '').padEnd(6, 'F'); return '&H00' + h.slice(4, 6) + h.slice(2, 4) + h.slice(0, 2); }
+function assTime(sec) { sec = Math.max(0, sec); const h = Math.floor(sec / 3600), m = Math.floor((sec % 3600) / 60), s = Math.floor(sec % 60), cs = Math.min(99, Math.round((sec - Math.floor(sec)) * 100)); return `${h}:${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}.${String(cs).padStart(2, '0')}`; }
+function escAss(t) { return String(t).replace(/\{/g, '(').replace(/\}/g, ')').replace(/\r?\n/g, '\\N'); }
+function buildAss() {
+  const font = currentFont(), fs = Math.round(sizePx() * font.scale);
+  const color = hexToAss($('stColor').value), boxMode = $('stBg').value === 'box';
+  const of = outlineFactor();
+  const outline = boxMode ? Math.round(fs * 0.28) : Math.round(fs * of);
+  const outlineColour = boxMode ? '&H66000000' : hexToAss($('stOutColor').value);
+  const spacing = Math.round(sizePx() * 0.05);
+  const cx = Math.round(videoW / 2), cy = Math.round(videoH * subYFrac());
+  let ass = `[Script Info]
+ScriptType: v4.00+
+PlayResX: ${videoW}
+PlayResY: ${videoH}
+WrapStyle: 0
+
+[V4+ Styles]
+Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding
+Style: Sub,${font.name},${fs},${color},${color},${outlineColour},&H80000000,0,0,0,0,100,100,${spacing},0,${boxMode ? 3 : 1},${outline},0,5,60,60,0,1
+
+[Events]
+Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
+`;
+  const enSize = Math.round(fs * 0.8), anim = $('stAnim').value;
+  for (const s of getCues()) {
+    if (s.end <= s.start) continue;
+    let fx = `\\an5\\pos(${cx},${cy})`;
+    const durMs = Math.round((s.end - s.start) * 1000);
+    if (anim === 'pop') { const d1 = Math.min(140, Math.round(durMs * 0.4)), d2 = Math.min(d1 + 60, Math.round(durMs * 0.6)); fx += `\\fscx60\\fscy60\\t(0,${d1},\\fscx106\\fscy106)\\t(${d1},${d2},\\fscx100\\fscy100)`; }
+    else if (anim === 'fade') { fx += `\\fad(${Math.min(150, Math.round(durMs * 0.4))},${Math.min(100, Math.round(durMs * 0.3))})`; }
+    let text = '';
+    if (S.lang === 'da') text = escAss(applyCaps(s.da));
+    else if (S.lang === 'en') text = escAss(applyCaps(s.en));
+    else { text = escAss(applyCaps(s.da)); if (s.en) text += `\\N{\\fs${enSize}\\i1}` + escAss(applyCaps(s.en)); }
+    if (!text.trim()) continue;
+    ass += `Dialogue: 0,${assTime(s.start)},${assTime(s.end)},Sub,,0,0,0,,{${fx}}${text}\n`;
+  }
+  return ass;
+}
+
+/* ---------- Trin 4: brænd ---------- */
+$('btnPreview').addEventListener('click', () => { video.currentTime = 0; video.play(); $('screen').scrollIntoView({ behavior: 'smooth', block: 'center' }); });
+$('btnBurn').addEventListener('click', async () => {
+  if (!videoFile) { setStatus('burnStatus', 'Vælg først en video i trin 1.', 'err'); return; }
+  const frame = renderOverlayCanvas();
+  const assText = buildAss();
+  const hasSubs = assText.includes('Dialogue:');
+  if (!frame && !hasSubs) { setStatus('burnStatus', 'Der er hverken kasse eller undertekster at brænde ind.', 'err'); return; }
+  const btn = $('btnBurn'); btn.disabled = true;
+  $('result').classList.add('hidden');
+  const bar = $('burnBar'), fill = bar.firstElementChild; bar.classList.remove('hidden'); fill.style.width = '3%';
+  try {
+    setStatus('burnStatus', 'Gør videomotor og skrifttype klar…');
+    const ff = await getFFmpeg(({ progress }) => { if (progress > 0 && progress <= 1) fill.style.width = Math.round(10 + progress * 88) + '%'; });
+    await ff.writeFile('input.mp4', await fileToUint8(videoFile));
+    const inputs = ['-i', 'input.mp4'], parts = []; let cur = '[0:v]';
+    if (frame) {
+      const blob = await new Promise(r => frame.toBlob(r, 'image/png'));
+      await ff.writeFile('frame.png', new Uint8Array(await blob.arrayBuffer()));
+      inputs.push('-i', 'frame.png');
+      parts.push(`[1:v]scale=${videoW}:${videoH}[fr]`, `${cur}[fr]overlay=0:0[vfr]`); cur = '[vfr]';
+    }
+    if (hasSubs) {
+      try { await ff.createDir('/fonts'); } catch (e) { /* findes */ }
+      await ff.writeFile('/fonts/sub.ttf', await fetchUint8(currentFont().urls));
+      await ff.writeFile('subs.ass', new TextEncoder().encode(assText));
+      parts.push(`${cur}subtitles=subs.ass:fontsdir=/fonts[vsub]`); cur = '[vsub]';
+    }
+    const args = [...inputs, '-filter_complex', parts.join(';'), '-map', cur, '-map', '0:a?',
+      '-c:v', 'libx264', '-preset', 'ultrafast', '-crf', '20', '-c:a', 'copy', '-movflags', '+faststart', 'output.mp4'];
+    setStatus('burnStatus', 'Brænder kasse og tekster ind. Lad fanen være åben…');
+    fill.style.width = '10%';
+    await ff.exec(args);
+    const out = await ff.readFile('output.mp4');
+    if (!out || out.length < 1000) throw new Error('Den færdige video blev tom');
+    const blob = new Blob([out.buffer], { type: 'video/mp4' });
+    const dl = $('dlLink');
+    const base = (videoFile.name || 'reel').replace(/\.[^.]+$/, '');
+    dl.href = URL.createObjectURL(blob); dl.download = `${base}-castillo.mp4`;
+    $('resultInfo').textContent = `${(blob.size / 1048576).toFixed(1)} MB · klar til Instagram`;
+    $('result').classList.remove('hidden');
+    fill.style.width = '100%';
+    setStatus('burnStatus', 'Færdig.', 'ok'); markDone(4);
+  } catch (err) {
+    console.error(err);
+    setStatus('burnStatus', 'Det gik galt under indbrændingen: ' + err.message + '. Prøv igen, evt. med en kortere video.', 'err');
+  } finally { btn.disabled = false; }
+});
+
+/* ---------- Start ---------- */
+restore();
+setPressed($('swatches'), S.color);
+setPressed($('langSeg'), S.lang); setPressed($('flowSeg'), S.flow); setPressed($('sizeSeg'), S.size); setPressed($('styleCards'), S.style);
+$('subsArea').classList.toggle('hidden', S.lang === 'none');
+$('boxFields').classList.toggle('hidden', !$('boxOn').checked);
+renderLines();
+updateSubStyle();
+Promise.all([loadImg('img/taarn-hvid.png'), loadImg('img/taarne-hvid-trans.png')]).then(([w, r]) => { towers.white = w; towers.red = r; updateOverlayPreview(); }).catch(() => updateOverlayPreview());
+const fontsToLoad = ['italic 600 40px "Cormorant Garamond"', '700 20px Manrope', '800 40px Cinzel', '800 40px Poppins'];
+Promise.all(fontsToLoad.map(f => document.fonts.load(f, 'Høsten æøå'))).catch(() => {}).then(() => { updateOverlayPreview(); updateSubStyle(); });
+updateOverlayPreview();
+</script>
+</body>
+</html>
