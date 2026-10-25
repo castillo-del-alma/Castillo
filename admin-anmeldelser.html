@@ -16161,22 +16161,64 @@ async function oversaetFelter(par, btn, hvad) {
   }
 }
 
+// Lister i retreat-editoren (Highlights, Værelser & priser, Tilvalg) bygges
+// dynamisk og har ingen faste ID'er — derfor fandt findDaEnPar dem aldrig,
+// og "⇄ Oversæt" sprang dem over, så den engelske side viste dansk tekst.
+// Her laves de om til samme {da, en}-par, hvor en.value skriver direkte i
+// listens tilstand — dvs. præcis det, der gemmes ved 💾 Gem.
+function findListePar(container) {
+  const par = [];
+  const har = (id) => container.querySelector('#' + id) || container.id === id;
+  const felt = (vaerdi, saet) => ({
+    da: { value: vaerdi || '', id: 'liste' },
+    en: { get value() { return saet(); }, set value(v) { saet(v); } }
+  });
+  if (har('addonListe') && typeof addonState !== 'undefined') {
+    addonState.forEach((a) => {
+      par.push(felt(a.text, (v) => (v === undefined ? (a.text_en || '') : (a.text_en = v))));
+    });
+  }
+  if (har('roomPricingListe') && typeof roomPricingState !== 'undefined') {
+    roomPricingState.forEach((r) => {
+      par.push(felt(r.room_da, (v) => (v === undefined ? (r.room_en || '') : (r.room_en = v))));
+    });
+  }
+  if (har('highlightsListe') && typeof highlightsState !== 'undefined') {
+    highlightsState.forEach((h, i) => {
+      const en = () => (highlightsStateEN[i] = highlightsStateEN[i] || { title: '', text: '' });
+      par.push(felt(h.title, (v) => (v === undefined ? (en().title || '') : (en().title = v))));
+      par.push(felt(h.text, (v) => (v === undefined ? (en().text || '') : (en().text = v))));
+    });
+  }
+  return par;
+}
+
+// Tegner listerne igen, så de nye engelske tekster kan ses i felterne
+function gentegnLister(container) {
+  const har = (id) => container.querySelector('#' + id);
+  if (har('addonListe') && typeof renderAddonListe === 'function') renderAddonListe();
+  if (har('roomPricingListe') && typeof renderRoomPricingListe === 'function') renderRoomPricingListe();
+  if (har('highlightsListe') && typeof renderHighlightsListe === 'function') renderHighlightsListe();
+}
+
 // Oversætter én blok (knappen sidder i blokkens header)
 async function oversaetBlok(btn) {
   const blok = btn.closest('.fc-block');
   if (!blok) return;
-  await oversaetFelter(findDaEnPar(blok), btn, 'denne sektion');
+  await oversaetFelter(findDaEnPar(blok).concat(findListePar(blok)), btn, 'denne sektion');
+  gentegnLister(blok);
 }
 
 // Oversætter hele fanen/modalen
 async function oversaetHeleSiden(btn, containerId) {
   const c = document.getElementById(containerId);
   if (!c) return;
-  const par = findDaEnPar(c);
+  const par = findDaEnPar(c).concat(findListePar(c));
   const tomme = par.filter(p => String(p.da.value || '').trim() && !String(p.en.value || '').trim()).length;
   if (!tomme) { showToast('Alle felter har allerede engelsk tekst ✓'); return; }
   if (!confirm(`Oversæt ${tomme} tomme engelske felter? Felter med eksisterende engelsk tekst røres ikke.`)) return;
   await oversaetFelter(par, btn, 'siden');
+  gentegnLister(c);
 }
 
 // ── FJERN BILLEDE/VIDEO — tømmer feltet, så billedet forsvinder helt fra siden ──
