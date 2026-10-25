@@ -579,6 +579,24 @@ async function betalResten(paymentType = 'final', oensketBeloeb = null, visBeloe
   }
 }
 
+// Early bird: mens fristen løber, skal gæsten kunne se den. Når prisen er
+// sikret, bekræftes det. Er den udløbet, står den nye pris allerede i
+// total_price, så der er intet særskilt at vise.
+function ebLinje(b, skylder) {
+  if (!b || !(parseInt(b.early_bird_pladser, 10) > 0)) return '';
+  if (b.early_bird_status === 'sikret') {
+    return `<div class="betaling-row"><span class="betaling-label">${T('ebLabel')}</span><span class="betaling-value green">${T('ebSikret')} ✓</span></div>`;
+  }
+  if (b.early_bird_status === 'aktiv' && skylder > 0 && b.early_bird_frist && new Date(b.early_bird_frist) > new Date()) {
+    const normal = parseFloat(b.early_bird_normalpris);
+    return `<div style="margin-top:1rem;padding:.9rem 1rem;border:1px solid rgba(184,138,30,.35);background:rgba(184,138,30,.08);font-size:.8rem;line-height:1.6;color:#5c4e3a;">
+      <strong style="display:block;font-size:.6rem;letter-spacing:.18em;text-transform:uppercase;color:#b88a1e;margin-bottom:.3rem;">${T('ebLabel')}</strong>
+      ${T('ebFristTekst').replace('{dato}', fmt(b.early_bird_frist))}${normal > 0 ? ' ' + T('ebNormalTekst').replace('{pris}', normal.toFixed(2)) : ''}
+    </div>`;
+  }
+  return '';
+}
+
 function renderBetalinger() {
   if (!bookingData) return;
   const b = bookingData;
@@ -595,6 +613,7 @@ function renderBetalinger() {
       <div class="betaling-bar"><div class="betaling-bar-fill" style="width:${pct}%"></div></div>
       <div class="betaling-row"><span class="betaling-label">${T('betBetalt')}</span><span class="betaling-value green">€${betalt.toFixed(2)}</span></div>
       <div class="betaling-row"><span class="betaling-label">${T('betUdestaaende')}</span><span class="betaling-value gold">€${skylder.toFixed(2)}</span></div>
+      ${ebLinje(b, skylder)}
       ${skylder > 0 ? `<div style="margin-top:1rem;"><button onclick="visBetalMinBooking(${skylder},${parseFloat(bookingData.deposit_amount)||0})" style="width:100%;background:#7a1f35;border:none;color:#fff;padding:.85rem;font-size:.68rem;letter-spacing:.18em;text-transform:uppercase;cursor:pointer;font-family:'Manrope',sans-serif;">${T('betVaelgForm')}</button></div>` : ''}
     </div>
     ${(b.payments||[]).filter(p=>p.status==='paid').map(p=>`
@@ -1247,6 +1266,7 @@ const MB_I18N = {
     forumFejl: 'Kunne ikke hente dine fora. Prøv igen om lidt.',
     henter: 'Henter…', fejl: 'Noget gik galt. Prøv igen om lidt.',
     betRetreatpris: 'Retreat pris', betEkstra: 'Ekstra forbrug', betTotal: 'Total',
+    ebLabel: 'Early bird', ebSikret: 'Pris sikret', ebFristTekst: 'Betal resten senest <strong>{dato}</strong> for at beholde din early bird-pris.', ebNormalTekst: 'Derefter gælder normalprisen (€{pris}) — din plads er sikret uanset hvad.',
     betBetalt: 'Betalt', betUdestaaende: 'Udestående', betVaelgForm: 'Vælg betalingsform',
     betDepositum: 'Depositum', betSlutbetaling: 'Slutbetaling', betBetaling: 'Betaling',
     betHvorMeget: 'Hvor meget ønsker du at betale nu?', betFuldt: 'Fuldt udestående',
@@ -1310,6 +1330,7 @@ const MB_I18N = {
     forumFejl: 'Could not load your forums. Please try again shortly.',
     henter: 'Loading…', fejl: 'Something went wrong. Please try again shortly.',
     betRetreatpris: 'Retreat price', betEkstra: 'Extra charges', betTotal: 'Total',
+    ebLabel: 'Early bird', ebSikret: 'Price secured', ebFristTekst: 'Pay the balance by <strong>{dato}</strong> to keep your early bird price.', ebNormalTekst: 'After that the regular price applies (€{pris}) — your place is secured either way.',
     betBetalt: 'Paid', betUdestaaende: 'Outstanding', betVaelgForm: 'Choose payment option',
     betDepositum: 'Deposit', betSlutbetaling: 'Final payment', betBetaling: 'Payment',
     betHvorMeget: 'How much would you like to pay now?', betFuldt: 'Full balance',

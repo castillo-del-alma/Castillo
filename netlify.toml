@@ -11,6 +11,11 @@
 [functions."forum-lifecycle"]
   schedule = "0 8 * * *"
 
+# Early bird: sikrer/udløber early bird-priser og sender påmindelse 48 timer
+# før fristen. Kører dagligt kl. 07:30 UTC (09:30 spansk sommertid).
+[functions."early-bird"]
+  schedule = "30 7 * * *"
+
 # Ugentlig holdstatus til jer selv: mandag kl. 06:00 UTC (08:00 spansk tid)
 [functions."holdstatus"]
   schedule = "0 6 * * 1"

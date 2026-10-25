@@ -1,5 +1,5 @@
 const { buildEmail, getLang, fmtDate, texts } = require('./email-template');
-const { retreatPris, beregnBookingpris } = require('./beloeb');
+const { retreatPris, beregnBookingpris, earlyBirdTilbud, solgteEarlyBirdPladser, earlyBirdFrist } = require('./beloeb');
 const { hentRabat } = require('./rabat');
 
 exports.handler = async (event) => {
@@ -70,10 +70,33 @@ exports.handler = async (event) => {
       }
     }
 
+    // ── EARLY BIRD ───────────────────────────────────────────────────────
+    // Slås op på retreatet og tælles op mod de pladser der allerede er givet.
+    // Beregningen vælger selv den billigste af early bird og rabatkode — de
+    // to lægges aldrig oven i hinanden.
+    let ebTilbud = null;
+    if (priser && priser.earlyBird && priser.earlyBird.early_bird_price) {
+      try {
+        const solgte = await solgteEarlyBirdPladser(retreat_id);
+        ebTilbud = earlyBirdTilbud(priser.earlyBird, priser.pris, solgte);
+      } catch (e) {
+        console.warn('create-booking: early bird kunne ikke tjekkes (normalpris bruges):', e.message);
+      }
+    }
+
     const beregnet = priser
-      ? beregnBookingpris(priser.pris, priser.pct, antalGaesterTotal, rabat ? rabat.procent : 0)
-      : { totalPrice: 0, depositAmount: 0, rabatPct: 0, rabatBeloeb: 0 };
+      ? beregnBookingpris(priser.pris, priser.pct, antalGaesterTotal, rabat ? rabat.procent : 0, ebTilbud)
+      : { totalPrice: 0, depositAmount: 0, rabatPct: 0, rabatBeloeb: 0, earlyBird: null };
     const { totalPrice, depositAmount } = beregnet;
+
+    // Vandt early bird over rabatkoden, er koden ikke brugt. Så skal den
+    // heller ikke stå på bookingen eller tælle som brugt.
+    const eb = beregnet.earlyBird || null;
+    if (eb && rabat) {
+      console.log(`create-booking: early bird var billigere end rabatkode "${rabat.kode}" — koden er ikke anvendt`);
+      rabat = null;
+    }
+    const ebFrist = eb ? earlyBirdFrist() : null;
 
     const headers = {
       'Content-Type': 'application/json',
@@ -187,7 +210,16 @@ exports.handler = async (event) => {
         // godt for regnskabet eller for at måle hvilken kampagne der virkede.
         rabatkode: rabat ? rabat.kode : null,
         rabat_pct: rabat ? beregnet.rabatPct : null,
-        rabat_beloeb: rabat ? beregnet.rabatBeloeb : null
+        rabat_beloeb: rabat ? beregnet.rabatBeloeb : null,
+        // Early bird-felterne skrives KUN når early bird faktisk er givet.
+        // Så kan en booking uden early bird oprettes, selv hvis SQL'en
+        // (sql/2026-10-25-early-bird.sql) mangler.
+        ...(eb ? {
+          early_bird_pladser: eb.pladser,
+          early_bird_frist: ebFrist.toISOString(),
+          early_bird_normalpris: eb.normalpris,
+          early_bird_status: 'aktiv'
+        } : {})
       })
     });
     const bookingData = await bookingRes.json();
@@ -315,6 +347,8 @@ exports.handler = async (event) => {
               [t.label_room, vaerelse || null],
               [t.label_addons, (selected_addons||[]).length > 0 ? (selected_addons.map(a=>a.text).join(', ') + ' (' + t.addons_note + ')') : null],
               [t.label_rabat, rabat ? `${beregnet.rabatPct}% (${rabat.kode}) − €${beregnet.rabatBeloeb.toFixed(2)}` : null],
+              [t.label_early_bird, eb ? `−€${eb.besparelse.toFixed(2)} ${t.early_bird_saved}` : null],
+              [t.label_early_bird_frist, eb ? fmtDate(ebFrist.toISOString(), lang) : null],
               [t.label_deposit, '€' + depositAmount.toFixed(2)],
               [t.label_total, '€' + totalPrice.toFixed(2)],
             ]
@@ -323,7 +357,7 @@ exports.handler = async (event) => {
             { label: t.btn_minbooking, url: 'https://castillodelalma.es/min-booking', primary: true },
             { label: t.btn_pay_deposit, url: 'https://castillodelalma.es/betal?booking=' + booking.id, primary: false }
           ],
-          note: t.reservation_login + ' <a href="mailto:booking@castillodelalma.es" style="color:#7a1f35;">booking@castillodelalma.es</a>'
+          note: (eb ? t.early_bird_note + '<br><br>' : '') + t.reservation_login + ' <a href="mailto:booking@castillodelalma.es" style="color:#7a1f35;">booking@castillodelalma.es</a>'
         })
       })
     });
@@ -387,7 +421,8 @@ exports.handler = async (event) => {
                ${ekstraGaesterHtml}
                <h3>Særlige ønsker</h3>
                <p>${kommentar || '—'}</p>
-               ${rabat ? `<h3>Rabatkode</h3><p><strong>${rabat.kode}</strong> — ${beregnet.rabatPct}% (−€${beregnet.rabatBeloeb.toFixed(2)})</p>` : ''}`
+               ${rabat ? `<h3>Rabatkode</h3><p><strong>${rabat.kode}</strong> — ${beregnet.rabatPct}% (−€${beregnet.rabatBeloeb.toFixed(2)})</p>` : ''}
+               ${eb ? `<h3>Early bird</h3><p>${eb.pladser} ${eb.pladser === 1 ? 'person' : 'personer'} til €${eb.pris} — sparet €${eb.besparelse.toFixed(2)}<br>Resten skal være betalt senest ${fmtDateDK(ebFrist.toISOString())}, ellers gælder normalprisen (€${eb.normalpris}).</p>` : ''}`
       })
     });
     const adminEmailData = await adminEmailRes.json();
@@ -400,7 +435,15 @@ exports.handler = async (event) => {
     return {
       statusCode: 200,
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ success: true, email: emailData, bookingId: booking.id })
+      body: JSON.stringify({
+        success: true,
+        email: emailData,
+        bookingId: booking.id,
+        // Siden kan vise gæsten den pris serveren faktisk landede på
+        totalPrice,
+        depositAmount,
+        earlyBird: eb ? { pladser: eb.pladser, besparelse: eb.besparelse, frist: ebFrist.toISOString() } : null
+      })
     };
 
   } catch (e) {

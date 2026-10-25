@@ -546,6 +546,8 @@ section{position:relative;z-index:1;}
 .retreat-card-foot{display:flex;align-items:flex-end;justify-content:space-between;gap:.9rem;margin-top:1rem;}
 .retreat-card-meta{text-align:right;line-height:1.35;flex:none;}
 .retreat-card-price{display:block;font-family:'Manrope',sans-serif;font-size:.78rem;font-weight:600;letter-spacing:.05em;color:var(--gold-pale);}
+.retreat-card-price-was{font-weight:400;opacity:.6;margin-right:.4rem;}
+.retreat-card-eb{display:inline-block;font-size:.52rem;letter-spacing:.16em;text-transform:uppercase;font-weight:600;color:var(--gold-pale);border:1px solid rgba(255,255,255,.35);padding:.08rem .35rem;margin-left:.2rem;vertical-align:middle;}
 .retreat-card-days{display:block;font-family:'Manrope',sans-serif;font-size:.62rem;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.62);}
 
 /* ══════════════════════════════
@@ -2608,11 +2610,11 @@ async function fetchRetreatAvailability() {
     const r = await fetch('/.netlify/functions/retreat-availability');
     if (r.ok) {
       const data = await r.json();
-      _availCache = { booked: data.booked || {}, bookedByDate: data.bookedByDate || {} };
+      _availCache = { booked: data.booked || {}, bookedByDate: data.bookedByDate || {}, earlyBirdSold: data.earlyBirdSold || {} };
       return _availCache;
     }
   } catch (e) { /* fejler pænt — badge skjules */ }
-  return { booked: {}, bookedByDate: {} };
+  return { booked: {}, bookedByDate: {}, earlyBirdSold: {} };
 }
 
 function buildAvailBadge(r, availData, isEN) {
@@ -2640,11 +2642,37 @@ function buildAvailBadge(r, availData, isEN) {
 // og mangler en af datoerne, vises kun prisen. Er ingen af delene sat, returneres
 // tom streng, og pilen står alene i fod-rækken som før.
 // Varigheden regnes ud på præcis samme måde som på retreat-siden: nætter + 1.
-function buildKortMeta(r, isEN) {
+//
+// Early bird: gælder tilbuddet nu (samme regler som earlyBirdTilbud() i
+// netlify/functions/beloeb.js), vises early bird-prisen med normalprisen
+// overstreget. Kun visning — prisen afgøres ved booking.
+function kortEarlyBird(r, availData) {
+  const normal = parseFloat(r.price) || 0;
+  const eb = parseFloat(r.early_bird_price);
+  if (!(eb > 0) || !(eb < normal)) return null;
+  const dl = r.early_bird_deadline ? String(r.early_bird_deadline).slice(0, 10) : '';
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(dl)) return null;
+  let idag;
+  try { idag = new Intl.DateTimeFormat('en-CA', { timeZone: 'Europe/Madrid', year: 'numeric', month: '2-digit', day: '2-digit' }).format(new Date()); }
+  catch (e) { idag = new Date().toISOString().slice(0, 10); }
+  if (idag > dl) return null;
+  const loft = parseInt(r.early_bird_spots, 10);
+  if (loft > 0) {
+    const solgt = parseInt(availData && availData.earlyBirdSold && availData.earlyBirdSold[r.id], 10) || 0;
+    if (solgt >= loft) return null;
+  }
+  return Math.round(eb);
+}
+
+function buildKortMeta(r, isEN, availData) {
+  const loc = isEN ? 'en-US' : 'da-DK';
   const pris = parseFloat(r.price) || 0;
-  const prisTekst = pris
-    ? '€' + pris.toLocaleString(isEN ? 'en-US' : 'da-DK')
-    : '';
+  const eb = pris ? kortEarlyBird(r, availData) : null;
+  const prisTekst = eb
+    ? `<s class="retreat-card-price-was">€${pris.toLocaleString(loc)}</s>€${eb.toLocaleString(loc)} <span class="retreat-card-eb">Early bird</span>`
+    : pris
+      ? '€' + pris.toLocaleString(loc)
+      : '';
 
   let dageTekst = '';
   if (r.arrival_date && r.departure_date) {
@@ -2771,7 +2799,7 @@ async function loadRetreatsGrid() {
           <p>${description}</p>
           <div class="retreat-card-foot">
             <span class="retreat-card-arrow">${seMere}</span>
-            ${buildKortMeta(r, isEN)}
+            ${buildKortMeta(r, isEN, availData)}
           </div>
         </div>
       </div>`;

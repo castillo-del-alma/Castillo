@@ -257,6 +257,15 @@ body.menu-open .nav-burger span:nth-child(3){ transform:translateY(-9px) rotate(
   font-family:'Cinzel',serif;font-size:1.6rem;color:var(--wine);font-weight:300;letter-spacing:.05em;
 }
 .booking-bar-price .per{font-size:.6rem;color:var(--text-light);white-space:nowrap;}
+/* Early bird — vises kun når admin har sat en early bird-pris der gælder nu */
+.booking-bar-price .eb-was{font-family:'Cinzel',serif;font-size:.85rem;color:var(--text-light);text-decoration:line-through;letter-spacing:.05em;margin-right:.45rem;font-weight:300;}
+.booking-bar-price .eb-tag{font-size:.58rem;letter-spacing:.16em;text-transform:uppercase;color:var(--gold);font-weight:600;margin-top:.2rem;white-space:nowrap;}
+.eb-boks{border:1px solid rgba(184,138,30,.35);background:rgba(184,138,30,.08);padding:1.3rem 1.5rem;margin:1.6rem 0 .4rem;}
+.eb-boks .eb-boks-label{display:block;font-family:'Manrope',sans-serif;font-size:.58rem;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);font-weight:600;margin-bottom:.5rem;}
+.eb-boks .eb-boks-pris{font-family:'Cinzel',serif;font-weight:300;font-size:1.5rem;color:var(--wine);letter-spacing:.05em;margin:0 0 .3rem;font-style:normal;line-height:1.3;}
+.eb-boks .eb-boks-pris s{font-size:.95rem;color:#9a8c7a;margin-left:.5rem;}
+.booking-section .eb-boks p.eb-boks-tekst{font-size:1rem;margin:0;line-height:1.6;}
+.booking-section .eb-boks p.eb-boks-pladser{font-family:'Manrope',sans-serif;font-style:normal;font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;color:var(--wine);font-weight:600;margin:.6rem 0 0;}
 .booking-bar-actions{display:flex;gap:.8rem;align-items:center;}
 
 /* Date selector */
@@ -966,8 +975,9 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:3rem
     </div>
     <div class="booking-bar-price">
       <span class="from" id="barFraLabel">Fra</span>
-      <span class="amount" id="barPrice">—</span>
+      <span class="amount"><span class="eb-was" id="barPriceWas" hidden></span><span id="barPrice">—</span></span>
       <span class="per" id="barPerLabel">pr. person · delt værelse</span>
+      <span class="eb-tag" id="barEbTag" hidden></span>
     </div>
     <div class="booking-bar-actions">
       <div class="date-select-wrap">
@@ -1292,6 +1302,12 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:3rem
         <h2 id="bookHeading">Tag det første skridt</h2>
         <p id="bookIntro1">Udfyld formularen og vi vender tilbage inden for 24 timer med bekræftelse og information om næste trin.</p>
         <p id="bookIntro2">Har du spørgsmål inden du tilmelder dig, er du altid velkommen til at skrive eller ringe.</p>
+        <div class="eb-boks" id="ebBoks" hidden>
+          <span class="eb-boks-label" id="ebBoksLabel">Early bird</span>
+          <p class="eb-boks-pris" id="ebBoksPris"></p>
+          <p class="eb-boks-tekst" id="ebBoksTekst"></p>
+          <p class="eb-boks-pladser" id="ebBoksPladser" hidden></p>
+        </div>
         <p class="policy-note" id="bookPolicyNote">Ved tilmelding accepterer du vores betalings- og afbestillingsbetingelser. Depositum på 30% forfalder ved tilmelding og reserverer din plads. Restbeløbet forfalder senest 6 uger før ankomst.</p>
       </div>
       <div class="reveal-right d2">
@@ -1721,6 +1737,13 @@ const STATIC_I18N = {
     rabatUdloebet: 'Den kode er desværre udløbet.', rabatIkkeStartet: 'Den kode gælder først senere.',
     rabatOpbrugt: 'Den kode er desværre brugt op.', rabatTjekker: 'Tjekker…', rabatFejl: 'Koden kunne ikke tjekkes lige nu. Prøv igen.',
     bvRabatLabel: 'Rabat',
+    ebLabel: 'Early bird', ebTag: 'Early bird til og med {dato}',
+    ebPrisLinje: '€{eb} pr. person',
+    ebTekst: 'Book senest {dato} og spar €{spar} pr. person. Betal resten inden 7 dage efter din booking for at beholde early bird-prisen — derefter gælder normalprisen, men din plads er sikret uanset hvad.',
+    ebPladser1: 'Kun 1 early bird-plads tilbage', ebPladserN: 'Kun {n} early bird-pladser tilbage',
+    ebBv: 'Early bird: −€{spar} · betal resten inden 7 dage for at beholde prisen',
+    ebBvDelvis: 'Early bird for {n} af {total} gæster: −€{spar} · betal resten inden 7 dage for at beholde prisen',
+    ebRabatIkke: 'Early bird-prisen er billigere end koden, så du får early bird-prisen.',
     btnReserverPlads: 'Reserver din plads', btnBookBetal: 'Book og betal', btnBookNuBetal: 'Book nu og betal',
     btnHeroReserver: 'Reserver', btnHeroBook: 'Book nu',
     bvTitle: 'Vælg betalingsform', bvSub: 'Hvor meget ønsker du at betale nu?',
@@ -1749,6 +1772,13 @@ const STATIC_I18N = {
     rabatUdloebet: 'That code has expired.', rabatIkkeStartet: 'That code is not valid yet.',
     rabatOpbrugt: 'That code has been fully used.', rabatTjekker: 'Checking…', rabatFejl: "The code couldn't be checked right now. Please try again.",
     bvRabatLabel: 'Discount',
+    ebLabel: 'Early bird', ebTag: 'Early bird until {dato}',
+    ebPrisLinje: '€{eb} per person',
+    ebTekst: 'Book by {dato} and save €{spar} per person. Pay the balance within 7 days of booking to keep the early bird price — after that the regular price applies, but your place is secured either way.',
+    ebPladser1: 'Only 1 early bird place left', ebPladserN: 'Only {n} early bird places left',
+    ebBv: 'Early bird: −€{spar} · pay the balance within 7 days to keep the price',
+    ebBvDelvis: 'Early bird for {n} of {total} guests: −€{spar} · pay the balance within 7 days to keep the price',
+    ebRabatIkke: 'The early bird price is lower than the code, so you get the early bird price.',
     btnReserverPlads: 'Reserve your spot', btnBookBetal: 'Book and pay', btnBookNuBetal: 'Book now and pay',
     btnHeroReserver: 'Reserve', btnHeroBook: 'Book now',
     bvTitle: 'Choose payment method', bvSub: 'How much would you like to pay now?',
@@ -2183,6 +2213,8 @@ async function loadRetreatData() {
   RETREAT_PRICE = parseFloat(data.price) || 0;
   DEPOSIT_PCT = parseFloat(data.deposit_pct) || 0.30;
   DEPOSIT_DKK = Math.round(RETREAT_PRICE * DEPOSIT_PCT);
+  EB_SOLGTE = 0;
+  hentEarlyBirdSolgte(data);
 
   applyRetreatContent();
   applyStaticLabels();
@@ -3177,12 +3209,12 @@ function visBetalingsvalg() {
   _bvAntalGaester = 1 + ekstraGaesterListe.length;
 
   // Rabatten trækkes fra HELE ordren, og depositummet regnes af den
-  // rabatterede total. Samme regnestykke som beregnBookingpris() laver
+  // rabatterede total. Early bird og rabatkode lægges ikke sammen — den
+  // billigste vinder. Samme regnestykke som beregnBookingpris() laver
   // serverside — tallene her skal stemme med det gæsten møder hos Stripe.
-  const fuldPris = Math.round(RETREAT_PRICE * _bvAntalGaester);
-  _bvFuldt = AKTIV_RABAT
-    ? Math.round(fuldPris * (100 - AKTIV_RABAT.procent) / 100)
-    : fuldPris;
+  const _bvPris = beregnPrisKlient(_bvAntalGaester);
+  const fuldPris = _bvPris.fuld;
+  _bvFuldt = _bvPris.total;
   _bvDepositum = Math.round(_bvFuldt * DEPOSIT_PCT);
 
   document.getElementById('bv-deposit-amount').textContent = _bvDepositum.toLocaleString('da-DK');
@@ -3190,7 +3222,13 @@ function visBetalingsvalg() {
 
   const bvRabat = document.getElementById('bv-rabat');
   if (bvRabat) {
-    if (AKTIV_RABAT) {
+    if (_bvPris.eb) {
+      const spar = _bvPris.eb.spar.toLocaleString('da-DK');
+      bvRabat.textContent = _bvPris.eb.pladser < _bvAntalGaester
+        ? ebTekst('ebBvDelvis', { n: _bvPris.eb.pladser, total: _bvAntalGaester, spar })
+        : ebTekst('ebBv', { spar });
+      bvRabat.style.display = 'block';
+    } else if (AKTIV_RABAT) {
       bvRabat.textContent = `${SI18N('bvRabatLabel')}: ${AKTIV_RABAT.kode} — ${AKTIV_RABAT.procent}% (−€${(fuldPris - _bvFuldt).toLocaleString('da-DK')})`;
       bvRabat.style.display = 'block';
     } else {
@@ -3358,7 +3396,124 @@ function updatePriceDisplay() {
   if (btn && !btn.disabled) {
     btn.textContent = SI18N('btnBookNuBetal');
   }
+  renderEarlyBird();
   if (AKTIV_RABAT) visRabatBesked('ok');
+}
+
+/* ── EARLY BIRD ────────────────────────────────────────────────────────────
+   Ren visning. Om gæsten faktisk får early bird, afgør create-booking ud fra
+   databasen (beloeb.js) — samme regler som her, men det er serverens svar
+   der gælder. Reglerne her SKAL holdes i takt med earlyBirdTilbud() og
+   beregnBookingpris() i netlify/functions/beloeb.js. */
+let EB_SOLGTE = 0;
+
+function ebMadridIDag() {
+  try {
+    return new Intl.DateTimeFormat('en-CA', { timeZone: 'Europe/Madrid', year: 'numeric', month: '2-digit', day: '2-digit' }).format(new Date());
+  } catch (e) { return new Date().toISOString().slice(0, 10); }
+}
+
+// { pris, deadline, tilbage } eller null
+function earlyBirdTilbudKlient() {
+  const d = CURRENT_RETREAT;
+  if (!d) return null;
+  const ebPris = parseFloat(d.early_bird_price);
+  if (!(ebPris > 0) || !(ebPris < RETREAT_PRICE)) return null;
+  const deadline = d.early_bird_deadline ? String(d.early_bird_deadline).slice(0, 10) : '';
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(deadline)) return null;
+  if (ebMadridIDag() > deadline) return null;
+  const loft = parseInt(d.early_bird_spots, 10);
+  let tilbage = null;
+  if (loft > 0) {
+    tilbage = Math.max(0, loft - (EB_SOLGTE || 0));
+    if (tilbage <= 0) return null;
+  }
+  return { pris: Math.round(ebPris), deadline, tilbage };
+}
+
+// Samme regnestykke som beregnBookingpris(): early bird mod rabatkode,
+// den billigste vinder. Returnerer { total, fuld, eb: {...}|null }.
+function beregnPrisKlient(antal) {
+  const fuld = Math.round(RETREAT_PRICE * antal);
+  const medRabat = AKTIV_RABAT ? Math.round(fuld * (100 - AKTIV_RABAT.procent) / 100) : fuld;
+  const t = earlyBirdTilbudKlient();
+  if (t) {
+    const ebPladser = t.tilbage == null ? antal : Math.min(antal, t.tilbage);
+    if (ebPladser > 0) {
+      const ebTotal = Math.round(t.pris * ebPladser + RETREAT_PRICE * (antal - ebPladser));
+      if (ebTotal < medRabat) return { total: ebTotal, fuld, eb: { pladser: ebPladser, spar: fuld - ebTotal } };
+    }
+  }
+  return { total: medRabat, fuld, eb: null };
+}
+
+function ebFmtDato(iso) {
+  const [y, m, dd] = String(iso).split('-').map(Number);
+  const mdr = retreatLang === 'en'
+    ? ['January','February','March','April','May','June','July','August','September','October','November','December']
+    : ['januar','februar','marts','april','maj','juni','juli','august','september','oktober','november','december'];
+  return retreatLang === 'en' ? `${dd} ${mdr[m - 1]} ${y}` : `${dd}. ${mdr[m - 1]} ${y}`;
+}
+
+function ebTekst(noegle, vaerdier) {
+  return SI18N(noegle).replace(/\{(\w+)\}/g, (_, k) => (vaerdier && vaerdier[k] != null ? vaerdier[k] : ''));
+}
+
+function renderEarlyBird() {
+  const t = earlyBirdTilbudKlient();
+  const loc = retreatLang === 'en' ? 'en-US' : 'da-DK';
+  const was = document.getElementById('barPriceWas');
+  const tag = document.getElementById('barEbTag');
+  const bar = document.getElementById('barPrice');
+  const boks = document.getElementById('ebBoks');
+
+  if (!t) {
+    if (was) was.hidden = true;
+    if (tag) tag.hidden = true;
+    if (boks) boks.hidden = true;
+    if (bar && RETREAT_PRICE) bar.textContent = `€${RETREAT_PRICE.toLocaleString(loc)}`;
+    return;
+  }
+
+  const dato = ebFmtDato(t.deadline);
+  const spar = (RETREAT_PRICE - t.pris).toLocaleString(loc);
+
+  if (bar) bar.textContent = `€${t.pris.toLocaleString(loc)}`;
+  if (was) { was.textContent = `€${RETREAT_PRICE.toLocaleString(loc)}`; was.hidden = false; }
+  if (tag) { tag.textContent = ebTekst('ebTag', { dato }); tag.hidden = false; }
+
+  if (boks) {
+    setText('ebBoksLabel', SI18N('ebLabel'));
+    const prisEl = document.getElementById('ebBoksPris');
+    if (prisEl) prisEl.innerHTML = `${ebTekst('ebPrisLinje', { eb: t.pris.toLocaleString(loc) })}<s>€${RETREAT_PRICE.toLocaleString(loc)}</s>`;
+    const tekstEl = document.getElementById('ebBoksTekst');
+    if (tekstEl) tekstEl.textContent = ebTekst('ebTekst', { dato, spar });
+    const pladsEl = document.getElementById('ebBoksPladser');
+    if (pladsEl) {
+      if (t.tilbage != null && t.tilbage <= 5) {
+        pladsEl.textContent = t.tilbage === 1 ? SI18N('ebPladser1') : ebTekst('ebPladserN', { n: t.tilbage });
+        pladsEl.hidden = false;
+      } else {
+        pladsEl.hidden = true;
+      }
+    }
+    boks.hidden = false;
+  }
+}
+
+// Antal early bird-pladser der allerede er givet — kun et samlet tal.
+// Hentes kun hvis retreatet har et loft. Fejler det, vises tilbuddet uden
+// "pladser tilbage"; serveren tæller alligevel selv ved booking.
+function hentEarlyBirdSolgte(data) {
+  if (!data || !data.id || !(parseInt(data.early_bird_spots, 10) > 0) || !(parseFloat(data.early_bird_price) > 0)) return;
+  fetch('/.netlify/functions/retreat-availability')
+    .then(r => (r.ok ? r.json() : null))
+    .then(j => {
+      if (!j || !j.earlyBirdSold) return;
+      EB_SOLGTE = parseInt(j.earlyBirdSold[data.id], 10) || 0;
+      renderEarlyBird();
+    })
+    .catch(() => {});
 }
 
 /* ── RABATKODE ────────────────────────────────────────────────────────────
@@ -3393,7 +3548,9 @@ function visRabatBesked(art, tekst) {
     const fuld = Math.round(RETREAT_PRICE * antalGaester);
     const spar = fuld - Math.round(fuld * (100 - AKTIV_RABAT.procent) / 100);
     boks.style.color = '#2a7a74';
-    boks.textContent = `✓ ${SI18N('rabatOk')}: ${AKTIV_RABAT.kode} — ${AKTIV_RABAT.procent}% (−€${spar.toLocaleString('da-DK')})`;
+    boks.textContent = beregnPrisKlient(antalGaester).eb
+      ? SI18N('ebRabatIkke')
+      : `✓ ${SI18N('rabatOk')}: ${AKTIV_RABAT.kode} — ${AKTIV_RABAT.procent}% (−€${spar.toLocaleString('da-DK')})`;
   } else {
     boks.style.color = art === 'venter' ? 'rgba(44,35,24,.5)' : '#c05c30';
     boks.textContent = tekst || '';

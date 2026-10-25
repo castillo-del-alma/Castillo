@@ -6120,11 +6120,22 @@ feeling more calm – and coming home to yourself again."</textarea></div>
         </div>
         <div class="fc-row">
           <div><label class="fc-label">Max. deltagere</label><input type="number" id="retreat_max_guests" class="fc-input-da" placeholder="10" min="1"></div>
-          <div><label class="fc-label">Pris per person (€)</label><input type="number" id="retreat_price" class="fc-input-da" placeholder="1495" min="0"></div>
+          <div><label class="fc-label">Pris per person (€)</label><input type="number" id="retreat_price" class="fc-input-da" placeholder="1495" min="0" oninput="ebAdminStatus()"></div>
         </div>
         <div class="fc-row">
           <div><label class="fc-label">Depositum (€)</label><input type="number" id="retreat_deposit_pct" class="fc-input-da" placeholder="30" min="0"></div>
           <div><label class="fc-label">Booking deadline</label><input type="date" id="retreat_booking_deadline" class="fc-input-da"></div>
+        </div>
+        <div id="ra_early_bird" style="margin-top:1.2rem;padding:1rem 1.1rem;border:1px dashed rgba(184,138,30,.45);background:rgba(184,138,30,.05);">
+          <label class="fc-label" style="color:#7a5c14;">🐦 Early bird <span style="font-weight:400;text-transform:none;letter-spacing:0;color:rgba(44,35,24,.55);">— lad prisen stå tom for at slå early bird fra. Gæsten har 7 dage fra bookingen til at betale resten til early bird-pris; derefter gælder normalprisen (pladsen beholdes).</span></label>
+          <div class="fc-row" style="margin-top:.6rem;">
+            <div><label class="fc-label">Early bird-pris per person (€)</label><input type="number" id="retreat_eb_price" class="fc-input-da" placeholder="fx 1295" min="0" oninput="ebAdminStatus()"></div>
+            <div><label class="fc-label">Early bird til og med</label><input type="date" id="retreat_eb_deadline" class="fc-input-da" oninput="ebAdminStatus()"></div>
+          </div>
+          <div class="fc-row">
+            <div><label class="fc-label">Max early bird-pladser</label><input type="number" id="retreat_eb_spots" class="fc-input-da" placeholder="Tom = ubegrænset" min="1" oninput="ebAdminStatus()"></div>
+            <div><label class="fc-label">Status</label><div id="retreat_eb_status" style="font-family:Manrope,sans-serif;font-size:.74rem;line-height:1.5;color:rgba(44,35,24,.6);padding-top:.45rem;">—</div></div>
+          </div>
         </div>
         <div style="text-align:right;margin-top:1rem;padding-top:.8rem;border-top:1px solid rgba(184,138,30,.12);">
           <button type="button" onclick="gemRetreat()" style="background:var(--wine);color:#fff;border:none;padding:.5rem 1.4rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;">💾 Gem retreat</button><button type="button" onclick="gemRetreatOgLuk()" style="background:#2a7a74;color:#fff;border:none;padding:.5rem 1.4rem;font-family:Manrope,sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;margin-left:.6rem;">💾 Gem og luk</button>
@@ -8567,6 +8578,22 @@ async function visDetalje(kundeId) {
       <div class="detalje-row"><span class="detalje-key">Rabat</span><span class="detalje-val" style="color:#2a7a74;">${rkEsc(booking.rabatkode)}${booking.rabat_pct ? ' · ' + booking.rabat_pct + '%' : ''} − €${rabatBeloeb.toFixed(2)}</span></div>`;
     }
 
+    // Early bird. Mens fristen løber, er total_price early bird-prisen.
+    // Udløber den, har early-bird.js allerede sat total_price til normalprisen.
+    if (parseInt(booking.early_bird_pladser, 10) > 0) {
+      const ebNormal = parseFloat(booking.early_bird_normalpris) || 0;
+      const ebStatus = booking.early_bird_status;
+      const ebFrist = booking.early_bird_frist ? new Date(booking.early_bird_frist).toLocaleDateString('da-DK', { day: 'numeric', month: 'long', year: 'numeric' }) : '—';
+      const ebTekst = ebStatus === 'sikret' ? '✓ Sikret'
+        : ebStatus === 'udloebet' ? 'Udløbet — normalpris gælder'
+        : 'Aktiv — resten skal betales senest ' + ebFrist;
+      const ebFarve = ebStatus === 'udloebet' ? 'rgba(44,35,24,.5)' : ebStatus === 'sikret' ? '#2a7a74' : 'var(--gold)';
+      if (ebStatus !== 'udloebet' && ebNormal > 0) {
+        html += `<div class="detalje-row"><span class="detalje-key">Normalpris</span><span class="detalje-val" style="color:rgba(44,35,24,.5);">€${ebNormal.toFixed(2)}</span></div>`;
+      }
+      html += `<div class="detalje-row"><span class="detalje-key">Early bird</span><span class="detalje-val" style="color:${ebFarve};">${booking.early_bird_pladser} ${booking.early_bird_pladser == 1 ? 'person' : 'personer'} · ${ebTekst}</span></div>`;
+    }
+
     html += `<div class="detalje-row"><span class="detalje-key">Retreat pris</span><span class="detalje-val">€${parseFloat(booking.total_price).toFixed(2)}</span></div>
       <div class="detalje-row"><span class="detalje-key">Depositum</span><span class="detalje-val">€${parseFloat(booking.deposit_amount).toFixed(2)}</span></div>`;
 
@@ -9558,6 +9585,10 @@ function openNytRetreat() {
   { const _ff = document.getElementById('ra_food_img_file'); if (_ff) _ff.value = ''; }
   retreatOrigImages = { hero: '', card: '', food: '' };
   document.getElementById('retreat_booking_deadline').value = '';
+  { const _e = document.getElementById('retreat_eb_price'); if (_e) _e.value = ''; }
+  { const _e = document.getElementById('retreat_eb_deadline'); if (_e) _e.value = ''; }
+  { const _e = document.getElementById('retreat_eb_spots'); if (_e) _e.value = ''; }
+  ebAdminStatus();
   document.getElementById('retreat_teacher_bio').value = 'En erfaren wellness-facilitator med speciale i nervesystemsregulering, breathwork og somatic therapy. Med mange års erfaring fra retreats i Skandinavien og Sydeuropa skabes et trygt og professionelt rum for transformation.';
   document.getElementById('retreat_teacher_bio_en').value = 'An experienced wellness facilitator specialising in nervous system regulation, breathwork and somatic therapy. With many years of experience from retreats across Scandinavia and Southern Europe.';
   document.getElementById('retreatSaveBtn').textContent = 'Opret retreat';
@@ -9607,6 +9638,10 @@ function udfyldRetreatForm(r) {
   document.getElementById('retreat_description_en').value = r.description_en || '';
   document.getElementById('retreat_price').value = r.price || '';
   document.getElementById('retreat_deposit_pct').value = r.deposit_pct ? Math.round(r.deposit_pct * 100) : '30';
+  { const _e = document.getElementById('retreat_eb_price'); if (_e) _e.value = r.early_bird_price || ''; }
+  { const _e = document.getElementById('retreat_eb_deadline'); if (_e) _e.value = r.early_bird_deadline ? String(r.early_bird_deadline).slice(0, 10) : ''; }
+  { const _e = document.getElementById('retreat_eb_spots'); if (_e) _e.value = r.early_bird_spots || ''; }
+  ebAdminStatus();
   { const _ra = document.getElementById('retreat_active'); if (_ra) _ra.checked = r.active === true; }
   // Billed-URL-felter + thumbnails (previews er <img>-elementer — sæt src, ikke innerHTML)
   { const _hu = document.getElementById('retreat_hero_image'); if (_hu) _hu.value = r.hero_image || ''; }
@@ -10121,6 +10156,29 @@ function updateAddonPreview() {
   } catch(e) { preview.textContent = ''; }
 }
 
+// Early bird-status i retreat-editoren: viser med det samme om tilbuddet
+// er gyldigt, så man ikke gemmer en early bird der aldrig bliver vist.
+// Samme regler som earlyBirdTilbud() i netlify/functions/beloeb.js.
+function ebAdminStatus() {
+  const el = document.getElementById('retreat_eb_status');
+  if (!el) return;
+  const normal = parseFloat(document.getElementById('retreat_price')?.value) || 0;
+  const eb = parseFloat(document.getElementById('retreat_eb_price')?.value) || 0;
+  const dl = document.getElementById('retreat_eb_deadline')?.value || '';
+  const loft = parseInt(document.getElementById('retreat_eb_spots')?.value, 10) || 0;
+  const saet = (txt, farve) => { el.textContent = txt; el.style.color = farve; };
+  if (!eb) return saet('Ingen early bird', 'rgba(44,35,24,.55)');
+  if (!(eb < normal)) return saet('⚠ Early bird-prisen skal være lavere end normalprisen', '#c05c30');
+  if (!dl) return saet('⚠ Vælg en slutdato — uden dato vises early bird ikke', '#c05c30');
+  let idag;
+  try { idag = new Intl.DateTimeFormat('en-CA', { timeZone: 'Europe/Madrid', year: 'numeric', month: '2-digit', day: '2-digit' }).format(new Date()); }
+  catch (e) { idag = new Date().toISOString().slice(0, 10); }
+  if (idag > dl) return saet('Udløbet — vises ikke længere på siden', 'rgba(44,35,24,.55)');
+  const dage = Math.round((new Date(dl + 'T00:00:00Z') - new Date(idag + 'T00:00:00Z')) / 864e5);
+  const pct = Math.round((1 - eb / normal) * 100);
+  saet(`✓ Aktiv — spar €${Math.round(normal - eb)} (${pct}%) pr. person · ${dage === 0 ? 'sidste dag i dag' : dage + (dage === 1 ? ' dag' : ' dage') + ' tilbage'}${loft ? ' · max ' + loft + ' pladser' : ''}`, '#2a7a74');
+}
+
 async function gemRetreat() {
   syncHighlightsToFields(); // Synkroniser highlights state til felter inden gem
   const id = document.getElementById('retreat_id').value;
@@ -10157,6 +10215,9 @@ async function gemRetreat() {
       arrival_soldout: !!(datesState[0] && datesState[0].soldout),
       price: parseFloat(document.getElementById('retreat_price').value) || 0,
       deposit_pct: (parseFloat(document.getElementById('retreat_deposit_pct').value) || 30) / 100,
+      early_bird_price: parseFloat(document.getElementById('retreat_eb_price')?.value) || null,
+      early_bird_deadline: document.getElementById('retreat_eb_deadline')?.value || null,
+      early_bird_spots: parseInt(document.getElementById('retreat_eb_spots')?.value, 10) || null,
       active: document.getElementById('retreat_active')?.checked === true,
       location: document.getElementById('retreat_location').value.trim() || null,
       about_heading: document.getElementById('retreat_about_heading').value.trim() || null,
@@ -10432,21 +10493,21 @@ async function gemRetreat() {
 
     if (id) {
       let { error } = await sb.from('retreats').update(payload).eq('id', id);
-      if (error && /nav_links|sektion_orden|retreat_images5_2|retreat_images5_3|jsonld_extra|stribe_luft|about_icon|freetext_extra/.test(error.message || '')) {
+      if (error && /nav_links|sektion_orden|retreat_images5_2|retreat_images5_3|jsonld_extra|stribe_luft|about_icon|freetext_extra|early_bird/.test(error.message || '')) {
         // Kolonnerne findes ikke endnu (SQL ikke kørt) — gem resten og advar
         delete payload.nav_links; delete payload.sektion_orden;
-        delete payload.retreat_images5_2; delete payload.retreat_images5_3; delete payload.jsonld_extra; delete payload.stribe_luft; delete payload.about_icon; delete payload.freetext_extra;
+        delete payload.retreat_images5_2; delete payload.retreat_images5_3; delete payload.jsonld_extra; delete payload.stribe_luft; delete payload.about_icon; delete payload.freetext_extra; delete payload.early_bird_price; delete payload.early_bird_deadline; delete payload.early_bird_spots;
         ({ error } = await sb.from('retreats').update(payload).eq('id', id));
-        if (!error) showToast('⚠ Gemt, men nogle nye felter (fx fritekst 2–3, billeder, ikon) kræver at SQL-opdateringen køres først', true);
+        if (!error) showToast('⚠ Gemt, men nogle nye felter (fx early bird, fritekst 2–3, billeder, ikon) kræver at SQL-opdateringen køres først', true);
       }
       if (error) throw error;
     } else {
       let { error } = await sb.from('retreats').insert(payload);
-      if (error && /nav_links|sektion_orden|retreat_images5_2|retreat_images5_3|jsonld_extra|stribe_luft|about_icon|freetext_extra/.test(error.message || '')) {
+      if (error && /nav_links|sektion_orden|retreat_images5_2|retreat_images5_3|jsonld_extra|stribe_luft|about_icon|freetext_extra|early_bird/.test(error.message || '')) {
         delete payload.nav_links; delete payload.sektion_orden;
-        delete payload.retreat_images5_2; delete payload.retreat_images5_3; delete payload.jsonld_extra; delete payload.stribe_luft; delete payload.about_icon; delete payload.freetext_extra;
+        delete payload.retreat_images5_2; delete payload.retreat_images5_3; delete payload.jsonld_extra; delete payload.stribe_luft; delete payload.about_icon; delete payload.freetext_extra; delete payload.early_bird_price; delete payload.early_bird_deadline; delete payload.early_bird_spots;
         ({ error } = await sb.from('retreats').insert(payload));
-        if (!error) showToast('⚠ Gemt, men nogle nye felter (fx fritekst 2–3, billeder, ikon) kræver at SQL-opdateringen køres først', true);
+        if (!error) showToast('⚠ Gemt, men nogle nye felter (fx early bird, fritekst 2–3, billeder, ikon) kræver at SQL-opdateringen køres først', true);
       }
       if (error) throw error;
     }

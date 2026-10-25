@@ -53,10 +53,32 @@ exports.handler = async (event) => {
       }
     }
 
-    return { statusCode: 200, headers, body: JSON.stringify({ booked, bookedByDate }) };
+    // Early bird: antal personer der allerede har fået early bird-pris pr.
+    // retreat. Samme regel som beloeb.js/solgteEarlyBirdPladser: alle
+    // ikke-annullerede bookinger hvor early bird ikke er udløbet. Kun tal.
+    // Findes kolonnerne ikke endnu, udelades feltet bare.
+    const earlyBirdSold = {};
+    try {
+      const ebRes = await fetch(
+        `${SUPABASE_URL}/rest/v1/bookings?early_bird_pladser=gt.0&select=retreat_id,early_bird_pladser,early_bird_status,status`,
+        { headers: { apikey: KEY, Authorization: `Bearer ${KEY}` } }
+      );
+      if (ebRes.ok) {
+        const ebRows = await ebRes.json();
+        for (const b of Array.isArray(ebRows) ? ebRows : []) {
+          if (!b || !b.retreat_id) continue;
+          if (b.status === 'annulleret' || b.early_bird_status === 'udloebet') continue;
+          earlyBirdSold[b.retreat_id] = (earlyBirdSold[b.retreat_id] || 0) + (parseInt(b.early_bird_pladser, 10) || 0);
+        }
+      }
+    } catch (e) {
+      console.warn('retreat-availability: early bird-optælling fejlede:', e.message);
+    }
+
+    return { statusCode: 200, headers, body: JSON.stringify({ booked, bookedByDate, earlyBirdSold }) };
   } catch (err) {
     console.error('retreat-availability fejl:', err.message);
     // Ved fejl: tomt objekt, så forsiden bare skjuler badgen (fejler pænt)
-    return { statusCode: 200, headers, body: JSON.stringify({ booked: {}, bookedByDate: {}, error: 'kunne ikke hente' }) };
+    return { statusCode: 200, headers, body: JSON.stringify({ booked: {}, bookedByDate: {}, earlyBirdSold: {}, error: 'kunne ikke hente' }) };
   }
 };

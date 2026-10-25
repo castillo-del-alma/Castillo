@@ -87,6 +87,30 @@ exports.handler = async (event) => {
         console.error('stripe-webhook: forum-synkronisering fejlede:', e.message);
       }
 
+      // Early bird: er grundprisen nu betalt inden fristen, er prisen sikret.
+      // Er den stadig åben, husker vi fristen, så mailen kan minde om den.
+      // Fejler noget her (fx SQL ikke kørt), sendes mailen bare uden.
+      let ebAabenFrist = null;
+      try {
+        const ebRes = await fetch(`${SUPABASE_URL}/rest/v1/bookings?id=eq.${bookingId}&select=id,total_price,early_bird_pladser,early_bird_frist,early_bird_normalpris,early_bird_status,payments(amount,status,paid_at,created_at)`, { headers });
+        if (ebRes.ok) {
+          const ebArr = await ebRes.json();
+          const ebB = Array.isArray(ebArr) ? ebArr[0] : null;
+          if (ebB && parseInt(ebB.early_bird_pladser, 10) > 0 && ebB.early_bird_status === 'aktiv') {
+            const { earlyBirdAfgoerelse, anvendEarlyBirdAfgoerelse } = require('./beloeb');
+            const afg = earlyBirdAfgoerelse(ebB);
+            if (afg) {
+              await anvendEarlyBirdAfgoerelse(ebB, afg);
+              console.log(`stripe-webhook: early bird ${afg} for booking ${bookingId}`);
+            } else {
+              ebAabenFrist = ebB.early_bird_frist;
+            }
+          }
+        }
+      } catch (e) {
+        console.error('stripe-webhook: early bird-tjek fejlede:', e.message);
+      }
+
       // Hent booking- og kundeinfo til bekræftelsesmail
       const bookingInfoRes = await fetch(`${SUPABASE_URL}/rest/v1/bookings?id=eq.${bookingId}&select=retreat_name,arrival_date,customer_id`, { headers });
       const bookingInfoArr = await bookingInfoRes.json();
@@ -111,7 +135,8 @@ exports.handler = async (event) => {
             introDep: 'Vi har modtaget dit depositum og er glade for at byde dig velkommen til Castillo del Alma.',
             body: 'Du er velkommen til at logge ind på din profil på Castillo del Alma. Her kan du se dit retreat, dine betalinger, tilvalg, afsendte mails og chatte med os, hvis du har nogen spørgsmål.',
             seeYou: 'Vi ses', btn: 'Min booking', resLabel: 'DIN RESERVATION',
-            lRetreat: 'Retreat', lArrival: 'Ankomst', lPaid: 'Betalt'
+            lRetreat: 'Retreat', lArrival: 'Ankomst', lPaid: 'Betalt',
+            lEbFrist: 'Early bird — betal resten senest', ebNote: 'Betal resten inden denne dato for at beholde din early bird-pris. Derefter gælder normalprisen — din plads er sikret uanset hvad.'
           } : {
             subFinal: 'Thank you for your final payment — Castillo del Alma',
             subFull: 'Thank you for your booking and payment — Castillo del Alma',
@@ -123,7 +148,8 @@ exports.handler = async (event) => {
             introDep: 'We have received your deposit and are delighted to welcome you to Castillo del Alma.',
             body: 'Feel free to log in to your profile at Castillo del Alma. There you can see your retreat, payments, add-ons, sent emails and chat with us if you have any questions.',
             seeYou: 'See you soon', btn: 'My booking', resLabel: 'YOUR RESERVATION',
-            lRetreat: 'Retreat', lArrival: 'Arrival', lPaid: 'Paid'
+            lRetreat: 'Retreat', lArrival: 'Arrival', lPaid: 'Paid',
+            lEbFrist: 'Early bird — pay the balance by', ebNote: 'Pay the balance before this date to keep your early bird price. After that the regular price applies — your place is secured either way.'
           };
           const retreatName = bookingInfo.retreat_name || 'dit retreat';
 
@@ -182,10 +208,15 @@ exports.handler = async (event) => {
                 <td style="padding:10px 0;border-bottom:1px solid rgba(44,35,24,.08);text-align:right;"><span style="font-size:13px;color:#2c2318;">${fmtDateDK(bookingInfo.arrival_date)}</span></td>
               </tr>
               <tr>
-                <td style="padding:10px 0;"><span style="font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:rgba(44,35,24,.65);">${S.lPaid}</span></td>
-                <td style="padding:10px 0;text-align:right;"><span style="font-size:13px;color:#7a1f35;font-weight:bold;">€${amount.toLocaleString('da-DK')}</span></td>
-              </tr>
-            </table>
+                <td style="padding:10px 0;${ebAabenFrist ? 'border-bottom:1px solid rgba(44,35,24,.08);' : ''}"><span style="font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:rgba(44,35,24,.65);">${S.lPaid}</span></td>
+                <td style="padding:10px 0;text-align:right;${ebAabenFrist ? 'border-bottom:1px solid rgba(44,35,24,.08);' : ''}"><span style="font-size:13px;color:#7a1f35;font-weight:bold;">€${amount.toLocaleString('da-DK')}</span></td>
+              </tr>${ebAabenFrist ? `
+              <tr>
+                <td style="padding:10px 0;"><span style="font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:rgba(44,35,24,.65);">${S.lEbFrist}</span></td>
+                <td style="padding:10px 0;text-align:right;"><span style="font-size:13px;color:#b88a1e;font-weight:bold;">${fmtDateDK(ebAabenFrist)}</span></td>
+              </tr>` : ''}
+            </table>${ebAabenFrist ? `
+            <p style="margin:16px 0 0;font-size:13px;line-height:1.7;color:rgba(44,35,24,.75);font-style:italic;">${S.ebNote}</p>` : ''}
           </td></tr>
         </table>
       </td></tr>
