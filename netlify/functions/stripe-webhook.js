@@ -255,5 +255,21 @@ exports.handler = async (event) => {
     }
   }
 
+  // Gæsten forlod Stripe uden at betale, og betalingssiden er udløbet
+  // (create-checkout sætter udløb til 1 time). Send én mail med
+  // betalingslink — se betaling-afbrudt.js for reglerne.
+  // Kræver at hændelsen `checkout.session.expired` er slået til på
+  // webhook'en i Stripe Dashboard.
+  if (stripeEvent.type === 'checkout.session.expired') {
+    try {
+      const { haandterAfbrudtBetaling } = require('./betaling-afbrudt');
+      const ud = await haandterAfbrudtBetaling(stripeEvent.data.object);
+      if (!ud.sendt) console.log('betaling-afbrudt: ingen mail —', ud.grund);
+    } catch (e) {
+      // Stripe skal altid have 200 — ellers prøver den igen i dagevis
+      console.error('stripe-webhook: afbrudt betaling fejlede:', e.message);
+    }
+  }
+
   return { statusCode: 200, body: JSON.stringify({ received: true }) };
 };

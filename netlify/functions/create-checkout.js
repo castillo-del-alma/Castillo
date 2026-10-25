@@ -98,7 +98,13 @@ exports.handler = async (event) => {
       }],
       success_url: `${process.env.URL}/betal-success?booking=${bookingId}${langParam}`,
       cancel_url: `${process.env.URL}/${cancelPath || 'betal'}?booking=${bookingId}`,
-      metadata: { booking_id: bookingId, payment_type: betalingsType }
+      metadata: { booking_id: bookingId, payment_type: betalingsType },
+      // Betalingssiden udløber efter 1 time (Stripes minimum er 30 min).
+      // Forlader gæsten den uden at betale, sender Stripe
+      // checkout.session.expired, og gæsten får en mail med betalingslink
+      // (betaling-afbrudt.js). Standard ville være 24 timer — så sent, at
+      // pladsen allerede var frigivet, før gæsten hørte fra os.
+      expires_at: Math.floor(Date.now() / 1000) + 60 * 60
     });
 
     return { statusCode: 200, body: JSON.stringify({ url: session.url }) };

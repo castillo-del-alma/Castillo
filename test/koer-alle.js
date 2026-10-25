@@ -21,6 +21,7 @@ const TESTS = [
   ['Beløb',         'beloeb.js'],
   ['Rabatkoder',    'rabat.js'],
   ['Early bird',    'early-bird.js'],
+  ['Betaling afbrudt', 'betaling-afbrudt.js'],
   ['Bilag',         'bilag.js'],
   ['Seværdigheder', 'sevaerdigheder.js'],
   ['Forside → seværdigheder', 'forside-sevaerdigheder.js'],
