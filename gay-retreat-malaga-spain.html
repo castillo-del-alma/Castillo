@@ -271,6 +271,9 @@ section{padding:8rem 0;}
   text-transform:uppercase;color:rgba(255,255,255,.82);
 }
 .rcard-price{color:var(--gold-pale);font-weight:600;white-space:nowrap;}
+/* Early bird — normalpris overstreget + lille mærke */
+.rcard-price .was{font-weight:400;opacity:.6;text-decoration:line-through;margin-right:.4rem;}
+.rcard-price .eb{display:inline-block;font-size:.52rem;letter-spacing:.16em;border:1px solid rgba(255,255,255,.35);padding:.08rem .35rem;margin-left:.35rem;vertical-align:middle;}
 /* Alle afholdelser vises — hoveddatoen og hver ekstra dato fra admin */
 .rcard-datoer{display:flex;flex-direction:column;gap:.4rem;}
 .rcard-dato{display:flex;align-items:baseline;gap:.5rem;flex-wrap:wrap;}
@@ -1668,7 +1671,7 @@ bindGayFaq();
 // eksponeres, så sprogskiftet kan tegne kortene om uden at hente igen.
 (function () {
   var FALLBACK_IMG = '/img/castillo-del-alma-social-1200.jpg';
-  var raekker = null, ledighed = {};
+  var raekker = null, ledighed = {}, ebSolgt = {};
 
   function esc(s) {
     return String(s == null ? '' : s)
@@ -1711,6 +1714,34 @@ bindGayFaq();
     var da = (typeof gayLang !== 'undefined' && gayLang === 'da');
     return (da ? 'Fra €' : 'From €') + n.toLocaleString(da ? 'da-DK' : 'en-GB');
   }
+  // Early bird — samme regler som earlyBirdTilbud() i netlify/functions/beloeb.js
+  // og kortEarlyBird() på forsiden. Kun visning; prisen afgøres ved booking.
+  function earlyBird(r) {
+    var normal = parseFloat(r.price) || 0;
+    var eb = parseFloat(r.early_bird_price);
+    if (!(eb > 0) || !(eb < normal)) return null;
+    var dl = r.early_bird_deadline ? String(r.early_bird_deadline).slice(0, 10) : '';
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(dl)) return null;
+    var idag;
+    try { idag = new Intl.DateTimeFormat('en-CA', { timeZone: 'Europe/Madrid', year: 'numeric', month: '2-digit', day: '2-digit' }).format(new Date()); }
+    catch (e) { idag = new Date().toISOString().slice(0, 10); }
+    if (idag > dl) return null;
+    var loft = parseInt(r.early_bird_spots, 10);
+    if (loft > 0 && (parseInt(ebSolgt[r.id], 10) || 0) >= loft) return null;
+    return Math.round(eb);
+  }
+  // Prisfeltet som HTML (escapet), med early bird når den gælder
+  function prisHtml(r) {
+    var n = parseFloat(r.price);
+    if (!n || isNaN(n)) return '';
+    var da = (typeof gayLang !== 'undefined' && gayLang === 'da');
+    var loc = da ? 'da-DK' : 'en-GB';
+    var eb = earlyBird(r);
+    if (!eb) return esc(pris(r.price));
+    return (da ? 'Fra ' : 'From ') +
+      '<span class="was">€' + esc(n.toLocaleString(loc)) + '</span>€' + esc(eb.toLocaleString(loc)) +
+      '<span class="eb">Early bird</span>';
+  }
   // Samme tærskel som buildAvailBadge() på forsiden: 75 % booket = "kun få"
   function badge(r) {
     var da = (typeof gayLang !== 'undefined' && gayLang === 'da');
@@ -1740,7 +1771,7 @@ bindGayFaq();
       var kat = rent(da ? (r.subtitle || r.subtitle_en) : (r.subtitle_en || r.subtitle)) || 'Gay Retreat:';
       var tekst = rent(da ? (r.description || r.description_en) : (r.description_en || r.description)).slice(0, 260);
       var img = r.card_image || r.hero_image || FALLBACK_IMG;
-      var kr = pris(r.price);
+      var kr = prisHtml(r);
       var b = badge(r);
       var udsolgtTxt = da ? 'Udsolgt' : 'Sold out';
       var datoer = alleDatoer(r).map(function (d) {
@@ -1763,7 +1794,7 @@ bindGayFaq();
           '<p>' + esc(tekst) + '</p>' +
           '<div class="rcard-meta">' +
             '<div class="rcard-datoer">' + datoer + '</div>' +
-            (kr ? '<span class="rcard-price">' + esc(kr) + '</span>' : '') +
+            (kr ? '<span class="rcard-price">' + kr + '</span>' : '') +
           '</div>' +
           '<span class="rcard-arrow">' + (da ? 'Se retreat →' : 'View retreat →') + '</span>' +
         '</div></a>';
@@ -1772,19 +1803,25 @@ bindGayFaq();
   window.gayRenderRetreats = tegn;
 
   if (!gSb) return;
-  Promise.all([
-    gSb.from('retreats')
-      .select('id,slug,title,title_en,subtitle,subtitle_en,description,description_en,price,arrival_date,departure_date,arrival_soldout,extra_dates,max_guests,hero_image,card_image,active,pride')
+  var FELTER = 'id,slug,title,title_en,subtitle,subtitle_en,description,description_en,price,arrival_date,departure_date,arrival_soldout,extra_dates,max_guests,hero_image,card_image,active,pride';
+  function hentRetreats(felter) {
+    return gSb.from('retreats').select(felter)
       .eq('pride', true).eq('active', true)
-      .order('arrival_date', { ascending: true }),
+      .order('arrival_date', { ascending: true });
+  }
+  Promise.all([
+    // Early bird-kolonnerne hentes med. Findes de ikke (SQL'en
+    // 2026-10-25-early-bird.sql ikke kørt), hentes kortene uden.
+    hentRetreats(FELTER + ',early_bird_price,early_bird_deadline,early_bird_spots')
+      .then(function (res) { return (res && res.error) ? hentRetreats(FELTER) : res; }),
     fetch('/.netlify/functions/retreat-availability')
       .then(function (r) { return r.ok ? r.json() : null; })
-      .then(function (d) { return (d && d.bookedByDate) || {}; })
-      .catch(function () { return {}; })
+      .catch(function () { return null; })
   ])
     .then(function (svar) {
       var res = svar[0];
-      ledighed = svar[1] || {};
+      ledighed = (svar[1] && svar[1].bookedByDate) || {};
+      ebSolgt = (svar[1] && svar[1].earlyBirdSold) || {};
       // Fejlede opslaget, ved vi ikke hvad der er sandt — så bliver de
       // statiske kort stående, så siden ikke står tom.
       if (!res || res.error || !Array.isArray(res.data)) return;
