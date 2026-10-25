@@ -1343,8 +1343,8 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:3rem
             <label id="labelVaerelse">Værelses-præference</label>
             <select id="room-select">
               <option value="" id="optVaelgVaerelse">Vælg værelse</option>
-              <option id="opt-delt">Delt dobbeltværelse</option>
-              <option id="optEnkeltForesp">Forespørg på enkeltværelse</option>
+              <option id="opt-delt" value="delt_dobbelt">Delt dobbeltværelse</option>
+              <option id="optEnkeltForesp" value="enkelt">Forespørg på enkeltværelse</option>
             </select>
           </div>
           <div class="form-field">
@@ -3344,6 +3344,9 @@ function updateRoomLabel() {
   if (!opt) return;
   const hasGuests = document.querySelectorAll('.guest-row').length > 0;
   opt.textContent = hasGuests ? SI18N('optDobbelt') : SI18N('optDeltDobbelt');
+  // Værdien er sprogneutral — teksten vises på det sprog, bookingen læses på
+  // (admin, Min booking, mails). Se vaerelseTekst() i email-template.js.
+  opt.value = hasGuests ? 'dobbelt' : 'delt_dobbelt';
 }
 
 // Læs de ekstra gæster fra formularen.

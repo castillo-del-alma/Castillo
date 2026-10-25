@@ -121,6 +121,30 @@ function getLang(nationality) {
   return danish.includes(String(nationality || '').trim().toLowerCase()) ? 'da' : 'en';
 }
 
+// Værelsesvalget gemmes som en nøgle (delt_dobbelt | dobbelt | enkelt) og
+// vises på læserens sprog. Ældre bookinger har teksten gemt på det sprog,
+// gæsten bookede på — de genkendes også. Ukendt tekst vises som den står.
+// SAMME TABEL i netlify/functions/email-template.js, min-booking.html og
+// admin-anmeldelser.html — hold dem ens.
+const VAERELSER = {
+  delt_dobbelt: { da: 'Delt dobbeltværelse', en: 'Shared double room' },
+  dobbelt:      { da: 'Dobbeltværelse',      en: 'Double room' },
+  enkelt:       { da: 'Enkeltværelse (forespørgsel)', en: 'Single room (on request)' },
+};
+function vaerelseTekst(v, lang) {
+  if (!v) return '';
+  const s = String(v).trim();
+  const l = lang === 'en' ? 'en' : 'da';
+  if (VAERELSER[s]) return VAERELSER[s][l];
+  const n = s.toLowerCase();
+  const gammel = {
+    'delt dobbeltværelse': 'delt_dobbelt', 'shared double room': 'delt_dobbelt', 'shared twin room': 'delt_dobbelt',
+    'dobbeltværelse': 'dobbelt', 'double room': 'dobbelt',
+    'forespørg på enkeltværelse': 'enkelt', 'inquire about single room': 'enkelt', 'enkeltværelse': 'enkelt', 'single room': 'enkelt',
+  }[n];
+  return gammel ? VAERELSER[gammel][l] : s;
+}
+
 function fmtDate(iso, lang) {
   if (!iso) return '—';
   return new Date(iso).toLocaleDateString(lang === 'da' ? 'da-DK' : 'en-GB', {
@@ -221,4 +245,5 @@ function buildEmail({ lang = 'da', title, intro, greetingName = null, sections =
 </html>`;
 }
 
-module.exports = { buildEmail, getLang, fmtDate, texts };
+module.exports = {
+  vaerelseTekst, buildEmail, getLang, fmtDate, texts };

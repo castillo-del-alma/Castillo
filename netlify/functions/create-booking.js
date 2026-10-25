@@ -1,4 +1,4 @@
-const { buildEmail, getLang, fmtDate, texts } = require('./email-template');
+const { buildEmail, getLang, fmtDate, texts, vaerelseTekst } = require('./email-template');
 const { retreatPris, beregnBookingpris, earlyBirdTilbud, solgteEarlyBirdPladser, earlyBirdFrist } = require('./beloeb');
 const { hentRabat } = require('./rabat');
 
@@ -344,7 +344,7 @@ exports.handler = async (event) => {
               [t.label_arrival, fmtDate(arrival_date, lang)],
               [t.label_departure, fmtDate(departure_date, lang)],
               [t.label_guests, String(antalGaesterTotal)],
-              [t.label_room, vaerelse || null],
+              [t.label_room, vaerelseTekst(vaerelse, lang) || null],
               [t.label_addons, (selected_addons||[]).length > 0 ? (selected_addons.map(a=>a.text).join(', ') + ' (' + t.addons_note + ')') : null],
               [t.label_rabat, rabat ? `${beregnet.rabatPct}% (${rabat.kode}) − €${beregnet.rabatBeloeb.toFixed(2)}` : null],
               [t.label_early_bird, eb ? `−€${eb.besparelse.toFixed(2)} ${t.early_bird_saved}` : null],
@@ -414,7 +414,7 @@ exports.handler = async (event) => {
                <p><strong>Retreat:</strong> ${retreat_name || '—'}</p>
                <p><strong>Ankomst:</strong> ${fmtDateDK(arrival_date)}</p>
                <p><strong>Afrejse:</strong> ${fmtDateDK(departure_date)}</p>
-               <p><strong>Værelse:</strong> ${vaerelse || '—'}</p>
+               <p><strong>Værelse:</strong> ${vaerelseTekst(vaerelse, 'da') || '—'}</p>
                <h3>Tilvalg</h3>
                <p>${addons.length > 0 ? addons.join('<br>') : 'Ingen tilvalg'}</p>
                <h3>Ekstra gæster</h3>

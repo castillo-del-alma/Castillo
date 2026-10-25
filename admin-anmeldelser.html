@@ -8552,7 +8552,7 @@ async function visDetalje(kundeId) {
       <div class="detalje-row"><span class="detalje-key">Ankomst</span><span class="detalje-val">${fmt(booking.arrival_date)}</span></div>
       <div class="detalje-row"><span class="detalje-key">Afrejse</span><span class="detalje-val">${fmt(booking.departure_date)}</span></div>
       <div class="detalje-row"><span class="detalje-key">Gæster</span><span class="detalje-val">${booking.guests}${booking.extra_guests && booking.extra_guests.length > 0 ? ' (' + booking.extra_guests.map(g => g.navn).join(', ') + ')' : ''}</span></div>
-      <div class="detalje-row"><span class="detalje-key">Værelse</span><span class="detalje-val">${booking.room || '—'}</span></div>
+      <div class="detalje-row"><span class="detalje-key">Værelse</span><span class="detalje-val">${vaerelseTekst(booking.room, 'da') || '—'}</span></div>
       ${booking.notes ? `<div class="detalje-row"><span class="detalje-key">Noter</span><span class="detalje-val">${booking.notes}</span></div>` : ''}
       ${(booking.selected_addons||[]).length > 0 ? `<div class="detalje-row"><span class="detalje-key">Tilvalg (bestilt)</span><span class="detalje-val" style="color:rgba(44,35,24,.85);">${(booking.selected_addons||[]).map(a=>a.text+(a.price?' (€'+a.price+')':'')).join(', ')}</span></div>` : tilvalgCharges.length > 0 ? `<div class="detalje-row"><span class="detalje-key">Tilvalg</span><span class="detalje-val" style="color:rgba(44,35,24,.85);">${tilvalgCharges.map(c=>c.description.replace('Tilvalg: ','')).join(', ')}</span></div>` : ''}
     </div>`;
@@ -10177,6 +10177,30 @@ function ebAdminStatus() {
   const dage = Math.round((new Date(dl + 'T00:00:00Z') - new Date(idag + 'T00:00:00Z')) / 864e5);
   const pct = Math.round((1 - eb / normal) * 100);
   saet(`✓ Aktiv — spar €${Math.round(normal - eb)} (${pct}%) pr. person · ${dage === 0 ? 'sidste dag i dag' : dage + (dage === 1 ? ' dag' : ' dage') + ' tilbage'}${loft ? ' · max ' + loft + ' pladser' : ''}`, '#2a7a74');
+}
+
+// Værelsesvalget gemmes som en nøgle (delt_dobbelt | dobbelt | enkelt) og
+// vises på læserens sprog. Ældre bookinger har teksten gemt på det sprog,
+// gæsten bookede på — de genkendes også. Ukendt tekst vises som den står.
+// SAMME TABEL i netlify/functions/email-template.js, min-booking.html og
+// admin-anmeldelser.html — hold dem ens.
+const VAERELSER = {
+  delt_dobbelt: { da: 'Delt dobbeltværelse', en: 'Shared double room' },
+  dobbelt:      { da: 'Dobbeltværelse',      en: 'Double room' },
+  enkelt:       { da: 'Enkeltværelse (forespørgsel)', en: 'Single room (on request)' },
+};
+function vaerelseTekst(v, lang) {
+  if (!v) return '';
+  const s = String(v).trim();
+  const l = lang === 'en' ? 'en' : 'da';
+  if (VAERELSER[s]) return VAERELSER[s][l];
+  const n = s.toLowerCase();
+  const gammel = {
+    'delt dobbeltværelse': 'delt_dobbelt', 'shared double room': 'delt_dobbelt', 'shared twin room': 'delt_dobbelt',
+    'dobbeltværelse': 'dobbelt', 'double room': 'dobbelt',
+    'forespørg på enkeltværelse': 'enkelt', 'inquire about single room': 'enkelt', 'enkeltværelse': 'enkelt', 'single room': 'enkelt',
+  }[n];
+  return gammel ? VAERELSER[gammel][l] : s;
 }
 
 async function gemRetreat() {

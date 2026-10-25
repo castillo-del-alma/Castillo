@@ -338,7 +338,7 @@ function renderBooking() {
       <div class="booking-info-item"><div class="label">${T('ankomst')}</div><div class="value">${fmt(b.arrival_date)}</div></div>
       <div class="booking-info-item"><div class="label">${T('afrejse')}</div><div class="value">${fmt(b.departure_date)}</div></div>
       <div class="booking-info-item"><div class="label">${T('gaester')}</div><div class="value">${b.guests}</div></div>
-      <div class="booking-info-item"><div class="label">${T('vaerelse')}</div><div class="value">${b.room || '—'}</div></div>
+      <div class="booking-info-item"><div class="label">${T('vaerelse')}</div><div class="value">${vaerelseTekst(b.room, mbLang) || '—'}</div></div>
       ${b.notes ? `<div class="booking-info-item" style="grid-column:1/-1"><div class="label">${T('saerlige')}</div><div class="value">${b.notes}</div></div>` : ''}
       ${b.deadline ? `<div class="booking-info-item" style="grid-column:1/-1"><div class="label" style="color:var(--wine)">Betalingsfrist</div><div class="value" style="color:var(--wine)">${new Date(b.deadline).toLocaleString(LOC(),{weekday:'long',day:'numeric',month:'long',hour:'2-digit',minute:'2-digit'})}</div></div>` : ''}
     </div>
@@ -1345,6 +1345,30 @@ const MB_I18N = {
 };
 
 let mbLang = 'da';
+// Værelsesvalget gemmes som en nøgle (delt_dobbelt | dobbelt | enkelt) og
+// vises på læserens sprog. Ældre bookinger har teksten gemt på det sprog,
+// gæsten bookede på — de genkendes også. Ukendt tekst vises som den står.
+// SAMME TABEL i netlify/functions/email-template.js, min-booking.html og
+// admin-anmeldelser.html — hold dem ens.
+const VAERELSER = {
+  delt_dobbelt: { da: 'Delt dobbeltværelse', en: 'Shared double room' },
+  dobbelt:      { da: 'Dobbeltværelse',      en: 'Double room' },
+  enkelt:       { da: 'Enkeltværelse (forespørgsel)', en: 'Single room (on request)' },
+};
+function vaerelseTekst(v, lang) {
+  if (!v) return '';
+  const s = String(v).trim();
+  const l = lang === 'en' ? 'en' : 'da';
+  if (VAERELSER[s]) return VAERELSER[s][l];
+  const n = s.toLowerCase();
+  const gammel = {
+    'delt dobbeltværelse': 'delt_dobbelt', 'shared double room': 'delt_dobbelt', 'shared twin room': 'delt_dobbelt',
+    'dobbeltværelse': 'dobbelt', 'double room': 'dobbelt',
+    'forespørg på enkeltværelse': 'enkelt', 'inquire about single room': 'enkelt', 'enkeltværelse': 'enkelt', 'single room': 'enkelt',
+  }[n];
+  return gammel ? VAERELSER[gammel][l] : s;
+}
+
 function T(k) { return (MB_I18N[mbLang] && MB_I18N[mbLang][k]) || MB_I18N.da[k] || ''; }
 
 // Datoer og beløb skal følge sproget — ellers står der "18. juli" på en engelsk side
