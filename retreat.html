@@ -680,6 +680,9 @@ section h2 em{color:var(--wine);font-style:normal;}
 .bv-cancel{font-size:.65rem;letter-spacing:.15em;text-transform:uppercase;color:rgba(44,35,24,.35);background:none;border:none;cursor:pointer;margin-top:.8rem;}
 /* ── BOOKING FORM ── */
 .rt-fotostribe{padding:var(--stribe-top,2rem) 0 var(--stribe-bund,2rem);}
+/* Fotostribe: flex + center → færre end 5 billeder står centreret i samme størrelse */
+.rt-img5-row{display:flex;flex-wrap:wrap;justify-content:center;gap:.6rem;}
+.rt-img5-row>.retreat-img5-item{flex:0 0 calc((100% - 2.4rem)/5);}
 .retreat-img5-item{aspect-ratio:1/1;background-size:cover;background-position:center;overflow:hidden;cursor:pointer;transition:transform .4s;position:relative;}
 .retreat-img5-item:hover{transform:scale(1.05);}
 .retreat-img5-item::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;z-index:2;}
@@ -832,7 +835,7 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:3rem
   .rooms-options{grid-template-columns:1fr;}
   .ejrm-grid{grid-template-columns:1fr;}
   .reviews-grid{grid-template-columns:1fr;}
-  #retreatImages5Grid, #retreatImages5Grid2, #retreatImages5Grid3{grid-template-columns:repeat(2,1fr)!important;}
+  .rt-img5-row>.retreat-img5-item{flex-basis:calc((100% - .6rem)/2);}
   /* Formularfelter: 16px så iOS ikke zoomer ind ved tastning */
   .form-field input,.form-field select,.form-field textarea{font-size:16px;letter-spacing:.04em;}
   .form-field input::placeholder{font-size:16px;}
@@ -1023,21 +1026,21 @@ footer{background:#1e1810;border-top:1px solid rgba(184,138,30,.12);padding:3rem
 <!-- RETREAT BILLEDER (retreat_images5) -->
 <section id="fotostribe" class="rt-fotostribe" style="display:none;">
   <div class="section-inner">
-    <div id="retreatImages5Grid" style="display:grid;grid-template-columns:repeat(5,1fr);gap:.6rem;"></div>
+    <div id="retreatImages5Grid" class="rt-img5-row"></div>
   </div>
 </section>
 
 <!-- RETREAT BILLEDER 2 (retreat_images5_2) -->
 <section id="fotostribe2" class="rt-fotostribe" style="display:none;">
   <div class="section-inner">
-    <div id="retreatImages5Grid2" style="display:grid;grid-template-columns:repeat(5,1fr);gap:.6rem;"></div>
+    <div id="retreatImages5Grid2" class="rt-img5-row"></div>
   </div>
 </section>
 
 <!-- RETREAT BILLEDER 3 (retreat_images5_3) -->
 <section id="fotostribe3" class="rt-fotostribe" style="display:none;">
   <div class="section-inner">
-    <div id="retreatImages5Grid3" style="display:grid;grid-template-columns:repeat(5,1fr);gap:.6rem;"></div>
+    <div id="retreatImages5Grid3" class="rt-img5-row"></div>
   </div>
 </section>
 
